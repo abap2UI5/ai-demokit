@@ -1,3 +1,4 @@
+" @keywords grid sap.ui.layout gridxl title text image
 CLASS z2ui5_cl_smpc_app_226 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

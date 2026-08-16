@@ -1,3 +1,4 @@
+" @keywords calendar sap.ui.unified calendardatedeselection label text
 CLASS z2ui5_cl_smpc_app_305 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

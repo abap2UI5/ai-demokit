@@ -1,3 +1,4 @@
+" @keywords table sap.m tableviewsettingsdialog viewsettingsdialog viewsettingsitem viewsettingsfilteritem overflowtoolbar title toolbarspacer button togglebutton text
 CLASS z2ui5_cl_smpc_app_298 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

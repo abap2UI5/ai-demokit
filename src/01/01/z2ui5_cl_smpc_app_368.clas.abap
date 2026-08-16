@@ -1,3 +1,4 @@
+" @keywords input sap.m inputpassword label
 CLASS z2ui5_cl_smpc_app_368 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

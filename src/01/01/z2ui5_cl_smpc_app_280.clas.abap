@@ -1,3 +1,4 @@
+" @keywords textarea text area sap.m textareavalueupdate label switch
 CLASS z2ui5_cl_smpc_app_280 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

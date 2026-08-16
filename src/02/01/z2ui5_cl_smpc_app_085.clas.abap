@@ -1,3 +1,4 @@
+" @keywords tokenizer sap.m tokens editable delete input button checkbox token label
 CLASS z2ui5_cl_smpc_app_085 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

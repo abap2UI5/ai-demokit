@@ -1,3 +1,4 @@
+" @keywords blockbase block base sap.uxap objectpageblockbase objectpagelayout objectpageheader objectpageheaderactionbutton objectpagesection objectpagesubsection
 CLASS z2ui5_cl_smpc_app_408 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

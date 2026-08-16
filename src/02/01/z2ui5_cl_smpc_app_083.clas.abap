@@ -1,3 +1,4 @@
+" @keywords standardlistitem standard list item sap.m avatar index bindings
 CLASS z2ui5_cl_smpc_app_083 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,4 @@
+" @keywords dynamicsidecontent dynamic side content sap.ui.layout dynamicsidecontentposition title text toolbar button slider
 CLASS z2ui5_cl_smpc_app_344 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

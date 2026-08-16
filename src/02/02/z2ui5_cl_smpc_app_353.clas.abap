@@ -1,3 +1,4 @@
+" @keywords table sap.ui.table dnd column
 CLASS z2ui5_cl_smpc_app_353 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

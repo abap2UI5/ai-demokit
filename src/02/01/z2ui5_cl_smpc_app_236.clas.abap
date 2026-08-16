@@ -1,3 +1,4 @@
+" @keywords feedinput feed input sap.m label button dialog text
 CLASS z2ui5_cl_smpc_app_236 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

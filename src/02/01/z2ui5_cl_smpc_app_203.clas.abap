@@ -1,3 +1,4 @@
+" @keywords overflowtoolbartokenizer overflow toolbar tokenizer sap.m token text input button label overflowtoolbarlayoutdata overflowtoolbar
 CLASS z2ui5_cl_smpc_app_203 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

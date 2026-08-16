@@ -1,3 +1,4 @@
+" @keywords objectpagesubsection object sub section sap.uxap objectpagesubsectionwithactions objectpagelayout objectpageheader objectpagesection
 CLASS z2ui5_cl_smpc_app_178 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

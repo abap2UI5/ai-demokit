@@ -1,3 +1,4 @@
+" @keywords blocklayout block layout sap.ui.layout backgrounds vbox hbox label select text input textarea
 CLASS z2ui5_cl_smpc_app_140 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

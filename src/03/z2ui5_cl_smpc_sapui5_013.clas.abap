@@ -1,3 +1,4 @@
+" @keywords ganttchartwithtable messagestrip text
 "! <p class="shorttext">sap.gantt - GanttChartWithTable</p>
 "!
 "! SAPUI5-only control: it ships with SAPUI5, not with OpenUI5, so there is no

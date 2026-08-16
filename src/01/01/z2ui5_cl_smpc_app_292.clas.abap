@@ -1,3 +1,4 @@
+" @keywords panel sap.m panelbackgrounddesign label select text messagestrip
 CLASS z2ui5_cl_smpc_app_292 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

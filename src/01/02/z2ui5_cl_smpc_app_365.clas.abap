@@ -1,3 +1,4 @@
+" @keywords treetable tree table sap.ui.table treetable.hierarchymaintenancejsontreebinding column
 CLASS z2ui5_cl_smpc_app_365 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

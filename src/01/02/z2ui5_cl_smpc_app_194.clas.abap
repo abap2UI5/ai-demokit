@@ -1,3 +1,4 @@
+" @keywords grid sap.ui.layout gridinfo image vbox text
 CLASS z2ui5_cl_smpc_app_194 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

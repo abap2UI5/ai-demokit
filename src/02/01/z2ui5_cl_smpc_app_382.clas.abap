@@ -1,3 +1,4 @@
+" @keywords icontabbar icon tab bar sap.m icontabbarsubtabs label icontabfilter text
 CLASS z2ui5_cl_smpc_app_382 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

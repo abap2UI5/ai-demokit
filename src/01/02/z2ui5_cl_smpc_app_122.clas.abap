@@ -1,3 +1,4 @@
+" @keywords icon sap.ui.core font gallery hbox flexitemdata
 CLASS z2ui5_cl_smpc_app_122 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

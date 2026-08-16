@@ -1,3 +1,4 @@
+" @keywords flexbox flex box sap.m flexboxbasicalignment vbox panel button
 CLASS z2ui5_cl_smpc_app_392 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

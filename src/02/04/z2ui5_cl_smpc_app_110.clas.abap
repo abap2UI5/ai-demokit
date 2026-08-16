@@ -1,3 +1,4 @@
+" @keywords shellbar shell bar sap.f application header
 CLASS z2ui5_cl_smpc_app_110 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

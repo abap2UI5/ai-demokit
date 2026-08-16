@@ -1,3 +1,4 @@
+" @keywords carousel sap.m user browse through title image text scrollcontainer list standardlistitem
 CLASS z2ui5_cl_smpc_app_006 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

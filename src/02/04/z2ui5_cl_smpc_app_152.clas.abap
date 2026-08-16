@@ -1,3 +1,4 @@
+" @keywords shellbar shell bar sap.f menu button
 CLASS z2ui5_cl_smpc_app_152 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

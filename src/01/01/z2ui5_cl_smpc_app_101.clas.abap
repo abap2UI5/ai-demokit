@@ -1,3 +1,4 @@
+" @keywords wizard sap.m multi-step product creation navcontainer wizardstep messagestrip text hbox segmentedbutton segmentedbuttonitem
 CLASS z2ui5_cl_smpc_app_101 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

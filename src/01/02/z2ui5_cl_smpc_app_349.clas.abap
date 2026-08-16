@@ -1,3 +1,4 @@
+" @keywords cssgrid sap.ui.layout.cssgrid gridtemplaterows slider panel overflowtoolbar title label combobox vbox text
 CLASS z2ui5_cl_smpc_app_349 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

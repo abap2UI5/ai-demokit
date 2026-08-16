@@ -1,3 +1,4 @@
+" @keywords splitcontainer split container sap.m master-detail navigation label button vbox text radiobuttongroup radiobutton
 CLASS z2ui5_cl_smpc_app_096 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

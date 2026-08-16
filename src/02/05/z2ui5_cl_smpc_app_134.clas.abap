@@ -1,3 +1,4 @@
+" @keywords toolheader tool header sap.tnt app shell scrollcontainer button overflowtoolbarlayoutdata image title text
 CLASS z2ui5_cl_smpc_app_134 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

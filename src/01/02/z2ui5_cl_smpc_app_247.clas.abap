@@ -1,3 +1,4 @@
+" @keywords table sap.ui.table columnresizing column
 CLASS z2ui5_cl_smpc_app_247 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

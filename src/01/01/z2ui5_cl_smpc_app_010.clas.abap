@@ -1,3 +1,4 @@
+" @keywords columnlistitem column list item sap.m opa test app product table toolbar title
 CLASS z2ui5_cl_smpc_app_010 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,4 @@
+" @keywords colorpicker color picker sap.ui.unified colorpickerlarge responsivepopover button
 CLASS z2ui5_cl_smpc_app_310 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

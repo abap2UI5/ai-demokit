@@ -1,3 +1,4 @@
+" @keywords table sap.m tablecontextualwidthdynamic messagestrip column text columnlistitem label
 CLASS z2ui5_cl_smpc_app_277 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

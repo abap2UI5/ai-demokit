@@ -1,3 +1,4 @@
+" @keywords sap.m standard responsive css classes objectheader objectattribute objectstatus icontabbar icontabfilter label text
 CLASS z2ui5_cl_smpc_app_089 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

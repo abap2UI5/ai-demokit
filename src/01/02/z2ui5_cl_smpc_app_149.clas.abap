@@ -1,3 +1,4 @@
+" @keywords card sap.ui.integration.widgets explorer link vbox image
 CLASS z2ui5_cl_smpc_app_149 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

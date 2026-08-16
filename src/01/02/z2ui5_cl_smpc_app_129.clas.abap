@@ -1,3 +1,4 @@
+" @keywords integer sap.ui.model.type data type label input text
 CLASS z2ui5_cl_smpc_app_129 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,4 @@
+" @keywords textarea text area sap.m textareagrowing messagestrip label
 CLASS z2ui5_cl_smpc_app_370 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

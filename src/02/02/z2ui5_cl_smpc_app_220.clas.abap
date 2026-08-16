@@ -1,3 +1,4 @@
+" @keywords calendar sap.ui.unified calendarminmax label text flexbox switch
 CLASS z2ui5_cl_smpc_app_220 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

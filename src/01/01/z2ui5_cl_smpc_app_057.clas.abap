@@ -1,3 +1,4 @@
+" @keywords inputlistitem input list item sap.m items hosting switch checkbox radiobutton select hbox
 CLASS z2ui5_cl_smpc_app_057 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

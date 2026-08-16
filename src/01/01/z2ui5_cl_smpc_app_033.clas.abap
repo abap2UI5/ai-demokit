@@ -1,3 +1,4 @@
+" @keywords link sap.m usually object identifier fir table toolbar title column text columnlistitem
 CLASS z2ui5_cl_smpc_app_033 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

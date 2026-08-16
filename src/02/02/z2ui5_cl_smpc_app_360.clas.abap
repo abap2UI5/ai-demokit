@@ -1,3 +1,4 @@
+" @keywords table sap.ui.table selectcopypaste column
 CLASS z2ui5_cl_smpc_app_360 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

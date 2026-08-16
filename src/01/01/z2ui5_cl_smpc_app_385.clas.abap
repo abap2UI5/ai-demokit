@@ -1,3 +1,4 @@
+" @keywords multicombobox multi combo box sap.m multicomboboxwrapping label
 CLASS z2ui5_cl_smpc_app_385 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

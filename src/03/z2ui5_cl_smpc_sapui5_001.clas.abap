@@ -1,3 +1,4 @@
+" @keywords interactivedonutchart shell link text flexbox button
 "! <p class="shorttext">sap.suite.ui.microchart - InteractiveDonutChart</p>
 "!
 "! SAPUI5-only control: it ships with SAPUI5, not with OpenUI5, so there is no

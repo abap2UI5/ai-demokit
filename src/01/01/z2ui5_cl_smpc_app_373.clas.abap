@@ -1,3 +1,4 @@
+" @keywords select sap.m selectvaluestate hbox label
 CLASS z2ui5_cl_smpc_app_373 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

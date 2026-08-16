@@ -1,3 +1,4 @@
+" @keywords tilecontent tile content sap.m numeric feed news numericcontent feedcontent newscontent
 CLASS z2ui5_cl_smpc_app_078 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

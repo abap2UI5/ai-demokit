@@ -1,3 +1,4 @@
+" @keywords gridlist grid list sap.f layout slider panel toolbar title vbox flexitemdata label
 CLASS z2ui5_cl_smpc_app_111 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

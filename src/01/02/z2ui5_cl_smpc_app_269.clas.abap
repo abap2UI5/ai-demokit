@@ -1,3 +1,4 @@
+" @keywords dynamicsidecontent dynamic side content sap.ui.layout dynamicsidecontentproduct vbox title image text toolbar toolbarspacer
 CLASS z2ui5_cl_smpc_app_269 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

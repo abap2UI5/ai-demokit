@@ -1,3 +1,4 @@
+" @keywords toolbar sap.m items shrink expand too slider messagestrip label toolbarspacer button searchfield
 CLASS z2ui5_cl_smpc_app_053 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

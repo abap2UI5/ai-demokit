@@ -1,3 +1,4 @@
+" @keywords flexbox flex box sap.m flexboxrendertype vbox panel button flexitemdata input
 CLASS z2ui5_cl_smpc_app_190 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

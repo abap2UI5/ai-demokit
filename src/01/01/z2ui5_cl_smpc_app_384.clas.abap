@@ -1,3 +1,4 @@
+" @keywords combobox combo box sap.m comboboxwrapping label
 CLASS z2ui5_cl_smpc_app_384 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

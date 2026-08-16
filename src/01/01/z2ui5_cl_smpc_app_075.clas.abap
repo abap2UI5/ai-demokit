@@ -1,3 +1,4 @@
+" @keywords selectlist select list sap.m items sorter
 CLASS z2ui5_cl_smpc_app_075 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

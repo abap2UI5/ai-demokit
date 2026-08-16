@@ -1,3 +1,4 @@
+" @keywords objectpagelayout object layout sap.uxap objectpageresetselectedsection objectpagedynamicheadertitle objectpagesection objectpagesubsection
 CLASS z2ui5_cl_smpc_app_263 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

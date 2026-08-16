@@ -1,3 +1,4 @@
+" @keywords cssgrid sap.ui.layout.cssgrid gridresponsiveness togglebutton slider panel overflowtoolbar title text hbox segmentedbutton segmentedbuttonitem
 CLASS z2ui5_cl_smpc_app_271 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

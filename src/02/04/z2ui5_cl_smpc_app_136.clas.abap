@@ -1,3 +1,4 @@
+" @keywords sidepanel side panel sap.f single item button vbox label switch text
 CLASS z2ui5_cl_smpc_app_136 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

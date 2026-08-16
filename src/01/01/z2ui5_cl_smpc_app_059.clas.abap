@@ -1,3 +1,4 @@
+" @keywords lightbox light box sap.m image thumbnails opening messagestrip list customlistitem hbox lightboxitem
 CLASS z2ui5_cl_smpc_app_059 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

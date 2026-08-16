@@ -1,3 +1,4 @@
+" @keywords form sap.ui.layout.form form480_trial bar button vbox text link ratingindicator progressindicator input select
 CLASS z2ui5_cl_smpc_app_319 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

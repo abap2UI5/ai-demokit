@@ -1,3 +1,4 @@
+" @keywords pdfviewer sap.m pdfviewerembedded scrollcontainer flexbox button flexitemdata
 CLASS z2ui5_cl_smpc_app_288 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,4 @@
+" @keywords colorpalette color palette sap.m colorpalettepopover table column text columnlistitem label button
 CLASS z2ui5_cl_smpc_app_250 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

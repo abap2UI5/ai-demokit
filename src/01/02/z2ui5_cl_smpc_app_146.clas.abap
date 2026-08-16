@@ -1,3 +1,4 @@
+" @keywords hyphenation sap.ui.core.hyphenation api html label slider panel
 CLASS z2ui5_cl_smpc_app_146 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,4 @@
+" @keywords messagestrip message strip sap.m dynamicmessagestripgenerator button
 CLASS z2ui5_cl_smpc_app_289 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

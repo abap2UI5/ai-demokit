@@ -1,3 +1,4 @@
+" @keywords objectmarker object marker sap.m table column text columnlistitem objectidentifier
 CLASS z2ui5_cl_smpc_app_237 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

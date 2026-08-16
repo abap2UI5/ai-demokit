@@ -1,3 +1,4 @@
+" @keywords select sap.m selectwithicons
 CLASS z2ui5_cl_smpc_app_205 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

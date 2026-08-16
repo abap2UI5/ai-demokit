@@ -1,3 +1,4 @@
+" @keywords pdfviewer sap.m pdf viewer opening popup dialog. carousel image
 CLASS z2ui5_cl_smpc_app_044 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

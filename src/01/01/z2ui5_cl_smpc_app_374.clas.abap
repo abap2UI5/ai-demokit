@@ -1,3 +1,4 @@
+" @keywords select sap.m selectwithwrappeditemtext
 CLASS z2ui5_cl_smpc_app_374 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

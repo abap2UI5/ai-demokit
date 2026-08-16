@@ -1,3 +1,4 @@
+" @keywords objectheader object header sap.m objectheadercondensed objectattribute
 CLASS z2ui5_cl_smpc_app_201 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

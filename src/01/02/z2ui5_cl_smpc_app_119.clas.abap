@@ -1,3 +1,4 @@
+" @keywords fixflex fix flex sap.ui.layout layout image text
 CLASS z2ui5_cl_smpc_app_119 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.

@@ -1,3 +1,4 @@
+" @keywords slider sap.m variants: tickmarks tooltips scale text responsivescale
 CLASS z2ui5_cl_smpc_app_068 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,4 @@
+" @keywords busydialog busy dialog sap.m busydialoglight button
 CLASS z2ui5_cl_smpc_app_251 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

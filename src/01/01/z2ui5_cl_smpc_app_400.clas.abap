@@ -1,3 +1,4 @@
+" @keywords objectheader object header sap.m objectheadercircleimage objectattribute
 CLASS z2ui5_cl_smpc_app_400 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

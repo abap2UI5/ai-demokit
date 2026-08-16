@@ -1,3 +1,4 @@
+" @keywords icontabheader icon tab header sap.m inline mode icontabfilter
 CLASS z2ui5_cl_smpc_app_055 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

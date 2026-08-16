@@ -1,3 +1,4 @@
+" @keywords carousel sap.m title image
 CLASS z2ui5_cl_smpc_app_398 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

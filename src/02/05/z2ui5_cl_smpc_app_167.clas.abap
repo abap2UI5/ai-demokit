@@ -1,3 +1,4 @@
+" @keywords toolpage tool sap.tnt button overflowtoolbarlayoutdata toolbarspacer navcontainer scrollcontainer text popover dialog
 CLASS z2ui5_cl_smpc_app_167 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

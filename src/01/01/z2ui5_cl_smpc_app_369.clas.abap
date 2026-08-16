@@ -1,3 +1,4 @@
+" @keywords input sap.m inputwrapping label
 CLASS z2ui5_cl_smpc_app_369 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

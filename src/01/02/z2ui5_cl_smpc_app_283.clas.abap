@@ -1,3 +1,4 @@
+" @keywords theming sap.ui.core themecustomclasses messagestrip table column text columnlistitem
 CLASS z2ui5_cl_smpc_app_283 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

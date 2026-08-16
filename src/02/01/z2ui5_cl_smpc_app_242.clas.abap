@@ -1,3 +1,4 @@
+" @keywords navcontainer nav container sap.m vbox overflowtoolbar button hbox flexitemdata select
 CLASS z2ui5_cl_smpc_app_242 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

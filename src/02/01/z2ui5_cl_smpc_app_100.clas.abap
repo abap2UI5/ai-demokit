@@ -1,3 +1,4 @@
+" @keywords quickview quick sap.m popover entity pages vbox button quickviewpage avatar quickviewgroup quickviewgroupelement
 CLASS z2ui5_cl_smpc_app_100 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

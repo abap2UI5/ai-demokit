@@ -1,3 +1,4 @@
+" @keywords ui5.controls.vizframe shell title button combobox
 "! <p class="shorttext">sap.viz - ui5.controls.VizFrame</p>
 "!
 "! SAPUI5-only control: it ships with SAPUI5, not with OpenUI5, so there is no

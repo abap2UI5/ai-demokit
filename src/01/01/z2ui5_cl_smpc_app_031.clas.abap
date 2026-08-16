@@ -1,3 +1,4 @@
+" @keywords image sap.m visualizes state vbox flexitemdata text hbox
 CLASS z2ui5_cl_smpc_app_031 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

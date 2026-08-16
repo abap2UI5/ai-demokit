@@ -1,3 +1,4 @@
+" @keywords currency sap.ui.unified amounts table column text columnlistitem objectidentifier objectnumber
 CLASS z2ui5_cl_smpc_app_171 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

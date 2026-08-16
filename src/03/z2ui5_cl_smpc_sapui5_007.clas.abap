@@ -1,3 +1,4 @@
+" @keywords timeline shell
 "! <p class="shorttext">sap.suite.ui.commons - Timeline</p>
 "!
 "! SAPUI5-only control: it ships with SAPUI5, not with OpenUI5, so there is no

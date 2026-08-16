@@ -1,3 +1,4 @@
+" @keywords menu sap.ui.unified menumenueventing button
 CLASS z2ui5_cl_smpc_app_228 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

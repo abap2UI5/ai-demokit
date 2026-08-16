@@ -1,3 +1,4 @@
+" @keywords infolabel info label sap.tnt infolabelintable table toolbar title toolbarspacer combobox column text
 CLASS z2ui5_cl_smpc_app_192 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

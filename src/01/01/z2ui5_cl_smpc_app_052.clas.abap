@@ -1,3 +1,4 @@
+" @keywords textarea text area sap.m allows enter multi-line te
 CLASS z2ui5_cl_smpc_app_052 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

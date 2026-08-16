@@ -1,3 +1,4 @@
+" @keywords combobox combo box sap.m provides list
 CLASS z2ui5_cl_smpc_app_011 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,4 @@
+" @keywords objectattribute object attribute sap.m active attributes customcontent label link text dialog ratingindicator
 CLASS z2ui5_cl_smpc_app_073 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

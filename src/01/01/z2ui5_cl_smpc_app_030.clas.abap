@@ -1,3 +1,4 @@
+" @keywords icontabbar icon tab bar sap.m height icontabfilter scrollcontainer list standardlistitem text
 CLASS z2ui5_cl_smpc_app_030 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

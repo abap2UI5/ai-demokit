@@ -1,3 +1,4 @@
+" @keywords semanticpage semantic sap.f.semantic title text objectattribute objectstatus table column columnlistitem objectidentifier button
 CLASS z2ui5_cl_smpc_app_166 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,4 @@
+" @keywords semanticpage semantic sap.m.semantic actions button overflowtoolbarbutton
 CLASS z2ui5_cl_smpc_app_105 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

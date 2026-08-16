@@ -1,3 +1,4 @@
+" @keywords image sap.m vbox hbox text
 CLASS z2ui5_cl_smpc_app_399 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

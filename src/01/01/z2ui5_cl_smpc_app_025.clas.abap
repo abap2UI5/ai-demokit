@@ -1,3 +1,4 @@
+" @keywords feedlistitem feed list item sap.m provides set feedlistitemaction
 CLASS z2ui5_cl_smpc_app_025 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

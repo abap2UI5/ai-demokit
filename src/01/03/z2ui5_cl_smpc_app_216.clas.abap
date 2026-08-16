@@ -1,3 +1,4 @@
+" @keywords objectpageheadercontent object header content sap.uxap headercontent objectpageheaderlayoutdata
 CLASS z2ui5_cl_smpc_app_216 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

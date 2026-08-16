@@ -1,3 +1,4 @@
+" @keywords standardlistitem standard list item sap.m
 CLASS z2ui5_cl_smpc_app_212 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

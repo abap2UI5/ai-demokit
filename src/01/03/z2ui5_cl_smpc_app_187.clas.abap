@@ -1,3 +1,4 @@
+" @keywords objectpagelayout object layout sap.uxap anchorbarnopopover objectpagedynamicheadertitle objectpagesection objectpagesubsection
 CLASS z2ui5_cl_smpc_app_187 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,4 @@
+" @keywords table sap.ui.table rowhighlights rowsettings column
 CLASS z2ui5_cl_smpc_app_174 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

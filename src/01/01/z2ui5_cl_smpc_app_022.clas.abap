@@ -1,3 +1,4 @@
+" @keywords facetfilter facet filter sap.m aposlightapos version vbox facetfilterlist facetfilteritem table overflowtoolbar title
 CLASS z2ui5_cl_smpc_app_022 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

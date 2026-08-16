@@ -1,3 +1,4 @@
+" @keywords table sap.ui.table multi-level column headers
 CLASS z2ui5_cl_smpc_app_137 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,4 @@
+" @keywords text sap.m textmaxlines messagestrip
 CLASS z2ui5_cl_smpc_app_372 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

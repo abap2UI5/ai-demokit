@@ -1,3 +1,4 @@
+" @keywords objectpageheaderactionbutton object header action button sap.uxap objectpageheaderactionbuttons objectpagelayout objectpagedynamicheadertitle objectpagesection objectpagesubsection
 CLASS z2ui5_cl_smpc_app_239 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

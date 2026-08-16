@@ -1,3 +1,4 @@
+" @keywords semanticpage semantic sap.m.semantic master-detail actions splitcontainer pageaccessiblelandmarkinfo messagepopover messageitem pagingbutton overflowtoolbarbutton button
 CLASS z2ui5_cl_smpc_app_107 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

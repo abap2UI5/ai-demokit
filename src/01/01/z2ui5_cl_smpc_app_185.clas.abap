@@ -1,3 +1,4 @@
+" @keywords whitespacepattern whitespace pattern sap.m messagestrip link input multiinput multicombobox token objectstatus objectnumber
 CLASS z2ui5_cl_smpc_app_185 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

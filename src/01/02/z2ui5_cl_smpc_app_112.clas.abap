@@ -1,3 +1,4 @@
+" @keywords colorpicker color picker sap.ui.unified selection responsivepopover button
 CLASS z2ui5_cl_smpc_app_112 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

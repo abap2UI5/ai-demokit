@@ -1,3 +1,4 @@
+" @keywords shellbar shell bar sap.f shellbarwithsearch searchmanager
 CLASS z2ui5_cl_smpc_app_218 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

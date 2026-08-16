@@ -1,3 +1,4 @@
+" @keywords generictag generic tag sap.m displays app-speci flexbox text objectnumber
 CLASS z2ui5_cl_smpc_app_027 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,4 @@
+" @keywords objectnumber object number sap.m states inverted interactive styles label panel
 CLASS z2ui5_cl_smpc_app_072 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

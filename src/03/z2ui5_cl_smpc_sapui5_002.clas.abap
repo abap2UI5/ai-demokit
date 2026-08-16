@@ -1,3 +1,4 @@
+" @keywords interactivelinechart shell link text flexbox
 "! <p class="shorttext">sap.suite.ui.microchart - InteractiveLineChart</p>
 "!
 "! SAPUI5-only control: it ships with SAPUI5, not with OpenUI5, so there is no

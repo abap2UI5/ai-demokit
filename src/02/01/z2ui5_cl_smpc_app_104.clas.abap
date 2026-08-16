@@ -1,3 +1,4 @@
+" @keywords tableselectdialog table select dialog sap.m product row columnlistitem objectidentifier text objectnumber column
 CLASS z2ui5_cl_smpc_app_104 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

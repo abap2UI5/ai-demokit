@@ -1,3 +1,4 @@
+" @keywords headerfacetpattern header facet pattern sap.uxap objectpagewithlinksandobjectstatus objectpagelayout objectpagedynamicheadertitle objectpagesection objectpagesubsection quickview quickviewpage
 CLASS z2ui5_cl_smpc_app_412 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

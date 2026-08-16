@@ -1,3 +1,4 @@
+" @keywords dynamicsidecontent dynamic side content sap.ui.layout dynamicsidecontentequalsplit vbox title image text toolbar button
 CLASS z2ui5_cl_smpc_app_267 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

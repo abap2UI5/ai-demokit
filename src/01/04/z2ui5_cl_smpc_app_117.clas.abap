@@ -1,3 +1,4 @@
+" @keywords card sap.f fiori vbox hbox combobox datepicker button list customlistitem title text
 CLASS z2ui5_cl_smpc_app_117 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

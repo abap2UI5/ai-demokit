@@ -1,3 +1,4 @@
+" @keywords text sap.m embedding long vbox
 CLASS z2ui5_cl_smpc_app_051 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

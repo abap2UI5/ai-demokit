@@ -1,3 +1,4 @@
+" @keywords flexbox flex box sap.m boxes nested. remember hbox flexitemdata vbox
 CLASS z2ui5_cl_smpc_app_026 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

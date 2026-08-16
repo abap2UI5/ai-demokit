@@ -1,3 +1,4 @@
+" @keywords notificationlistgroup notification list group sap.m grouped notifications vbox notificationlist flexitemdata button notificationlistitem
 CLASS z2ui5_cl_smpc_app_077 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

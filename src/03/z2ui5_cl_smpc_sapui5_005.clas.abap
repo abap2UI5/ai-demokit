@@ -1,3 +1,4 @@
+" @keywords harveyballmicrochart shell
 "! <p class="shorttext">sap.suite.ui.microchart - HarveyBallMicroChart</p>
 "!
 "! SAPUI5-only control: it ships with SAPUI5, not with OpenUI5, so there is no

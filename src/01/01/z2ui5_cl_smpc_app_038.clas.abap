@@ -1,3 +1,4 @@
+" @keywords messageview message sap.m showing connect messageitem
 CLASS z2ui5_cl_smpc_app_038 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

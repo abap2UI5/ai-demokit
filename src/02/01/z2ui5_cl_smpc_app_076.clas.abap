@@ -1,3 +1,4 @@
+" @keywords notificationlistitem notification list item sap.m variants buttons avatars vbox notificationlist flexitemdata button
 CLASS z2ui5_cl_smpc_app_076 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

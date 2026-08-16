@@ -1,3 +1,4 @@
+" @keywords date sap.ui.model.type typedateasdate label datepicker text
 CLASS z2ui5_cl_smpc_app_282 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

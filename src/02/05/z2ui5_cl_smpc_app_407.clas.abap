@@ -1,3 +1,4 @@
+" @keywords sidenavigation side navigation sap.tnt sidenavigationsearch button image title text toolbarspacer searchfield overflowtoolbarlayoutdata
 CLASS z2ui5_cl_smpc_app_407 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

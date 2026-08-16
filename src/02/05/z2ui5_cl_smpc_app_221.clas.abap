@@ -1,3 +1,4 @@
+" @keywords toolheader tool header sap.tnt toolheadericontabheader text button overflowtoolbarlayoutdata icontabheader icontabfilter menubutton menu
 CLASS z2ui5_cl_smpc_app_221 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

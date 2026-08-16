@@ -1,3 +1,4 @@
+" @keywords searchfield search field sap.m inside dialog button toolbar text
 CLASS z2ui5_cl_smpc_app_090 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

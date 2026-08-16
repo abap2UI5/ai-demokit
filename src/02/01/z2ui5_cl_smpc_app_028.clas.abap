@@ -1,3 +1,4 @@
+" @keywords generictile generic tile sap.m shows kpi contain tilecontent numericcontent imagecontent newscontent slidetile
 CLASS z2ui5_cl_smpc_app_028 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

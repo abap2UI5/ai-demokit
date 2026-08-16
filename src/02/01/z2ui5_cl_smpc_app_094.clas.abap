@@ -1,3 +1,4 @@
+" @keywords popover sap.m controlling click behavior app table toolbar title column text columnlistitem
 CLASS z2ui5_cl_smpc_app_094 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

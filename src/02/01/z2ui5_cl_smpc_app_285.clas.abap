@@ -1,3 +1,4 @@
+" @keywords popover sap.m popoverwithinarea button vbox flexitemdata flexbox image list standardlistitem
 CLASS z2ui5_cl_smpc_app_285 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

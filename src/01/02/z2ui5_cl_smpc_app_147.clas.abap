@@ -1,3 +1,4 @@
+" @keywords busyindicator busy indicator sap.ui.core global panel text button
 CLASS z2ui5_cl_smpc_app_147 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

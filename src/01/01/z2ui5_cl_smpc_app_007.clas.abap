@@ -1,3 +1,4 @@
+" @keywords checkbox check box sap.m reflects text
 CLASS z2ui5_cl_smpc_app_007 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

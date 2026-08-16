@@ -1,3 +1,4 @@
+" @keywords table sap.ui.table selection column
 CLASS z2ui5_cl_smpc_app_361 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

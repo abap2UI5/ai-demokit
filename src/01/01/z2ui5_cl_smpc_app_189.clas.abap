@@ -1,3 +1,4 @@
+" @keywords bar sap.m toolbarvsbar button toolbar toolbarspacer title messagestrip label toolbarlayoutdata overflowtoolbar
 CLASS z2ui5_cl_smpc_app_189 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

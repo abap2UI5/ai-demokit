@@ -1,3 +1,4 @@
+" @keywords containerpadding container padding sap.ui.core no content messagestrip icontabbar text icontabfilter icontabseparator
 CLASS z2ui5_cl_smpc_app_087 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

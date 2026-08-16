@@ -1,3 +1,4 @@
+" @keywords stepinput step input sap.m allows user change st list customlistitem hbox vbox
 CLASS z2ui5_cl_smpc_app_049 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

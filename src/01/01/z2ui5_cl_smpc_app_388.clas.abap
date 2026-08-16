@@ -1,3 +1,4 @@
+" @keywords generictile generic tile sap.m generictileasfeedtile tilecontent feedcontent slidetile newscontent
 CLASS z2ui5_cl_smpc_app_388 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

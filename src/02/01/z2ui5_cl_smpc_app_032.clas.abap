@@ -1,3 +1,4 @@
+" @keywords input sap.m shows different value state vbox formattedtext link
 CLASS z2ui5_cl_smpc_app_032 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

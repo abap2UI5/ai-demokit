@@ -893,6 +893,18 @@ test run rather than by an author. Putting it in a `"` comment would bloat the
 source and would still be worse structured than JSON. That belongs beside the
 class, and the sidecar is right for it.
 
+### In this repository
+
+`" @keywords` is **generated**, not written: `npm run keywords` derives it from
+`meta/<class>.json`'s `entity`, the class `DESCRIPT` and the controls the port
+actually builds, and `npm run check:keywords` holds it to those sources.
+
+`" @summary` is still empty on all 431 ports. The demo kit's full description
+is what belongs there - the `DESCRIPT` carries it truncated at 60 characters,
+mid-sentence in places - and it is no longer in this repository. That is a
+fetch, not an authorship exercise, and replacing 431 truncated sentences with
+431 invented ones would be worse than the gap.
+
 ### The test, when a new field turns up
 
 Ask: *would this still be true if nobody ever ran a check again?* If yes it
@@ -937,6 +949,18 @@ property of the class; it is a log entry about a process, usually written by a
 test run rather than by an author. Putting it in a `"` comment would bloat the
 source and would still be worse structured than JSON. That belongs beside the
 class, and the sidecar is right for it.
+
+### In this repository
+
+`" @keywords` is **generated**, not written: `npm run keywords` derives it from
+`meta/<class>.json`'s `entity`, the class `DESCRIPT` and the controls the port
+actually builds, and `npm run check:keywords` holds it to those sources.
+
+`" @summary` is still empty on all 431 ports. The demo kit's full description
+is what belongs there - the `DESCRIPT` carries it truncated at 60 characters,
+mid-sentence in places - and it is no longer in this repository. That is a
+fetch, not an authorship exercise, and replacing 431 truncated sentences with
+431 invented ones would be worse than the gap.
 
 ### The test, when a new field turns up
 

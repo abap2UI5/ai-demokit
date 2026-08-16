@@ -1,3 +1,4 @@
+" @keywords modelmapping model mapping sap.uxap boundmodelmapping text
 CLASS z2ui5_cl_smpc_app_230 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

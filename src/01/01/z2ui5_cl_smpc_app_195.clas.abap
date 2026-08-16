@@ -1,3 +1,4 @@
+" @keywords list sap.m listfooter standardlistitem
 CLASS z2ui5_cl_smpc_app_195 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

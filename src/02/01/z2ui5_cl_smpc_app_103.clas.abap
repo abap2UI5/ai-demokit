@@ -1,3 +1,4 @@
+" @keywords selectdialog select dialog sap.m product list standardlistitem button input
 CLASS z2ui5_cl_smpc_app_103 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

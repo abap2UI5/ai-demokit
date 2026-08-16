@@ -1,3 +1,4 @@
+" @keywords card sap.ui.integration manifest menu menuitem avatar icontabbar icontabfilter title
 CLASS z2ui5_cl_smpc_app_118 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

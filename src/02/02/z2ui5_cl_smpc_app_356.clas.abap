@@ -1,3 +1,4 @@
+" @keywords table sap.ui.table multiselectionplugin column
 CLASS z2ui5_cl_smpc_app_356 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,4 @@
+" @keywords tabcontainer tab container sap.m editable employee tabs tabcontaineritem label input
 CLASS z2ui5_cl_smpc_app_093 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

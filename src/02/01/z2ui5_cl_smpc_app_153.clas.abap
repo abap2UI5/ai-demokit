@@ -1,3 +1,4 @@
+" @keywords maskinput mask input sap.m rules app label maskinputrule
 CLASS z2ui5_cl_smpc_app_153 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

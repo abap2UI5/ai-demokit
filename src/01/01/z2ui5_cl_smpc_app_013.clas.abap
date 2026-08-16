@@ -1,3 +1,4 @@
+" @keywords cookiesettingsdialogpattern cookie settings dialog pattern sap.m button vbox text hbox title switch
 CLASS z2ui5_cl_smpc_app_013 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

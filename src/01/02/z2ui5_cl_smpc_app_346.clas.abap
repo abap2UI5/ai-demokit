@@ -1,3 +1,4 @@
+" @keywords cssgrid sap.ui.layout.cssgrid gridautorows panel togglebutton overflowtoolbar title text label vbox toolbar
 CLASS z2ui5_cl_smpc_app_346 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

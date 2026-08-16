@@ -1,3 +1,4 @@
+" @keywords select sap.m dropdown selects item binding toolbar toolbarspacer hbox vbox label switch
 CLASS z2ui5_cl_smpc_app_048 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

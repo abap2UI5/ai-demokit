@@ -1,3 +1,4 @@
+" @keywords form sap.ui.layout.form toolbars vbox toolbar title toolbarspacer button input select
 CLASS z2ui5_cl_smpc_app_142 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,4 @@
+" @keywords viewsettingsdialog settings dialog sap.m viewsettingsdialogcustom viewsettingscustomitem slider button
 CLASS z2ui5_cl_smpc_app_295 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

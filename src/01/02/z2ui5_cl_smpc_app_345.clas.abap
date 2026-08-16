@@ -1,3 +1,4 @@
+" @keywords grid sap.ui.layout gridproperties messagestrip title formattedtext slider
 CLASS z2ui5_cl_smpc_app_345 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

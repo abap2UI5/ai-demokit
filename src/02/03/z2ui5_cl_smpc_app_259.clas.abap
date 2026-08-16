@@ -1,3 +1,4 @@
+" @keywords objectpagedynamicheadertitle object dynamic header title sap.uxap objectpageprogressratingindicators objectpagelayout objectpagesection objectpagesubsection
 CLASS z2ui5_cl_smpc_app_259 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

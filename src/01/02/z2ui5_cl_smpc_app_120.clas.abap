@@ -1,3 +1,4 @@
+" @keywords html sap.ui.core raw injection
 CLASS z2ui5_cl_smpc_app_120 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.

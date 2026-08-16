@@ -1,3 +1,4 @@
+" @keywords menu sap.m shown another openby vbox button menuitem
 CLASS z2ui5_cl_smpc_app_060 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

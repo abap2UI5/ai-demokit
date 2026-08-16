@@ -1,3 +1,4 @@
+" @keywords splitapp split app sap.m master-detail navigation label button vbox text radiobuttongroup radiobutton
 CLASS z2ui5_cl_smpc_app_097 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,4 @@
+" @keywords splitter sap.ui.layout splitter4 app button
 CLASS z2ui5_cl_smpc_app_340 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

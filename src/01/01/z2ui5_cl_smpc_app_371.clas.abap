@@ -1,3 +1,4 @@
+" @keywords textarea text area sap.m textareavaluestates
 CLASS z2ui5_cl_smpc_app_371 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,4 @@
+" @keywords image sap.m imageerrorwithillustration vbox button flexitemdata illustratedmessage
 CLASS z2ui5_cl_smpc_app_279 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

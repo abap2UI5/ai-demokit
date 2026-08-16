@@ -1,3 +1,4 @@
+" @keywords filter sap.ui.model boundfilters.filterbar title toolbar label input toolbarspacer button text
 CLASS z2ui5_cl_smpc_app_264 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

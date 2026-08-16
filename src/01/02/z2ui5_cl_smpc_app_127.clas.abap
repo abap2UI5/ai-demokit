@@ -1,3 +1,4 @@
+" @keywords invisibletext invisible text sap.ui.core aria descriptions toolbar button toolbarspacer title hbox flexitemdata
 CLASS z2ui5_cl_smpc_app_127 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

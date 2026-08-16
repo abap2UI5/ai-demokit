@@ -1,3 +1,4 @@
+" @keywords currency sap.ui.unified list customlistitem
 CLASS z2ui5_cl_smpc_app_196 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

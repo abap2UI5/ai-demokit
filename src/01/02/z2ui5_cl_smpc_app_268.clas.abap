@@ -1,3 +1,4 @@
+" @keywords colorpickerpopover color picker popover sap.ui.unified table column text columnlistitem label input
 CLASS z2ui5_cl_smpc_app_268 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

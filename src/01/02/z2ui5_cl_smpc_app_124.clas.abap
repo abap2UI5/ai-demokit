@@ -1,3 +1,4 @@
+" @keywords cssgrid sap.ui.layout.cssgrid layout slider panel overflowtoolbar title
 CLASS z2ui5_cl_smpc_app_124 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

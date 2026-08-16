@@ -1,3 +1,4 @@
+" @keywords statusindicator.statusindicator shell panel text slider responsivescale flexbox
 "! <p class="shorttext">sap.suite.ui.commons - statusindicator.StatusIndicator</p>
 "!
 "! SAPUI5-only control: it ships with SAPUI5, not with OpenUI5, so there is no

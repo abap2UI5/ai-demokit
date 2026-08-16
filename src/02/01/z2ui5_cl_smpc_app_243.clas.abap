@@ -1,3 +1,4 @@
+" @keywords responsivepopover responsive popover sap.m button image overflowtoolbar toolbarspacer
 CLASS z2ui5_cl_smpc_app_243 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

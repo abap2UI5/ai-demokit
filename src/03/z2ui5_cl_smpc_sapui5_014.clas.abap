@@ -1,3 +1,4 @@
+" @keywords ganttchartcontainer shell messagestrip scrollcontainer text label
 "! <p class="shorttext">sap.gantt - GanttChartContainer</p>
 "!
 "! SAPUI5-only control: it ships with SAPUI5, not with OpenUI5, so there is no

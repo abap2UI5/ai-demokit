@@ -1,3 +1,4 @@
+" @keywords objectheader object header sap.m objectheaderimage objectstatus objectattribute
 CLASS z2ui5_cl_smpc_app_206 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,4 @@
+" @keywords table sap.m tablealternaterowcolors overflowtoolbar title column text columnlistitem objectidentifier
 CLASS z2ui5_cl_smpc_app_210 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

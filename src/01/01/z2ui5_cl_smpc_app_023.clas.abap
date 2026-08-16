@@ -1,3 +1,4 @@
+" @keywords feedcontent feed content sap.m displays tile containing text
 CLASS z2ui5_cl_smpc_app_023 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

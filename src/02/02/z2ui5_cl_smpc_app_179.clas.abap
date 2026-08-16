@@ -1,3 +1,4 @@
+" @keywords float sap.ui.model.type typefloat label input text
 CLASS z2ui5_cl_smpc_app_179 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

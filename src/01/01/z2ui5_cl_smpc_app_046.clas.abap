@@ -1,3 +1,4 @@
+" @keywords scrollcontainer scroll container sap.m th image
 CLASS z2ui5_cl_smpc_app_046 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

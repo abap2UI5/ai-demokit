@@ -1,3 +1,4 @@
+" @keywords carousel sap.m carouselwithmorepages label input switch title carousellayout scrollcontainer hbox text
 CLASS z2ui5_cl_smpc_app_252 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,4 @@
+" @keywords navigationlist navigation list sap.tnt overflowtoolbar button
 CLASS z2ui5_cl_smpc_app_123 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

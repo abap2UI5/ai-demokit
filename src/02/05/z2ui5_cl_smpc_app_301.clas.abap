@@ -1,3 +1,4 @@
+" @keywords sidenavigation side navigation sap.tnt sidenavigationoverlaymode app avatar navcontainer scrollcontainer vbox text responsivepopover
 CLASS z2ui5_cl_smpc_app_301 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

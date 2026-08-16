@@ -1,3 +1,4 @@
+" @keywords multicombobox multi combo box sap.m items could gr
 CLASS z2ui5_cl_smpc_app_039 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,4 @@
+" @keywords displaylistitem display list item sap.m represent label
 CLASS z2ui5_cl_smpc_app_020 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

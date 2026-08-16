@@ -1,3 +1,4 @@
+" @keywords flexiblecolumnlayout flexible column layout sap.f master-detail table label columnlistitem text button
 CLASS z2ui5_cl_smpc_app_234 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

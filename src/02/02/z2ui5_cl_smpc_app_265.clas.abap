@@ -1,3 +1,4 @@
+" @keywords filter sap.ui.model boundfilters.filteredlistintable title label text select
 CLASS z2ui5_cl_smpc_app_265 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

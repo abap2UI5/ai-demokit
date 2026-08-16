@@ -1,3 +1,4 @@
+" @keywords calendardateinterval calendar date interval sap.ui.unified calendardateintervalbasic button label text
 CLASS z2ui5_cl_smpc_app_177 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

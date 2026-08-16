@@ -1,3 +1,4 @@
+" @keywords datepicker date picker sap.m open another title vbox label button link
 CLASS z2ui5_cl_smpc_app_016 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

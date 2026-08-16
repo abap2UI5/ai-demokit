@@ -1,3 +1,4 @@
+" @keywords slidetile slide tile sap.m sliding generic tiles generictile tilecontent newscontent
 CLASS z2ui5_cl_smpc_app_082 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,4 @@
+" @keywords sap.ui.core fieldgroup label input select combobox messagestrip toolbar button
 CLASS z2ui5_cl_smpc_app_272 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

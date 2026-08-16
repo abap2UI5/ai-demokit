@@ -1,3 +1,4 @@
+" @keywords form sap.ui.layout.form form_column_onegroup bar button vbox text input select
 CLASS z2ui5_cl_smpc_app_320 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

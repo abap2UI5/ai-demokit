@@ -1,3 +1,4 @@
+" @keywords togglebutton toggle button sap.m bars pressed states bar title hbox flexitemdata
 CLASS z2ui5_cl_smpc_app_080 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

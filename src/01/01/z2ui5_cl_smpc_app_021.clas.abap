@@ -1,3 +1,4 @@
+" @keywords draftindicator draft indicator sap.m sap.m.label button
 CLASS z2ui5_cl_smpc_app_021 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

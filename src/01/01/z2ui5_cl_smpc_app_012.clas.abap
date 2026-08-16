@@ -1,3 +1,4 @@
+" @keywords comparisonpattern comparison pattern sap.m compare items side app table toolbar title toolbarspacer
 CLASS z2ui5_cl_smpc_app_012 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

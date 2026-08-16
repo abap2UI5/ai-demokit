@@ -1,3 +1,4 @@
+" @keywords verticallayout vertical layout sap.ui.layout image
 CLASS z2ui5_cl_smpc_app_173 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,4 @@
+" @keywords planningcalendar planning calendar sap.m single-row day planner vbox title togglebutton planningcalendarrow
 CLASS z2ui5_cl_smpc_app_108 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

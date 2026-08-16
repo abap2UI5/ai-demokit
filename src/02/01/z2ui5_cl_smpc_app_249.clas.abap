@@ -1,3 +1,4 @@
+" @keywords button sap.m buttonwithbadge toolbar title badgecustomdata flexbox text stepinput input select checkbox
 CLASS z2ui5_cl_smpc_app_249 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

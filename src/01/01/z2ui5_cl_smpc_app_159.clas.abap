@@ -1,3 +1,4 @@
+" @keywords input sap.m types label
 CLASS z2ui5_cl_smpc_app_159 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

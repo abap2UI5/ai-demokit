@@ -1,3 +1,4 @@
+" @keywords facetfilter facet filter sap.m facetfiltersimple vbox facetfilterlist facetfilteritem table overflowtoolbar title toolbarspacer
 CLASS z2ui5_cl_smpc_app_235 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

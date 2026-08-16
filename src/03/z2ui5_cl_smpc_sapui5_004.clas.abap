@@ -1,3 +1,4 @@
+" @keywords radialmicrochart shell link
 "! <p class="shorttext">sap.suite.ui.microchart - RadialMicroChart</p>
 "!
 "! SAPUI5-only control: it ships with SAPUI5, not with OpenUI5, so there is no

@@ -1,3 +1,4 @@
+" @keywords colorpalette color palette sap.m standalone contai toolbar title label
 CLASS z2ui5_cl_smpc_app_008 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

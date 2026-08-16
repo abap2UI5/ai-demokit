@@ -1,3 +1,4 @@
+" @keywords objectpageheadercontent object header content sap.uxap objectpageheadercontentpriorities objectpagelayout objectpagedynamicheadertitle objectpageheaderlayoutdata objectpagesection objectpagesubsection
 CLASS z2ui5_cl_smpc_app_188 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

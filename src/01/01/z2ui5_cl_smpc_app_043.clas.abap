@@ -1,3 +1,4 @@
+" @keywords panel sap.m panels possibility expand col text overflowtoolbar title toolbarspacer button
 CLASS z2ui5_cl_smpc_app_043 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

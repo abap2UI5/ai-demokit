@@ -1,3 +1,4 @@
+" @keywords fixflex fix flex sap.ui.layout fixflexfixedsize scrollcontainer text
 CLASS z2ui5_cl_smpc_app_338 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,4 @@
+" @keywords dynamicpage dynamic sap.f dynamicpagewithstickysubheader title breadcrumbs link label overflowtoolbar generictag objectnumber button
 CLASS z2ui5_cl_smpc_app_238 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

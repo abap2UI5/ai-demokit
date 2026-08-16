@@ -1,3 +1,4 @@
+" @keywords messagepopover message popover sap.m async handling overflowtoolbar button messageitem link toolbarspacer
 CLASS z2ui5_cl_smpc_app_067 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

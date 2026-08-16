@@ -1,3 +1,4 @@
+" @keywords horizontallayout horizontal layout sap.ui.layout named model image
 CLASS z2ui5_cl_smpc_app_162 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

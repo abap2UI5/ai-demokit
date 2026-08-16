@@ -1,3 +1,4 @@
+" @keywords table sap.ui.table grid column
 CLASS z2ui5_cl_smpc_app_115 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

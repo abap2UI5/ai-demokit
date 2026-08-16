@@ -1,3 +1,4 @@
+" @keywords list sap.m counter item quickly shows many standardlistitem
 CLASS z2ui5_cl_smpc_app_034 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

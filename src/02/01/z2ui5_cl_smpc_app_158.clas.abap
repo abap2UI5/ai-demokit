@@ -1,3 +1,4 @@
+" @keywords flexbox flex box sap.m gap vbox panel button
 CLASS z2ui5_cl_smpc_app_158 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

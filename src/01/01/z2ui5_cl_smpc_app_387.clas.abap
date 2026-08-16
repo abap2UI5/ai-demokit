@@ -1,3 +1,4 @@
+" @keywords multiinput multi input sap.m multiinputwrapping label
 CLASS z2ui5_cl_smpc_app_387 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

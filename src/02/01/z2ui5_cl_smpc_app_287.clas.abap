@@ -1,3 +1,4 @@
+" @keywords icontabbar icon tab bar sap.m icontabbarbadges panel label radiobuttongroup radiobutton icontabfilter text
 CLASS z2ui5_cl_smpc_app_287 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

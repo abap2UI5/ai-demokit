@@ -1,3 +1,4 @@
+" @keywords button sap.m buttons: types icons press events toolbar toolbarspacer title hbox flexitemdata
 CLASS z2ui5_cl_smpc_app_005 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

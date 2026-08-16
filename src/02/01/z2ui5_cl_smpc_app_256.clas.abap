@@ -1,3 +1,4 @@
+" @keywords daterangeselection date range selection sap.m daterangeselectionhidden title vbox label button link
 CLASS z2ui5_cl_smpc_app_256 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

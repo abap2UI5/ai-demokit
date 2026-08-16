@@ -1,3 +1,4 @@
+" @keywords dialog sap.m dialogfullscreen button list standardlistitem
 CLASS z2ui5_cl_smpc_app_274 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

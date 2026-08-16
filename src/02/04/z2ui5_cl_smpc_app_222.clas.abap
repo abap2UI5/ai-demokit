@@ -1,3 +1,4 @@
+" @keywords gridlist grid list sap.f gridlistresponsivecolumnlayout togglebutton slider panel toolbar title vbox label
 CLASS z2ui5_cl_smpc_app_222 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

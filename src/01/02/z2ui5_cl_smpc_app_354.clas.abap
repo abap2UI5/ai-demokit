@@ -1,3 +1,4 @@
+" @keywords table sap.ui.table filtering column
 CLASS z2ui5_cl_smpc_app_354 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

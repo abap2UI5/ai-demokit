@@ -1,3 +1,4 @@
+" @keywords networkgraph.graph quickview quickviewpage avatar quickviewgroup quickviewgroupelement
 "! <p class="shorttext">sap.suite.ui.commons - networkgraph.Graph</p>
 "!
 "! SAPUI5-only control: it ships with SAPUI5, not with OpenUI5, so there is no

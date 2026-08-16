@@ -1,3 +1,4 @@
+" @keywords objectlistitem object list item sap.m objectlistitemmarkers objectstatus objectattribute objectmarker
 CLASS z2ui5_cl_smpc_app_198 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

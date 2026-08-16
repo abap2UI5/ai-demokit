@@ -1,3 +1,4 @@
+" @keywords toolpage tool sap.tnt toolpagenavigation button overflowtoolbarlayoutdata image title text toolbarspacer searchfield overflowtoolbarbutton
 CLASS z2ui5_cl_smpc_app_302 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

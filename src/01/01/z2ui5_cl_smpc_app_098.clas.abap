@@ -1,3 +1,4 @@
+" @keywords viewsettingsdialog settings dialog sap.m sort group filter viewsettingsitem viewsettingsfilteritem button
 CLASS z2ui5_cl_smpc_app_098 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

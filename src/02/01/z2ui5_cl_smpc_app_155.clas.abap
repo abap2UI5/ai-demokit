@@ -1,3 +1,4 @@
+" @keywords checkbox check box sap.m states vbox label
 CLASS z2ui5_cl_smpc_app_155 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

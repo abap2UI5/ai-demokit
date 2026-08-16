@@ -1,3 +1,4 @@
+" @keywords actionlistitem action list item sap.m
 CLASS z2ui5_cl_smpc_app_001 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

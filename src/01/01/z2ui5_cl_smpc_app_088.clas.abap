@@ -1,3 +1,4 @@
+" @keywords standardmargins standard margins sap.ui.core margin classes text panel
 CLASS z2ui5_cl_smpc_app_088 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,4 @@
+" @keywords treetable tree table sap.ui.table treetable.basicodatatreebinding column
 CLASS z2ui5_cl_smpc_app_364 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

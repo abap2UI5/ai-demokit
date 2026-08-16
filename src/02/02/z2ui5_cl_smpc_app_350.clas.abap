@@ -1,3 +1,4 @@
+" @keywords cssgrid sap.ui.layout.cssgrid producthomelayout image text toolbarspacer button avatar scrollcontainer togglebutton vbox title
 CLASS z2ui5_cl_smpc_app_350 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

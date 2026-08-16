@@ -1,3 +1,4 @@
+" @keywords sap.m pagelistreporticontabbar vbox label text flexitemdata icontabbar icontabfilter overflowtoolbar toolbarspacer searchfield segmentedbutton
 CLASS z2ui5_cl_smpc_app_406 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

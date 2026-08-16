@@ -1,3 +1,4 @@
+" @keywords productswitch product switch sap.f productswitchnavigation button text responsivepopover
 CLASS z2ui5_cl_smpc_app_165 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

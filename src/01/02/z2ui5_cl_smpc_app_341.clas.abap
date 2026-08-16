@@ -1,3 +1,4 @@
+" @keywords card sap.ui.integration.widgets cardsloading label input button
 CLASS z2ui5_cl_smpc_app_341 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

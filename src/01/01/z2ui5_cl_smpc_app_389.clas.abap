@@ -1,3 +1,4 @@
+" @keywords generictile generic tile sap.m generictileasmonitortile tilecontent numericcontent
 CLASS z2ui5_cl_smpc_app_389 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

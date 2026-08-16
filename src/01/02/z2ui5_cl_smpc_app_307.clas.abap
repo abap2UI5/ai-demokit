@@ -1,3 +1,4 @@
+" @keywords calendar sap.ui.unified calendarmultipledayselection button list standardlistitem
 CLASS z2ui5_cl_smpc_app_307 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

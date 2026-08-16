@@ -1,3 +1,4 @@
+" @keywords table sap.m automatic pop-in column importance messagestrip slider overflowtoolbar title toolbarspacer label
 CLASS z2ui5_cl_smpc_app_092 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

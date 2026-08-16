@@ -1,3 +1,4 @@
+" @keywords blocklayout block layout sap.ui.layout blocklayoutdefault label slider segmentedbutton segmentedbuttonitem text radiobuttongroup radiobutton
 CLASS z2ui5_cl_smpc_app_214 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

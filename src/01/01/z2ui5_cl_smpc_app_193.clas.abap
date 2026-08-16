@@ -1,3 +1,4 @@
+" @keywords combobox combo box sap.m combobox2columns
 CLASS z2ui5_cl_smpc_app_193 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

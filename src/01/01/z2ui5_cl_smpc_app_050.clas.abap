@@ -1,3 +1,4 @@
+" @keywords switch sap.m off switches types custom text vbox hbox flexitemdata
 CLASS z2ui5_cl_smpc_app_050 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

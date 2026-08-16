@@ -1,3 +1,4 @@
+" @keywords calendar sap.ui.unified calendarsingleintervalselection label text
 CLASS z2ui5_cl_smpc_app_306 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

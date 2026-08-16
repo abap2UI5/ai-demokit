@@ -1,3 +1,4 @@
+" @keywords fixflex fix flex sap.ui.layout fixflexhorizontal image text
 CLASS z2ui5_cl_smpc_app_219 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

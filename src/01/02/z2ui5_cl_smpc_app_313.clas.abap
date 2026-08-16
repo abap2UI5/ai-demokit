@@ -1,3 +1,4 @@
+" @keywords form sap.ui.layout.form form354wide bar button vbox text input select
 CLASS z2ui5_cl_smpc_app_313 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

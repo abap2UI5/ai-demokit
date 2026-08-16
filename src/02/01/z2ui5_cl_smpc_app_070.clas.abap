@@ -1,3 +1,4 @@
+" @keywords progressindicator progress indicator sap.m states display-only animation text flexbox button
 CLASS z2ui5_cl_smpc_app_070 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

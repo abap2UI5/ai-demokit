@@ -1,3 +1,4 @@
+" @keywords messagepopover message popover sap.m list overflowtoolbar button messageitem link toolbarspacer
 CLASS z2ui5_cl_smpc_app_066 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

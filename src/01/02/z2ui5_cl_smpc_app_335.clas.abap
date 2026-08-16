@@ -1,3 +1,4 @@
+" @keywords simpleform simple form sap.ui.layout.form simpleform_column_threegroups234 bar button vbox label text link input
 CLASS z2ui5_cl_smpc_app_335 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

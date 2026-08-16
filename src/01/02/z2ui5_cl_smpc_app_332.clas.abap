@@ -1,3 +1,4 @@
+" @keywords simpleform simple form sap.ui.layout.form simpleform480_trial bar button vbox label text ratingindicator progressindicator
 CLASS z2ui5_cl_smpc_app_332 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

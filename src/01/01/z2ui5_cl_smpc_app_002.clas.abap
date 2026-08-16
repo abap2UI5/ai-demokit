@@ -1,3 +1,4 @@
+" @keywords bar sap.m header sub footer bars button overflowtoolbar searchfield vbox text toolbarspacer
 CLASS z2ui5_cl_smpc_app_002 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

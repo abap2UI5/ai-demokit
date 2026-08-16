@@ -1,3 +1,4 @@
+" @keywords objectidentifier object identifier sap.m active title press
 CLASS z2ui5_cl_smpc_app_071 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

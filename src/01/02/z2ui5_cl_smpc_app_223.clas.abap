@@ -1,3 +1,4 @@
+" @keywords blocklayout block layout sap.ui.layout blocklayoutlinktitle label slider segmentedbutton segmentedbuttonitem messagestrip text link
 CLASS z2ui5_cl_smpc_app_223 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

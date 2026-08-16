@@ -1,3 +1,4 @@
+" @keywords radiobutton radio button sap.m groups value states wrapping vbox label radiobuttongroup hbox
 CLASS z2ui5_cl_smpc_app_069 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

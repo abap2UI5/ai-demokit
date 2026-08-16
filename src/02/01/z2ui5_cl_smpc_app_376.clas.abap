@@ -1,3 +1,4 @@
+" @keywords standardlistitem standard list item sap.m standardlistitemwrapping toolbar title toolbarspacer togglebutton
 CLASS z2ui5_cl_smpc_app_376 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

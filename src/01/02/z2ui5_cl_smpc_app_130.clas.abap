@@ -1,3 +1,4 @@
+" @keywords sap.ui.core busyindicator toolbar button panel toolbarspacer text
 CLASS z2ui5_cl_smpc_app_130 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

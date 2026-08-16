@@ -1,3 +1,4 @@
+" @keywords objectpageheader object header sap.uxap childobjectpage objectpagelayout objectpageheaderactionbutton objectpagesection objectpagesubsection
 CLASS z2ui5_cl_smpc_app_416 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

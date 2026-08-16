@@ -1,3 +1,4 @@
+" @keywords simpleform simple form sap.ui.layout.form simpleformtoolbar vbox toolbar title toolbarspacer button label input
 CLASS z2ui5_cl_smpc_app_175 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

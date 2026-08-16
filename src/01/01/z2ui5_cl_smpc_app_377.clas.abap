@@ -1,3 +1,4 @@
+" @keywords icontabbar icon tab bar sap.m icontabfilter icontabseparator table overflowtoolbar label column text
 CLASS z2ui5_cl_smpc_app_377 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

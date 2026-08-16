@@ -1,3 +1,4 @@
+" @keywords urlhelper sap.m tel sms email url triggers list displaylistitem
 CLASS z2ui5_cl_smpc_app_084 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

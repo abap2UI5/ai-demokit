@@ -1,3 +1,4 @@
+" @keywords table sap.ui.table rowaction column rowactionitem rowsettings
 CLASS z2ui5_cl_smpc_app_359 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

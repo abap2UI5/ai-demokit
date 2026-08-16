@@ -1,3 +1,4 @@
+" @keywords panel sap.m overflowtoolbar title image text toolbarspacer button
 CLASS z2ui5_cl_smpc_app_397 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

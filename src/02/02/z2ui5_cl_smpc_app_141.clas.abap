@@ -1,3 +1,4 @@
+" @keywords invisiblemessage invisible message sap.ui.core a11y hbox button flexitemdata text
 CLASS z2ui5_cl_smpc_app_141 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

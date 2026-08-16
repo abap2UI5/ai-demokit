@@ -1,3 +1,4 @@
+" @keywords formattedtext formatted text sap.m html vbox
 CLASS z2ui5_cl_smpc_app_154 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

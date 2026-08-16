@@ -1,3 +1,4 @@
+" @keywords feedinput feed input sap.m allows user list feedlistitem
 CLASS z2ui5_cl_smpc_app_024 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

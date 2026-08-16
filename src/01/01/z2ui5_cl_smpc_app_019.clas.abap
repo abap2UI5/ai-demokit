@@ -1,3 +1,4 @@
+" @keywords dialog sap.m confirm reject submit order dialogs button text label textarea
 CLASS z2ui5_cl_smpc_app_019 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

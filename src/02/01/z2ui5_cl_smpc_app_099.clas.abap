@@ -1,3 +1,4 @@
+" @keywords quickviewcard quick card sap.m inline links button panel quickviewpage avatar quickviewgroup quickviewgroupelement
 CLASS z2ui5_cl_smpc_app_099 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,4 @@
+" @keywords objectattribute object attribute sap.m objectattributeintable table column text columnlistitem objectidentifier
 CLASS z2ui5_cl_smpc_app_191 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

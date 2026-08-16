@@ -1,3 +1,4 @@
+" @keywords messageview message sap.m messageviewwithgrouping overflowtoolbar button toolbarspacer dialog bar text messageitem link
 CLASS z2ui5_cl_smpc_app_294 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

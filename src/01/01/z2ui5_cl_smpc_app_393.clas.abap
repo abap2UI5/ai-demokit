@@ -1,3 +1,4 @@
+" @keywords flexbox flex box sap.m flexboxdirectionorder vbox panel button flexitemdata
 CLASS z2ui5_cl_smpc_app_393 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

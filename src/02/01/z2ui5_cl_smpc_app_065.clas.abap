@@ -1,3 +1,4 @@
+" @keywords messagepopover message popover sap.m handling vbox label input select overflowtoolbar button messageitem
 CLASS z2ui5_cl_smpc_app_065 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

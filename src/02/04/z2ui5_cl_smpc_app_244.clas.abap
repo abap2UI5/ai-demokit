@@ -1,3 +1,4 @@
+" @keywords dynamicpage dynamic sap.f dynamicpageresponsiveavatar breadcrumbs link hbox title objectmarker text flexbox avatar
 CLASS z2ui5_cl_smpc_app_244 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

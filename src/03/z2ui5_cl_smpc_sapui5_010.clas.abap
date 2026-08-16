@@ -1,3 +1,4 @@
+" @keywords analyticmap shell
 "! <p class="shorttext">sap.ui.vbm - AnalyticMap</p>
 "!
 "! SAPUI5-only control: it ships with SAPUI5, not with OpenUI5, so there is no

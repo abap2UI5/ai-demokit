@@ -1,3 +1,4 @@
+" @keywords segmentedbutton segmented button sap.m allows user overflowtoolbar toolbarspacer segmentedbuttonitem vbox label text
 CLASS z2ui5_cl_smpc_app_047 DEFINITION PUBLIC.
 
   PUBLIC SECTION.
