@@ -90,6 +90,29 @@ the per-port modules here):
   KEYBOARD activation for controls with no layout box: 008 (a palette
     swatch, focus + Enter) 233 (F4 on the Input opens the SelectDialog) —
     a DOM click does NOT reach either of them
+  Edit/Save/Cancel through bound visible flags (2026-08-16): 312-337, all
+    26 ports of the Form/SimpleForm family on ONE module - Edit swaps the
+    form, CANCEL restores the record the EDIT handler cloned, SAVE keeps
+    the edited one
+  CAL_SELECT expression-arg round-trips (2026-08-16): 304 (+ Select Today)
+    305 (the SAME day clicked twice, which is the branch that CLEARS the
+    selection) 306 (two clicks make an interval)
+  TOGGLE_EXPAND on a SideNavigation (2026-08-16): 299 300 - pressed TWICE,
+    because a flag that latches on would pass a single click. Note the
+    navigation is NOT inside a ToolPage in 299: match on
+    [class*="sapTntSideNavigation"] and read NotExpanded off its class
+  SideNavigation itemSelect -> NavContainer 'to' (2026-08-16): 302 303 -
+    .sapTntNLI is not clickable where its text is; getByText() is
+  the anchored ColorPicker ResponsivePopover (2026-08-16): 309 310 - the
+    picker has no "Hue" label until it is OPEN; assert on
+    .sapUiColorPicker-ColorPickerMatrix instead
+  a static port that had never been SEEN to render (2026-08-16): 413 - the
+    ObjectPage header IDENTIFIER and header CONTENT are two different DOM
+    subtrees, so one assertion cannot cover both
+  the enum an emptied aggregation breaks (2026-08-16): 308 - pressing the
+    ToggleButton twice clears the table, UI5 evaluates the template with no
+    row, and an enum-typed property refuses the `` it gets. The port was
+    FIXED by this module; see abap2UI5's ui5-check §4
   still open: 233's confirm leg (neither click nor Enter on a dialog row
     reaches the SelectDialog's confirm headless) and the hidden-picker
     openBy class (016/256/257, Popover.onfocusin recursion)
