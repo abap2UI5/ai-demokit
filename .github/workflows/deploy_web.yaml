@@ -10,6 +10,17 @@ name: deploy_web
 # 28 MB of the repository per rebuild while being, at the moment it was
 # removed, twelve hours behind src/. A fallback nobody can tell is stale is
 # not a fallback.
+#
+# If you see a red "pages build and deployment" on main: that is GitHub's
+# BUILT-IN Jekyll builder, not this workflow, and it is a leftover of the old
+# branch source. It chdirs to ./docs, which no longer exists, and fails with
+# "No such file or directory @ dir_chdir0 - /github/workspace/docs". It
+# publishes nothing either way - this workflow's deploy job is what serves the
+# site, and it is green (checked 2026-08-16: deploy-pages succeeded minutes
+# after the built-in builder failed on the same commit, which it could not do
+# unless the source were already "GitHub Actions"). Re-saving the Pages source
+# in Settings clears the leftover; do NOT answer it by committing a docs/
+# folder again.
 
 on:
   workflow_dispatch:
