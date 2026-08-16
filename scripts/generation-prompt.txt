@@ -42,10 +42,18 @@ Rules:
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
   Add model_init / on_event only when the app actually has data / events.
+  The check_on_navigated branch is NOT optional and stays even in a static
+  app with no data and no events: check_on_init means "this app instance
+  never ran", so it is false when the overview app is re-entered, when a
+  z2ui5_cl_pop_* value help hands control back, or when a bookmarked state is
+  restored. Those roundtrips fire check_on_navigated alone, and without the
+  branch the browser silently keeps showing the previous app's view.
   z2ui5_if_app~main is always the FIRST method in the implementation; the
   remaining methods follow in the order they are called from main, EXCEPT
   model_init which always goes LAST (after every other method, and declared

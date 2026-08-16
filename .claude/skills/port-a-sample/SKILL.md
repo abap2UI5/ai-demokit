@@ -60,6 +60,8 @@ METHOD z2ui5_if_app~main.
   IF client->check_on_init( ).
     model_init( ).
     view_display( ).
+  ELSEIF client->check_on_navigated( ).
+    view_display( ).
   ELSEIF client->check_on_event( ).
     on_event( ).
   ENDIF.
@@ -76,14 +78,18 @@ ENDMETHOD.
   bottom stops that data from interrupting the reading flow of the dispatcher,
   view and event methods. pattern-lint checks that main comes first and that
   model_init comes last.
-- A **fully static sample** (no data, no events — app 051's class) reduces the
-  dispatcher to a bare `IF client->check_on_init( ). view_display( ). ENDIF.`
-  — no `ELSEIF`, no `model_init`/`on_event` methods at all.
+- A **fully static sample** (no data, no events — app 051's class) drops the
+  `on_event` branch and the `model_init`/`on_event` methods, but keeps both
+  display branches: `IF client->check_on_init( ). view_display( ). ELSEIF
+  client->check_on_navigated( ). view_display( ). ENDIF.`
 - `check_on_init( )` fires once when the app starts — seed the data, draw the view.
 - `check_on_event( )` fires on every user interaction — dispatch in `on_event( )`.
+- `check_on_navigated( )` fires when the app *regains* the screen — re-run
+  `view_display( )`, nothing else.
 - Add `model_init( )` / `on_event( )` **only when the app actually has data /
   events** — never a pass-through method with a single statement. A static app
-  (like app 051) has just `view_display( )` under `check_on_init( )`. A
+  (like app 051) has just `view_display( )` in each of its two display
+  branches. A
   **data-less-but-stateful** app (its only "model" is one or two control-state
   flags a button toggles, e.g. `expanded`) seeds those flags **inline in `main`**
   (or `view_display`), no `model_init` — the single-statement-method rule wins
@@ -95,8 +101,16 @@ ENDMETHOD.
   binding *values* only where the original itself binds). Declare a `LIVE_TEST`
   only because the round-trip *behaviour* is unverified, not because the diff
   requires it (app 128/172 precedent).
-- If the sample re-displays on navigation, add an
-  `ELSEIF client->check_on_navigated( ). view_display( ).` branch.
+- **The `check_on_navigated( )` branch is unconditional, not "if the sample
+  navigates".** `check_on_init( )` means "this app instance never ran" — it
+  stays false when the overview app is re-entered, when a `z2ui5_cl_pop_*`
+  value help hands control back (those run over `nav_app_call` too), and when a
+  bookmarked state is restored. Those roundtrips fire `check_on_navigated( )`
+  alone: without the branch the browser keeps showing the *previous* app's
+  view, silently. A port that only ever runs standalone looks fine and breaks
+  the day it is opened from a navigation — which is exactly how the overview
+  app opens every port. Most of the existing corpus predates this rule; new and
+  touched ports get the branch.
 
 #### `model_init` — the model
 
