@@ -20,8 +20,8 @@
       "what": "the controller's Device.system.phone branch (phone: keep the header and add Submit/Cancel buttons; otherwise setShowHeader(false)) stays a branch: abap2UI5 serves the device> named model on every view slot, so ResponsivePopover.showHeader and the two buttons' visible bind {= ${device>/system/phone}} instead of being resolved to one value at render time (apps 277/279 precedent). Both buttons close the popover client-side via follow_up_action( popover_close ), matching the original's oRP.close()."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet run in a system: the anchored popover round-trip and the phone-only Submit/Cancel buttons."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the anchored popover round-trip and the phone-only Submit/Cancel buttons."
     }
   ]
 }

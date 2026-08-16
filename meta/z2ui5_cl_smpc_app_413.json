@@ -20,8 +20,8 @@
       "what": "The three social-icon image assets (linkedInIcon.png, facebookIcon.png, twitterIcon.png) use the sample's relative './test-resources/sap/uxap/images/...' src paths; rewritten to the absolute sdk.openui5.org host ('https://sdk.openui5.org/test-resources/sap/uxap/images/linkedInIcon.png' etc.) per the offline asset-URL rule (app 200/262 precedent). Same assets, literal src values only - structural-diff compares literal attribute names, not values."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Rendering not yet verified in a running system: the port is init-only and fully static (no bindings, no events, no round-trip), so the open behaviours are render-time only - the ObjectPageHeader navigationBar Bar, the showPlaceholder=true Circle placeholder avatar (no objectImageURI is set), showTitleInHeaderContent=true and the always/snapped visibility flags (isObjectTitleAlwaysVisible/isObjectSubtitleAlwaysVisible=false, isActionAreaAlwaysVisible=true) are unverified live."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-16 (nightly e2e interaction): Rendering not yet verified in a running system: the port is init-only and fully static (no bindings, no events, no round-trip), so the open behaviours are render-time only - the ObjectPageHeader navigationBar Bar, the showPlaceholder=true Circle placeholder avatar (no objectImageURI is set), showTitleInHeaderContent=true and the always/snapped visibility flags (isObjectTitleAlwaysVisible/isObjectSubtitleAlwaysVisible=false, isActionAreaAlwaysVisible=true) are unverified live."
     }
   ]
 }
