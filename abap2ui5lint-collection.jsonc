@@ -1,0 +1,75 @@
+{
+  // The view check for src/03 — the SAPUI5-only COLLECTION (AGENTS §3).
+  //
+  // The ports in src/01 and src/02 go through scripts/view-gates.mjs, which is
+  // sidecar-driven and therefore cannot see this folder: a collection class has
+  // no meta/<class>.json by design, so structural_diff, data_fidelity and the
+  // coverage tables leave it alone. That is right for the PORT machinery and
+  // wrong for the view check, which asks only whether the view a class builds
+  // is a view UI5 can load. Until 2026-08 nothing asked that here at all — the
+  // 14 classes were written on the frozen z2ui5_cl_xml_view, which no
+  // reconstruction can read, so the linter answered "no checkable app classes".
+  //
+  //   npm run check:collection
+  //
+  // The render gate is OFF and cannot be turned on: it serves the OpenUI5
+  // runtime, and the whole point of this folder is controls that ship with
+  // SAPUI5 only (sap.gantt, sap.ui.vbm, sap.suite.*, sap.ndc, sap.ui.comp).
+  // There is no OpenUI5 build that could load them. --distribution sapui5 is
+  // what keeps sapui5-only-control quiet for the same reason.
+  "$schema": "./node_modules/@abap2ui5/linter/data/abap2ui5lint.schema.json",
+
+  "paths": ["src/03"],
+  "ui5": "1.71",
+  "distribution": "sapui5",
+  "render": false,
+
+  "rules": {
+    // A collection sample is not a port and is NOT held to the 1.71 floor
+    // (AGENTS §3: the <= 1.71 / > 1.71 split is a porting concern about which
+    // runtime a REBUILD needs). A SAPUI5-only control frequently arrived after
+    // 1.71 anyway, and the class header names the release it needs. Kept as
+    // hints rather than switched off: what they say is true and worth reading,
+    // it just does not decide anything here.
+    "control-too-new": { "severity": "hint" },
+    "member-too-new": { "severity": "hint" },
+    "aggregation-too-new": { "severity": "hint" },
+    "enum-value-too-new": { "severity": "hint" },
+    "icon-too-new": { "severity": "hint" },
+
+    // Each class links its control's SAPUI5 demo kit page, which is on
+    // ui5.sap.com because SAPUI5 has no other home — the same reason the
+    // collection's assets legitimately come from ui5.sap.com/test-resources
+    // (AGENTS §3). The rule is about an app loading its RUNTIME from the
+    // commercial host; a documentation hyperlink is not that.
+    "commercial-ui5-host": false,
+
+    // TEMPORARY, and only until the @abap2ui5/linter pin reaches 0.2.0.
+    // Both are linter defects this folder is the first corpus to hit, both are
+    // fixed on the linter's main branch, and both produce findings that are
+    // simply not true here:
+    //
+    //   unknown-aggregation   an aggregation under a control the SNAPSHOT does
+    //                         not have (every SAPUI5-only control is outside
+    //                         it) was attributed to the nearest control the
+    //                         snapshot DOES have - "sap.m.Page has no
+    //                         aggregation vos", naming a control four levels up
+    //   undeclared-namespace  an XML prefix is an NCName, so `xmlns:viz.data`
+    //                         is a declaration; the matcher used \w and read it
+    //                         as absent, then reported every use of it
+    //
+    // VERIFIED 2026-08-15 against the linter's main branch: with both lines
+    // removed the collection reports the same three findings it reports
+    // with them (aggregation-too-new, control-too-new, member-too-new -
+    // all three the SAPUI5-only API this package exists for). So the pin
+    // bump is a delete, not an investigation.
+    // Nothing else in this repo is affected - the ports in src/01 and
+    // src/02 are OpenUI5 and fully in the snapshot.
+    "unknown-aggregation": false,
+    "undeclared-namespace": false
+  },
+
+  // Hints stay visible and decide nothing. An error is a view UI5 would fail
+  // to load, and that fails the run here like anywhere else.
+  "failOn": "error"
+}

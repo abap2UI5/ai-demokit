@@ -66,49 +66,72 @@ CLASS z2ui5_cl_smpc_sapui5_010 IMPLEMENTATION.
         (   text = `Flight route` color = `rgb(92,186,35)` ) ).
     ENDIF.
 
-    DATA(view) = z2ui5_cl_xml_view=>factory( ).
-    DATA(page) = view->shell(
-            )->page(
-                    title          = `abap2UI5 - Map Container`
-                    navbuttonpress = client->_event_nav_app_leave( )
-                    shownavbutton  = client->check_app_prev_stack( ) ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    DATA(map) = page->map_container( autoadjustheight = abap_true
-         )->content( `vk`
-             )->container_content(
-               title = `Analytic Map`
-               icon  = `sap-icon://geographic-bubble-chart`
-                 )->content( `vk`
-                     )->analytic_map(
-                       initialposition = `9.933573;50;0`
-                       initialzoom     = `6` ).
+    view->ele( n = `View` ns = `mvc`
+        )->a( n = `displayBlock` v = `true`
+        )->a( n = `height`       v = `100%`
+        )->a( n = `xmlns`        v = `sap.m`
+        )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:vk`     v = `sap.ui.vk`
+        )->a( n = `xmlns:vbm`    v = `sap.ui.vbm`
 
-    map->vos(
-      )->spots( client->_bind( mt_spot )
-      )->spot(
-        position      = `{POS}`
-        contentoffset = `{CONTENTOFFSET}`
-        type          = `{TYPE}`
-        scale         = `{SCALE}`
-        tooltip       = `{TOOLTIP}` ).
+        )->ele( `Shell`
+            )->ele( `Page`
+                )->a( n = `title`          v = `abap2UI5 - Map Container`
+                )->a( n = `navButtonPress` v = client->_event_nav_app_leave( )
+                )->a( n = `showNavButton`  b = client->check_app_prev_stack( )
 
-    map->routes( client->_bind( mt_route ) )->route(
-      position      = `{POSITION}`
-        routetype   = `{ROUTETYPE}`
-        linedash    = `{LINEDASH}`
-        color       = `{COLOR}`
-        colorborder = `{COLORBORDER}`
-      linewidth     = `{LINEWIDTH}`
-      ).
+                )->ele( n = `MapContainer` ns = `vk`
+                    )->a( n = `autoAdjustHeight` b = abap_true
 
-    map->legend_area( )->legend(
-        items   = client->_bind( mt_legend )
-        caption = `Legend`
-      )->legenditem(
-      text    = `{TEXT}`
-        color = `{COLOR}`
-      ).
-    client->view_display( page->stringify( ) ).
+                    )->ele( n = `content` ns = `vk`
+                        )->ele( n = `ContainerContent` ns = `vk`
+                            )->a( n = `title` v = `Analytic Map`
+                            )->a( n = `icon`  v = `sap-icon://geographic-bubble-chart`
+
+                            )->ele( n = `content` ns = `vk`
+                                )->ele( n = `AnalyticMap` ns = `vbm`
+                                    )->a( n = `initialPosition` v = `9.933573;50;0`
+                                    )->a( n = `initialZoom`     v = `6`
+
+                                    )->ele( n = `vos` ns = `vbm`
+                                        )->ele( n = `Spots` ns = `vbm`
+                                            )->a( n = `items` v = client->_bind( mt_spot )
+
+                                            )->tag( n = `Spot` ns = `vbm`
+                                                )->a( n = `position`      v = `{POS}`
+                                                )->a( n = `contentOffset` v = `{CONTENTOFFSET}`
+                                                )->a( n = `type`          v = `{TYPE}`
+                                                )->a( n = `scale`         v = `{SCALE}`
+                                                )->a( n = `tooltip`       v = `{TOOLTIP}`
+
+                                        )->end(
+                                    )->end(
+
+                                    )->ele( n = `Routes` ns = `vbm`
+                                        )->a( n = `items` v = client->_bind( mt_route )
+
+                                        )->tag( n = `Route` ns = `vbm`
+                                            )->a( n = `position`    v = `{POSITION}`
+                                            )->a( n = `routetype`   v = `{ROUTETYPE}`
+                                            )->a( n = `lineDash`    v = `{LINEDASH}`
+                                            )->a( n = `linewidth`   v = `{LINEWIDTH}`
+                                            )->a( n = `color`       v = `{COLOR}`
+                                            )->a( n = `colorBorder` v = `{COLORBORDER}`
+
+                                    )->end(
+
+                                    )->ele( n = `legend` ns = `vbm`
+                                        )->ele( n = `Legend` ns = `vbm`
+                                            )->a( n = `caption` v = `Legend`
+                                            )->a( n = `items`   v = client->_bind( mt_legend )
+
+                                            )->tag( n = `LegendItem` ns = `vbm`
+                                                )->a( n = `text`  v = `{TEXT}`
+                                                )->a( n = `color` v = `{COLOR}` ).
+
+    client->view_display( view->stringify( ) ).
 
   ENDMETHOD.
 

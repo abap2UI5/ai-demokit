@@ -292,10 +292,26 @@ is expressed with the framework, as orientation. That is a knowledge store, so:
   `data_fidelity`, `view_gates`, the overview app and the coverage tables are
   all sidecar-driven. A class here is invisible to every one of them **by
   construction**, not by an exclusion list that could rot;
-- **classes are `z2ui5_cl_smpc_sapui5_<nnn>`**, in the samples style (the
-  framework's own `z2ui5_cl_xml_view` builder, dispatch inline on
-  `CASE client->get( )-event.`) — the `z2ui5_cl_ui5_view_builder` rule in §5 is a *port*
-  rule and does not reach here;
+- **the VIEW check is not part of that**, and `npm run check:collection` is it
+  (`abap2ui5lint-collection.jsonc`, run in `checks.yaml` and in `gates:full`).
+  Being outside the *port* machinery is a decision about `structural_diff` and
+  friends; whether the view a class builds is one UI5 can load is a question
+  that applies to every abap2UI5 class in the repository, exactly as `abaplint`
+  and `pattern-lint` do. Property gate only — the render gate serves the
+  OpenUI5 runtime and these controls ship with SAPUI5 alone, so there is no
+  build that could load them. The 1.71 rules run as **hints** here (a
+  collection sample is not a port and the §3 split does not apply) and the
+  demo-kit hyperlink is exempt from `commercial-ui5-host` for the same reason
+  the assets are exempt from `data_fidelity`;
+- **classes are `z2ui5_cl_smpc_sapui5_<nnn>`**, in the samples style (dispatch
+  inline on `CASE client->get( )-event.`). They were written on the framework's
+  own `z2ui5_cl_xml_view` and were **migrated to `z2ui5_cl_ui5_view_builder` on
+  2026-08-15**: `z2ui5_cl_xml_view` is frozen legacy in `src/99` that abap2UI5's
+  own removal plan wants gone, these 14 were the last classes anywhere in the
+  ecosystem still using it, and — the reason that decided it — *no view check
+  can read it*. The linter reconstructs the current builder and answered
+  "no checkable app classes under src/03"; the collection was the only ABAP in
+  this repository nothing looked at;
 - **ABAP hygiene still applies.** `abaplint` and `pattern-lint` walk all of
   `src/`, and the collection is held to them like any other ABAP in this repo:
   no commented-out code, `ty_`/`ty_s_`/`ty_t_` types, explicit `EMPTY KEY`, no

@@ -103,40 +103,51 @@ CLASS z2ui5_cl_smpc_sapui5_006 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_xml_view=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    DATA(page) = view->shell( )->page(
-        title          = `abap2UI5 - Process Flow`
-        navbuttonpress = client->_event_nav_app_leave( )
-        shownavbutton  = client->check_app_prev_stack( )
-        class          = `sapUiContentPadding` ).
+    view->ele( n = `View` ns = `mvc`
+        )->a( n = `displayBlock`  v = `true`
+        )->a( n = `height`        v = `100%`
+        )->a( n = `xmlns`         v = `sap.m`
+        )->a( n = `xmlns:mvc`     v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:commons` v = `sap.suite.ui.commons`
 
-    page->process_flow(
-        id            = `processflow1`
-        scrollable    = abap_true
-        wheelzoomable = abap_false
-        foldedcorners = abap_true
-        nodepress     = client->_event( val = `NODE_PRESS` )
-        nodes         = client->_bind( mt_nodes )
-        lanes         = client->_bind( mt_lanes )
-      )->nodes( `commons`
-        )->process_flow_node(
-          laneid            = `{LANE}`
-          nodeid            = `{ID}`
-          title             = `{TITLE}`
-          titleabbreviation = `{TITLEABBREVIATION}`
-          children          = `{CHILDREN}`
-          state             = `{STATE}`
-          statetext         = `{STATETEXT}`
-          highlighted       = `{HIGHLIGHTED}`
-          focused           = `{FOCUSED}`
-        )->get_parent( )->get_parent(
-      )->lanes(
-        )->process_flow_lane_header(
-          laneid   = `{ID}`
-          iconsrc  = `{ICON}`
-          text     = `{LABEL}`
-          position = `{POSITION}` ).
+        )->ele( `Shell`
+            )->ele( `Page`
+                )->a( n = `title`          v = `abap2UI5 - Process Flow`
+                )->a( n = `navButtonPress` v = client->_event_nav_app_leave( )
+                )->a( n = `showNavButton`  b = client->check_app_prev_stack( )
+                )->a( n = `class`          v = `sapUiContentPadding`
+
+                )->ele( n = `ProcessFlow` ns = `commons`
+                    )->a( n = `id`            v = `processflow1`
+                    )->a( n = `nodePress`     v = client->_event( val = `NODE_PRESS` )
+                    )->a( n = `nodes`         v = client->_bind( mt_nodes )
+                    )->a( n = `lanes`         v = client->_bind( mt_lanes )
+                    )->a( n = `scrollable`    b = abap_true
+                    )->a( n = `wheelZoomable` b = abap_false
+                    )->a( n = `foldedCorners` b = abap_true
+
+                    )->ele( n = `nodes` ns = `commons`
+                        )->tag( n = `ProcessFlowNode` ns = `commons`
+                            )->a( n = `laneId`            v = `{LANE}`
+                            )->a( n = `nodeId`            v = `{ID}`
+                            )->a( n = `title`             v = `{TITLE}`
+                            )->a( n = `titleAbbreviation` v = `{TITLEABBREVIATION}`
+                            )->a( n = `children`          v = `{CHILDREN}`
+                            )->a( n = `state`             v = `{STATE}`
+                            )->a( n = `stateText`         v = `{STATETEXT}`
+                            )->a( n = `highlighted`       v = `{HIGHLIGHTED}`
+                            )->a( n = `focused`           v = `{FOCUSED}`
+
+                    )->end(
+
+                    )->ele( n = `lanes` ns = `commons`
+                        )->tag( n = `ProcessFlowLaneHeader` ns = `commons`
+                            )->a( n = `laneId`   v = `{ID}`
+                            )->a( n = `iconSrc`  v = `{ICON}`
+                            )->a( n = `text`     v = `{LABEL}`
+                            )->a( n = `position` v = `{POSITION}` ).
 
     client->view_display( view->stringify( ) ).
 

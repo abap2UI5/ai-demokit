@@ -51,71 +51,85 @@ CLASS z2ui5_cl_smpc_sapui5_004 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_xml_view=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    DATA(container) = view->shell(
-        )->page(
-            title          = `abap2UI5 - Visualization`
-            navbuttonpress = client->_event_nav_app_leave( )
-            shownavbutton  = client->check_app_prev_stack( )
-        )->tab_container( ).
+    view->ele( n = `View` ns = `mvc`
+        )->a( n = `displayBlock`  v = `true`
+        )->a( n = `height`        v = `100%`
+        )->a( n = `xmlns`         v = `sap.m`
+        )->a( n = `xmlns:mvc`     v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:webc`    v = `sap.ui.webc.main`
+        )->a( n = `xmlns:layout`  v = `sap.ui.layout`
+        )->a( n = `xmlns:mchart`  v = `sap.suite.ui.microchart`
 
-    DATA(grid) = container->tab(
-            text     = `Radial Chart`
-            selected = client->_bind( tab_radial_active )
-        )->grid( `XL12 L12 M12 S12` ).
+        )->ele( `Shell`
+            )->ele( `Page`
+                )->a( n = `title`          v = `abap2UI5 - Visualization`
+                )->a( n = `navButtonPress` v = client->_event_nav_app_leave( )
+                )->a( n = `showNavButton`  b = client->check_app_prev_stack( )
 
-    grid->link(
-        text   = `Go to the SAP Demos for Radial Charts here...`
-        target = `_blank`
-        href   = `https://sapui5.hana.ondemand.com/#/entity/sap.suite.ui.microchart.RadialMicroChart/sample/sap.suite.ui.microchart.sample.RadialMicroChart` ).
+                )->ele( n = `TabContainer` ns = `webc`
+                    )->ele( n = `Tab` ns = `webc`
+                        )->a( n = `text`     v = `Radial Chart`
+                        )->a( n = `selected` v = client->_bind( tab_radial_active )
 
-    grid->vertical_layout(
-        )->horizontal_layout(
-            )->radial_micro_chart(
-                size       = `M`
-                percentage = `45`
-                press      = client->_event( `RADIAL_PRESS` )
-            )->radial_micro_chart(
-                size       = `S`
-                percentage = `45`
-                press      = client->_event( `RADIAL_PRESS` )
-        )->get_parent(
-        )->horizontal_layout(
-            )->radial_micro_chart(
-                size       = `M`
-                percentage = `99.9`
-                press      = client->_event( `RADIAL_PRESS` )
-                valuecolor = `Good`
-            )->radial_micro_chart(
-                size       = `S`
-                percentage = `99.9`
-                press      = client->_event( `RADIAL_PRESS` )
-                valuecolor = `Good`
-        )->get_parent(
-        )->horizontal_layout(
-            )->radial_micro_chart(
-                size       = `M`
-                percentage = `0`
-                press      = client->_event( `RADIAL_PRESS` )
-                valuecolor = `Error`
-            )->radial_micro_chart(
-                size       = `S`
-                percentage = `0`
-                press      = client->_event( `RADIAL_PRESS` )
-                valuecolor = `Error`
-        )->get_parent(
-        )->horizontal_layout(
-            )->radial_micro_chart(
-                size       = `M`
-                percentage = `0.1`
-                press      = client->_event( `RADIAL_PRESS` )
-                valuecolor = `Critical`
-            )->radial_micro_chart(
-                size       = `S`
-                percentage = `0.1`
-                press      = client->_event( `RADIAL_PRESS` )
-                valuecolor = `Critical` ).
+                        )->ele( n = `Grid` ns = `layout`
+                            )->a( n = `defaultSpan` v = `XL12 L12 M12 S12`
+
+                            )->tag( `Link`
+                                )->a( n = `text`   v = `Go to the SAP Demos for Radial Charts here...`
+                                )->a( n = `target` v = `_blank`
+                                )->a( n = `href`   v = `https://ui5.sap.com/#/entity/sap.suite.ui.microchart.RadialMicroChart/sample/sap.suite.ui.microchart.sample.RadialMicroChart`
+
+                            )->ele( n = `VerticalLayout` ns = `layout`
+                                )->ele( n = `HorizontalLayout` ns = `layout`
+                                    )->tag( n = `RadialMicroChart` ns = `mchart`
+                                        )->a( n = `size`       v = `M`
+                                        )->a( n = `percentage` v = `45`
+                                        )->a( n = `press`      v = client->_event( `RADIAL_PRESS` )
+                                    )->tag( n = `RadialMicroChart` ns = `mchart`
+                                        )->a( n = `size`       v = `S`
+                                        )->a( n = `percentage` v = `45`
+                                        )->a( n = `press`      v = client->_event( `RADIAL_PRESS` )
+                                )->end(
+
+                                )->ele( n = `HorizontalLayout` ns = `layout`
+                                    )->tag( n = `RadialMicroChart` ns = `mchart`
+                                        )->a( n = `size`       v = `M`
+                                        )->a( n = `percentage` v = `99.9`
+                                        )->a( n = `press`      v = client->_event( `RADIAL_PRESS` )
+                                        )->a( n = `valueColor` v = `Good`
+                                    )->tag( n = `RadialMicroChart` ns = `mchart`
+                                        )->a( n = `size`       v = `S`
+                                        )->a( n = `percentage` v = `99.9`
+                                        )->a( n = `press`      v = client->_event( `RADIAL_PRESS` )
+                                        )->a( n = `valueColor` v = `Good`
+                                )->end(
+
+                                )->ele( n = `HorizontalLayout` ns = `layout`
+                                    )->tag( n = `RadialMicroChart` ns = `mchart`
+                                        )->a( n = `size`       v = `M`
+                                        )->a( n = `percentage` v = `0`
+                                        )->a( n = `press`      v = client->_event( `RADIAL_PRESS` )
+                                        )->a( n = `valueColor` v = `Error`
+                                    )->tag( n = `RadialMicroChart` ns = `mchart`
+                                        )->a( n = `size`       v = `S`
+                                        )->a( n = `percentage` v = `0`
+                                        )->a( n = `press`      v = client->_event( `RADIAL_PRESS` )
+                                        )->a( n = `valueColor` v = `Error`
+                                )->end(
+
+                                )->ele( n = `HorizontalLayout` ns = `layout`
+                                    )->tag( n = `RadialMicroChart` ns = `mchart`
+                                        )->a( n = `size`       v = `M`
+                                        )->a( n = `percentage` v = `0.1`
+                                        )->a( n = `press`      v = client->_event( `RADIAL_PRESS` )
+                                        )->a( n = `valueColor` v = `Critical`
+                                    )->tag( n = `RadialMicroChart` ns = `mchart`
+                                        )->a( n = `size`       v = `S`
+                                        )->a( n = `percentage` v = `0.1`
+                                        )->a( n = `press`      v = client->_event( `RADIAL_PRESS` )
+                                        )->a( n = `valueColor` v = `Critical` ).
 
     client->view_display( view->stringify( ) ).
 

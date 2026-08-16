@@ -28,101 +28,153 @@ CLASS z2ui5_cl_smpc_sapui5_003 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_xml_view=>factory( ).
-    DATA(container) = view->shell(
-        )->page(
-            showheader     = xsdbool( abap_false = client->get( )-check_launchpad_active )
-            title          = `abap2UI5 - Visualization`
-            navbuttonpress = client->_event_nav_app_leave( )
-            shownavbutton  = client->check_app_prev_stack( )
-        )->tab_container( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    DATA(grid) = container->tab(
-            text     = `Bar Chart`
-            selected = client->_bind( tab_bar_active )
-        )->grid( `XL6 L6 M6 S12` ).
+    view->ele( n = `View` ns = `mvc`
+        )->a( n = `displayBlock`  v = `true`
+        )->a( n = `height`        v = `100%`
+        )->a( n = `xmlns`         v = `sap.m`
+        )->a( n = `xmlns:mvc`     v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:webc`    v = `sap.ui.webc.main`
+        )->a( n = `xmlns:layout`  v = `sap.ui.layout`
+        )->a( n = `xmlns:mchart`  v = `sap.suite.ui.microchart`
 
-    grid->link(
-            text   = `Go to the SAP Demos for Interactive bar Charts here...`
-            target = `_blank`
-            href   = `https://sapui5.hana.ondemand.com/#/entity/sap.suite.ui.microchart.InteractiveBarChart/sample/sap.suite.ui.microchart.sample.InteractiveBarChart`
-        )->text(
-                text  = `Absolute and Percentage value`
-                class = `sapUiSmallMargin`
-            )->get( )->layout_data(
-                )->grid_data( `XL12 L12 M12 S12` ).
+        )->ele( `Shell`
+            )->ele( `Page`
+                )->a( n = `title`          v = `abap2UI5 - Visualization`
+                )->a( n = `navButtonPress` v = client->_event_nav_app_leave( )
+                )->a( n = `showNavButton`  b = client->check_app_prev_stack( )
+                )->a( n = `showHeader`     b = xsdbool( abap_false = client->get( )-check_launchpad_active )
 
-    DATA(bar) = grid->flex_box(
-            width      = `22rem`
-            height     = `13rem`
-            alignitems = `Center`
-            class      = `sapUiSmallMargin`
-        )->items( )->interact_bar_chart(
-                selectionchanged = client->_event( `BAR_CHANGED` )
-                press            = client->_event( `BAR_CHANGED` )
-                labelwidth       = `25%`
-                displayedbars    = `4`
-            )->bars( ).
-    bar->interact_bar_chart_bar(
-        selected = client->_bind( sel1 )
-        label    = `Product 1`
-        value    = `10` ).
-    bar->interact_bar_chart_bar(
-        selected = client->_bind( sel2 )
-        label    = `Product 2`
-        value    = `20` ).
-    bar->interact_bar_chart_bar(
-        selected = client->_bind( sel3 )
-        label    = `Product 3`
-        value    = `70` ).
+                )->ele( n = `TabContainer` ns = `webc`
+                    )->ele( n = `Tab` ns = `webc`
+                        )->a( n = `text`     v = `Bar Chart`
+                        )->a( n = `selected` v = client->_bind( tab_bar_active )
 
-    bar = grid->flex_box(
-            width      = `22rem`
-            height     = `13rem`
-            alignitems = `Center`
-            class      = `sapUiSmallMargin`
-        )->items( )->interact_bar_chart(
-                selectionchanged = client->_event( `BAR_CHANGED` )
-            )->bars( ).
-    bar->interact_bar_chart_bar(
-        label          = `Product 1`
-        value          = `10`
-        displayedvalue = `10%` ).
-    bar->interact_bar_chart_bar(
-        label          = `Product 2`
-        value          = `20`
-        displayedvalue = `20%` ).
-    bar->interact_bar_chart_bar(
-        label          = `Product 3`
-        value          = `70`
-        displayedvalue = `70%` ).
+                        )->ele( n = `Grid` ns = `layout`
+                            )->a( n = `defaultSpan` v = `XL6 L6 M6 S12`
 
-    bar = grid->vertical_layout(
-        )->layout_data( `layout`
-            )->grid_data( `XL12 L12 M12 S12`
-        )->get_parent(
-        )->text(
-            text  = `Positive and Negative values`
-            class = `sapUiSmallMargin`
-        )->flex_box(
-            width      = `20rem`
-            height     = `10rem`
-            alignitems = `Center`
-            class      = `sapUiSmallMargin`
-        )->items( )->interact_bar_chart(
-                selectionchanged = client->_event( `BAR_CHANGED` )
-                press            = client->_event( `BAR_PRESS` )
-                labelwidth       = `25%`
-            )->bars( ).
-    bar->interact_bar_chart_bar(
-        label = `Product 1`
-        value = `25` ).
-    bar->interact_bar_chart_bar(
-        label = `Product 2`
-        value = `-50` ).
-    bar->interact_bar_chart_bar(
-        label = `Product 3`
-        value = `-100` ).
+                            )->tag( `Link`
+                                )->a( n = `text`   v = `Go to the SAP Demos for Interactive bar Charts here...`
+                                )->a( n = `target` v = `_blank`
+                                )->a( n = `href`   v = `https://ui5.sap.com/#/entity/sap.suite.ui.microchart.InteractiveBarChart/sample/sap.suite.ui.microchart.sample.InteractiveBarChart`
+
+                            )->ele( `Text`
+                                )->a( n = `text`  v = `Absolute and Percentage value`
+                                )->a( n = `class` v = `sapUiSmallMargin`
+
+                                )->ele( `layoutData`
+                                    )->tag( n = `GridData` ns = `layout`
+                                        )->a( n = `span` v = `XL12 L12 M12 S12`
+
+                                )->end(
+                            )->end(
+
+                            )->ele( `FlexBox`
+                                )->a( n = `width`      v = `22rem`
+                                )->a( n = `height`     v = `13rem`
+                                )->a( n = `alignItems` v = `Center`
+                                )->a( n = `class`      v = `sapUiSmallMargin`
+
+                                )->ele( `items`
+                                    )->ele( n = `InteractiveBarChart` ns = `mchart`
+                                        )->a( n = `selectionChanged` v = client->_event( `BAR_CHANGED` )
+                                        )->a( n = `press`            v = client->_event( `BAR_CHANGED` )
+                                        )->a( n = `labelWidth`       v = `25%`
+                                        )->a( n = `displayedBars`    v = `4`
+
+                                        )->ele( n = `bars` ns = `mchart`
+                                            )->tag( n = `InteractiveBarChartBar` ns = `mchart`
+                                                )->a( n = `selected`       v = client->_bind( sel1 )
+                                                )->a( n = `label`          v = `Product 1`
+                                                )->a( n = `value`          v = `10`
+
+                                            )->tag( n = `InteractiveBarChartBar` ns = `mchart`
+                                                )->a( n = `selected`       v = client->_bind( sel2 )
+                                                )->a( n = `label`          v = `Product 2`
+                                                )->a( n = `value`          v = `20`
+
+                                            )->tag( n = `InteractiveBarChartBar` ns = `mchart`
+                                                )->a( n = `selected`       v = client->_bind( sel3 )
+                                                )->a( n = `label`          v = `Product 3`
+                                                )->a( n = `value`          v = `70`
+
+                                        )->end(
+                                    )->end(
+                                )->end(
+                            )->end(
+
+                            )->ele( `FlexBox`
+                                )->a( n = `width`      v = `22rem`
+                                )->a( n = `height`     v = `13rem`
+                                )->a( n = `alignItems` v = `Center`
+                                )->a( n = `class`      v = `sapUiSmallMargin`
+
+                                )->ele( `items`
+                                    )->ele( n = `InteractiveBarChart` ns = `mchart`
+                                        )->a( n = `selectionChanged` v = client->_event( `BAR_CHANGED` )
+
+                                        )->ele( n = `bars` ns = `mchart`
+                                            )->tag( n = `InteractiveBarChartBar` ns = `mchart`
+                                                )->a( n = `label`          v = `Product 1`
+                                                )->a( n = `value`          v = `10`
+                                                )->a( n = `displayedValue` v = `10%`
+
+                                            )->tag( n = `InteractiveBarChartBar` ns = `mchart`
+                                                )->a( n = `label`          v = `Product 2`
+                                                )->a( n = `value`          v = `20`
+                                                )->a( n = `displayedValue` v = `20%`
+
+                                            )->tag( n = `InteractiveBarChartBar` ns = `mchart`
+                                                )->a( n = `label`          v = `Product 3`
+                                                )->a( n = `value`          v = `70`
+                                                )->a( n = `displayedValue` v = `70%`
+
+                                        )->end(
+                                    )->end(
+                                )->end(
+                            )->end(
+
+                            )->ele( n = `VerticalLayout` ns = `layout`
+                                )->ele( n = `layoutData` ns = `layout`
+                                    )->tag( n = `GridData` ns = `layout`
+                                        )->a( n = `span` v = `XL12 L12 M12 S12`
+
+                                )->end(
+
+                                )->tag( `Text`
+                                    )->a( n = `text`  v = `Positive and Negative values`
+                                    )->a( n = `class` v = `sapUiSmallMargin`
+
+                                )->ele( `FlexBox`
+                                    )->a( n = `width`      v = `20rem`
+                                    )->a( n = `height`     v = `10rem`
+                                    )->a( n = `alignItems` v = `Center`
+                                    )->a( n = `class`      v = `sapUiSmallMargin`
+
+                                    )->ele( `items`
+                                        )->ele( n = `InteractiveBarChart` ns = `mchart`
+                                            )->a( n = `selectionChanged` v = client->_event( `BAR_CHANGED` )
+                                            )->a( n = `press`            v = client->_event( `BAR_PRESS` )
+                                            )->a( n = `labelWidth`       v = `25%`
+
+                                            )->ele( n = `bars` ns = `mchart`
+                                                )->tag( n = `InteractiveBarChartBar` ns = `mchart`
+                                                    )->a( n = `label`          v = `Product 1`
+                                                    )->a( n = `value`          v = `25`
+
+                                                )->tag( n = `InteractiveBarChartBar` ns = `mchart`
+                                                    )->a( n = `label`          v = `Product 2`
+                                                    )->a( n = `value`          v = `-50`
+
+                                                )->tag( n = `InteractiveBarChartBar` ns = `mchart`
+                                                    )->a( n = `label`          v = `Product 3`
+                                                    )->a( n = `value`          v = `-100`
+
+                                            )->end(
+                                        )->end(
+                                    )->end(
+                                 ).
 
     client->view_display( view->stringify( ) ).
 

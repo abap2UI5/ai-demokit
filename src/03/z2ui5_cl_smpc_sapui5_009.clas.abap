@@ -106,52 +106,88 @@ CLASS z2ui5_cl_smpc_sapui5_009 IMPLEMENTATION.
   METHOD view_display.
 
 
-    DATA(view) = z2ui5_cl_xml_view=>factory( ).
-    view->_generic( ns   = `html`
-                    name = `style` )->_cc_plain_xml( `.SICursorStyle:hover {` &&
-                                                                 `  cursor: pointer;` &&
-                                                                 `}` &&
-                                                                 `.SIBorderStyle {` &&
-                                                                 `  border: 1px solid #cccccc;` &&
-                                                                 `}` &&
-                                                                 `.SIPanelStyle .sapMPanelContent{` &&
-                                                                 `  overflow: visible;` &&
-                                                                 `}` ).
-    DATA(page) = view->shell(
-         )->page(
-            showheader     = xsdbool( abap_false = client->get( )-check_launchpad_active )
-            title          = `abap2UI5 - Status Indicators Library`
-            navbuttonpress = client->_event_nav_app_leave( )
-            shownavbutton  = client->check_app_prev_stack( ) ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    DATA(panel) = page->panel( class = `sapUiResponsiveMargin SIPanelStyle`
-                               width = `95%` ).
-    panel->text( `Use the slider for adjusting the fill` ).
-    panel->slider( class           = `sapUiLargeMarginBottom`
-                   enabletickmarks = abap_true
-               value               = client->_bind( mv_slider_value ) )->get(
-       )->responsive_scale( tickmarksbetweenlabels = `10` ).
+    view->ele( n = `View` ns = `mvc`
+        )->a( n = `displayBlock` v = `true`
+        )->a( n = `height`       v = `100%`
+        )->a( n = `xmlns`        v = `sap.m`
+        )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:core`   v = `sap.ui.core`
+        )->a( n = `xmlns:si`     v = `sap.suite.ui.commons.statusindicator`
 
-    DATA(fb) = panel->flex_box( wrap  = `Wrap`
-                                items = client->_bind( mt_shapes ) ).
-    fb->items(
-      )->flex_box( direction = `Column`
-                   class     = `sapUiTinyMargin SIBorderStyle`
-        )->items(
-          )->status_indicator( value  = client->_bind( mv_slider_value )
-                               width  = `120px`
-                               height = `120px`
-                               class  = `sapUiTinyMargin SICursorStyle`
-            )->property_thresholds(
-              )->property_threshold( fillcolor = `Error`
-                                     tovalue   = `25` )->get_parent(
-              )->property_threshold( fillcolor = `Critical`
-                                     tovalue   = `60` )->get_parent(
-              )->property_threshold( fillcolor = `Good`
-                                     tovalue   = `100` )->get_parent(
-               )->get_parent(
-             )->shape_group(
-              )->library_shape( shapeid = `{ID}` ).
+        " the stylesheet travels as the CONTENT of a core:HTML control: the
+        " builder re-escapes it on stringify, so the literal markup is written
+        " here, and the CSS braces are escaped for the XMLView parser
+        )->tag( n = `HTML` ns = `core`
+            )->a( n = `content` v = `<style>`                          && |\n| &&
+                                    `.SICursorStyle:hover \{`          && |\n| &&
+                                    `  cursor: pointer;`               && |\n| &&
+                                    `\}`                               && |\n| &&
+                                    `.SIBorderStyle \{`                && |\n| &&
+                                    `  border: 1px solid #cccccc;`     && |\n| &&
+                                    `\}`                               && |\n| &&
+                                    `.SIPanelStyle .sapMPanelContent\{` && |\n| &&
+                                    `  overflow: visible;`             && |\n| &&
+                                    `\}`                               && |\n| &&
+                                    `</style>`
+
+        )->ele( `Shell`
+            )->ele( `Page`
+                )->a( n = `title`          v = `abap2UI5 - Status Indicators Library`
+                )->a( n = `navButtonPress` v = client->_event_nav_app_leave( )
+                )->a( n = `showNavButton`  b = client->check_app_prev_stack( )
+                )->a( n = `showHeader`     b = xsdbool( abap_false = client->get( )-check_launchpad_active )
+
+                )->ele( `Panel`
+                    )->a( n = `class` v = `sapUiResponsiveMargin SIPanelStyle`
+                    )->a( n = `width` v = `95%`
+
+                    )->tag( `Text`
+                        )->a( n = `text` v = `Use the slider for adjusting the fill`
+
+                    )->ele( `Slider`
+                        )->a( n = `class`           v = `sapUiLargeMarginBottom`
+                        )->a( n = `value`           v = client->_bind( mv_slider_value )
+                        )->a( n = `enableTickmarks` b = abap_true
+
+                        )->tag( `ResponsiveScale`
+                            )->a( n = `tickmarksBetweenLabels` v = `10`
+
+                    )->end(
+
+                    )->ele( `FlexBox`
+                        )->a( n = `wrap`  v = `Wrap`
+                        )->a( n = `items` v = client->_bind( mt_shapes )
+
+                        )->ele( `items`
+                            )->ele( `FlexBox`
+                                )->a( n = `direction` v = `Column`
+                                )->a( n = `class`     v = `sapUiTinyMargin SIBorderStyle`
+
+                                )->ele( `items`
+                                    )->ele( n = `StatusIndicator` ns = `si`
+                                        )->a( n = `value`  v = client->_bind( mv_slider_value )
+                                        )->a( n = `width`  v = `120px`
+                                        )->a( n = `height` v = `120px`
+                                        )->a( n = `class`  v = `sapUiTinyMargin SICursorStyle`
+
+                                        )->ele( n = `propertyThresholds` ns = `si`
+                                            )->tag( n = `PropertyThreshold` ns = `si`
+                                                )->a( n = `fillColor` v = `Error`
+                                                )->a( n = `toValue`   v = `25`
+                                            )->tag( n = `PropertyThreshold` ns = `si`
+                                                )->a( n = `fillColor` v = `Critical`
+                                                )->a( n = `toValue`   v = `60`
+                                            )->tag( n = `PropertyThreshold` ns = `si`
+                                                )->a( n = `fillColor` v = `Good`
+                                                )->a( n = `toValue`   v = `100`
+
+                                        )->end(
+
+                                        )->ele( n = `ShapeGroup` ns = `si`
+                                            )->tag( n = `LibraryShape` ns = `si`
+                                                )->a( n = `shapeId` v = `{ID}` ).
 
     client->view_display( view->stringify( ) ).
 

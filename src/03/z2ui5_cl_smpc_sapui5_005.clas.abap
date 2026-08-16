@@ -20,24 +20,34 @@ CLASS z2ui5_cl_smpc_sapui5_005 IMPLEMENTATION.
 
     IF client->check_on_init( ).
 
-      DATA(view) = z2ui5_cl_xml_view=>factory( ).
-      DATA(page) = view->shell(
-          )->page( title          = `Harvey Chart`
-                   navbuttonpress = client->_event_nav_app_leave( )
-                   shownavbutton  = client->check_app_prev_stack( ) ).
+      DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-      page->harvey_ball_micro_chart(
-                                     size          = `L`
-                                     total         = `10`
-                                     totallabel    = `11`
-                                     showfractions = abap_true
-                                     showtotal     = abap_true
-                                     totalscale    = abap_true
-        )->harveyballmicrochartitem(
-                                   color         = `Good`
-                                   fraction      = `8`
-                                   fractionscale = `Mrd`
-        ).
+      view->ele( n = `View` ns = `mvc`
+          )->a( n = `displayBlock`  v = `true`
+          )->a( n = `height`        v = `100%`
+          )->a( n = `xmlns`         v = `sap.m`
+          )->a( n = `xmlns:mvc`     v = `sap.ui.core.mvc`
+          )->a( n = `xmlns:core`    v = `sap.ui.core`
+          )->a( n = `xmlns:mchart`  v = `sap.suite.ui.microchart`
+
+          )->ele( `Shell`
+              )->ele( `Page`
+                  )->a( n = `title`          v = `Harvey Chart`
+                  )->a( n = `navButtonPress` v = client->_event_nav_app_leave( )
+                  )->a( n = `showNavButton`  b = client->check_app_prev_stack( )
+
+                  )->ele( n = `HarveyBallMicroChart` ns = `mchart`
+                      )->a( n = `size`          v = `L`
+                      )->a( n = `total`         v = `10`
+                      )->a( n = `totalLabel`    v = `11`
+                      )->a( n = `totalScale`    v = `true`
+                      )->a( n = `showFractions` b = abap_true
+                      )->a( n = `showTotal`     b = abap_true
+
+                      )->tag( n = `HarveyBallMicroChartItem` ns = `mchart`
+                          )->a( n = `color`         v = `Good`
+                          )->a( n = `fraction`      v = `8`
+                          )->a( n = `fractionScale` v = `Mrd` ).
 
       client->view_display( view->stringify( ) ).
 

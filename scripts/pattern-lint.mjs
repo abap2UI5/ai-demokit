@@ -257,6 +257,36 @@ for (const key of BASELINE) {
   }
 }
 
+// The generation prompt has to speak the builder the corpus is written in.
+// It fell a rename behind once: the ports moved from z2ui5_cl_ai_xml to
+// z2ui5_cl_ui5_view_builder and its open( )/leaf( )/shut( ) became
+// ele( )/tag( )/end( ), but the prompt kept teaching the old three — and it
+// is not only read here, ai-mcp serves it to agents as `generation_rules`
+// (see check-mcp-contract.mjs). Every port generated from it would have been
+// written against methods that do not exist, and nothing said so.
+const PROMPT = path.join(ROOT, 'scripts', 'generation-prompt.txt');
+const RETIRED_VERBS = ['open', 'leaf', 'shut'];
+if (fs.existsSync(PROMPT)) {
+  const prompt = fs.readFileSync(PROMPT, 'utf8');
+  const rel = path.relative(ROOT, PROMPT).split(path.sep).join('/');
+  for (const verb of RETIRED_VERBS) {
+    // the call shape only — `open the mvc:View` is prose, `open( ` is a claim
+    const re = new RegExp(`\\b${verb}\\s*\\(`, 'g');
+    for (const m of prompt.matchAll(re)) {
+      console.log(`ERROR ${rel}:${lineOf(prompt, m.index)} [prompt-builder-verb] ${verb}( ) is not a method of z2ui5_cl_ui5_view_builder`);
+      console.log('      the builder is ele( ) / tag( ) / a( ) / end( ) — the prompt is also served to agents as ai-mcp generation_rules');
+      errors++;
+    }
+  }
+  for (const verb of ['ele', 'tag', 'end']) {
+    if (!new RegExp(`\\b${verb}\\s*\\(`).test(prompt)) {
+      console.log(`ERROR ${rel}:1 [prompt-builder-verb] the prompt never mentions ${verb}( )`);
+      console.log('      it has to teach the four verbs the corpus is written in');
+      errors++;
+    }
+  }
+}
+
 console.log(`\npattern-lint: ${errors} error(s), ${warns} warning(s), ` +
   `${seenBaseline.size}/${BASELINE.size} baseline entries matched.`);
 process.exit(errors ? 1 : 0);

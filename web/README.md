@@ -5,8 +5,8 @@ the abap2UI5 framework and every `z2ui5_cl_smpc_app_*` port are transpiled to
 JavaScript, bundled with webpack, and run in the browser with **no ABAP
 backend** — the transpiled `z2ui5_cl_http_handler` answers the app's own
 roundtrips in-page (a `fetch` interceptor), and sql.js (WASM) provides the
-draft database. The result is the static site in [`../docs`](../docs), which
-GitHub Pages serves.
+draft database. The result is the static site in `build/`, which the
+`deploy_web` workflow uploads to GitHub Pages.
 
 It is a thin adaptation of the official
 [abap2UI5/web-abap2UI5](https://github.com/abap2UI5/web-abap2UI5) build
@@ -26,18 +26,22 @@ overview (`z2ui5_cl_smpc_app_overview`) instead of the framework home page.
    express-icf-shim and open-abap-core runtime libs).
 4. **webpack:build** — bundle `app/web.mjs` + the transpiled backend + sql.js
    into `build/` (one `app.bundle.js` + the WASM files).
-5. **deploy:docs** — copy `build/` → `../docs` (the Pages source).
+
+`build/` is what `deploy_web` uploads to GitHub Pages, and it is not
+committed: the bundle is ~28 MB, and a copy of it in the repository was both
+a second thing to keep current and the largest object in the history.
 
 ## Rebuild
 
 ```bash
 cd web
 npm ci
-npm run all        # assemble → downport → transpile → webpack → copy to ../docs
+npm run all        # assemble → downport → transpile → webpack
 ```
 
-Then commit the updated `../docs`. Test locally before committing (the
-`document.write` boot does not work with webpack-dev-server HMR):
+Nothing to commit afterwards — `build/` is a build output and `deploy_web`
+produces its own. Test locally (the `document.write` boot does not work with
+webpack-dev-server HMR):
 
 ```bash
 npm run serve:build   # serves web/build on http://localhost:8081

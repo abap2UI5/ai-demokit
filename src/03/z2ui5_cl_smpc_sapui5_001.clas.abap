@@ -34,142 +34,209 @@ CLASS z2ui5_cl_smpc_sapui5_001 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(container) = z2ui5_cl_xml_view=>factory(
-        )->shell(
-        )->page(
-            title          = `abap2UI5 - Visualization`
-            navbuttonpress = client->_event_nav_app_leave( )
-            shownavbutton  = client->check_app_prev_stack( )
-        )->tab_container( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    DATA(grid) = container->tab(
-            text     = `Donut Chart`
-            selected = client->_bind( tab_donut_active )
-         )->grid( `XL6 L6 M6 S12` ).
+    view->ele( n = `View` ns = `mvc`
+        )->a( n = `displayBlock`  v = `true`
+        )->a( n = `height`        v = `100%`
+        )->a( n = `xmlns`         v = `sap.m`
+        )->a( n = `xmlns:mvc`     v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:webc`    v = `sap.ui.webc.main`
+        )->a( n = `xmlns:layout`  v = `sap.ui.layout`
+        )->a( n = `xmlns:mchart`  v = `sap.suite.ui.microchart`
 
-    grid->link(
-         text   = `Go to the SAP Demos for Interactive Donut Charts here...`
-         target = `_blank`
-         href   = `https://sapui5.hana.ondemand.com/#/entity/sap.suite.ui.microchart.InteractiveDonutChart/sample/sap.suite.ui.microchart.sample.InteractiveDonutChart`
-        )->text(
-                text  = `Three segments`
-                class = `sapUiSmallMargin`
-            )->get( )->layout_data(
-                )->grid_data( `XL12 L12 M12 S12` ).
+        )->ele( `Shell`
+            )->ele( `Page`
+                )->a( n = `title`          v = `abap2UI5 - Visualization`
+                )->a( n = `navButtonPress` v = client->_event_nav_app_leave( )
+                )->a( n = `showNavButton`  b = client->check_app_prev_stack( )
 
-    DATA(seg) = grid->flex_box(
-            width          = `22rem`
-            height         = `13rem`
-            alignitems     = `Start`
-            justifycontent = `SpaceBetween`
-                )->items( )->interact_donut_chart(
-                            selectionchanged = client->_event( `DONUT_CHANGED` )
-                    )->segments( ).
-    seg->interact_donut_chart_segment(
-        selected       = client->_bind( sel4 )
-        label          = `Impl. Phase`
-        value          = `40.0`
-        displayedvalue = `40.0%` ).
-    seg->interact_donut_chart_segment(
-        selected       = client->_bind( sel5 )
-        label          = `Design Phase`
-        value          = `21.5`
-        displayedvalue = `21.5%` ).
-    seg->interact_donut_chart_segment(
-        selected       = client->_bind( sel6 )
-        label          = `Test Phase`
-        value          = `38.5`
-        displayedvalue = `38.5%` ).
+                )->ele( n = `TabContainer` ns = `webc`
+                    )->ele( n = `Tab` ns = `webc`
+                        )->a( n = `text`     v = `Donut Chart`
+                        )->a( n = `selected` v = client->_bind( tab_donut_active )
 
-    grid->text(
-            text  = `Four segments`
-            class = `sapUiSmallMargin`
-        )->get( )->layout_data(
-            )->grid_data( `XL12 L12 M12 S12` ).
+                        )->ele( n = `Grid` ns = `layout`
+                            )->a( n = `defaultSpan` v = `XL6 L6 M6 S12`
 
-    seg = grid->flex_box(
-            width          = `22rem`
-            height         = `13rem`
-            alignitems     = `Start`
-            justifycontent = `SpaceBetween`
-         )->items( )->interact_donut_chart(
-                selectionchanged  = client->_event( `DONUT_CHANGED` )
-                press             = client->_event( `DONUT_PRESS` )
-                displayedsegments = `4`
-            )->segments( ).
-    seg->interact_donut_chart_segment(
-        label          = `Design Phase`
-        value          = `32.0`
-        displayedvalue = `32.0%` ).
-    seg->interact_donut_chart_segment(
-        label          = `Implementation Phase`
-        value          = `28`
-        displayedvalue = `28%` ).
-    seg->interact_donut_chart_segment(
-        label          = `Test Phase`
-        value          = `25`
-        displayedvalue = `25%` ).
-    seg->interact_donut_chart_segment(
-        label          = `Launch Phase`
-        value          = `15`
-        displayedvalue = `15%` ).
+                            )->tag( `Link`
+                                )->a( n = `text`   v = `Go to the SAP Demos for Interactive Donut Charts here...`
+                                )->a( n = `target` v = `_blank`
+                                )->a( n = `href`   v = `https://ui5.sap.com/#/entity/sap.suite.ui.microchart.InteractiveDonutChart/sample/sap.suite.ui.microchart.sample.InteractiveDonutChart`
 
-    grid->text(
-            text  = `Error Messages`
-            class = `sapUiSmallMargin`
-        )->get( )->layout_data(
-            )->grid_data( `XL12 L12 M12 S12` ).
+                            )->ele( `Text`
+                                )->a( n = `text`  v = `Three segments`
+                                )->a( n = `class` v = `sapUiSmallMargin`
 
-    seg = grid->flex_box(
-            width          = `22rem`
-            height         = `13rem`
-            alignitems     = `Start`
-            justifycontent = `SpaceBetween`
-        )->items( )->interact_donut_chart(
-                selectionchanged  = client->_event( `DONUT_CHANGED` )
-                showerror         = abap_true
-                errormessagetitle = `No data`
-                errormessage      = `Currently no data is available`
-            )->segments( ).
-    seg->interact_donut_chart_segment(
-        label          = `Implementation Phase`
-        value          = `40.0`
-        displayedvalue = `40.0%` ).
-    seg->interact_donut_chart_segment(
-        label          = `Design Phase`
-        value          = `21.5`
-        displayedvalue = `21.5%` ).
-    seg->interact_donut_chart_segment(
-        label          = `Test Phase`
-        value          = `38.5`
-        displayedvalue = `38.5%` ).
+                                )->ele( `layoutData`
+                                    )->tag( n = `GridData` ns = `layout`
+                                        )->a( n = `span` v = `XL12 L12 M12 S12`
 
-    grid->text(
-            text  = `Model Update Table Data`
-            class = `sapUiSmallMargin`
-        )->get( )->layout_data(
-            )->grid_data( `XL12 L12 M12 S12` ).
+                                )->end(
+                            )->end(
 
-    DATA(donut_chart) = grid->button(
-            text  = `update chart`
-            press = client->_event( `UPDATE_CHART_DATA` )
-        )->get_parent(
-        )->flex_box(
-            width          = `30rem`
-            height         = `18rem`
-            alignitems     = `Start`
-            justifycontent = `SpaceBetween`
-            )->items(
-                )->interact_donut_chart(
-                    displayedsegments = client->_bind( total_count )
-                    segments          = client->_bind( counts ) ).
+                            )->ele( `FlexBox`
+                                )->a( n = `width`          v = `22rem`
+                                )->a( n = `height`         v = `13rem`
+                                )->a( n = `alignItems`     v = `Start`
+                                )->a( n = `justifyContent` v = `SpaceBetween`
 
-    donut_chart->interact_donut_chart_segment(
-        label          = `{TEXT}`
-        value          = `{PERCENT}`
-        displayedvalue = `{PERCENT}` ).
+                                )->ele( `items`
+                                    )->ele( n = `InteractiveDonutChart` ns = `mchart`
+                                        )->a( n = `selectionChanged` v = client->_event( `DONUT_CHANGED` )
 
-    client->view_display( container->stringify( ) ).
+                                        )->ele( n = `segments` ns = `mchart`
+                                            )->tag( n = `InteractiveDonutChartSegment` ns = `mchart`
+                                                )->a( n = `selected`       v = client->_bind( sel4 )
+                                                )->a( n = `label`          v = `Impl. Phase`
+                                                )->a( n = `value`          v = `40.0`
+                                                )->a( n = `displayedValue` v = `40.0%`
+
+                                            )->tag( n = `InteractiveDonutChartSegment` ns = `mchart`
+                                                )->a( n = `selected`       v = client->_bind( sel5 )
+                                                )->a( n = `label`          v = `Design Phase`
+                                                )->a( n = `value`          v = `21.5`
+                                                )->a( n = `displayedValue` v = `21.5%`
+
+                                            )->tag( n = `InteractiveDonutChartSegment` ns = `mchart`
+                                                )->a( n = `selected`       v = client->_bind( sel6 )
+                                                )->a( n = `label`          v = `Test Phase`
+                                                )->a( n = `value`          v = `38.5`
+                                                )->a( n = `displayedValue` v = `38.5%`
+
+                                        )->end(
+                                    )->end(
+                                )->end(
+                            )->end(
+
+                            )->ele( `Text`
+                                )->a( n = `text`  v = `Four segments`
+                                )->a( n = `class` v = `sapUiSmallMargin`
+
+                                )->ele( `layoutData`
+                                    )->tag( n = `GridData` ns = `layout`
+                                        )->a( n = `span` v = `XL12 L12 M12 S12`
+
+                                )->end(
+                            )->end(
+
+                            )->ele( `FlexBox`
+                                )->a( n = `width`          v = `22rem`
+                                )->a( n = `height`         v = `13rem`
+                                )->a( n = `alignItems`     v = `Start`
+                                )->a( n = `justifyContent` v = `SpaceBetween`
+
+                                )->ele( `items`
+                                    )->ele( n = `InteractiveDonutChart` ns = `mchart`
+                                        )->a( n = `selectionChanged`  v = client->_event( `DONUT_CHANGED` )
+                                        )->a( n = `press`             v = client->_event( `DONUT_PRESS` )
+                                        )->a( n = `displayedSegments` v = `4`
+
+                                        )->ele( n = `segments` ns = `mchart`
+                                            )->tag( n = `InteractiveDonutChartSegment` ns = `mchart`
+                                                )->a( n = `label`          v = `Design Phase`
+                                                )->a( n = `value`          v = `32.0`
+                                                )->a( n = `displayedValue` v = `32.0%`
+
+                                            )->tag( n = `InteractiveDonutChartSegment` ns = `mchart`
+                                                )->a( n = `label`          v = `Implementation Phase`
+                                                )->a( n = `value`          v = `28`
+                                                )->a( n = `displayedValue` v = `28%`
+
+                                            )->tag( n = `InteractiveDonutChartSegment` ns = `mchart`
+                                                )->a( n = `label`          v = `Test Phase`
+                                                )->a( n = `value`          v = `25`
+                                                )->a( n = `displayedValue` v = `25%`
+
+                                            )->tag( n = `InteractiveDonutChartSegment` ns = `mchart`
+                                                )->a( n = `label`          v = `Launch Phase`
+                                                )->a( n = `value`          v = `15`
+                                                )->a( n = `displayedValue` v = `15%`
+
+                                        )->end(
+                                    )->end(
+                                )->end(
+                            )->end(
+
+                            )->ele( `Text`
+                                )->a( n = `text`  v = `Error Messages`
+                                )->a( n = `class` v = `sapUiSmallMargin`
+
+                                )->ele( `layoutData`
+                                    )->tag( n = `GridData` ns = `layout`
+                                        )->a( n = `span` v = `XL12 L12 M12 S12`
+
+                                )->end(
+                            )->end(
+
+                            )->ele( `FlexBox`
+                                )->a( n = `width`          v = `22rem`
+                                )->a( n = `height`         v = `13rem`
+                                )->a( n = `alignItems`     v = `Start`
+                                )->a( n = `justifyContent` v = `SpaceBetween`
+
+                                )->ele( `items`
+                                    )->ele( n = `InteractiveDonutChart` ns = `mchart`
+                                        )->a( n = `selectionChanged`  v = client->_event( `DONUT_CHANGED` )
+                                        )->a( n = `errorMessageTitle` v = `No data`
+                                        )->a( n = `errorMessage`      v = `Currently no data is available`
+                                        )->a( n = `showError`         b = abap_true
+
+                                        )->ele( n = `segments` ns = `mchart`
+                                            )->tag( n = `InteractiveDonutChartSegment` ns = `mchart`
+                                                )->a( n = `label`          v = `Implementation Phase`
+                                                )->a( n = `value`          v = `40.0`
+                                                )->a( n = `displayedValue` v = `40.0%`
+
+                                            )->tag( n = `InteractiveDonutChartSegment` ns = `mchart`
+                                                )->a( n = `label`          v = `Design Phase`
+                                                )->a( n = `value`          v = `21.5`
+                                                )->a( n = `displayedValue` v = `21.5%`
+
+                                            )->tag( n = `InteractiveDonutChartSegment` ns = `mchart`
+                                                )->a( n = `label`          v = `Test Phase`
+                                                )->a( n = `value`          v = `38.5`
+                                                )->a( n = `displayedValue` v = `38.5%`
+
+                                        )->end(
+                                    )->end(
+                                )->end(
+                            )->end(
+
+                            )->ele( `Text`
+                                )->a( n = `text`  v = `Model Update Table Data`
+                                )->a( n = `class` v = `sapUiSmallMargin`
+
+                                )->ele( `layoutData`
+                                    )->tag( n = `GridData` ns = `layout`
+                                        )->a( n = `span` v = `XL12 L12 M12 S12`
+
+                                )->end(
+                            )->end(
+
+                            )->tag( `Button`
+                                )->a( n = `text`  v = `update chart`
+                                )->a( n = `press` v = client->_event( `UPDATE_CHART_DATA` )
+
+                        )->end(
+
+                        )->ele( `FlexBox`
+                            )->a( n = `width`          v = `30rem`
+                            )->a( n = `height`         v = `18rem`
+                            )->a( n = `alignItems`     v = `Start`
+                            )->a( n = `justifyContent` v = `SpaceBetween`
+
+                            )->ele( `items`
+                                )->ele( n = `InteractiveDonutChart` ns = `mchart`
+                                    )->a( n = `displayedSegments` v = client->_bind( total_count )
+                                    )->a( n = `segments`          v = client->_bind( counts )
+
+                                    )->tag( n = `InteractiveDonutChartSegment` ns = `mchart`
+                                        )->a( n = `label`          v = `{TEXT}`
+                                        )->a( n = `value`          v = `{PERCENT}`
+                                        )->a( n = `displayedValue` v = `{PERCENT}` ).
+
+    client->view_display( view->stringify( ) ).
 
   ENDMETHOD.
 
@@ -194,6 +261,12 @@ CLASS z2ui5_cl_smpc_sapui5_001 IMPLEMENTATION.
           ( text = `3rd` percent = `15.0` )
           ( text = `4th` percent = `15.0` ) ).
       total_count = lines( counts ).
+
+    ELSEIF client->check_on_event( `DONUT_CHANGED` ).
+      client->message_toast_display( `Donut selection changed` ).
+
+    ELSEIF client->check_on_event( `DONUT_PRESS` ).
+      client->message_toast_display( `Donut pressed` ).
     ENDIF.
 
   ENDMETHOD.
