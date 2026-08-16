@@ -1,0 +1,37 @@
+name: check-summary
+
+# Every port carries the demo kit's own sentence about the sample it rebuilds,
+# in a `" @summary` line. The sentence is not written here: it is snapshotted
+# from the OpenUI5 sources into ui5/descriptions.json (scripts/fetch-descriptions.mjs)
+# and written onto the classes by scripts/generate-summary.mjs.
+#
+# Generated and committed, so this checks the line is still the one the
+# snapshot holds - refresh the snapshot and every changed sentence moves with
+# it, in a diff somebody reads.
+#
+# Separate from check-keywords on purpose: the two lines answer different
+# questions ("which words find this port" / "is this the one I want") and come
+# from different sources, so one going red should not hide the other.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-summary-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check-summary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+    - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      with:
+        node-version: '22'
+    - run: node scripts/generate-summary.mjs --check

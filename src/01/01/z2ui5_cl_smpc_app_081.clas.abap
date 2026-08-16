@@ -1,4 +1,5 @@
 " @keywords pulltorefresh pull refresh sap.m list standardlistitem
+" @summary With the Pull to Refresh you can trigger an update operation by swiping the current page down on touch devices. On other devices the Pull To Refresh is visible all the time and the user clicks it like a button.
 CLASS z2ui5_cl_smpc_app_081 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

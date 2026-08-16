@@ -1,4 +1,5 @@
 " @keywords splitter sap.ui.layout layout data app button
+" @summary Simple splitter example with two content areas
 CLASS z2ui5_cl_smpc_app_125 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

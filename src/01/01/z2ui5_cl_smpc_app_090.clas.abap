@@ -1,4 +1,5 @@
 " @keywords searchfield search field sap.m inside dialog button toolbar text
+" @summary Use a Search Field inside a Dialog.
 CLASS z2ui5_cl_smpc_app_090 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

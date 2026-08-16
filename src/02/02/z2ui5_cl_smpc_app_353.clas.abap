@@ -1,4 +1,5 @@
 " @keywords table sap.ui.table dnd column
+" @summary Shows various drag-and-drop capabilities along with custom context menu alternatives for each action.
 CLASS z2ui5_cl_smpc_app_353 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

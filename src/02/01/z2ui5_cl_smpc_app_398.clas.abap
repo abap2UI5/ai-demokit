@@ -1,4 +1,5 @@
 " @keywords carousel sap.m title image
+" @summary A sample of a Carousel that contains images.
 CLASS z2ui5_cl_smpc_app_398 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,0 +1,3199 @@
+{
+  "source": {
+    "repo": "https://github.com/SAP/openui5",
+    "commit": "e50e7cc6dce895dd7521633749e0b0e67c912d96",
+    "committed": "2026-07-13",
+    "version": "1.151.0-SNAPSHOT",
+    "from": "src/*/test/**/demokit/docuindex.json -> explored.samples[]",
+    "libraries": 12,
+    "licence": "Apache-2.0 (OpenUI5). Held verbatim, like the sample sources under ui5/<lib>/<Sample>/."
+  },
+  "demokit": {
+    "sap.f.sample.AvatarGroup": {
+      "name": "Avatar Group",
+      "description": "This sample demonstrates the different group types and item sizes of the AvatarGroup control."
+    },
+    "sap.f.sample.Card": {
+      "name": "Card Control",
+      "description": "This sample illustrates how to specify the predefined header and the content of the Card control."
+    },
+    "sap.f.sample.DynamicPageAnalyticalTable": {
+      "name": "Dynamic Page with Analytical Table",
+      "description": "Dynamic Page containing an Analytical Table in the content area aligned with the SAP Fiori List Report floorplan."
+    },
+    "sap.f.sample.DynamicPageFreeStyle": {
+      "name": "Dynamic Page Freestyle Example",
+      "description": "Dynamic Page freestyle example with a responsive <code>sap.m.Table</code> in the content area, showing that each control can be placed in the title and the header content areas."
+    },
+    "sap.f.sample.DynamicPageResponsiveAvatar": {
+      "name": "Dynamic Page with Responsive Avatar",
+      "description": "Dynamic Page demonstrating the breakpointChange event to adjust Avatar sizes responsively based on breakpoints."
+    },
+    "sap.f.sample.DynamicPageWithStickySubheader": {
+      "name": "Dynamic Page with Sticky Subheader",
+      "description": "Dynamic Page containing an sap.m.IconTabBar in the sticky subheader content area."
+    },
+    "sap.f.sample.DynamicPageWithWizard": {
+      "name": "Dynamic Page with Wizard",
+      "description": "Dynamic Page containing a sap.m.Wizard and WizardProgressNavigator in the content area."
+    },
+    "sap.f.sample.FlexibleColumnLayoutColumnResize": {
+      "name": "Flexible Column Layout with programmatic scrolling to an item",
+      "description": "FlexibleColumnLayout where the app programmatically scrolls to some item within the newly navigated column, once the column is fully resized"
+    },
+    "sap.f.sample.FlexibleColumnLayoutLandmarkInfo": {
+      "name": "Flexible Column Layout Landmark Info For Columns",
+      "description": "Flexible Column Layout where the first and the last columns have custom Landmark Info"
+    },
+    "sap.f.sample.FlexibleColumnLayoutLandmarkInfoArrow": {
+      "name": "Flexible Column Layout Landmark Info For Arrows",
+      "description": "Flexible Column Layout where the all the arrows have custom Landmark Info"
+    },
+    "sap.f.sample.FlexibleColumnLayoutSimple": {
+      "name": "Flexible Column Layout (with Event Bus)",
+      "description": "Clicking on a link in a column opens the next column."
+    },
+    "sap.f.sample.FlexibleColumnLayoutWithFullscreenPage": {
+      "name": "Flexible Column Layout with Routing and first page in fullscreen only",
+      "description": "Flexible Column Layout as an app with routing that displays different pages in the initial column. The first page is only displayed in OneColumn layout type"
+    },
+    "sap.f.sample.FlexibleColumnLayoutWithOneColumnStart": {
+      "name": "Flexible Column Layout with Routing and One Initial Column",
+      "description": "Flexible Column Layout as an app with routing that starts with a single initial column."
+    },
+    "sap.f.sample.FlexibleColumnLayoutWithTwoColumnStart": {
+      "name": "Flexible Column Layout with Routing and Two Initial Columns",
+      "description": "Flexible Column Layout as an app with routing that starts with two initial columns."
+    },
+    "sap.f.sample.GridContainer": {
+      "name": "Grid Container",
+      "description": "This sample represents the general usage of GridContainer."
+    },
+    "sap.f.sample.GridContainerDragAndDrop": {
+      "name": "Grid Container - Drag and Drop",
+      "description": "This sample represents GridContainer with enabled Drag and Drop functionality."
+    },
+    "sap.f.sample.GridContainerDragAndDropFromList": {
+      "name": "Grid Container - Drag and Drop From List to GridContainer",
+      "description": "This sample represents how items from a control which is not GridContainer can be dragged and dropped over a GridContainer."
+    },
+    "sap.f.sample.GridContainersNavigation": {
+      "name": "Grid Container - Keyboard navigation between multiple grids",
+      "description": "This sample demonstrates the keyboard navigation between multiple grids"
+    },
+    "sap.f.sample.GridListBasic": {
+      "name": "Grid List - Basic examples",
+      "description": ""
+    },
+    "sap.f.sample.GridListBoxContainer": {
+      "name": "Grid List with GridBoxLayout",
+      "description": "This layout allows to display same height grid items with configurable width."
+    },
+    "sap.f.sample.GridListBoxContainerGrouping": {
+      "name": "Grid List features - Grouping, Header, Growing",
+      "description": "This sample illustrates subgroups with headers, custom header and lazy loading of GridList items."
+    },
+    "sap.f.sample.GridListBoxContainerReal": {
+      "name": "Grid List - Item Designs",
+      "description": "This is a sample for GridList item templates representing a typical tools page dashboard style."
+    },
+    "sap.f.sample.GridListBreakPoints": {
+      "name": "Grid List - Break point examples - S, M, L, XL",
+      "description": "This sample illustrates how to configure the responsive settings for different container sizes."
+    },
+    "sap.f.sample.GridListDragAndDrop": {
+      "name": "Grid List - Drag and Drop",
+      "description": "This sample represents GridList with enabled Drag and Drop functionality."
+    },
+    "sap.f.sample.GridListKeyboardArrowsNavigation": {
+      "name": "Navigation with keyboard arrows between multiple GridLists",
+      "description": "This sample demonstrates the keyboard navigation between multiple grids"
+    },
+    "sap.f.sample.GridListModes": {
+      "name": "Grid List - Different Modes With Various Item Types",
+      "description": "This is a sample for GridList with different modes of selection."
+    },
+    "sap.f.sample.GridListResponsiveColumnLayout": {
+      "name": "Grid List with Responsive Column Layout",
+      "description": "This layout displays a variable number of grid columns depending on available screen size. Grid row's height is dynamically determined by the height of the highest grid element on this row."
+    },
+    "sap.f.sample.ProductSwitchItemWithImageSrc": {
+      "name": "Product Switch with imageSrc",
+      "description": "This sample demonstrates the usage of Product Switch Item with imageSrc, configurable by the app developer."
+    },
+    "sap.f.sample.ProductSwitchNavigation": {
+      "name": "Product Switch with Navigation",
+      "description": "This sample demonstrates the navigation behavior of Product Switch, configurable by the app developer."
+    },
+    "sap.f.sample.SemanticPage": {
+      "name": "Semantic Page using Draft Indicator",
+      "description": "This sample demonstrates the use of a <code>DraftIndicator</code> in the footer area."
+    },
+    "sap.f.sample.SemanticPageFreeStyle": {
+      "name": "Semantic Page - Freestyle Sample",
+      "description": "This sample demonstrates a <code>SemanticPage</code> with all semantic-specific actions both in the title and in the footer areas."
+    },
+    "sap.f.sample.ShellBar": {
+      "name": "Shell Bar with title mega menu",
+      "description": "Shell Bar example showing the control title as part of a mega menu, configurable by the app developer."
+    },
+    "sap.f.sample.ShellBarProductSwitch": {
+      "name": "Shell Bar with Product Switch",
+      "description": "Shell Bar example with enabled Product Switch, configurable by the app developer. The Product Switch control is in experimental state."
+    },
+    "sap.f.sample.ShellBarWithFlexibleColumnLayout": {
+      "name": "Shell Bar with Flexible Column Layout",
+      "description": "Example of Shell Bar in combination with Flexible Column Layout."
+    },
+    "sap.f.sample.ShellBarWithMenuButton": {
+      "name": "Shell Bar with menu button",
+      "description": "Shell Bar example with a menu button and a plain title."
+    },
+    "sap.f.sample.ShellBarWithSearch": {
+      "name": "Shell Bar with search",
+      "description": "Shell Bar example with configured search functionality."
+    },
+    "sap.f.sample.ShellBarWithSplitApp": {
+      "name": "Shell Bar with Split App",
+      "description": "Example of Shell Bar in combination with Split App."
+    },
+    "sap.f.sample.SidePanel": {
+      "name": "Side Panel",
+      "description": "Demonstrates the basic usage of Side Panel."
+    },
+    "sap.f.sample.SidePanelOverflow": {
+      "name": "Side Panel with overflow menu",
+      "description": "Demonstrates the usage of Side Panel with overflow menu on desktop and tablet devices."
+    },
+    "sap.f.sample.SidePanelResizable": {
+      "name": "Resizable Side Panel",
+      "description": "Demonstrates the usage of resizable Side Panel."
+    },
+    "sap.f.sample.SidePanelSingle": {
+      "name": "Side Panel with single action item",
+      "description": "Demonstrates the usage of Side Panel with single action item."
+    },
+    "sap.m.sample.AIIntegration": {
+      "name": "AI Integration",
+      "description": "This sample project demonstrates the seamless integration of UI5 Web Components into the OpenUI5 framework showing AI use cases"
+    },
+    "sap.m.sample.ActionListItem": {
+      "name": "Action List Item",
+      "description": "Use the Action List Item to trigger an action directly from a list"
+    },
+    "sap.m.sample.ActionSelect": {
+      "name": "Action Select",
+      "description": "Illustrates an Action Select with 2 actions."
+    },
+    "sap.m.sample.ActionSheet": {
+      "name": "Action Sheet",
+      "description": "Action Sheet provides an easier way of showing a list of actions and allowing the user to select one. Title and Cancel button can be shown or hidden. Without an icon the entry will be left-aligned (see the last action in the list)."
+    },
+    "sap.m.sample.Avatar": {
+      "name": "Avatar",
+      "description": "This sample demonstrates different combinations of types, shapes, and sizes of the Avatar."
+    },
+    "sap.m.sample.AvatarActiveState": {
+      "name": "Avatar with toggling of Active state",
+      "description": "This sample demonstrates toggling of Avatar Active state, when a User menu is opened/closed."
+    },
+    "sap.m.sample.AvatarBadgeIconColor": {
+      "name": "Avatar with Badge Icon Color",
+      "description": "This sample demonstrates different badge icon colors of the Avatar."
+    },
+    "sap.m.sample.AvatarValueState": {
+      "name": "Avatar with badgeValueState",
+      "description": "This sample demonstrates different badge value states of the Avatar."
+    },
+    "sap.m.sample.AvatarWithAffordance": {
+      "name": "Avatar with Visual Affordance",
+      "description": "This sample demonstrates different combinations of types, shapes, and sizes of the Avatar with visual affordance."
+    },
+    "sap.m.sample.Breadcrumbs": {
+      "name": "Breadcrumbs sample",
+      "description": "Breadcrumbs is useful for displaying link hierarchy"
+    },
+    "sap.m.sample.BreadcrumbsWithCurrentPageLink": {
+      "name": "Breadcrumbs sample with current page link",
+      "description": "Breadcrumbs sample with current page set as aggregation, resulting in a link"
+    },
+    "sap.m.sample.BreadcrumbsWithoutCurrentPage": {
+      "name": "Breadcrumbs sample without current page",
+      "description": "The breadcrumb shows the position of the object page in the application hiearchy, without the current page. Use this breadcrumb for the object page only."
+    },
+    "sap.m.sample.BusyDialog": {
+      "name": "Busy Dialog - Standard",
+      "description": "A Busy Dialog blocks the user interface until the currently running operation has been finished. No other activities can be started in parallel."
+    },
+    "sap.m.sample.BusyDialogLight": {
+      "name": "Busy Dialog - Light",
+      "description": "This is a 'light' version of the standard Busy Dialog; it also blocks the user interface until the currently running operation has been finished. It has no UI components, so you must close it programmatically when appropriate."
+    },
+    "sap.m.sample.BusyIndicator": {
+      "name": "Busy Indicator",
+      "description": "The Busy Indicator signals that some operation is going on and that the user must wait. It does not block the current UI screen so other operations could be triggered in parallel."
+    },
+    "sap.m.sample.Button": {
+      "name": "Button",
+      "description": "Buttons trigger user actions and come in a variety of shapes and colors. Placing a button on a page header or footer changes its appearance."
+    },
+    "sap.m.sample.ButtonWithBadge": {
+      "name": "Button with Badge",
+      "description": "Button with a Badge attached"
+    },
+    "sap.m.sample.Carousel": {
+      "name": "Carousel",
+      "description": "A sample of a Carousel that contains images."
+    },
+    "sap.m.sample.CarouselEmptyMessages": {
+      "name": "Carousel Without Pages",
+      "description": "When the carousel has no pages loaded or provided illustrated message will be shown."
+    },
+    "sap.m.sample.CarouselWithControls": {
+      "name": "Carousel with Controls",
+      "description": "With the Carousel a user can browse through multi-page content by swiping left or right."
+    },
+    "sap.m.sample.CarouselWithDisplayOptions": {
+      "name": "Carousel with Display Options",
+      "description": "The Carousel has options for the arrows placement, page indicator placement and page indicator visibility."
+    },
+    "sap.m.sample.CarouselWithMorePages": {
+      "name": "Carousel with Multiple Items at Once",
+      "description": "The customLayout aggregation determines how many pages are displayed in Carousel's visible area."
+    },
+    "sap.m.sample.CheckBox": {
+      "name": "Check Box",
+      "description": "Checkboxes allow users to select a subset of options. If you want to offer an off/on setting you should use the Switch control instead."
+    },
+    "sap.m.sample.CheckBoxTriState": {
+      "name": "Tri-State Check Box",
+      "description": "In this sample, the CheckBox reflects the selection states of its dependent input fields - selected, not selected, and partially selected."
+    },
+    "sap.m.sample.ColorPalette": {
+      "name": "Color Palette in a form",
+      "description": "The standalone ColorPalette in a container (<code>sap.ui.layout.SimpleForm</code>)."
+    },
+    "sap.m.sample.ColorPalettePopover": {
+      "name": "Color Palette as popover",
+      "description": "The ColorPalette in a popover (by use of thin wrapper control <code>sap.m.ColorPalettePopover</code>)."
+    },
+    "sap.m.sample.ComboBox": {
+      "name": "Combo box",
+      "description": "The combo box control provides a list box with items and a text field allowing the user to either type a value directly into the control or choose from the list of existing items."
+    },
+    "sap.m.sample.ComboBox2Columns": {
+      "name": "Combo box - Two columns layout",
+      "description": "Use the combo box dropdown list with two columns layout if you need to display additional information to your options, like e.g. currencies to countries or abbreviations to systems."
+    },
+    "sap.m.sample.ComboBoxClearIcon": {
+      "name": "ComboBox - Clear Icon",
+      "description": "The combo box control can show 'clear' icon, which when pressed will remove the user's input and selected key."
+    },
+    "sap.m.sample.ComboBoxDefaultFiltering": {
+      "name": "Combo box - Default Filtering",
+      "description": "The default filtering is 'starts with per term', which filters by the beginning of every word in every column. Autocomplete (type-ahead) works only for the first column, the leading value."
+    },
+    "sap.m.sample.ComboBoxFilteringContains": {
+      "name": "Combo box - Custom filtering \"Contains\"",
+      "description": "You can override the default filtering \"Starts with per term\" with your own filter function using the setFilterFunction method. The \"Contains\" approach searches everywhere in the entries."
+    },
+    "sap.m.sample.ComboBoxFilteringStartsWith": {
+      "name": "Combo box - Custom filtering \"Starts with\"",
+      "description": "You can override the default filtering \"Starts with per term\" with your own filter function using the setFilterFunction method. The \"Starts with\" approach searches only in the beginning of the entries in both columns."
+    },
+    "sap.m.sample.ComboBoxGrouping": {
+      "name": "ComboBox - Grouping of items",
+      "description": "Items in the ComboBox could be grouped by a property"
+    },
+    "sap.m.sample.ComboBoxLazyLoading": {
+      "name": "Combo box - Deferred loading of the items",
+      "description": "Use this feature to defer initialization of items until the point at which the items are needed. It can improve performance, reduce memory usage and unnecessary client/server round-trips. <br><br><b>Note:</b> This feature loads the items <b>once</b>, it is not intended to be used for paging the results or loading more items on demand."
+    },
+    "sap.m.sample.ComboBoxMaxPickerHeight": {
+      "name": "ComboBox - maxPickerHeight",
+      "description": "Limit the picker popup height using maxPickerHeight property"
+    },
+    "sap.m.sample.ComboBoxSearchBoth": {
+      "name": "Combo box - Search in both columns",
+      "description": "Combo box dropdown list with search functionality which checks both columns. When you need to display additional information on your options, like e.g. keys of countries or system abbreviations, and want to search in those as well."
+    },
+    "sap.m.sample.ComboBoxValidation": {
+      "name": "ComboBox - Validation",
+      "description": "The combo box control could be restricted to allow selection only from the items in the list."
+    },
+    "sap.m.sample.ComboBoxValueState": {
+      "name": "Combo box with value state",
+      "description": "The combo box can show different value states."
+    },
+    "sap.m.sample.ComboBoxWrapping": {
+      "name": "ComboBox - Suggestions wrapping",
+      "description": "Suggestions wrap automatically when longer then the dropdown width"
+    },
+    "sap.m.sample.ComparisonPattern": {
+      "name": "Comparison Pattern",
+      "description": "The pattern allows users to select multiple items from an sap.m.Table and display information about them in a structured way - all items are displayed next to each other for easy comparison, based on their specifics."
+    },
+    "sap.m.sample.ContainerNoPadding": {
+      "name": "No Container Content Padding",
+      "description": "Many UI5 containers support the standard container content padding CSS classes. Apply the CSS class 'sapUiNoContentPadding' on a UI5 container control to remove the default padding around the container content area."
+    },
+    "sap.m.sample.ContainerPadding": {
+      "name": "Container Content Padding",
+      "description": "Apply the CSS class 'sapUiContentPadding' on a UI5 container control to add a default padding of 1rem (16px) around the container content area."
+    },
+    "sap.m.sample.ContainerPaddingAndMargin": {
+      "name": "Container Content Padding and Margins",
+      "description": "By combining the margin and padding concepts you can flexibly design your application layout without having to write any custom CSS. This example shows a HorizontalLayout that is layouted with the standard margin and padding classes provided by UI5."
+    },
+    "sap.m.sample.ContainerResponsivePadding": {
+      "name": "Responsive Container Content Padding",
+      "description": "Apply the CSS class 'sapUiResponsiveContentPadding' on a UI5 container control to add a responsive padding based on the screen size around the container content area."
+    },
+    "sap.m.sample.CookieSettingsDialogPattern": {
+      "name": "Cookie Settings Dialog Pattern",
+      "description": "The Cookie Settings Dialog allows you to easily manage the cookie settings according to the needs of the specific product."
+    },
+    "sap.m.sample.CustomListItem": {
+      "name": "Custom List Item",
+      "description": "With the Custom List Item you can add any kind of content to lists."
+    },
+    "sap.m.sample.CustomMessageStripDesign": {
+      "name": "Custom Message Strip Design",
+      "description": "Demonstrates MessageStrips with different colorSet and colorScheme properties."
+    },
+    "sap.m.sample.CustomTreeItem": {
+      "name": "Custom Tree Item",
+      "description": "With the Custom Tree Item you can add any kind of content to Tree."
+    },
+    "sap.m.sample.DatePicker": {
+      "name": "Date Picker",
+      "description": "The Date Picker is an extension of the Input control and is dedicated to Date."
+    },
+    "sap.m.sample.DatePickerHidden": {
+      "name": "Date Picker - Open by Another Control",
+      "description": "This example shows Date Picker which is opened by another control."
+    },
+    "sap.m.sample.DatePickerMassEdit": {
+      "name": "Date Picker Mass Editing Scenario",
+      "description": "Using calendar in a dialog for changing dates in mass editing scenario."
+    },
+    "sap.m.sample.DatePickerValueState": {
+      "name": "Date Picker - Value States",
+      "description": "This example shows different DatePicker value states."
+    },
+    "sap.m.sample.DateRangeSelection": {
+      "name": "Date Range Selection",
+      "description": "The Date Range Selection is an extension of the Date Picker Control and enables the user to select range of dates."
+    },
+    "sap.m.sample.DateRangeSelectionHidden": {
+      "name": "Date Range Selection - Open by Another Control",
+      "description": "This example shows Date Range Selection which is opened by another control."
+    },
+    "sap.m.sample.DateRangeSelectionValueState": {
+      "name": "Date Range Selection - Value States",
+      "description": "This example shows different DateRangeSelection value states."
+    },
+    "sap.m.sample.DateTimeInput": {
+      "name": "Date Time Input",
+      "description": "The Date & Time Input control allows input of dates and times using date and time pickers. [Deprecated since 1.32.8]"
+    },
+    "sap.m.sample.DateTimePicker": {
+      "name": "Date Time Picker",
+      "description": "With the DateTimePicker a Date can be entered or selected including the time part."
+    },
+    "sap.m.sample.DateTimePickerHidden": {
+      "name": "Date Time Picker - Open by Another Control",
+      "description": "This example shows Date Time Picker which is opened by another control."
+    },
+    "sap.m.sample.DateTimePickerValueState": {
+      "name": "Date Time Picker - Value States",
+      "description": "This example shows different DateTimePicker value states."
+    },
+    "sap.m.sample.Dialog": {
+      "name": "Dialog",
+      "description": "Typically a Dialog prompts the user for decisions or additional information required by the application. The content of a dialog is fully customizable. If you want to highlight important information you should use the special type of 'Message Dialog'."
+    },
+    "sap.m.sample.DialogConfirm": {
+      "name": "Dialog with Confirm Options",
+      "description": "Creating a dialog with confirm and reject options that replaces the confirmDialog functionality."
+    },
+    "sap.m.sample.DialogFullScreen": {
+      "name": "Dialog - Fullscreen",
+      "description": "A dialog that can be toggled to fullscreen mode through a header button, by double-clicking the header, or by using the 'Shift+Ctrl+F' keyboard shortcut."
+    },
+    "sap.m.sample.DialogMessage": {
+      "name": "Message Dialog",
+      "description": "Creating a dialog for showing UI messages. The possible messages types are: 'None', 'Success', 'Warning' and 'Error'."
+    },
+    "sap.m.sample.DialogSearch": {
+      "name": "Dialog with Search Field",
+      "description": "Use a Search Field inside a Dialog."
+    },
+    "sap.m.sample.DialogWithMessagePopover": {
+      "name": "Dialog with Custom Footer",
+      "description": "Dialog with custom footer and support for message popover."
+    },
+    "sap.m.sample.DialogWithinArea": {
+      "name": "Dialog in Custom Within Area",
+      "description": "Within area of sap.ui.core.Popup determines where all popups (including dialogs) are positioned and where they can be dragged."
+    },
+    "sap.m.sample.DisplayListItem": {
+      "name": "Display List Item",
+      "description": "Use the Display List Item for showing name/value pairs."
+    },
+    "sap.m.sample.DraftIndicator": {
+      "name": "Draft Indicator",
+      "description": "The Draft Indicator shows that eighter currently a draft is saving or that it is already saved. It does not block the current UI screen so other operations could be triggered in parallel."
+    },
+    "sap.m.sample.DynamicDateRange": {
+      "name": "Dynamic Date Range",
+      "description": "The dynamic date range is a control that offers a choice of absolute and relative dates, using different offset from the current date. The list of values offered must be defined by the application."
+    },
+    "sap.m.sample.DynamicDateRangeAndCalendarWeekNumbering": {
+      "name": "Dynamic Date Range with calendarWeekNumbering",
+      "description": "This example shows the Dynamic Date Range control with Middle Eastern calendar week numbering."
+    },
+    "sap.m.sample.DynamicDateRangeHidden": {
+      "name": "Dynamic Date Range - Open by Another Control",
+      "description": "This example shows Dynamic Date Range which is opened by another control."
+    },
+    "sap.m.sample.DynamicDateRangeWithCustomOptions": {
+      "name": "Dynamic Date Range with Custom Options",
+      "description": "This example shows the Dynamic Date Range control with custom options for interval or date selection."
+    },
+    "sap.m.sample.DynamicMessageStripGenerator": {
+      "name": "Dynamic Message Strip Generator",
+      "description": "Generates MessageStrips with random properties."
+    },
+    "sap.m.sample.ExpandableText": {
+      "name": "Expandable Text",
+      "description": "The ExpandableText control can be used to display a larger texts inside a table, list or form."
+    },
+    "sap.m.sample.FacetFilterCustomFilters": {
+      "name": "Facet Filter - Custom Filters",
+      "description": "With the FacetFilter you can define custom filtering criteria to be applied when searching in the FacetFilterList instead of the default filtering criteria of the control in order to assist the user in narrowing down the data in, say, a table."
+    },
+    "sap.m.sample.FacetFilterLight": {
+      "name": "Facet Filter - Light",
+      "description": "This is a 'Light' version of the Facet Filter. It is for small displays where only a selectable summary bar is shown, and a dialog is shown for setting the facet values."
+    },
+    "sap.m.sample.FacetFilterSimple": {
+      "name": "Facet Filter - Simple",
+      "description": "With the Facet Filter you can offer multiple filters ('facets') to assist the user in narrowing down the data in, say, a table. With this default 'Simple' type, each filter is displayed in a row for selection."
+    },
+    "sap.m.sample.Feed": {
+      "name": "Feed",
+      "description": "This sample shows you how to build a complete feed user interface by combining a FeedInput with a list of FeedListItems."
+    },
+    "sap.m.sample.FeedContent": {
+      "name": "Feed Content",
+      "description": "Shows the tile containing the text of the feed, a subheader, and a numeric value."
+    },
+    "sap.m.sample.FeedInput": {
+      "name": "Feed Input",
+      "description": "This sample shows a standalone feed input with different settings."
+    },
+    "sap.m.sample.FeedListItem": {
+      "name": "Feed List Item",
+      "description": "The Feed List Item provides a standard UI for 'feeds' where multiple users publish information on regular basis on a certain topic."
+    },
+    "sap.m.sample.FlexBoxBasicAlignment": {
+      "name": "Flex Box - Basic Alignment",
+      "description": "Flex Box items can be placed in different areas using the justifyContent and alignItem properties."
+    },
+    "sap.m.sample.FlexBoxCols": {
+      "name": "Flex Box - Equal Height Cols",
+      "description": "You can create balanced areas with Flex Box, such as these columns with equal height regardless of content."
+    },
+    "sap.m.sample.FlexBoxDirectionOrder": {
+      "name": "Flex Box - Direction & Order",
+      "description": "You can influence the direction and order of elements in horizontal and vertical Flex Box controls with the direction property."
+    },
+    "sap.m.sample.FlexBoxGap": {
+      "name": "Flex Box - Gap, Row Gap & Column Gap",
+      "description": "You can add gap between rows and columns."
+    },
+    "sap.m.sample.FlexBoxNav": {
+      "name": "Flex Box - Navigation Examples",
+      "description": "Here is an example of how you can use navigation items as unordered list items in a Flex Box."
+    },
+    "sap.m.sample.FlexBoxNested": {
+      "name": "Flex Box - Nested",
+      "description": "Flex Boxes can be nested. Remember also that HBox and VBox are 'convenience' controls based on the Flex Box control."
+    },
+    "sap.m.sample.FlexBoxOpposingAlignment": {
+      "name": "Flex Box - Opposing Alignment",
+      "description": "In this Flex Box the items are aligned at opposing ends of the container with justifyContent set to 'SpaceBetween'."
+    },
+    "sap.m.sample.FlexBoxRenderType": {
+      "name": "Flex Box - Render Type",
+      "description": "Flex items can be rendered differently. By default, they are wrapped in a <code>div</code> element. Optionally, the bare controls can be rendered directly. This can affect the resulting layout."
+    },
+    "sap.m.sample.FlexBoxSizeAdjustments": {
+      "name": "Flex Box - Size Adjustments",
+      "description": "Automatic size adjustments can be achieved for Flex Items with the use of Flex Item Data settings on the contained controls."
+    },
+    "sap.m.sample.FormattedText": {
+      "name": "Formatted Text",
+      "description": "The control can be used for embedding formatted HTML text into your application."
+    },
+    "sap.m.sample.GenericTag": {
+      "name": "Generic Tag with Different Configurations",
+      "description": "Previews of the GenericTag control based on combinations of different sets of properties."
+    },
+    "sap.m.sample.GenericTileAsFeedTile": {
+      "name": "Feed and News Tile",
+      "description": "Shows Feed Tile and News Tile samples that can contain feed content, news content, and a footer."
+    },
+    "sap.m.sample.GenericTileAsKPITile": {
+      "name": "KPI Tile",
+      "description": "Shows KPI Tile samples that can contain header, subheader, key value, trend, scale, unit, and a footer."
+    },
+    "sap.m.sample.GenericTileAsLaunchTile": {
+      "name": "Launch Tile",
+      "description": "Shows Launch Tile samples that can contain header, subheader, image content, unit, and a footer."
+    },
+    "sap.m.sample.GenericTileAsMonitorTile": {
+      "name": "Monitor Tile",
+      "description": "Shows Monitor Tile samples that can contain header, subheader, icon, key value, unit, and a footer."
+    },
+    "sap.m.sample.GenericTileLineMode": {
+      "name": "Tile Modes and Scopes",
+      "description": "Shows Generic Tile regular and in line mode, and you can switch between the display scope and actions scope for Generic Tiles on a web page."
+    },
+    "sap.m.sample.GenericTileStates": {
+      "name": "Tile Statuses",
+      "description": "Shows the GenericTile while it is loading, if loading fails, and in disabled status."
+    },
+    "sap.m.sample.HeaderContainer": {
+      "name": "Header Container - Horizontal Mode",
+      "description": "The Header Container with horizontal layout. It provides horizontal scrolling on mobile devices (tablet and phone). On a desktop, it provides scroll left and scroll right buttons."
+    },
+    "sap.m.sample.HeaderContainerLazyLoading": {
+      "name": "Header Container - Lazy Loading",
+      "description": "The header container with lazy loading functionality on pressing the scroll button."
+    },
+    "sap.m.sample.HeaderContainerNoDividers": {
+      "name": "Header Container Without Dividers",
+      "description": "The Header Container without divider lines."
+    },
+    "sap.m.sample.HeaderContainerOH": {
+      "name": "Header Container with Object Header",
+      "description": "The Header Container combined with sap.m.ObjectHeader."
+    },
+    "sap.m.sample.HeaderContainerVM": {
+      "name": "Header Container - Vertical Mode",
+      "description": "The Header Container with a vertical layout and with divider lines."
+    },
+    "sap.m.sample.IconTabBar": {
+      "name": "Icon Tab Bar - Filter",
+      "description": "In this example, the Icon Tab Bar is used to apply filters on a table and display the count of the items for each view."
+    },
+    "sap.m.sample.IconTabBarBackgroundDesign": {
+      "name": "Icon Tab Bar - Background Design",
+      "description": "In this example the backgroundDesign and headerBackgroundDesign properties are demonstrated."
+    },
+    "sap.m.sample.IconTabBarBadges": {
+      "name": "Icon Tab Bar - Badges",
+      "description": "This sample illustrates the possibility to add badges to the icon tab filters."
+    },
+    "sap.m.sample.IconTabBarDragDrop": {
+      "name": "Icon Tab Bar - Tabs drag and drop",
+      "description": "This example shows how the tab filters can be reordered and nested with drag and drop. Works only on desktop devices."
+    },
+    "sap.m.sample.IconTabBarFiori2": {
+      "name": "Icon Tab Bar - Text and Count",
+      "description": "In this example, the Icon Tab Bar tabs display text and corresponding count."
+    },
+    "sap.m.sample.IconTabBarInlineIcons": {
+      "name": "Icon Tab Bar - Inline mode tab icons",
+      "description": "This sample illustrates tab icons for inline mode."
+    },
+    "sap.m.sample.IconTabBarInlineMode": {
+      "name": "Icon Tab Bar - Inline Mode",
+      "description": "In this example, the Icon Tab Bar tabs display the text and the count in one line."
+    },
+    "sap.m.sample.IconTabBarMulti": {
+      "name": "Icon Tab Bar - Icons Only",
+      "description": "In this example, the Icon Tab Bar tabs display icons only."
+    },
+    "sap.m.sample.IconTabBarNoIcons": {
+      "name": "Icon Tab Bar - Text Only",
+      "description": "In this example, the Icon Tab Bar tabs display text only."
+    },
+    "sap.m.sample.IconTabBarOverflowSelectList": {
+      "name": "Icon Tab Bar - Overflow Behavior",
+      "description": "In this example when there is not enough space for all tab items to fit on the screen, the rest are displayed in an overflow select list for easier selection."
+    },
+    "sap.m.sample.IconTabBarProcess": {
+      "name": "Icon Tab Bar - Process",
+      "description": "In this example, the Icon Tab Bar is used to apply filters on the same content along a business process."
+    },
+    "sap.m.sample.IconTabBarResponsivePadding": {
+      "name": "Icon Tab Bar - Responsive Padding",
+      "description": "This example demonstrates the Icon Tab Bar's support for paddings that depend on the width of its container"
+    },
+    "sap.m.sample.IconTabBarStartAndEndOverflow": {
+      "name": "Icon Tab Bar - Start and End Overflow",
+      "description": "This sample illustrates the start and end overflow mode of the Icon Tab Bar."
+    },
+    "sap.m.sample.IconTabBarStretchContent": {
+      "name": "Icon Tab Bar - Stretch Content Height",
+      "description": "In this example, the IconTabBar height is stretched to the maximum height of the page content. Note: The height of the parent container must be defined as a fixed value. Also, applyContentPadding property is set to false and backgroundDesign property is set to Transparent."
+    },
+    "sap.m.sample.IconTabBarSubTabs": {
+      "name": "Icon Tab Bar - Sub tabs",
+      "description": "This sample illustrates nested tabs with or without own content in their root-level tab."
+    },
+    "sap.m.sample.IconTabBarTabDensityMode": {
+      "name": "Icon Tab Bar - Tab Density Mode",
+      "description": "In this example, the Icon Tab Bar is used in different tab density modes."
+    },
+    "sap.m.sample.IconTabHeader": {
+      "name": "Standalone Icon Tab Header",
+      "description": "Icon Tab Header used standalone, outside of Icon Tab Bar."
+    },
+    "sap.m.sample.IconTabSeparator": {
+      "name": "Icon Tab Bar - Separator",
+      "description": "This is an example how to use separators in the Icon Tab Bar. You can choose an icon as a separator or use the default vertical line."
+    },
+    "sap.m.sample.IllustratedMessageEVR": {
+      "name": "Illustrated Message Enable Vertical Responsiveness",
+      "description": "Demonstrates the IllustratedMessage's 'enableVerticalResponsiveness' property."
+    },
+    "sap.m.sample.IllustratedMessageInAppCustom": {
+      "name": "A demo application that imports a Custom Illustration Set from an npm package",
+      "description": "Shows how to import a Custom Illustration from an npm package into a UI5 application for usage with IllustratedMessage."
+    },
+    "sap.m.sample.IllustratedMessageInCardNoActivities": {
+      "name": "'NoActivities' Illustrated Message in a Card",
+      "description": "IllustratedMessage as content of sap.f.Card. 'NoActivities' illustration type is being used for the Illustrated Message."
+    },
+    "sap.m.sample.IllustratedMessageInCardNoEmail": {
+      "name": "'NoEmail' Illustrated Message in a Card",
+      "description": "IllustratedMessage as content of sap.f.Card. 'NoEmail' illustration type is being used for the Illustrated Message."
+    },
+    "sap.m.sample.IllustratedMessageInDialog": {
+      "name": "Illustrated Message in a Dialog",
+      "description": "IllustratedMessage as content of sap.m.Dialog."
+    },
+    "sap.m.sample.IllustratedMessageInPage": {
+      "name": "Default Illustration Set (sapIllus)",
+      "description": "The available illustrations are from the default ('sapIllus') illustration set."
+    },
+    "sap.m.sample.IllustratedMessageInPageCustom": {
+      "name": "Illustrated Message in a Page with Configurable Properties (Custom Illustration Set)",
+      "description": "The available properties of the IllustratedMessage are configurable in this sample. The available illustrations are from the 'custom' illustration set."
+    },
+    "sap.m.sample.IllustratedMessageInPageTNT": {
+      "name": "Illustrated Message in a Page with Configurable Properties (TNT Illustration Set)",
+      "description": "The available properties of the IllustratedMessage are configurable in this sample. The available illustrations are from the 'tnt' illustration set."
+    },
+    "sap.m.sample.IllustratedMessageInPageWithURI": {
+      "name": "Illustrative style illustrations using the 'src' property",
+      "description": "The available illustrations are from the default illustration set with the use of the 'src' property."
+    },
+    "sap.m.sample.IllustratedMessageSessionTimeout": {
+      "name": "Illustrated Message Session Timeout",
+      "description": "All applications that require user sign-in should employ a mechanism for automating user sign-out. When the inactivity is about to reach that threshold, a session timeout dialog appears automatically to inform the user."
+    },
+    "sap.m.sample.Image": {
+      "name": "Image",
+      "description": "Images are faster than words and attract people's attention. Images can also have an active state or be used in SVG format."
+    },
+    "sap.m.sample.ImageContent": {
+      "name": "ImageContent",
+      "description": "Shows ImageContent that can include an icon, a profile image, or a logo with a tooltip."
+    },
+    "sap.m.sample.ImageErrorWithIllustration": {
+      "name": "Image error handling with IllustratedMessage",
+      "description": "Handle errors using the sap.m.IllustratedMessage with the error event."
+    },
+    "sap.m.sample.ImageModeBackground": {
+      "name": "Image with ImageMode.Background",
+      "description": "Visualizes the state of the control when the mode property is set to ImageMode.Background."
+    },
+    "sap.m.sample.InitialPagePattern": {
+      "name": "InitialPage Pattern",
+      "description": "The initial page floorplan allows the user to navigate to a single\nobject to view or edit it. The interaction point on the screen is a\nsingle input field that relies on assisted input to direct the user to\nthe object in as few steps as possible (using features such as value\nhelp and live search).\n\nThe floorplan is achieved with a single sap.uxap.ObjectPageLayout with\nsap.uxap.ObjectPageDynamicHeaderTitle.\n\nsap.m.Input is used as an Input within the Title.\nsap.m.MessagePage is used as a section, which informs the user\nif input is needed or if the searched value is not found.\nsap.m.SelectDialog is used as a value help dialog for the input."
+    },
+    "sap.m.sample.InputAssisted": {
+      "name": "Input - Assisted",
+      "description": "Assisted input is available via suggestions - shown as you type - and a value help dialog."
+    },
+    "sap.m.sample.InputAssistedTabularSuggestions": {
+      "name": "Input - Assisted Tabular Suggestions",
+      "description": "In this example assisted input is provided with table-like suggestions where several columns can display more details."
+    },
+    "sap.m.sample.InputAssistedTwoValues": {
+      "name": "Input - Assisted Two Values",
+      "description": "This example shows how to easily implement an assisted input with two-value suggestions."
+    },
+    "sap.m.sample.InputChecked": {
+      "name": "Input - Checked",
+      "description": "Input checks are handled via the validation of the data binding. In this example there are two inputs that are validated (a) while the user types and (b) when the user continues the process. If the built-in validation types are not sufficient you can create your own, like the email type in this example."
+    },
+    "sap.m.sample.InputCustomValueHelpIcon": {
+      "name": "Input - Custom Value Help Icon",
+      "description": "This example shows the usage of a custom value help icon instead of the default one."
+    },
+    "sap.m.sample.InputDescription": {
+      "name": "Input - Description",
+      "description": "This sample illustrates the usage of the description with input fields, e.g. description for units of measurements and currencies."
+    },
+    "sap.m.sample.InputGrouping": {
+      "name": "Input - Grouping of items",
+      "description": "Items in the Input could be grouped by a property"
+    },
+    "sap.m.sample.InputKeyValue": {
+      "name": "Input - Key and Value",
+      "description": "This sample illustrates how the Input works with key and value values, when the data is available via list of suggestions."
+    },
+    "sap.m.sample.InputKeyValueTabularSuggestions": {
+      "name": "Input - Key and Value Tabular Suggestions",
+      "description": "This sample illustrates how the Input works with key and value values, when the data is provided with table-like suggestions."
+    },
+    "sap.m.sample.InputListItem": {
+      "name": "Input List Item",
+      "description": "Use the Input List Item on phones to build form like user interfaces."
+    },
+    "sap.m.sample.InputModelUpdate": {
+      "name": "Late Model Update",
+      "description": "The sample demonstrates how to rebind a control to a different data source after a certain delay. This is useful when working with data that may change dynamically, as it allows the control to automatically update its displayed value without the need for user interaction."
+    },
+    "sap.m.sample.InputPassword": {
+      "name": "Input - Password",
+      "description": "To make sure the password is not shown as clear text you set the 'type' of an input control to 'Password'."
+    },
+    "sap.m.sample.InputStates": {
+      "name": "Input - States",
+      "description": "This example demonstrates the different input field states, e.g. disabled, editable, with value help and value help only."
+    },
+    "sap.m.sample.InputSuggestionsCustomFilter": {
+      "name": "Input - Suggestions - Custom",
+      "description": "The default filtering for the suggestionItems aggregation uses a 'begins with' style operator. You can override this with your own custom filter function using the Input control's setFilterFunction method."
+    },
+    "sap.m.sample.InputSuggestionsDynamic": {
+      "name": "Input - Suggestions - Dynamic",
+      "description": "With the Input control's suggest event, you can handle the suggestionItems yourself dynamically. This is useful when you have a server-side source of possible entries, and want to retrieve a specific subset by setting a filter on the aggregation binding with the model."
+    },
+    "sap.m.sample.InputSuggestionsOpenSearch": {
+      "name": "Input - Suggestions - OSP",
+      "description": "If you need to use an Open Search Provider (OSP) to supply possible values, you can do this with the Input control's suggest event, and build the suggestionItems dynamically according to the results of the Open Search call."
+    },
+    "sap.m.sample.InputTypes": {
+      "name": "Input - Types",
+      "description": "Input type corresponds to the type attribute of the HTML input tag. On touch devices, it controls the keyboard layout. On desktop, the effect of this setting is browser dependent."
+    },
+    "sap.m.sample.InputValueState": {
+      "name": "Input - Value States",
+      "description": "This example shows different input value states."
+    },
+    "sap.m.sample.InputValueUpdate": {
+      "name": "Input - Value Update",
+      "description": "Since 1.24 the value property of sap.m.Input is not updated on every keystroke, but first when the user presses Enter or leaves the input. The change was necessary to fully support the standard UI5 data binding with formatters and types. If you still need immediate update you have 2 options: Handle liveChange events or enable the boolean property valueLiveUpdate."
+    },
+    "sap.m.sample.InputWrapping": {
+      "name": "Input - Suggestions wrapping",
+      "description": "Suggestions wrap automatically when longer then the dropdown width"
+    },
+    "sap.m.sample.Label": {
+      "name": "Label with Inputs",
+      "description": "Labels are helpful when you need to describe some other UI control."
+    },
+    "sap.m.sample.LabelProperties": {
+      "name": "Label Properties",
+      "description": "This sample shows the different behaviors of a label."
+    },
+    "sap.m.sample.LightBox": {
+      "name": "LightBox",
+      "description": "Displays several image thumbnails. Clicking on each of them will open a LightBox."
+    },
+    "sap.m.sample.Link": {
+      "name": "Link",
+      "description": "Here are some links. Typically links are used in user interfaces to trigger navigation to related content inside or outside of the current application."
+    },
+    "sap.m.sample.LinkEmphasized": {
+      "name": "Link - Emphasized",
+      "description": "Usually you use an Object Identifier in the first column of a table. But if you need an active identifier you should use an 'emphasized' link instead."
+    },
+    "sap.m.sample.LinkSubtle": {
+      "name": "Link - Subtle",
+      "description": "Subtle links should be used to indicate less important links in tables with a large number of links. In this example all columns contain links, only the first column is non-subtle."
+    },
+    "sap.m.sample.ListActions": {
+      "name": "List - Custom Actions",
+      "description": "This example demonstrates how to add custom actions to list items. Dedicated 'Delete' and 'Edit' types can be used to add predefined actions to the list items. The 'Custom' type can be used to add custom actions to the list items. Those actions are independent of the selection mode of the list."
+    },
+    "sap.m.sample.ListCounter": {
+      "name": "List - Counter Indication",
+      "description": "The counter of an item quickly shows how many detail entries are related, without having to navigate to the detail page."
+    },
+    "sap.m.sample.ListDeletion": {
+      "name": "List - Deletion",
+      "description": "Setting 'Delete' mode on a List means you can trigger the deletion of single items with a single press. The application has to decide if an additional confirmation is required."
+    },
+    "sap.m.sample.ListFooter": {
+      "name": "List - Footer",
+      "description": "With the 'footerText' property you can set a message that is shown at the very end of the list."
+    },
+    "sap.m.sample.ListGrouping": {
+      "name": "List - Grouping & Context Menu",
+      "description": "Grouping your items makes it easier for the user to browse and find the desired content. This example also shows the context menu for the items in the List control."
+    },
+    "sap.m.sample.ListGrowing": {
+      "name": "List - Growing",
+      "description": "The Growing feature helps if your content is too big to be loaded/shown at once. It paginates the content into smaller chunks - aka pages - which are loaded/shown one after another. Random access to pages (e.g jumping to the end) is not possible. Depending on the model the content is loaded on demand (OData) or shown on demand (JSON)."
+    },
+    "sap.m.sample.ListGrowingUpwards": {
+      "name": "List - Growing Upwards",
+      "description": "The Upwards Growing"
+    },
+    "sap.m.sample.ListItemTypes": {
+      "name": "List - Items Type",
+      "description": "You can use the ‘type’ property of any list item, which inherits from ListItemBase control, to demonstrate all possible types (see sap.m.ListType). In this example, you can see the Standard List Item behavior when different values of ‘type’ property are selected."
+    },
+    "sap.m.sample.ListLoading": {
+      "name": "List - Loading Indication",
+      "description": "You can use enableBusyIndicator property to display loading animation while the data is being loaded from server. By default, this property is true and busy indicator will be shown after 1000ms. This behavior can be customized by setting the busyIndicatorDelay property. When this property is set to false, items stay on the List until data loading is completed."
+    },
+    "sap.m.sample.ListNavType": {
+      "name": "List - Navigation Indication",
+      "description": "If only a subset of the list items are navigable you should indicate those by setting their 'type' to 'Navigation'. This displays an navigation arrow. Do not show arrows if all items are navigable. This achieved by setting the 'type' to 'Active'."
+    },
+    "sap.m.sample.ListNoData": {
+      "name": "List - No Data Indication",
+      "description": "If the list is empty it indicates this state by displaying a message text."
+    },
+    "sap.m.sample.ListSelection": {
+      "name": "List - Selection",
+      "description": "'Single selection' forces the user to choose exactly one out of many items. With the 'multi' selection the user can pick multiple items at the same time. This is helpful for e.g. batch processing. With 'includeItem' the selection is also changed when pressing the item."
+    },
+    "sap.m.sample.ListSelectionSearch": {
+      "name": "List - Selection & Search",
+      "description": "When searching a list with multi selection the previously selected items will stay selected. This is managed by the list control for you."
+    },
+    "sap.m.sample.ListSwipe": {
+      "name": "List - Swipe",
+      "description": "With a swipe gesture you can show additional content for an item without having to navigate to a detail page. This feature is only available for touch devices."
+    },
+    "sap.m.sample.ListToolbar": {
+      "name": "List - Header & Info Toolbar",
+      "description": "The 'headerText' property is an easy but limited way of setting the list header. If you need more flexibility you should assemble your own header or info toolbar that can also contain buttons. This example also demonstrates the sticky header toolbar and info toolbar options."
+    },
+    "sap.m.sample.ListUnread": {
+      "name": "List - Unread Indication",
+      "description": "With the Unread Indicator you can highlight new items making it easier for the user to discover them."
+    },
+    "sap.m.sample.MaskInput": {
+      "name": "MaskInput",
+      "description": "The sap.m.MaskInput control allows users to easily enter data in a certain format and in a fixed-width input (for example: date, time, credit card number, and others)."
+    },
+    "sap.m.sample.MaxNumberOfNotificationsReached": {
+      "name": "Notification List Group with max number of notifications reached",
+      "description": "Notification List Group with max number of notifications reached. The group will render the max amount of notificatons, depending on device type allowed and then show a warning messge."
+    },
+    "sap.m.sample.Menu": {
+      "name": "Menu",
+      "description": "This control is used to show a menu in both desktop and mobile."
+    },
+    "sap.m.sample.MenuButton": {
+      "name": "Menu Button",
+      "description": "This control is used to open a menu in both desktop and mobile."
+    },
+    "sap.m.sample.MenuEndContent": {
+      "name": "Menu with EndContent Items",
+      "description": "EndContent (Button and/or Icon) can be added to some of the menu items."
+    },
+    "sap.m.sample.MenuSelectable": {
+      "name": "Menu with Selectable Items",
+      "description": "Some menu items can be added to groups to allow single or multiple item selection."
+    },
+    "sap.m.sample.MessageBox": {
+      "name": "Message Box",
+      "description": "MessageBox is an easy way of displaying a message-type dialog to the user. You can display different types of dialogs:\n- Types of message (Alert, Confirmation, etc.)\n- Initial focus can be set to the buttons or the controls used in the message"
+    },
+    "sap.m.sample.MessageBoxInfo": {
+      "name": "Message Box Details",
+      "description": "MessageBox with the option to display detailed information."
+    },
+    "sap.m.sample.MessageBoxInitialFocus": {
+      "name": "Message Box Initial Focus",
+      "description": "Shows how to set initial focus to MessageBox button."
+    },
+    "sap.m.sample.MessagePage": {
+      "name": "Message Page",
+      "description": "This sample displays the MessagePage with basic information."
+    },
+    "sap.m.sample.MessagePageWithButtons": {
+      "name": "Message Page with FormattedText and Buttons",
+      "description": "This sample displays the MessagePage with FormattedText and buttons."
+    },
+    "sap.m.sample.MessagePopover": {
+      "name": "MessagePopover",
+      "description": "MessagePopover is a control that displays a summarized list of different types of messages (errors, warnings, success and information). It provides a handy and systemized way to navigate and explore details for every message."
+    },
+    "sap.m.sample.MessagePopoverAsyncMessageHandling": {
+      "name": "Message Popover - Async Message Handling",
+      "description": "The message handling concept sample shows how you can use callback functions for resolving a promise after a link or descriptions have been asynchronously validated."
+    },
+    "sap.m.sample.MessagePopoverMessageHandling": {
+      "name": "Message Popover - Message Handling",
+      "description": "The message handling concept sample shows how you can connect an error inside the page (such as input validation error) with an error, visualized as an item in a message popover."
+    },
+    "sap.m.sample.MessageStrip": {
+      "name": "Message Strip",
+      "description": "MessageStrip for showing status messages."
+    },
+    "sap.m.sample.MessageStripWithEnableFormattedText": {
+      "name": "Message Strip with enableFormattedText",
+      "description": "A sample MessageStrip that shows status messages with additional formatting."
+    },
+    "sap.m.sample.MessageToast": {
+      "name": "Message Toast",
+      "description": "The Message Toast displays the message text as an overlay to the current screen. It closes automatically after some time without requiring further user interaction."
+    },
+    "sap.m.sample.MessageViewInsideDialog": {
+      "name": "Message View inside Dialog",
+      "description": "A sample with Message View placed inside a Dialog."
+    },
+    "sap.m.sample.MessageViewInsidePopover": {
+      "name": "Message View inside Popover",
+      "description": "A sample with Message View inside a Popover."
+    },
+    "sap.m.sample.MessageViewInsideResponsivePopover": {
+      "name": "Message View inside ResponsivePopover",
+      "description": "A sample with Message View inside a ResponsivePopover."
+    },
+    "sap.m.sample.MessageViewMessageManager": {
+      "name": "Message View connected with Message Model",
+      "description": "A sample showing how you can connect the MessageView with MessageManager."
+    },
+    "sap.m.sample.MessageViewWithGrouping": {
+      "name": "Message View with Grouping",
+      "description": "A sample with Message View and inside a Dialog and grouping of items"
+    },
+    "sap.m.sample.MultiComboBox": {
+      "name": "MultiComboBox",
+      "description": "Choose one or more out of multiple options with the MultiComboBox control."
+    },
+    "sap.m.sample.MultiComboBoxClearIcon": {
+      "name": "MultiComboBox - Clear Icon",
+      "description": "The multi combo box control can show 'clear' icon, which when pressed will remove the user's input."
+    },
+    "sap.m.sample.MultiComboBoxCustomFiltering": {
+      "name": "MultiComboBox - Custom Filtering and Suggestions",
+      "description": "The default filtering for the suggestionsItems aggregation uses a 'starts with per term' style operator. You can override this with your own custom filter function using the setFilterFunction method."
+    },
+    "sap.m.sample.MultiComboBoxDefaultFiltering": {
+      "name": "MultiComboBox - Filtering and Suggestions",
+      "description": "The default filtering is 'starts with per term', which filters by the beginning of every word in every column."
+    },
+    "sap.m.sample.MultiComboBoxGrouping": {
+      "name": "MultiComboBox - Grouping of items",
+      "description": "Items in the MultiComboBox could be grouped by a property"
+    },
+    "sap.m.sample.MultiComboBoxMaxPickerHeight": {
+      "name": "MultiComboBox - maxPickerHeight",
+      "description": "Limit the picker popup height using maxPickerHeight property"
+    },
+    "sap.m.sample.MultiComboBoxSelectAll": {
+      "name": "MultiComboBox - showSelectAll functionality",
+      "description": "MultiComboBox with enabled Select All feature inside suggestions."
+    },
+    "sap.m.sample.MultiComboBoxSuggestionsAndValueState": {
+      "name": "MultiComboBox - Suggestions with Value State",
+      "description": "MultiComboBox with suggestions and Value State Message containing a link."
+    },
+    "sap.m.sample.MultiComboBoxTwoColumnsLayout": {
+      "name": "MultiComboBox - Two columns layout",
+      "description": "Use the dropdown list with two columns layout if you need to display additional information to your options, like e.g. currencies to countries or abbreviations to systems."
+    },
+    "sap.m.sample.MultiComboBoxWrapping": {
+      "name": "MultiComboBox - Suggestions wrapping",
+      "description": "Suggestions wrap automatically when longer then the dropdown width"
+    },
+    "sap.m.sample.MultiInput": {
+      "name": "MultiInput",
+      "description": "MultiInput provides functionality to add / remove / enter tokens."
+    },
+    "sap.m.sample.MultiInputCustomFiltering": {
+      "name": "MultiInput Custom Filtering",
+      "description": "The default filtering for the suggestionItems aggregation uses is a 'starts with per term' style operator. You can overwrite this with your own custom filter function using the Input control's setFilterFunction method."
+    },
+    "sap.m.sample.MultiInputDatabinding": {
+      "name": "MultiInput Data Binding",
+      "description": "MultiInput data binding allows data to be bound to tokens in MultiInput."
+    },
+    "sap.m.sample.MultiInputFilteringSuggestions": {
+      "name": "MultiInput Filtering and Suggestions",
+      "description": "The default filtering is 'starts with per term', which filters by the beginning of every word in every column."
+    },
+    "sap.m.sample.MultiInputGrouping": {
+      "name": "MultiInput - Grouping of items",
+      "description": "Items in the MultiInput could be grouped by a property"
+    },
+    "sap.m.sample.MultiInputMaxTokens": {
+      "name": "MultiInput with Max Tokens",
+      "description": "Number of Tokens in MultiInput cannot exceed the maxToken number."
+    },
+    "sap.m.sample.MultiInputModelUpdate": {
+      "name": "MultiInput - Model update",
+      "description": "This sample illustrates how the model bound to the MultiInput can be updated upon token creation or deletion."
+    },
+    "sap.m.sample.MultiInputTokenUpdate": {
+      "name": "MultiInput tokenUpdate event example",
+      "description": "MultiInput fires several tokenUpdate events depending on when the tokens were validated."
+    },
+    "sap.m.sample.MultiInputValidators": {
+      "name": "MultiInput Validators",
+      "description": "MultiInput uses validators to accept, decline and change tokens."
+    },
+    "sap.m.sample.MultiInputValueHelp": {
+      "name": "MultiInput with Value Help",
+      "description": "MultiInput that includes a SelectDialog as a value help dialog"
+    },
+    "sap.m.sample.MultiInputValueStates": {
+      "name": "MultiInput - Value States",
+      "description": "This sample illustrates the different value states of the sap.m.MultiInput control."
+    },
+    "sap.m.sample.MultiInputWrapping": {
+      "name": "MultiInput - Suggestions wrapping",
+      "description": "Suggestions wrap automatically when longer then the dropdown width"
+    },
+    "sap.m.sample.NavContainer": {
+      "name": "Nav Container",
+      "description": "The Nav Container stacks multiple pages and offers an API to switch between them with some animation. Typically application developers would use the App control which inherits from NavContainer."
+    },
+    "sap.m.sample.NewsContent": {
+      "name": "News Content",
+      "description": "This control is used to display the news content text and subheader in a tile."
+    },
+    "sap.m.sample.NotificationListGroup": {
+      "name": "Notification List Group",
+      "description": "A control suitable for grouping notifications."
+    },
+    "sap.m.sample.NotificationListGroupBindings": {
+      "name": "Notification List Group with data bindings",
+      "description": "A control suitable for grouping notifications. The sample uses JSON data bindings."
+    },
+    "sap.m.sample.NotificationListGroupLazyLoading": {
+      "name": "Notification List Group with lazy loading of the notifications",
+      "description": "Notification List Group with lazy loading of the notifications."
+    },
+    "sap.m.sample.NotificationListItem": {
+      "name": "Notification List Item",
+      "description": "A list item suitable for showing notifications to the user."
+    },
+    "sap.m.sample.NumericContentDifColors": {
+      "name": "Numeric Content of Different Colors",
+      "description": "Shows NumericContent including numbers, units of measurement, and status arrows indicating a trend. The numbers can be colored according to their meaning."
+    },
+    "sap.m.sample.NumericContentIcon": {
+      "name": "Numeric Content with Icon",
+      "description": "Shows NumericContent including an icon."
+    },
+    "sap.m.sample.NumericContentWithoutMargin": {
+      "name": "Numeric Content Without Margins",
+      "description": "This is an example of the NumericContent that contains no margins, so the control is aligned to the left and to the top without any margins."
+    },
+    "sap.m.sample.ObjectAttributeInTable": {
+      "name": "Object Attribute inside Table",
+      "description": "This is an example of Object Attribute used inside Table."
+    },
+    "sap.m.sample.ObjectAttributes": {
+      "name": "Object Attribute",
+      "description": "This is an example of Object Attribute used standalone."
+    },
+    "sap.m.sample.ObjectHeader": {
+      "name": "Object Header",
+      "description": "This is a Object Header which displays the basic information about objects similar to the Object List Item. Besides a title and number you can show multiple attributes (on the left) and statuses (on the right)."
+    },
+    "sap.m.sample.ObjectHeaderActiveAttributes": {
+      "name": "Object Header – Active Attributes",
+      "description": "Active Object Attributes can trigger actions, such as navigating to related content inside or outside of the current application, or displaying additional information in a popover."
+    },
+    "sap.m.sample.ObjectHeaderCircleImage": {
+      "name": "Object Header - with Circle-shaped Image",
+      "description": "An Object Header can set shape of the image by using 'imageShape' property. The shapes could be Square (by default) and Circle. \nNote: This example shows the image inside ObjectHeader with the responsive property set to true. On phone in portrait mode, the image is hidden."
+    },
+    "sap.m.sample.ObjectHeaderCondensed": {
+      "name": "Object Header - Condensed",
+      "description": "The Object Header is shown in condensed mode with title, number, number unit and one attribute."
+    },
+    "sap.m.sample.ObjectHeaderFavFlag": {
+      "name": "Object Header - Favorite & Flag",
+      "description": "The Object Header can indicate whether the object is a favorite, or has been flagged for further action. Changing these states is done elsewhere.<br><br><b>Note:</b> The <code>markFlagged</code> and <code>markFavorite</code> properties are deprecated as of version 1.42. We recommend using the <code>markers</code> aggregation instead."
+    },
+    "sap.m.sample.ObjectHeaderImage": {
+      "name": "Object Header - with Image",
+      "description": "An Object Header will also make space for an image if one is specified, via a URL for the 'icon' property. \nNote: This example shows the image inside ObjectHeader with the responsive property set to false. On phone in portrait mode, the image remains visible."
+    },
+    "sap.m.sample.ObjectHeaderMarkers": {
+      "name": "Object Header - markers aggregation",
+      "description": "This sample shows the different states of an Object Header, which can be set using the <code>markers</code>."
+    },
+    "sap.m.sample.ObjectHeaderResponsiveI": {
+      "name": "Object Header Responsive I",
+      "description": "This is a responsive Object Header with a Title, 2 Statuses/Attributes rendered next to the title in a fullScreenOptimized mode (fullScreenOptimized = true)."
+    },
+    "sap.m.sample.ObjectHeaderResponsiveII": {
+      "name": "Object Header Responsive II",
+      "description": "This is a responsive Object Header with a Title, 2 Statuses/Attributes rendered below the title in a Master/Detail mode (fullScreenOptimized = false)."
+    },
+    "sap.m.sample.ObjectHeaderResponsiveIII": {
+      "name": "Object Header Responsive III",
+      "description": "This is a responsive Object Header with a Title, number, 6 Statuses/Attributes rendered in 4 columns in a fullScreenOptimized mode (fullScreenOptimized = true)."
+    },
+    "sap.m.sample.ObjectHeaderResponsiveIV": {
+      "name": "Object Header Responsive IV",
+      "description": "This is a responsive Object Header with a Title, number, 6 Statuses/Attributes rendered in 3 columns in a Master/Detail mode (fullScreenOptimized = false)."
+    },
+    "sap.m.sample.ObjectHeaderResponsiveV": {
+      "name": "Object Header Responsive V",
+      "description": "This is a responsive Object Header without a number and with a Title, 3 Statuses/Attributes."
+    },
+    "sap.m.sample.ObjectHeaderTitleActive": {
+      "name": "Object Header - Active Title",
+      "description": "The Object Header's title can be active to trigger further actions like showing additional information in a Popover."
+    },
+    "sap.m.sample.ObjectHeaderTitleSel": {
+      "name": "Object Header - Select Title",
+      "description": "This is a Object Header with a title selection. This can be used to switch between variants of the business object being shown."
+    },
+    "sap.m.sample.ObjectIdentifier": {
+      "name": "Object Identifier",
+      "description": "The object identifier is a small building block representing an object by a title and short description. Often it is used in the first column of a table."
+    },
+    "sap.m.sample.ObjectListItem": {
+      "name": "Object List Item",
+      "description": "The Object List Item has many possibilities to provide a quick overview for an object within a list."
+    },
+    "sap.m.sample.ObjectListItemMarkLocked": {
+      "name": "Object List Item - markLocked, markFlagged, markFavorite",
+      "description": "This sample shows the different states of an Object List Item, which can be set using the <code>markLocked</code>, <code>markFlagged</code>, and <code>markFavorite</code> properties.<br><br><b>Note:</b> The <code>markLocked</code>, <code>markFlagged</code>, and <code>markFavourite</code> properties are deprecated as of version 1.42. We recommend using the <code>markers</code> aggregation instead."
+    },
+    "sap.m.sample.ObjectListItemMarkers": {
+      "name": "Object List Item - markers aggregation",
+      "description": "This sample shows the different states of an Object List Item, which can be set using the <code>markers</code> aggregation."
+    },
+    "sap.m.sample.ObjectMarker": {
+      "name": "Object Marker in a table",
+      "description": "The <code>ObjectMarker</code> is a small building block representing an object by an icon or text and icon. Often it is used in a table."
+    },
+    "sap.m.sample.ObjectNumber": {
+      "name": "Object Number",
+      "description": "The object number is a small building block representing an important, numerical attribute of an object together with it's unit. Often it is used in the last column of a table."
+    },
+    "sap.m.sample.ObjectStatus": {
+      "name": "Object Status",
+      "description": "The object status is a small building block representing a status with a semantic color."
+    },
+    "sap.m.sample.OverflowToolbarDifferentControls": {
+      "name": "Overflow Toolbar - Different Controls",
+      "description": "Demonstrates different controls and their behavior when they are part of the OverflowToolbar."
+    },
+    "sap.m.sample.OverflowToolbarFooter": {
+      "name": "Overflow Toolbar - in a table and in the footer of a page",
+      "description": "Overflow Toolbar Button is useful for showing lists of action buttons that can display an icon in the toolbar, and icon+text when in the overflow."
+    },
+    "sap.m.sample.OverflowToolbarSimple": {
+      "name": "Overflow Toolbar - layout",
+      "description": "Overflow Toolbar can contain the same controls as Toolbar with the added benefit that buttons that do not fit are moved to an overflow area when overflow occurs."
+    },
+    "sap.m.sample.OverflowToolbarTokenizer": {
+      "name": "Tokenizer in Toolbar and OverflowToolbar",
+      "description": "Tokenizer integration with sap.m.OverflowToolbar"
+    },
+    "sap.m.sample.PDFViewerEmbedded": {
+      "name": "PDF Viewer - Embedded",
+      "description": "A PDF viewer embedded in another control."
+    },
+    "sap.m.sample.PDFViewerMultiple": {
+      "name": "PDF Viewer - Two PDF Documents",
+      "description": "Two PDF viewer frames displayed side by side. The second frame has the property isTrustedSource set to false which opens the PDF viewer with the displayType set to Link"
+    },
+    "sap.m.sample.PDFViewerPopup": {
+      "name": "PDF Viewer - Popup",
+      "description": "A PDF viewer opening as a popup dialog."
+    },
+    "sap.m.sample.Page": {
+      "name": "Page,Toolbar and Bar",
+      "description": "Each screen of a mobile application is typically represented by a 'Page' consisting of a header, a scrollable content area and optionally a footer. The standard header offers a navigation button and a title. Alternatively you can provide a customer header. Gernerally you should use Toolbars in the Page. If you need a centered title you may use a Bar."
+    },
+    "sap.m.sample.PageFloatingFooter": {
+      "name": "Page Floating Footer",
+      "description": "The floating Footer allows the user to see the underlying content."
+    },
+    "sap.m.sample.PageListReportIconTabBar": {
+      "name": "Flexible sizing - Icon Tab Bar",
+      "description": "This page shows flexible sizing with an Icon Tab Bar: The upper part extends with its content, but doesn't react to viewport changes. The Icon Tab Bar reacts to the viewport size. The table inside takes the available space. If the minimum size of the table is reached, the page begins to scroll."
+    },
+    "sap.m.sample.PageListReportToolbar": {
+      "name": "Flexible sizing - Toolbar",
+      "description": "This page shows flexible sizing with a Toolbar. The upper part extends with its content, but doesn't react to viewport changes. The lower part reacts to the viewport size. The table inside takes the available space. If the minimum size of the table is reached, the page begins to scroll."
+    },
+    "sap.m.sample.PageStandardClasses": {
+      "name": "Fiori Object Page - Standard Classes",
+      "description": "This page implements the same sample as in 'Fiori Sample Page - sapUiFioriObjectPage' using standard margin classes. In contrast to using 'sapUiFioriObjectPage', the margins used for form, list, table and panel are responsive: they adapt to the available screen width. For more information, please search for 'Standard Margins' and take a look at our samples."
+    },
+    "sap.m.sample.Panel": {
+      "name": "Panel",
+      "description": "Panels are helpful to group custom content. They can be decorated with header and info toolbars."
+    },
+    "sap.m.sample.PanelBackgroundDesign": {
+      "name": "Panel - Background Design",
+      "description": "Panels support different background designs for better visual distinction inside containers. [since rel. 1.150]"
+    },
+    "sap.m.sample.PanelExpanded": {
+      "name": "Panel - Expand / Collapse",
+      "description": "Panels also have the possibility to expand/collapse their content (including the infoToolbar if available). [since rel. 1.22]"
+    },
+    "sap.m.sample.PanelSticky": {
+      "name": "Panel - Sticky header",
+      "description": "Panels can also have a sticky header. [since rel. 1.117]"
+    },
+    "sap.m.sample.PlanningCalendar": {
+      "name": "simple Planning Calendar",
+      "description": "PlanningCalendar with single row selection that illustrates the built-in views."
+    },
+    "sap.m.sample.PlanningCalendarAppointmentSizes": {
+      "name": "Planning Calendar - with appointments in different sizes",
+      "description": "PlanningCalendar showing normal, half-sized and large appointments."
+    },
+    "sap.m.sample.PlanningCalendarDnD": {
+      "name": "Planning Calendar - Drag and Drop",
+      "description": "PlanningCalendar with draggable appointments. The sample represents three possible roles. If you are logged as an Admin, you can move appointments both within the same row and between different rows without any restrictions. As a Manager, you have the same rights as the Admin but appointments can be dropped only on free slots (no overlapping). As a team member you can only move the appointments within your own row. By pressing Ctrl/Cmd while dragging, the dropped appointment will copy the initial one."
+    },
+    "sap.m.sample.PlanningCalendarMinMax": {
+      "name": "Planning Calendar - with min. and max. date",
+      "description": "PlanningCalendar with min. date 2000-01-01 and max. date 2050-12-31"
+    },
+    "sap.m.sample.PlanningCalendarModifyAppointments": {
+      "name": "Planning Calendar - with appointments modification",
+      "description": "PlanningCalendar containing sap.m.Popover with information for the appointments and sap.m.Dialog for creating a new appointment. Note: Illustrates how the PlanningCalendar can be used in combination with the sap.m.Popover and sap.m.Dialog controls for details/create. These features are NOT part of the control."
+    },
+    "sap.m.sample.PlanningCalendarMulti": {
+      "name": "Planning Calendar - multiple selection",
+      "description": "PlanningCalendar with multiple row selection. No interval headers are displayed. On click on an interval a new appointment is created."
+    },
+    "sap.m.sample.PlanningCalendarOneLine": {
+      "name": "Planning Calendar - with one line appointments and multiple appointments selection option",
+      "description": "PlanningCalendar showing appointment with only title in one line to save space. The interval headers are only shown if there are some assigned in the visible area."
+    },
+    "sap.m.sample.PlanningCalendarRecurringItem": {
+      "name": "Planning Calendar - with Recurring Calendar Items",
+      "description": "PlanningCalendar with recurring calendar items."
+    },
+    "sap.m.sample.PlanningCalendarRelativeViews": {
+      "name": "Planning Calendar - with relative views",
+      "description": "PlanningCalendar with relative views. The relative periods are not directly related to dates, but periods with pre-defined duration."
+    },
+    "sap.m.sample.PlanningCalendarSingle": {
+      "name": "Planning Calendar - without row header",
+      "description": "PlanningCalendar with only one row without row header.  On click on an interval a new appointment is created."
+    },
+    "sap.m.sample.PlanningCalendarViews": {
+      "name": "Planning Calendar - with custom views",
+      "description": "PlanningCalendar with custom views to set number of hours, days and months and change view description. It illustrates both built-in and custom views. Sub-intervals are shown. Custom non-working days and hours are set. In months view some appointments are grouped. The group appointment mode can be toggled to expand the appointments."
+    },
+    "sap.m.sample.PlanningCalendarWeekNumbering": {
+      "name": "Planning Calendar - week numbering",
+      "description": "Demonstrates PlanningCalendar with different week numbering (only Date Picker, 1 Week and 1 Month views are affected)."
+    },
+    "sap.m.sample.PlanningCalendarWithLegend": {
+      "name": "Planning Calendar - with legend and option to change the first day of week",
+      "description": "PlanningCalendar inside the main part of a sap.ui.layout.DynamicSideContent and a sap.m.PlanningCalendarLegend inside the side part. The legend includes calendar and appointments sections. For each sap.m.PlanningCalendarRow in the sap.m.PlanningCalendar some specific special dates of type non-working are set."
+    },
+    "sap.m.sample.PlanningCalendarWithStickyHeader": {
+      "name": "Planning Calendar - with header that remains visible (fixed on top) on scroll",
+      "description": "PlanningCalendar with header area that remains visible (fixed on top) when the rest of the content is scrolled out of view."
+    },
+    "sap.m.sample.Popover": {
+      "name": "Popover",
+      "description": "The Popover controls allows to show contextual information without leaving the current page. Press somewhere outside the popover to close it."
+    },
+    "sap.m.sample.PopoverControllingCloseBehavior": {
+      "name": "Popover Controlling Closing Behavior",
+      "description": "In some cases the closing behavior of the Popover can lead to drill down navigation. This sample demonstrates how you can control this. When the Popover is opened, add a style \"pointer-events: none\" to the area that should remain static and when the Popover is closed, remove it. Please note that, when having nested controls with \"pointer-events\" set, depending on the value of the property, internal controls may fire events, which will bubble up and trigger other events where applicable. The application needs to handle such cases."
+    },
+    "sap.m.sample.PopoverNavCon": {
+      "name": "Popover with NavContainer",
+      "description": "You can nest NavContainers in Popovers (and Dialogs) to navigate to further details in place."
+    },
+    "sap.m.sample.PopoverWithinArea": {
+      "name": "Popover in Custom Within Area",
+      "description": "Within area of sap.ui.core.Popup determines where all popups (including popovers) are positioned."
+    },
+    "sap.m.sample.ProgressIndicator": {
+      "name": "Progress Indicator",
+      "description": "Shows the progress of a process in a graphical way. To indicate the progress, the inside of the ProgressIndicator is filled with a color."
+    },
+    "sap.m.sample.ProgressIndicatorWithAnnouncement": {
+      "name": "Progress Indicator With Announcement",
+      "description": "Announce the progress of the ProgressIndicator."
+    },
+    "sap.m.sample.PullToRefresh": {
+      "name": "Pull To Refresh",
+      "description": "With the Pull to Refresh you can trigger an update operation by swiping the current page down on touch devices. On other devices the Pull To Refresh is visible all the time and the user clicks it like a button."
+    },
+    "sap.m.sample.QuickView": {
+      "name": "QuickView",
+      "description": "QuickView basic samples."
+    },
+    "sap.m.sample.QuickViewAvatarConfiguration": {
+      "name": "QuickView with Different Configurations of Avatar",
+      "description": "QuickView with fallback icon, initials, display shape and other avatar properties."
+    },
+    "sap.m.sample.QuickViewCard": {
+      "name": "QuickViewCard",
+      "description": "QuickViewCard embedded in container"
+    },
+    "sap.m.sample.QuickViewCardScrollBar": {
+      "name": "QuickViewCard Scroll Example",
+      "description": "QuickViewCard embedded in container with scroll bar"
+    },
+    "sap.m.sample.QuickViewNavOrigin": {
+      "name": "QuickView with Navigation and Data Binding",
+      "description": "QuickView using navOrigin parameter when navigating."
+    },
+    "sap.m.sample.RadioButton": {
+      "name": "Radio Button",
+      "description": "Typically the Radio Button is used by other controls. E.g. the List uses it for the single selection. But you can also use the Radio Buttons control directly, to allow selection of exactly one of multiple options."
+    },
+    "sap.m.sample.RadioButtonGroup": {
+      "name": "Radio Button Group",
+      "description": "A wrapper for a group of radio buttons."
+    },
+    "sap.m.sample.RangeSlider": {
+      "name": "RangeSlider",
+      "description": "With the RangeSlider a user can specify range from a numerical interval."
+    },
+    "sap.m.sample.RatingIndicator": {
+      "name": "Rating Indicator",
+      "description": "A Rating Indicator can be used to both indicate and/or rate content."
+    },
+    "sap.m.sample.RefreshResponsive": {
+      "name": "Responsive Refresh",
+      "description": "An 'Responsive Refresh' can be achieved by the combination of a Search Field's refresh button and a Pull To Refresh, both of which appear depending on whether the device is touch-enabled. A growing stream of backend data is simulated here."
+    },
+    "sap.m.sample.ResponsivePopover": {
+      "name": "Responsive Popover",
+      "description": "The Responsive Popover is an abstraction of Popover and Dialog. On the phone a Dialog will be shown. On tablet and desktop a Popover is shown."
+    },
+    "sap.m.sample.ScrollContainer": {
+      "name": "Scroll Container",
+      "description": "The Scroll Container is a control that can display arbitrary content within a limited screen area and provides touch scrolling to make all content accessible."
+    },
+    "sap.m.sample.SearchField": {
+      "name": "Search Field",
+      "description": "Use the Search Field to let the user enter a search string and trigger the search process."
+    },
+    "sap.m.sample.SearchFieldSuggestions": {
+      "name": "Search Field - Suggestions",
+      "description": "Add suggestion capabilities to a basic Search Field."
+    },
+    "sap.m.sample.SegmentedButton": {
+      "name": "Segmented Button",
+      "description": "The Segmented Button allows the user to pick one out of many options for displaying the content of the current page. It is a UI pattern from iOS, now also available for other platforms. Putting the Segmented Button to a Bar control on non-iOS platforms will result in something very close to a tab."
+    },
+    "sap.m.sample.SegmentedButtonContentModes": {
+      "name": "Segmented Button Content Modes",
+      "description": "Segmented Button different Content Modes"
+    },
+    "sap.m.sample.SegmentedButtonDialog": {
+      "name": "Segmented Button in Dialog",
+      "description": "Segmented Button used in Dialog component"
+    },
+    "sap.m.sample.SegmentedButtonLI": {
+      "name": "Segmented Button in Input List Item",
+      "description": "Segmented Button used in Input List Item component"
+    },
+    "sap.m.sample.SegmentedButtonVSD": {
+      "name": "Segmented Button in View Settings Dialog",
+      "description": "Segmented Button used in View Settings Dialog component"
+    },
+    "sap.m.sample.Select": {
+      "name": "Select",
+      "description": "Illustrates the usage of a Select in header, footer and content of a page. Note the different display options."
+    },
+    "sap.m.sample.Select2Columns": {
+      "name": "Select - Two columns layout",
+      "description": "Use the select dropdown list with two columns layout if you need to display additional information to your options, like e.g. currencies to countries or abbreviations to systems."
+    },
+    "sap.m.sample.SelectChangeEvents": {
+      "name": "Select - Change Events",
+      "description": "Demonstrates the use of 'change' and 'liveChange' events."
+    },
+    "sap.m.sample.SelectDialog": {
+      "name": "Select Dialog",
+      "description": "The Select Dialog allows the user to search for and pick an item from a possibly long option list. Basically it is a convenience function to quickly assemble a Dialog, a Search Field and a List with Standard List Items. You can have single select or multi select mode. The dialog can remember the selections previously set on the dialog."
+    },
+    "sap.m.sample.SelectDialogLazyLoading": {
+      "name": "Select Dialog Lazy Loading",
+      "description": "Select Dialog lazy loading example with JSON model."
+    },
+    "sap.m.sample.SelectList": {
+      "name": "SelectList",
+      "description": "A SelectList allows the user to select one item from a list of choices."
+    },
+    "sap.m.sample.SelectListWithIcons": {
+      "name": "SelectList - with icons",
+      "description": "A SelectList with icons."
+    },
+    "sap.m.sample.SelectValueState": {
+      "name": "Select - Validation states",
+      "description": "Visualizes the validation state of the control, for example, Error, Warning and Success."
+    },
+    "sap.m.sample.SelectWithIcons": {
+      "name": "Select - with icons",
+      "description": "Illustrates the usage of a Select with icons"
+    },
+    "sap.m.sample.SelectWithWrappedItemText": {
+      "name": "Select - Wrapping text",
+      "description": "Illustrates how the text in items wrap."
+    },
+    "sap.m.sample.SemanticPage": {
+      "name": "Semantic Page Master-Detail",
+      "description": "Semantic Page Master/Detail"
+    },
+    "sap.m.sample.SemanticPageDraftIndicator": {
+      "name": "Semantic Page using Draft Indicator",
+      "description": "Integration of Draft Indicator inside Semantic Page"
+    },
+    "sap.m.sample.SemanticPageFloatingFooter": {
+      "name": "Semantic Page using Floating Footer",
+      "description": "Integration of Floating Footer inside Semantic Page"
+    },
+    "sap.m.sample.SemanticPageFullScreen": {
+      "name": "Semantic Page Full Screen",
+      "description": "Semantic Page Full Screen"
+    },
+    "sap.m.sample.SinglePlanningCalendar": {
+      "name": "Single Planning Calendar",
+      "description": "This sample demonstrates most of the features available for the SinglePlanningCalendar control."
+    },
+    "sap.m.sample.SinglePlanningCalendarCreateApp": {
+      "name": "Single Planning Calendar - Create and Modify Appointments",
+      "description": "This sample demonstrates how the SinglePlanningCalendar control can be used in combination with sap.m.Dialog to create new appointments and sap.m.ResponsivePopover to edit already existing appointments. It also showcases how appointments can be deleted. Please note that these features are not part of the control."
+    },
+    "sap.m.sample.SinglePlanningCalendarDND": {
+      "name": "Single Planning Calendar with Drag and Drop",
+      "description": "SinglePlanningCalendar with enabled drag and drop functionality, allowing to create appointments with dragging and dropping, to change the start and end date of appointments by selecting and dragging their top or bottom end, and to copy and paste appointments."
+    },
+    "sap.m.sample.SinglePlanningCalendarDateSelection": {
+      "name": "Single Planning Calendar with Multiple Date Selection",
+      "description": "SinglePlanningCalendar with multiple date selection functionality."
+    },
+    "sap.m.sample.SinglePlanningCalendarRecurringItem": {
+      "name": "Single Planning Calendar with Recurring Calendar Items",
+      "description": "SinglePlanningCalendar with recurring calendar items"
+    },
+    "sap.m.sample.SinglePlanningCalendarSnappingHeader": {
+      "name": "Single Planning Calendar with Snapping Header and option to change the first day of week",
+      "description": "SinglePlanningCalendar showing the modes for snapping the header part of the calendar."
+    },
+    "sap.m.sample.SinglePlanningCalendarWeekNumbering": {
+      "name": "Single Planning Calendar - Week Numbering",
+      "description": "This sample demonstrates how the SinglePlanningCalendar control can be used width different week numbering (only Week and Month views are affected)"
+    },
+    "sap.m.sample.SinglePlanningCalendarWithCustomViews": {
+      "name": "Single Planning Calendar with Custom Views",
+      "description": "SinglePlanningCalendar showing the provided predefined views and custom views."
+    },
+    "sap.m.sample.SinglePlanningCalendarWithLegend": {
+      "name": "Single Planning Calendar with Legend and defined working hours",
+      "description": "SinglePlanningCalendar and PlanningCalendarLegend controls used as main and side parts of an sap.ui.layout.DynamicSideContent control. The calendar also shows the daily working hours."
+    },
+    "sap.m.sample.SinglePlanningCalendarWithZoomInZoomOut": {
+      "name": "Single Planning Calendar with Zoom In and Zoom Out behavior",
+      "description": "SinglePlanningCalendar with enabled Zoom In and Zoom Out functionality."
+    },
+    "sap.m.sample.SlideTile": {
+      "name": "Slide Tile",
+      "description": "Shows Generic Tile with the 2x1 frame type displayed as sliding tiles."
+    },
+    "sap.m.sample.Slider": {
+      "name": "Slider",
+      "description": "With the Slider a user can choose a value from a numerical range."
+    },
+    "sap.m.sample.SplitApp": {
+      "name": "SplitApp standard use case",
+      "description": "The SplitApp is the base for each master detail application. It extends the sap.m.SplitContainer control."
+    },
+    "sap.m.sample.SplitContainer": {
+      "name": "SplitContainer standard use case",
+      "description": "SplitContainer maintains two NavContainers if running on tablet or desktop and one NavContainer - on phone. The display of master NavContainer depends on the portrait/landscape orientation of the device and the mode of SplitContainer."
+    },
+    "sap.m.sample.StandardListItem": {
+      "name": "Standard List Item",
+      "description": "This list item offers a standardized user interface for list content with only title."
+    },
+    "sap.m.sample.StandardListItemAvatar": {
+      "name": "Standard List Item - Avatar",
+      "description": "This list item offers a standardized user interface for list content with title, description, and avatar."
+    },
+    "sap.m.sample.StandardListItemDescription": {
+      "name": "Standard List Item - Description",
+      "description": "This list item offers a standardized user interface for list content with title and description."
+    },
+    "sap.m.sample.StandardListItemIcon": {
+      "name": "Standard List Item - Icon",
+      "description": "This list item offers a standardized user interface for list content with title, description and icon."
+    },
+    "sap.m.sample.StandardListItemInfo": {
+      "name": "Standard List Item - Info",
+      "description": "This list item offers a standardized user interface for list content with title and info."
+    },
+    "sap.m.sample.StandardListItemInfoStateInverted": {
+      "name": "Standard List Item - Info State Inverted",
+      "description": "This sample demonstrates the inverted rendering behavior of the info text and the info state of the StandardListItem control."
+    },
+    "sap.m.sample.StandardListItemNavigated": {
+      "name": "Standard List Item - Navigated",
+      "description": "This example demonstrates the navigated property of the list item."
+    },
+    "sap.m.sample.StandardListItemTitle": {
+      "name": "Standard List Item - Adapt Title",
+      "description": "By default the title size adapts to the available space and gets bigger if the description is empty. List items with and without descriptions results in titles with different sizes. In this cases it is better to switch the size adaption off."
+    },
+    "sap.m.sample.StandardListItemWrapping": {
+      "name": "Standard List Item - Wrapping",
+      "description": "This sample demonstrates the wrapping behavior of the title text and the description text. In desktop mode, the character limit is set to 300 characters, whereas in the phone mode, the character limit is set to 100 characters."
+    },
+    "sap.m.sample.StandardMarginsAll": {
+      "name": "Margins All Around",
+      "description": "Use standard margin classes 'sapUiTinyMargin', 'sapUiSmallMargin', 'sapUiMediumMargin' or 'sapUiLargeMargin' to add a 8px (0.5rem), 16px (1rem), 32px (2rem) or 48px (3rem) margin to your control. This will clear the area all around your control (outside its border)."
+    },
+    "sap.m.sample.StandardMarginsCollapse": {
+      "name": "Collapsing Margins",
+      "description": "See how adjacent margins collapse to a single margin."
+    },
+    "sap.m.sample.StandardMarginsEnforceWidthAuto": {
+      "name": "Enforce Width 'auto'",
+      "description": "Some controls (for example the IconTabBar) do not have a 'width' property but still have a default width of 100%. We provide css class 'sapUiForceWidthAuto' to overwrite the control's width in such a case."
+    },
+    "sap.m.sample.StandardMarginsResponsive": {
+      "name": "Responsive Margins",
+      "description": "Clear the space around your control, where the margin depends on the device your are using."
+    },
+    "sap.m.sample.StandardMarginsSingleSided": {
+      "name": "Single-Sided Margins",
+      "description": "Clear the space to the left, right, top or bottom of your control. Choose a size ('Tiny', 'Small', 'Medium' or 'Large', which stands for 8px (0.5rem), 16px (1rem), 32px (2rem) or 48px (3rem) respectively) and a direction ('Begin', 'End', 'Top' or 'Bottom', where 'Begin' is left and 'End' is right and vice versa in right-to-left mode). If you would like to clear a 32px space to the left (resp. right in rtl mode), you would add class 'sapUiMediumMarginBegin'. You may also add several classes which have to point to different directions though, for example you would add classes 'sapUiLargeMarginEnd sapUiLargeMarginBottom' to clear a 48px space to the bottom and to the right (resp. to the left in rtl mode)."
+    },
+    "sap.m.sample.StandardMarginsTwoSided": {
+      "name": "Two-Sided Margins",
+      "description": "Clear the space to the left and right, top and bottom of your control. Choose a size ('Tiny', 'Small', 'Medium' or 'Large', which stands for 8px (0.5rem), 16px (1rem), 32px (2rem) or 48px (3rem) respectively) and an orientation ('BeginEnd', 'TopBottom'). If you would like to clear a 32px space to the left and right, you would add class 'sapUiMediumMarginBeginEnd'."
+    },
+    "sap.m.sample.StandardNegativeMarginsTwoSided": {
+      "name": "Negative Margins",
+      "description": "Use standard negative margin classes 'sapUiTinyNegativeMarginBeginEnd', 'sapUiSmallNegativeMarginBeginEnd', 'sapUiMediumNegativeMarginBeginEnd' or 'sapUiLargeNegativeMarginBeginEnd' to remove  0.5rem, 1rem, 2rem, or 3rem margin to the left and right edges of your control."
+    },
+    "sap.m.sample.StandardNoMargins": {
+      "name": "Remove Margins",
+      "description": "Use our standard 'No-Margins' classes to remove existing margins from your control. You can either remove all margins at once or remove the margin on one or more sides."
+    },
+    "sap.m.sample.StepInput": {
+      "name": "StepInput",
+      "description": "The StepInput allows the user to change stepwise a value by a predefined step and also to set additional description, such as units of measurement and currencies after the input field."
+    },
+    "sap.m.sample.StepInputValueState": {
+      "name": "Step Input - Value States",
+      "description": "This example shows different StepInput value states."
+    },
+    "sap.m.sample.Switch": {
+      "name": "Switch",
+      "description": "\"Some say it is only a switch, I say it is one of the most stylish controls in the universe of mobile UI controls.\" (unknown developer)"
+    },
+    "sap.m.sample.TabContainer": {
+      "name": "Tab Container",
+      "description": "The sap.m.TabContainer allows for working with multiple tabs."
+    },
+    "sap.m.sample.TabContainerIcons": {
+      "name": "Tab Container - with icons and additional text",
+      "description": "This example shows how you can add additional text and an Icon to the tabs in TabContainer."
+    },
+    "sap.m.sample.TabContainerMHC": {
+      "name": "Tab Container - Multi-instance handling concept",
+      "description": "Allows detail view / edit in <code>sap.m.TabContainer</code> after selecting items from table."
+    },
+    "sap.m.sample.Table": {
+      "name": "Table - Columns",
+      "description": "The table shares many features with the list and, in addition, introduces columns. The table is fully responsive and can hide columns or shown them in-place if the screen space is not sufficient. This example also demonstrates the different table pop-in layout options along with sticky column headers, header toolbar and info toolbar options."
+    },
+    "sap.m.sample.TableAlternateRowColors": {
+      "name": "Table - Alternate Row Colors",
+      "description": "Table with alternating light and dark background colors. Note: The effect of this feature is only visible in some themes (e.g. SAP Belize or SAP Quartz)."
+    },
+    "sap.m.sample.TableAutoPopin": {
+      "name": "Table - Auto popin of the table columns",
+      "description": "This example demonstrates the automatic pop-in behavior of the table and hiding columns instead of moving them into the pop-in depending on their importance."
+    },
+    "sap.m.sample.TableBreadcrumb": {
+      "name": "Table - Breadcrumb",
+      "description": "With an InfoToolbar and some crumb logic you can navigate simple hierarchies with a breadcrumb table approach."
+    },
+    "sap.m.sample.TableColumnWidth": {
+      "name": "Table - Defining Column Width",
+      "description": "While defining the column width you can use percent values but you should be careful with them. Click to see some traps and tipps."
+    },
+    "sap.m.sample.TableContextualWidthDynamic": {
+      "name": "Table - ContextualWidth (Dynamic)",
+      "description": "This example shows the container-based pop-in behavior. The container has dynamic width."
+    },
+    "sap.m.sample.TableContextualWidthStatic": {
+      "name": "Table - ContextualWidth (Static)",
+      "description": "This example shows the container-based pop-in behavior. The container has static width."
+    },
+    "sap.m.sample.TableDnD": {
+      "name": "Table - Drag and Drop",
+      "description": "Shows the different kinds of drag-and-drop capabilities across view boundaries along with custom context menu alternatives to perform these action."
+    },
+    "sap.m.sample.TableEditable": {
+      "name": "Table - Editable",
+      "description": "Table with edit/display togglable scenario."
+    },
+    "sap.m.sample.TableIColumnHeaderMenu": {
+      "name": "Table - IColumnHeaderMenu",
+      "description": "This example demonstrates an implementation of the IColumnHeaderMenu interface with the sap.m.Menu as a breakout scenario."
+    },
+    "sap.m.sample.TableLayout": {
+      "name": "Table - Fixed vs Auto Layout",
+      "description": "You can use fixedLayout property to define the layout algorithm to be used for the table cells, rows, and columns.\nWhen fixedLayout property is set to false, the width of the table and its cells depends on the content thereof. The column width is set by the widest unbreakable content in the cells.\nBy default, table is rendered with fixed layout algorithm. This means the horizontal layout only depends on the table's width and the width of the columns, not the contents of the cells. Cells in subsequent rows do not affect column widths."
+    },
+    "sap.m.sample.TableMergeCells": {
+      "name": "Table - Merge Cells",
+      "description": "With column duplicate merging, you can improve the display of repeated data. See the effect of mergeDuplicates on the Supplier column, space permitting.\nNote: This feature is ignored if a column is shown in the pop-in."
+    },
+    "sap.m.sample.TableMultiSelectMode": {
+      "name": "Table - MultiSelectMode",
+      "description": "This example demonstrates the different multi-selection modes if the table is configured with MultiToggle mode and the sap.m.table.Title control."
+    },
+    "sap.m.sample.TableNavigated": {
+      "name": "Table - Item Navigated",
+      "description": "This example demonstrates the navigated property of the item."
+    },
+    "sap.m.sample.TableOutdated": {
+      "name": "Table - Outdated Data",
+      "description": "You can use the 'showOverlay' property to indicate that the table data is no longer up to date. When the user modifies the filter values of the table, this results in displaying an overlay, which disables operations on the table. Once the user chooses 'Filter', the filter values and table data are synchronized again and the overlay is removed."
+    },
+    "sap.m.sample.TableScrollToIndex": {
+      "name": "Table - Scroll To Index",
+      "description": "This sample demonstrates the scroll-to-index functionality."
+    },
+    "sap.m.sample.TableSelectCopy": {
+      "name": "Table - CellSelector, CopyProvider",
+      "description": "This example demonstrates how the Table data can be copied to the clipboard via CopyProvider plugin."
+    },
+    "sap.m.sample.TableSelectDialog": {
+      "name": "Table Select Dialog",
+      "description": "Similar to the Select Dialog, the Table Select Dialog presents selectable items in a table-based dialog, with filter functions. You can have single select or multi select mode. The dialog can remember the selections previously set on the dialog."
+    },
+    "sap.m.sample.TableSelectDialogGrowing": {
+      "name": "Table Select Dialog Growing",
+      "description": "Table Select Dialog can be created with property growing set to true or false."
+    },
+    "sap.m.sample.TableStrictLayout": {
+      "name": "Table - Strict layout",
+      "description": "This example demonstrates the Strict layout and the column resizing of the table."
+    },
+    "sap.m.sample.TableTest": {
+      "name": "Table Test with OPA",
+      "description": "The following example simulates a click on a list item in a table."
+    },
+    "sap.m.sample.TableVerticalAlignment": {
+      "name": "Table - Vertical Alignment",
+      "description": "This is a good example of how to vertically align different elements within a Table's ColumnListItem row template."
+    },
+    "sap.m.sample.TableViewSettingsDialog": {
+      "name": "Table - View Settings & Menus",
+      "description": "The View Settings Dialog is standard UI pattern for specifying sorting, grouping and filtering. For a table it should be triggered by a button in the table header with the 'drop-down-list' icon. The active filter should be shown with the table's info bar. This example also shows the context menu for the items in the Table control."
+    },
+    "sap.m.sample.Text": {
+      "name": "Text",
+      "description": "The text control can be used for embedding longer paragraphs of text into your application, that need text wrapping."
+    },
+    "sap.m.sample.TextArea": {
+      "name": "Text Area",
+      "description": "The Text Area allows to enter multi-line text and automatically breaks to a new line for overflow text. If the text gets too big to be displayed at once the user can scroll up and down."
+    },
+    "sap.m.sample.TextAreaGrowing": {
+      "name": "TextArea - Growing",
+      "description": "Since 1.38 the growing property of sap.m.TextArea gives the ability of a control to automatically grow and shrink dynamically with its content."
+    },
+    "sap.m.sample.TextAreaMaxLength": {
+      "name": "TextArea with MaxLength = true",
+      "description": "Shows the behavior of the control with the new showExceededText property (since 1.48) and maxLength = true"
+    },
+    "sap.m.sample.TextAreaValueStates": {
+      "name": "TextArea - Value States",
+      "description": "This sample illustrates the different value states of the sap.m.TextArea control."
+    },
+    "sap.m.sample.TextAreaValueUpdate": {
+      "name": "TextArea - Value Update",
+      "description": "Since 1.30 the value property of sap.m.TextArea is not updated on every keystroke, but first when the user presses Enter or leaves the input. The change was necessary to fully support the standard UI5 data binding with formatters and types. If you still need immediate update you have 2 options: Handle liveChange events or enable the boolean property valueLiveUpdate."
+    },
+    "sap.m.sample.TextEmptyIndicator": {
+      "name": "Text - Empty Indicator",
+      "description": "The Text control has a property allowing an empty text indicator to be displayed."
+    },
+    "sap.m.sample.TextHyphenation": {
+      "name": "Text - Hyphenation",
+      "description": "The Text control has a property allowing hyphenation."
+    },
+    "sap.m.sample.TextMaxLines": {
+      "name": "Text - Max Lines",
+      "description": "The Text control has a property to limit the number of lines for wrapping texts."
+    },
+    "sap.m.sample.TextRenderWhitespace": {
+      "name": "Text - Render Whitespace",
+      "description": "The Text control has a property allowing browsers to render whitespace and tabs."
+    },
+    "sap.m.sample.TileContainer": {
+      "name": "Tile Container",
+      "description": "Tiles: a modern UI design pattern for overview & navigation."
+    },
+    "sap.m.sample.TileContent": {
+      "name": "Tile Content",
+      "description": "Shows the universal container for different content types and context information in the footer area."
+    },
+    "sap.m.sample.TimePicker": {
+      "name": "Time Picker",
+      "description": "TimePicker examples displaying the four time formats: \nHH : mm, \nHH : mm : ss, \nHH : mm : pp, \nHH : mm : ss : pp"
+    },
+    "sap.m.sample.TimePickerHidden": {
+      "name": "Time Picker - Open by Another Control",
+      "description": "This example demonstrates the Time Picker that is opened by another control."
+    },
+    "sap.m.sample.TimePickerSliders": {
+      "name": "Time Picker Sliders",
+      "description": "TimePickerSliders used in a Dialog."
+    },
+    "sap.m.sample.TimePickerValueState": {
+      "name": "Time Picker - Value States",
+      "description": "This example shows different TimePicker value states."
+    },
+    "sap.m.sample.Title": {
+      "name": "Title",
+      "description": "The Title control is a simple one line text with additional semantic information about the level of the following section in the page structure for accessibility purposes."
+    },
+    "sap.m.sample.TitleLink": {
+      "name": "Title with Link",
+      "description": "This sample shows how to add a link to a title."
+    },
+    "sap.m.sample.TitleToolBar": {
+      "name": "Placing a Title in OverflowToolbar/Toolbar",
+      "description": "The sap.m.Title control can be used to place a title inside an OverflowToolbar/Toolbar."
+    },
+    "sap.m.sample.TitleWrapping": {
+      "name": "Title Properties",
+      "description": "This sample shows the different behaviors of a title."
+    },
+    "sap.m.sample.ToggleButton": {
+      "name": "Toggle Button",
+      "description": "Toggle Buttons can be toggled between pressed and normal state."
+    },
+    "sap.m.sample.TokenizerBasic": {
+      "name": "Basic Tokenizer",
+      "description": "Basic Tokenizer with tokens"
+    },
+    "sap.m.sample.TokenizerMultiLine": {
+      "name": "Tokenizer Multi-line and Clear All",
+      "description": "Tokenizer with Multi-line support and Clear All button"
+    },
+    "sap.m.sample.ToolbarActive": {
+      "name": "OverflowToolbar - Active",
+      "description": "Making an OverflowToolbar or a Toolbar active allows them to react to the click event."
+    },
+    "sap.m.sample.ToolbarAlignment": {
+      "name": "OverflowToolbar - Alignment",
+      "description": "OverflowToolbar and Toolbar are often used for left/right alignment. This is easily achieved with ToolbarSpacer."
+    },
+    "sap.m.sample.ToolbarDesign": {
+      "name": "OverflowToolbar - Design and styling",
+      "description": "The Design and Style properties can be used to specify the visual design of the OverflowToolbar/Toolbar."
+    },
+    "sap.m.sample.ToolbarEnabled": {
+      "name": "OverflowToolbar - Enabled",
+      "description": "The Enabled property can be used to enable or disable all the controls inside the OverflowToolbar/Toolbar."
+    },
+    "sap.m.sample.ToolbarResponsive": {
+      "name": "Toolbar - Responsive",
+      "description": "Toolbar items can be displayed depending on the current device."
+    },
+    "sap.m.sample.ToolbarShrinkable": {
+      "name": "Toolbar - Shrinkable items",
+      "description": "Toolbar items can shrink/expand when the toolbar is resized. This behavior is enabled/disabled via the ToolbarLayoutData layout. It is also possible to set min/max width for shrinkable items."
+    },
+    "sap.m.sample.ToolbarVsBar": {
+      "name": "Toolbar vs Bar vs OverflowToolbar",
+      "description": "Toolbar handles overflow by shrinking items. OverflowToolbar provides an overflow menu. Bar is able to perfectly center a text if nothing overflows."
+    },
+    "sap.m.sample.Tree": {
+      "name": "Tree - Basic",
+      "description": "Tree displays data in hierarchical structure."
+    },
+    "sap.m.sample.TreeDnD": {
+      "name": "Tree - Drag and Drop",
+      "description": "This example shows drag-and-drop capability."
+    },
+    "sap.m.sample.TreeExpandMulti": {
+      "name": "Tree - Multi Expand & Collapse",
+      "description": "This example shows how to expand/collapse multiple nodes and demonstrates the sticky header toolbar and info toolbar options."
+    },
+    "sap.m.sample.TreeExpandTo": {
+      "name": "Tree - InitialExpand & CollapseAll",
+      "description": "This example shows the initial expand state and how to collapse all nodes."
+    },
+    "sap.m.sample.TreeIcon": {
+      "name": "Tree - Icon & Context Menu",
+      "description": "Tree item with icon. This example also shows the context menu for the items in the Tree control."
+    },
+    "sap.m.sample.TreeJSONLazyLoading": {
+      "name": "Tree - Lazy loading with a JSON model",
+      "description": "Shows how lazy loading with a JSON model can be done using the toggleOpenState event."
+    },
+    "sap.m.sample.TreeOData": {
+      "name": "Tree - OData",
+      "description": "This example shows Tree with OData service."
+    },
+    "sap.m.sample.TreeSelection": {
+      "name": "Tree - Selection",
+      "description": "This example shows different selection modes of Tree."
+    },
+    "sap.m.sample.TsHelloWorld": {
+      "name": "TypeScript Hello World",
+      "description": "This sample demonstrates a TypeScript setup for developing UI5 applications."
+    },
+    "sap.m.sample.UXCIntegration": {
+      "name": "UXC Integration",
+      "description": "This example illustrates the integration of UI5 Web Components into SAPUI5 applications."
+    },
+    "sap.m.sample.UploadCollection": {
+      "name": "Upload Collection - Instant Upload",
+      "description": "This control allows you to upload single or multiple files from their devices (desktop, tablet or smartphone) and attach them to the application immediately. The selection and upload process is completed in one step and is automatically triggered by the UploadCollection control."
+    },
+    "sap.m.sample.UploadCollectionFolderHierarchy": {
+      "name": "Upload Collection with Folder Hierarchy",
+      "description": "Shows the UploadCollection with a navigable folder structure."
+    },
+    "sap.m.sample.UploadCollectionForPendingUpload": {
+      "name": "Upload Collection - Upload Pending",
+      "description": "You can use this UploadCollection scenario to select single or mutliple files and to add them to the upload list first. In a second step, the application can upload the selected files by calling the upload() function."
+    },
+    "sap.m.sample.UploadCollectionSortingFiltering": {
+      "name": "With Grouping, Sorting and Filtering Feature",
+      "description": "Shows the UploadCollection with grouping, sorting and filtering feature. After setting the criteria for filtering and sorting you get the filtering information displayed in the info toolbar."
+    },
+    "sap.m.sample.UploadCollectionVersioning": {
+      "name": "With Download and Update Feature",
+      "description": "Shows the UploadCollection with a download and update version feature. If one item is selected, you can download it or update the item to a new version. Both features can only be used in the Instant Upload scenario."
+    },
+    "sap.m.sample.UploadSet": {
+      "name": "Upload Set",
+      "description": "This sample shows an Upload Set control with a list of files to be uploaded and actions you can perform on them."
+    },
+    "sap.m.sample.UploadSetCloudUpload": {
+      "name": "Upload Set - Upload files from cloud",
+      "description": "Shows the UploadSet with the cloudFilePicker set as enabled. Now, files can be uploaded from cloud with the integrated cloudFilePicker control."
+    },
+    "sap.m.sample.UploadSetCustomUploader": {
+      "name": "Upload Set with Custom Uploader",
+      "description": "Shows how to customize the Upload Set control using a custom uploader."
+    },
+    "sap.m.sample.UploadSetDirectoryUploads": {
+      "name": "Upload Set Directory Uploads",
+      "description": "Shows the UploadSet with directory uploads enabled. Toolbar offer modes to switch between directory or file uploads."
+    },
+    "sap.m.sample.UploadSetGroupingSortingFiltering": {
+      "name": "Upload Set with Grouping, Sorting and Filtering Feature",
+      "description": "Shows the UploadSet with grouping, sorting and filtering feature. After setting the criteria for filtering and sorting you get the filtering information displayed in the info toolbar."
+    },
+    "sap.m.sample.UploadSetwithTable.UploadSetwithTableFilePreview": {
+      "name": "UploadSet With Table - File Preview",
+      "description": "This example showcases how uploaded files can be previewed with FilePreviewDialog control and its related configurations. UploadSetwithTable Control creates and use default instance of FilePreviewDialog, if not defined."
+    },
+    "sap.m.sample.UploadSetwithTable.UploadSetwithTableFileUploads": {
+      "name": "UploadSet With Table - File uploads with user dialogs",
+      "description": "This example demonstrates usage of itemValidationHandler callback to leverage additional validations and configurations to the UploadSetwithTableitems, and also the manual trigger of the upload process. The user input can be captured for each file with the help of the user dialog implemented at the application controller, before its upload."
+    },
+    "sap.m.sample.UploadSetwithTable.UploadSetwithTableGrowing": {
+      "name": "UploadSet With Table - Growing & Selection modes",
+      "description": "The growing feature helps if the content is not being displayed at once. It paginates the content into smaller pages that are displayed one after another. Random access to the pages (e.g jumping to the end) is not possible. Depending on the model, the content is loaded on demand (OData) or it is shown on demand (JSON). This example also demonstrates modes of the control (e.g. None, SingleSelect, MultiSelect, Delete)."
+    },
+    "sap.m.sample.UploadSetwithTable.UploadSetwithTablePersonalization": {
+      "name": "UploadSet With Table - Personalization and Variant management",
+      "description": "This example showcases personalization and variant management for UploadSetwithTable."
+    },
+    "sap.m.sample.UploadSetwithTable.UploadSetwithTableSimple": {
+      "name": "UploadSet with Table",
+      "description": "This example demonstrates the usage of UploadSetwithTable and UploadSetwithTableItem controls with the features of upload, download, drag & drop, remove and rename of files. It also demonstrates how the uploaded files can be displayed in a table that is tailored as required."
+    },
+    "sap.m.sample.UploadSetwithTablePlugin.FileNameValidationSample": {
+      "name": "Plugin for Responsive Table (sap.m.Table) - File Name validation configuration",
+      "description": "This example demonstrates the usage of fileNameValidationConfig property to configure file name validation for renaming a file."
+    },
+    "sap.m.sample.UploadSetwithTablePlugin.FilePreviewCustomPageContent": {
+      "name": "Plugin for Responsive Table (sap.m.Table) - File Preview with Custom Page Content for non supported file types",
+      "description": "This example showcases how to display custom page content for non supported file types in the FilePreviewDialog control. The custom page content is displayed when the user tries to preview a file that is not supported by the FilePreviewDialog control. This sample demonstrates usage of customPageConentHandler property as a callback function to display custom page content."
+    },
+    "sap.m.sample.UploadSetwithTablePlugin.GridTableSimple": {
+      "name": "Plugin for Grid Table (sap.ui.table.Table)",
+      "description": "This example demonstrates the usage of UploadSetwithTable plugin for grid table with the features of upload, download, drag & drop, remove and rename of files. It also demonstrates how the uploaded files can be displayed in a table."
+    },
+    "sap.m.sample.UploadSetwithTablePlugin.MultiplePluginInstances": {
+      "name": "Plugin for Responsive Table (sap.m.Table) - Multiple plugin instances with multiple tables",
+      "description": "This example demonstrates the usage of multiple plugin instances with multiple tables. The plugin instances are created for each table and the uploaded files are displayed in their respective tables."
+    },
+    "sap.m.sample.UploadSetwithTablePlugin.ResponsiveTableFileDialogs": {
+      "name": "Plugin for Responsive Table (sap.m.Table) - File upload with user dialogs",
+      "description": "This example demonstrates usage of itemValidationHandler callback to leverage additional validations and configurations for the items that are to be uploaded, and also the manual trigger of the upload process. The user input can be captured for each file with the help of the user dialog implemented at the application controller, before its upload."
+    },
+    "sap.m.sample.UploadSetwithTablePlugin.ResponsiveTableFilePreview": {
+      "name": "Plugin for Responsive Table (sap.m.Table) - File Preview",
+      "description": "This example showcases how uploaded files can be previewed with FilePreviewDialog control and its related configuration. UploadSetwithTable plugin creates and uses default instance of FilePreviewDialog, if not defined."
+    },
+    "sap.m.sample.UploadSetwithTablePlugin.ResponsiveTableProgressIndicator": {
+      "name": "Plugin for Responsive Table (sap.m.Table) - Upload Progress and Upload Termination",
+      "description": "This example demonstrates the progress or termination of the items that are being uploaded. The upload progress is displayed for each item that is being uploaded. The users can terminate the upload process at any time."
+    },
+    "sap.m.sample.UploadSetwithTablePlugin.ResponsiveTableSimple": {
+      "name": "Plugin for Responsive Table (sap.m.Table)",
+      "description": "This example demonstrates the usage of UploadSetwithTable plugin for responsive table with the features of upload, download, drag & drop, remove and rename of files. It also demonstrates how the uploaded files can be displayed in a table."
+    },
+    "sap.m.sample.UploadSetwithTablePlugin.TreeTableSimple": {
+      "name": "Plugin for Tree Table (sap.ui.table.TreeTable)",
+      "description": "This example demonstrates the usage of UploadSetwithTable plugin for tree table with the features of upload, download, drag & drop, remove and rename of files. It also demonstrates how the uploaded files can be displayed in a table."
+    },
+    "sap.m.sample.UploadSetwithTablePlugin.TreeTableWithFolderHierarchy": {
+      "name": "Plugin for Tree Table with folder hierarchy & folder uploads",
+      "description": "This example demonstrates the usage of UploadSetwithTable plugin with a tree table featuring folder hierarchy, folder creation, folder uploads, folder navigation with breadcrumbs and folder management"
+    },
+    "sap.m.sample.UrlHelper": {
+      "name": "URL Helper",
+      "description": "The URL Helper can be used to easily trigger a phone's native apps like Email, Telephone and SMS. It can be used with any UI control but typically an active Display List Item is chosen."
+    },
+    "sap.m.sample.VariantManagement": {
+      "name": "VariantManagement using dedicated items",
+      "description": "VariantManagement with dedicated items"
+    },
+    "sap.m.sample.ViewSettingsDialog": {
+      "name": "View Settings Dialog - Standard",
+      "description": "The View Settings Dialog is a standard UI pattern for specifying sorting, grouping and filtering."
+    },
+    "sap.m.sample.ViewSettingsDialogCustom": {
+      "name": "View Settings Dialog - Custom Filters",
+      "description": "You can have custom filters in your View Settings Dialog, as shown in this example here."
+    },
+    "sap.m.sample.ViewSettingsDialogCustomFilterDetails": {
+      "name": "View Settings Dialog - Custom Search",
+      "description": "You can filter the items in the filter details page using different string filter operators."
+    },
+    "sap.m.sample.ViewSettingsDialogCustomTabs": {
+      "name": "View Settings Dialog - Custom Tabs",
+      "description": "You can have custom tabs with your own defined content in the View Settings Dialog, as shown in this example."
+    },
+    "sap.m.sample.WhitespacePattern": {
+      "name": "Whitespaces Pattern",
+      "description": "Renders whitespaces properly within controls"
+    },
+    "sap.m.sample.Wizard": {
+      "name": "Wizard standard use case",
+      "description": "The Wizard is useful for breaking down complex tasks into smaller steps."
+    },
+    "sap.m.sample.WizardBranching": {
+      "name": "Wizard branching use case",
+      "description": "The Wizard could be used in branching mode, where the choice of next step depends on the decision made for the current one."
+    },
+    "sap.m.sample.WizardCurrentStep": {
+      "name": "Wizard edit mode",
+      "description": "Demonstrates the usage of the setCurrentStep association, which controlls the current step of the wizard. This association could be used to simulate 'edit mode' for the wizard by showing all steps in the wizard, without need from the user click next button on each of them."
+    },
+    "sap.m.sample.WizardSingleStep": {
+      "name": "Wizard page mode",
+      "description": "Demonstrates the usage of the renderMode property. The Wizard is displayed inside a Dialog to allow blocking of the interface without using page context. The dynamic page is used to provide a consistent and standards-compliant look. In addition it also provides the title and footer to ensure proper Wizard function. The footer contains the Wizard's actions which allow people to navigate."
+    },
+    "sap.m.sample.p13n.Container": {
+      "name": "p13n.Container usage in a Dialog/Popover",
+      "description": "Dialog & Popover with a sap.m.P13nContainer as content."
+    },
+    "sap.m.sample.p13n.Engine": {
+      "name": "Personalization for responsive table",
+      "description": "Responsive Table using the personalization Engine"
+    },
+    "sap.m.sample.p13n.EngineCustomFilters": {
+      "name": "Personalization implementing custom filter controls",
+      "description": "Filtering using the personalization Engine"
+    },
+    "sap.m.sample.p13n.EngineGridList": {
+      "name": "Personalization for grid list",
+      "description": "GridList using the personalization Engine"
+    },
+    "sap.m.sample.p13n.EngineGridTable": {
+      "name": "Personalization for grid table",
+      "description": "Grid Table using the personalization Engine"
+    },
+    "sap.m.sample.p13n.EngineMultipleController": {
+      "name": "Personalization with multiple SelectionControllers",
+      "description": "Personalization for Reponsive Table using multiple SelectionControllers"
+    },
+    "sap.m.sample.p13n.Popup": {
+      "name": "p13n.Popup usage",
+      "description": "Dialog with sap.m.p13n/* Panels"
+    },
+    "sap.tnt.sample.InfoLabel": {
+      "name": "InfoLabel",
+      "description": "<code>InfoLabel</code> with all available color schemes"
+    },
+    "sap.tnt.sample.InfoLabelInDynamicPage": {
+      "name": "InfoLabel in DynamicPage",
+      "description": "<code>InfoLabel</code> used as subheader in <code>DynamicPage</code>"
+    },
+    "sap.tnt.sample.InfoLabelInTable": {
+      "name": "InfoLabel in Table",
+      "description": "<code>InfoLabel</code> used in content of <code>Table</code>"
+    },
+    "sap.tnt.sample.NavigationList": {
+      "name": "Navigation List",
+      "description": "Navigation List in a Page"
+    },
+    "sap.tnt.sample.SideNavigation": {
+      "name": "Side Navigation",
+      "description": "SideNavigation in container with fixed width."
+    },
+    "sap.tnt.sample.SideNavigationActions": {
+      "name": "Side Navigation - Actions",
+      "description": "SideNavigation with a quick create action button."
+    },
+    "sap.tnt.sample.SideNavigationOverlayMode": {
+      "name": "Side Navigation - Overlay Mode",
+      "description": "SideNavigation in a responsive popover."
+    },
+    "sap.tnt.sample.SideNavigationPressEvent": {
+      "name": "Side Navigation - Press Event",
+      "description": "SideNavigation with press event parameters and preventDefault."
+    },
+    "sap.tnt.sample.SideNavigationSearch": {
+      "name": "Side Navigation with Search",
+      "description": "SideNavigation with a search field in the filter section and filterable navigation items."
+    },
+    "sap.tnt.sample.SideNavigationUnselectableParents": {
+      "name": "Side Navigation - Unselectable Parent Items",
+      "description": "SideNavigation with unselectable parent items."
+    },
+    "sap.tnt.sample.SideNavigationWithTags": {
+      "name": "Side Navigation - Tags",
+      "description": "SideNavigation with tags for status indicators and metadata."
+    },
+    "sap.tnt.sample.SideNavigationWrapping": {
+      "name": "Side Navigation - Wrapping of long texts",
+      "description": "SideNavigation with long texts that wrap."
+    },
+    "sap.tnt.sample.ToolHeader": {
+      "name": "ToolHeader",
+      "description": "ToolHeader that mimics the content of the Shell."
+    },
+    "sap.tnt.sample.ToolHeaderIconTabHeader": {
+      "name": "ToolHeader with IconTabHeader",
+      "description": "ToolHeader can contain IconTabHeader. When both controls are combined, the IconTabHeader supports only inline text. No icons can be used."
+    },
+    "sap.tnt.sample.ToolPage": {
+      "name": "Tool Page with Vertical Navigation",
+      "description": "A tool page layout with vertical navigation"
+    },
+    "sap.tnt.sample.ToolPageHorizontalNavigation": {
+      "name": "Tool Page with Horizontal Navigation",
+      "description": "A tool page layout with horizontal navigation"
+    },
+    "sap.tnt.sample.ToolPageNavigation": {
+      "name": "Tool Page Horizontal and Vertical Navigation",
+      "description": "A tool page layout with horizontal navigation (on desktop and tablet) and vertical navigation (on phone)"
+    },
+    "sap.ui.codeeditor.sample.CodeEditor": {
+      "name": "Code Editor",
+      "description": "Display or edit source code with syntax highlighting for various source types."
+    },
+    "sap.ui.codeeditor.sample.CodeEditorIconTabHeader": {
+      "name": "Code Editor with IconTabHeader",
+      "description": "Example how to use CodeEditor with IconTabHeader to create a tab-based experience."
+    },
+    "sap.ui.core.sample.BasicThemeParameters": {
+      "name": "Basic Theme Parameters",
+      "description": "Sample provides a link to the Theme Parameter Toolbox. There you can easily search, preview, and filter semantic theme parameters."
+    },
+    "sap.ui.core.sample.BoundFilters.FilterBar": {
+      "name": "Bound Filters - Filter Bar",
+      "description": "This sample shows how bound filters work in a filter bar. As the user enters values, a toolbar with filter inputs instantly filters the customer table. It also demonstrates how to use the filter API to change the bound filters programmatically."
+    },
+    "sap.ui.core.sample.BoundFilters.FilteredListInTable": {
+      "name": "Bound Filters - Filtered List in Table",
+      "description": "This sample shows how bound filters work. It features a table of customers with a 'Select' control in each row. The 'Select' control uses the customer's region to filter the list of available account managers."
+    },
+    "sap.ui.core.sample.BusyIndicator": {
+      "name": "Busy Indicator",
+      "description": "A busy indicator can be used to block the entire screen until an operation has finished."
+    },
+    "sap.ui.core.sample.Commands": {
+      "name": "Commands",
+      "description": "This example demonstrates how to define shortcuts using commands in your application"
+    },
+    "sap.ui.core.sample.ControlBusyIndicator": {
+      "name": "Control Busy Indicator",
+      "description": "A control's busy indicator can be used to block parts of the screen until an operation has finished. In this example we block the content of only one out of two panels."
+    },
+    "sap.ui.core.sample.FieldGroup": {
+      "name": "Field Groups",
+      "description": "A control's field group id can be used to define a virtual group of fields that should be validated together. Field groups can be validated usinf the ValidateFieldGroup event if the user presses the enter key in a field belonging to the field group or focusses a control outside of the field group."
+    },
+    "sap.ui.core.sample.Html": {
+      "name": "HTML",
+      "description": "With the HTML controls you can easily embed any kind of HTML content into your UI5 mobile application."
+    },
+    "sap.ui.core.sample.Html.preserveDOM": {
+      "name": "Static HTML Provided With Preserved DOM",
+      "description": "The second use case is similar to the first one: The HTML fragment is specified as a string. The difference is that after the first rendering, the HTML control tries to preserve the created DOM nodes as long as possible. Before each re-rendering step, the existing DOM is preserved in some hidden page area, and then the control and its relatives (parents, siblings) are rendered - this creates a new DOM node hierarchy. After the rendering, the preserved DOM content of the controls is integrated in the newly created DOM tree."
+    },
+    "sap.ui.core.sample.Html.static": {
+      "name": "Static HTML Provided as a String",
+      "description": "This is the simple use case for the HTML control: Some - usually decorative - HTML fragment is specified as a string and set to the content property. Without further configuration, the HTML control will convert this string to DOM nodes whenever it has to render."
+    },
+    "sap.ui.core.sample.HyphenationAPI": {
+      "name": "Hyphenation API",
+      "description": "This sample demonstrates usage of the Hyphenation API"
+    },
+    "sap.ui.core.sample.Icon": {
+      "name": "Icon",
+      "description": "Built with an embedded font, icons scale well, and can be altered with CSS. They can also fire a press event. See the Icon Explorer for more icons."
+    },
+    "sap.ui.core.sample.InvisibleMessage": {
+      "name": "InvisibleMessage",
+      "description": "The InvisibleMessage provides a way to programmaticaly expose dynamic content changes in a way that can be announced by screen readers."
+    },
+    "sap.ui.core.sample.InvisibleText": {
+      "name": "InvisibleText",
+      "description": "Many controls provide the associations ariaLabelledBy and ariaDescribedBy for accessibility purposes. The InvisibleText control can be used by application to provide hidden texts on the UI which can be referenced via these associations."
+    },
+    "sap.ui.core.sample.Messaging.BasicMessages": {
+      "name": "Basic Messages",
+      "description": "Shows how to create messages on the frontend and display them afterwards. This can be used for form validation on the frontend."
+    },
+    "sap.ui.core.sample.Messaging.BasicODataMessages": {
+      "name": "Basic OData Messages",
+      "description": "Uses the OData V2 mock server to simulate an OData response containing different types of server side messages (error, warning, info, success)."
+    },
+    "sap.ui.core.sample.Messaging.ODataBackendMessagesComp": {
+      "name": "OData Messages Component",
+      "description": "Shows how to handle OData responses containing server side messages in component based apps. Also illustrates how the sap-message header works."
+    },
+    "sap.ui.core.sample.OpaAction": {
+      "name": "Simulating user interactions on UI5 controls with OPA5",
+      "description": "There are built-in actions for OPA and you are also able to write custom actions if they do not fit the control you are using."
+    },
+    "sap.ui.core.sample.OpaAutoWaitParams": {
+      "name": "OPA5 autoWait parameters",
+      "description": "This sample demonstrates how to take advantage of OPA5 autoWait parameters"
+    },
+    "sap.ui.core.sample.OpaBusyIndicator": {
+      "name": "Testing busy controls with OPA5",
+      "description": "This sample demonstrates how to test busy controls with OPA5"
+    },
+    "sap.ui.core.sample.OpaById": {
+      "name": "Finding controls by id",
+      "description": "OPA finds a control by its id, triggers a tap and then finds multiple controls by their ids"
+    },
+    "sap.ui.core.sample.OpaDynamicWait": {
+      "name": "How to write nested actions",
+      "description": "If you have complex control structures you are able to add actions based on the result of previous actions."
+    },
+    "sap.ui.core.sample.OpaGetStarted": {
+      "name": "Simulating a simple backend request with OPA5",
+      "description": "This example is complementary to the OPA get started section in the developer guide. It shows how to simulate a simple backend server request with OPA5 and Sinon.JS"
+    },
+    "sap.ui.core.sample.OpaMatchers": {
+      "name": "Using Matchers",
+      "description": "Matchers are used in OPA tests to retrieve controls that have to match a condition, eg: Property matching a value"
+    },
+    "sap.ui.core.sample.OpaPageObject": {
+      "name": "How to structure your OPA tests with Page Objects",
+      "description": "If you have multiple pages or UI areas that have several operations, you should place reuse functions in Page Objects to make your OPA tests maintainable. The example shows as well how to share and reuse functionality within and across page objects."
+    },
+    "sap.ui.core.sample.OpaStartup.iStartMyAppInAFrame": {
+      "name": "Starting an app in an iFrame",
+      "description": "Use this function if you would like to run your app isolated from the other tests and your app starts with a html file."
+    },
+    "sap.ui.core.sample.OpaStartup.iStartMyUIComponent": {
+      "name": "Starting a UIComponent",
+      "description": "Use this function if you would like to run OPA tests for a single UIComponent (a component which creates entries in the DOM tree)"
+    },
+    "sap.ui.core.sample.OpaStaticAreaControls": {
+      "name": "Retrieving controls located in the static area with OPA5",
+      "description": "This sample demonstrates how to locate static area controls with OPA5"
+    },
+    "sap.ui.core.sample.OpaTableAction": {
+      "name": "Simulating user interactions on Tables with OPA5",
+      "description": "This sample demonstrates how to use the keyDown/keyUp properties for multi-selection with Shift key and the rightClick property for context menus on tables."
+    },
+    "sap.ui.core.sample.OpaTestLibrary": {
+      "name": "Creating and using OPA5 test libraries",
+      "description": "This sample demonstrates how to create and use a simple OPA5 test library"
+    },
+    "sap.ui.core.sample.OpaURLParameters.iStartMyAppInAFrameWithURLParameters": {
+      "name": "Starting an app in an iFrame with passing URL parameters to the iFrame",
+      "description": "Passing URL parameters to an app in an iFrame from configuration"
+    },
+    "sap.ui.core.sample.OpaURLParameters.iStartMyUIComponentWithURLParameters": {
+      "name": "Starting a UIComponent with URL parameters",
+      "description": "Passing URL parameters from configurations when using UIComponent"
+    },
+    "sap.ui.core.sample.OpaWithSupportAssistant": {
+      "name": "Running OPA tests with Support Assistant checks",
+      "description": "This sample demonstrates how to extend existing OPA test/journey by plugging calls to Support Assistant extension assertions, with different severity and check scope parameters"
+    },
+    "sap.ui.core.sample.PatternMatching": {
+      "name": "Route Patterns",
+      "description": "Syntax for the Route pattern property."
+    },
+    "sap.ui.core.sample.RoutingFullscreen": {
+      "name": "Routing between Fullscreen pages a simple sample",
+      "description": "A mini app with 2 pages. Both are bookmarkable."
+    },
+    "sap.ui.core.sample.RoutingMasterDetail": {
+      "name": "Routing in a split screen layout with the master detail pattern",
+      "description": "A mini app with 2 detail pages. Both are bookmarkable."
+    },
+    "sap.ui.core.sample.RoutingNestedComponent": {
+      "name": "Routing with nested components consuming data from a mocked OData V2 service",
+      "description": "An app that shows how nested components with enabled routing can be used. This app uses a mocked OData V2 service and shows the 'Products', 'Categories' and 'Suppliers' entity sets and the relationships between them."
+    },
+    "sap.ui.core.sample.TargetsStandalone": {
+      "name": "Targets without a Router",
+      "description": "If you do not need bookmarks, a router is too complicated you can use Targets to lazy load your views and navigate through your application."
+    },
+    "sap.ui.core.sample.ThemeCustomClasses": {
+      "name": "Theme-independent CSS-classes",
+      "description": "Sample display of 'sapTheme'-prefixed CSS classes for theme-independent styling of custom HTML/Controls. The set displayed is to be used to style static HTML elements."
+    },
+    "sap.ui.core.sample.TypeCurrency": {
+      "name": "Currency Format",
+      "description": "Formats the number by using the parameters defined for the given currency code. Either currency symbol, currency code or none of them can be included in the final formatted string. It parses the given string into an array which contains both the currency number and currency code."
+    },
+    "sap.ui.core.sample.TypeDateAsDate": {
+      "name": "Date Type - Source As Date",
+      "description": "This sample explains the formatting options of the Date type with the date being available as date object."
+    },
+    "sap.ui.core.sample.TypeDateAsString": {
+      "name": "Date Type - Source As String",
+      "description": "This sample explains the formatting options of the Date type with the date being available as string."
+    },
+    "sap.ui.core.sample.TypeDateTime": {
+      "name": "DateTime Type",
+      "description": "This sample explains the formatting options of the DateTime type."
+    },
+    "sap.ui.core.sample.TypeFileSize": {
+      "name": "FileSize Type",
+      "description": "This sample explains the formatting options of the FileSize type."
+    },
+    "sap.ui.core.sample.TypeFloat": {
+      "name": "Float Format",
+      "description": "Formats and parses both integer and decimal digits."
+    },
+    "sap.ui.core.sample.TypeInteger": {
+      "name": "Integer Format",
+      "description": "Formats and parses only the integer digits. The decimal digits are ignored."
+    },
+    "sap.ui.core.sample.TypeTimeAsTime": {
+      "name": "Time Type",
+      "description": "This sample explains the formatting options of the Time type."
+    },
+    "sap.ui.core.sample.View.async": {
+      "name": "Async View loading and rendering",
+      "description": "Example for Views with async source loading and the impact on rendering."
+    },
+    "sap.ui.core.sample.View.navigationTypedView": {
+      "name": "Typed View",
+      "description": "Based on defining views via Typed Views primarily, this small sample demonstrates basic routing configuration, event handler registration, asynchronous content creation incl. JS fragments and stable IDs. See the provided sample code."
+    },
+    "sap.ui.core.sample.View.preprocessor": {
+      "name": "Preprocessor example with XMLView",
+      "description": "A small example for View Preprocessor usage with XMLViews."
+    },
+    "sap.ui.core.sample.ViewTemplate.scenario": {
+      "name": "XML Templating: demo scenario",
+      "description": "Complete demo scenario for XML Templating based on OData V4 annotations"
+    },
+    "sap.ui.core.sample.ViewTemplate.scenario.extension": {
+      "name": "XML Templating: demo scenario extension",
+      "description": "Complete demo scenario for XML Templating based on OData V4 annotations incl. custom extensions"
+    },
+    "sap.ui.core.sample.ViewTemplate.tiny": {
+      "name": "XML Templating: minimal sample",
+      "description": "Minimal sample for XML Templating. Run this code sample with UI5 CLI. See the example in 'XML Templating' in the Demo Kit."
+    },
+    "sap.ui.core.sample.ViewTemplate.types": {
+      "name": "XML Templating: UI5 OData types",
+      "description": "XML Templating sample with UI5 core primitive OData types"
+    },
+    "sap.ui.core.sample.ViewTemplate.valuelist": {
+      "name": "Separate Value List Loading",
+      "description": "Separate loading of value lists to reduce size of OData service metadata to be loaded"
+    },
+    "sap.ui.core.sample.XMLComposite.01": {
+      "name": "XMLComposite: basic example",
+      "description": "Basic example to show the structure of an XML composite control"
+    },
+    "sap.ui.core.sample.XMLComposite.02": {
+      "name": "XMLComposite: example showing usage of aggregation",
+      "description": "Example showing how aggregations can be dealt with in an XML composite control"
+    },
+    "sap.ui.core.sample.gherkin.GherkinWithOPA5": {
+      "name": "Using Gherkin with OPA5",
+      "description": "How to combine Gherkin and OPA5 to run behavior driven development tests"
+    },
+    "sap.ui.core.sample.gherkin.GherkinWithPageObjects": {
+      "name": "Using Gherkin with OPA5 Page Objects",
+      "description": "How to combine Gherkin and OPA5 page objects to run behavior driven development tests"
+    },
+    "sap.ui.core.sample.gherkin.GherkinWithQUnit": {
+      "name": "Using Gherkin with QUnit",
+      "description": "How to combine Gherkin and QUnit to run behavior driven development tests"
+    },
+    "sap.ui.core.sample.gherkin.GherkinWithUIComponent": {
+      "name": "Using Gherkin to load and test a UIComponent",
+      "description": "How to use Gherkin and OPA5 to load a UIComponent and run behavior driven development tests on it"
+    },
+    "sap.ui.core.sample.matcher.BindingPath": {
+      "name": "Binding Path Matcher",
+      "description": "The binding path matcher checks if a control has a binding with the exact same binding context and/or binding property path in OPA tests."
+    },
+    "sap.ui.core.sample.matcher.Descendant": {
+      "name": "Descendant Matcher",
+      "description": "The descendant matcher checks if a control has a given descendant."
+    },
+    "sap.ui.core.sample.matcher.I18NText": {
+      "name": "I18N Text Matcher",
+      "description": "The I18N text matcher checks if a control property has the same value as a text of an I18N file in OPA tests."
+    },
+    "sap.ui.core.sample.matcher.LabelFor": {
+      "name": "Label For Matcher",
+      "description": "The LabelFor matcher searches for given control associated with labelFor property in OPA tests."
+    },
+    "sap.ui.core.sample.odata.types.v2.DateTime": {
+      "name": "OData V2 Dates - Use sap.ui.model.odata.type.DateTime for Edm.DateTime",
+      "description": "This sample explains how to use the OData V2 Edm.DateTime type in SAPUI5 applications."
+    },
+    "sap.ui.core.sample.odata.types.v2.DateTimeOffset": {
+      "name": "OData V2 Timestamps - Use sap.ui.model.odata.type.DateTimeOffset for Edm.DateTimeOffset",
+      "description": "This sample explains how to use the OData V2 Edm.DateTimeOffset type in SAPUI5 applications."
+    },
+    "sap.ui.core.sample.odata.types.v2.Time": {
+      "name": "OData V2 Times - Use sap.ui.model.odata.type.Time for Edm.Time",
+      "description": "This sample explains how to use the OData V2 Edm.Time type in SAPUI5 applications."
+    },
+    "sap.ui.core.sample.odata.types.v4.Date": {
+      "name": "OData V4 Dates - Use sap.ui.model.odata.type.Date for Edm.Date",
+      "description": "This sample explains how to use the OData V4 Edm.Date type in SAPUI5 applications."
+    },
+    "sap.ui.core.sample.odata.types.v4.DateTimeOffset": {
+      "name": "OData V4 Timestamps - Use sap.ui.model.odata.type.DateTimeOffset for Edm.DateTimeOffset",
+      "description": "This sample explains how to use the OData V4 Edm.DateTimeOffset type in SAPUI5 applications."
+    },
+    "sap.ui.core.sample.odata.types.v4.TimeOfDay": {
+      "name": "OData V4 Times - Use sap.ui.model.odata.type.TimeOfDay for Edm.TimeOfDay",
+      "description": "This sample explains how to use the OData V4 Edm.TimeOfDay type in SAPUI5 applications."
+    },
+    "sap.ui.core.sample.odata.v4.DeepCreate": {
+      "name": "Deep Create Handling",
+      "description": "Example on how to deal with deep creates in an OData V4 model"
+    },
+    "sap.ui.core.sample.odata.v4.Draft": {
+      "name": "Draft Handling and Data Synchronisation",
+      "description": "Example of an OData V4 model consuming a draft service that shows how to synchronise data between a list report and an object page"
+    },
+    "sap.ui.core.sample.odata.v4.FlatDataAggregation": {
+      "name": "OData V4 Flat Data Aggregation",
+      "description": "Example for OData V4 Data Aggregation w/o visual grouping; based on https://github.com/SAP-samples/cap-sflight"
+    },
+    "sap.ui.core.sample.odata.v4.ListBinding": {
+      "name": "Operation Binding",
+      "description": "OData V4 model operation bindings example; refer to the Sales Orders example to understand other OData V4 model features"
+    },
+    "sap.ui.core.sample.odata.v4.SalesOrders": {
+      "name": "Sales Orders",
+      "description": "Example for OData V4 EPM Sales Orders"
+    },
+    "sap.ui.core.sample.odata.v4.SalesOrdersTemplate": {
+      "name": "Sales Orders Template",
+      "description": "Example for OData V4 EPM Sales Orders using XML Templating"
+    },
+    "sap.ui.integration.sample.CardExplorer": {
+      "name": "Card Explorer",
+      "description": "Card Explorer is the application where you can learn more about integration cards."
+    },
+    "sap.ui.integration.sample.CardsLayout": {
+      "name": "Home page with cards",
+      "description": "Different types of cards types arranged in a sap.f.GridContainer."
+    },
+    "sap.ui.integration.sample.CardsLoading": {
+      "name": "Home page with cards loading",
+      "description": "Different types of cards types and their loading placeholder"
+    },
+    "sap.ui.integration.sample.LazyLoading": {
+      "name": "Lazy loading of cards on home page ",
+      "description": "dataMode:'Auto' activates lazy loading behavior of an integration card"
+    },
+    "sap.ui.layout.sample.BlockLayoutCustomBackground": {
+      "name": "Block Layout with custom background color set for the cells",
+      "description": "Block Layout in which all cells use the same background color set and different color shade."
+    },
+    "sap.ui.layout.sample.BlockLayoutCustomBackgroundPerCell": {
+      "name": "Block Layout with custom background color set per cell",
+      "description": "Block Layout in which all cells use different background color set and different shade."
+    },
+    "sap.ui.layout.sample.BlockLayoutDefault": {
+      "name": "Block Layout",
+      "description": "The BlockLayout is intended to be used with rows and cells. The cells have predefined width, the rows have predefined rendering modes - scrollable/vertical/horizontal."
+    },
+    "sap.ui.layout.sample.BlockLayoutLinkTitle": {
+      "name": "Block Layout with links as titles",
+      "description": "The BlockLayout Cells can have links as titles. The link text overwrites the title text."
+    },
+    "sap.ui.layout.sample.CSSGrid": {
+      "name": "CSSGrid",
+      "description": "CSSGrid example for page layout."
+    },
+    "sap.ui.layout.sample.DynamicSideContent": {
+      "name": "Dynamic Side Content",
+      "description": "Attaches side content area which is next to the main content of the page on larger screens taking different ratios between the two on different screen sizes and on phone size screens the side content area falls down under the main content area. Best viewed in full screen."
+    },
+    "sap.ui.layout.sample.DynamicSideContentEqualSplit": {
+      "name": "Dynamic Side Content - equal split mode",
+      "description": "The side content and the main content take 50%/50% of the container on all screen sizes except on phone screens where there is a button implemented to toggle between each other."
+    },
+    "sap.ui.layout.sample.DynamicSideContentPosition": {
+      "name": "Dynamic Side Content - position",
+      "description": "The side content is positioned on the left side of the main content in left-to-right mode and on the right side of the main content in right-to-left mode."
+    },
+    "sap.ui.layout.sample.DynamicSideContentProduct": {
+      "name": "Dynamic Side Content - product page",
+      "description": "Product page with comments example."
+    },
+    "sap.ui.layout.sample.FixFlexFixedSize": {
+      "name": "Fix Flex - Fix container size",
+      "description": "Shows a FixFlex control where fixContentSize is set to a specific value(200px) and sap.m.scrollContainer is enabling vertical scrolling."
+    },
+    "sap.ui.layout.sample.FixFlexHorizontal": {
+      "name": "Fix Flex - Horizontal Direction",
+      "description": "Shows a FixFlex control with a horizontal layout."
+    },
+    "sap.ui.layout.sample.FixFlexMinFlexSize": {
+      "name": "Fix Flex - Vertical Direction with minFlexSize",
+      "description": "Shows a FixFlex control where the minFlexSize is set to 400px."
+    },
+    "sap.ui.layout.sample.FixFlexVertical": {
+      "name": "Fix Flex - Vertical Direction",
+      "description": "Shows a FixFlex control with a vertical layout."
+    },
+    "sap.ui.layout.sample.Form354": {
+      "name": "Fullscreen – one group",
+      "description": "Form with one single group in a fullscreen app with a label field ratio of 3:5:4 in all sizes besides size S (12:12:0)."
+    },
+    "sap.ui.layout.sample.Form354wide": {
+      "name": "Fullscreen – one group with long labels ",
+      "description": "Form with one single group in a fullscreen app for long labels and fields, so some more space is available on medium screens (4:7:0). To avoid heavily stretched forms on extra large screens, the form gets a two-column layout in this size (4:7:0)."
+    },
+    "sap.ui.layout.sample.Form354wideDual": {
+      "name": "Fullscreen – two groups (horizontal)",
+      "description": "Form with two groups with long labels and fields in a fullscreen app."
+    },
+    "sap.ui.layout.sample.Form471": {
+      "name": "Splitscreen – one group",
+      "description": "Form with one single group in a split app with a label field ratio of 4:7:1 in all sizes besides size S (12:12:0)."
+    },
+    "sap.ui.layout.sample.Form480_12120": {
+      "name": "Fullscreen – two groups (vertical)",
+      "description": "Form with two groups. On large screens a two-column layout (4:8:0) is used; on medium screens a one-column layout (12:12:0); on small screens also a one-column layout (12:12:0). In the second form an empty column is displayed next to the group to be aligned with the first form."
+    },
+    "sap.ui.layout.sample.Form480_12120Dual": {
+      "name": "Fullscreen – two columns of size M",
+      "description": "Form with two groups, gets a two-column layout whenever possible."
+    },
+    "sap.ui.layout.sample.Form480_Trial": {
+      "name": "Fullscreen – three groups (horizontal)",
+      "description": "Form with three groups in a three-column layout. On extra large screens a three-column layout (4:8:0) is used; on large and medium screens a two-column layout (4:8:0); on small screens a one-column layout (12:12:0)."
+    },
+    "sap.ui.layout.sample.FormToolbar": {
+      "name": "Fullscreen – with toolbar",
+      "description": "A form that uses <code>Toolbar</code>s as <code>Form</code> header and <code>FormContainer</code> headers."
+    },
+    "sap.ui.layout.sample.Form_Column_oneGroup": {
+      "name": "Fullscreen – one group using ColumnLayout",
+      "description": "Form with one single group in a fullscreen app using the <code>ColumnLayout</code> control  with default settings as layout."
+    },
+    "sap.ui.layout.sample.Form_Column_oneGroup234": {
+      "name": "Fullscreen – one group using ColumnLayout with up to 4 columns",
+      "description": "Form with one large single group in a fullscreen app (with 2 columns in M, 3 columns in L, and 4 columns in XL size)."
+    },
+    "sap.ui.layout.sample.Form_Column_threeGroups234": {
+      "name": "Fullscreen – three groups using ColumnLayout with up to 4 columns",
+      "description": "Form with three groups in a fullscreen app (with 2 columns in M, 3 columns in L, and 4 columns in XL size)."
+    },
+    "sap.ui.layout.sample.Form_Column_threeGroups346": {
+      "name": "Fullscreen – three groups using ColumnLayout with up to 6 columns",
+      "description": "Form with three groups in a fullscreen app (with 3 columns in M, 4 columns in L, and 6 columns in XL size)."
+    },
+    "sap.ui.layout.sample.Form_Column_twoGroups234": {
+      "name": "Fullscreen – two groups using ColumnLayout with up to 4 columns",
+      "description": "Form with two groups in a fullscreen app (with 2 columns in M, 3 columns in L, and 4 columns in XL size)."
+    },
+    "sap.ui.layout.sample.GridAutoFlow": {
+      "name": "Controlling Empty Spaces Within the Grid",
+      "description": "Example of setting the gridAutoFlow property."
+    },
+    "sap.ui.layout.sample.GridAutoRows": {
+      "name": "Automatic Sizing for Additional Rows and Columns",
+      "description": "Example of setting gridAutoRows and gridAutoColumns properties."
+    },
+    "sap.ui.layout.sample.GridData": {
+      "name": "Grid - Using GridData",
+      "description": "Take advantage of sap.ui.layout.GridData to control the appearance of individual Grid children."
+    },
+    "sap.ui.layout.sample.GridGap": {
+      "name": "Grid Gap and Layout Data",
+      "description": "Example of setting the gridGap property and using of Layout Data."
+    },
+    "sap.ui.layout.sample.GridInfo": {
+      "name": "Grid - Info Layout",
+      "description": "You can use the Grid control to make responsive table-free layouts; here we are using a default indent and span, and specifying the Small settings such that the image and text will stack on a small display."
+    },
+    "sap.ui.layout.sample.GridProperties": {
+      "name": "Grid - Own properties",
+      "description": "You can see how the different properties of the sap.ui.layout.Grid affect it's final appearance."
+    },
+    "sap.ui.layout.sample.GridResponsiveColumnLayout": {
+      "name": "Responsive Column Layout",
+      "description": "Example of using ResponsiveColumnLayout."
+    },
+    "sap.ui.layout.sample.GridResponsiveness": {
+      "name": "Responsiveness",
+      "description": "Example of setting customLayout for different layout (screen) sizes."
+    },
+    "sap.ui.layout.sample.GridTemplateRows": {
+      "name": "Configuring Rows and Columns",
+      "description": "Example of setting gridTemplateRows and gridTemplateColumns properties."
+    },
+    "sap.ui.layout.sample.GridXL": {
+      "name": "Grid - Features Demo",
+      "description": "The major layout features of the Grid control are shown in this example. Features like indentation, making content visible/invisible based on the screen size, moving content forward and backwards are demonstrated."
+    },
+    "sap.ui.layout.sample.HorizontalLayout": {
+      "name": "Horizontal Layout",
+      "description": "The Horizontal Layout control is a simple way to align multiple controls horizontally. By default the contained controls are not wrapped. If you want more sophisticated layout options, consider Grid or Flex Box based layouts."
+    },
+    "sap.ui.layout.sample.NestedGrids": {
+      "name": "Nested Example",
+      "description": "CSSGrid example nested grids."
+    },
+    "sap.ui.layout.sample.ProductHomeLayout": {
+      "name": "Product Home Layout",
+      "description": "Example of using several grids nested in one main grid with ResponsiveColumnLayout, in order to achieve responsive home page design."
+    },
+    "sap.ui.layout.sample.ResponsiveSplitter": {
+      "name": "Responsive Splitter",
+      "description": "ResponsiveSplitter is used to visually divide the content of its parent. It consists of PaneContainers that further  agregate other PaneContainers and SplitPanes. SplitPanes can be moved to the pagination when a minimum width of their parent is reached."
+    },
+    "sap.ui.layout.sample.SimpleForm354": {
+      "name": "Fullscreen – one group",
+      "description": "Form with one single group in a fullscreen app with a label field ratio of 3:5:4 in all sizes besides size S (12:12:0)."
+    },
+    "sap.ui.layout.sample.SimpleForm354wide": {
+      "name": "Fullscreen – one group with long labels ",
+      "description": "Form with one single group in a fullscreen app for long labels and fields, so some more space is available on medium screens (4:7:0). To avoid heavily stretched forms on extra large screens, the form gets a two-column layout in this size (4:7:0)."
+    },
+    "sap.ui.layout.sample.SimpleForm354wideDual": {
+      "name": "Fullscreen – two groups (horizontal)",
+      "description": "Form with two groups with long labels and fields in a fullscreen app."
+    },
+    "sap.ui.layout.sample.SimpleForm471": {
+      "name": "Splitscreen – one group",
+      "description": "Form with one single group in a split app with a label field ratio of 4:7:1 in all sizes besides size S (12:12:0)."
+    },
+    "sap.ui.layout.sample.SimpleForm480_12120": {
+      "name": "Fullscreen – two groups (vertical)",
+      "description": "Form with two groups. On large screens a two-column layout (4:8:0) is used; on medium screens a one-column layout (12:12:0); on small screens also a one-column layout (12:12:0). In the second form an empty column is displayed next to the group to be aligned with the first form."
+    },
+    "sap.ui.layout.sample.SimpleForm480_12120Dual": {
+      "name": "Fullscreen – two columns of size M",
+      "description": "Form with two groups, gets a two-column layout whenever possible."
+    },
+    "sap.ui.layout.sample.SimpleForm480_Trial": {
+      "name": "Fullscreen – three groups (horizontal)",
+      "description": "Form with three groups in a three-column layout. On extra large screens a three-column layout (4:8:0) is used; on large and medium screens a two-column layout (4:8:0); on small screens a one-column layout (12:12:0)."
+    },
+    "sap.ui.layout.sample.SimpleFormToolbar": {
+      "name": "Fullscreen – with toolbar",
+      "description": "A <code>SimpleForm</code> that uses <code>Toolbar</code>s as <code>Form</code> header and <code>FormContainer</code> headers."
+    },
+    "sap.ui.layout.sample.SimpleForm_Column_oneGroup": {
+      "name": "Fullscreen – one group using ColumnLayout",
+      "description": "Form with one single group in a fullscreen app using the <code>ColumnLayout</code> control  with default settings as layout."
+    },
+    "sap.ui.layout.sample.SimpleForm_Column_oneGroup234": {
+      "name": "Fullscreen – one group using ColumnLayout with up to 4 columns",
+      "description": "Form with one large single group in a fullscreen app (with 2 columns in M, 3 columns in L, and 4 columns in XL size)."
+    },
+    "sap.ui.layout.sample.SimpleForm_Column_threeGroups234": {
+      "name": "Fullscreen – three groups using ColumnLayout with up to 4 columns",
+      "description": "Form with three groups in a fullscreen app (with 2 columns in M, 3 columns in L, and 4 columns in XL size)."
+    },
+    "sap.ui.layout.sample.SimpleForm_Column_threeGroups346": {
+      "name": "Fullscreen – three groups using ColumnLayout with up to 6 columns",
+      "description": "Form with three groups in a fullscreen app (with 3 columns in M, 4 columns in L, and 6 columns in XL size)."
+    },
+    "sap.ui.layout.sample.SimpleForm_Column_twoGroups234": {
+      "name": "Fullscreen – two groups using ColumnLayout with up to 4 columns",
+      "description": "Form with two groups in a fullscreen app (with 2 columns in M, 3 columns in L, and 4 columns in XL size)."
+    },
+    "sap.ui.layout.sample.Splitter": {
+      "name": "Splitter Layout",
+      "description": "Splitter where you can change contentAreas and their sizes live"
+    },
+    "sap.ui.layout.sample.Splitter2": {
+      "name": "Splitter Layout - 2 areas",
+      "description": "Simple splitter example with two content areas"
+    },
+    "sap.ui.layout.sample.Splitter3": {
+      "name": "Splitter Layout - 2 non-resizable areas",
+      "description": "Simple splitter example with two content areas that cannot be resized"
+    },
+    "sap.ui.layout.sample.Splitter4": {
+      "name": "Splitter Layout - 3 areas",
+      "description": "Simple splitter example with three content areas"
+    },
+    "sap.ui.layout.sample.SplitterNested1": {
+      "name": "Nested Splitter Layouts - 7 Areas",
+      "description": "Nested Splitter example with 7 content areas"
+    },
+    "sap.ui.layout.sample.VerticalLayout": {
+      "name": "Vertical Layout",
+      "description": "The Vertical Layout control is a simple way to align multiple controls vertically. If you want more sophisticated layout options, consider Grid or Flex Box based layouts."
+    },
+    "sap.ui.mdc.demokit.sample.Chart.ChartJS": {
+      "name": "Chart using ChartJS",
+      "description": "Chart integrated with ChartJS to demonstrate features such as dynamic dimensions, measures, and chart interactions. "
+    },
+    "sap.ui.mdc.demokit.sample.FieldCustomContent": {
+      "name": "Field - with custom controls",
+      "description": "Fields rendering custom inner controls"
+    },
+    "sap.ui.mdc.demokit.sample.FieldTypes": {
+      "name": "Field - with various data types",
+      "description": "Fields with various data types rendering various input controls"
+    },
+    "sap.ui.mdc.demokit.sample.FieldValueHelpJson": {
+      "name": "ValueHelp - with value help dialog",
+      "description": "A field with a more complex value help dialog including filter and search features"
+    },
+    "sap.ui.mdc.demokit.sample.FieldValueHelpTypes": {
+      "name": "ValueHelp - with various types of value help",
+      "description": "Fields with multiple value helps including typeahead, dropdowns, or dialog"
+    },
+    "sap.ui.mdc.demokit.sample.FilterbarCustomContent": {
+      "name": "FilterBar - with custom controls",
+      "description": "A filter bar with filter fields rendering custom inner controls"
+    },
+    "sap.ui.mdc.demokit.sample.FilterbarCustomOperators": {
+      "name": "FilterBar - with custom operators",
+      "description": "A filter bar with custom operators of type integer and date"
+    },
+    "sap.ui.mdc.demokit.sample.FilterbarTypes": {
+      "name": "FilterBar - with various data types",
+      "description": "A filter bar with several filter fields of various data types"
+    },
+    "sap.ui.mdc.demokit.sample.FilterbarVisualizeValidationState": {
+      "name": "FilterBar - with custom validation state visualization",
+      "description": "A filter bar with custom implementation of FilterBarDelegate.visualizeValidationState."
+    },
+    "sap.ui.mdc.demokit.sample.LinkPayloadJson": {
+      "name": "Link - with JSON model",
+      "description": "A link using a delegate payload"
+    },
+    "sap.ui.mdc.demokit.sample.MultiValueField": {
+      "name": "MultiValueField - with value help",
+      "description": "Multi-value field of type string and date with a value help dialog"
+    },
+    "sap.ui.mdc.demokit.sample.TableFilterBarJson": {
+      "name": "Overview - table with filter bar",
+      "description": "A table with a filter bar including variant management"
+    },
+    "sap.ui.mdc.demokit.sample.table.TableCopyPaste": {
+      "name": "Table - with copy and paste",
+      "description": "A table with copy and paste features using CopyProvider, paste event, CellSelector, and a custom context menu for copying selected rows to the clipboard."
+    },
+    "sap.ui.mdc.demokit.sample.table.TableExport": {
+      "name": "Table - with export",
+      "description": "A table with export capabilities."
+    },
+    "sap.ui.mdc.demokit.sample.table.TableJson": {
+      "name": "Table - with personalization",
+      "description": "A table with basic configuration and enabled personalization"
+    },
+    "sap.ui.mdc.demokit.sample.table.TablePropertyInfos": {
+      "name": "Table - with column width calculation and additional property infos",
+      "description": "A table showcasing column width calculation and other different configuration options for property infos."
+    },
+    "sap.ui.mdc.demokit.sample.table.TableTypes": {
+      "name": "Table - with different table types",
+      "description": "A table using different table types."
+    },
+    "sap.ui.mdc.demokit.sample.table.TreeTable": {
+      "name": "Table - with hierarchy",
+      "description": "A table displaying a hierarchy."
+    },
+    "sap.ui.mdc.demokit.sample.table.UploadSetwithTablePlugin": {
+      "name": "Table - with UploadSetwithTable Plugin",
+      "description": "A table using sap.m.plugins.UploadSetwithTable plugin to demonstrate the features of upload, download, drag & drop, remove and rename of files."
+    },
+    "sap.ui.mdc.sample.FieldCustomContent": {
+      "name": "1.7 Fields with custom content",
+      "description": "custom content controls used to render Fields"
+    },
+    "sap.ui.mdc.sample.FieldDisplay": {
+      "name": "1.3 Fields with different Display formats",
+      "description": "shows some Fields with different display formats"
+    },
+    "sap.ui.mdc.sample.FieldEditMode": {
+      "name": "1.1 Fields with different EditModes",
+      "description": "shows some Fields with type String in edit and display mode"
+    },
+    "sap.ui.mdc.sample.FieldInOutParameter": {
+      "name": "1.6 Fields with in/out parameter",
+      "description": "in/out parameter between fields and valuehelp"
+    },
+    "sap.ui.mdc.sample.FieldOtherFeature": {
+      "name": "1.4 other Field feature",
+      "description": "shows some mandatory Fields..."
+    },
+    "sap.ui.mdc.sample.FieldTypes": {
+      "name": "1.2 Fields with different Types",
+      "description": "shows some Fields with different types"
+    },
+    "sap.ui.mdc.sample.FieldValueHelp": {
+      "name": "1.5 Fields with different ValueHelp",
+      "description": "shows some Fields with different types of value help"
+    },
+    "sap.ui.mdc.sample.FilterBar": {
+      "name": "3.1 FilterBar",
+      "description": "first FilterBar example"
+    },
+    "sap.ui.mdc.sample.FilterFieldCustomContent": {
+      "name": "2.2 FilterFields with custom content",
+      "description": "custom content controls used to render FilterFields"
+    },
+    "sap.ui.mdc.sample.FilterFieldTypes": {
+      "name": "2.1  FilterFields with different Types",
+      "description": "shows some FilterFields with different types bound to a condition model"
+    },
+    "sap.ui.mdc.sample.GridTable": {
+      "name": "0.2 Table of type \"GridTable\"",
+      "description": "Basic example with table type \"GridTable\"."
+    },
+    "sap.ui.mdc.sample.ResponsiveTable": {
+      "name": "0.1 Table of type \"ResponsiveTable\"",
+      "description": "Basic example with table type \"ResponsiveTable\"."
+    },
+    "sap.ui.mdc.sample.StateUtil": {
+      "name": "7.1 StateUtil overview",
+      "description": "example demonstrating StateUtil functionality"
+    },
+    "sap.ui.mdc.sample.Table": {
+      "name": "4.1 Table",
+      "description": "first Table example"
+    },
+    "sap.ui.mdc.sample.TableFilter": {
+      "name": "0.4 Table with FilterBar",
+      "description": "Basic example with a FilterBar."
+    },
+    "sap.ui.mdc.sample.TableODataV4": {
+      "name": "0.5 Table with OData V4",
+      "description": "OData V4 with analytical capabilities, e.g. grouping and totals."
+    },
+    "sap.ui.mdc.sample.TableODataV4PDFExport": {
+      "name": "0.7 Table with OData V4 for PDF export (TODO: merge into 0.5)",
+      "description": "OData V4 with PDF export capabilities."
+    },
+    "sap.ui.mdc.sample.TableStateHandling": {
+      "name": "0.3 Table state handling",
+      "description": "Basic example of state handling."
+    },
+    "sap.ui.mdc.sample.TableWithFilterBar": {
+      "name": "6.1 Table with FilterBar",
+      "description": "first Table and Filterbar example"
+    },
+    "sap.ui.mdc.sample.TreeTableODataV4": {
+      "name": "0.6 TreeTable with OData V4",
+      "description": "OData V4 with hierarchies."
+    },
+    "sap.ui.table.sample.Aggregations": {
+      "name": "Aggregations",
+      "description": "Example which shows the different aggregations of the table"
+    },
+    "sap.ui.table.sample.Basic": {
+      "name": "Basic",
+      "description": "Basic example showing most controls which are intended to be used inside a table."
+    },
+    "sap.ui.table.sample.ColumnResizing": {
+      "name": "Column Resizing",
+      "description": "Example for column resizing"
+    },
+    "sap.ui.table.sample.DnD": {
+      "name": "Drag and Drop",
+      "description": "Shows various drag-and-drop capabilities along with custom context menu alternatives for each action."
+    },
+    "sap.ui.table.sample.Filtering": {
+      "name": "Filtering",
+      "description": "Example showing the different facets of filtering within a table"
+    },
+    "sap.ui.table.sample.Menus": {
+      "name": "Table related Menus",
+      "description": "Example which focuses the handling of the table related Menus"
+    },
+    "sap.ui.table.sample.MultiHeader": {
+      "name": "Multi Header",
+      "description": "Example for multi-header of table"
+    },
+    "sap.ui.table.sample.MultiSelectionPlugin": {
+      "name": "MultiSelectionPlugin",
+      "description": "Example showing the behavior of MultiSelectionPlugin"
+    },
+    "sap.ui.table.sample.OData": {
+      "name": "OData",
+      "description": "OData related example"
+    },
+    "sap.ui.table.sample.OData2": {
+      "name": "OData Metadata",
+      "description": "Shows an example how an OData metadata driven table creation can look like."
+    },
+    "sap.ui.table.sample.RowAction": {
+      "name": "Row Actions",
+      "description": "Shows how row actions can be used."
+    },
+    "sap.ui.table.sample.RowHighlights": {
+      "name": "Row Highlights",
+      "description": "Shows how row highlights and alternating row colors can be used."
+    },
+    "sap.ui.table.sample.RowModes": {
+      "name": "Row Modes",
+      "description": "Example for the different row modes"
+    },
+    "sap.ui.table.sample.SelectCopyPaste": {
+      "name": "Cell Selection, Copy & Paste",
+      "description": "Shows cell selection, copy and paste interaction in the table."
+    },
+    "sap.ui.table.sample.Selection": {
+      "name": "Selection",
+      "description": "Selection example showing selection modes and selection behaviors of table."
+    },
+    "sap.ui.table.sample.Sorting": {
+      "name": "Sorting",
+      "description": "Example showing the different kinds of sorting capabilities"
+    },
+    "sap.ui.table.sample.TableFreeze": {
+      "name": "Table Freeze",
+      "description": "Example which shows table freeze with fixed columns"
+    },
+    "sap.ui.table.sample.TreeTable.BasicODataTreeBinding": {
+      "name": "Basic OData TreeBinding",
+      "description": "Illustrates how to bind to data from an OData model without using $metadata annotations or navigation properties. Instead, treeAnnotationProperties is filled for the TreeBinding."
+    },
+    "sap.ui.table.sample.TreeTable.HierarchyMaintenanceJSONTreeBinding": {
+      "name": "Hierarchy Maintenance with a JSONModel",
+      "description": "Shows how hierarchy maintenance can be done using drag and drop."
+    },
+    "sap.ui.table.sample.TreeTable.JSONTreeBinding": {
+      "name": "JSONTreeBinding",
+      "description": "Basic example showing how a TreeTable can be built using a JSONModel"
+    },
+    "sap.ui.table.sample.TreeTable.ODataAnnotationsTreeBinding": {
+      "name": "OData Annotations TreeBinding",
+      "description": "Illustrates how to bind to data from an OData model using $metadata annotations."
+    },
+    "sap.ui.testlib.sample.TestButton": {
+      "name": "Test Button Sample",
+      "description": "Sample with Test Button."
+    },
+    "sap.ui.unified.sample.CalendarCalendarType": {
+      "name": "calendar type",
+      "description": "islamic Calendar with secondary gregorian type"
+    },
+    "sap.ui.unified.sample.CalendarDateDeselection": {
+      "name": "Date deselection with shortcut for today",
+      "description": "An example of recommended implementation of deselection logic when the calendar is in single selection mode."
+    },
+    "sap.ui.unified.sample.CalendarDateIntervalBasic": {
+      "name": "simple example",
+      "description": "CalendarDateInterval with 14 days and single day selection"
+    },
+    "sap.ui.unified.sample.CalendarLegendNavigation": {
+      "name": "Calendar with navigatable legend",
+      "description": "An example of adding navigatable legend to the calendar."
+    },
+    "sap.ui.unified.sample.CalendarMinMax": {
+      "name": "calendar - min., max., disabled and show/hide week numbers",
+      "description": "Calendar with minimum date 2000-01-01 and maximum date 2050-12-31, some disabled days (in January 2016) and ability to show or hide week numbers."
+    },
+    "sap.ui.unified.sample.CalendarMultipleDaySelection": {
+      "name": "Multiple Day Selection",
+      "description": "Calendar where the user can select multiple days, entire weeks (either by selecting its week number or by using SHIFT + Space) and ranges (using SHIFT + ENTER/Left mouse click)."
+    },
+    "sap.ui.unified.sample.CalendarMultipleMonth": {
+      "name": "multiple months",
+      "description": "Calendar with more than one month"
+    },
+    "sap.ui.unified.sample.CalendarSingleDaySelection": {
+      "name": "Single Day Selection",
+      "description": "Calendar where the user can select a single day"
+    },
+    "sap.ui.unified.sample.CalendarSingleIntervalSelection": {
+      "name": "Single Interval Selection",
+      "description": "Calendar where the user can select an interval or entire week (either by selecting its week number or by using SHIFT + Space)."
+    },
+    "sap.ui.unified.sample.CalendarSpecialDaysLegend": {
+      "name": "Special Days with Legend",
+      "description": "Calendar with special days and legend"
+    },
+    "sap.ui.unified.sample.ColorPicker": {
+      "name": "Color Picker - displayMode: Default",
+      "description": "Basic example of Color Picker. Note that you have to set the Color Picker mode to HSL to take advantage of the responsiveness of the control on a mobile device."
+    },
+    "sap.ui.unified.sample.ColorPickerLarge": {
+      "name": "Color Picker - displayMode: Large",
+      "description": "Basic example of Color Picker. Note that you have to set the Color Picker mode to HSL to take advantage of the responsiveness of the control on a mobile device."
+    },
+    "sap.ui.unified.sample.ColorPickerPopover": {
+      "name": "Color Picker Popover",
+      "description": "Example of ColorPicker in a popover using the thin wrapper control <code>sap.ui.unified.ColorPickerPopover</code>."
+    },
+    "sap.ui.unified.sample.ColorPickerSimplified": {
+      "name": "Color Picker - displayMode: Simplified",
+      "description": "Basic example of Color Picker. Note that you have to set the Color Picker mode to HSL to take advantage of the responsiveness of the control on a mobile device."
+    },
+    "sap.ui.unified.sample.Currency": {
+      "name": "Currency",
+      "description": "Display Currencies with proper Alignment"
+    },
+    "sap.ui.unified.sample.CurrencyInTable": {
+      "name": "Currency in Table",
+      "description": "Display Currencies in Table"
+    },
+    "sap.ui.unified.sample.FileUploaderBasic": {
+      "name": "Basic",
+      "description": "Basic File Uploader Example"
+    },
+    "sap.ui.unified.sample.FileUploaderComplex": {
+      "name": "Complex",
+      "description": "File Uploader Example with Parameters"
+    },
+    "sap.ui.unified.sample.MenuItemEventing": {
+      "name": "Item Eventing",
+      "description": "Menu with Item Eventing"
+    },
+    "sap.ui.unified.sample.MenuMenuEventing": {
+      "name": "Menu Eventing",
+      "description": "Menu with Menu Eventing"
+    },
+    "sap.ui.unified.sample.MenuSelectable": {
+      "name": "Menu with Selectable Items",
+      "description": "Some menu items can be added to groups to allow single or multiple item selection."
+    },
+    "sap.uxap.sample.AlternativeProfileObjectPageHeader": {
+      "name": "ObjectPageHeader options",
+      "description": "This is a different example of ObjectPageHeader hiding the headerTitle area entirely until user scrolls down."
+    },
+    "sap.uxap.sample.AnchorBar": {
+      "name": "Object Page AnchorBar",
+      "description": "AnchorBar has a different behavior based on the device"
+    },
+    "sap.uxap.sample.AnchorBarNoPopover": {
+      "name": "Navigation to Section sample",
+      "description": "This example shows how to change the default behavior in order to be able to navigate to sections instead of subsections, using the Anchor Bar"
+    },
+    "sap.uxap.sample.AnchorBarWithNumbers": {
+      "name": "Object Page AnchorBar with numbers",
+      "description": "This example shows how to visualize numbers in parenthesis after the corresponding section titles in the AnchorBar"
+    },
+    "sap.uxap.sample.BlockBaseBlockInBlock": {
+      "name": "Block in a block",
+      "description": "Uses a block in a view of another block"
+    },
+    "sap.uxap.sample.BlockBaseEventing": {
+      "name": "Eventing blocks",
+      "description": "Uses of a block that is firing a dummy event"
+    },
+    "sap.uxap.sample.BoundModelMapping": {
+      "name": "Bound Model Mapping",
+      "description": "Use of dynamic bound model mapping"
+    },
+    "sap.uxap.sample.ChildObjectPage": {
+      "name": "ObjectPage as a child page",
+      "description": "This is an example of an ObjectPage Child page."
+    },
+    "sap.uxap.sample.HeaderContent": {
+      "name": "ObjectPageHeaderContent",
+      "description": "This is an example of an ObjectPageHeaderContent."
+    },
+    "sap.uxap.sample.KPIObjectPageHeader": {
+      "name": "Standard Fiori ObjectPageHeader",
+      "description": "This is an example of an ObjectPageHeader containing mainly KPIs."
+    },
+    "sap.uxap.sample.MPModelMapping": {
+      "name": "Model Mapping",
+      "description": "Use of dynamic model mapping"
+    },
+    "sap.uxap.sample.ObjectPageBeforeNavigate": {
+      "name": "Object Page demonstrating beforeNavigate event",
+      "description": "Object Page demonstrating how beforeNavigate event can be used to prevent default navigation behaviour"
+    },
+    "sap.uxap.sample.ObjectPageBlockBase": {
+      "name": "ObjectPage Blockbase",
+      "description": "This example shows the different layout of the blocks based on their ColumnLayout."
+    },
+    "sap.uxap.sample.ObjectPageBlockViewTypes": {
+      "name": "Object Page with blocks of different view types",
+      "description": "ObjectPage sample with blocks that use different view types"
+    },
+    "sap.uxap.sample.ObjectPageDynamicSideContentBtn": {
+      "name": "ObjectPage with DynamicSideContent Button",
+      "description": "The sample shows Object Page inside a main content of DynamicSideContent. The ObjectPageHeader has property DynamicSideContentButton set to true which is used to show the side panel of DynamicSideContent."
+    },
+    "sap.uxap.sample.ObjectPageFormFocusableInput": {
+      "name": "ObjectPage with first editable input",
+      "description": "Object Page that focuses its first editable input in the currently selected section."
+    },
+    "sap.uxap.sample.ObjectPageFormLayout": {
+      "name": "ObjectPage with forms",
+      "description": "Object Page automatically adjusts form layout to match block column layout"
+    },
+    "sap.uxap.sample.ObjectPageHeaderActionButtons": {
+      "name": "Object Page with ObjectPageHeaderActionButtons",
+      "description": "This example demonstrates ObjectPage with ObjectPageHeaderActionButtons and a GenericTag in the header."
+    },
+    "sap.uxap.sample.ObjectPageHeaderBackgroundDesign": {
+      "name": "Object Page with Translucent backgroundDesign",
+      "description": "This example demonstrates ObjectPage with ObjectPageDynamicHeaderTitle with Solid backgroundDesign and Translucent backgroundDesignAnchorBar."
+    },
+    "sap.uxap.sample.ObjectPageHeaderContentPriorities": {
+      "name": "Object Page Header Content Priorities",
+      "description": "The sample shows how to set priorities of the ObjectPageHeader content items by using the ObjectPageHeaderContentLayoutData element"
+    },
+    "sap.uxap.sample.ObjectPageHeaderExpanded": {
+      "name": "ObjectPage with HeaderContent always shown on desktop",
+      "description": "This is an example of an ObjectPage with property alwaysShowContentHeader set to true. In this case the HeaderContent won't snap on a desktop."
+    },
+    "sap.uxap.sample.ObjectPageHeaderWithAllControls": {
+      "name": "ObjectPageHeader with all controls",
+      "description": "This is an example of an ObjectPageHeader containing all possible controls in it."
+    },
+    "sap.uxap.sample.ObjectPageLazyLoadingWithoutBlocks": {
+      "name": "Object Page with LazyLoading without blocks",
+      "description": "This sample showcases the lazy loading using the stashed property of the ObjectPageLazyLoader. It enables usage of lazy loading without the need to have Blocks"
+    },
+    "sap.uxap.sample.ObjectPageOnJSON": {
+      "name": "Object Page with Title on top",
+      "description": "Object Page sample showing a layout with subsection titles on top. This is the default layout. The sample also shows the 'Edit header' button in the Header Content area."
+    },
+    "sap.uxap.sample.ObjectPageOnJSONWithLazyLoading": {
+      "name": "Object Page with LazyLoading",
+      "description": "Object Page with LazyLoading"
+    },
+    "sap.uxap.sample.ObjectPageProgressRatingIndicators": {
+      "name": "Object Page Header with Progress Indicator and Rating Indicator",
+      "description": "ObjectPage sample with header content arranged using containers, called facets, ProgressIndicator and RatingIndicator."
+    },
+    "sap.uxap.sample.ObjectPageResetSelectedSection": {
+      "name": "Object Page reseting the selected section to the first visible section",
+      "description": "Object Page sample showing how to ensure the page is always scrolled to the top on any subsequent navigation to the page, regardless of its previously selected section in the preceding navigation."
+    },
+    "sap.uxap.sample.ObjectPageResponsiveAvatar": {
+      "name": "Object Page with Responsive Avatar",
+      "description": "ObjectPage sample demonstrating the breakpointChange event to adjust Avatar sizes responsively based on screen size (phone: M, tablet: L, desktop/desktop_XL: XL)."
+    },
+    "sap.uxap.sample.ObjectPageSection": {
+      "name": "Object Page Layout Section sample",
+      "description": "This example explains the rules for the rendering of sections"
+    },
+    "sap.uxap.sample.ObjectPageSectionShowTitle": {
+      "name": "ObjectPage with Hidden Section Titles",
+      "description": "ObjectPage sample that demonstrates the combination of header facets and showTitle properties of sections and subsections."
+    },
+    "sap.uxap.sample.ObjectPageSelectedSection": {
+      "name": "Object Page with predefined selected section in Tab navigation mode",
+      "description": "Object Page sample showing a layout where the selected section is defined by the user."
+    },
+    "sap.uxap.sample.ObjectPageState": {
+      "name": "Object Page State",
+      "description": "This example shows how the page can be accessed directly to a specific vertical position, with \"See More\" enabled"
+    },
+    "sap.uxap.sample.ObjectPageSubSection": {
+      "name": "Subsection with Expand/Collapse",
+      "description": "This example shows subsections in expanded and collapsed mode."
+    },
+    "sap.uxap.sample.ObjectPageSubSectionBackground": {
+      "name": "Subsection with transparent background",
+      "description": "This example uses the 'sapUxAPObjectPageSubSectionTransparentBackground' CSS class to set transparent background."
+    },
+    "sap.uxap.sample.ObjectPageSubSectionHiddenTitle": {
+      "name": "Subsection with hidden title",
+      "description": "Example of a subsection with showTitle property set to false."
+    },
+    "sap.uxap.sample.ObjectPageSubSectionMultiView": {
+      "name": "Subsection with automatic layout of blocks",
+      "description": "This example shows how blocks can be laid out automatically by the Object Page when their size is not specified."
+    },
+    "sap.uxap.sample.ObjectPageSubSectionSized": {
+      "name": "Subsection with blocks using column layout",
+      "description": "This example shows how the size of the blocks and be either specified or automatic"
+    },
+    "sap.uxap.sample.ObjectPageSubSectionWithActions": {
+      "name": "Subsection with Action buttons sample",
+      "description": "Example of a subsection displaying action buttons."
+    },
+    "sap.uxap.sample.ObjectPageTabNavigationMode": {
+      "name": "Object Page using the Tab navigation mode",
+      "description": "Object Page sample showing a layout where the navigation is Tab based (one Tab per section) rather than having all of the sections visible at the same time."
+    },
+    "sap.uxap.sample.ObjectPageTitleOnLeft": {
+      "name": "Object Page with Title on the left",
+      "description": "Object Page sample showing a layout with subsection titles on the left."
+    },
+    "sap.uxap.sample.ObjectPageWithHeaderContainer": {
+      "name": "Object Page with Header Container",
+      "description": "ObjectPage sample with Header Container"
+    },
+    "sap.uxap.sample.ObjectPageWithLinksAndObjectStatus": {
+      "name": "Object Page Header with Links, Rating Indicator, and Object Status",
+      "description": "ObjectPage sample with header content arranged using containers, called facets, Links, RatingIndicator and ObjectStatus."
+    },
+    "sap.uxap.sample.ProfileObjectPageHeader": {
+      "name": "ObjectPageHeader with placeholder",
+      "description": "This is an example of ObjectPageHeader using the showPlaceholder property."
+    },
+    "sap.uxap.sample.SingleView": {
+      "name": "Single View sample",
+      "description": "Use of implicit static view definition."
+    }
+  },
+  "written": {
+    "sap.ui.layout.sample.Form480": {
+      "description": "A fullscreen address form with Edit / Save / Cancel in the page header, switching between a display and a change fragment; ResponsiveGridLayout arranges the columns.",
+      "why": "the demo kit lists the three variants (Form480_12120, _12120Dual, _Trial) as samples - this id is the shared page they embed, so docuindex.json has no entry for it"
+    },
+    "sap.ui.layout.sample.SimpleForm480": {
+      "description": "The same fullscreen address form built with SimpleForm: Edit / Save / Cancel in the page header switch it between display and change mode.",
+      "why": "as Form480 - the shared page of the three SimpleForm480 variants, not a demo kit sample of its own"
+    },
+    "sap.f.sample.GridListBasic": {
+      "description": "A GridList with the default grid layout, resized live with a slider to show how the grid reflows.",
+      "why": "docuindex.json lists the sample (name 'Grid List - Basic examples') with an EMPTY description upstream"
+    }
+  }
+}

@@ -1,4 +1,5 @@
 " @keywords objectattribute object attribute sap.m active attributes customcontent label link text dialog ratingindicator
+" @summary This is an example of Object Attribute used standalone.
 CLASS z2ui5_cl_smpc_app_073 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

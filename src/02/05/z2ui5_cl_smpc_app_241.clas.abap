@@ -1,4 +1,5 @@
 " @keywords sidenavigation side navigation sap.tnt sidenavigationpressevent vbox hbox button checkbox dialog label input
+" @summary SideNavigation with press event parameters and preventDefault.
 CLASS z2ui5_cl_smpc_app_241 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

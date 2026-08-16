@@ -1,4 +1,5 @@
 " @keywords form sap.ui.layout.form form354 bar button vbox text input select
+" @summary Form with one single group in a fullscreen app with a label field ratio of 3:5:4 in all sizes besides size S (12:12:0).
 CLASS z2ui5_cl_smpc_app_312 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

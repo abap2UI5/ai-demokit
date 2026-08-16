@@ -1,4 +1,5 @@
 " @keywords shellbar shell bar sap.f application header
+" @summary Shell Bar example showing the control title as part of a mega menu, configurable by the app developer.
 CLASS z2ui5_cl_smpc_app_110 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

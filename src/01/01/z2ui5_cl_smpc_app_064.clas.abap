@@ -1,4 +1,5 @@
 " @keywords numericcontent numeric content sap.m icon
+" @summary Shows NumericContent including an icon.
 CLASS z2ui5_cl_smpc_app_064 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

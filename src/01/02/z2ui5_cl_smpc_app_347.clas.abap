@@ -1,4 +1,5 @@
 " @keywords cssgrid sap.ui.layout.cssgrid gridgap slider panel overflowtoolbar title text label input vbox
+" @summary Example of setting the gridGap property and using of Layout Data.
 CLASS z2ui5_cl_smpc_app_347 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

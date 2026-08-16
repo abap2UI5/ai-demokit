@@ -1,4 +1,5 @@
 " @keywords icontabbar icon tab bar sap.m icontabbarinlinemode icontabfilter text
+" @summary In this example, the Icon Tab Bar tabs display the text and the count in one line.
 CLASS z2ui5_cl_smpc_app_379 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,4 +1,5 @@
 " @keywords panel sap.m panelbackgrounddesign label select text messagestrip
+" @summary Panels support different background designs for better visual distinction inside containers. [since rel. 1.150]
 CLASS z2ui5_cl_smpc_app_292 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

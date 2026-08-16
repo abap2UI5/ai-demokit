@@ -1,4 +1,5 @@
 " @keywords table sap.ui.table aggregations column
+" @summary Example which shows the different aggregations of the table
 CLASS z2ui5_cl_smpc_app_352 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

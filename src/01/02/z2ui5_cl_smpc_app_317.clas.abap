@@ -1,4 +1,5 @@
 " @keywords form sap.ui.layout.form form480_12120 bar button vbox text input select
+" @summary Form with two groups. On large screens a two-column layout (4:8:0) is used; on medium screens a one-column layout (12:12:0); on small screens also a one-column layout (12:12:0).
 CLASS z2ui5_cl_smpc_app_317 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

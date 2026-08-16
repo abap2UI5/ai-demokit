@@ -1,4 +1,5 @@
 " @keywords parameters sap.ui.core.theming theme info messagestrip link
+" @summary Sample provides a link to the Theme Parameter Toolbox. There you can easily search, preview, and filter semantic theme parameters.
 CLASS z2ui5_cl_smpc_app_131 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

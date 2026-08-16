@@ -1,4 +1,5 @@
 " @keywords currency sap.ui.model.type data type label input text
+" @summary Formats the number by using the parameters defined for the given currency code. Either currency symbol, currency code or none of them can be included in the final formatted string.
 CLASS z2ui5_cl_smpc_app_135 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

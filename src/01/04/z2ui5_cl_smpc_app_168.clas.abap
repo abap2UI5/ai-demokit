@@ -1,4 +1,5 @@
 " @keywords gridcontainer grid container sap.f scrollcontainer togglebutton panel hbox label switch text generictile
+" @summary This sample represents the general usage of GridContainer.
 CLASS z2ui5_cl_smpc_app_168 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

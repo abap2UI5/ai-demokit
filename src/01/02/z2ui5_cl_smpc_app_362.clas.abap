@@ -1,4 +1,5 @@
 " @keywords table sap.ui.table sorting column
+" @summary Example showing the different kinds of sorting capabilities
 CLASS z2ui5_cl_smpc_app_362 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

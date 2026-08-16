@@ -1,4 +1,5 @@
 " @keywords selectdialog select dialog sap.m product list standardlistitem button input
+" @summary The Select Dialog allows the user to search for and pick an item from a possibly long option list. Basically it is a convenience function to quickly assemble a Dialog, a Search Field and a List with Standard List Items.
 CLASS z2ui5_cl_smpc_app_103 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

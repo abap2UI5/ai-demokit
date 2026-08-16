@@ -1,4 +1,5 @@
 " @keywords feedlistitem feed list item sap.m provides set feedlistitemaction
+" @summary The Feed List Item provides a standard UI for 'feeds' where multiple users publish information on regular basis on a certain topic.
 CLASS z2ui5_cl_smpc_app_025 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

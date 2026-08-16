@@ -1,4 +1,5 @@
 " @keywords daterangeselection date range selection sap.m single-field input vbox label text
+" @summary The Date Range Selection is an extension of the Date Picker Control and enables the user to select range of dates.
 CLASS z2ui5_cl_smpc_app_017 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,4 +1,5 @@
 " @keywords rangeslider range slider sap.m user specify text responsivescale
+" @summary With the RangeSlider a user can specify range from a numerical interval.
 CLASS z2ui5_cl_smpc_app_045 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

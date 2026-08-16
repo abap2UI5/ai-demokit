@@ -1,4 +1,5 @@
 " @keywords objectattribute object attribute sap.m objectattributeintable table column text columnlistitem objectidentifier
+" @summary This is an example of Object Attribute used inside Table.
 CLASS z2ui5_cl_smpc_app_191 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

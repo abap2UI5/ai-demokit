@@ -1,4 +1,5 @@
 " @keywords form sap.ui.layout.form form480_12120dual bar button vbox text input select
+" @summary Form with two groups, gets a two-column layout whenever possible.
 CLASS z2ui5_cl_smpc_app_318 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

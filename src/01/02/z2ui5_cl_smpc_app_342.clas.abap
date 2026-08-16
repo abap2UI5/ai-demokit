@@ -1,4 +1,5 @@
 " @keywords card sap.ui.integration.widgets lazyloading label input checkbox button
+" @summary dataMode:'Auto' activates lazy loading behavior of an integration card
 CLASS z2ui5_cl_smpc_app_342 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

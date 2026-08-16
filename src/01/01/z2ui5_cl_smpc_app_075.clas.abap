@@ -1,4 +1,5 @@
 " @keywords selectlist select list sap.m items sorter
+" @summary A SelectList allows the user to select one item from a list of choices.
 CLASS z2ui5_cl_smpc_app_075 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

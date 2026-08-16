@@ -1,4 +1,5 @@
 " @keywords input sap.m inputpassword label
+" @summary To make sure the password is not shown as clear text you set the 'type' of an input control to 'Password'.
 CLASS z2ui5_cl_smpc_app_368 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

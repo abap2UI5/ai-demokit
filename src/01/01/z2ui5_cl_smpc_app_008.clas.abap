@@ -1,4 +1,5 @@
 " @keywords colorpalette color palette sap.m standalone contai toolbar title label
+" @summary The standalone ColorPalette in a container (sap.ui.layout.SimpleForm).
 CLASS z2ui5_cl_smpc_app_008 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

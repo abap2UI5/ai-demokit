@@ -1,4 +1,5 @@
 " @keywords date sap.ui.model.type typedateasdate label datepicker text
+" @summary This sample explains the formatting options of the Date type with the date being available as date object.
 CLASS z2ui5_cl_smpc_app_282 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

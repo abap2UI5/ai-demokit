@@ -1,4 +1,5 @@
 " @keywords icontabbar icon tab bar sap.m icontabbarbadges panel label radiobuttongroup radiobutton icontabfilter text
+" @summary This sample illustrates the possibility to add badges to the icon tab filters.
 CLASS z2ui5_cl_smpc_app_287 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,4 +1,5 @@
 " @keywords codeeditor code editor sap.ui.codeeditor icontabheader icontabfilter
+" @summary Example how to use CodeEditor with IconTabHeader to create a tab-based experience.
 CLASS z2ui5_cl_smpc_app_150 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

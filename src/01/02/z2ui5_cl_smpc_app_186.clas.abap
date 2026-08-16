@@ -1,4 +1,5 @@
 " @keywords responsivesplitter responsive splitter sap.ui.layout panel text list standardlistitem vbox select overflowtoolbar label
+" @summary ResponsiveSplitter is used to visually divide the content of its parent. It consists of PaneContainers that further agregate other PaneContainers and SplitPanes.
 CLASS z2ui5_cl_smpc_app_186 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

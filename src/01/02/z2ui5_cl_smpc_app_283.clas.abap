@@ -1,4 +1,5 @@
 " @keywords theming sap.ui.core themecustomclasses messagestrip table column text columnlistitem
+" @summary Sample display of 'sapTheme'-prefixed CSS classes for theme-independent styling of custom HTML/Controls. The set displayed is to be used to style static HTML elements.
 CLASS z2ui5_cl_smpc_app_283 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

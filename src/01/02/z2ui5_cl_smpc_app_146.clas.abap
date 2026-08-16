@@ -1,4 +1,5 @@
 " @keywords hyphenation sap.ui.core.hyphenation api html label slider panel
+" @summary This sample demonstrates usage of the Hyphenation API
 CLASS z2ui5_cl_smpc_app_146 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

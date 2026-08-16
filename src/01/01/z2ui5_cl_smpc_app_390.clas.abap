@@ -1,4 +1,5 @@
 " @keywords numericcontent numeric content sap.m numericcontentwithoutmargin label
+" @summary This is an example of the NumericContent that contains no margins, so the control is aligned to the left and to the top without any margins.
 CLASS z2ui5_cl_smpc_app_390 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

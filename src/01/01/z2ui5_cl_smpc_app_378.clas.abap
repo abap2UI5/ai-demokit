@@ -1,4 +1,5 @@
 " @keywords icontabbar icon tab bar sap.m icontabbarfiori2 icontabfilter text
+" @summary In this example, the Icon Tab Bar tabs display text and corresponding count.
 CLASS z2ui5_cl_smpc_app_378 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

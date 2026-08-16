@@ -1,4 +1,5 @@
 " @keywords table sap.ui.table multiselectionplugin column
+" @summary Example showing the behavior of MultiSelectionPlugin
 CLASS z2ui5_cl_smpc_app_356 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

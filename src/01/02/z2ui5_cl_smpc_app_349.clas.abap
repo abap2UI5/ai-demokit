@@ -1,4 +1,5 @@
 " @keywords cssgrid sap.ui.layout.cssgrid gridtemplaterows slider panel overflowtoolbar title label combobox vbox text
+" @summary Example of setting gridTemplateRows and gridTemplateColumns properties.
 CLASS z2ui5_cl_smpc_app_349 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

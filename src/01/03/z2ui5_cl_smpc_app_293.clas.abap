@@ -1,4 +1,5 @@
 " @keywords objectpagesubsection object sub section sap.uxap objectpagesubsectionbackground objectpagelayout objectpageheader objectpagesection
+" @summary This example uses the 'sapUxAPObjectPageSubSectionTransparentBackground' CSS class to set transparent background.
 CLASS z2ui5_cl_smpc_app_293 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

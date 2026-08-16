@@ -1,4 +1,5 @@
 " @keywords comparisonpattern comparison pattern sap.m compare items side app table toolbar title toolbarspacer
+" @summary The pattern allows users to select multiple items from an sap.m.Table and display information about them in a structured way - all items are displayed next to each other for easy comparison, based on their specifics.
 CLASS z2ui5_cl_smpc_app_012 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

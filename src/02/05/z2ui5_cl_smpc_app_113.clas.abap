@@ -1,4 +1,5 @@
 " @keywords infolabel info label sap.tnt status labels scrollcontainer flexbox text
+" @summary InfoLabel with all available color schemes
 CLASS z2ui5_cl_smpc_app_113 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

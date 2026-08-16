@@ -1,4 +1,5 @@
 " @keywords datetimepicker date time picker sap.m datetimepickerhidden title vbox label button link
+" @summary This example shows Date Time Picker which is opened by another control.
 CLASS z2ui5_cl_smpc_app_257 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

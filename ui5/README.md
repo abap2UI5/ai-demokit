@@ -20,6 +20,16 @@ in [`mock/`](mock/) (provenance in its README), and [`universe.json`](universe.j
 is the committed snapshot of the full demo kit sample universe (entity, Since,
 deprecation per sample) that coverage regenerates from offline (AGENTS §7).
 
+[`descriptions.json`](descriptions.json) is the third snapshot: the sentence the
+demo kit prints under each sample title, for all 793 samples, taken from
+`src/<lib>/test/**/demokit/docuindex.json` — which is why copying the sample
+FILES here never brought it along. It is what `npm run summary` writes onto the
+ports as their `" @summary` line; refresh it with
+`npm run descriptions -- --openui5 <checkout>`, and its `source` block records
+the OpenUI5 commit the text came from. Its `written` block is the handful of
+samples the demo kit does not describe, each with a `why` — that block is NOT
+touched by a refresh.
+
 These files are held verbatim for reference and to feed the generator and the
 structural diff — they are outside the abapGit / abaplint scope (`src/` only)
 and are never edited to fit ABAP. `../api.md` links every sample to its

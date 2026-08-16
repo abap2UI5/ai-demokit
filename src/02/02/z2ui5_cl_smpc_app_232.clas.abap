@@ -1,4 +1,5 @@
 " @keywords commandexecution command execution sap.ui.core commands app popover toolbar button toolbarspacer input panel
+" @summary This example demonstrates how to define shortcuts using commands in your application
 CLASS z2ui5_cl_smpc_app_232 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

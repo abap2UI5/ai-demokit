@@ -1,4 +1,5 @@
 " @keywords messagebox message box sap.m shows set initial focus text button
+" @summary Shows how to set initial focus to MessageBox button.
 CLASS z2ui5_cl_smpc_app_036 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

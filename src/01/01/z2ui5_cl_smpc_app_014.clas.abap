@@ -1,4 +1,5 @@
 " @keywords customlistitem custom list item sap.m content hbox vbox link label dialog image
+" @summary With the Custom List Item you can add any kind of content to lists.
 CLASS z2ui5_cl_smpc_app_014 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

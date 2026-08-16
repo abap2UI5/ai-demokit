@@ -1,4 +1,5 @@
 " @keywords modelmapping model mapping sap.uxap boundmodelmapping text
+" @summary Use of dynamic bound model mapping
 CLASS z2ui5_cl_smpc_app_230 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

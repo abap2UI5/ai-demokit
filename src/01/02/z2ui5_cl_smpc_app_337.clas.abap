@@ -1,4 +1,5 @@
 " @keywords simpleform simple form sap.ui.layout.form simpleform_column_twogroups234 bar button vbox label text link input
+" @summary Form with two groups in a fullscreen app (with 2 columns in M, 3 columns in L, and 4 columns in XL size).
 CLASS z2ui5_cl_smpc_app_337 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

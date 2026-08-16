@@ -1,4 +1,5 @@
 " @keywords image sap.m vbox hbox text
+" @summary Images are faster than words and attract people's attention. Images can also have an active state or be used in SVG format.
 CLASS z2ui5_cl_smpc_app_399 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,4 +1,5 @@
 " @keywords button sap.m buttons: types icons press events toolbar toolbarspacer title hbox flexitemdata
+" @summary Buttons trigger user actions and come in a variety of shapes and colors. Placing a button on a page header or footer changes its appearance.
 CLASS z2ui5_cl_smpc_app_005 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

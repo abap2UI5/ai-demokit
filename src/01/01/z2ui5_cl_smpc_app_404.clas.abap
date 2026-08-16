@@ -1,4 +1,5 @@
 " @keywords timepicker time picker sap.m timepickervaluestate flexbox vbox label
+" @summary This example shows different TimePicker value states.
 CLASS z2ui5_cl_smpc_app_404 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

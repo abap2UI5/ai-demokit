@@ -1,4 +1,5 @@
 " @keywords invisibletext invisible text sap.ui.core aria descriptions toolbar button toolbarspacer title hbox flexitemdata
+" @summary Many controls provide the associations ariaLabelledBy and ariaDescribedBy for accessibility purposes. The InvisibleText control can be used by application to provide hidden texts on the UI which can be referenced via these associations.
 CLASS z2ui5_cl_smpc_app_127 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

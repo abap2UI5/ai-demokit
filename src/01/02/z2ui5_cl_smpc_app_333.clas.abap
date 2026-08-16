@@ -1,4 +1,5 @@
 " @keywords simpleform simple form sap.ui.layout.form simpleform_column_onegroup bar button vbox label text input select
+" @summary Form with one single group in a fullscreen app using the ColumnLayout control with default settings as layout.
 CLASS z2ui5_cl_smpc_app_333 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

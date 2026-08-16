@@ -1,4 +1,5 @@
 " @keywords toolbar sap.m items shrink expand too slider messagestrip label toolbarspacer button searchfield
+" @summary Toolbar items can shrink/expand when the toolbar is resized. This behavior is enabled/disabled via the ToolbarLayoutData layout. It is also possible to set min/max width for shrinkable items.
 CLASS z2ui5_cl_smpc_app_053 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

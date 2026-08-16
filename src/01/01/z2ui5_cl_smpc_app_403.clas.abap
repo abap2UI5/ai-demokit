@@ -1,4 +1,5 @@
 " @keywords standardmargins standard margins sap.ui.core standardnegativemarginstwosided toolbar text panel
+" @summary Use standard negative margin classes 'sapUiTinyNegativeMarginBeginEnd', 'sapUiSmallNegativeMarginBeginEnd', 'sapUiMediumNegativeMarginBeginEnd' or 'sapUiLargeNegativeMarginBeginEnd' to remove 0.
 CLASS z2ui5_cl_smpc_app_403 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

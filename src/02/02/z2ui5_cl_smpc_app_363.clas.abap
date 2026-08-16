@@ -1,4 +1,5 @@
 " @keywords table sap.ui.table tablefreeze column
+" @summary Example which shows table freeze with fixed columns
 CLASS z2ui5_cl_smpc_app_363 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

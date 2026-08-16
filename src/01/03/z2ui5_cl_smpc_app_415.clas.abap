@@ -1,4 +1,5 @@
 " @keywords objectpageheader object header sap.uxap objectpageheaderwithallcontrols objectpagelayout objectpageheaderactionbutton objectpageheaderlayoutdata objectpagesection objectpagesubsection responsivepopover list
+" @summary This is an example of an ObjectPageHeader containing all possible controls in it.
 CLASS z2ui5_cl_smpc_app_415 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

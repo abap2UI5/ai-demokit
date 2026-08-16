@@ -1,4 +1,5 @@
 " @keywords table sap.ui.table rowmodes named model column
+" @summary Example for the different row modes
 CLASS z2ui5_cl_smpc_app_164 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

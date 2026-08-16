@@ -1,4 +1,5 @@
 " @keywords table sap.m tableviewsettingsdialog viewsettingsdialog viewsettingsitem viewsettingsfilteritem overflowtoolbar title toolbarspacer button togglebutton text
+" @summary The View Settings Dialog is standard UI pattern for specifying sorting, grouping and filtering. For a table it should be triggered by a button in the table header with the 'drop-down-list' icon.
 CLASS z2ui5_cl_smpc_app_298 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

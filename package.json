@@ -28,7 +28,10 @@
     "downport": "abaplint --fix .github/abaplint/abap_702.jsonc && npm run syfixes && cp -f .github/abaplint/abap_702.jsonc abaplint.jsonc && npm run abaplintpathfix",
     "check:rule-block": "node scripts/check-rule-block.mjs",
     "keywords": "node scripts/generate-keywords.mjs",
-    "check:keywords": "node scripts/generate-keywords.mjs --check"
+    "check:keywords": "node scripts/generate-keywords.mjs --check",
+    "summary": "node scripts/generate-summary.mjs",
+    "check:summary": "node scripts/generate-summary.mjs --check",
+    "descriptions": "node scripts/fetch-descriptions.mjs"
   },
   "repository": {
     "type": "git",

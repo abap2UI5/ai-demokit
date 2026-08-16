@@ -1,4 +1,5 @@
 " @keywords objectheader object header sap.m objectheadermarkers objectattribute objectmarker
+" @summary This sample shows the different states of an Object Header, which can be set using the markers.
 CLASS z2ui5_cl_smpc_app_197 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,4 +1,5 @@
 " @keywords generictile generic tile sap.m generictilestates tilecontent imagecontent numericcontent feedcontent slidetile newscontent
+" @summary Shows the GenericTile while it is loading, if loading fails, and in disabled status.
 CLASS z2ui5_cl_smpc_app_275 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

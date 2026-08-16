@@ -1,4 +1,5 @@
 " @keywords objectlistitem object list item sap.m objectlistitemmarkers objectstatus objectattribute objectmarker
+" @summary This sample shows the different states of an Object List Item, which can be set using the markers aggregation.
 CLASS z2ui5_cl_smpc_app_198 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

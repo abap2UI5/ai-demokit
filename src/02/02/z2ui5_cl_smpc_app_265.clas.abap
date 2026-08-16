@@ -1,4 +1,5 @@
 " @keywords filter sap.ui.model boundfilters.filteredlistintable title label text select
+" @summary This sample shows how bound filters work. It features a table of customers with a 'Select' control in each row. The 'Select' control uses the customer's region to filter the list of available account managers.
 CLASS z2ui5_cl_smpc_app_265 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,4 +1,5 @@
 " @keywords sap.m pagelistreporticontabbar vbox label text flexitemdata icontabbar icontabfilter overflowtoolbar toolbarspacer searchfield segmentedbutton
+" @summary This page shows flexible sizing with an Icon Tab Bar: The upper part extends with its content, but doesn't react to viewport changes. The Icon Tab Bar reacts to the viewport size. The table inside takes the available space.
 CLASS z2ui5_cl_smpc_app_406 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,4 +1,5 @@
 " @keywords splitter sap.ui.layout app button text hbox checkbox input
+" @summary Splitter where you can change contentAreas and their sizes live
 CLASS z2ui5_cl_smpc_app_351 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

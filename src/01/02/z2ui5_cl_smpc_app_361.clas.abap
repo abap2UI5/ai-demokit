@@ -1,4 +1,5 @@
 " @keywords table sap.ui.table selection column
+" @summary Selection example showing selection modes and selection behaviors of table.
 CLASS z2ui5_cl_smpc_app_361 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

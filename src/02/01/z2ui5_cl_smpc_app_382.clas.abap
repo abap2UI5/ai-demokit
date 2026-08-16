@@ -1,4 +1,5 @@
 " @keywords icontabbar icon tab bar sap.m icontabbarsubtabs label icontabfilter text
+" @summary This sample illustrates nested tabs with or without own content in their root-level tab.
 CLASS z2ui5_cl_smpc_app_382 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

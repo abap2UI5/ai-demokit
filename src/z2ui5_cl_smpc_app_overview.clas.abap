@@ -1,3 +1,5 @@
+" @keywords overview catalogue index all samples search sort filter start ports
+" @summary Every ported demo kit sample in one searchable, sortable table - control, sample, class and rating - linking to the OpenUI5 original and starting the port in the system.
 "! Generated overview app - lists every abap2UI5 api sample app in a table.
 "! The search field filters the table on the client (binding_call Contains, no
 "! round-trip); its query is two-way bound (search_query), so it survives a

@@ -465,7 +465,17 @@ const columnsBlock = [
   plainColumn('Open', [['width', '9rem'], ['hAlign', 'Center']]),
 ].join('\n');
 
-const abap = `"! Generated overview app - lists every abap2UI5 api sample app in a table.
+/* The two search lines every app in the sample repositories carries (AGENTS,
+ * "Metadata: what goes on the class"). They are written HERE rather than by
+ * generate-summary.mjs / generate-keywords.mjs because this file is generated:
+ * those two skip this class by name, and if they did not, whichever generator
+ * ran last would win and the other's drift gate would go red.
+ *
+ * Unlike a port's, they are not derived from anything - this app has no
+ * upstream sample and no meta sidecar. It is one class, so it is written. */
+const abap = `" @keywords overview catalogue index all samples search sort filter start ports
+" @summary Every ported demo kit sample in one searchable, sortable table - control, sample, class and rating - linking to the OpenUI5 original and starting the port in the system.
+"! Generated overview app - lists every abap2UI5 api sample app in a table.
 "! The search field filters the table on the client (binding_call Contains, no
 "! round-trip); its query is two-way bound (search_query), so it survives a
 "! round-trip or an app state restore (draft) and view_display re-applies the

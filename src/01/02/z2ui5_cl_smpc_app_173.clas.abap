@@ -1,4 +1,5 @@
 " @keywords verticallayout vertical layout sap.ui.layout image
+" @summary The Vertical Layout control is a simple way to align multiple controls vertically. If you want more sophisticated layout options, consider Grid or Flex Box based layouts.
 CLASS z2ui5_cl_smpc_app_173 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

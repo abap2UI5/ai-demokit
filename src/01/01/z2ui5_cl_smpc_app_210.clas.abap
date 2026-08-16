@@ -1,4 +1,5 @@
 " @keywords table sap.m tablealternaterowcolors overflowtoolbar title column text columnlistitem objectidentifier
+" @summary Table with alternating light and dark background colors. Note: The effect of this feature is only visible in some themes (e.g. SAP Belize or SAP Quartz).
 CLASS z2ui5_cl_smpc_app_210 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

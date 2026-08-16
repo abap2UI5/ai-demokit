@@ -1,4 +1,5 @@
 " @keywords table sap.ui.table filtering column
+" @summary Example showing the different facets of filtering within a table
 CLASS z2ui5_cl_smpc_app_354 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,4 +1,5 @@
 " @keywords cssgrid sap.ui.layout.cssgrid nestedgrids slider panel overflowtoolbar title vbox text
+" @summary CSSGrid example nested grids.
 CLASS z2ui5_cl_smpc_app_270 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

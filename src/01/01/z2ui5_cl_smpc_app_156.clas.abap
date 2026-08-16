@@ -1,4 +1,5 @@
 " @keywords numericcontent numeric content sap.m colors generictile tilecontent
+" @summary Shows NumericContent including numbers, units of measurement, and status arrows indicating a trend. The numbers can be colored according to their meaning.
 CLASS z2ui5_cl_smpc_app_156 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

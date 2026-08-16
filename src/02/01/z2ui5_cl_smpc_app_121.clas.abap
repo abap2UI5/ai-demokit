@@ -1,4 +1,5 @@
 " @keywords uploadset upload set sap.m.upload file list overflowtoolbar toolbarspacer button objectmarker objectstatus
+" @summary This sample shows an Upload Set control with a list of files to be uploaded and actions you can perform on them.
 CLASS z2ui5_cl_smpc_app_121 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

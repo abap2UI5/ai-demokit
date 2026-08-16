@@ -1,4 +1,5 @@
 " @keywords horizontallayout horizontal layout sap.ui.layout named model image
+" @summary The Horizontal Layout control is a simple way to align multiple controls horizontally. By default the contained controls are not wrapped. If you want more sophisticated layout options, consider Grid or Flex Box based layouts.
 CLASS z2ui5_cl_smpc_app_162 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

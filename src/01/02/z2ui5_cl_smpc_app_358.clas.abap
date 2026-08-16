@@ -1,4 +1,5 @@
 " @keywords table sap.ui.table odata2 column
+" @summary Shows an example how an OData metadata driven table creation can look like.
 CLASS z2ui5_cl_smpc_app_358 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

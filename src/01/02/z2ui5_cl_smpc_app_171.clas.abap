@@ -1,4 +1,5 @@
 " @keywords currency sap.ui.unified amounts table column text columnlistitem objectidentifier objectnumber
+" @summary Display Currencies in Table
 CLASS z2ui5_cl_smpc_app_171 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

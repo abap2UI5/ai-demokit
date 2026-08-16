@@ -1,4 +1,5 @@
 " @keywords datepicker date picker sap.m datepickervaluestate flexbox vbox label
+" @summary This example shows different DatePicker value states.
 CLASS z2ui5_cl_smpc_app_253 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

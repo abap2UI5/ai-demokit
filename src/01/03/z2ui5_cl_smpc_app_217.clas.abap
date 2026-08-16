@@ -1,4 +1,5 @@
 " @keywords objectpageheader object header sap.uxap kpiobjectpageheader objectpagelayout objectpageheaderactionbutton objectpagesection objectpagesubsection
+" @summary This is an example of an ObjectPageHeader containing mainly KPIs.
 CLASS z2ui5_cl_smpc_app_217 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

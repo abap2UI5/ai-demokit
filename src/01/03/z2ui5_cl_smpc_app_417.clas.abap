@@ -1,4 +1,5 @@
 " @keywords objectpageheader object header sap.uxap objectpagedynamicsidecontentbtn objectpagelayout objectpageheaderactionbutton objectpagesection objectpagesubsection
+" @summary The sample shows Object Page inside a main content of DynamicSideContent. The ObjectPageHeader has property DynamicSideContentButton set to true which is used to show the side panel of DynamicSideContent.
 CLASS z2ui5_cl_smpc_app_417 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

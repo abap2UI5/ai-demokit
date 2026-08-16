@@ -899,68 +899,33 @@ class, and the sidecar is right for it.
 `meta/<class>.json`'s `entity`, the class `DESCRIPT` and the controls the port
 actually builds, and `npm run check:keywords` holds it to those sources.
 
-`" @summary` is still empty on all 431 ports. The demo kit's full description
-is what belongs there - the `DESCRIPT` carries it truncated at 60 characters,
-mid-sentence in places - and it is no longer in this repository. That is a
-fetch, not an authorship exercise, and replacing 431 truncated sentences with
-431 invented ones would be worse than the gap.
+`" @summary` is **fetched**, not written. The sentence the demo kit prints
+under a sample title says what the sample demonstrates, and it was never in
+this repository: it lives in the OpenUI5 sources in
+`src/<lib>/test/**/demokit/docuindex.json`, not in the per-sample
+`manifest.json` that [`ui5/`](ui5/) archives. So:
 
-### The test, when a new field turns up
+| | |
+|---|---|
+| `npm run descriptions -- --openui5 <checkout>` | snapshots all 793 demo kit descriptions into [`ui5/descriptions.json`](ui5/descriptions.json), with the OpenUI5 commit they came from |
+| `npm run summary` | writes them onto the classes — 413 ports from the demo kit, 3 from the snapshot's `written` block, 14 derived (the SAPUI5-only collection in `src/03` has no upstream sample) |
+| `npm run check:summary` | holds every line to the snapshot |
 
-Ask: *would this still be true if nobody ever ran a check again?* If yes it
-describes the sample and belongs on the class. If it only became true because
-somebody did something, it belongs in the sidecar.
+A snapshot rather than a live read, for the same reason `ui5/` archives the
+sample sources: a port batch and a CI run both have to work without a 43k-file
+OpenUI5 checkout, and an upstream edit must show up as a diff somebody reads
+rather than silently rewrite 400 class files.
 
-## Metadata: what goes on the class, and what goes beside it
+Three samples the demo kit does not describe — two shared "base" pages that are
+not samples of their own, one whose upstream description is empty — sit in the
+snapshot's `written` block, each with a `why`. A port that matches none of the
+sources **fails** `check:summary` instead of being skipped: the point is that a
+new undescribed sample gets noticed.
 
-Shared across `abap2UI5/samples`, `abap2UI5/samples-controls` and
-`abap2UI5/samples-stack`. Decided once, so nobody has to decide it again per
-repository.
-
-**A class says what it IS. A sidecar records what HAPPENED to it.**
-
-| | where | why |
-|---|---|---|
-| `DESCRIPT` — `Titel - Kurzbeschreibung` | `.clas.xml` | 60 characters, hard. What ADT's object list shows |
-| `" @summary` — one sentence | first lines of `.clas.abap` | no limit. The line a catalogue puts under the title |
-| `" @keywords` — search terms | first lines of `.clas.abap` | what somebody would type who does not know the sample exists |
-| upstream sample, port batch, audit findings, verification date, deviations | a sidecar (`meta/<class>.json`) | not properties of the class; written by machinery; long-form; changes on a different schedule |
-
-### Why the first three are not in a sidecar
-
-**A sidecar does not travel.** abapGit pulls `src/`; a `meta/` folder never
-reaches the SAP system. Three places that costs:
-
-1. **In the system it is simply absent** — which is why an overview app that
-   needs the data has to have it *baked in* by a generator.
-2. **A search engine drops somebody into the `.clas.abap` on GitHub** and the
-   code is all they get. This is the same argument `@docs` is a full URL for.
-3. **An AI reading the class file gets no metadata** unless its tooling happens
-   to know about `meta/`.
-
-A `"` comment costs the ABAP nothing — it is not `"!`, so SLIN/ATC does not
-report an unknown tag — and it cannot desync from the class, because it is in
-the class.
-
-### Why the rest is not on the class
-
-A deviation note with three paragraphs and a verification date is not a
-property of the class; it is a log entry about a process, usually written by a
-test run rather than by an author. Putting it in a `"` comment would bloat the
-source and would still be worse structured than JSON. That belongs beside the
-class, and the sidecar is right for it.
-
-### In this repository
-
-`" @keywords` is **generated**, not written: `npm run keywords` derives it from
-`meta/<class>.json`'s `entity`, the class `DESCRIPT` and the controls the port
-actually builds, and `npm run check:keywords` holds it to those sources.
-
-`" @summary` is still empty on all 431 ports. The demo kit's full description
-is what belongs there - the `DESCRIPT` carries it truncated at 60 characters,
-mid-sentence in places - and it is no longer in this repository. That is a
-fetch, not an authorship exercise, and replacing 431 truncated sentences with
-431 invented ones would be worse than the gap.
+The generated overview app is the exception to both generators: it writes its
+own `@keywords` / `@summary` (in `scripts/generate-overview.mjs`), and the two
+generators skip it by name — two generators writing one file would fight, and
+whichever ran last would turn the other's drift gate red.
 
 ### The test, when a new field turns up
 

@@ -1,4 +1,5 @@
 " @keywords messageview message sap.m showing connect messageitem
+" @summary A sample showing how you can connect the MessageView with MessageManager.
 CLASS z2ui5_cl_smpc_app_038 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

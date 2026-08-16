@@ -1,4 +1,5 @@
 " @keywords messagestrip message strip sap.m strips formatted text link
+" @summary A sample MessageStrip that shows status messages with additional formatting.
 CLASS z2ui5_cl_smpc_app_062 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,4 +1,5 @@
 " @keywords gridlist grid list sap.f drag drop panel toolbar title vbox flexitemdata label
+" @summary This sample represents GridList with enabled Drag and Drop functionality.
 CLASS z2ui5_cl_smpc_app_148 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

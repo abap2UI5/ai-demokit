@@ -1,4 +1,5 @@
 " @keywords overflowtoolbar overflow toolbar sap.m responsive text toolbarspacer button actionsheet
+" @summary Toolbar items can be displayed depending on the current device.
 CLASS z2ui5_cl_smpc_app_163 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

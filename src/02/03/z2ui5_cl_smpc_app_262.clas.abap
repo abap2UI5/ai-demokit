@@ -1,4 +1,5 @@
 " @keywords objectpagelayout object layout sap.uxap objectpageresponsiveavatar objectpagedynamicheadertitle objectpagesection objectpagesubsection
+" @summary ObjectPage sample demonstrating the breakpointChange event to adjust Avatar sizes responsively based on screen size (phone: M, tablet: L, desktop/desktop_XL: XL).
 CLASS z2ui5_cl_smpc_app_262 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

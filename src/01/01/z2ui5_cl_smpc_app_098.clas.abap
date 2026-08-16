@@ -1,4 +1,5 @@
 " @keywords viewsettingsdialog settings dialog sap.m sort group filter viewsettingsitem viewsettingsfilteritem button
+" @summary The View Settings Dialog is a standard UI pattern for specifying sorting, grouping and filtering.
 CLASS z2ui5_cl_smpc_app_098 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

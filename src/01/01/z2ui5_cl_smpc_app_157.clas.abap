@@ -1,4 +1,5 @@
 " @keywords headercontainer header container sap.m vertical numericcontent tilecontent
+" @summary The Header Container with a vertical layout and with divider lines.
 CLASS z2ui5_cl_smpc_app_157 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

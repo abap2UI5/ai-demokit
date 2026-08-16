@@ -1,4 +1,5 @@
 " @keywords dynamicpage dynamic sap.f infolabel title button flexbox panel objectattribute text overflowtoolbar toolbarspacer
+" @summary InfoLabel used as subheader in DynamicPage
 CLASS z2ui5_cl_smpc_app_143 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

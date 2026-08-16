@@ -1,4 +1,5 @@
 " @keywords harveyballmicrochart shell
+" @summary sap.suite.ui.microchart.HarveyBallMicroChart expressed in abap2UI5 - a SAPUI5-only control, so the demo kit original is outside OpenUI5 and this is orientation rather than a 1:1 port.
 "! <p class="shorttext">sap.suite.ui.microchart - HarveyBallMicroChart</p>
 "!
 "! SAPUI5-only control: it ships with SAPUI5, not with OpenUI5, so there is no

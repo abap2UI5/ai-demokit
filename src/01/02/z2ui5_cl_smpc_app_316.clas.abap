@@ -1,4 +1,5 @@
 " @keywords form sap.ui.layout.form form480 bar button vbox text input select
+" @summary A fullscreen address form with Edit / Save / Cancel in the page header, switching between a display and a change fragment; ResponsiveGridLayout arranges the columns.
 CLASS z2ui5_cl_smpc_app_316 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,4 +1,5 @@
 " @keywords messageview message sap.m messageviewinsidedialog button dialog bar title messageitem link
+" @summary A sample with Message View placed inside a Dialog.
 CLASS z2ui5_cl_smpc_app_284 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

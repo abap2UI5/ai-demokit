@@ -1,4 +1,5 @@
 " @keywords panel sap.m panels possibility expand col text overflowtoolbar title toolbarspacer button
+" @summary Panels also have the possibility to expand/collapse their content (including the infoToolbar if available). [since rel. 1.22]
 CLASS z2ui5_cl_smpc_app_043 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

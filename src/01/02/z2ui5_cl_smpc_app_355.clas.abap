@@ -1,4 +1,5 @@
 " @keywords table sap.ui.table menus column
+" @summary Example which focuses the handling of the table related Menus
 CLASS z2ui5_cl_smpc_app_355 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

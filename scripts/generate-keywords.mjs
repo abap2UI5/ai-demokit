@@ -77,8 +77,16 @@ const problems = [];
 let written = 0;
 let already = 0;
 
+/* The overview app is itself generated, header and all, by
+ * generate-overview.mjs - which writes its @keywords and @summary lines. Two
+ * generators writing the same file would fight: whichever ran last would win
+ * and the other's drift gate would go red. It is also the one app here with no
+ * `entity` and no DESCRIPT to derive from, so there is nothing to derive. */
+const GENERATED = 'z2ui5_cl_smpc_app_overview';
+
 for (const file of walk(path.join(ROOT, 'src'))) {
   const cls = path.basename(file, '.clas.abap');
+  if (cls === GENERATED) continue;
   const source = fs.readFileSync(file, 'utf8');
   if (!/INTERFACES\s+z2ui5_if_app\s*\./i.test(source)) continue;
 

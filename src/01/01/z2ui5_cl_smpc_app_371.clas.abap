@@ -1,4 +1,5 @@
 " @keywords textarea text area sap.m textareavaluestates
+" @summary This sample illustrates the different value states of the sap.m.TextArea control.
 CLASS z2ui5_cl_smpc_app_371 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

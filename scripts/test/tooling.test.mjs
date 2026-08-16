@@ -38,7 +38,8 @@ const GOLDEN = path.join(HERE, 'fixtures', 'golden');
 
 // scripts under test (plus their only local import); copied into the fixture
 // root so their ROOT resolution lands on the fixture corpus
-const SCRIPTS = ['structural-diff.mjs', 'data-fidelity.mjs', 'generate-coverage.mjs', 'lib-universe.mjs'];
+const SCRIPTS = ['structural-diff.mjs', 'data-fidelity.mjs', 'generate-coverage.mjs', 'lib-universe.mjs',
+  'generate-summary.mjs'];
 
 function makeFixtureRoot() {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'demokit-tooling-test-'));
@@ -122,6 +123,69 @@ test('generate-coverage: a ported out-of-scope sample without an exception is a 
     const r = run(root, 'generate-coverage.mjs');
     assert.equal(r.code, 1, 'the scope gate must exit 1');
     assert.match(r.errout, /ported sample sap\.m\.sample\.FixtureBad is out of scope \(deprecated\)/);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+/* generate-summary — the fixture carries both sources: FixtureGood is described
+ * by the (fixture) demo kit snapshot, FixtureBad only by a `written` entry. */
+
+test('generate-summary: writes the demo kit sentence, under the keywords line, cut at a sentence', () => {
+  const root = makeFixtureRoot();
+  try {
+    const app = path.join(root, 'src', '01', 'z2ui5_cl_smpc_app_001.clas.abap');
+    fs.writeFileSync(app, `" @keywords page list fixture\n${fs.readFileSync(app, 'utf8')}`);
+
+    const r = run(root, 'generate-summary.mjs');
+    assert.equal(r.code, 0, `writing must succeed\n${r.errout}`);
+    assert.match(r.out, /summary: 2 written, 0 already current/);
+    assert.match(r.out, /1 from the demo kit, 1 written by hand \(with a reason\), 0 derived/);
+
+    const [first, second] = fs.readFileSync(app, 'utf8').split('\n');
+    assert.equal(first, '" @keywords page list fixture', 'the keywords line stays first');
+    assert.match(second, /^" @summary A Page with a list, used by the tooling tests\./, 'markup stripped');
+    assert.ok(second.length <= 255, `one line, ${second.length} characters`);
+    assert.ok(second.endsWith('.'), `cut at a sentence, not mid-word: ${second}`);
+    assert.ok(!second.includes('filler'), 'the sentence that does not fit is dropped whole');
+
+    // an app with no keywords line gets the summary as its first line
+    const bad = fs.readFileSync(path.join(root, 'src', '01', 'z2ui5_cl_smpc_app_002.clas.abap'), 'utf8');
+    assert.match(bad, /^" @summary The failure fixture, described here rather than upstream\.\n/);
+
+    // and running again is a no-op: the line is what the snapshot implies
+    const again = run(root, 'generate-summary.mjs', '--check');
+    assert.equal(again.code, 0, `the check must pass on what the generator just wrote\n${again.out}${again.errout}`);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('generate-summary: a missing line, an edited line and an undescribed sample all fail the check', () => {
+  const root = makeFixtureRoot();
+  const app = path.join(root, 'src', '01', 'z2ui5_cl_smpc_app_001.clas.abap');
+  try {
+    run(root, 'generate-summary.mjs');
+
+    const written = fs.readFileSync(app, 'utf8');
+    fs.writeFileSync(app, written.replace(/^" @summary .*\n/m, ''));
+    const missing = run(root, 'generate-summary.mjs', '--check');
+    assert.equal(missing.code, 1, 'a removed line must fail');
+    assert.match(missing.errout, /z2ui5_cl_smpc_app_001: no `" @summary` line/);
+
+    fs.writeFileSync(app, written.replace(/^" @summary .*$/m, '" @summary something a human typed'));
+    const edited = run(root, 'generate-summary.mjs', '--check');
+    assert.equal(edited.code, 1, 'an edited line must fail — the sentence is the demo kit\'s');
+    assert.match(edited.errout, /z2ui5_cl_smpc_app_001: the @summary line is out of date/);
+
+    fs.writeFileSync(app, written);
+    const dPath = path.join(root, 'ui5', 'descriptions.json');
+    const d = JSON.parse(fs.readFileSync(dPath, 'utf8'));
+    delete d.demokit['sap.m.sample.FixtureGood'];
+    fs.writeFileSync(dPath, `${JSON.stringify(d, null, 2)}\n`);
+    const gone = run(root, 'generate-summary.mjs', '--check');
+    assert.equal(gone.code, 1, 'a sample nothing describes must fail rather than be skipped');
+    assert.match(gone.errout, /z2ui5_cl_smpc_app_001: nothing describes sap\.m\.sample\.FixtureGood/);
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
   }

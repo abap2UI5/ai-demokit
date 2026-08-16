@@ -1,0 +1,23 @@
+{
+  "source": {
+    "repo": "https://github.com/SAP/openui5",
+    "commit": "0000000000000000000000000000000000000000",
+    "committed": "2026-01-01",
+    "version": "0.0.0-FIXTURE",
+    "from": "src/*/test/**/demokit/docuindex.json -> explored.samples[]",
+    "libraries": 1,
+    "licence": "fixture data - not from OpenUI5"
+  },
+  "demokit": {
+    "sap.m.sample.FixtureGood": {
+      "name": "Fixture Good",
+      "description": "A <code>Page</code> with a list, used by the tooling tests. It carries a second sentence that exists only to push the text past the 244 characters one comment line holds, so that the fitting rule has something to cut: everything after this colon is filler and the line must end at the sentence before it."
+    }
+  },
+  "written": {
+    "sap.m.sample.FixtureBad": {
+      "description": "The failure fixture, described here rather than upstream.",
+      "why": "exercises the `written` source - a sample the demo kit does not describe"
+    }
+  }
+}

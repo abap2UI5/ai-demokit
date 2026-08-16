@@ -1,4 +1,5 @@
 " @keywords list sap.m listfooter standardlistitem
+" @summary With the 'footerText' property you can set a message that is shown at the very end of the list.
 CLASS z2ui5_cl_smpc_app_195 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

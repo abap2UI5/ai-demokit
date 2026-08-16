@@ -1,4 +1,5 @@
 " @keywords table sap.m tablestrictlayout column text columnlistitem objectidentifier objectnumber
+" @summary This example demonstrates the Strict layout and the column resizing of the table.
 CLASS z2ui5_cl_smpc_app_225 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

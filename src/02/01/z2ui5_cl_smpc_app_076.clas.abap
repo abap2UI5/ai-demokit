@@ -1,4 +1,5 @@
 " @keywords notificationlistitem notification list item sap.m variants buttons avatars vbox notificationlist flexitemdata button
+" @summary A list item suitable for showing notifications to the user.
 CLASS z2ui5_cl_smpc_app_076 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

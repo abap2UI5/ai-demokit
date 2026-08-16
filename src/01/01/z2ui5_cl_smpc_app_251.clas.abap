@@ -1,4 +1,5 @@
 " @keywords busydialog busy dialog sap.m busydialoglight button
+" @summary This is a 'light' version of the standard Busy Dialog; it also blocks the user interface until the currently running operation has been finished. It has no UI components, so you must close it programmatically when appropriate.
 CLASS z2ui5_cl_smpc_app_251 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

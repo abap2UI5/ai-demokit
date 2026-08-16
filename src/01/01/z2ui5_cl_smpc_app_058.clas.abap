@@ -1,4 +1,5 @@
 " @keywords label sap.m properties: wrapping hyphenation switch slider scrollcontainer input panel messagestrip
+" @summary This sample shows the different behaviors of a label.
 CLASS z2ui5_cl_smpc_app_058 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

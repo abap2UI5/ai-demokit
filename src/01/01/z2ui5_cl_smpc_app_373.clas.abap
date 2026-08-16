@@ -1,4 +1,5 @@
 " @keywords select sap.m selectvaluestate hbox label
+" @summary Visualizes the validation state of the control, for example, Error, Warning and Success.
 CLASS z2ui5_cl_smpc_app_373 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

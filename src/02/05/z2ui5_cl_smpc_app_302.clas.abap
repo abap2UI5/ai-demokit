@@ -1,4 +1,5 @@
 " @keywords toolpage tool sap.tnt toolpagenavigation button overflowtoolbarlayoutdata image title text toolbarspacer searchfield overflowtoolbarbutton
+" @summary A tool page layout with horizontal navigation (on desktop and tablet) and vertical navigation (on phone)
 CLASS z2ui5_cl_smpc_app_302 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

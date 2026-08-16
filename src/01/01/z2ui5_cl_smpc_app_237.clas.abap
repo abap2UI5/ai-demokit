@@ -1,4 +1,5 @@
 " @keywords objectmarker object marker sap.m table column text columnlistitem objectidentifier
+" @summary The ObjectMarker is a small building block representing an object by an icon or text and icon. Often it is used in a table.
 CLASS z2ui5_cl_smpc_app_237 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

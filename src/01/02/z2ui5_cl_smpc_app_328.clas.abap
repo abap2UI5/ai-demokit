@@ -1,4 +1,5 @@
 " @keywords simpleform simple form sap.ui.layout.form simpleform471 splitcontainer bar button vbox label text input
+" @summary Form with one single group in a split app with a label field ratio of 4:7:1 in all sizes besides size S (12:12:0).
 CLASS z2ui5_cl_smpc_app_328 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

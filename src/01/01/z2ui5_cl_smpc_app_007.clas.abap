@@ -1,4 +1,5 @@
 " @keywords checkbox check box sap.m reflects text
+" @summary In this sample, the CheckBox reflects the selection states of its dependent input fields - selected, not selected, and partially selected.
 CLASS z2ui5_cl_smpc_app_007 DEFINITION PUBLIC.
 
   PUBLIC SECTION.
