@@ -88,7 +88,13 @@ CLASS z2ui5_cl_smpc_app_308 IMPLEMENTATION.
                         )->a( n = `startDate`     v = `{ path: 'START_DATE', formatter: 'Formatter.DateCreateObject' }`
                         )->a( n = `endDate`       v = `{= ${END_DATE} ? Formatter.DateCreateObject(${END_DATE}) : null }`
                         )->a( n = `type`          v = `{TYPE}`
-                        )->a( n = `secondaryType` v = `{SECONDARY_TYPE}`
+                        " An enum property REFUSES an empty string - `"" is of type
+                        " string, expected sap.ui.unified.CalendarDayType` - and the
+                        " template is evaluated with no row the moment the toggle
+                        " CLEARS the table. Same shape as endDate above: fall back to
+                        " the enum's own default rather than let `` reach the control.
+                        " Found by the e2e interaction (the second press), 2026-08-16.
+                        )->a( n = `secondaryType` v = |\{= $\{SECONDARY_TYPE} ? $\{SECONDARY_TYPE} : 'None' }|
                         )->a( n = `tooltip`       v = `{TOOLTIP}`
                         )->a( n = `color`         v = `{COLOR}`
 
@@ -121,7 +127,13 @@ CLASS z2ui5_cl_smpc_app_308 IMPLEMENTATION.
                         )->a( n = `startDate`     v = `{ path: 'START_DATE', formatter: 'Formatter.DateCreateObject' }`
                         )->a( n = `endDate`       v = `{= ${END_DATE} ? Formatter.DateCreateObject(${END_DATE}) : null }`
                         )->a( n = `type`          v = `{TYPE}`
-                        )->a( n = `secondaryType` v = `{SECONDARY_TYPE}`
+                        " An enum property REFUSES an empty string - `"" is of type
+                        " string, expected sap.ui.unified.CalendarDayType` - and the
+                        " template is evaluated with no row the moment the toggle
+                        " CLEARS the table. Same shape as endDate above: fall back to
+                        " the enum's own default rather than let `` reach the control.
+                        " Found by the e2e interaction (the second press), 2026-08-16.
+                        )->a( n = `secondaryType` v = |\{= $\{SECONDARY_TYPE} ? $\{SECONDARY_TYPE} : 'None' }|
                         )->a( n = `tooltip`       v = `{TOOLTIP}`
                         )->a( n = `color`         v = `{COLOR}`
 
@@ -195,24 +207,18 @@ CLASS z2ui5_cl_smpc_app_308 IMPLEMENTATION.
       t_legend2  = VALUE #( BASE t_legend2 ( type = type text = text ) ).
     ENDDO.
 
-    " secondaryType is a UI5 ENUM (sap.ui.unified.CalendarDayType), and an
-    " unset ABAP string binds as `` - which the control rejects outright:
-    " '"" is of type string, expected sap.ui.unified.CalendarDayType'. `None`
-    " IS that enum's default, so spelling it out changes nothing about the
-    " rendering and keeps the binding legal. Found by the e2e interaction
-    " (the second Special Days press), not by reading the port.
     t_special1 = VALUE #( BASE t_special1
-      ( start_date = |{ prefix }12| type = `Type11` color = `#ff0000` secondary_type = `None` )
-      ( start_date = |{ prefix }13| type = `Type11` color = `#ff69b4` secondary_type = `None` )
-      ( start_date = |{ prefix }11| end_date = |{ prefix }21| type = `NonWorking` secondary_type = `None` )
-      ( start_date = |{ prefix }25| type = `Working` secondary_type = `None` ) ).
+      ( start_date = |{ prefix }12| type = `Type11` color = `#ff0000` )
+      ( start_date = |{ prefix }13| type = `Type11` color = `#ff69b4` )
+      ( start_date = |{ prefix }11| end_date = |{ prefix }21| type = `NonWorking` )
+      ( start_date = |{ prefix }25| type = `Working` ) ).
 
     t_special2 = VALUE #( BASE t_special2
-      ( start_date = |{ prefix }12| type = `Type11` color = `#ff0000` secondary_type = `None` )
-      ( start_date = |{ prefix }13| type = `Type11` color = `#add8e6` secondary_type = `None` )
+      ( start_date = |{ prefix }12| type = `Type11` color = `#ff0000` )
+      ( start_date = |{ prefix }13| type = `Type11` color = `#add8e6` )
       ( start_date = |{ prefix }22| type = `Type03` secondary_type = `NonWorking` )
-      ( start_date = |{ prefix }24| type = `Working` secondary_type = `None` )
-      ( start_date = |{ prefix }24| type = `Type03` secondary_type = `None` ) ).
+      ( start_date = |{ prefix }24| type = `Working` )
+      ( start_date = |{ prefix }24| type = `Type03` ) ).
 
   ENDMETHOD.
 

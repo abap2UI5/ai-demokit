@@ -1,5 +1,8 @@
-// the ToggleButton round-trip that fills BOTH calendars' special dates, and
-// clears them again - the second press is the half a single click misses
+// the ToggleButton round-trip that fills BOTH calendars' special dates and
+// clears them again. The second press is the half a single click misses, and
+// it is the half that was broken: clearing the table leaves the aggregation
+// template to be evaluated with no row, `{SECONDARY_TYPE}` resolves to `` and
+// the enum-typed property refuses it outright.
 export default async (page, expect) => {
   const special = () => page.locator('[class*="sapUiCalItemType"]').count();
   const btn = page.getByRole('button', { name: 'Special Days' }).first();
