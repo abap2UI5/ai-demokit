@@ -1,7 +1,7 @@
 "! <p class="shorttext">sap.suite.ui.microchart - InteractiveLineChart</p>
 "!
 "! SAPUI5-only control: it ships with SAPUI5, not with OpenUI5, so there is no
-"! demo kit original in this repo's sample universe and no 1:1 port (AGENTS §3).
+"! demo kit original in this repo's sample universe and no 1:1 port (AGENTS section 3).
 "! Collected here as orientation - how the control is expressed in abap2UI5.
 "!
 "! SAPUI5 demo kit: https://ui5.sap.com/#/entity/sap.suite.ui.microchart.InteractiveLineChart/sample/sap.suite.ui.microchart.sample.InteractiveLineChart
@@ -243,6 +243,8 @@ CLASS z2ui5_cl_smpc_sapui5_002 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -252,7 +254,7 @@ CLASS z2ui5_cl_smpc_sapui5_002 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `LINE_CHANGED`.
         " the chart's points are two-way bound, so the new selection is already

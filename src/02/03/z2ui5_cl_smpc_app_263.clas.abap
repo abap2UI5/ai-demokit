@@ -42,6 +42,8 @@ CLASS z2ui5_cl_smpc_app_263 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -783,19 +785,18 @@ CLASS z2ui5_cl_smpc_app_263 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-      WHEN `NAVIGATE`.
-        " onNavigate: when page2 becomes the destination and the checkbox is
-        " ticked, the controller calls setSelectedSection(null) so the page
-        " reopens on its first visible section. Reproduced 1:1 since the
-        " association setters take an EMPTY argument as null (the
-        " controlIdOrNull argument kind); the earlier substitute - naming the
-        " first section explicitly - is gone.
-        IF reset_check = abap_true AND client->get_event_arg( ) CS `page2`.
-          client->follow_up_action( val   = client->cs_event-control_by_id
-                                    t_arg = VALUE #( ( `ObjectPageLayout` ) ( `setSelectedSection` ) ( `` ) ) ).
-        ENDIF.
-    ENDCASE.
+    " onNavigate: when page2 becomes the destination and the checkbox is
+    " ticked, the controller calls setSelectedSection(null) so the page
+    " reopens on its first visible section. Reproduced 1:1 since the
+    " association setters take an EMPTY argument as null (the
+    " controlIdOrNull argument kind); the earlier substitute - naming the
+    " first section explicitly - is gone.
+    IF client->get_event( ) = `NAVIGATE`
+        AND reset_check = abap_true
+        AND client->get_event_arg( ) CS `page2`.
+      client->follow_up_action( val   = client->cs_event-control_by_id
+                                t_arg = VALUE #( ( `ObjectPageLayout` ) ( `setSelectedSection` ) ( `` ) ) ).
+    ENDIF.
 
   ENDMETHOD.
 

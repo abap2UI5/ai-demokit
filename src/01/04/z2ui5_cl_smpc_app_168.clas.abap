@@ -41,6 +41,8 @@ CLASS z2ui5_cl_smpc_app_168 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -404,13 +406,10 @@ CLASS z2ui5_cl_smpc_app_168 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `COLUMNS_CHANGE`.
-        " onGridColumnsChange: setText('Current grid columns count: ' + columns)
-        columns_text = |Current grid columns count: { client->get_event_arg( ) }|.
-
-    ENDCASE.
+    IF client->get_event( ) = `COLUMNS_CHANGE`.
+      " onGridColumnsChange: setText('Current grid columns count: ' + columns)
+      columns_text = |Current grid columns count: { client->get_event_arg( ) }|.
+    ENDIF.
 
   ENDMETHOD.
 

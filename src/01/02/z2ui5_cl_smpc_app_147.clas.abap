@@ -20,6 +20,8 @@ CLASS z2ui5_cl_smpc_app_147 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -86,7 +88,7 @@ CLASS z2ui5_cl_smpc_app_147 IMPLEMENTATION.
     " plus a setTimeout that hides it after iDuration - reproduced with the
     " BUSY_INDICATOR global target and START_TIMER (a new timer replaces the
     " previous one, matching the original's clearTimeout of _sTimeoutId)
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `SHOW_4000`.
         " show4000: default delay (1 second), hide after 4 seconds

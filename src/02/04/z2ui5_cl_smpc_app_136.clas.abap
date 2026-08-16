@@ -25,6 +25,8 @@ CLASS z2ui5_cl_smpc_app_136 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -147,28 +149,25 @@ CLASS z2ui5_cl_smpc_app_136 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `TOGGLE`.
-        " the event still reaches the backend when the veto fired (the framework
-        " calls preventDefault synchronously and sends the event anyway), so the
-        " branch is the original's: on a vetoed direction, toast and reset that
-        " switch; otherwise the panel really toggled and the new state is kept
-        DATA(expanded) = xsdbool( client->get_event_arg( ) = abap_true ).
-        IF expanded = abap_false AND prevent_collapse = abap_true.
-          prevent_collapse = abap_false.
-          client->message_toast_display( `I am prevented COLLAPSE event` ).
-        ELSEIF expanded = abap_true AND prevent_expand = abap_true.
-          prevent_expand = abap_false.
-          client->message_toast_display( `I am prevented EXPAND event` ).
-        ELSE.
-          panel_expanded = expanded.
-        ENDIF.
-        " re-render: the veto flag is baked into the wire, so it has to be
-        " rebuilt from the switch states the round-trip just brought back
-        view_display( ).
-
-    ENDCASE.
+    IF client->get_event( ) = `TOGGLE`.
+      " the event still reaches the backend when the veto fired (the framework
+      " calls preventDefault synchronously and sends the event anyway), so the
+      " branch is the original's: on a vetoed direction, toast and reset that
+      " switch; otherwise the panel really toggled and the new state is kept
+      DATA(expanded) = xsdbool( client->get_event_arg( ) = abap_true ).
+      IF expanded = abap_false AND prevent_collapse = abap_true.
+        prevent_collapse = abap_false.
+        client->message_toast_display( `I am prevented COLLAPSE event` ).
+      ELSEIF expanded = abap_true AND prevent_expand = abap_true.
+        prevent_expand = abap_false.
+        client->message_toast_display( `I am prevented EXPAND event` ).
+      ELSE.
+        panel_expanded = expanded.
+      ENDIF.
+      " re-render: the veto flag is baked into the wire, so it has to be
+      " rebuilt from the switch states the round-trip just brought back
+      view_display( ).
+    ENDIF.
 
   ENDMETHOD.
 

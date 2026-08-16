@@ -45,6 +45,8 @@ CLASS z2ui5_cl_smpc_app_092 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -102,6 +104,7 @@ CLASS z2ui5_cl_smpc_app_092 IMPLEMENTATION.
                         )->a( n = `id`              v = `idMultiComboBox`
                         )->a( n = `width`           v = `10rem`
                         )->a( n = `selectedKeys`    v = client->_bind( t_hidden )
+                        " abap2ui5lint-disable-next-line event-without-handler -- the roundtrip alone is the point: selectedKeys is written back into t_hidden, which hiddenInPopin is bound to
                         )->a( n = `selectionFinish` v = client->_event( `HIDE` )
                         )->ele( `items`
                             )->tag( n = `Item` ns = `core`
@@ -230,13 +233,10 @@ CLASS z2ui5_cl_smpc_app_092 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-      WHEN `HIDE`.
-        " selectionFinish: the MultiComboBox keys arrive two-way bound in
-        " t_hidden, and the table's hiddenInPopin is bound to the same field -
-        " so the sample's setHiddenInPopin(getSelectedKeys()) needs no action,
-        " only the model push
-    ENDCASE.
+    " HIDE / selectionFinish needs no handler: the MultiComboBox keys arrive
+    " two-way bound in t_hidden, and the table's hiddenInPopin is bound to the
+    " same field - so the sample's setHiddenInPopin( getSelectedKeys( ) ) is
+    " already done by the model push this round-trip ends in.
 
   ENDMETHOD.
 

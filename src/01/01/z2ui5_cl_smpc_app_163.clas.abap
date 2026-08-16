@@ -28,6 +28,8 @@ CLASS z2ui5_cl_smpc_app_163 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -108,53 +110,50 @@ CLASS z2ui5_cl_smpc_app_163 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    IF client->get_event( ) = `OPEN_SHEET`.
+      " onOpen: Fragment.load( ActionSheet.fragment.xml ) + openBy( button ) -
+      " rebuilt 1:1 as a popover anchored to the pressed overflow button
+      DATA(sheet) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-      WHEN `OPEN_SHEET`.
-        " onOpen: Fragment.load( ActionSheet.fragment.xml ) + openBy( button ) -
-        " rebuilt 1:1 as a popover anchored to the pressed overflow button
-        DATA(sheet) = z2ui5_cl_ui5_view_builder=>factory( ).
+      sheet->ele( n = `FragmentDefinition` ns = `core`
+          )->a( n = `xmlns`      v = `sap.m`
+          )->a( n = `xmlns:core` v = `sap.ui.core`
 
-        sheet->ele( n = `FragmentDefinition` ns = `core`
-            )->a( n = `xmlns`      v = `sap.m`
-            )->a( n = `xmlns:core` v = `sap.ui.core`
+          )->ele( `ActionSheet`
+              )->a( n = `title`            v = `Menu`
+              )->a( n = `showCancelButton` v = `true`
+              )->a( n = `placement`        v = `Top`
 
-            )->ele( `ActionSheet`
-                )->a( n = `title`            v = `Menu`
-                )->a( n = `showCancelButton` v = `true`
-                )->a( n = `placement`        v = `Top`
+              )->ele( `buttons`
+                  )->tag( `Button`
+                      )->a( n = `text`    v = `Mark as Favorite`
+                      )->a( n = `icon`    v = `sap-icon://favorite`
+                      )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
+                      )->a( n = `visible` v = client->_bind( isphone )
+                  )->tag( `Button`
+                      )->a( n = `text`    v = `Send Email`
+                      )->a( n = `icon`    v = `sap-icon://email`
+                      )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
+                      )->a( n = `visible` v = client->_bind( isphone )
+                  )->tag( `Button`
+                      )->a( n = `text`    v = `Share`
+                      )->a( n = `icon`    v = `sap-icon://share-2`
+                      )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
+                      )->a( n = `visible` v = client->_bind( isphone )
+                  )->tag( `Button`
+                      )->a( n = `text`    v = `Print`
+                      )->a( n = `icon`    v = `sap-icon://print`
+                      )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
+                      )->a( n = `visible` v = client->_bind( isphone )
+                  )->tag( `Button`
+                      )->a( n = `text`    v = `Export as Excel`
+                      )->a( n = `icon`    v = `sap-icon://excel-attachment`
+                      )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
+                      )->a( n = `visible` v = client->_bind( isphoneortablet ) ).
 
-                )->ele( `buttons`
-                    )->tag( `Button`
-                        )->a( n = `text`    v = `Mark as Favorite`
-                        )->a( n = `icon`    v = `sap-icon://favorite`
-                        )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
-                        )->a( n = `visible` v = client->_bind( isphone )
-                    )->tag( `Button`
-                        )->a( n = `text`    v = `Send Email`
-                        )->a( n = `icon`    v = `sap-icon://email`
-                        )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
-                        )->a( n = `visible` v = client->_bind( isphone )
-                    )->tag( `Button`
-                        )->a( n = `text`    v = `Share`
-                        )->a( n = `icon`    v = `sap-icon://share-2`
-                        )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
-                        )->a( n = `visible` v = client->_bind( isphone )
-                    )->tag( `Button`
-                        )->a( n = `text`    v = `Print`
-                        )->a( n = `icon`    v = `sap-icon://print`
-                        )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
-                        )->a( n = `visible` v = client->_bind( isphone )
-                    )->tag( `Button`
-                        )->a( n = `text`    v = `Export as Excel`
-                        )->a( n = `icon`    v = `sap-icon://excel-attachment`
-                        )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
-                        )->a( n = `visible` v = client->_bind( isphoneortablet ) ).
-
-        client->popover_display( xml   = sheet->stringify( )
-                                 by_id = client->get_event_arg( ) ).
-
-    ENDCASE.
+      client->popover_display( xml   = sheet->stringify( )
+                               by_id = client->get_event_arg( ) ).
+    ENDIF.
 
   ENDMETHOD.
 

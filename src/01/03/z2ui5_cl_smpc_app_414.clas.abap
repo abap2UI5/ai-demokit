@@ -25,6 +25,8 @@ CLASS z2ui5_cl_smpc_app_414 IMPLEMENTATION.
       " the original never sets showHeaderContent in the view - the UI5 default is true
       show_header_content = abap_true.
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -279,7 +281,7 @@ CLASS z2ui5_cl_smpc_app_414 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `TOGGLE_HEADER_CONTENT`.
         " handlePress: the original toggles the layout's showHeaderContent state

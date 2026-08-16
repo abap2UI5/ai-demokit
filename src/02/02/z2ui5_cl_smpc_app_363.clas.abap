@@ -5,19 +5,19 @@ CLASS z2ui5_cl_smpc_app_363 DEFINITION PUBLIC.
 
     TYPES:
       BEGIN OF ty_s_product,
-        name            TYPE string,
-        productid       TYPE string,
-        quantity        TYPE i,
-        status          TYPE string,
-        availablestate  TYPE string,
-        availableicon   TYPE string,
-        price           TYPE p LENGTH 13 DECIMALS 2,
-        currencycode    TYPE string,
-        suppliername    TYPE string,
-        productpicurl   TYPE string,
-        heavy           TYPE string,
-        category        TYPE string,
-        deliverydate    TYPE string,
+        name           TYPE string,
+        productid      TYPE string,
+        quantity       TYPE i,
+        status         TYPE string,
+        availablestate TYPE string,
+        availableicon  TYPE string,
+        price          TYPE p LENGTH 13 DECIMALS 2,
+        currencycode   TYPE string,
+        suppliername   TYPE string,
+        productpicurl  TYPE string,
+        heavy          TYPE string,
+        category       TYPE string,
+        deliverydate   TYPE string,
       END OF ty_s_product,
       BEGIN OF ty_s_name,
         name TYPE string,
@@ -54,6 +54,8 @@ CLASS z2ui5_cl_smpc_app_363 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       model_init( ).
+      view_display( ).
+    ELSEIF client->check_on_navigated( ).
       view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
@@ -319,32 +321,28 @@ CLASS z2ui5_cl_smpc_app_363 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    IF client->get_event( ) = `APPLY`.
+      " buttonPress: clamp the entered counts against the table's own totals
+      " and tell the user when a value had to be corrected
+      IF fixed_column_count > cv_total_columns.
+        fixed_column_count = cv_total_columns.
+        client->message_toast_display( `Fixed column count exceeds the total column count. Value in column count input got updated.` ).
+      ENDIF.
 
-      WHEN `APPLY`.
-        " buttonPress: clamp the entered counts against the table's own totals
-        " and tell the user when a value had to be corrected
-        IF fixed_column_count > cv_total_columns.
-          fixed_column_count = cv_total_columns.
-          client->message_toast_display( `Fixed column count exceeds the total column count. Value in column count input got updated.` ).
+      IF fixed_top_row_count + fixed_bottom_row_count > cv_total_rows.
+        IF fixed_top_row_count < cv_total_rows AND fixed_bottom_row_count < cv_total_rows.
+          fixed_bottom_row_count = 1.
+        ELSEIF fixed_top_row_count > cv_total_rows AND fixed_bottom_row_count < cv_total_rows.
+          fixed_top_row_count = cv_total_rows - fixed_bottom_row_count - 1.
+        ELSEIF fixed_top_row_count < cv_total_rows AND fixed_bottom_row_count > cv_total_rows.
+          fixed_bottom_row_count = cv_total_rows - fixed_top_row_count - 1.
+        ELSE.
+          fixed_top_row_count    = 1.
+          fixed_bottom_row_count = 1.
         ENDIF.
-
-        IF fixed_top_row_count + fixed_bottom_row_count > cv_total_rows.
-          IF fixed_top_row_count < cv_total_rows AND fixed_bottom_row_count < cv_total_rows.
-            fixed_bottom_row_count = 1.
-          ELSEIF fixed_top_row_count > cv_total_rows AND fixed_bottom_row_count < cv_total_rows.
-            fixed_top_row_count = cv_total_rows - fixed_bottom_row_count - 1.
-          ELSEIF fixed_top_row_count < cv_total_rows AND fixed_bottom_row_count > cv_total_rows.
-            fixed_bottom_row_count = cv_total_rows - fixed_top_row_count - 1.
-          ELSE.
-            fixed_top_row_count    = 1.
-            fixed_bottom_row_count = 1.
-          ENDIF.
-          client->message_toast_display( `Sum of fixed row count and bottom row count exceeds the total row count. Input values got updated.` ).
-        ENDIF.
-
-
-    ENDCASE.
+        client->message_toast_display( `Sum of fixed row count and bottom row count exceeds the total row count. Input values got updated.` ).
+      ENDIF.
+    ENDIF.
 
   ENDMETHOD.
 

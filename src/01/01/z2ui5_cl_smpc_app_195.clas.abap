@@ -25,6 +25,8 @@ CLASS z2ui5_cl_smpc_app_195 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ENDIF.
 
   ENDMETHOD.
@@ -59,7 +61,7 @@ CLASS z2ui5_cl_smpc_app_195 IMPLEMENTATION.
 
     " original controller loads the shared demo products.json and element-binds a
     " single record (List binding="{/ProductCollection/0}"); flattened here to
-    " top-level default-model fields the {…} bindings resolve against (products.json
+    " top-level default-model fields the {...} bindings resolve against (products.json
     " row 0). ProductPicUrl points at the OpenUI5 host per the asset-URL rule
     name          = `Notebook Basic 15`.
     productid     = `HT-1000`.

@@ -42,6 +42,8 @@ CLASS z2ui5_cl_smpc_app_009 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -197,18 +199,15 @@ CLASS z2ui5_cl_smpc_app_009 IMPLEMENTATION.
 
     DATA selected TYPE abap_bool.
 
-    CASE client->get( )-event.
-
-      WHEN `STICKY_SELECT`.
-        DATA(sticky_text) = client->get_event_arg( ).
-        selected = client->get_event_arg( 2 ).
-        IF selected = abap_true.
-          INSERT sticky_text INTO TABLE t_sticky.
-        ELSE.
-          DELETE t_sticky WHERE table_line = sticky_text.
-        ENDIF.
-
-    ENDCASE.
+    IF client->get_event( ) = `STICKY_SELECT`.
+      DATA(sticky_text) = client->get_event_arg( ).
+      selected = client->get_event_arg( 2 ).
+      IF selected = abap_true.
+        INSERT sticky_text INTO TABLE t_sticky.
+      ELSE.
+        DELETE t_sticky WHERE table_line = sticky_text.
+      ENDIF.
+    ENDIF.
 
   ENDMETHOD.
 

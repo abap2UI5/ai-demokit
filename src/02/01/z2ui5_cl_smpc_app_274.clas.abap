@@ -17,10 +17,10 @@ CLASS z2ui5_cl_smpc_app_274 DEFINITION PUBLIC.
     METHODS on_event.
     METHODS popup_products_display
       IMPORTING
-        resizable  TYPE abap_bool
-        draggable  TYPE abap_bool
-        sized      TYPE abap_bool
-        begin_ok   TYPE abap_bool.
+        resizable TYPE abap_bool
+        draggable TYPE abap_bool
+        sized     TYPE abap_bool
+        begin_ok  TYPE abap_bool.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -33,6 +33,8 @@ CLASS z2ui5_cl_smpc_app_274 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       model_init( ).
+      view_display( ).
+    ELSEIF client->check_on_navigated( ).
       view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
@@ -80,7 +82,7 @@ CLASS z2ui5_cl_smpc_app_274 IMPLEMENTATION.
     " the three controller-built Dialogs: same title, showFullScreenButton and
     " product List, differing only in resizable / draggable / the fixed content
     " size, and in the first one's extra Emphasized OK begin button
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `DIALOG`.
         popup_products_display( resizable = abap_false

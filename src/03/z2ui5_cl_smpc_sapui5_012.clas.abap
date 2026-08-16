@@ -1,7 +1,7 @@
 "! <p class="shorttext">sap.viz - ui5.controls.VizFrame</p>
 "!
 "! SAPUI5-only control: it ships with SAPUI5, not with OpenUI5, so there is no
-"! demo kit original in this repo's sample universe and no 1:1 port (AGENTS §3).
+"! demo kit original in this repo's sample universe and no 1:1 port (AGENTS section 3).
 "! Collected here as orientation - how the control is expressed in abap2UI5.
 "!
 "! SAPUI5 demo kit: https://ui5.sap.com/#/entity/sap.viz.ui5.controls.VizFrame
@@ -47,7 +47,7 @@ CLASS z2ui5_cl_smpc_sapui5_012 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
       WHEN `EVT_DATA_SELECT`.
         client->message_toast_display( client->get_event_arg( ) ).
       WHEN `EVT_VIZTYPE_CHANGE`.
@@ -268,7 +268,8 @@ CLASS z2ui5_cl_smpc_sapui5_012 IMPLEMENTATION.
     IF client->check_on_init( ).
       on_init( ).
       on_rendering( ).
-
+    ELSEIF client->check_on_navigated( ).
+      on_rendering( ).
     ELSE.
       on_event( ).
     ENDIF.

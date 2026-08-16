@@ -41,6 +41,8 @@ CLASS z2ui5_cl_smpc_app_017 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -157,28 +159,25 @@ CLASS z2ui5_cl_smpc_app_017 IMPLEMENTATION.
 
     DATA valid TYPE abap_bool.
 
-    CASE client->get( )-event.
-
-      WHEN `CHANGE`.
-        DATA(source_id) = client->get_event_arg( ).
-        DATA(date_from) = client->get_event_arg( 2 ).
-        DATA(date_to)   = client->get_event_arg( 3 ).
-        valid = client->get_event_arg( 4 ).
-        event_text = |Id: { source_id }\nFrom: { date_from }\nTo: { date_to }|.
-        DATA(value_state) = COND string( WHEN valid = abap_true THEN `None` ELSE `Error` ).
-        IF source_id CS `DRS1`.
-          drs1_value_state = value_state.
-        ELSEIF source_id CS `DRS2`.
-          drs2_value_state = value_state.
-        ELSEIF source_id CS `DRS3`.
-          drs3_value_state = value_state.
-        ELSEIF source_id CS `DRS4`.
-          drs4_value_state = value_state.
-        ELSEIF source_id CS `DRS5`.
-          drs5_value_state = value_state.
-        ENDIF.
-
-    ENDCASE.
+    IF client->get_event( ) = `CHANGE`.
+      DATA(source_id) = client->get_event_arg( ).
+      DATA(date_from) = client->get_event_arg( 2 ).
+      DATA(date_to)   = client->get_event_arg( 3 ).
+      valid = client->get_event_arg( 4 ).
+      event_text = |Id: { source_id }\nFrom: { date_from }\nTo: { date_to }|.
+      DATA(value_state) = COND string( WHEN valid = abap_true THEN `None` ELSE `Error` ).
+      IF source_id CS `DRS1`.
+        drs1_value_state = value_state.
+      ELSEIF source_id CS `DRS2`.
+        drs2_value_state = value_state.
+      ELSEIF source_id CS `DRS3`.
+        drs3_value_state = value_state.
+      ELSEIF source_id CS `DRS4`.
+        drs4_value_state = value_state.
+      ELSEIF source_id CS `DRS5`.
+        drs5_value_state = value_state.
+      ENDIF.
+    ENDIF.
 
   ENDMETHOD.
 

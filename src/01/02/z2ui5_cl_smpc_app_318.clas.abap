@@ -43,6 +43,8 @@ CLASS z2ui5_cl_smpc_app_318 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -329,7 +331,7 @@ CLASS z2ui5_cl_smpc_app_318 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `EDIT`.
         " handleEditPress: clone the record, then show the Change form and the

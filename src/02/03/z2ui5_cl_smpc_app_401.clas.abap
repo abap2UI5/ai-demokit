@@ -29,6 +29,8 @@ CLASS z2ui5_cl_smpc_app_401 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -704,11 +706,10 @@ CLASS z2ui5_cl_smpc_app_401 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-      WHEN `TOGGLE_FOOTER`.
-        " the controller's toggleFooter: setShowFooter( !getShowFooter( ) )
-        show_footer = xsdbool( show_footer = abap_false ).
-    ENDCASE.
+    IF client->get_event( ) = `TOGGLE_FOOTER`.
+      " the controller's toggleFooter: setShowFooter( !getShowFooter( ) )
+      show_footer = xsdbool( show_footer = abap_false ).
+    ENDIF.
 
   ENDMETHOD.
 

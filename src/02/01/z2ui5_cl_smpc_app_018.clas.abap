@@ -41,6 +41,8 @@ CLASS z2ui5_cl_smpc_app_018 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -213,31 +215,28 @@ CLASS z2ui5_cl_smpc_app_018 IMPLEMENTATION.
 
     DATA valid TYPE abap_bool.
 
-    CASE client->get( )-event.
+    IF client->get_event( ) = `CHANGE`.
+      DATA(source_id) = client->get_event_arg( ).
+      DATA(new_value) = client->get_event_arg( 2 ).
+      valid = client->get_event_arg( 3 ).
+      event_count = event_count + 1.
+      text_result = |Change - Event { event_count }: DateTimePicker { source_id }:{ new_value }|.
 
-      WHEN `CHANGE`.
-        DATA(source_id) = client->get_event_arg( ).
-        DATA(new_value) = client->get_event_arg( 2 ).
-        valid = client->get_event_arg( 3 ).
-        event_count = event_count + 1.
-        text_result = |Change - Event { event_count }: DateTimePicker { source_id }:{ new_value }|.
-
-        DATA(state) = COND string( WHEN valid = abap_true THEN `None` ELSE `Error` ).
-        IF source_id CP `*DTP1`.
-          vs_dtp1 = state.
-        ELSEIF source_id CP `*DTP6`.
-          vs_dtp6 = state.
-        ELSEIF source_id CP `*DTP2`.
-          vs_dtp2 = state.
-        ELSEIF source_id CP `*DTP3`.
-          vs_dtp3 = state.
-        ELSEIF source_id CP `*DTP4`.
-          vs_dtp4 = state.
-        ELSEIF source_id CP `*DTP7`.
-          vs_dtp7 = state.
-        ENDIF.
-
-    ENDCASE.
+      DATA(state) = COND string( WHEN valid = abap_true THEN `None` ELSE `Error` ).
+      IF source_id CP `*DTP1`.
+        vs_dtp1 = state.
+      ELSEIF source_id CP `*DTP6`.
+        vs_dtp6 = state.
+      ELSEIF source_id CP `*DTP2`.
+        vs_dtp2 = state.
+      ELSEIF source_id CP `*DTP3`.
+        vs_dtp3 = state.
+      ELSEIF source_id CP `*DTP4`.
+        vs_dtp4 = state.
+      ELSEIF source_id CP `*DTP7`.
+        vs_dtp7 = state.
+      ENDIF.
+    ENDIF.
 
   ENDMETHOD.
 

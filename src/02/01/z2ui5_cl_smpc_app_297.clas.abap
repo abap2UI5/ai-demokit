@@ -25,6 +25,8 @@ CLASS z2ui5_cl_smpc_app_297 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -359,7 +361,7 @@ CLASS z2ui5_cl_smpc_app_297 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `OPEN_DIALOG`.
         client->follow_up_action( val   = client->cs_event-control_by_id

@@ -79,24 +79,24 @@ CLASS z2ui5_cl_smpc_app_overview DEFINITION PUBLIC.
     " draft to ~199 kB and the round-trip to ~3-4 s on the same machine.
     TYPES:
       BEGIN OF ty_s_row,
-        module    TYPE string,
-        ctrl_name TYPE string,
-        name      TYPE string,
-        class     TYPE string,
-        start_url TYPE string,
-        has_check TYPE abap_bool,
-        has_notes TYPE abap_bool,
-        has_p171  TYPE abap_bool,
+        module        TYPE string,
+        ctrl_name     TYPE string,
+        name          TYPE string,
+        class         TYPE string,
+        start_url     TYPE string,
+        has_check     TYPE abap_bool,
+        has_notes     TYPE abap_bool,
+        has_p171      TYPE abap_bool,
         since         TYPE string,
         since_post171 TYPE abap_bool,
         ui5_only      TYPE abap_bool,
         is_post171    TYPE abap_bool,
         is_deprecated TYPE abap_bool,
-        dep_text  TYPE string,
-        ctrl_html TYPE string,
-        score       TYPE i,
-        score_tip   TYPE string,
-        filter    TYPE string,
+        dep_text      TYPE string,
+        ctrl_html     TYPE string,
+        score         TYPE i,
+        score_tip     TYPE string,
+        filter        TYPE string,
       END OF ty_s_row.
     TYPES ty_t_row TYPE STANDARD TABLE OF ty_s_row WITH EMPTY KEY.
 
@@ -120,33 +120,33 @@ CLASS z2ui5_cl_smpc_app_overview DEFINITION PUBLIC.
     " attribute), so none of it reaches the persisted app state.
     TYPES:
       BEGIN OF ty_s_app,
-        module    TYPE string,
-        control   TYPE string,
-        ctrl_name TYPE string,
-        name      TYPE string,
-        class     TYPE string,
-        path      TYPE string,
-        api_url   TYPE string,
-        js_url    TYPE string,
-        ui5_url   TYPE string,
-        abap_url  TYPE string,
-        start_url TYPE string,
-        checked   TYPE string,
-        has_check TYPE abap_bool,
-        notes     TYPE string,
-        has_notes TYPE abap_bool,
-        post171   TYPE string,
-        has_p171  TYPE abap_bool,
+        module        TYPE string,
+        control       TYPE string,
+        ctrl_name     TYPE string,
+        name          TYPE string,
+        class         TYPE string,
+        path          TYPE string,
+        api_url       TYPE string,
+        js_url        TYPE string,
+        ui5_url       TYPE string,
+        abap_url      TYPE string,
+        start_url     TYPE string,
+        checked       TYPE string,
+        has_check     TYPE abap_bool,
+        notes         TYPE string,
+        has_notes     TYPE abap_bool,
+        post171       TYPE string,
+        has_p171      TYPE abap_bool,
         since         TYPE string,
         since_post171 TYPE abap_bool,
         ui5_only      TYPE abap_bool,
         is_post171    TYPE abap_bool,
         is_deprecated TYPE abap_bool,
-        dep_text  TYPE string,
-        ctrl_html TYPE string,
-        score       TYPE i,
-        score_tip   TYPE string,
-        filter    TYPE string,
+        dep_text      TYPE string,
+        ctrl_html     TYPE string,
+        score         TYPE i,
+        score_tip     TYPE string,
+        filter        TYPE string,
       END OF ty_s_app.
     TYPES ty_t_app TYPE STANDARD TABLE OF ty_s_app WITH EMPTY KEY.
 
@@ -179,10 +179,10 @@ CLASS z2ui5_cl_smpc_app_overview DEFINITION PUBLIC.
 
     CONSTANTS:
       BEGIN OF cs_url,
-        docs      TYPE string VALUE `https://abap2UI5.org`,
-        samples   TYPE string VALUE `https://github.com/abap2UI5/samples`,
-        controls  TYPE string VALUE `https://github.com/abap2UI5/samples-controls`,
-        stack     TYPE string VALUE `https://github.com/abap2UI5/samples-stack`,
+        docs     TYPE string VALUE `https://abap2UI5.org`,
+        samples  TYPE string VALUE `https://github.com/abap2UI5/samples`,
+        controls TYPE string VALUE `https://github.com/abap2UI5/samples-controls`,
+        stack    TYPE string VALUE `https://github.com/abap2UI5/samples-stack`,
       END OF cs_url.
 
     METHODS view_display.
@@ -204,19 +204,19 @@ CLASS z2ui5_cl_smpc_app_overview DEFINITION PUBLIC.
         name   TYPE string.
     METHODS header_button
       IMPORTING
-        toolbar   TYPE REF TO z2ui5_cl_ui5_view_builder
-        icon      TYPE string
+        toolbar     TYPE REF TO z2ui5_cl_ui5_view_builder
+        icon        TYPE string
         " the entry's name - the tooltip opens with it and the popover of an
         " uninstalled repository is titled after it
-        name      TYPE string
-        descr     TYPE string
-        href      TYPE string
-        class     TYPE string OPTIONAL
+        name        TYPE string
+        descr       TYPE string
+        href        TYPE string
+        class       TYPE string OPTIONAL
         " the overview app's PREVIOUS name, tried when CLASS is not on the
         " system: a repository that renamed its overview app is installed under
         " both names in the wild for a while
-        class_old TYPE string OPTIONAL
-        here      TYPE abap_bool DEFAULT abap_false
+        class_old   TYPE string OPTIONAL
+        here        TYPE abap_bool DEFAULT abap_false
         " this entry opens a new group of the header row, so it carries the
         " wider margin that sets the groups apart - see render_header( )
         group_start TYPE abap_bool DEFAULT abap_false.
@@ -274,7 +274,7 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
     " here because abaplint wants every definition at the top of the routine
     DATA li_app TYPE REF TO z2ui5_if_app.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `LINKS`.
         " the four link buttons for the pressed row, opened in a popover
@@ -1035,8 +1035,8 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` runtime UI5 ids, exactly as in the original.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListModes`                                 class = `z2ui5_cl_smpc_app_133` path = `src/01/04/z2ui5_cl_smpc_app_133.clas.abap`
-        score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.60`
         notes = lv_text1 ) ).
 
@@ -1181,8 +1181,8 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` press and toasts 'Products has been activated' (the headless layout collapses the links into the Breadcrumbs overflow Select; the picker path exercises the same press wire).`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Breadcrumbs`                     name = `Breadcrumbs`                                   class = `z2ui5_cl_smpc_app_003` path = `src/01/01/z2ui5_cl_smpc_app_003.clas.abap`
-        score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed); RESTAMP after the 2026-07-16 rework (link toast +` &&
                  ` instant separator switch confirmed)`
@@ -1541,8 +1541,8 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` used in the sample.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.DateRangeSelection`              name = `DateRangeSelection`                            class = `z2ui5_cl_smpc_app_017` path = `src/02/01/z2ui5_cl_smpc_app_017.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         since = `1.22.0`
         is_post171 = abap_true
@@ -1863,8 +1863,8 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
       ( module = `sap.m`              control = `sap.m.FormattedText`                   name = `FormattedText`                                 class = `z2ui5_cl_smpc_app_154` path = `src/01/01/z2ui5_cl_smpc_app_154.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.38.0`
         notes = `NOTE: FormattedText.htmlText bound to a model field holding the original controller's demo HTML string (headings, link, list, pre, code, cite, dl) 1:1.` )
       ( module = `sap.m`              control = `sap.m.GenericTag`                      name = `GenericTag`                                    class = `z2ui5_cl_smpc_app_027` path = `src/02/01/z2ui5_cl_smpc_app_027.clas.abap`
@@ -2084,7 +2084,7 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                  ` content attribute (CAPABILITIES.md CSS row, as apps 028/026; the EXTRA core:HTML control vs the original view). Confirmed rendering via the human visual pass 2026-07-19.` )
       ( module = `sap.m`              control = `sap.m.ImageContent`                    name = `ImageContent`                                  class = `z2ui5_cl_smpc_app_056` path = `src/01/01/z2ui5_cl_smpc_app_056.clas.abap`
         score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.38`
         notes = `NOTE: the profile-image and logo ImageContent keep the sample's original demokit test-resources asset paths (test-resources/sap/m/demokit/sample/ImageContent/images/*.png) as the src literal 1:1;` &&
                  ` abap2UI5 does not serve those static assets, so only the first (sap-icon://area-chart) icon renders offline. The images are archived under ui5/sap.m/ImageContent/images/.` ) ).
@@ -2545,8 +2545,8 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` one). The two ungrouped messages carry no groupName, which is what makes them appear outside the two Purchase Order groups.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MessageView`                     name = `MessageViewWithGrouping`                       class = `z2ui5_cl_smpc_app_294` path = `src/01/01/z2ui5_cl_smpc_app_294.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         since = `1.46`
         notes = lv_text1 ) ).
@@ -2720,7 +2720,7 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                  ` the first NumericContent toasts 'The numeric content is pressed.'; the other tiles are the identical wire.` )
       ( module = `sap.m`              control = `sap.m.NumericContent`                  name = `NumericContentIcon`                            class = `z2ui5_cl_smpc_app_064` path = `src/01/01/z2ui5_cl_smpc_app_064.clas.abap`
         score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
         notes = `NOTE: the second NumericContent keeps the sample's original demokit test-resources image path (test-resources/sap/m/demokit/sample/NumericContentIcon/images/grass.jpg) as the icon literal 1:1;` &&
                  ` abap2UI5 does not serve that static asset, so it does not render offline (the first tile's sap-icon://travel-expense does). The image is archived under ui5/sap.m/NumericContentIcon/images/.` )
@@ -3132,8 +3132,8 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` ${$parameters>/navOrigin} ? ${$parameters>/navOrigin}.getText() : '' and the ABAP COND rebuilds the original's if/else.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.QuickView`                       name = `QuickView`                                     class = `z2ui5_cl_smpc_app_100` path = `src/02/01/z2ui5_cl_smpc_app_100.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         since = `1.28.11`
         is_post171 = abap_true
@@ -4598,8 +4598,8 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` unverified in a running system; the same REDIRECT action class is live-verified in app 084.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.integration` control = `sap.ui.integration.widgets.Card`       name = `CardExplorer`                                  class = `z2ui5_cl_smpc_app_149` path = `src/01/02/z2ui5_cl_smpc_app_149.clas.abap`
-        score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.62`
         notes = lv_text1 ) ).
 
@@ -6229,7 +6229,7 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.CalendarLegend`         name = `CalendarLegendNavigation`                      class = `z2ui5_cl_smpc_app_240` path = `src/02/02/z2ui5_cl_smpc_app_240.clas.abap`
         score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
         is_post171 = abap_true
         notes = lv_text1

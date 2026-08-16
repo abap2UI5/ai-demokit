@@ -34,6 +34,8 @@ CLASS z2ui5_cl_smpc_app_148 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -124,37 +126,33 @@ CLASS z2ui5_cl_smpc_app_148 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    IF client->get_event( ) = `DROP`.
+      " onDrop 1:1 - the client indices are 0-based, ABAP rows 1-based. Both
+      " arrive from the frontend, so they are range-checked before they are
+      " used as a table index: JS would splice a nonsense index harmlessly,
+      " ABAP would dump on the read
+      DATA(drag_pos) = CONV i( client->get_event_arg( ) ).
+      DATA(drop_pos) = CONV i( client->get_event_arg( 2 ) ).
+      DATA(position) = client->get_event_arg( 3 ).
 
-      WHEN `DROP`.
-        " onDrop 1:1 - the client indices are 0-based, ABAP rows 1-based. Both
-        " arrive from the frontend, so they are range-checked before they are
-        " used as a table index: JS would splice a nonsense index harmlessly,
-        " ABAP would dump on the read
-        DATA(drag_pos) = CONV i( client->get_event_arg( ) ).
-        DATA(drop_pos) = CONV i( client->get_event_arg( 2 ) ).
-        DATA(position) = client->get_event_arg( 3 ).
+      IF drag_pos < 0 OR drag_pos >= lines( t_items )
+      OR drop_pos < 0 OR drop_pos >= lines( t_items ).
+        RETURN.
+      ENDIF.
 
-        IF drag_pos < 0 OR drag_pos >= lines( t_items )
-        OR drop_pos < 0 OR drop_pos >= lines( t_items ).
-          RETURN.
-        ENDIF.
+      DATA(item) = t_items[ drag_pos + 1 ].
+      DELETE t_items INDEX drag_pos + 1.
 
-        DATA(item) = t_items[ drag_pos + 1 ].
-        DELETE t_items INDEX drag_pos + 1.
+      IF drag_pos < drop_pos.
+        drop_pos = drop_pos - 1.
+      ENDIF.
 
-        IF drag_pos < drop_pos.
-          drop_pos = drop_pos - 1.
-        ENDIF.
-
-        IF position = `Before`.
-          INSERT item INTO t_items INDEX drop_pos + 1.
-        ELSE.
-          INSERT item INTO t_items INDEX drop_pos + 2.
-        ENDIF.
-
-
-    ENDCASE.
+      IF position = `Before`.
+        INSERT item INTO t_items INDEX drop_pos + 1.
+      ELSE.
+        INSERT item INTO t_items INDEX drop_pos + 2.
+      ENDIF.
+    ENDIF.
 
   ENDMETHOD.
 

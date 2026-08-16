@@ -22,6 +22,8 @@ CLASS z2ui5_cl_smpc_app_246 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -85,24 +87,21 @@ CLASS z2ui5_cl_smpc_app_246 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `UPLOAD`.
-        " original handleUploadPress: no chosen file -> 'Choose a file first';
-        " else upload() then clear() (checkFileReadable is a client-side File
-        " API probe with no declarative equivalent - its cannot-be-read branch
-        " is not reproduced, see sidecar)
-        IF file_value IS INITIAL.
-          client->message_toast_display( `Choose a file first` ).
-        ELSE.
-          client->follow_up_action( val   = client->cs_event-control_by_id
-                                    t_arg = VALUE #( ( `fileUploader` ) ( `upload` ) ) ).
-          client->follow_up_action( val   = client->cs_event-control_by_id
-                                    t_arg = VALUE #( ( `fileUploader` ) ( `clear` ) ) ).
-          file_value = ``.
-        ENDIF.
-
-    ENDCASE.
+    IF client->get_event( ) = `UPLOAD`.
+      " original handleUploadPress: no chosen file -> 'Choose a file first';
+      " else upload() then clear() (checkFileReadable is a client-side File
+      " API probe with no declarative equivalent - its cannot-be-read branch
+      " is not reproduced, see sidecar)
+      IF file_value IS INITIAL.
+        client->message_toast_display( `Choose a file first` ).
+      ELSE.
+        client->follow_up_action( val   = client->cs_event-control_by_id
+                                  t_arg = VALUE #( ( `fileUploader` ) ( `upload` ) ) ).
+        client->follow_up_action( val   = client->cs_event-control_by_id
+                                  t_arg = VALUE #( ( `fileUploader` ) ( `clear` ) ) ).
+        file_value = ``.
+      ENDIF.
+    ENDIF.
 
   ENDMETHOD.
 

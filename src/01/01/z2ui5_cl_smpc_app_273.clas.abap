@@ -27,6 +27,8 @@ CLASS z2ui5_cl_smpc_app_273 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -82,7 +84,7 @@ CLASS z2ui5_cl_smpc_app_273 IMPLEMENTATION.
 
     " the five controller-built Dialogs, one per press handler: same type,
     " title, state and content text, and the same single Emphasized OK button
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `DEFAULT_DIALOG`.
         popup_message_display( title = `Default Message`
@@ -155,7 +157,6 @@ CLASS z2ui5_cl_smpc_app_273 IMPLEMENTATION.
   METHOD model_init.
 
     " the sample has no model - the five dialogs are built from literals
-    RETURN.
 
   ENDMETHOD.
 

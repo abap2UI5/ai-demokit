@@ -1,7 +1,7 @@
 "! <p class="shorttext">sap.suite.ui.commons - networkgraph.Graph</p>
 "!
 "! SAPUI5-only control: it ships with SAPUI5, not with OpenUI5, so there is no
-"! demo kit original in this repo's sample universe and no 1:1 port (AGENTS §3).
+"! demo kit original in this repo's sample universe and no 1:1 port (AGENTS section 3).
 "! Collected here as orientation - how the control is expressed in abap2UI5.
 "!
 "! SAPUI5 demo kit: https://ui5.sap.com/#/entity/sap.suite.ui.commons.networkgraph.Graph
@@ -112,7 +112,7 @@ CLASS z2ui5_cl_smpc_sapui5_008 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
       WHEN `LINE_PRESS`.
         client->message_toast_display( `LINE_PRESSED` ).
 
@@ -121,8 +121,10 @@ CLASS z2ui5_cl_smpc_sapui5_008 IMPLEMENTATION.
 
         READ TABLE mt_data-nodes INTO DATA(ls_node) WITH KEY id = lt_arg[ 2 ].
 
-        detail_popover( id   = lt_arg[ 1 ]
-                        node = ls_node ).
+        IF sy-subrc = 0.
+          detail_popover( id   = lt_arg[ 1 ]
+                          node = ls_node ).
+        ENDIF.
     ENDCASE.
 
   ENDMETHOD.
@@ -280,6 +282,8 @@ CLASS z2ui5_cl_smpc_sapui5_008 IMPLEMENTATION.
                                                       ( from = `Mills` to = `Sykorova` )
                                     ) ).
 
+      view_display( ).
+    ELSEIF client->check_on_navigated( ).
       view_display( ).
 
     ENDIF.

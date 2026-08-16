@@ -43,6 +43,8 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -312,7 +314,7 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `SELECT_1`.
         selected_1 = CONV i( client->get_event_arg( ) ) + 1.

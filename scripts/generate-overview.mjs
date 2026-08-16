@@ -546,24 +546,24 @@ CLASS ${CLASS} DEFINITION PUBLIC.
     " draft to ~199 kB and the round-trip to ~3-4 s on the same machine.
     TYPES:
       BEGIN OF ty_s_row,
-        module    TYPE string,
-        ctrl_name TYPE string,
-        name      TYPE string,
-        class     TYPE string,
-        start_url TYPE string,
-        has_check TYPE abap_bool,
-        has_notes TYPE abap_bool,
-        has_p171  TYPE abap_bool,
+        module        TYPE string,
+        ctrl_name     TYPE string,
+        name          TYPE string,
+        class         TYPE string,
+        start_url     TYPE string,
+        has_check     TYPE abap_bool,
+        has_notes     TYPE abap_bool,
+        has_p171      TYPE abap_bool,
         since         TYPE string,
         since_post171 TYPE abap_bool,
         ui5_only      TYPE abap_bool,
         is_post171    TYPE abap_bool,
         is_deprecated TYPE abap_bool,
-        dep_text  TYPE string,
-        ctrl_html TYPE string,
-        score       TYPE i,
-        score_tip   TYPE string,
-        filter    TYPE string,
+        dep_text      TYPE string,
+        ctrl_html     TYPE string,
+        score         TYPE i,
+        score_tip     TYPE string,
+        filter        TYPE string,
       END OF ty_s_row.
     TYPES ty_t_row TYPE STANDARD TABLE OF ty_s_row WITH EMPTY KEY.
 
@@ -587,33 +587,33 @@ CLASS ${CLASS} DEFINITION PUBLIC.
     " attribute), so none of it reaches the persisted app state.
     TYPES:
       BEGIN OF ty_s_app,
-        module    TYPE string,
-        control   TYPE string,
-        ctrl_name TYPE string,
-        name      TYPE string,
-        class     TYPE string,
-        path      TYPE string,
-        api_url   TYPE string,
-        js_url    TYPE string,
-        ui5_url   TYPE string,
-        abap_url  TYPE string,
-        start_url TYPE string,
-        checked   TYPE string,
-        has_check TYPE abap_bool,
-        notes     TYPE string,
-        has_notes TYPE abap_bool,
-        post171   TYPE string,
-        has_p171  TYPE abap_bool,
+        module        TYPE string,
+        control       TYPE string,
+        ctrl_name     TYPE string,
+        name          TYPE string,
+        class         TYPE string,
+        path          TYPE string,
+        api_url       TYPE string,
+        js_url        TYPE string,
+        ui5_url       TYPE string,
+        abap_url      TYPE string,
+        start_url     TYPE string,
+        checked       TYPE string,
+        has_check     TYPE abap_bool,
+        notes         TYPE string,
+        has_notes     TYPE abap_bool,
+        post171       TYPE string,
+        has_p171      TYPE abap_bool,
         since         TYPE string,
         since_post171 TYPE abap_bool,
         ui5_only      TYPE abap_bool,
         is_post171    TYPE abap_bool,
         is_deprecated TYPE abap_bool,
-        dep_text  TYPE string,
-        ctrl_html TYPE string,
-        score       TYPE i,
-        score_tip   TYPE string,
-        filter    TYPE string,
+        dep_text      TYPE string,
+        ctrl_html     TYPE string,
+        score         TYPE i,
+        score_tip     TYPE string,
+        filter        TYPE string,
       END OF ty_s_app.
     TYPES ty_t_app TYPE STANDARD TABLE OF ty_s_app WITH EMPTY KEY.
 
@@ -646,10 +646,10 @@ CLASS ${CLASS} DEFINITION PUBLIC.
 
     CONSTANTS:
       BEGIN OF cs_url,
-        docs      TYPE string VALUE \`https://abap2UI5.org\`,
-        samples   TYPE string VALUE \`https://github.com/abap2UI5/samples\`,
-        controls  TYPE string VALUE \`https://github.com/abap2UI5/samples-controls\`,
-        stack     TYPE string VALUE \`https://github.com/abap2UI5/samples-stack\`,
+        docs     TYPE string VALUE \`https://abap2UI5.org\`,
+        samples  TYPE string VALUE \`https://github.com/abap2UI5/samples\`,
+        controls TYPE string VALUE \`https://github.com/abap2UI5/samples-controls\`,
+        stack    TYPE string VALUE \`https://github.com/abap2UI5/samples-stack\`,
       END OF cs_url.
 
     METHODS view_display.
@@ -671,19 +671,19 @@ CLASS ${CLASS} DEFINITION PUBLIC.
         name   TYPE string.
     METHODS header_button
       IMPORTING
-        toolbar   TYPE REF TO z2ui5_cl_ui5_view_builder
-        icon      TYPE string
+        toolbar     TYPE REF TO z2ui5_cl_ui5_view_builder
+        icon        TYPE string
         " the entry's name - the tooltip opens with it and the popover of an
         " uninstalled repository is titled after it
-        name      TYPE string
-        descr     TYPE string
-        href      TYPE string
-        class     TYPE string OPTIONAL
+        name        TYPE string
+        descr       TYPE string
+        href        TYPE string
+        class       TYPE string OPTIONAL
         " the overview app's PREVIOUS name, tried when CLASS is not on the
         " system: a repository that renamed its overview app is installed under
         " both names in the wild for a while
-        class_old TYPE string OPTIONAL
-        here      TYPE abap_bool DEFAULT abap_false
+        class_old   TYPE string OPTIONAL
+        here        TYPE abap_bool DEFAULT abap_false
         " this entry opens a new group of the header row, so it carries the
         " wider margin that sets the groups apart - see render_header( )
         group_start TYPE abap_bool DEFAULT abap_false.
@@ -741,7 +741,7 @@ CLASS ${CLASS} IMPLEMENTATION.
     " here because abaplint wants every definition at the top of the routine
     DATA li_app TYPE REF TO z2ui5_if_app.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN \`LINKS\`.
         " the four link buttons for the pressed row, opened in a popover

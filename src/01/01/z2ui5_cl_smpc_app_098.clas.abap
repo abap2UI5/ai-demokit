@@ -20,6 +20,8 @@ CLASS z2ui5_cl_smpc_app_098 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -256,7 +258,7 @@ CLASS z2ui5_cl_smpc_app_098 IMPLEMENTATION.
                         )->a( n = `key`  v = `3`
 
                 )->end(
-                " presetFilterItems added declaratively (the original adds them in _presetFiltersInit; the Filter payload is inert here — no list is bound)
+                " presetFilterItems added declaratively (the original adds them in _presetFiltersInit; the Filter payload is inert here - no list is bound)
                 )->ele( `presetFilterItems`
                     )->tag( `ViewSettingsItem`
                         )->a( n = `key`  v = `myPresetFilter1`
@@ -296,7 +298,7 @@ CLASS z2ui5_cl_smpc_app_098 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `OPEN_DIALOG`.
         client->follow_up_action( val   = client->cs_event-control_by_id

@@ -71,6 +71,8 @@ CLASS z2ui5_cl_smpc_app_298 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -323,7 +325,7 @@ CLASS z2ui5_cl_smpc_app_298 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `OPEN_SORT`.
         client->follow_up_action( val   = client->cs_event-control_by_id
@@ -352,12 +354,15 @@ CLASS z2ui5_cl_smpc_app_298 IMPLEMENTATION.
       WHEN `GROUP_CONFIRM`.
         t_item = event_items( client->get_event_arg( ) ).
         group_key = COND #( WHEN t_item IS INITIAL THEN `` ELSE t_item[ 1 ]-key ).
-        IF group_key = `SupplierName`.
-          SORT t_products BY supplier_name ASCENDING.
+        CASE group_key.
 
-        ELSEIF group_key = `Price`.
-          SORT t_products BY price ASCENDING.
-        ENDIF.
+          WHEN `SupplierName`.
+            SORT t_products BY supplier_name ASCENDING.
+
+          WHEN `Price`.
+            SORT t_products BY price ASCENDING.
+
+        ENDCASE.
 
       WHEN `GROUP_RESET`.
         group_key = ``.

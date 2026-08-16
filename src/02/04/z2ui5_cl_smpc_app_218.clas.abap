@@ -46,6 +46,8 @@ CLASS z2ui5_cl_smpc_app_218 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -119,26 +121,23 @@ CLASS z2ui5_cl_smpc_app_218 IMPLEMENTATION.
 
     DATA json_groups TYPE string.
 
-    CASE client->get( )-event.
-
-      WHEN `SUGGEST`.
-        DATA(suggest_value) = client->get_event_arg( ).
-        IF suggest_value IS INITIAL.
-          json_groups = `[]`.
-        ELSE.
-          DATA(search_val) = suggest_value.
-          REPLACE ALL OCCURRENCES OF `\` IN search_val WITH `\\`.
-          REPLACE ALL OCCURRENCES OF `"` IN search_val WITH `\"`.
-          json_groups = |[[["PRODUCTID","Contains","{ search_val }"],["NAME","Contains","{ search_val }"]]]|.
-        ENDIF.
-        client->follow_up_action( val   = client->cs_event-binding_call
-                                  t_arg = VALUE #( ( `searchField` ) ( `suggestionItems` ) ( `filter` ) ( json_groups ) ) ).
-        " original: this.oSF.suggest() - reopen the suggestion popup after the
-        " filter (a public non-denied method via the generalized allowlist)
-        client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `searchField` ) ( `suggest` ) ) ).
-
-    ENDCASE.
+    IF client->get_event( ) = `SUGGEST`.
+      DATA(suggest_value) = client->get_event_arg( ).
+      IF suggest_value IS INITIAL.
+        json_groups = `[]`.
+      ELSE.
+        DATA(search_val) = suggest_value.
+        REPLACE ALL OCCURRENCES OF `\` IN search_val WITH `\\`.
+        REPLACE ALL OCCURRENCES OF `"` IN search_val WITH `\"`.
+        json_groups = |[[["PRODUCTID","Contains","{ search_val }"],["NAME","Contains","{ search_val }"]]]|.
+      ENDIF.
+      client->follow_up_action( val   = client->cs_event-binding_call
+                                t_arg = VALUE #( ( `searchField` ) ( `suggestionItems` ) ( `filter` ) ( json_groups ) ) ).
+      " original: this.oSF.suggest() - reopen the suggestion popup after the
+      " filter (a public non-denied method via the generalized allowlist)
+      client->follow_up_action( val   = client->cs_event-control_by_id
+                                t_arg = VALUE #( ( `searchField` ) ( `suggest` ) ) ).
+    ENDIF.
 
   ENDMETHOD.
 

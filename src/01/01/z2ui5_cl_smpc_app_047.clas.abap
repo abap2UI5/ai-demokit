@@ -23,6 +23,8 @@ CLASS z2ui5_cl_smpc_app_047 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -171,18 +173,15 @@ CLASS z2ui5_cl_smpc_app_047 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `SELECTION_CHANGE`.
-        " map the two-way bound key back to the item text
-        DATA(text) = SWITCH string( selected_key
-                       WHEN `one`   THEN `One`
-                       WHEN `two`   THEN `Two`
-                       WHEN `three` THEN `Three` ).
-        client->message_toast_display( |oEvent.getParameter('item').getText(): '{ text }' selected| ).
-        selected_item_text = |getSelectedItem(): { text }|.
-
-    ENDCASE.
+    IF client->get_event( ) = `SELECTION_CHANGE`.
+      " map the two-way bound key back to the item text
+      DATA(text) = SWITCH string( selected_key
+                     WHEN `one`   THEN `One`
+                     WHEN `two`   THEN `Two`
+                     WHEN `three` THEN `Three` ).
+      client->message_toast_display( |oEvent.getParameter('item').getText(): '{ text }' selected| ).
+      selected_item_text = |getSelectedItem(): { text }|.
+    ENDIF.
 
   ENDMETHOD.
 

@@ -24,6 +24,8 @@ CLASS z2ui5_cl_smpc_app_135 IMPLEMENTATION.
       amount   = `123456789.123`.
       currency = `USD`.
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ENDIF.
 
   ENDMETHOD.

@@ -24,6 +24,8 @@ CLASS z2ui5_cl_smpc_app_021 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -78,7 +80,7 @@ CLASS z2ui5_cl_smpc_app_021 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `SET_SAVING_DRAFT`.
         state = `Saving`.

@@ -5,13 +5,13 @@ CLASS z2ui5_cl_smpc_app_376 DEFINITION PUBLIC.
 
     TYPES:
       BEGIN OF ty_s_name,
-        title           TYPE string,
-        desc            TYPE string,
-        icon            TYPE string,
-        highlight       TYPE string,
-        info            TYPE string,
-        infoicon        TYPE string,
-        wrapcharlimit   TYPE i,
+        title         TYPE string,
+        desc          TYPE string,
+        icon          TYPE string,
+        highlight     TYPE string,
+        info          TYPE string,
+        infoicon      TYPE string,
+        wrapcharlimit TYPE i,
       END OF ty_s_name.
     DATA t_names TYPE STANDARD TABLE OF ty_s_name WITH EMPTY KEY.
 
@@ -35,6 +35,8 @@ CLASS z2ui5_cl_smpc_app_376 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       model_init( ).
+      view_display( ).
+    ELSEIF client->check_on_navigated( ).
       view_display( ).
     ENDIF.
 

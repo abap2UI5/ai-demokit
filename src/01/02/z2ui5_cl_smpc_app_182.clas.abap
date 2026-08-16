@@ -24,6 +24,8 @@ CLASS z2ui5_cl_smpc_app_182 IMPLEMENTATION.
       " is used here so the port is deterministic
       time = `13:30:00`.
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ENDIF.
 
   ENDMETHOD.

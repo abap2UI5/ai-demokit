@@ -32,6 +32,8 @@ CLASS z2ui5_cl_smpc_app_081 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -77,15 +79,14 @@ CLASS z2ui5_cl_smpc_app_081 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-      WHEN `REFRESH`.
-        " _pushNewProduct: each pull-to-refresh appends the next product until the full collection is shown
-        DATA(all) = fill_all( ).
-        IF shown < lines( all ).
-          shown = shown + 1.
-        ENDIF.
-        t_products = VALUE #( FOR i = 1 WHILE i <= shown ( all[ i ] ) ).
-    ENDCASE.
+    IF client->get_event( ) = `REFRESH`.
+      " _pushNewProduct: each pull-to-refresh appends the next product until the full collection is shown
+      DATA(all) = fill_all( ).
+      IF shown < lines( all ).
+        shown = shown + 1.
+      ENDIF.
+      t_products = VALUE #( FOR i = 1 WHILE i <= shown ( all[ i ] ) ).
+    ENDIF.
 
   ENDMETHOD.
 

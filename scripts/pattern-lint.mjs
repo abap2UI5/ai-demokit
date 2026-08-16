@@ -163,12 +163,21 @@ const RULES = [
       if (/on_event/.test(content)) return out; // matches check_on_event too
       /* A class may also dispatch inline, straight off the event name — the
        * samples style, which the src/03 SAPUI5 collection is written in
-       * (AGENTS §3). `CASE client->get( )-event.` with a WHEN branch IS a
-       * dispatcher, so the wire is not dead; ports still have to use on_event,
-       * which the method-order rules below enforce for them. */
-      if (/get\(\s*\)-event/.test(content) && /\bWHEN\b/.test(content)) return out;
+       * (AGENTS §3). Both shapes are a dispatcher, so the wire is not dead:
+       *   CASE client->get_event( ).  WHEN `X`.        two or more events
+       *   IF client->get_event( ) = `X`.               exactly one
+       * The IF form is not a style choice — abaplint's `short_case` requires
+       * it from a single-branch CASE (2026-08-16), so a one-event class can
+       * no longer be written with WHEN at all. Ports still have to use
+       * on_event, which the method-order rules below enforce for them.
+       * `get( )-event` is the pre-2026-08-16 spelling of `get_event( )` and
+       * is matched too: the corpus no longer contains it, but a hand-written
+       * class or an older branch may. */
+      const EVENT_READ = /get_event\(\s*\)|get\(\s*\)-event/;
+      if (EVENT_READ.test(content) && /\bWHEN\b/.test(content)) return out;
+      if (new RegExp('IF\\s+[^\\n]*(?:' + EVENT_READ.source + ')\\s*=').test(content)) return out;
       const m = content.match(/->_event\(/);
-      out.push({ line: lineOf(content, m.index), text: '_event( ) wired but no on_event/check_on_event dispatcher and no CASE on get( )-event' });
+      out.push({ line: lineOf(content, m.index), text: '_event( ) wired but no on_event/check_on_event dispatcher and no CASE or IF on get_event( )' });
       return out;
     },
   },

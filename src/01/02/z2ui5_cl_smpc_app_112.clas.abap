@@ -20,6 +20,8 @@ CLASS z2ui5_cl_smpc_app_112 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -61,47 +63,44 @@ CLASS z2ui5_cl_smpc_app_112 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    IF client->get_event( ) = `OPEN_POPOVER`.
+      " original openPopover: a controller-built ResponsivePopover with an
+      " HSL/Simplified ColorPicker, opened by the pressed button; the
+      " Device.system.phone branch (Submit/Cancel buttons vs no header) is
+      " expressed via device> model bindings instead of a JS branch
+      DATA(popover) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-      WHEN `OPEN_POPOVER`.
-        " original openPopover: a controller-built ResponsivePopover with an
-        " HSL/Simplified ColorPicker, opened by the pressed button; the
-        " Device.system.phone branch (Submit/Cancel buttons vs no header) is
-        " expressed via device> model bindings instead of a JS branch
-        DATA(popover) = z2ui5_cl_ui5_view_builder=>factory( ).
+      popover->ele( n = `FragmentDefinition` ns = `core`
+          )->a( n = `xmlns:core` v = `sap.ui.core`
+          )->a( n = `xmlns:u`    v = `sap.ui.unified`
+          )->a( n = `xmlns`      v = `sap.m`
 
-        popover->ele( n = `FragmentDefinition` ns = `core`
-            )->a( n = `xmlns:core` v = `sap.ui.core`
-            )->a( n = `xmlns:u`    v = `sap.ui.unified`
-            )->a( n = `xmlns`      v = `sap.m`
+          )->ele( `ResponsivePopover`
+              )->a( n = `title`      v = `Color Picker`
+              )->a( n = `showHeader` v = `{device>/system/phone}`
 
-            )->ele( `ResponsivePopover`
-                )->a( n = `title`      v = `Color Picker`
-                )->a( n = `showHeader` v = `{device>/system/phone}`
+              )->ele( `content`
+                  )->tag( n = `ColorPicker` ns = `u`
+                      )->a( n = `mode`        v = `HSL`
+                      )->a( n = `displayMode` v = `Simplified`
 
-                )->ele( `content`
-                    )->tag( n = `ColorPicker` ns = `u`
-                        )->a( n = `mode`        v = `HSL`
-                        )->a( n = `displayMode` v = `Simplified`
+              )->end(
+              )->ele( `beginButton`
+                  )->tag( `Button`
+                      )->a( n = `text`    v = `Submit`
+                      )->a( n = `visible` v = `{device>/system/phone}`
+                      )->a( n = `press`   v = client->follow_up_action( client->cs_event-popover_close )
 
-                )->end(
-                )->ele( `beginButton`
-                    )->tag( `Button`
-                        )->a( n = `text`    v = `Submit`
-                        )->a( n = `visible` v = `{device>/system/phone}`
-                        )->a( n = `press`   v = client->follow_up_action( client->cs_event-popover_close )
+              )->end(
+              )->ele( `endButton`
+                  )->tag( `Button`
+                      )->a( n = `text`    v = `Cancel`
+                      )->a( n = `visible` v = `{device>/system/phone}`
+                      )->a( n = `press`   v = client->follow_up_action( client->cs_event-popover_close ) ).
 
-                )->end(
-                )->ele( `endButton`
-                    )->tag( `Button`
-                        )->a( n = `text`    v = `Cancel`
-                        )->a( n = `visible` v = `{device>/system/phone}`
-                        )->a( n = `press`   v = client->follow_up_action( client->cs_event-popover_close ) ).
-
-        client->popover_display( xml   = popover->stringify( )
-                                 by_id = client->get_event_arg( ) ).
-
-    ENDCASE.
+      client->popover_display( xml   = popover->stringify( )
+                               by_id = client->get_event_arg( ) ).
+    ENDIF.
 
   ENDMETHOD.
 

@@ -23,6 +23,8 @@ CLASS z2ui5_cl_smpc_app_141 IMPLEMENTATION.
     IF client->check_on_init( ).
       statustext = `There is no message sent to the invisible message service. Please, press a button.`.
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -93,15 +95,12 @@ CLASS z2ui5_cl_smpc_app_141 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `PRESS`.
-        " original onPress: announces the pressed button's type+text to the
-        " InvisibleMessage a11y service and echoes it into the status Text.
-        " The pressed button's identity is not read back here (simplified).
-        statustext = `A new message was sent to the invisible messaging service.`.
-
-    ENDCASE.
+    IF client->get_event( ) = `PRESS`.
+      " original onPress: announces the pressed button's type+text to the
+      " InvisibleMessage a11y service and echoes it into the status Text.
+      " The pressed button's identity is not read back here (simplified).
+      statustext = `A new message was sent to the invisible messaging service.`.
+    ENDIF.
 
   ENDMETHOD.
 

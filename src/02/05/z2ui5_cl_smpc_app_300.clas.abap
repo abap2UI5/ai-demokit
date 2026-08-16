@@ -26,6 +26,8 @@ CLASS z2ui5_cl_smpc_app_300 IMPLEMENTATION.
     IF client->check_on_init( ).
       expanded = abap_true.
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -179,7 +181,7 @@ CLASS z2ui5_cl_smpc_app_300 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `TOGGLE_EXPAND`.
         " original onCollapseExpandPress: toggles SideNavigation.expanded

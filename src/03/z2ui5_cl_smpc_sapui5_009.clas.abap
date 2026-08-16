@@ -1,7 +1,7 @@
 "! <p class="shorttext">sap.suite.ui.commons - statusindicator.StatusIndicator</p>
 "!
 "! SAPUI5-only control: it ships with SAPUI5, not with OpenUI5, so there is no
-"! demo kit original in this repo's sample universe and no 1:1 port (AGENTS §3).
+"! demo kit original in this repo's sample universe and no 1:1 port (AGENTS section 3).
 "! Collected here as orientation - how the control is expressed in abap2UI5.
 "!
 "! SAPUI5 demo kit: https://ui5.sap.com/#/entity/sap.suite.ui.commons.statusindicator.StatusIndicator
@@ -137,7 +137,7 @@ CLASS z2ui5_cl_smpc_sapui5_009 IMPLEMENTATION.
                 )->a( n = `title`          v = `abap2UI5 - Status Indicators Library`
                 )->a( n = `navButtonPress` v = client->_event_nav_app_leave( )
                 )->a( n = `showNavButton`  b = client->check_app_prev_stack( )
-                )->a( n = `showHeader`     b = xsdbool( abap_false = client->get( )-check_launchpad_active )
+                )->a( n = `showHeader`     b = xsdbool( client->get( )-check_launchpad_active = abap_false )
 
                 )->ele( `Panel`
                     )->a( n = `class` v = `sapUiResponsiveMargin SIPanelStyle`
@@ -199,6 +199,8 @@ CLASS z2ui5_cl_smpc_sapui5_009 IMPLEMENTATION.
     IF client->check_on_init( ).
 
       initialize( ).
+      view_display( ).
+    ELSEIF client->check_on_navigated( ).
       view_display( ).
 
     ENDIF.

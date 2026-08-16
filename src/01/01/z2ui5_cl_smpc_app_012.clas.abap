@@ -79,6 +79,8 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -432,7 +434,7 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `SELECTION`.
         DATA(selected_count) = 0.
@@ -508,11 +510,7 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
     IF pages_count > lines( t_comp_products ).
       pages_count = lines( t_comp_products ).
     ENDIF.
-    IF pages_count = 4.
-      is_desktop = abap_true.
-    ELSE.
-      is_desktop = abap_false.
-    ENDIF.
+    is_desktop = xsdbool( pages_count = 4 ).
 
     first_item = 0.
     comparison_props_build( ).

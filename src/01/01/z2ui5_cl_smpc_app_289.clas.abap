@@ -32,6 +32,8 @@ CLASS z2ui5_cl_smpc_app_289 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -79,37 +81,34 @@ CLASS z2ui5_cl_smpc_app_289 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    IF client->get_event( ) = `GENERATE`.
+      " _generateMsgStrip picks type, showIcon and showCloseButton at random.
+      " Randomness is a decision, so it is taken in ABAP - and taken
+      " DETERMINISTICALLY: the press counter rotates through the four types
+      " and through the two flag combinations, so every press still changes
+      " the strip and the port stays reproducible
+      press_count   = press_count + 1.
+      strip_visible = abap_true.
+      strip_text    = `Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ` &&
+                      `ad minim veniam, quis nostrud exercitation ullamco.`.
+      strip_type    = SWITCH string( press_count MOD 4
+                                     WHEN 1 THEN `Information`
+                                     WHEN 2 THEN `Warning`
+                                     WHEN 3 THEN `Error`
+                                     WHEN 0 THEN `Success` ).
+      show_icon     = xsdbool( press_count MOD 2 = 1 ).
+      show_close    = xsdbool( press_count MOD 3 <> 0 ).
 
-      WHEN `GENERATE`.
-        " _generateMsgStrip picks type, showIcon and showCloseButton at random.
-        " Randomness is a decision, so it is taken in ABAP - and taken
-        " DETERMINISTICALLY: the press counter rotates through the four types
-        " and through the two flag combinations, so every press still changes
-        " the strip and the port stays reproducible
-        press_count   = press_count + 1.
-        strip_visible = abap_true.
-        strip_text    = `Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ` &&
-                        `ad minim veniam, quis nostrud exercitation ullamco.`.
-        strip_type    = SWITCH string( press_count MOD 4
-                                       WHEN 1 THEN `Information`
-                                       WHEN 2 THEN `Warning`
-                                       WHEN 3 THEN `Error`
-                                       WHEN 0 THEN `Success` ).
-        show_icon     = xsdbool( press_count MOD 2 = 1 ).
-        show_close    = xsdbool( press_count MOD 3 <> 0 ).
-
-        " onInit takes an InvisibleMessage instance and _generateMsgStrip
-        " announces the new strip assertively. InvisibleMessage is a singleton
-        " with no control id, so the announcement goes through the global
-        " target added for it (pr/invisible-message-announce)
-        client->follow_up_action( val   = client->cs_event-control_global
-                                  t_arg = VALUE #( ( `INVISIBLE_MESSAGE` )
-                                                   ( `announce` )
-                                                   ( |New Information Bar of type { strip_type }| )
-                                                   ( `Assertive` ) ) ).
-
-    ENDCASE.
+      " onInit takes an InvisibleMessage instance and _generateMsgStrip
+      " announces the new strip assertively. InvisibleMessage is a singleton
+      " with no control id, so the announcement goes through the global
+      " target added for it (pr/invisible-message-announce)
+      client->follow_up_action( val   = client->cs_event-control_global
+                                t_arg = VALUE #( ( `INVISIBLE_MESSAGE` )
+                                                 ( `announce` )
+                                                 ( |New Information Bar of type { strip_type }| )
+                                                 ( `Assertive` ) ) ).
+    ENDIF.
 
   ENDMETHOD.
 

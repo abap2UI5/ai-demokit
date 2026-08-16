@@ -30,6 +30,8 @@ CLASS z2ui5_cl_smpc_app_209 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ENDIF.
 
   ENDMETHOD.
@@ -87,7 +89,7 @@ CLASS z2ui5_cl_smpc_app_209 IMPLEMENTATION.
 
   METHOD model_init.
 
-    " products.json row 0 (ProductId HT-1000) — the record the original element-binds
+    " products.json row 0 (ProductId HT-1000) - the record the original element-binds
     name          = `Notebook Basic 15`.
     productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg`.
     description   = `Notebook Basic 15 with 2,80 GHz quad core, 15" LCD, 4 GB DDR3 RAM, 500 GB Hard Disc, Windows 8 Pro`.

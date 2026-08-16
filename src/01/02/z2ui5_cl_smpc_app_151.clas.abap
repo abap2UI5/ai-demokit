@@ -23,6 +23,8 @@ CLASS z2ui5_cl_smpc_app_151 IMPLEMENTATION.
     IF client->check_on_init( ).
       selected_date = `No Date Selected`.
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -79,7 +81,7 @@ CLASS z2ui5_cl_smpc_app_151 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `CAL_SELECT`.
         " Calendar.select formats the SELECTED day as Gregorian yyyy-MM-dd (the

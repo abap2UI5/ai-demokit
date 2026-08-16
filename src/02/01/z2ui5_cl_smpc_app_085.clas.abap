@@ -31,6 +31,8 @@ CLASS z2ui5_cl_smpc_app_085 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -115,7 +117,7 @@ CLASS z2ui5_cl_smpc_app_085 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
       WHEN `ADD`.
         " onAddToken: append a Token from the input value (default text if empty), then clear the input
         DATA(text) = COND #( WHEN input_value IS NOT INITIAL THEN input_value ELSE `One more token` ).

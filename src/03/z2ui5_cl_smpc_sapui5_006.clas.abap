@@ -1,7 +1,7 @@
 "! <p class="shorttext">sap.suite.ui.commons - ProcessFlow</p>
 "!
 "! SAPUI5-only control: it ships with SAPUI5, not with OpenUI5, so there is no
-"! demo kit original in this repo's sample universe and no 1:1 port (AGENTS §3).
+"! demo kit original in this repo's sample universe and no 1:1 port (AGENTS section 3).
 "! Collected here as orientation - how the control is expressed in abap2UI5.
 "!
 "! SAPUI5 demo kit: https://ui5.sap.com/#/entity/sap.suite.ui.commons.ProcessFlow
@@ -59,6 +59,8 @@ CLASS z2ui5_cl_smpc_sapui5_006 IMPLEMENTATION.
 
       view_display( ).
       RETURN.
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -68,15 +70,12 @@ CLASS z2ui5_cl_smpc_sapui5_006 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `NODE_PRESS`.
-        " the wire carries no argument, so the press is all this knows. To act
-        " on the node itself, add a t_arg to the _event( ) call in view_display
-        " and read it back with client->get_event_arg( ).
-        client->message_toast_display( `nodePress - a process flow node was clicked` ).
-
-    ENDCASE.
+    IF client->get_event( ) = `NODE_PRESS`.
+      " the wire carries no argument, so the press is all this knows. To act
+      " on the node itself, add a t_arg to the _event( ) call in view_display
+      " and read it back with client->get_event_arg( ).
+      client->message_toast_display( `nodePress - a process flow node was clicked` ).
+    ENDIF.
 
   ENDMETHOD.
 

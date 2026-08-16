@@ -23,6 +23,8 @@ CLASS z2ui5_cl_smpc_app_130 IMPLEMENTATION.
     IF client->check_on_init( ).
       busy = abap_false.
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -88,14 +90,11 @@ CLASS z2ui5_cl_smpc_app_130 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `TOGGLE_BUSY`.
-        " original onAction: sets both controls busy, then clears after 5s
-        " (setTimeout). The client-side auto-reset is simplified to a toggle.
-        busy = xsdbool( busy = abap_false ).
-
-    ENDCASE.
+    IF client->get_event( ) = `TOGGLE_BUSY`.
+      " original onAction: sets both controls busy, then clears after 5s
+      " (setTimeout). The client-side auto-reset is simplified to a toggle.
+      busy = xsdbool( busy = abap_false ).
+    ENDIF.
 
   ENDMETHOD.
 

@@ -42,6 +42,8 @@ CLASS z2ui5_cl_smpc_app_308 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -150,23 +152,20 @@ CLASS z2ui5_cl_smpc_app_308 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `SHOW_SPECIAL_DAYS`.
-        " handleShowSpecialDays: the pressed state adds the special dates and the
-        " legend items to both calendars, the released state destroys them again -
-        " here the four bound tables are filled and cleared instead
-        pressed = client->get_event_arg( ).
-        IF pressed = abap_true.
-          special_days_fill( ).
-        ELSE.
-          CLEAR t_special1.
-          CLEAR t_special2.
-          CLEAR t_legend1.
-          CLEAR t_legend2.
-        ENDIF.
-
-    ENDCASE.
+    IF client->get_event( ) = `SHOW_SPECIAL_DAYS`.
+      " handleShowSpecialDays: the pressed state adds the special dates and the
+      " legend items to both calendars, the released state destroys them again -
+      " here the four bound tables are filled and cleared instead
+      pressed = client->get_event_arg( ).
+      IF pressed = abap_true.
+        special_days_fill( ).
+      ELSE.
+        CLEAR t_special1.
+        CLEAR t_special2.
+        CLEAR t_legend1.
+        CLEAR t_legend2.
+      ENDIF.
+    ENDIF.
 
   ENDMETHOD.
 

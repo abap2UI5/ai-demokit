@@ -55,6 +55,8 @@ CLASS z2ui5_cl_smpc_app_359 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -257,14 +259,11 @@ CLASS z2ui5_cl_smpc_app_359 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `MODE_CHANGE`.
-        " onBehaviourModeChange -> switchState: the picked mode decides the
-        " row action count and which items are shown
-        mode_apply( ).
-
-    ENDCASE.
+    IF client->get_event( ) = `MODE_CHANGE`.
+      " onBehaviourModeChange -> switchState: the picked mode decides the
+      " row action count and which items are shown
+      mode_apply( ).
+    ENDIF.
 
 
   ENDMETHOD.

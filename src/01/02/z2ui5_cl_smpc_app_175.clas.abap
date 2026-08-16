@@ -30,6 +30,8 @@ CLASS z2ui5_cl_smpc_app_175 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ENDIF.
 
   ENDMETHOD.
@@ -176,7 +178,7 @@ CLASS z2ui5_cl_smpc_app_175 IMPLEMENTATION.
 
     " original controller sets /SupplierCollection/0 via bindElement from the
     " shared demo supplier.json; flattened here to top-level model fields the
-    " {…} form bindings resolve against (values are supplier.json row 0)
+    " {...} form bindings resolve against (values are supplier.json row 0)
     suppliername = `Red Point Stores`.
     street       = `Main St`.
     housenumber  = `1618`.

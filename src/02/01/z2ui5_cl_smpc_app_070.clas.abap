@@ -27,6 +27,8 @@ CLASS z2ui5_cl_smpc_app_070 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -201,19 +203,18 @@ CLASS z2ui5_cl_smpc_app_070 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-      WHEN `SET`.
-        " the original's onPIChangeValueButtonPressed - setPercentValue/setDisplayValue on the target PI
-        DATA(target) = client->get_event_arg( ).
-        DATA(value)  = client->get_event_arg( 2 ).
-        IF target = `A`.
-          pi_a_value   = value.
-          pi_a_display = |{ value }%|.
-        ELSE.
-          pi_b_value   = value.
-          pi_b_display = |{ value }%|.
-        ENDIF.
-    ENDCASE.
+    IF client->get_event( ) = `SET`.
+      " the original's onPIChangeValueButtonPressed - setPercentValue/setDisplayValue on the target PI
+      DATA(target) = client->get_event_arg( ).
+      DATA(value)  = client->get_event_arg( 2 ).
+      IF target = `A`.
+        pi_a_value   = value.
+        pi_a_display = |{ value }%|.
+      ELSE.
+        pi_b_value   = value.
+        pi_b_display = |{ value }%|.
+      ENDIF.
+    ENDIF.
 
   ENDMETHOD.
 

@@ -1,7 +1,7 @@
 "! <p class="shorttext">sap.ui.vbm - AnalyticMap</p>
 "!
 "! SAPUI5-only control: it ships with SAPUI5, not with OpenUI5, so there is no
-"! demo kit original in this repo's sample universe and no 1:1 port (AGENTS §3).
+"! demo kit original in this repo's sample universe and no 1:1 port (AGENTS section 3).
 "! Collected here as orientation - how the control is expressed in abap2UI5.
 "!
 "! SAPUI5 demo kit: https://ui5.sap.com/#/entity/sap.ui.vbm.AnalyticMap
@@ -51,6 +51,10 @@ CLASS z2ui5_cl_smpc_sapui5_010 IMPLEMENTATION.
 
   METHOD z2ui5_if_app~main.
 
+    " No check_on_navigated( ) branch, and that is not an oversight: the view
+    " below is built and displayed OUTSIDE the lifecycle IF, so every
+    " roundtrip re-displays it - including the navigated one. The IF only
+    " seeds the model, which has to happen once.
     IF client->check_on_init( ).
 
       mt_spot = VALUE #(

@@ -29,6 +29,8 @@ CLASS z2ui5_cl_smpc_app_071 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
@@ -66,11 +68,10 @@ CLASS z2ui5_cl_smpc_app_071 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-      WHEN `TITLE_PRESS`.
-        " the original's titleClicked - MessageBox.alert("Title was clicked!")
-        client->message_box_display( text = `Title was clicked!` type = `alert` ).
-    ENDCASE.
+    IF client->get_event( ) = `TITLE_PRESS`.
+      " the original's titleClicked - MessageBox.alert("Title was clicked!")
+      client->message_box_display( text = `Title was clicked!` type = `alert` ).
+    ENDIF.
 
   ENDMETHOD.
 

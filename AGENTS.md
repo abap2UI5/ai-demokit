@@ -304,7 +304,7 @@ is expressed with the framework, as orientation. That is a knowledge store, so:
   demo-kit hyperlink is exempt from `commercial-ui5-host` for the same reason
   the assets are exempt from `data_fidelity`;
 - **classes are `z2ui5_cl_smpc_sapui5_<nnn>`**, in the samples style (dispatch
-  inline on `CASE client->get( )-event.`). They were written on the framework's
+  inline on `CASE client->get_event( ).`). They were written on the framework's
   own `z2ui5_cl_xml_view` and were **migrated to `z2ui5_cl_ui5_view_builder` on
   2026-08-15**: `z2ui5_cl_xml_view` is frozen legacy in `src/99` that abap2UI5's
   own removal plan wants gone, these 14 were the last classes anywhere in the
@@ -507,15 +507,54 @@ Three abaplint checks run on every pull request; all must report **0 issues**:
 | `ABAP_CLOUD`    | `abaplint .github/abaplint/abap_cloud.jsonc`    | `Cloud` |
 | `ABAP_702`      | `npm run downport` → `abaplint .github/abaplint/abap_702.jsonc` | `v702` |
 
-The **root** `abaplint.jsonc` carries the full curated rule set (correctness +
-style aligned with §8: `keyword_case`, `types_naming ^TY_`,
-`object_naming ^Z2UI5_CL_SMPC_`, `unused_*`, `obsolete_statement`,
-`avoid_use` incl. `defaultKey` — always `WITH EMPTY KEY`, `commented_code`,
-`definitions_top`, `whitespace_end`, …). The cloud/702 configs stay on the
-correctness core, because the 702 config also drives `abaplint --fix` in the
-downport. When adding a rule, run all three builds — a rule that fights the
-generated view-chain style (e.g. `empty_line_in_statement`, `double_space`)
-stays off deliberately.
+**The rule block in the root `abaplint.jsonc` is byte-identical in three
+repositories** — this one, [samples](https://github.com/abap2UI5/samples) and
+[samples-stack](https://github.com/abap2UI5/samples-stack) — the same way
+`scripts/chain-format.mjs` already is. abaplint has no `extends`, so the copy
+is the mechanism, and the block carries a header saying so. **Change it here
+and copy it to the other two**, then re-run their gates: what is checked is a
+joint decision of the three corpora, not a local preference.
+
+Only `global`, `dependencies` and `syntax` are per repository — plus exactly
+**one** rule: `object_naming`, which carries the `SMPC` token. It sits last in
+the file behind a marker that says so; everything above that marker must stay
+identical. All 188 rules abaplint ships are named: 171 on, 17 off, each with
+its reason in a comment. **A rule is never left out of the file** — when an
+upgrade adds one, add the key in all three: on if all three corpora pass, off
+with the reason if they do not.
+
+The cloud/702 configs stay on the correctness core, because the 702 config
+also drives `abaplint --fix` in the downport — they are NOT part of the shared
+block. When changing the shared block, run all three builds here *and* the
+other two repositories' gates.
+
+Two things this corpus contributes to the shared decisions, both of which look
+like over-permissiveness until you know why:
+
+- **`7bit_ascii` excludes 22 ports.** Their DATA is non-ASCII — product
+  descriptions, supplier names, i18n strings — because it is the original demo
+  kit sample's data, and `scripts/data-fidelity.mjs` compares it against that
+  original. Rewriting it to ASCII would fail that gate. The rule is otherwise
+  on, and it found 22 em-dashes and ellipses in *comments*, which are now
+  ASCII. **A new port whose data is non-ASCII extends that list, and says so.**
+- **`line_only_punc` and `double_space`'s `endParen` are off.** Both read
+  deliberate alignment as a defect: a chain and a `VALUE #( )` data table close
+  with `).` on its own line (70 of those, in 61 files), and a literal data
+  table aligns its rows before the closing paren (676). Same layout question
+  the five chain rules already answer — `npm run check:chains` is the gate for
+  that shape.
+
+> **Write a configured rule's flags out in full.** abaplint replaces the whole
+> options object, so a partial one silently turns every flag it omits *off* —
+> `"check_subrc": { "selectTable": false }` disables the rule entirely instead
+> of narrowing it.
+
+`short_case` forbids a single-branch `CASE`, so a class that dispatches one
+event inline writes `IF client->get_event( ) = \`X\`.` — `pattern-lint`'s
+`dead-event-wire` rule knows that shape as a dispatcher alongside the `CASE`
+form. Realigning a `TYPE` block in the **generated** overview app belongs in
+`scripts/generate-overview.mjs`, not in the generated class, or the next
+generator run undoes it.
 
 Every sample must be **ABAP Cloud ready** *and* **downportable to 7.02** — there
 is no `src/00` "restricted" area here (unlike abap2UI5/samples); everything must
