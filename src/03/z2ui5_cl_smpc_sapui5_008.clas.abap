@@ -195,8 +195,8 @@ CLASS z2ui5_cl_smpc_sapui5_008 IMPLEMENTATION.
                                 )->a( n = `title`    v = `Detail`
                                 )->a( n = `icon`     v = `sap-icon://employee`
                                 )->a( n = `press`    v = client->_event( val   = `DETAIL_POPOVER`
-                                                                        t_arg = VALUE #( ( `${$source>/id}` )
-                                                                                         ( `${ID}` ) ) )
+                                                                         t_arg = VALUE #( ( `${$source>/id}` )
+                                                                                          ( `${ID}` ) ) )
 
                         )->end(
 

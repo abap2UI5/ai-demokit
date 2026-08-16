@@ -92,6 +92,7 @@ CLASS z2ui5_cl_smpc_sapui5_004 IMPLEMENTATION.
                                         )->a( n = `size`       v = `S`
                                         )->a( n = `percentage` v = `45`
                                         )->a( n = `press`      v = client->_event( `RADIAL_PRESS` )
+
                                 )->end(
 
                                 )->ele( n = `HorizontalLayout` ns = `layout`
@@ -105,6 +106,7 @@ CLASS z2ui5_cl_smpc_sapui5_004 IMPLEMENTATION.
                                         )->a( n = `percentage` v = `99.9`
                                         )->a( n = `press`      v = client->_event( `RADIAL_PRESS` )
                                         )->a( n = `valueColor` v = `Good`
+
                                 )->end(
 
                                 )->ele( n = `HorizontalLayout` ns = `layout`
@@ -118,6 +120,7 @@ CLASS z2ui5_cl_smpc_sapui5_004 IMPLEMENTATION.
                                         )->a( n = `percentage` v = `0`
                                         )->a( n = `press`      v = client->_event( `RADIAL_PRESS` )
                                         )->a( n = `valueColor` v = `Error`
+
                                 )->end(
 
                                 )->ele( n = `HorizontalLayout` ns = `layout`
