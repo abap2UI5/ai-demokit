@@ -9,7 +9,7 @@
     "coverage": "node scripts/generate-coverage.mjs",
     "check:chains": "node scripts/chain-format.mjs",
     "fmt:chains": "node scripts/chain-format.mjs --write",
-    "gates": "node scripts/chain-format.mjs && node scripts/pattern-lint.mjs && node scripts/check-pins.mjs && node scripts/validate-meta.mjs && node scripts/structural-diff.mjs --strict && node scripts/data-fidelity.mjs && node scripts/check-mcp-contract.mjs && node scripts/generate-overview.mjs && node scripts/generate-coverage.mjs && node scripts/generate-status.mjs && git diff --exit-code -- src README.md api.md STATUS.md",
+    "gates": "node scripts/chain-format.mjs && node scripts/pattern-lint.mjs && node scripts/check-pins.mjs && node scripts/validate-meta.mjs && node scripts/structural-diff.mjs --strict && node scripts/data-fidelity.mjs && node scripts/check-mcp-contract.mjs && node scripts/generate-overview.mjs && node scripts/generate-coverage.mjs && node scripts/generate-status.mjs && node scripts/generate-samples-md.mjs && git diff --exit-code -- src README.md api.md STATUS.md SAMPLES.md",
     "gates:full": "npm run gates && npx abaplint ./abaplint.jsonc && node scripts/view-gates.mjs --strict && npm run check:collection",
     "test": "node --test scripts/test/*.test.mjs",
     "view-gates": "node scripts/view-gates.mjs --strict",
@@ -31,7 +31,9 @@
     "check:keywords": "node scripts/generate-keywords.mjs --check",
     "summary": "node scripts/generate-summary.mjs",
     "check:summary": "node scripts/generate-summary.mjs --check",
-    "descriptions": "node scripts/fetch-descriptions.mjs"
+    "descriptions": "node scripts/fetch-descriptions.mjs",
+    "samples:md": "node scripts/generate-samples-md.mjs",
+    "check:samples-md": "node scripts/generate-samples-md.mjs --check"
   },
   "repository": {
     "type": "git",

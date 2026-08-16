@@ -222,6 +222,7 @@ generation/review batch a port came from is recorded in its
 | [`TRAINING.md`](TRAINING.md) | The improvement loop: batches, quality ladder, reference repositories |
 | [`STATUS.md`](STATUS.md) | Generated point-in-time state + the open findings backlog |
 | [`STATUS-history.md`](STATUS-history.md) | The chronological journal (batches, probes, audits) |
+| [`SAMPLES.md`](SAMPLES.md) | The catalogue: every port with what it shows, grouped by UI5 library — the same page shape as [samples](https://github.com/abap2UI5/samples/blob/main/SAMPLES.md) and [samples-stack](https://github.com/abap2UI5/samples-stack/blob/main/SAMPLES.md) |
 | [`api.md`](api.md) | One row per demo kit sample: ported, backlog or out of scope |
 | [`meta/`](meta) | One sidecar per port — status, checked, typed deviations |
 | [`pr/`](pr) | Forwardable improvement requests for the abap2UI5 framework, distilled from porting gaps |

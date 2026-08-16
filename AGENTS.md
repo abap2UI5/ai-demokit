@@ -642,8 +642,9 @@ which `npm ci` / `npm install` runs automatically via the `prepare` script.
 
 ## 7. Coverage & overview — always (re)generated
 
-Four artefacts are generated, never hand-edited — edit the scripts instead:
-the `README.md` coverage block, the `STATUS.md` state block, `api.md`, and the
+Five artefacts are generated, never hand-edited — edit the scripts instead:
+the `README.md` coverage block, the `STATUS.md` state block, `api.md`,
+`SAMPLES.md`, and the
 in-system overview app `src/z2ui5_cl_smpc_app_overview.clas.*`. They regenerate
 as part of `npm run gates` (or via the individual `generate-*.mjs` scripts)
 and must leave `git diff` clean before every commit — the `meta_valid` CI job
@@ -652,6 +653,18 @@ enforces exactly that. The full spec (overview app columns and behaviour, the
 targets, the weekly `generate_result` workflow, gap-free renumbering) is in
 **`.claude/skills/regenerate-artefacts/SKILL.md`** — read it before touching a
 generator, a generated file, or the sidecar shape they read.
+
+`api.md` and `SAMPLES.md` answer different questions and both are needed.
+`api.md` is COVERAGE — one row per demo kit sample including the ~300 that are
+not ported, keyed by control, built to show what is missing. `SAMPLES.md` is
+the CATALOGUE — one row per port with the sentence that says what it shows,
+grouped by UI5 library, for somebody asking "is there a port for X".
+
+`SAMPLES.md` is written from the classes (`DESCRIPT`, `" @summary`,
+`" @keywords`), and its **row shape is a contract, not a layout**:
+`abap2UI5/samples` and `abap2UI5/samples-stack` render the identical shape and
+one parser reads all three (`abap2UI5/ai-mcp`, the `examples` tool). Change it
+here and you change it for them.
 
 ---
 
