@@ -20,8 +20,8 @@
       "what": "handleSelectToday does removeAllSelectedDates() + addSelectedDate(new DateRange({startDate: today})) and reformats. The port only writes the text: the server date IS today, so the label is 1:1, but the calendar's own highlight of that day is not moved - addSelectedDate takes a DateRange CONTROL, which no wire can construct (same residual as app 139)."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet run in a system: the CAL_SELECT expression-arg round-trip across the two displayed months and the SELECT_TODAY text update."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the CAL_SELECT expression-arg round-trip across the two displayed months and the SELECT_TODAY text update."
     }
   ]
 }

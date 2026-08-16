@@ -195,18 +195,24 @@ CLASS z2ui5_cl_smpc_app_308 IMPLEMENTATION.
       t_legend2  = VALUE #( BASE t_legend2 ( type = type text = text ) ).
     ENDDO.
 
+    " secondaryType is a UI5 ENUM (sap.ui.unified.CalendarDayType), and an
+    " unset ABAP string binds as `` - which the control rejects outright:
+    " '"" is of type string, expected sap.ui.unified.CalendarDayType'. `None`
+    " IS that enum's default, so spelling it out changes nothing about the
+    " rendering and keeps the binding legal. Found by the e2e interaction
+    " (the second Special Days press), not by reading the port.
     t_special1 = VALUE #( BASE t_special1
-      ( start_date = |{ prefix }12| type = `Type11` color = `#ff0000` )
-      ( start_date = |{ prefix }13| type = `Type11` color = `#ff69b4` )
-      ( start_date = |{ prefix }11| end_date = |{ prefix }21| type = `NonWorking` )
-      ( start_date = |{ prefix }25| type = `Working` ) ).
+      ( start_date = |{ prefix }12| type = `Type11` color = `#ff0000` secondary_type = `None` )
+      ( start_date = |{ prefix }13| type = `Type11` color = `#ff69b4` secondary_type = `None` )
+      ( start_date = |{ prefix }11| end_date = |{ prefix }21| type = `NonWorking` secondary_type = `None` )
+      ( start_date = |{ prefix }25| type = `Working` secondary_type = `None` ) ).
 
     t_special2 = VALUE #( BASE t_special2
-      ( start_date = |{ prefix }12| type = `Type11` color = `#ff0000` )
-      ( start_date = |{ prefix }13| type = `Type11` color = `#add8e6` )
+      ( start_date = |{ prefix }12| type = `Type11` color = `#ff0000` secondary_type = `None` )
+      ( start_date = |{ prefix }13| type = `Type11` color = `#add8e6` secondary_type = `None` )
       ( start_date = |{ prefix }22| type = `Type03` secondary_type = `NonWorking` )
-      ( start_date = |{ prefix }24| type = `Working` )
-      ( start_date = |{ prefix }24| type = `Type03` ) ).
+      ( start_date = |{ prefix }24| type = `Working` secondary_type = `None` )
+      ( start_date = |{ prefix }24| type = `Type03` secondary_type = `None` ) ).
 
   ENDMETHOD.
 
