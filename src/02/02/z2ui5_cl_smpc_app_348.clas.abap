@@ -28,6 +28,8 @@ CLASS z2ui5_cl_smpc_app_348 IMPLEMENTATION.
       " the Slider's value="100"
       slider_value = 100.
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.

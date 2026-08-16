@@ -23,6 +23,8 @@ CLASS z2ui5_cl_smpc_app_124 IMPLEMENTATION.
       " the original Slider value / Panel width=100%
       slider_value = 100.
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ENDIF.
 
   ENDMETHOD.

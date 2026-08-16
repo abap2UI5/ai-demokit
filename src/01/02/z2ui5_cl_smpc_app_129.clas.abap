@@ -22,6 +22,8 @@ CLASS z2ui5_cl_smpc_app_129 IMPLEMENTATION.
     IF client->check_on_init( ).
       number = `123`.
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ENDIF.
 
   ENDMETHOD.

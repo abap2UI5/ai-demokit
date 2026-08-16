@@ -253,6 +253,8 @@ CLASS z2ui5_cl_smpc_sapui5_001 IMPLEMENTATION.
       total_count = lines( counts ).
 
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
 
     ELSEIF client->check_on_event( `UPDATE_CHART_DATA` ).
       counts = VALUE #(

@@ -25,6 +25,8 @@ CLASS z2ui5_cl_smpc_app_244 IMPLEMENTATION.
       show_footer = abap_true.
       avatar_size = `XL`.
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.

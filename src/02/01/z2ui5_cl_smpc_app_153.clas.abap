@@ -24,6 +24,8 @@ CLASS z2ui5_cl_smpc_app_153 IMPLEMENTATION.
       " stays unresolved and the property keeps its default false
       showclearicon = abap_false.
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ENDIF.
 
   ENDMETHOD.

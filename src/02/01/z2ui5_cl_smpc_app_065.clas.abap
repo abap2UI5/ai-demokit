@@ -62,6 +62,8 @@ CLASS z2ui5_cl_smpc_app_065 IMPLEMENTATION.
       view_display( ).
       " original onInit: MessageToast.show('Press "Save" to trigger validation.')
       client->message_toast_display( `Press "Save" to trigger validation.` ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.

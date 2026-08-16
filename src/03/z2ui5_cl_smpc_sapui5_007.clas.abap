@@ -41,6 +41,8 @@ CLASS z2ui5_cl_smpc_sapui5_007 IMPLEMENTATION.
 
       set_data( ).
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ENDIF.
 
   ENDMETHOD.

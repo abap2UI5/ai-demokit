@@ -23,6 +23,8 @@ CLASS z2ui5_cl_smpc_app_141 IMPLEMENTATION.
     IF client->check_on_init( ).
       statustext = `There is no message sent to the invisible message service. Please, press a button.`.
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.

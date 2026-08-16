@@ -24,6 +24,8 @@ CLASS z2ui5_cl_smpc_app_181 IMPLEMENTATION.
       " a fixed date is used here so the port is deterministic
       date = `2026-07-24`.
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ENDIF.
 
   ENDMETHOD.

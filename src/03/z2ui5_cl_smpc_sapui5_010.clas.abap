@@ -51,6 +51,10 @@ CLASS z2ui5_cl_smpc_sapui5_010 IMPLEMENTATION.
 
   METHOD z2ui5_if_app~main.
 
+    " No check_on_navigated( ) branch, and that is not an oversight: the view
+    " below is built and displayed OUTSIDE the lifecycle IF, so every
+    " roundtrip re-displays it - including the navigated one. The IF only
+    " seeds the model, which has to happen once.
     IF client->check_on_init( ).
 
       mt_spot = VALUE #(

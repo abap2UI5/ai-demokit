@@ -48,6 +48,8 @@ CLASS z2ui5_cl_smpc_app_362 IMPLEMENTATION.
       SORT t_products BY name ASCENDING.
       sort_name = `Ascending`.
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.

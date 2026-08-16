@@ -268,7 +268,8 @@ CLASS z2ui5_cl_smpc_sapui5_012 IMPLEMENTATION.
     IF client->check_on_init( ).
       on_init( ).
       on_rendering( ).
-
+    ELSEIF client->check_on_navigated( ).
+      on_rendering( ).
     ELSE.
       on_event( ).
     ENDIF.

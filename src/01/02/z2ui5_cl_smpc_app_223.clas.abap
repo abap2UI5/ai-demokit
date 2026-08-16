@@ -24,6 +24,8 @@ CLASS z2ui5_cl_smpc_app_223 IMPLEMENTATION.
       slidervalue        = 100.
       selectedbackground = `Default`.
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ENDIF.
 
   ENDMETHOD.

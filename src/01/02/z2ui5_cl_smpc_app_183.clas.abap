@@ -27,6 +27,8 @@ CLASS z2ui5_cl_smpc_app_183 IMPLEMENTATION.
       dtvalue   = `2026-07-24 13:30:00`.
       dtpattern = `e.g. Dec 31, 2026, 11:59:58 PM`.
       view_display( ).
+    ELSEIF client->check_on_navigated( ).
+      view_display( ).
     ENDIF.
 
   ENDMETHOD.
