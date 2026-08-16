@@ -66,7 +66,8 @@ const VERSION_TYPES = new Set(['control-too-new', 'member-too-new', 'aggregation
  * was built. They are worth seeing on every run - an icon-only button really
  * is unusable with a screen reader - but turning 41 of them into a red build
  * is a decision for the corpus, not a side effect of upgrading the linter. */
-const ADVISORY_TYPES = new Set(['missing-accessibility', 'event-without-handler']);
+const ADVISORY_TYPES = new Set(['missing-accessibility', 'event-without-handler',
+  'missing-on-navigated-branch']);
 
 /* …but "never gating" must not mean "growing unnoticed": the RATCHET pins the
  * accepted advisory debt per finding type. The existing findings stay
@@ -77,6 +78,24 @@ const ADVISORY_TYPES = new Set(['missing-accessibility', 'event-without-handler'
  * debt decision belongs, instead of accruing silently.
  * Counts pinned 2026-08-04. */
 const ADVISORY_BUDGET = {
+  /* Added with the 0.2.0 linter bump, and it is the largest single entry this
+   * ratchet has ever carried: EVERY port. `main( )` here dispatches on
+   * check_on_init( ) alone, so nothing re-displays when a called app or a
+   * popup hands control back, or when a bookmarked state is restored.
+   *
+   * It is not a false positive and it is not a fidelity deviation — this
+   * repository decided the branch is mandatory in #102, and its own generated
+   * README now says so word for word: "The check_on_navigated branch is NOT
+   * optional and stays even in a static app with no data and no events."
+   * The demo kit originals have no such branch because they are not abap2UI5
+   * apps; a port has to carry the framework's lifecycle either way.
+   *
+   * Budgeted rather than gating, because turning 416 ports red on a linter
+   * bump is the side effect the comment below warns against — but this budget
+   * is DEBT, not a tolerated shape like the alt-less logos. It must ratchet to
+   * zero as the ports are regenerated: the generation prompt already emits the
+   * branch, so a re-port fixes it, and every batch should lower this number. */
+  'missing-on-navigated-branch': 416, // every port, measured 2026-08-16 on the 0.2.0 bump
   // raised 2026-08-09 (batch b08, sap.tnt): the two ToolPage ports keep the
   // original's alt-less sap.m.Image logo 1:1 — adding an alt would invent text
   // raised 2026-08-10 (batch b19, app 350 ProductHomeLayout): the same shape —
