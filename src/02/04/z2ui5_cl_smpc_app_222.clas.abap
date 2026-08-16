@@ -1,3 +1,5 @@
+" @keywords gridlist grid list sap.f gridlistresponsivecolumnlayout togglebutton slider panel toolbar title vbox label
+" @summary This layout displays a variable number of grid columns depending on available screen size. Grid row's height is dynamically determined by the height of the highest grid element on this row.
 CLASS z2ui5_cl_smpc_app_222 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

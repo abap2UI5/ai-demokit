@@ -1,3 +1,5 @@
+" @keywords column sap.m allows define specific properties table overflowtoolbar title toolbarspacer combobox label
+" @summary The table shares many features with the list and, in addition, introduces columns. The table is fully responsive and can hide columns or shown them in-place if the screen space is not sufficient.
 CLASS z2ui5_cl_smpc_app_009 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

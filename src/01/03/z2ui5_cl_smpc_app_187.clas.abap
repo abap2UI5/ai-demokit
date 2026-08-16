@@ -1,3 +1,5 @@
+" @keywords objectpagelayout object layout sap.uxap anchorbarnopopover objectpagedynamicheadertitle objectpagesection objectpagesubsection
+" @summary This example shows how to change the default behavior in order to be able to navigate to sections instead of subsections, using the Anchor Bar
 CLASS z2ui5_cl_smpc_app_187 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

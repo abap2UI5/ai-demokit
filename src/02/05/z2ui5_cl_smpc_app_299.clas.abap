@@ -1,3 +1,5 @@
+" @keywords sidenavigation side navigation sap.tnt sidenavigationactions vbox button dialog label input
+" @summary SideNavigation with a quick create action button.
 CLASS z2ui5_cl_smpc_app_299 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

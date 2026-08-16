@@ -1,3 +1,5 @@
+" @keywords textarea text area sap.m allows enter multi-line te
+" @summary The Text Area allows to enter multi-line text and automatically breaks to a new line for overflow text. If the text gets too big to be displayed at once the user can scroll up and down.
 CLASS z2ui5_cl_smpc_app_052 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,5 @@
+" @keywords sidenavigation side navigation sap.tnt sidenavigationsearch button image title text toolbarspacer searchfield overflowtoolbarlayoutdata
+" @summary SideNavigation with a search field in the filter section and filterable navigation items.
 CLASS z2ui5_cl_smpc_app_407 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,5 @@
+" @keywords actionlistitem action list item sap.m
+" @summary Use the Action List Item to trigger an action directly from a list
 CLASS z2ui5_cl_smpc_app_001 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

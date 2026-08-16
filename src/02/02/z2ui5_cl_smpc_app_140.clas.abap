@@ -1,3 +1,5 @@
+" @keywords blocklayout block layout sap.ui.layout backgrounds vbox hbox label select text input textarea
+" @summary Block Layout in which all cells use the same background color set and different color shade.
 CLASS z2ui5_cl_smpc_app_140 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

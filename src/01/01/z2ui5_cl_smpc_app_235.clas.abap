@@ -1,3 +1,5 @@
+" @keywords facetfilter facet filter sap.m facetfiltersimple vbox facetfilterlist facetfilteritem table overflowtoolbar title toolbarspacer
+" @summary With the Facet Filter you can offer multiple filters ('facets') to assist the user in narrowing down the data in, say, a table. With this default 'Simple' type, each filter is displayed in a row for selection.
 CLASS z2ui5_cl_smpc_app_235 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

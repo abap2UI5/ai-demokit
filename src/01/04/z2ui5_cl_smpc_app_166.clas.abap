@@ -1,3 +1,5 @@
+" @keywords semanticpage semantic sap.f.semantic title text objectattribute objectstatus table column columnlistitem objectidentifier button
+" @summary This sample demonstrates the use of a DraftIndicator in the footer area.
 CLASS z2ui5_cl_smpc_app_166 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

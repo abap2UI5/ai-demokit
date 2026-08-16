@@ -1,3 +1,5 @@
+" @keywords treetable tree table sap.ui.table treetable.basicodatatreebinding column
+" @summary Illustrates how to bind to data from an OData model without using $metadata annotations or navigation properties. Instead, treeAnnotationProperties is filled for the TreeBinding.
 CLASS z2ui5_cl_smpc_app_364 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,5 @@
+" @keywords cssgrid sap.ui.layout.cssgrid gridresponsivecolumnlayout togglebutton slider panel toolbar title text vbox label
+" @summary Example of using ResponsiveColumnLayout.
 CLASS z2ui5_cl_smpc_app_348 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,5 @@
+" @keywords sidepanel side panel sap.f single item button vbox label switch text
+" @summary Demonstrates the usage of Side Panel with single action item.
 CLASS z2ui5_cl_smpc_app_136 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

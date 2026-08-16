@@ -1,3 +1,5 @@
+" @keywords objectpageheader object header sap.uxap profileobjectpageheader objectpagelayout objectpageheaderactionbutton objectpagesection objectpagesubsection
+" @summary This is an example of ObjectPageHeader using the showPlaceholder property.
 CLASS z2ui5_cl_smpc_app_413 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

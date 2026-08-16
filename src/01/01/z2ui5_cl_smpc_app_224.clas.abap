@@ -1,3 +1,5 @@
+" @keywords list sap.m listselection overflowtoolbar title toolbarspacer select standardlistitem
+" @summary 'Single selection' forces the user to choose exactly one out of many items. With the 'multi' selection the user can pick multiple items at the same time. This is helpful for e.g. batch processing.
 CLASS z2ui5_cl_smpc_app_224 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

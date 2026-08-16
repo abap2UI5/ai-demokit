@@ -1,3 +1,5 @@
+" @keywords blockbase block base sap.uxap blockbaseblockinblock objectpagelayout objectpageheader objectpagesection objectpagesubsection
+" @summary Uses a block in a view of another block
 CLASS z2ui5_cl_smpc_app_409 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

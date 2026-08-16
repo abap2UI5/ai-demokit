@@ -1,3 +1,5 @@
+" @keywords overflowtoolbar overflow toolbar sap.m design style selection label select button
+" @summary The Design and Style properties can be used to specify the visual design of the OverflowToolbar/Toolbar.
 CLASS z2ui5_cl_smpc_app_086 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

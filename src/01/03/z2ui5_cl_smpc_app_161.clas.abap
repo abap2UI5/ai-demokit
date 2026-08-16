@@ -1,3 +1,5 @@
+" @keywords objectpagelayout object layout sap.uxap objectpage single objectpageheader objectpagesection objectpagesubsection
+" @summary Use of implicit static view definition.
 CLASS z2ui5_cl_smpc_app_161 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,5 @@
+" @keywords objectpageheader object header sap.uxap alternativeprofileobjectpageheader objectpagelayout objectpageheaderactionbutton objectpagesection objectpagesubsection responsivepopover label
+" @summary This is a different example of ObjectPageHeader hiding the headerTitle area entirely until user scrolls down.
 CLASS z2ui5_cl_smpc_app_414 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,5 @@
+" @keywords table sap.ui.table rowaction column rowactionitem rowsettings
+" @summary Shows how row actions can be used.
 CLASS z2ui5_cl_smpc_app_359 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

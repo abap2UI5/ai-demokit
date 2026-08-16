@@ -1,3 +1,5 @@
+" @keywords blockbase block base sap.uxap blockbaseeventing objectpagelayout objectpageheader objectpagesection objectpagesubsection
+" @summary Uses of a block that is firing a dummy event
 CLASS z2ui5_cl_smpc_app_410 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

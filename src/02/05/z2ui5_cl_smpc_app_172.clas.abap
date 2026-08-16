@@ -1,3 +1,5 @@
+" @keywords sidenavigation side navigation sap.tnt sidenavigationunselectableparents vbox button
+" @summary SideNavigation with unselectable parent items.
 CLASS z2ui5_cl_smpc_app_172 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

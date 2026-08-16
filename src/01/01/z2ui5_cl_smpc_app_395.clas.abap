@@ -1,3 +1,5 @@
+" @keywords overflowtoolbar overflow toolbar sap.m titletoolbar title toolbarspacer button
+" @summary The sap.m.Title control can be used to place a title inside an OverflowToolbar/Toolbar.
 CLASS z2ui5_cl_smpc_app_395 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

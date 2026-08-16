@@ -1,3 +1,5 @@
+" @keywords multicombobox multi combo box sap.m multicomboboxselectall
+" @summary MultiComboBox with enabled Select All feature inside suggestions.
 CLASS z2ui5_cl_smpc_app_281 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

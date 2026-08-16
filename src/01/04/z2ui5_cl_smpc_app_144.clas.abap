@@ -1,3 +1,5 @@
+" @keywords gridlist grid list sap.f gridboxlayout slider panel toolbar title vbox flexitemdata label
+" @summary This layout allows to display same height grid items with configurable width.
 CLASS z2ui5_cl_smpc_app_144 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

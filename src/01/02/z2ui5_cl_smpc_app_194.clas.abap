@@ -1,3 +1,5 @@
+" @keywords grid sap.ui.layout gridinfo image vbox text
+" @summary You can use the Grid control to make responsive table-free layouts; here we are using a default indent and span, and specifying the Small settings such that the image and text will stack on a small display.
 CLASS z2ui5_cl_smpc_app_194 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

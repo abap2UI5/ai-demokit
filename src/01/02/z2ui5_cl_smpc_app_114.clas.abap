@@ -1,3 +1,5 @@
+" @keywords codeeditor code editor sap.ui.codeeditor ace
+" @summary Display or edit source code with syntax highlighting for various source types.
 CLASS z2ui5_cl_smpc_app_114 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

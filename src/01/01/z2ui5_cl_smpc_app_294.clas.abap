@@ -1,3 +1,5 @@
+" @keywords messageview message sap.m messageviewwithgrouping overflowtoolbar button toolbarspacer dialog bar text messageitem link
+" @summary A sample with Message View and inside a Dialog and grouping of items
 CLASS z2ui5_cl_smpc_app_294 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

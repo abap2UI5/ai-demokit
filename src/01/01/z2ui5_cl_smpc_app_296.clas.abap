@@ -1,3 +1,5 @@
+" @keywords viewsettingsdialog settings dialog sap.m viewsettingsdialogcustomfilterdetails viewsettingsfilteritem viewsettingsitem button
+" @summary You can filter the items in the filter details page using different string filter operators.
 CLASS z2ui5_cl_smpc_app_296 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

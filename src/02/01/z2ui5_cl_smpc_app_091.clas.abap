@@ -1,3 +1,5 @@
+" @keywords timepicker time picker sap.m opened another hidden input title vbox label button
+" @summary This example demonstrates the Time Picker that is opened by another control.
 CLASS z2ui5_cl_smpc_app_091 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

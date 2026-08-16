@@ -1,3 +1,5 @@
+" @keywords containerpadding container padding sap.ui.core no content messagestrip icontabbar text icontabfilter icontabseparator
+" @summary Many UI5 containers support the standard container content padding CSS classes. Apply the CSS class 'sapUiNoContentPadding' on a UI5 container control to remove the default padding around the container content area.
 CLASS z2ui5_cl_smpc_app_087 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

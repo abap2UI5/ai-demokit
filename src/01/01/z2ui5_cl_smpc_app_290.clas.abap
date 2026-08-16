@@ -1,3 +1,5 @@
+" @keywords multiinput multi input sap.m multiinputvaluehelp selectdialog standardlistitem label token
+" @summary MultiInput that includes a SelectDialog as a value help dialog
 CLASS z2ui5_cl_smpc_app_290 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

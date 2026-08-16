@@ -1,3 +1,5 @@
+" @keywords float sap.ui.model.type typefloat label input text
+" @summary Formats and parses both integer and decimal digits.
 CLASS z2ui5_cl_smpc_app_179 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

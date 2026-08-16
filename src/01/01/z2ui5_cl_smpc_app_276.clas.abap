@@ -1,3 +1,5 @@
+" @keywords list sap.m listgrowing standardlistitem
+" @summary The Growing feature helps if your content is too big to be loaded/shown at once. It paginates the content into smaller chunks - aka pages - which are loaded/shown one after another. Random access to pages (e.
 CLASS z2ui5_cl_smpc_app_276 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

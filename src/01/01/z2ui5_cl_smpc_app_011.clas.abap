@@ -1,3 +1,5 @@
+" @keywords combobox combo box sap.m provides list
+" @summary The combo box control provides a list box with items and a text field allowing the user to either type a value directly into the control or choose from the list of existing items.
 CLASS z2ui5_cl_smpc_app_011 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

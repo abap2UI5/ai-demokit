@@ -1,3 +1,5 @@
+" @keywords splitcontainer split container sap.m master-detail navigation label button vbox text radiobuttongroup radiobutton
+" @summary SplitContainer maintains two NavContainers if running on tablet or desktop and one NavContainer - on phone. The display of master NavContainer depends on the portrait/landscape orientation of the device and the mode of SplitContainer.
 CLASS z2ui5_cl_smpc_app_096 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

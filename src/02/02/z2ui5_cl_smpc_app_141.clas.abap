@@ -1,3 +1,5 @@
+" @keywords invisiblemessage invisible message sap.ui.core a11y hbox button flexitemdata text
+" @summary The InvisibleMessage provides a way to programmaticaly expose dynamic content changes in a way that can be announced by screen readers.
 CLASS z2ui5_cl_smpc_app_141 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

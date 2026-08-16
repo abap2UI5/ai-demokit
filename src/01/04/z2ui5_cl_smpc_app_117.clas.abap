@@ -1,3 +1,5 @@
+" @keywords card sap.f fiori vbox hbox combobox datepicker button list customlistitem title text
+" @summary This sample illustrates how to specify the predefined header and the content of the Card control.
 CLASS z2ui5_cl_smpc_app_117 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

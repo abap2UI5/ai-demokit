@@ -1,3 +1,5 @@
+" @keywords title sap.m embedded link list toolbar toolbarspacer button standardlistitem
+" @summary This sample shows how to add a link to a title.
 CLASS z2ui5_cl_smpc_app_079 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

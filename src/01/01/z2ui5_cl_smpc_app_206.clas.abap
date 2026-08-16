@@ -1,3 +1,5 @@
+" @keywords objectheader object header sap.m objectheaderimage objectstatus objectattribute
+" @summary An Object Header will also make space for an image if one is specified, via a URL for the 'icon' property. Note: This example shows the image inside ObjectHeader with the responsive property set to false.
 CLASS z2ui5_cl_smpc_app_206 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

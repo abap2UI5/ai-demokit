@@ -1,3 +1,5 @@
+" @keywords cssgrid sap.ui.layout.cssgrid producthomelayout image text toolbarspacer button avatar scrollcontainer togglebutton vbox title
+" @summary Example of using several grids nested in one main grid with ResponsiveColumnLayout, in order to achieve responsive home page design.
 CLASS z2ui5_cl_smpc_app_350 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,5 @@
+" @keywords sidenavigation side navigation sap.tnt tags vbox button objectstatus
+" @summary SideNavigation with tags for status indicators and metadata.
 CLASS z2ui5_cl_smpc_app_132 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

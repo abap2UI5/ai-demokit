@@ -1,3 +1,5 @@
+" @keywords form sap.ui.layout.form form480_trial bar button vbox text link ratingindicator progressindicator input select
+" @summary Form with three groups in a three-column layout. On extra large screens a three-column layout (4:8:0) is used; on large and medium screens a two-column layout (4:8:0); on small screens a one-column layout (12:12:0).
 CLASS z2ui5_cl_smpc_app_319 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

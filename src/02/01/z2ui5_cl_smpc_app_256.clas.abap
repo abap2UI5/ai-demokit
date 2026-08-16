@@ -1,3 +1,5 @@
+" @keywords daterangeselection date range selection sap.m daterangeselectionhidden title vbox label button link
+" @summary This example shows Date Range Selection which is opened by another control.
 CLASS z2ui5_cl_smpc_app_256 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

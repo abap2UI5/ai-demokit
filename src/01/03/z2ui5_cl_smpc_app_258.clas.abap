@@ -1,3 +1,5 @@
+" @keywords objectpagedynamicheadertitle object dynamic header title sap.uxap objectpageheaderbackgrounddesign objectpagelayout objectpagesection objectpagesubsection
+" @summary This example demonstrates ObjectPage with ObjectPageDynamicHeaderTitle with Solid backgroundDesign and Translucent backgroundDesignAnchorBar.
 CLASS z2ui5_cl_smpc_app_258 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

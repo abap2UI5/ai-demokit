@@ -1,3 +1,5 @@
+" @keywords flexbox flex box sap.m flexboxopposingalignment panel button
+" @summary In this Flex Box the items are aligned at opposing ends of the container with justifyContent set to 'SpaceBetween'.
 CLASS z2ui5_cl_smpc_app_394 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

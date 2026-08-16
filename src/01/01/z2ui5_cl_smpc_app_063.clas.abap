@@ -1,3 +1,5 @@
+" @keywords newscontent news content sap.m tile tilecontent
+" @summary This control is used to display the news content text and subheader in a tile.
 CLASS z2ui5_cl_smpc_app_063 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

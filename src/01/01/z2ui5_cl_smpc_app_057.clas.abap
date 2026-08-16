@@ -1,3 +1,5 @@
+" @keywords inputlistitem input list item sap.m items hosting switch checkbox radiobutton select hbox
+" @summary Use the Input List Item on phones to build form like user interfaces.
 CLASS z2ui5_cl_smpc_app_057 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

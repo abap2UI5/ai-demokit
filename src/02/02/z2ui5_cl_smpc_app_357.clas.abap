@@ -1,3 +1,5 @@
+" @keywords table sap.ui.table odata column
+" @summary OData related example
 CLASS z2ui5_cl_smpc_app_357 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

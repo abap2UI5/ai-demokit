@@ -1,3 +1,5 @@
+" @keywords singleplanningcalendar single planning calendar sap.m day selection vbox overflowtoolbar toolbarseparator label togglebutton
+" @summary SinglePlanningCalendar with multiple date selection functionality.
 CLASS z2ui5_cl_smpc_app_109 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

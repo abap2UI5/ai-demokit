@@ -1,3 +1,5 @@
+" @keywords standardlistitem standard list item sap.m
+" @summary This list item offers a standardized user interface for list content with only title.
 CLASS z2ui5_cl_smpc_app_212 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

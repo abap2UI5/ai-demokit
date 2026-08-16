@@ -1,3 +1,5 @@
+" @keywords objectpagesubsection object sub section sap.uxap objectpagesubsectionhiddentitle label text table overflowtoolbar title toolbarspacer
+" @summary Example of a subsection with showTitle property set to false.
 CLASS z2ui5_cl_smpc_app_245 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

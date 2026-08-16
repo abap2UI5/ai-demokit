@@ -1,3 +1,5 @@
+" @keywords textarea text area sap.m textareavalueupdate label switch
+" @summary Since 1.30 the value property of sap.m.TextArea is not updated on every keystroke, but first when the user presses Enter or leaves the input. The change was necessary to fully support the standard UI5 data binding with formatters and types.
 CLASS z2ui5_cl_smpc_app_280 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

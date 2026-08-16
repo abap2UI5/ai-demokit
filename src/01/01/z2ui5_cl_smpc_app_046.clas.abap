@@ -1,3 +1,5 @@
+" @keywords scrollcontainer scroll container sap.m th image
+" @summary The Scroll Container is a control that can display arbitrary content within a limited screen area and provides touch scrolling to make all content accessible.
 CLASS z2ui5_cl_smpc_app_046 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,5 @@
+" @keywords calendar sap.ui.unified calendarmultipledayselection button list standardlistitem
+" @summary Calendar where the user can select multiple days, entire weeks (either by selecting its week number or by using SHIFT + Space) and ranges (using SHIFT + ENTER/Left mouse click).
 CLASS z2ui5_cl_smpc_app_307 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

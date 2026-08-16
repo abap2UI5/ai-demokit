@@ -1,3 +1,5 @@
+" @keywords datetime date time sap.ui.model.type typedatetime label datetimepicker input text
+" @summary This sample explains the formatting options of the DateTime type.
 CLASS z2ui5_cl_smpc_app_183 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

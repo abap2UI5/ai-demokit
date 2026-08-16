@@ -1,3 +1,5 @@
+" @keywords sidenavigation side navigation sap.tnt sidenavigationwrapping vbox button dialog label input
+" @summary SideNavigation with long texts that wrap.
 CLASS z2ui5_cl_smpc_app_300 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

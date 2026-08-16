@@ -1,3 +1,5 @@
+" @keywords objectpagelayout object layout sap.uxap objectpageonjson objectpagedynamicheadertitle objectpagesection objectpagesubsection
+" @summary Object Page sample showing a layout with subsection titles on top. This is the default layout. The sample also shows the 'Edit header' button in the Header Content area.
 CLASS z2ui5_cl_smpc_app_401 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

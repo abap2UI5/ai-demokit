@@ -1,3 +1,5 @@
+" @keywords flexbox flex box sap.m flexboxdirectionorder vbox panel button flexitemdata
+" @summary You can influence the direction and order of elements in horizontal and vertical Flex Box controls with the direction property.
 CLASS z2ui5_cl_smpc_app_393 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,5 @@
+" @keywords table sap.ui.table grid column
+" @summary Basic example showing most controls which are intended to be used inside a table.
 CLASS z2ui5_cl_smpc_app_115 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

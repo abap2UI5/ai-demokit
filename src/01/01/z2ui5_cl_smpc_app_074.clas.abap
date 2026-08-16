@@ -1,3 +1,5 @@
+" @keywords objectlistitem object list item sap.m status attributes currency objectstatus objectattribute
+" @summary The Object List Item has many possibilities to provide a quick overview for an object within a list.
 CLASS z2ui5_cl_smpc_app_074 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

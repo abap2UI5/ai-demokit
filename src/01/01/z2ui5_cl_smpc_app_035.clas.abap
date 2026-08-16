@@ -1,3 +1,5 @@
+" @keywords list sap.m empty indicates state
+" @summary If the list is empty it indicates this state by displaying a message text.
 CLASS z2ui5_cl_smpc_app_035 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,3 +1,5 @@
+" @keywords flexbox flex box sap.m flexboxbasicalignment vbox panel button
+" @summary Flex Box items can be placed in different areas using the justifyContent and alignItem properties.
 CLASS z2ui5_cl_smpc_app_392 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

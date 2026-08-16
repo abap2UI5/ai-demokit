@@ -1,3 +1,5 @@
+" @keywords time sap.ui.model.type typetimeastime label timepicker text
+" @summary This sample explains the formatting options of the Time type.
 CLASS z2ui5_cl_smpc_app_182 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

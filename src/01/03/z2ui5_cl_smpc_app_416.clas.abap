@@ -1,3 +1,5 @@
+" @keywords objectpageheader object header sap.uxap childobjectpage objectpagelayout objectpageheaderactionbutton objectpagesection objectpagesubsection
+" @summary This is an example of an ObjectPage Child page.
 CLASS z2ui5_cl_smpc_app_416 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

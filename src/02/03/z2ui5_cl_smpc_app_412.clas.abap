@@ -1,3 +1,5 @@
+" @keywords headerfacetpattern header facet pattern sap.uxap objectpagewithlinksandobjectstatus objectpagelayout objectpagedynamicheadertitle objectpagesection objectpagesubsection quickview quickviewpage
+" @summary ObjectPage sample with header content arranged using containers, called facets, Links, RatingIndicator and ObjectStatus.
 CLASS z2ui5_cl_smpc_app_412 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

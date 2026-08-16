@@ -1,3 +1,5 @@
+" @keywords splitter sap.ui.layout splitter3 app text
+" @summary Simple splitter example with two content areas that cannot be resized
 CLASS z2ui5_cl_smpc_app_339 DEFINITION PUBLIC.
 
   PUBLIC SECTION.
