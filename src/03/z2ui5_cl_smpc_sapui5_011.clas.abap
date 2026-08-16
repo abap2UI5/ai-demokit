@@ -68,8 +68,8 @@ CLASS z2ui5_cl_smpc_sapui5_011 IMPLEMENTATION.
                         )->tag( n = `BarcodeScannerButton` ns = `ndc`
                             )->a( n = `dialogTitle` v = `Barcode Scanner`
                             )->a( n = `scanSuccess` v = client->_event( val   = `ON_SCAN_SUCCESS`
-                                                                       t_arg = VALUE #( ( `${$parameters>/text}` )
-                                                                                        ( `${$parameters>/format}` ) ) ) ).
+                                                                        t_arg = VALUE #( ( `${$parameters>/text}` )
+                                                                                         ( `${$parameters>/format}` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 
