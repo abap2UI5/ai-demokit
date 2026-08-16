@@ -197,7 +197,7 @@ CLASS z2ui5_cl_smpc_app_009 IMPLEMENTATION.
 
     DATA selected TYPE abap_bool.
 
-    IF client->get( )-event = `STICKY_SELECT`.
+    IF client->get_event( ) = `STICKY_SELECT`.
       DATA(sticky_text) = client->get_event_arg( ).
       selected = client->get_event_arg( 2 ).
       IF selected = abap_true.

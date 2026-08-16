@@ -704,7 +704,7 @@ CLASS z2ui5_cl_smpc_app_401 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `TOGGLE_FOOTER`.
+    IF client->get_event( ) = `TOGGLE_FOOTER`.
       " the controller's toggleFooter: setShowFooter( !getShowFooter( ) )
       show_footer = xsdbool( show_footer = abap_false ).
     ENDIF.

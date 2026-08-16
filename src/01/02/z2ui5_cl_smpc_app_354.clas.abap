@@ -239,7 +239,7 @@ CLASS z2ui5_cl_smpc_app_354 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `SEARCH`.
         " filterGlobally: Name OR Category contains the query

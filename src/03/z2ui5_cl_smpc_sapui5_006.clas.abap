@@ -68,7 +68,7 @@ CLASS z2ui5_cl_smpc_sapui5_006 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `NODE_PRESS`.
+    IF client->get_event( ) = `NODE_PRESS`.
       " the wire carries no argument, so the press is all this knows. To act
       " on the node itself, add a t_arg to the _event( ) call in view_display
       " and read it back with client->get_event_arg( ).

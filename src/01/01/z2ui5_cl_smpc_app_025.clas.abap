@@ -94,7 +94,7 @@ CLASS z2ui5_cl_smpc_app_025 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `PRESSED`.
         client->message_toast_display( |Pressed on { client->get_event_arg( ) }| ).

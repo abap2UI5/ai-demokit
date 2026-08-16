@@ -79,7 +79,7 @@ CLASS z2ui5_cl_smpc_app_289 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `GENERATE`.
+    IF client->get_event( ) = `GENERATE`.
       " _generateMsgStrip picks type, showIcon and showCloseButton at random.
       " Randomness is a decision, so it is taken in ABAP - and taken
       " DETERMINISTICALLY: the press counter rotates through the four types

@@ -131,7 +131,7 @@ CLASS z2ui5_cl_smpc_app_291 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `ITEM_CLOSE`.
+    IF client->get_event( ) = `ITEM_CLOSE`.
       " onItemClose removes the item from its group and toasts its title; the
       " row travels by its own title, which is unique in this data
       DATA(lv_title) = client->get_event_arg( ).

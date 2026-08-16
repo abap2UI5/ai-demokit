@@ -108,7 +108,7 @@ CLASS z2ui5_cl_smpc_app_163 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `OPEN_SHEET`.
+    IF client->get_event( ) = `OPEN_SHEET`.
       " onOpen: Fragment.load( ActionSheet.fragment.xml ) + openBy( button ) -
       " rebuilt 1:1 as a popover anchored to the pressed overflow button
       DATA(sheet) = z2ui5_cl_ui5_view_builder=>factory( ).

@@ -249,7 +249,7 @@ CLASS z2ui5_cl_smpc_app_249 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `MIN_CHANGE`.
         " minChangeHandler: accept 1 <= min <= current max, else reset the

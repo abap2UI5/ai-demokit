@@ -119,7 +119,7 @@ CLASS z2ui5_cl_smpc_app_218 IMPLEMENTATION.
 
     DATA json_groups TYPE string.
 
-    IF client->get( )-event = `SUGGEST`.
+    IF client->get_event( ) = `SUGGEST`.
       DATA(suggest_value) = client->get_event_arg( ).
       IF suggest_value IS INITIAL.
         json_groups = `[]`.

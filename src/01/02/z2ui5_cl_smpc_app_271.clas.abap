@@ -270,7 +270,7 @@ CLASS z2ui5_cl_smpc_app_271 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `LAYOUT_CHANGE`.
+    IF client->get_event( ) = `LAYOUT_CHANGE`.
       " onLayoutChange: the info Text names the active GridSettings
       " aggregation; 'layout' covers both M and L
       DATA(lv_layout) = client->get_event_arg( ).

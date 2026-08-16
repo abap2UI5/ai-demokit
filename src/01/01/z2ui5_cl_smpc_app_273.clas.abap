@@ -82,7 +82,7 @@ CLASS z2ui5_cl_smpc_app_273 IMPLEMENTATION.
 
     " the five controller-built Dialogs, one per press handler: same type,
     " title, state and content text, and the same single Emphasized OK button
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `DEFAULT_DIALOG`.
         popup_message_display( title = `Default Message`

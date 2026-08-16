@@ -397,7 +397,7 @@ CLASS z2ui5_cl_smpc_app_348 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `LAYOUT_CHANGE`.
+    IF client->get_event( ) = `LAYOUT_CHANGE`.
       " onLayoutChange: setProperty('/currentBreakpoint', event layout)
       currentbreakpoint = client->get_event_arg( ).
     ENDIF.

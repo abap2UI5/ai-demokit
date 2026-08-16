@@ -78,7 +78,7 @@ CLASS z2ui5_cl_smpc_app_165 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `OPEN_SWITCH`.
+    IF client->get_event( ) = `OPEN_SWITCH`.
       DATA(popover) = z2ui5_cl_ui5_view_builder=>factory( ).
 
       popover->ele( n = `FragmentDefinition` ns = `core`

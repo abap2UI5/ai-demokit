@@ -319,7 +319,7 @@ CLASS z2ui5_cl_smpc_app_363 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `APPLY`.
+    IF client->get_event( ) = `APPLY`.
       " buttonPress: clamp the entered counts against the table's own totals
       " and tell the user when a value had to be corrected
       IF fixed_column_count > cv_total_columns.

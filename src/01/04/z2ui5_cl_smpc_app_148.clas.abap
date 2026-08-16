@@ -124,7 +124,7 @@ CLASS z2ui5_cl_smpc_app_148 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `DROP`.
+    IF client->get_event( ) = `DROP`.
       " onDrop 1:1 - the client indices are 0-based, ABAP rows 1-based. Both
       " arrive from the frontend, so they are range-checked before they are
       " used as a table index: JS would splice a nonsense index harmlessly,

@@ -55,7 +55,7 @@ CLASS z2ui5_cl_smpc_app_013 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `OPEN_COOKIE_SETTINGS_DIALOG`.
         " the original forces cookie details to be hidden on opening of the dialog

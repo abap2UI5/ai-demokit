@@ -157,7 +157,7 @@ CLASS z2ui5_cl_smpc_app_017 IMPLEMENTATION.
 
     DATA valid TYPE abap_bool.
 
-    IF client->get( )-event = `CHANGE`.
+    IF client->get_event( ) = `CHANGE`.
       DATA(source_id) = client->get_event_arg( ).
       DATA(date_from) = client->get_event_arg( 2 ).
       DATA(date_to)   = client->get_event_arg( 3 ).

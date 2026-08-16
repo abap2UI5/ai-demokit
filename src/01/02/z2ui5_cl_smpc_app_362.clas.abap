@@ -209,7 +209,7 @@ CLASS z2ui5_cl_smpc_app_362 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `SORT`.
         " sortDeliveryDate: no multi-column sorting - every other column's

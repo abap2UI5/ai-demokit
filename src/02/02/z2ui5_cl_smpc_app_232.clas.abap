@@ -271,7 +271,7 @@ CLASS z2ui5_cl_smpc_app_232 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `SAVE`.
         " original onSave (page CE_SAVE): a disabled/invisible CommandExecution

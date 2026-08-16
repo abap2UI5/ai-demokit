@@ -121,7 +121,7 @@ CLASS z2ui5_cl_smpc_app_109 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `PRESS`.
         client->message_toast_display( `Day selection mode toggled` ).

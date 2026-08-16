@@ -85,7 +85,7 @@ CLASS z2ui5_cl_smpc_app_246 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `UPLOAD`.
+    IF client->get_event( ) = `UPLOAD`.
       " original handleUploadPress: no chosen file -> 'Choose a file first';
       " else upload() then clear() (checkFileReadable is a client-side File
       " API probe with no declarative equivalent - its cannot-be-read branch

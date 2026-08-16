@@ -172,7 +172,7 @@ CLASS z2ui5_cl_smpc_app_269 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
       WHEN `BREAKPOINT_CHANGED`.
         " updateToggleButtonState: the Toggle button is enabled on S only.
         " updateShowSideContentButtonVisibility: the Open Side Content button

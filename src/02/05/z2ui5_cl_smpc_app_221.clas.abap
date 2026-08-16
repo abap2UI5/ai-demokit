@@ -381,7 +381,7 @@ CLASS z2ui5_cl_smpc_app_221 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `HOME_PRESS`.
+    IF client->get_event( ) = `HOME_PRESS`.
       CASE client->get_event_arg( ).
         WHEN `1`.
           selected_key1 = `invalidKey`.

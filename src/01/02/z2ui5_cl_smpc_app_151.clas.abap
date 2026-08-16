@@ -79,7 +79,7 @@ CLASS z2ui5_cl_smpc_app_151 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `CAL_SELECT`.
         " Calendar.select formats the SELECTED day as Gregorian yyyy-MM-dd (the

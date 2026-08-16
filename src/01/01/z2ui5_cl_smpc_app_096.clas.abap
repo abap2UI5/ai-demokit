@@ -176,7 +176,7 @@ CLASS z2ui5_cl_smpc_app_096 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `NAV_TO_DETAIL`.
         client->follow_up_action( val = client->cs_event-control_by_id

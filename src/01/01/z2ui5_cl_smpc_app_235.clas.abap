@@ -245,7 +245,7 @@ CLASS z2ui5_cl_smpc_app_235 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `STICKY_SELECT`.
         " onSelect: the controller maintains an array of sap.m.Sticky keys and

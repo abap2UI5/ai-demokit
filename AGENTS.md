@@ -304,7 +304,7 @@ is expressed with the framework, as orientation. That is a knowledge store, so:
   demo-kit hyperlink is exempt from `commercial-ui5-host` for the same reason
   the assets are exempt from `data_fidelity`;
 - **classes are `z2ui5_cl_smpc_sapui5_<nnn>`**, in the samples style (dispatch
-  inline on `CASE client->get( )-event.`). They were written on the framework's
+  inline on `CASE client->get_event( ).`). They were written on the framework's
   own `z2ui5_cl_xml_view` and were **migrated to `z2ui5_cl_ui5_view_builder` on
   2026-08-15**: `z2ui5_cl_xml_view` is frozen legacy in `src/99` that abap2UI5's
   own removal plan wants gone, these 14 were the last classes anywhere in the
@@ -550,7 +550,7 @@ like over-permissiveness until you know why:
 > of narrowing it.
 
 `short_case` forbids a single-branch `CASE`, so a class that dispatches one
-event inline writes `IF client->get( )-event = \`X\`.` — `pattern-lint`'s
+event inline writes `IF client->get_event( ) = \`X\`.` — `pattern-lint`'s
 `dead-event-wire` rule knows that shape as a dispatcher alongside the `CASE`
 form. Realigning a `TYPE` block in the **generated** overview app belongs in
 `scripts/generate-overview.mjs`, not in the generated class, or the next

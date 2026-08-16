@@ -160,7 +160,7 @@ CLASS z2ui5_cl_smpc_app_108 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `APPT_SELECT`.
         DATA(appt_title) = client->get_event_arg( ).

@@ -408,7 +408,7 @@ CLASS z2ui5_cl_smpc_app_042 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `STATUS_PRESSED`.
+    IF client->get_event( ) = `STATUS_PRESSED`.
       " the original controller builds this Dialog (title/VBox/Text/OK button) and opens it
       DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
 

@@ -583,7 +583,7 @@ CLASS z2ui5_cl_smpc_app_350 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `LAYOUT_CHANGE`.
         " onLayoutChangeMain: remember the layout and recompute every group's

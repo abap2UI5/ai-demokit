@@ -96,7 +96,7 @@ CLASS z2ui5_cl_smpc_app_093 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
       WHEN `ADD`.
         " addNewButtonPressHandler: add a new, empty employee tab
         APPEND VALUE #( name = `New employee` modified = abap_false ) TO t_employees.

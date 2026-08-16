@@ -340,10 +340,19 @@ found them following opposite conventions — and `node scripts/chain-format.mjs
   declared class attribute (a `template` aggregation counts as a row context,
   so `sap.ui.table` column templates are not judged).
 - `client->_event( \`NAME\` )` — wire a control event (press, liveChange…) to an
-  event named `NAME`. **Always** dispatch in `on_event( )` with a
-  `CASE client->get( )-event.` … `WHEN \`NAME\`.` … `ENDCASE` — even for a single
-  event (never an `IF check_on_event( )`). After changing bound data in an event,
-  call `client->view_model_update( )` to push it back (no full redraw).
+  event named `NAME`. **Always** dispatch in `on_event( )` off the event name,
+  never off `check_on_event( )`:
+  - two or more events → `CASE client->get_event( ).` … `WHEN \`NAME\`.` …
+    `ENDCASE`
+  - exactly one → `IF client->get_event( ) = \`NAME\`.` … `ENDIF`. This is not
+    a style choice: abaplint's `short_case` refuses a `CASE` with one `WHEN`
+    (2026-08-16), and `pattern-lint` knows both shapes as a dispatcher.
+
+  Read the event with `client->get_event( )`, **not** `client->get( )-event` —
+  the latter builds the whole `ty_s_get` structure to use one field of it, and
+  the corpus was converted away from it on 2026-08-16. After changing bound
+  data in an event, call `client->view_model_update( )` to push it back (no
+  full redraw).
 - **Client handle strings (`_event`, `_bind`, `follow_up_action`, …) are
   written inline at each control — never captured in a variable**, even when
   the same call repeats on many controls and even inside expression bindings

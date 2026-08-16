@@ -201,7 +201,7 @@ CLASS z2ui5_cl_smpc_app_070 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `SET`.
+    IF client->get_event( ) = `SET`.
       " the original's onPIChangeValueButtonPressed - setPercentValue/setDisplayValue on the target PI
       DATA(target) = client->get_event_arg( ).
       DATA(value)  = client->get_event_arg( 2 ).

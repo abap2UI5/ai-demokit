@@ -150,7 +150,7 @@ CLASS z2ui5_cl_smpc_app_308 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `SHOW_SPECIAL_DAYS`.
+    IF client->get_event( ) = `SHOW_SPECIAL_DAYS`.
       " handleShowSpecialDays: the pressed state adds the special dates and the
       " legend items to both calendars, the released state destroys them again -
       " here the four bound tables are filled and cleared instead

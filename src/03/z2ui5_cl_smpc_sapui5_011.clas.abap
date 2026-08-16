@@ -21,7 +21,7 @@ CLASS z2ui5_cl_smpc_sapui5_011 IMPLEMENTATION.
 
   METHOD z2ui5_if_app~main.
 
-    IF client->get( )-event = `ON_SCAN_SUCCESS`.
+    IF client->get_event( ) = `ON_SCAN_SUCCESS`.
       client->message_box_display( `Scan finished!` ).
       DATA(lt_arg) = client->get( )-t_event_arg.
       mv_scan_input = lt_arg[ 1 ].

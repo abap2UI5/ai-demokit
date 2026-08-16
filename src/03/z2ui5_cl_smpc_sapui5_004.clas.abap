@@ -40,7 +40,7 @@ CLASS z2ui5_cl_smpc_sapui5_004 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `RADIAL_PRESS`.
+    IF client->get_event( ) = `RADIAL_PRESS`.
       client->message_toast_display( `press - a radial chart was clicked` ).
     ENDIF.
 

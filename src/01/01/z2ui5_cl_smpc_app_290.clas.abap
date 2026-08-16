@@ -119,7 +119,7 @@ CLASS z2ui5_cl_smpc_app_290 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `VALUE_HELP`.
         " handleValueHelp: filter the dialog binding by what was typed, then

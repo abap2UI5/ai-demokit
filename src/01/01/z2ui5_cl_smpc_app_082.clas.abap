@@ -107,7 +107,7 @@ CLASS z2ui5_cl_smpc_app_082 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
       WHEN `PRESS_ONE`.
         client->message_toast_display( `The generic tile one pressed.` ).
       WHEN `PRESS_TWO`.

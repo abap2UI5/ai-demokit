@@ -279,7 +279,7 @@ CLASS z2ui5_cl_smpc_app_414 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `TOGGLE_HEADER_CONTENT`.
         " handlePress: the original toggles the layout's showHeaderContent state

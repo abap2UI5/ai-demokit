@@ -323,7 +323,7 @@ CLASS z2ui5_cl_smpc_app_238 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
       WHEN `GENERIC_TAG_PRESS`.
         popover_card( ).
       WHEN `TOGGLE_FOOTER`.

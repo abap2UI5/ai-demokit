@@ -401,7 +401,7 @@ CLASS z2ui5_cl_smpc_app_233 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `SUBMIT`.
         " handleInputSubmit: the entered value (two-way bound) selects the purchase

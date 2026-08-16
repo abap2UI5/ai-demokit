@@ -228,7 +228,7 @@ CLASS z2ui5_cl_smpc_app_417 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `BP_CHANGED`.
         " updateToggleButtonState: the open button shows on breakpoint S

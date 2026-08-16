@@ -75,7 +75,7 @@ CLASS z2ui5_cl_smpc_app_139 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `CAL_SELECT`.
         " _updateText: format getSelectedDates()[0] as yyyy-MM-dd. The day

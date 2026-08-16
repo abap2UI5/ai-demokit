@@ -57,7 +57,7 @@ CLASS z2ui5_cl_smpc_app_004 IMPLEMENTATION.
 
     DATA cancel_pressed TYPE abap_bool.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `OPEN_DIALOG`.
         check_busy = abap_true.

@@ -47,7 +47,7 @@ CLASS z2ui5_cl_smpc_sapui5_012 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
       WHEN `EVT_DATA_SELECT`.
         client->message_toast_display( client->get_event_arg( ) ).
       WHEN `EVT_VIZTYPE_CHANGE`.

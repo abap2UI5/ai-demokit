@@ -257,7 +257,7 @@ CLASS z2ui5_cl_smpc_app_359 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `MODE_CHANGE`.
+    IF client->get_event( ) = `MODE_CHANGE`.
       " onBehaviourModeChange -> switchState: the picked mode decides the
       " row action count and which items are shown
       mode_apply( ).

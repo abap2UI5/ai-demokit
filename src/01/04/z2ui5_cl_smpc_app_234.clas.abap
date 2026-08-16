@@ -168,7 +168,7 @@ CLASS z2ui5_cl_smpc_app_234 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `LIST_PRESS`.
         " like handleListPress: open the mid column (TwoColumnsBeginExpanded) and toast

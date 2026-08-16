@@ -78,7 +78,7 @@ CLASS z2ui5_cl_smpc_app_177 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `CAL_SELECT`.
         " handleCalendarSelect: format getSelectedDates()[0] as yyyy-MM-dd, and

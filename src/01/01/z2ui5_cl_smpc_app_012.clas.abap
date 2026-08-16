@@ -432,7 +432,7 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `SELECTION`.
         DATA(selected_count) = 0.

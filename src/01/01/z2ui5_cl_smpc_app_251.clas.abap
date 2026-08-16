@@ -62,7 +62,7 @@ CLASS z2ui5_cl_smpc_app_251 IMPLEMENTATION.
 
     " handlePress: oDialog.open() + setTimeout(close, 3000) - the 147 idiom
     " (control_by_id open + START_TIMER, the timer round-trip closes)
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `SHOW_BUSY`.
         client->follow_up_action( val   = client->cs_event-control_by_id

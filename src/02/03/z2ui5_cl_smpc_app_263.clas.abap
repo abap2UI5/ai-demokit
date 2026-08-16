@@ -789,7 +789,7 @@ CLASS z2ui5_cl_smpc_app_263 IMPLEMENTATION.
     " association setters take an EMPTY argument as null (the
     " controlIdOrNull argument kind); the earlier substitute - naming the
     " first section explicitly - is gone.
-    IF client->get( )-event = `NAVIGATE`
+    IF client->get_event( ) = `NAVIGATE`
         AND reset_check = abap_true
         AND client->get_event_arg( ) CS `page2`.
       client->follow_up_action( val   = client->cs_event-control_by_id

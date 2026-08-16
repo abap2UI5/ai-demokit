@@ -79,7 +79,7 @@ CLASS z2ui5_cl_smpc_app_014 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `LINK_PRESS`.
+    IF client->get_event( ) = `LINK_PRESS`.
       popup_display_image( client->get_event_arg( ) ).
     ENDIF.
 

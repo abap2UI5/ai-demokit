@@ -52,7 +52,7 @@ CLASS z2ui5_cl_smpc_app_037 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `SHOW_MESSAGE_TOAST`.
+    IF client->get_event( ) = `SHOW_MESSAGE_TOAST`.
       client->message_toast_display( |Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy\r\n eirmod.| ).
     ENDIF.
 

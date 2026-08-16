@@ -55,7 +55,7 @@ CLASS z2ui5_cl_smpc_app_090 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `OPEN`.
+    IF client->get_event( ) = `OPEN`.
       " the original loads Dialog.fragment.xml and opens it - rebuilt 1:1 and shown via popup_display; its bindElement /ProductCollection/0 is a no-op (static content) and dropped
       DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
       popup->ele( n = `FragmentDefinition` ns = `core`

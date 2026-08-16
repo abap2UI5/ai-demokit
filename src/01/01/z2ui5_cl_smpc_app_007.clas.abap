@@ -71,7 +71,7 @@ CLASS z2ui5_cl_smpc_app_007 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `PARENT_CLICKED`.
+    IF client->get_event( ) = `PARENT_CLICKED`.
       child1 = client->get_event_arg( ).
       child2 = client->get_event_arg( ).
       child3 = client->get_event_arg( ).

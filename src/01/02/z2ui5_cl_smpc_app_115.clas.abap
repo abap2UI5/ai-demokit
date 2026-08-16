@@ -303,7 +303,7 @@ CLASS z2ui5_cl_smpc_app_115 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `TOKEN_UPDATE`.
+    IF client->get_event( ) = `TOKEN_UPDATE`.
       " the update type, the removed token key and the row it belongs to (its
       " binding context path ends in the row index, as in app 094). The
       " original filters the row's token list by the removed KEYS, which is

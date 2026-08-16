@@ -121,7 +121,7 @@ CLASS z2ui5_cl_smpc_app_123 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `TOGGLE_EXPAND`.
         " original onCollapseExpandPress: getExpanded() -> setExpanded(!bExpanded)

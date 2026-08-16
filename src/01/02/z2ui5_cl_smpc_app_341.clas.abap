@@ -230,7 +230,7 @@ CLASS z2ui5_cl_smpc_app_341 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `FORM_SUBMIT`.
+    IF client->get_event( ) = `FORM_SUBMIT`.
       " the original walks the grid items and either sets the manifest (first
       " press) or refreshes an already-loaded Card. Same split here: the first
       " press publishes the manifests through the model, every later press

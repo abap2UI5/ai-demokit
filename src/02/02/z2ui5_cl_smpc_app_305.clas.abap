@@ -78,7 +78,7 @@ CLASS z2ui5_cl_smpc_app_305 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `CAL_SELECT`.
+    IF client->get_event( ) = `CAL_SELECT`.
       " handleCalendarSelect: a second click on the SAME day clears the
       " selection (removeSelectedDate), any other day becomes the new one;
       " _updateText then formats it yyyy-MM-dd

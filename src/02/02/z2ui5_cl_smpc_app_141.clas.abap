@@ -93,7 +93,7 @@ CLASS z2ui5_cl_smpc_app_141 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `PRESS`.
+    IF client->get_event( ) = `PRESS`.
       " original onPress: announces the pressed button's type+text to the
       " InvisibleMessage a11y service and echoes it into the status Text.
       " The pressed button's identity is not read back here (simplified).

@@ -147,7 +147,7 @@ CLASS z2ui5_cl_smpc_app_136 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `TOGGLE`.
+    IF client->get_event( ) = `TOGGLE`.
       " the event still reaches the backend when the veto fired (the framework
       " calls preventDefault synchronously and sends the event anyway), so the
       " branch is the original's: on a vetoed direction, toast and reset that

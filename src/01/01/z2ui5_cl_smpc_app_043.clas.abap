@@ -117,7 +117,7 @@ CLASS z2ui5_cl_smpc_app_043 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `TOOLBAR_PRESSED`.
+    IF client->get_event( ) = `TOOLBAR_PRESSED`.
       " original: oPanel.setExpanded(!oPanel.getExpanded()). Panel.expanded is
       " a bindable property, so the flag is bound two-way and only flipped
       " here - no frontend action, and the state survives a view rebuild

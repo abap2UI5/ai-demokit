@@ -61,7 +61,7 @@ CLASS z2ui5_cl_smpc_app_112 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `OPEN_POPOVER`.
+    IF client->get_event( ) = `OPEN_POPOVER`.
       " original openPopover: a controller-built ResponsivePopover with an
       " HSL/Simplified ColorPicker, opened by the pressed button; the
       " Device.system.phone branch (Submit/Cancel buttons vs no header) is

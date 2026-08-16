@@ -139,7 +139,7 @@ CLASS z2ui5_cl_smpc_app_267 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `BREAKPOINT_CHANGED`.
+    IF client->get_event( ) = `BREAKPOINT_CHANGED`.
       " _updateToggleButtonState: the Toggle button is enabled on the S
       " breakpoint only
       toggle_enabled = xsdbool( client->get_event_arg( ) = `S` ).

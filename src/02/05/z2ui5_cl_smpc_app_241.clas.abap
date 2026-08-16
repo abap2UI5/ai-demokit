@@ -155,7 +155,7 @@ CLASS z2ui5_cl_smpc_app_241 IMPLEMENTATION.
     DATA lv_alt   TYPE abap_bool.
     DATA lv_meta  TYPE abap_bool.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `TOGGLE_EXPAND`.
         " original onCollapseExpandPress: toggles SideNavigation.expanded

@@ -164,7 +164,7 @@ CLASS z2ui5_cl_smpc_app_010 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `MESSAGE_DIALOG_PRESS`.
+    IF client->get_event( ) = `MESSAGE_DIALOG_PRESS`.
       popup_message_display( ).
     ENDIF.
 

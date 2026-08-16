@@ -87,7 +87,7 @@ CLASS z2ui5_cl_smpc_app_288 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `PATH_CORRECT`.
         " onCorrectPathClick: setProperty( '/Source', validPath )

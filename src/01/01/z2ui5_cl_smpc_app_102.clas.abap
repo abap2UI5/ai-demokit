@@ -63,7 +63,7 @@ CLASS z2ui5_cl_smpc_app_102 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `REBIND`.
         " original fnRebind: after ~3s (the OData dataReceived) late-bind the input

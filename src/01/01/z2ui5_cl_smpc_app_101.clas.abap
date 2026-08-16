@@ -476,7 +476,7 @@ CLASS z2ui5_cl_smpc_app_101 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `ADDITIONAL_INFO`.
         " reproduces additionalInfoValidation: name >= 6 chars, weight numeric

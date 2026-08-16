@@ -246,7 +246,7 @@ CLASS z2ui5_cl_smpc_app_352 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `SEARCH`.
         " handleTxtFilter: Name OR Status contains the query

@@ -194,7 +194,7 @@ CLASS z2ui5_cl_smpc_sapui5_003 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `BAR_CHANGED`.
         " the chart's points are two-way bound, so the new selection is already

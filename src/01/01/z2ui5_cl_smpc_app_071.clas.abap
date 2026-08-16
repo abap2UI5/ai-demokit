@@ -66,7 +66,7 @@ CLASS z2ui5_cl_smpc_app_071 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `TITLE_PRESS`.
+    IF client->get_event( ) = `TITLE_PRESS`.
       " the original's titleClicked - MessageBox.alert("Title was clicked!")
       client->message_box_display( text = `Title was clicked!` type = `alert` ).
     ENDIF.

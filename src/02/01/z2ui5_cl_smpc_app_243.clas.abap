@@ -72,7 +72,7 @@ CLASS z2ui5_cl_smpc_app_243 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `SHOW_POPOVER`.
         " Popover.fragment.xml: a ResponsivePopover with begin/end action buttons,

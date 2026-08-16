@@ -100,7 +100,7 @@ CLASS z2ui5_cl_smpc_app_144 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `SLIDER`.
+    IF client->get_event( ) = `SLIDER`.
       " original onSliderMoved: byId('panelForGridList').setWidth(value + '%')
       panel_width = |{ slider_value }%|.
     ENDIF.

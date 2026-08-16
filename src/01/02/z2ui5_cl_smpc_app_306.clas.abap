@@ -98,7 +98,7 @@ CLASS z2ui5_cl_smpc_app_306 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `CAL_SELECT`.
         " _updateText: the interval's start and end formatted yyyy-MM-dd, or

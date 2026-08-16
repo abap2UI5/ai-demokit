@@ -234,7 +234,7 @@ CLASS z2ui5_cl_smpc_app_357 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `MODEL_REFRESH`.
         " onModelRefresh: binding.refresh( true ) - re-read the rows

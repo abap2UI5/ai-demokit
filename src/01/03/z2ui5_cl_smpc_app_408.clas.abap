@@ -122,7 +122,7 @@ CLASS z2ui5_cl_smpc_app_408 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `TOGGLE_TITLE`.
+    IF client->get_event( ) = `TOGGLE_TITLE`.
       subsectionlayout = COND #( WHEN subsectionlayout = `TitleOnTop`
                                  THEN `TitleOnLeft`
                                  ELSE `TitleOnTop` ).

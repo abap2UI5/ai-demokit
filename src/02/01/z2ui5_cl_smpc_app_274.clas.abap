@@ -80,7 +80,7 @@ CLASS z2ui5_cl_smpc_app_274 IMPLEMENTATION.
     " the three controller-built Dialogs: same title, showFullScreenButton and
     " product List, differing only in resizable / draggable / the fixed content
     " size, and in the first one's extra Emphasized OK begin button
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN `DIALOG`.
         popup_products_display( resizable = abap_false

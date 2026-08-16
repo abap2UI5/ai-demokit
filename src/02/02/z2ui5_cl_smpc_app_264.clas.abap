@@ -188,7 +188,7 @@ CLASS z2ui5_cl_smpc_app_264 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `TOGGLE_FILTERS`.
+    IF client->get_event( ) = `TOGGLE_FILTERS`.
       " onToggleFilters: flip ui>/showOrganizational and apply the other
       " filter pair to the rows binding - here the flag flips and the view is
       " redrawn, which re-bakes the boundFilters list into the binding info

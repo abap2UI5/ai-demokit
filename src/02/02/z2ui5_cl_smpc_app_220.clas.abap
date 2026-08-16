@@ -120,7 +120,7 @@ CLASS z2ui5_cl_smpc_app_220 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `CAL_SELECT`.
+    IF client->get_event( ) = `CAL_SELECT`.
       " handleCalendarSelect: DateFormat.getInstance({style:'long'}).format(oDate)
       " - the English long form ('March 17, 2026'). The day arrives as its three
       " LOCAL parts; year 0 means the re-click cleared the selection

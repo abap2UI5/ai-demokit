@@ -741,7 +741,7 @@ CLASS ${CLASS} IMPLEMENTATION.
     " here because abaplint wants every definition at the top of the routine
     DATA li_app TYPE REF TO z2ui5_if_app.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
 
       WHEN \`LINKS\`.
         " the four link buttons for the pressed row, opened in a popover

@@ -149,7 +149,7 @@ CLASS z2ui5_cl_smpc_app_073 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    CASE client->get_event( ).
       WHEN `FEEDBACK`.
         " the original's handleFeedbacklinkPressed - a Dialog with a RatingIndicator + TextArea and Submit/Cancel
         DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).

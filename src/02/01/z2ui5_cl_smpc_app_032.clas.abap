@@ -120,7 +120,7 @@ CLASS z2ui5_cl_smpc_app_032 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get( )-event = `LINK_PRESS`.
+    IF client->get_event( ) = `LINK_PRESS`.
       client->message_toast_display(
         text = `You have pressed a link in value state message`
         my   = `center center`
