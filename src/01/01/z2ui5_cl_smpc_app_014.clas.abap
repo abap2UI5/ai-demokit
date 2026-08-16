@@ -79,12 +79,9 @@ CLASS z2ui5_cl_smpc_app_014 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `LINK_PRESS`.
-        popup_display_image( client->get_event_arg( ) ).
-
-    ENDCASE.
+    IF client->get( )-event = `LINK_PRESS`.
+      popup_display_image( client->get_event_arg( ) ).
+    ENDIF.
 
   ENDMETHOD.
 

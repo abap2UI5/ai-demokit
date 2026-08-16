@@ -176,7 +176,7 @@ CLASS z2ui5_cl_smpc_app_175 IMPLEMENTATION.
 
     " original controller sets /SupplierCollection/0 via bindElement from the
     " shared demo supplier.json; flattened here to top-level model fields the
-    " {…} form bindings resolve against (values are supplier.json row 0)
+    " {...} form bindings resolve against (values are supplier.json row 0)
     suppliername = `Red Point Stores`.
     street       = `Main St`.
     housenumber  = `1618`.

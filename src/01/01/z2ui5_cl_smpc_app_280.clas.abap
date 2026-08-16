@@ -77,15 +77,11 @@ CLASS z2ui5_cl_smpc_app_280 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `LIVE_CHANGE`.
-
-        " the original controller writes the event's value into the getValue Text,
-        " deliberately bypassing the model - here it is the backend that holds it
-        get_value = client->get_event_arg( ).
-
-    ENDCASE.
+    IF client->get( )-event = `LIVE_CHANGE`.
+      " the original controller writes the event's value into the getValue Text,
+      " deliberately bypassing the model - here it is the backend that holds it
+      get_value = client->get_event_arg( ).
+    ENDIF.
 
   ENDMETHOD.
 

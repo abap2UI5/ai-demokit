@@ -238,16 +238,13 @@ CLASS z2ui5_cl_smpc_app_360 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `PASTE`.
-        " onPaste: report what arrived. The original first asks whether to
-        " paste at the selected cell range; the CellSelector that provides that
-        " range is added in the controller and has no counterpart here, so the
-        " table-level branch of the same handler is what remains
-        client->message_toast_display( |Pasted Data (on Table Level):\n\n{ client->get_event_arg( ) }| ).
-
-    ENDCASE.
+    IF client->get( )-event = `PASTE`.
+      " onPaste: report what arrived. The original first asks whether to
+      " paste at the selected cell range; the CellSelector that provides that
+      " range is added in the controller and has no counterpart here, so the
+      " table-level branch of the same handler is what remains
+      client->message_toast_display( |Pasted Data (on Table Level):\n\n{ client->get_event_arg( ) }| ).
+    ENDIF.
 
 
   ENDMETHOD.

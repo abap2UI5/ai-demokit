@@ -294,9 +294,12 @@ CLASS z2ui5_cl_smpc_app_065 IMPLEMENTATION.
         " invalid values and authors the matching four messages (3 Errors + 1 Warning), which the
         " z2ui5.cc.MessageManager reconciles into the message manager.
         IF lines( t_forms ) >= 7.
-          t_forms[ 5 ]-name     = ``.                 " John Miller  -> /T_FORMS/4/NAME
-          t_forms[ 6 ]-zip_code = `AAA`.              " Stefan Bosch -> /T_FORMS/5/ZIP_CODE
-          t_forms[ 7 ]-email    = `MariaFontes.com`.  " Maria Fontes -> /T_FORMS/6/EMAIL
+          " John Miller  -> /T_FORMS/4/NAME
+          t_forms[ 5 ]-name     = ``.
+          " Stefan Bosch -> /T_FORMS/5/ZIP_CODE
+          t_forms[ 6 ]-zip_code = `AAA`.
+          " Maria Fontes -> /T_FORMS/6/EMAIL
+          t_forms[ 7 ]-email    = `MariaFontes.com`.
         ENDIF.
         IF t_employment IS NOT INITIAL.
           t_employment[ 1 ]-weeklyhours = `400`.

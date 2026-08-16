@@ -5,18 +5,18 @@ CLASS z2ui5_cl_smpc_app_215 DEFINITION PUBLIC.
 
     TYPES:
       BEGIN OF ty_s_product,
-        productid      TYPE string,
-        name           TYPE string,
-        suppliername   TYPE string,
-        width          TYPE string,
-        depth          TYPE string,
-        height         TYPE string,
-        dimunit        TYPE string,
-        weightmeasure  TYPE string,
-        weightunit     TYPE string,
-        price          TYPE p LENGTH 14 DECIMALS 2,
-        currencycode   TYPE string,
-        description    TYPE string,
+        productid     TYPE string,
+        name          TYPE string,
+        suppliername  TYPE string,
+        width         TYPE string,
+        depth         TYPE string,
+        height        TYPE string,
+        dimunit       TYPE string,
+        weightmeasure TYPE string,
+        weightunit    TYPE string,
+        price         TYPE p LENGTH 14 DECIMALS 2,
+        currencycode  TYPE string,
+        description   TYPE string,
       END OF ty_s_product.
     DATA t_product_collection TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
 

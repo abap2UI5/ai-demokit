@@ -270,15 +270,14 @@ CLASS z2ui5_cl_smpc_app_271 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-      WHEN `LAYOUT_CHANGE`.
-        " onLayoutChange: the info Text names the active GridSettings
-        " aggregation; 'layout' covers both M and L
-        DATA(lv_layout) = client->get_event_arg( ).
-        info_text = COND string( WHEN lv_layout = `layout`
-                                 THEN `Layout size is: layoutM or layoutL`
-                                 ELSE |Layout size is: { lv_layout }| ).
-    ENDCASE.
+    IF client->get( )-event = `LAYOUT_CHANGE`.
+      " onLayoutChange: the info Text names the active GridSettings
+      " aggregation; 'layout' covers both M and L
+      DATA(lv_layout) = client->get_event_arg( ).
+      info_text = COND string( WHEN lv_layout = `layout`
+                               THEN `Layout size is: layoutM or layoutL`
+                               ELSE |Layout size is: { lv_layout }| ).
+    ENDIF.
 
   ENDMETHOD.
 

@@ -120,28 +120,25 @@ CLASS z2ui5_cl_smpc_app_220 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `CAL_SELECT`.
-        " handleCalendarSelect: DateFormat.getInstance({style:'long'}).format(oDate)
-        " - the English long form ('March 17, 2026'). The day arrives as its three
-        " LOCAL parts; year 0 means the re-click cleared the selection
-        DATA(year) = client->get_event_arg( ).
-        IF year IS INITIAL OR year = `0`.
-          selected_date = `No Date Selected`.
-        ELSE.
-          DATA(month) = CONV i( client->get_event_arg( 2 ) ).
-          selected_date = |{ SWITCH string( month
-                                            WHEN 1 THEN `January`   WHEN 2 THEN `February`
-                                            WHEN 3 THEN `March`     WHEN 4 THEN `April`
-                                            WHEN 5 THEN `May`       WHEN 6 THEN `June`
-                                            WHEN 7 THEN `July`      WHEN 8 THEN `August`
-                                            WHEN 9 THEN `September` WHEN 10 THEN `October`
-                                            WHEN 11 THEN `November` WHEN 12 THEN `December` ) }| &&
-                          | { CONV i( client->get_event_arg( 3 ) ) }, { year }|.
-        ENDIF.
-
-    ENDCASE.
+    IF client->get( )-event = `CAL_SELECT`.
+      " handleCalendarSelect: DateFormat.getInstance({style:'long'}).format(oDate)
+      " - the English long form ('March 17, 2026'). The day arrives as its three
+      " LOCAL parts; year 0 means the re-click cleared the selection
+      DATA(year) = client->get_event_arg( ).
+      IF year IS INITIAL OR year = `0`.
+        selected_date = `No Date Selected`.
+      ELSE.
+        DATA(month) = CONV i( client->get_event_arg( 2 ) ).
+        selected_date = |{ SWITCH string( month
+                                          WHEN 1 THEN `January`   WHEN 2 THEN `February`
+                                          WHEN 3 THEN `March`     WHEN 4 THEN `April`
+                                          WHEN 5 THEN `May`       WHEN 6 THEN `June`
+                                          WHEN 7 THEN `July`      WHEN 8 THEN `August`
+                                          WHEN 9 THEN `September` WHEN 10 THEN `October`
+                                          WHEN 11 THEN `November` WHEN 12 THEN `December` ) }| &&
+                        | { CONV i( client->get_event_arg( 3 ) ) }, { year }|.
+      ENDIF.
+    ENDIF.
 
   ENDMETHOD.
 

@@ -647,18 +647,15 @@ CLASS z2ui5_cl_smpc_app_287 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `DENSITY`.
-        " the original reads the selected button's TEXT; the group's
-        " selectedIndex is bound two-way, so the same three values are derived
-        " server-side and every bar follows through its tabDensityMode binding
-        tab_density = SWITCH string( density_idx
-                                     WHEN 0 THEN `Cozy`
-                                     WHEN 1 THEN `Compact`
-                                     WHEN 2 THEN `Inherit` ).
-
-    ENDCASE.
+    IF client->get( )-event = `DENSITY`.
+      " the original reads the selected button's TEXT; the group's
+      " selectedIndex is bound two-way, so the same three values are derived
+      " server-side and every bar follows through its tabDensityMode binding
+      tab_density = SWITCH string( density_idx
+                                   WHEN 0 THEN `Cozy`
+                                   WHEN 1 THEN `Compact`
+                                   WHEN 2 THEN `Inherit` ).
+    ENDIF.
 
   ENDMETHOD.
 

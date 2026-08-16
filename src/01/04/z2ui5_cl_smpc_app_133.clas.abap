@@ -155,13 +155,10 @@ CLASS z2ui5_cl_smpc_app_133 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `MODE_CHANGE`.
-        " original onModeChange: setMode(key) + setHeaderText('GridList with mode ' + key)
-        header_text = |GridList with mode { mode }|.
-
-    ENDCASE.
+    IF client->get( )-event = `MODE_CHANGE`.
+      " original onModeChange: setMode(key) + setHeaderText('GridList with mode ' + key)
+      header_text = |GridList with mode { mode }|.
+    ENDIF.
 
   ENDMETHOD.
 

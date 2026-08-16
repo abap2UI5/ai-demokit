@@ -185,10 +185,9 @@ CLASS z2ui5_cl_smpc_app_377 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-      WHEN `FILTER_SELECT`.
-        table_filter( client->get_event_arg( ) ).
-    ENDCASE.
+    IF client->get( )-event = `FILTER_SELECT`.
+      table_filter( client->get_event_arg( ) ).
+    ENDIF.
 
   ENDMETHOD.
 

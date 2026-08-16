@@ -230,26 +230,23 @@ CLASS z2ui5_cl_smpc_app_341 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `FORM_SUBMIT`.
-        " the original walks the grid items and either sets the manifest (first
-        " press) or refreshes an already-loaded Card. Same split here: the first
-        " press publishes the manifests through the model, every later press
-        " calls refresh( ) on each Card via a frontend action
-        IF manifest_listtest = c_no_manifest.
-          model_init( ).
-        ELSE.
-          LOOP AT VALUE string_table( ( `listTest` ) ( `list` ) ( `error` ) ( `all` )
-                                      ( `descriptionTitle` ) ( `iconTitle` ) ( `table` )
-                                      ( `analytical` ) ( `calendar` ) ( `object` )
-                                      ( `timeline` ) ) INTO DATA(lv_card_id).
-            client->follow_up_action( val   = client->cs_event-control_by_id
-                                      t_arg = VALUE #( ( lv_card_id ) ( `refresh` ) ) ).
-          ENDLOOP.
-        ENDIF.
-
-    ENDCASE.
+    IF client->get( )-event = `FORM_SUBMIT`.
+      " the original walks the grid items and either sets the manifest (first
+      " press) or refreshes an already-loaded Card. Same split here: the first
+      " press publishes the manifests through the model, every later press
+      " calls refresh( ) on each Card via a frontend action
+      IF manifest_listtest = c_no_manifest.
+        model_init( ).
+      ELSE.
+        LOOP AT VALUE string_table( ( `listTest` ) ( `list` ) ( `error` ) ( `all` )
+                                    ( `descriptionTitle` ) ( `iconTitle` ) ( `table` )
+                                    ( `analytical` ) ( `calendar` ) ( `object` )
+                                    ( `timeline` ) ) INTO DATA(lv_card_id).
+          client->follow_up_action( val   = client->cs_event-control_by_id
+                                    t_arg = VALUE #( ( lv_card_id ) ( `refresh` ) ) ).
+        ENDLOOP.
+      ENDIF.
+    ENDIF.
 
   ENDMETHOD.
 

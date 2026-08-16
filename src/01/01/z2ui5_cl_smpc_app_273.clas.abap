@@ -155,7 +155,6 @@ CLASS z2ui5_cl_smpc_app_273 IMPLEMENTATION.
   METHOD model_init.
 
     " the sample has no model - the five dialogs are built from literals
-    RETURN.
 
   ENDMETHOD.
 

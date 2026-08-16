@@ -88,14 +88,11 @@ CLASS z2ui5_cl_smpc_app_130 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `TOGGLE_BUSY`.
-        " original onAction: sets both controls busy, then clears after 5s
-        " (setTimeout). The client-side auto-reset is simplified to a toggle.
-        busy = xsdbool( busy = abap_false ).
-
-    ENDCASE.
+    IF client->get( )-event = `TOGGLE_BUSY`.
+      " original onAction: sets both controls busy, then clears after 5s
+      " (setTimeout). The client-side auto-reset is simplified to a toggle.
+      busy = xsdbool( busy = abap_false ).
+    ENDIF.
 
   ENDMETHOD.
 

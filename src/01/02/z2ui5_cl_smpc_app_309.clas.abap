@@ -62,12 +62,9 @@ CLASS z2ui5_cl_smpc_app_309 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `OPEN_POPOVER`.
-        popover_colorpicker_display( ).
-
-    ENDCASE.
+    IF client->get( )-event = `OPEN_POPOVER`.
+      popover_colorpicker_display( ).
+    ENDIF.
 
   ENDMETHOD.
 

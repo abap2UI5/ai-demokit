@@ -1,7 +1,7 @@
 "! <p class="shorttext">sap.ndc - BarcodeScannerButton</p>
 "!
 "! SAPUI5-only control: it ships with SAPUI5, not with OpenUI5, so there is no
-"! demo kit original in this repo's sample universe and no 1:1 port (AGENTS §3).
+"! demo kit original in this repo's sample universe and no 1:1 port (AGENTS section 3).
 "! Collected here as orientation - how the control is expressed in abap2UI5.
 "!
 "! SAPUI5 demo kit: https://ui5.sap.com/#/entity/sap.ndc.BarcodeScannerButton
@@ -21,17 +21,15 @@ CLASS z2ui5_cl_smpc_sapui5_011 IMPLEMENTATION.
 
   METHOD z2ui5_if_app~main.
 
-    CASE client->get( )-event.
-
-      WHEN `ON_SCAN_SUCCESS`.
-        client->message_box_display( `Scan finished!`).
-        DATA(lt_arg) = client->get( )-t_event_arg.
-        mv_scan_input = lt_arg[ 1 ].
-        mv_scan_type  = lt_arg[ 2 ].
-        "implement further processing here...
-        "...
-        RETURN.
-    ENDCASE.
+    IF client->get( )-event = `ON_SCAN_SUCCESS`.
+      client->message_box_display( `Scan finished!` ).
+      DATA(lt_arg) = client->get( )-t_event_arg.
+      mv_scan_input = lt_arg[ 1 ].
+      mv_scan_type  = lt_arg[ 2 ].
+      "implement further processing here...
+      "...
+      RETURN.
+    ENDIF.
 
     DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
@@ -48,7 +46,7 @@ CLASS z2ui5_cl_smpc_sapui5_011 IMPLEMENTATION.
                 )->a( n = `title`          v = `abap2UI5`
                 )->a( n = `navButtonPress` v = client->_event_nav_app_leave( )
                 )->a( n = `showNavButton`  b = client->check_app_prev_stack( )
-                )->a( n = `showHeader`     b = xsdbool( abap_false = client->get( )-check_launchpad_active )
+                )->a( n = `showHeader`     b = xsdbool( client->get( )-check_launchpad_active = abap_false )
 
                 )->ele( n = `SimpleForm` ns = `form`
                     )->a( n = `title`    v = `Information`

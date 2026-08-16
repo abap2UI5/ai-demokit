@@ -298,11 +298,10 @@ CLASS z2ui5_cl_smpc_app_416 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-      WHEN `LINK2_PRESS`.
-        " the controller's handleLink2Press constant-text MessageToast
-        client->message_toast_display( `Page 2 long link clicked` ).
-    ENDCASE.
+    IF client->get( )-event = `LINK2_PRESS`.
+      " the controller's handleLink2Press constant-text MessageToast
+      client->message_toast_display( `Page 2 long link clicked` ).
+    ENDIF.
 
   ENDMETHOD.
 

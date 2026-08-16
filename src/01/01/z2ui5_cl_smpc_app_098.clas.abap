@@ -256,7 +256,7 @@ CLASS z2ui5_cl_smpc_app_098 IMPLEMENTATION.
                         )->a( n = `key`  v = `3`
 
                 )->end(
-                " presetFilterItems added declaratively (the original adds them in _presetFiltersInit; the Filter payload is inert here — no list is bound)
+                " presetFilterItems added declaratively (the original adds them in _presetFiltersInit; the Filter payload is inert here - no list is bound)
                 )->ele( `presetFilterItems`
                     )->tag( `ViewSettingsItem`
                         )->a( n = `key`  v = `myPresetFilter1`

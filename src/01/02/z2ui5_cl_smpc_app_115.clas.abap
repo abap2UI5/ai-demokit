@@ -11,25 +11,25 @@ CLASS z2ui5_cl_smpc_app_115 DEFINITION PUBLIC.
              name TYPE string,
            END OF ty_s_named.
     TYPES: BEGIN OF ty_s_product,
-             productid       TYPE string,
-             name            TYPE string,
-             quantity        TYPE i,
-             status          TYPE string,
-             price           TYPE p LENGTH 9 DECIMALS 2,
-             currencycode    TYPE string,
-             suppliername    TYPE string,
-             productpicurl   TYPE string,
-             category        TYPE string,
-             weightmeasure   TYPE p LENGTH 9 DECIMALS 3,
+             productid                     TYPE string,
+             name                          TYPE string,
+             quantity                      TYPE i,
+             status                        TYPE string,
+             price                         TYPE p LENGTH 9 DECIMALS 2,
+             currencycode                  TYPE string,
+             suppliername                  TYPE string,
+             productpicurl                 TYPE string,
+             category                      TYPE string,
+             weightmeasure                 TYPE p LENGTH 9 DECIMALS 3,
              " derived in initSampleDataModel, reproduced in model_init
-             available       TYPE abap_bool,
-             availablestate  TYPE string,
-             availableicon   TYPE string,
-             heavy           TYPE string,
-             deliverydate    TYPE string,
+             available                     TYPE abap_bool,
+             availablestate                TYPE string,
+             availableicon                 TYPE string,
+             heavy                         TYPE string,
+             deliverydate                  TYPE string,
              " the MultiInput column: the sample's rows carry neither key, so both
              " start empty and the token table grows through the tokenUpdate wire
-             additionalcategory TYPE string,
+             additionalcategory            TYPE string,
              additionalcategoriesselection TYPE STANDARD TABLE OF ty_s_token WITH EMPTY KEY,
            END OF ty_s_product.
     DATA productcollection TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
@@ -303,32 +303,29 @@ CLASS z2ui5_cl_smpc_app_115 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `TOKEN_UPDATE`.
-        " the update type, the removed token key and the row it belongs to (its
-        " binding context path ends in the row index, as in app 094). The
-        " original filters the row's token list by the removed KEYS, which is
-        " reproduced verbatim - an empty key matches the empty-key tokens, the
-        " same set the original's filter drops
-        DATA(update_type) = client->get_event_arg( ).
-        DATA(removed_key) = client->get_event_arg( 2 ).
-        DATA(row_path) = client->get_event_arg( 3 ).
-        DATA(row_index) = CONV i( substring_after( val = row_path
-                                                   sub = `/`
-                                                   occ = -1 ) ).
-        " the row is addressed through a field symbol, not a table expression:
-        " abaplint's downport leaves an itab[ ] TARGET of INSERT/DELETE in
-        " place, and the 702 parser rejects it
-        DATA(row_no) = row_index + 1.
-        IF update_type = `removed`.
-          READ TABLE productcollection INDEX row_no ASSIGNING FIELD-SYMBOL(<product>).
-          IF sy-subrc = 0.
-            DELETE <product>-additionalcategoriesselection WHERE key = removed_key.
-          ENDIF.
+    IF client->get( )-event = `TOKEN_UPDATE`.
+      " the update type, the removed token key and the row it belongs to (its
+      " binding context path ends in the row index, as in app 094). The
+      " original filters the row's token list by the removed KEYS, which is
+      " reproduced verbatim - an empty key matches the empty-key tokens, the
+      " same set the original's filter drops
+      DATA(update_type) = client->get_event_arg( ).
+      DATA(removed_key) = client->get_event_arg( 2 ).
+      DATA(row_path) = client->get_event_arg( 3 ).
+      DATA(row_index) = CONV i( substring_after( val = row_path
+                                                 sub = `/`
+                                                 occ = -1 ) ).
+      " the row is addressed through a field symbol, not a table expression:
+      " abaplint's downport leaves an itab[ ] TARGET of INSERT/DELETE in
+      " place, and the 702 parser rejects it
+      DATA(row_no) = row_index + 1.
+      IF update_type = `removed`.
+        READ TABLE productcollection INDEX row_no ASSIGNING FIELD-SYMBOL(<product>).
+        IF sy-subrc = 0.
+          DELETE <product>-additionalcategoriesselection WHERE key = removed_key.
         ENDIF.
-
-    ENDCASE.
+      ENDIF.
+    ENDIF.
 
   ENDMETHOD.
 

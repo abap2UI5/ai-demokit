@@ -222,25 +222,30 @@ CLASS z2ui5_cl_smpc_app_247 IMPLEMENTATION.
 
   METHOD set_widths.
 
-    IF mode = `Flexible`.
-      name     = `25%`.
-      category = `25%`.
-      image    = `15%`.
-      quantity = `10%`.
-      date     = `25%`.
-    ELSEIF mode = `Mixed`.
-      name     = `20%`.
-      category = `11rem`.
-      image    = `7rem`.
-      quantity = `6rem`.
-      date     = `9rem`.
-    ELSE.
-      name     = `13rem`.
-      category = `11rem`.
-      image    = `7rem`.
-      quantity = `6rem`.
-      date     = `9rem`.
-    ENDIF.
+    CASE mode.
+
+      WHEN `Flexible`.
+        name     = `25%`.
+        category = `25%`.
+        image    = `15%`.
+        quantity = `10%`.
+        date     = `25%`.
+
+      WHEN `Mixed`.
+        name     = `20%`.
+        category = `11rem`.
+        image    = `7rem`.
+        quantity = `6rem`.
+        date     = `9rem`.
+
+      WHEN OTHERS.
+        name     = `13rem`.
+        category = `11rem`.
+        image    = `7rem`.
+        quantity = `6rem`.
+        date     = `9rem`.
+
+    ENDCASE.
 
   ENDMETHOD.
 

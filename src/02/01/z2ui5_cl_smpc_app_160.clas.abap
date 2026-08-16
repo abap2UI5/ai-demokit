@@ -90,14 +90,11 @@ CLASS z2ui5_cl_smpc_app_160 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `LINK_PRESSED`.
-        " MessageBox.alert( ) - type 'alert' with the original's text, verbatim
-        client->message_box_display( text = `Link was clicked!`
-                                     type = `alert` ).
-
-    ENDCASE.
+    IF client->get( )-event = `LINK_PRESSED`.
+      " MessageBox.alert( ) - type 'alert' with the original's text, verbatim
+      client->message_box_display( text = `Link was clicked!`
+                                   type = `alert` ).
+    ENDIF.
 
   ENDMETHOD.
 

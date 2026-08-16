@@ -1,7 +1,7 @@
 "! <p class="shorttext">sap.suite.ui.microchart - RadialMicroChart</p>
 "!
 "! SAPUI5-only control: it ships with SAPUI5, not with OpenUI5, so there is no
-"! demo kit original in this repo's sample universe and no 1:1 port (AGENTS §3).
+"! demo kit original in this repo's sample universe and no 1:1 port (AGENTS section 3).
 "! Collected here as orientation - how the control is expressed in abap2UI5.
 "!
 "! SAPUI5 demo kit: https://ui5.sap.com/#/entity/sap.suite.ui.microchart.RadialMicroChart/sample/sap.suite.ui.microchart.sample.RadialMicroChart
@@ -40,12 +40,9 @@ CLASS z2ui5_cl_smpc_sapui5_004 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `RADIAL_PRESS`.
-        client->message_toast_display( `press - a radial chart was clicked` ).
-
-    ENDCASE.
+    IF client->get( )-event = `RADIAL_PRESS`.
+      client->message_toast_display( `press - a radial chart was clicked` ).
+    ENDIF.
 
   ENDMETHOD.
 

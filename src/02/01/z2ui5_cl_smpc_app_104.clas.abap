@@ -34,12 +34,12 @@ CLASS z2ui5_cl_smpc_app_104 DEFINITION PUBLIC.
 
     METHODS view_display.
     METHODS on_event.
-    METHODS open_dialog IMPORTING multi        TYPE abap_bool DEFAULT abap_false
-                                  drag         TYPE abap_bool DEFAULT abap_false
-                                  resize       TYPE abap_bool DEFAULT abap_false
-                                  rem          TYPE abap_bool DEFAULT abap_false
-                                  confirmtext  TYPE string    DEFAULT ``
-                                  responsive   TYPE abap_bool DEFAULT abap_false.
+    METHODS open_dialog IMPORTING multi       TYPE abap_bool DEFAULT abap_false
+                                  drag        TYPE abap_bool DEFAULT abap_false
+                                  resize      TYPE abap_bool DEFAULT abap_false
+                                  rem         TYPE abap_bool DEFAULT abap_false
+                                  confirmtext TYPE string    DEFAULT ``
+                                  responsive  TYPE abap_bool DEFAULT abap_false.
     METHODS model_init.
 
   PRIVATE SECTION.

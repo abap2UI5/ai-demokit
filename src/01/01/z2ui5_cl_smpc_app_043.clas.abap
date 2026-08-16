@@ -117,15 +117,12 @@ CLASS z2ui5_cl_smpc_app_043 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `TOOLBAR_PRESSED`.
-        " original: oPanel.setExpanded(!oPanel.getExpanded()). Panel.expanded is
-        " a bindable property, so the flag is bound two-way and only flipped
-        " here - no frontend action, and the state survives a view rebuild
-        expanded = xsdbool( expanded = abap_false ).
-
-    ENDCASE.
+    IF client->get( )-event = `TOOLBAR_PRESSED`.
+      " original: oPanel.setExpanded(!oPanel.getExpanded()). Panel.expanded is
+      " a bindable property, so the flag is bound two-way and only flipped
+      " here - no frontend action, and the state survives a view rebuild
+      expanded = xsdbool( expanded = abap_false ).
+    ENDIF.
 
   ENDMETHOD.
 

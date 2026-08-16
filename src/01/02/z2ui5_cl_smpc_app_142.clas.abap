@@ -207,7 +207,7 @@ CLASS z2ui5_cl_smpc_app_142 IMPLEMENTATION.
   METHOD model_init.
 
     " original binds /SupplierCollection/0 from the shared demo supplier.json;
-    " flattened here to top-level fields the {…} form bindings resolve against.
+    " flattened here to top-level fields the {...} form bindings resolve against.
     suppliername = `Red Point Stores`.
     street       = `Main St`.
     housenumber  = `1618`.

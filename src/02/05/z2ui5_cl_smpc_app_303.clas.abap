@@ -299,16 +299,13 @@ CLASS z2ui5_cl_smpc_app_303 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `ITEM_SELECT`.
-        " original onItemSelect: pageContainer.to( the selected item's key )
-        client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `pageContainer` )
-                                                   ( `to` )
-                                                   ( client->get_event_arg( ) ) ) ).
-
-    ENDCASE.
+    IF client->get( )-event = `ITEM_SELECT`.
+      " original onItemSelect: pageContainer.to( the selected item's key )
+      client->follow_up_action( val   = client->cs_event-control_by_id
+                                t_arg = VALUE #( ( `pageContainer` )
+                                                 ( `to` )
+                                                 ( client->get_event_arg( ) ) ) ).
+    ENDIF.
 
   ENDMETHOD.
 

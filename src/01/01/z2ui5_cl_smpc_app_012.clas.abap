@@ -508,11 +508,7 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
     IF pages_count > lines( t_comp_products ).
       pages_count = lines( t_comp_products ).
     ENDIF.
-    IF pages_count = 4.
-      is_desktop = abap_true.
-    ELSE.
-      is_desktop = abap_false.
-    ENDIF.
+    is_desktop = xsdbool( pages_count = 4 ).
 
     first_item = 0.
     comparison_props_build( ).

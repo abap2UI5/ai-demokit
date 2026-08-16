@@ -25,7 +25,8 @@ CLASS z2ui5_cl_smpc_app_348 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
-      slider_value = 100.             " the Slider's value="100"
+      " the Slider's value="100"
+      slider_value = 100.
       view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
@@ -396,13 +397,10 @@ CLASS z2ui5_cl_smpc_app_348 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `LAYOUT_CHANGE`.
-        " onLayoutChange: setProperty('/currentBreakpoint', event layout)
-        currentbreakpoint = client->get_event_arg( ).
-
-    ENDCASE.
+    IF client->get( )-event = `LAYOUT_CHANGE`.
+      " onLayoutChange: setProperty('/currentBreakpoint', event layout)
+      currentbreakpoint = client->get_event_arg( ).
+    ENDIF.
 
   ENDMETHOD.
 

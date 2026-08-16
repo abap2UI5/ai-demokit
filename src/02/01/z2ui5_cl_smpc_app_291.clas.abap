@@ -131,18 +131,15 @@ CLASS z2ui5_cl_smpc_app_291 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `ITEM_CLOSE`.
-        " onItemClose removes the item from its group and toasts its title; the
-        " row travels by its own title, which is unique in this data
-        DATA(lv_title) = client->get_event_arg( ).
-        LOOP AT t_groups REFERENCE INTO DATA(group).
-          DELETE group->groupitems WHERE title = lv_title.
-        ENDLOOP.
-        client->message_toast_display( |Item Closed: { lv_title }| ).
-
-    ENDCASE.
+    IF client->get( )-event = `ITEM_CLOSE`.
+      " onItemClose removes the item from its group and toasts its title; the
+      " row travels by its own title, which is unique in this data
+      DATA(lv_title) = client->get_event_arg( ).
+      LOOP AT t_groups REFERENCE INTO DATA(group).
+        DELETE group->groupitems WHERE title = lv_title.
+      ENDLOOP.
+      client->message_toast_display( |Item Closed: { lv_title }| ).
+    ENDIF.
 
   ENDMETHOD.
 

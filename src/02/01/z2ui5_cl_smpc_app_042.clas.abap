@@ -408,34 +408,31 @@ CLASS z2ui5_cl_smpc_app_042 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    IF client->get( )-event = `STATUS_PRESSED`.
+      " the original controller builds this Dialog (title/VBox/Text/OK button) and opens it
+      DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-      WHEN `STATUS_PRESSED`.
-        " the original controller builds this Dialog (title/VBox/Text/OK button) and opens it
-        DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
+      popup->ele( n = `FragmentDefinition` ns = `core`
+          )->a( n = `xmlns`      v = `sap.m`
+          )->a( n = `xmlns:core` v = `sap.ui.core`
 
-        popup->ele( n = `FragmentDefinition` ns = `core`
-            )->a( n = `xmlns`      v = `sap.m`
-            )->a( n = `xmlns:core` v = `sap.ui.core`
+          )->ele( `Dialog`
+              )->a( n = `title` v = `Error description`
 
-            )->ele( `Dialog`
-                )->a( n = `title` v = `Error description`
+              )->ele( `VBox`
+                  )->a( n = `fitContainer` v = `true`
 
-                )->ele( `VBox`
-                    )->a( n = `fitContainer` v = `true`
+                  )->tag( `Text`
+                      )->a( n = `text` v = `Product was damaged along transportation.`
 
-                    )->tag( `Text`
-                        )->a( n = `text` v = `Product was damaged along transportation.`
+              )->end(
+              )->ele( `buttons`
+                  )->tag( `Button`
+                      )->a( n = `text`  v = `OK`
+                      )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close ) ).
 
-                )->end(
-                )->ele( `buttons`
-                    )->tag( `Button`
-                        )->a( n = `text`  v = `OK`
-                        )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close ) ).
-
-        client->popup_display( popup->stringify( ) ).
-
-    ENDCASE.
+      client->popup_display( popup->stringify( ) ).
+    ENDIF.
 
   ENDMETHOD.
 

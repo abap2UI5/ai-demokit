@@ -17,10 +17,10 @@ CLASS z2ui5_cl_smpc_app_274 DEFINITION PUBLIC.
     METHODS on_event.
     METHODS popup_products_display
       IMPORTING
-        resizable  TYPE abap_bool
-        draggable  TYPE abap_bool
-        sized      TYPE abap_bool
-        begin_ok   TYPE abap_bool.
+        resizable TYPE abap_bool
+        draggable TYPE abap_bool
+        sized     TYPE abap_bool
+        begin_ok  TYPE abap_bool.
 
   PRIVATE SECTION.
 ENDCLASS.

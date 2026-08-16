@@ -171,18 +171,15 @@ CLASS z2ui5_cl_smpc_app_047 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `SELECTION_CHANGE`.
-        " map the two-way bound key back to the item text
-        DATA(text) = SWITCH string( selected_key
-                       WHEN `one`   THEN `One`
-                       WHEN `two`   THEN `Two`
-                       WHEN `three` THEN `Three` ).
-        client->message_toast_display( |oEvent.getParameter('item').getText(): '{ text }' selected| ).
-        selected_item_text = |getSelectedItem(): { text }|.
-
-    ENDCASE.
+    IF client->get( )-event = `SELECTION_CHANGE`.
+      " map the two-way bound key back to the item text
+      DATA(text) = SWITCH string( selected_key
+                     WHEN `one`   THEN `One`
+                     WHEN `two`   THEN `Two`
+                     WHEN `three` THEN `Three` ).
+      client->message_toast_display( |oEvent.getParameter('item').getText(): '{ text }' selected| ).
+      selected_item_text = |getSelectedItem(): { text }|.
+    ENDIF.
 
   ENDMETHOD.
 

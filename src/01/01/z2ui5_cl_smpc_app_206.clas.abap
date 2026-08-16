@@ -83,7 +83,7 @@ CLASS z2ui5_cl_smpc_app_206 IMPLEMENTATION.
 
   METHOD model_init.
 
-    " products.json row 5 (ProductId HT-1010) — the record the original element-binds
+    " products.json row 5 (ProductId HT-1010) - the record the original element-binds
     name          = `Notebook Professional 15`.
     productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1010.jpg`.
     price         = '1999.00'.

@@ -20,7 +20,8 @@ CLASS z2ui5_cl_smpc_app_124 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
-      slider_value = 100.       " the original Slider value / Panel width=100%
+      " the original Slider value / Panel width=100%
+      slider_value = 100.
       view_display( ).
     ENDIF.
 

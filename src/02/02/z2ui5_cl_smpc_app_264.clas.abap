@@ -188,14 +188,13 @@ CLASS z2ui5_cl_smpc_app_264 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-      WHEN `TOGGLE_FILTERS`.
-        " onToggleFilters: flip ui>/showOrganizational and apply the other
-        " filter pair to the rows binding - here the flag flips and the view is
-        " redrawn, which re-bakes the boundFilters list into the binding info
-        showorganizational = xsdbool( showorganizational = abap_false ).
-        view_display( ).
-    ENDCASE.
+    IF client->get( )-event = `TOGGLE_FILTERS`.
+      " onToggleFilters: flip ui>/showOrganizational and apply the other
+      " filter pair to the rows binding - here the flag flips and the view is
+      " redrawn, which re-bakes the boundFilters list into the binding info
+      showorganizational = xsdbool( showorganizational = abap_false ).
+      view_display( ).
+    ENDIF.
 
   ENDMETHOD.
 

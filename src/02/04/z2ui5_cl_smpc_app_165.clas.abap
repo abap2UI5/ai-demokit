@@ -78,48 +78,45 @@ CLASS z2ui5_cl_smpc_app_165 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
+    IF client->get( )-event = `OPEN_SWITCH`.
+      DATA(popover) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-      WHEN `OPEN_SWITCH`.
-        DATA(popover) = z2ui5_cl_ui5_view_builder=>factory( ).
+      popover->ele( n = `FragmentDefinition` ns = `core`
+          )->a( n = `xmlns`      v = `sap.m`
+          )->a( n = `xmlns:f`    v = `sap.f`
+          )->a( n = `xmlns:core` v = `sap.ui.core`
 
-        popover->ele( n = `FragmentDefinition` ns = `core`
-            )->a( n = `xmlns`      v = `sap.m`
-            )->a( n = `xmlns:f`    v = `sap.f`
-            )->a( n = `xmlns:core` v = `sap.ui.core`
+          )->ele( `ResponsivePopover`
+              )->a( n = `placement`  v = `Bottom`
+              )->a( n = `showHeader` v = `false`
 
-            )->ele( `ResponsivePopover`
-                )->a( n = `placement`  v = `Bottom`
-                )->a( n = `showHeader` v = `false`
+              )->ele( n = `ProductSwitch` ns = `f`
+                  )->a( n = `items`  v = client->_bind( t_items )
+                  " fnChange toasts 'Redirecting to <targetSrc>' and calls
+                  " URLHelper.redirect( targetSrc, true ) - both are client
+                  " actions, chained on one event
+                  )->a( n = `change` v = client->follow_up_action(
+                            val   = client->cs_event-control_global
+                            t_arg = VALUE #( ( `MESSAGE_TOAST` )
+                                             ( `show` )
+                                             ( `Redirecting to {0}` )
+                                             ( `${$parameters>/itemPressed}.getTargetSrc()` ) ) ) && `; ` &&
+                                        client->follow_up_action(
+                            val   = client->cs_event-urlhelper
+                            t_arg = VALUE #( ( `REDIRECT` )
+                                             ( `\{ URL: ${$parameters>/itemPressed}.getTargetSrc(), NEW_WINDOW: true \}` ) ) )
 
-                )->ele( n = `ProductSwitch` ns = `f`
-                    )->a( n = `items`  v = client->_bind( t_items )
-                    " fnChange toasts 'Redirecting to <targetSrc>' and calls
-                    " URLHelper.redirect( targetSrc, true ) - both are client
-                    " actions, chained on one event
-                    )->a( n = `change` v = client->follow_up_action(
-                              val   = client->cs_event-control_global
-                              t_arg = VALUE #( ( `MESSAGE_TOAST` )
-                                               ( `show` )
-                                               ( `Redirecting to {0}` )
-                                               ( `${$parameters>/itemPressed}.getTargetSrc()` ) ) ) && `; ` &&
-                                          client->follow_up_action(
-                              val   = client->cs_event-urlhelper
-                              t_arg = VALUE #( ( `REDIRECT` )
-                                               ( `\{ URL: ${$parameters>/itemPressed}.getTargetSrc(), NEW_WINDOW: true \}` ) ) )
+                  )->ele( n = `items` ns = `f`
+                      )->tag( n = `ProductSwitchItem` ns = `f`
+                          )->a( n = `src`       v = `{SRC}`
+                          )->a( n = `title`     v = `{TITLE}`
+                          )->a( n = `subTitle`  v = `{SUBTITLE}`
+                          )->a( n = `targetSrc` v = `{TARGETSRC}`
+                          )->a( n = `target`    v = `{TARGET}` ).
 
-                    )->ele( n = `items` ns = `f`
-                        )->tag( n = `ProductSwitchItem` ns = `f`
-                            )->a( n = `src`       v = `{SRC}`
-                            )->a( n = `title`     v = `{TITLE}`
-                            )->a( n = `subTitle`  v = `{SUBTITLE}`
-                            )->a( n = `targetSrc` v = `{TARGETSRC}`
-                            )->a( n = `target`    v = `{TARGET}` ).
-
-        client->popover_display( xml   = popover->stringify( )
-                                 by_id = `pSwitchBtn` ).
-
-    ENDCASE.
+      client->popover_display( xml   = popover->stringify( )
+                               by_id = `pSwitchBtn` ).
+    ENDIF.
 
   ENDMETHOD.
 

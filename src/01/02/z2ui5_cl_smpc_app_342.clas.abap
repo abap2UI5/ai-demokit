@@ -114,12 +114,9 @@ CLASS z2ui5_cl_smpc_app_342 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `FORM_SUBMIT`.
-        cards_build( ).
-
-    ENDCASE.
+    IF client->get( )-event = `FORM_SUBMIT`.
+      cards_build( ).
+    ENDIF.
 
   ENDMETHOD.
 

@@ -100,12 +100,11 @@ CLASS z2ui5_cl_smpc_app_410 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-      WHEN `DUMMY`.
-        " the main controller's onDummy toast, with the transported runtime id
-        " of the block stand-in as the event source
-        client->message_toast_display( |dummy event fired by control { client->get_event_arg( ) }| ).
-    ENDCASE.
+    IF client->get( )-event = `DUMMY`.
+      " the main controller's onDummy toast, with the transported runtime id
+      " of the block stand-in as the event source
+      client->message_toast_display( |dummy event fired by control { client->get_event_arg( ) }| ).
+    ENDIF.
 
   ENDMETHOD.
 

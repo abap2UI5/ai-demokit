@@ -78,29 +78,26 @@ CLASS z2ui5_cl_smpc_app_305 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `CAL_SELECT`.
-        " handleCalendarSelect: a second click on the SAME day clears the
-        " selection (removeSelectedDate), any other day becomes the new one;
-        " _updateText then formats it yyyy-MM-dd
-        DATA(year) = client->get_event_arg( ).
-        IF year IS INITIAL OR year = `0`.
+    IF client->get( )-event = `CAL_SELECT`.
+      " handleCalendarSelect: a second click on the SAME day clears the
+      " selection (removeSelectedDate), any other day becomes the new one;
+      " _updateText then formats it yyyy-MM-dd
+      DATA(year) = client->get_event_arg( ).
+      IF year IS INITIAL OR year = `0`.
+        selected_date = `No Date Selected`.
+        CLEAR last_selected.
+      ELSE.
+        DATA(picked) = |{ year }-{ CONV i( client->get_event_arg( 2 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
+                       |-{ CONV i( client->get_event_arg( 3 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }|.
+        IF picked = last_selected.
           selected_date = `No Date Selected`.
           CLEAR last_selected.
         ELSE.
-          DATA(picked) = |{ year }-{ CONV i( client->get_event_arg( 2 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
-                         |-{ CONV i( client->get_event_arg( 3 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }|.
-          IF picked = last_selected.
-            selected_date = `No Date Selected`.
-            CLEAR last_selected.
-          ELSE.
-            selected_date = picked.
-            last_selected = picked.
-          ENDIF.
+          selected_date = picked.
+          last_selected = picked.
         ENDIF.
-
-    ENDCASE.
+      ENDIF.
+    ENDIF.
 
   ENDMETHOD.
 

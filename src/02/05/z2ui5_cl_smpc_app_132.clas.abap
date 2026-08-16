@@ -192,13 +192,10 @@ CLASS z2ui5_cl_smpc_app_132 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `TOGGLE_EXPAND`.
-        " original onCollapseExpandPress: toggles SideNavigation.expanded
-        expanded = xsdbool( expanded = abap_false ).
-
-    ENDCASE.
+    IF client->get( )-event = `TOGGLE_EXPAND`.
+      " original onCollapseExpandPress: toggles SideNavigation.expanded
+      expanded = xsdbool( expanded = abap_false ).
+    ENDIF.
 
   ENDMETHOD.
 

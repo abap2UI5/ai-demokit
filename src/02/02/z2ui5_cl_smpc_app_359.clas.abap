@@ -257,14 +257,11 @@ CLASS z2ui5_cl_smpc_app_359 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get( )-event.
-
-      WHEN `MODE_CHANGE`.
-        " onBehaviourModeChange -> switchState: the picked mode decides the
-        " row action count and which items are shown
-        mode_apply( ).
-
-    ENDCASE.
+    IF client->get( )-event = `MODE_CHANGE`.
+      " onBehaviourModeChange -> switchState: the picked mode decides the
+      " row action count and which items are shown
+      mode_apply( ).
+    ENDIF.
 
 
   ENDMETHOD.
