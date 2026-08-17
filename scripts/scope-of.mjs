@@ -24,6 +24,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { isSkippedDir } from './lib/src-tree.mjs';
 import {
   loadUniverseSnapshot, loadEntityOverrides, loadNonAppFamilies, nonAppFamilyFor,
 } from './lib-universe.mjs';
@@ -72,7 +73,8 @@ function sourceFor(entity) {
     try { ents = fs.readdirSync(dir, { withFileTypes: true }); } catch { return; }
     for (const e of ents) {
       const p = path.join(dir, e.name);
-      if (e.isDirectory()) {
+      if (isSkippedDir(e.name)) continue;
+    if (e.isDirectory()) {
         // skip test/demokit trees — the control source lives under <lib>/src
         if (e.name === 'test' || e.name === 'node_modules') continue;
         walk(p);

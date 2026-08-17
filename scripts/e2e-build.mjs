@@ -28,6 +28,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { resolveA2UI5 } from './lib-a2ui5.mjs';
+import { isSkippedDir } from './lib/src-tree.mjs';
 
 const AIDEMOKIT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -144,6 +145,7 @@ function main() {
 function* walk(dir) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     const p = path.join(dir, e.name);
+    if (isSkippedDir(e.name)) continue;
     if (e.isDirectory()) yield* walk(p);
     else yield p;
   }
