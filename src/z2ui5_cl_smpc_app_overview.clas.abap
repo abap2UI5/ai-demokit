@@ -3940,12 +3940,14 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` three NavigationListItem controls are missing vs the original count, and creating appends a row with the same defaults ('New Navigation Item' / sap-icon://building). The rows bind with`.
     lv_text1 = lv_text1 && ` omit_initial_paths for EXPANDED so an item that does not set it keeps the control default. // POST-1.71: NavigationListItem.selectable (@since 1.116) is kept 1:1 (selectable=false on the Quick Create` &&
                ` and External Link fixedItem entries). @since verified in sap.tnt/src/sap/tnt/NavigationListItem.js. // POST-1.71: NavigationListItem.design="Action" and NavigationListItem.ariaHasPopup="Dialog" (both` &&
-               ` @since 1.133) are kept 1:1 on the Quick Create item. @since verified in sap.tnt/src/sap/tnt/NavigationListItem.js. // LIVE-TEST: not yet run in a system: the TOGGLE_EXPAND round-trip` &&
-               ` (collapse/expand), the quick-create popup round-trip and the Create append (new row shows up in the bound NavigationList with the typed name/icon or the defaults).`.
+               ` @since 1.133) are kept 1:1 on the Quick Create item. @since verified in sap.tnt/src/sap/tnt/NavigationListItem.js. // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a` &&
+               ` system: the TOGGLE_EXPAND round-trip (collapse/expand), the quick-create popup round-trip and the Create append (new row shows up in the bound NavigationList with the typed name/icon or the` &&
+               ` defaults).`.
     result = VALUE #( BASE result
       ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationActions`                         class = `z2ui5_cl_smpc_app_299` path = `src/02/05/z2ui5_cl_smpc_app_299.clas.abap`
-        score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
         since = `1.34`
         is_post171 = abap_true
         notes = lv_text1
@@ -4121,8 +4123,8 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` wins over the append behaviour, which is the loss declared here. // POST-1.71: sap.tnt.NavigationListGroup (control @since 1.121) is used 1:1 for the 'System & Administration Management' and` &&
                ` 'Business operations' groups. Newer than UI5 1.71; the app needs UI5 >= 1.121 to render them. // POST-1.71: NavigationListItem.selectable (@since 1.116) is kept 1:1 (selectable=false on the` &&
                ` training-portal, service-management, financial-reports, CRM, Quick Create and SAP Support entries). // POST-1.71: NavigationListItem.design="Action" and NavigationListItem.ariaHasPopup="Dialog" (both` &&
-               ` @since 1.133) are kept 1:1 on the Quick Create item. // LIVE-TEST: not yet run in a system: the TOGGLE_EXPAND round-trip (collapse/expand of the 20rem side navigation) and the quick-create popup` &&
-               ` round-trip.`.
+               ` @since 1.133) are kept 1:1 on the Quick Create item. // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the TOGGLE_EXPAND round-trip (collapse/expand of the 20rem` &&
+               ` side navigation) and the quick-create popup round-trip.`.
     result = VALUE #( BASE result
       ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationWrapping`                        class = `z2ui5_cl_smpc_app_300` path = `src/02/05/z2ui5_cl_smpc_app_300.clas.abap`
         score = 5
@@ -4223,8 +4225,8 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` (searchButton visible=false, the rest visible) and no range toast is shown. // POST-1.71: sap.tnt.ToolPage aggregation subHeader (@since 1.93) carries the horizontal IconTabHeader navigation - it is`.
     lv_text1 = lv_text1 && ` the whole point of this sample and is kept 1:1. Newer than UI5 1.71. // POST-1.71: IconTabFilter.interactionMode="SelectLeavesOnly" (@since 1.121) is kept 1:1 on the top-level filter template, and` &&
                ` sap.m.Avatar (control @since 1.73) is kept 1:1 as the profile avatar of the ToolHeader. Both newer than UI5 1.71. // NOTE: the profile Avatar src 'test-resources/sap/tnt/images/Woman_avatar_01.png'` &&
-               ` is absolutized to the OpenUI5 host (https://sdk.openui5.org/test-resources/sap/tnt/images/Woman_avatar_01.png) per the repository asset-URL rule; the original uses the relative path. // LIVE-TEST:` &&
-               ` not yet run in a system: the IconTabHeader select -> NavContainer 'to' frontend action and the two-way bound selectedKey.`.
+               ` is absolutized to the OpenUI5 host (https://sdk.openui5.org/test-resources/sap/tnt/images/Woman_avatar_01.png) per the repository asset-URL rule; the original uses the relative path. // NOTE:` &&
+               ` live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the IconTabHeader select -> NavContainer 'to' frontend action and the two-way bound selectedKey.`.
     result = VALUE #( BASE result
       ( module = `sap.tnt`            control = `sap.tnt.ToolPage`                      name = `ToolPageHorizontalNavigation`                  class = `z2ui5_cl_smpc_app_303` path = `src/02/05/z2ui5_cl_smpc_app_303.clas.abap`
         score = 5
@@ -4251,8 +4253,8 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` filter template; sap.m.Avatar (control @since 1.73) is kept 1:1 as the ToolHeader profile avatar. All newer than UI5 1.71. // NOTE: the profile Avatar src`.
     lv_text1 = lv_text1 && ` 'test-resources/sap/tnt/images/Woman_avatar_01.png' is absolutized to the OpenUI5 host (https://sdk.openui5.org/test-resources/sap/tnt/images/Woman_avatar_01.png) per the repository asset-URL rule;` &&
                ` the original uses the relative path. The ENABLED/EXPANDED fields the templates bind are absent from model/data.json, so every row carries the UI5 property default (true) explicitly - a flat ABAP row` &&
-               ` would otherwise serialize them as empty and override that default. // LIVE-TEST: not yet run in a system: the IconTabHeader / SideNavigation select -> NavContainer 'to' frontend action, the two-way` &&
-               ` bound selectedKey and the SIDE_NAV_TOGGLE round-trip (sideExpanded plus the tooltip flip).`.
+               ` would otherwise serialize them as empty and override that default. // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the IconTabHeader / SideNavigation select ->` &&
+               ` NavContainer 'to' frontend action, the two-way bound selectedKey and the SIDE_NAV_TOGGLE round-trip (sideExpanded plus the tooltip flip).`.
     result = VALUE #( BASE result
       ( module = `sap.tnt`            control = `sap.tnt.ToolPage`                      name = `ToolPageNavigation`                            class = `z2ui5_cl_smpc_app_302` path = `src/02/05/z2ui5_cl_smpc_app_302.clas.abap`
         score = 5
@@ -4923,13 +4925,13 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` the original view does not have - abap2UI5 ships no separate stylesheet. The CSS braces are escaped \{ \} in a backtick literal so the XMLView parser does not read them as bindings. // NOTE:` &&
                ` onBeforeRendering hides the width Slider and the hint Text on a phone (Device.system.phone). Both are bound to the shared device model instead - visible="{= !${device>/system/phone} }" - which is the` &&
                ` live equivalent and needs no round-trip; the original's literal visible="getVisible()" on the hint Text (a sample quirk that evaluates to nothing) is replaced by that binding. The two body texts are` &&
-               ` the sample's full Lorem paragraphs verbatim, with the XML attribute's line breaks normalized to single spaces as an XML parser would. // LIVE-TEST: Unverified in a running system: the` &&
-               ` breakpointChanged round-trip enabling the Toggle button on S, the showSideContent flip, and the Slider's css width write on the container Page. The same three wires are live-verified on app 138 (the` &&
-               ` plain DynamicSideContent sample), which uses them identically.`.
+               ` the sample's full Lorem paragraphs verbatim, with the XML attribute's line breaks normalized to single spaces as an XML parser would. // NOTE: live-verified 2026-08-17 (nightly e2e interaction):` &&
+               ` Unverified in a running system: the breakpointChanged round-trip enabling the Toggle button on S, the showSideContent flip, and the Slider's css width write on the container Page. The same three` &&
+               ` wires are live-verified on app 138 (the plain DynamicSideContent sample), which uses them identically.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.DynamicSideContent`      name = `DynamicSideContentPosition`                    class = `z2ui5_cl_smpc_app_344` path = `src/01/02/z2ui5_cl_smpc_app_344.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30`
         notes = lv_text1 ) ).
 
@@ -5000,13 +5002,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
     lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
                ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
-               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel` &&
-               ` round-trips (form swap through the bound visible flags and the Cancel restore).`.
+               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // NOTE: live-verified 2026-08-16 (nightly e2e interaction):` &&
+               ` not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form_Column_oneGroup`                          class = `z2ui5_cl_smpc_app_320` path = `src/01/02/z2ui5_cl_smpc_app_320.clas.abap`
-        score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = lv_text1 ) ).
 
@@ -5020,13 +5021,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
                ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // NOTE: the fragments bind {EMail} while the mock key is` &&
                ` Email, so in the original that field renders empty. The port binds the real Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment` &&
-               ` case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
-               ` restore).`.
+               ` case-insensitively), but the address is actually shown here. // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the Edit/Save/Cancel round-trips (form swap through` &&
+               ` the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form_Column_oneGroup234`                       class = `z2ui5_cl_smpc_app_321` path = `src/01/02/z2ui5_cl_smpc_app_321.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = lv_text1 ) ).
 
@@ -5040,13 +5040,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
                ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // NOTE: the fragments bind {EMail} while the mock key is` &&
                ` Email, so in the original that field renders empty. The port binds the real Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment` &&
-               ` case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
-               ` restore).`.
+               ` case-insensitively), but the address is actually shown here. // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the Edit/Save/Cancel round-trips (form swap through` &&
+               ` the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form_Column_threeGroups234`                    class = `z2ui5_cl_smpc_app_322` path = `src/01/02/z2ui5_cl_smpc_app_322.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = lv_text1 ) ).
 
@@ -5060,13 +5059,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
                ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // NOTE: the fragments bind {EMail} while the mock key is` &&
                ` Email, so in the original that field renders empty. The port binds the real Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment` &&
-               ` case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
-               ` restore).`.
+               ` case-insensitively), but the address is actually shown here. // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the Edit/Save/Cancel round-trips (form swap through` &&
+               ` the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form_Column_threeGroups346`                    class = `z2ui5_cl_smpc_app_323` path = `src/01/02/z2ui5_cl_smpc_app_323.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = lv_text1 ) ).
 
@@ -5080,13 +5078,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
                ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // NOTE: the fragments bind {EMail} while the mock key is` &&
                ` Email, so in the original that field renders empty. The port binds the real Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment` &&
-               ` case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
-               ` restore).`.
+               ` case-insensitively), but the address is actually shown here. // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the Edit/Save/Cancel round-trips (form swap through` &&
+               ` the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form_Column_twoGroups234`                      class = `z2ui5_cl_smpc_app_324` path = `src/01/02/z2ui5_cl_smpc_app_324.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = lv_text1 ) ).
 
@@ -5098,13 +5095,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound ABSOLUTELY (client->_bind( suppliername )`.
     lv_text1 = lv_text1 && ` etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. The two composite Texts ({Street} {HouseNumber}, {ZIPCode} {City}) keep their` &&
                ` composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model is seeded synchronously in` &&
-               ` model_init, so the state the original reaches after the mock request completes is the state the port starts in. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap` &&
-               ` through the bound visible flags and the Cancel restore).`.
+               ` model_init, so the state the original reaches after the mock request completes is the state the port starts in. // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system:` &&
+               ` the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form354`                                       class = `z2ui5_cl_smpc_app_312` path = `src/01/02/z2ui5_cl_smpc_app_312.clas.abap`
-        score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = lv_text1 ) ).
 
@@ -5115,11 +5111,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads sap/ui/demo/mock/supplier.json and does` &&
                ` bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound ABSOLUTELY (client->_bind( suppliername )`.
     lv_text1 = lv_text1 && ` etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. The two composite Texts ({Street} {HouseNumber}, {ZIPCode} {City}) keep their` &&
-               ` composite form with the absolute paths. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
+               ` composite form with the absolute paths. // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible` &&
+               ` flags and the Cancel restore).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form354wide`                                   class = `z2ui5_cl_smpc_app_313` path = `src/01/02/z2ui5_cl_smpc_app_313.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = lv_text1 ) ).
 
@@ -5130,11 +5127,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads sap/ui/demo/mock/supplier.json and does` &&
                ` bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound ABSOLUTELY (client->_bind( suppliername )`.
     lv_text1 = lv_text1 && ` etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. The two composite Texts ({Street} {HouseNumber}, {ZIPCode} {City}) keep their` &&
-               ` composite form with the absolute paths. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
+               ` composite form with the absolute paths. // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible` &&
+               ` flags and the Cancel restore).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form354wideDual`                               class = `z2ui5_cl_smpc_app_314` path = `src/01/02/z2ui5_cl_smpc_app_314.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = lv_text1 ) ).
 
@@ -5145,12 +5143,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
                ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
     lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
-               ` {HouseNumber} keep their composite form with the absolute paths. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
-               ` restore).`.
+               ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the Edit/Save/Cancel round-trips (form swap` &&
+               ` through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form471`                                       class = `z2ui5_cl_smpc_app_315` path = `src/01/02/z2ui5_cl_smpc_app_315.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = lv_text1 ) ).
 
@@ -5161,12 +5159,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
                ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
     lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
-               ` {HouseNumber} keep their composite form with the absolute paths. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
-               ` restore).`.
+               ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the Edit/Save/Cancel round-trips (form swap` &&
+               ` through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form480`                                       class = `z2ui5_cl_smpc_app_316` path = `src/01/02/z2ui5_cl_smpc_app_316.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
@@ -5177,13 +5175,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
     lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
                ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the fragments bind {EMail} while the mock key is Email, so in the original that field renders empty. The port binds the real` &&
-               ` Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a` &&
-               ` system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
+               ` Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment case-insensitively), but the address is actually shown here. // NOTE: live-verified 2026-08-16` &&
+               ` (nightly e2e interaction): not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form480_12120`                                 class = `z2ui5_cl_smpc_app_317` path = `src/01/02/z2ui5_cl_smpc_app_317.clas.abap`
-        score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = lv_text1 ) ).
 
@@ -5194,12 +5191,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
                ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
     lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
-               ` {HouseNumber} keep their composite form with the absolute paths. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
-               ` restore).`.
+               ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the Edit/Save/Cancel round-trips (form swap` &&
+               ` through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form480_12120Dual`                             class = `z2ui5_cl_smpc_app_318` path = `src/01/02/z2ui5_cl_smpc_app_318.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = lv_text1 ) ).
 
@@ -5213,12 +5210,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the fragments bind {EMail} while the mock key is Email, so in the original that field renders empty. The port binds the real` &&
                ` Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment case-insensitively), but the address is actually shown here. // NOTE: Rating` &&
                ` (RatingIndicator.value) and Disposable (ProgressIndicator.percentValue) are numeric UI5 properties, so their ABAP fields are typed i, not string - a bound value that serializes as a JSON string is` &&
-               ` rejected on a numeric property. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
+               ` rejected on a numeric property. // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and` &&
+               ` the Cancel restore).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form480_Trial`                                 class = `z2ui5_cl_smpc_app_319` path = `src/01/02/z2ui5_cl_smpc_app_319.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = lv_text1 ) ).
 
@@ -5240,13 +5237,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
     lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
                ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
-               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel` &&
-               ` round-trips (form swap through the bound visible flags and the Cancel restore).`.
+               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // NOTE: live-verified 2026-08-16 (nightly e2e interaction):` &&
+               ` not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm_Column_oneGroup`                    class = `z2ui5_cl_smpc_app_333` path = `src/01/02/z2ui5_cl_smpc_app_333.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = lv_text1 ) ).
 
@@ -5260,13 +5256,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
                ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // NOTE: the fragments bind {EMail} while the mock key is` &&
                ` Email, so in the original that field renders empty. The port binds the real Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment` &&
-               ` case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
-               ` restore).`.
+               ` case-insensitively), but the address is actually shown here. // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the Edit/Save/Cancel round-trips (form swap through` &&
+               ` the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm_Column_oneGroup234`                 class = `z2ui5_cl_smpc_app_334` path = `src/01/02/z2ui5_cl_smpc_app_334.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = lv_text1 ) ).
 
@@ -5280,13 +5275,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
                ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // NOTE: the fragments bind {EMail} while the mock key is` &&
                ` Email, so in the original that field renders empty. The port binds the real Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment` &&
-               ` case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
-               ` restore).`.
+               ` case-insensitively), but the address is actually shown here. // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the Edit/Save/Cancel round-trips (form swap through` &&
+               ` the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm_Column_threeGroups234`              class = `z2ui5_cl_smpc_app_335` path = `src/01/02/z2ui5_cl_smpc_app_335.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = lv_text1 ) ).
 
@@ -5300,13 +5294,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
                ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // NOTE: the fragments bind {EMail} while the mock key is` &&
                ` Email, so in the original that field renders empty. The port binds the real Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment` &&
-               ` case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
-               ` restore).`.
+               ` case-insensitively), but the address is actually shown here. // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the Edit/Save/Cancel round-trips (form swap through` &&
+               ` the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm_Column_threeGroups346`              class = `z2ui5_cl_smpc_app_336` path = `src/01/02/z2ui5_cl_smpc_app_336.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = lv_text1 ) ).
 
@@ -5320,13 +5313,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
                ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // NOTE: the fragments bind {EMail} while the mock key is` &&
                ` Email, so in the original that field renders empty. The port binds the real Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment` &&
-               ` case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
-               ` restore).`.
+               ` case-insensitively), but the address is actually shown here. // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the Edit/Save/Cancel round-trips (form swap through` &&
+               ` the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm_Column_twoGroups234`                class = `z2ui5_cl_smpc_app_337` path = `src/01/02/z2ui5_cl_smpc_app_337.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = lv_text1 ) ).
 
@@ -5338,13 +5330,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
     lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
                ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
-               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel` &&
-               ` round-trips (form swap through the bound visible flags and the Cancel restore).`.
+               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // NOTE: live-verified 2026-08-16 (nightly e2e interaction):` &&
+               ` not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm354`                                 class = `z2ui5_cl_smpc_app_325` path = `src/01/02/z2ui5_cl_smpc_app_325.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = lv_text1 ) ).
 
@@ -5356,13 +5347,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
     lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
                ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
-               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel` &&
-               ` round-trips (form swap through the bound visible flags and the Cancel restore).`.
+               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // NOTE: live-verified 2026-08-16 (nightly e2e interaction):` &&
+               ` not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm354wide`                             class = `z2ui5_cl_smpc_app_326` path = `src/01/02/z2ui5_cl_smpc_app_326.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = lv_text1 ) ).
 
@@ -5374,13 +5364,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
     lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
                ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
-               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel` &&
-               ` round-trips (form swap through the bound visible flags and the Cancel restore).`.
+               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // NOTE: live-verified 2026-08-16 (nightly e2e interaction):` &&
+               ` not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm354wideDual`                         class = `z2ui5_cl_smpc_app_327` path = `src/01/02/z2ui5_cl_smpc_app_327.clas.abap`
-        score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = lv_text1 ) ).
 
@@ -5392,13 +5381,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
     lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
                ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
-               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel` &&
-               ` round-trips (form swap through the bound visible flags and the Cancel restore).`.
+               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // NOTE: live-verified 2026-08-16 (nightly e2e interaction):` &&
+               ` not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm471`                                 class = `z2ui5_cl_smpc_app_328` path = `src/01/02/z2ui5_cl_smpc_app_328.clas.abap`
-        score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = lv_text1 ) ).
 
@@ -5410,13 +5398,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
     lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
                ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
-               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel` &&
-               ` round-trips (form swap through the bound visible flags and the Cancel restore).`.
+               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // NOTE: live-verified 2026-08-16 (nightly e2e interaction):` &&
+               ` not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm480`                                 class = `z2ui5_cl_smpc_app_329` path = `src/01/02/z2ui5_cl_smpc_app_329.clas.abap`
-        score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
@@ -5427,13 +5414,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
     lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
                ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the fragments bind {EMail} while the mock key is Email, so in the original that field renders empty. The port binds the real` &&
-               ` Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a` &&
-               ` system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
+               ` Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment case-insensitively), but the address is actually shown here. // NOTE: live-verified 2026-08-16` &&
+               ` (nightly e2e interaction): not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm480_12120`                           class = `z2ui5_cl_smpc_app_330` path = `src/01/02/z2ui5_cl_smpc_app_330.clas.abap`
-        score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = lv_text1 ) ).
 
@@ -5444,12 +5430,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
                ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
     lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
-               ` {HouseNumber} keep their composite form with the absolute paths. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
-               ` restore).`.
+               ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the Edit/Save/Cancel round-trips (form swap` &&
+               ` through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm480_12120Dual`                       class = `z2ui5_cl_smpc_app_331` path = `src/01/02/z2ui5_cl_smpc_app_331.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = lv_text1 ) ).
 
@@ -5463,12 +5449,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the fragments bind {EMail} while the mock key is Email, so in the original that field renders empty. The port binds the real` &&
                ` Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment case-insensitively), but the address is actually shown here. // NOTE: Rating` &&
                ` (RatingIndicator.value) and Disposable (ProgressIndicator.percentValue) are numeric UI5 properties, so their ABAP fields are typed i, not string - a bound value that serializes as a JSON string is` &&
-               ` rejected on a numeric property. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
+               ` rejected on a numeric property. // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and` &&
+               ` the Cancel restore).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm480_Trial`                           class = `z2ui5_cl_smpc_app_332` path = `src/01/02/z2ui5_cl_smpc_app_332.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = lv_text1 ) ).
 
@@ -6090,13 +6076,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` DateRange CONTROL instance no wire can address, so the day stays visually highlighted while the text goes back to 'No Date Selected'. // IMPROVISED: onInit does` &&
                ` byId('calendar').displayDate(UI5Date.getInstance(2021, 6, 1)) to open the calendar on July 2021. Calendar exposes no bindable property for the displayed month and displayDate() takes a JS Date`.
     lv_text1 = lv_text1 && ` argument, which the frontend-action wire cannot carry (CONTROL_METHODS casts only string/int/bool/controlId/anchor kinds), so the port opens on the current month. // POST-1.71:` &&
-               ` Calendar.showCurrentDateButton (@since 1.95) is kept 1:1 from the original view. Newer than UI5 1.71. // LIVE-TEST: not yet run in a system: the CAL_SELECT expression-arg round-trip and the same-day` &&
-               ` second click clearing the label.`.
+               ` Calendar.showCurrentDateButton (@since 1.95) is kept 1:1 from the original view. Newer than UI5 1.71. // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the` &&
+               ` CAL_SELECT expression-arg round-trip and the same-day second click clearing the label.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarDateDeselection`                       class = `z2ui5_cl_smpc_app_305` path = `src/02/02/z2ui5_cl_smpc_app_305.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
         is_post171 = abap_true
         notes = lv_text1
@@ -6151,11 +6136,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` args (year, month+1, day - the LOCAL parts, not toISOString( ), which would shift the day east of Greenwich), each guarded by getSelectedDates().length > 0, and formats server-side; the Text gets a` &&
                ` two-way bound text attribute instead of setText (app 139 idiom, probe-verified). // NOTE: handleSelectToday does removeAllSelectedDates() + addSelectedDate(new DateRange({startDate: today})) and` &&
                ` reformats. The port only writes the text: the server date IS today, so the label is 1:1, but the calendar's own highlight of that day is not moved - addSelectedDate takes a DateRange CONTROL, which` &&
-               ` no wire can construct (same residual as app 139). // LIVE-TEST: not yet run in a system: the CAL_SELECT expression-arg round-trip across the two displayed months and the SELECT_TODAY text update.`.
+               ` no wire can construct (same residual as app 139). // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the CAL_SELECT expression-arg round-trip across the two` &&
+               ` displayed months and the SELECT_TODAY text update.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarMultipleMonth`                         class = `z2ui5_cl_smpc_app_304` path = `src/01/02/z2ui5_cl_smpc_app_304.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
         notes = lv_text1 ) ).
 
@@ -6178,12 +6164,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` parameters; both travel as expression args (${$parameters>/weekNumber} and the local date parts of ${$parameters>/weekDays}.getStartDate()/getEndDate()), and the every-fifth-week refusal toast is` &&
                ` composed server-side, exactly as the original composes it. // IMPROVISED: the refusal is only a toast: the original also calls oEvent.preventDefault() so the forbidden week is NOT selected. abap2UI5` &&
                ` bakes s_ctrl-check_prevent_default into the handler at RENDER time (app 241), which cannot express a condition evaluated per event (weekNumber % 5 === 0), so the week highlights and only the message`.
-    lv_text1 = lv_text1 && ` says it is not allowed. // LIVE-TEST: not yet run in a system: the CAL_SELECT interval round-trip and the WEEK_SELECT branch (toast on every fifth week, labels otherwise).`.
+    lv_text1 = lv_text1 && ` says it is not allowed. // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the CAL_SELECT interval round-trip and the WEEK_SELECT branch (toast on every fifth week,` &&
+               ` labels otherwise).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarSingleIntervalSelection`               class = `z2ui5_cl_smpc_app_306` path = `src/01/02/z2ui5_cl_smpc_app_306.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
         notes = lv_text1 ) ).
 
@@ -6195,11 +6181,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` converts them at the point of use via core:require. endDate is set on exactly one range, so its conversion is guarded with an expression binding - an unguarded new Date('') is an Invalid Date, which`.
     lv_text1 = lv_text1 && ` is truthy and takes the whole view down. Rows without color/secondaryType/tooltip bind through omit_initial_paths so the UI5 default applies instead of an empty string. // POST-1.71:` &&
                ` DateTypeRange.color (@since 1.76) and DateTypeRange.secondaryType (@since 1.81) are kept 1:1 from the original controller, and the Formatter.DateCreateObject core:require path needs UI5 >= 1.74. All` &&
-               ` newer than UI5 1.71. // LIVE-TEST: not yet run in a system: the ToggleButton round-trip filling and clearing both calendars' special dates and both legends.`.
+               ` newer than UI5 1.71. // NOTE: live-verified 2026-08-17 (nightly e2e interaction): not yet run in a system: the ToggleButton round-trip filling and clearing both calendars' special dates and both` &&
+               ` legends.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarSpecialDaysLegend`                     class = `z2ui5_cl_smpc_app_308` path = `src/02/02/z2ui5_cl_smpc_app_308.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
         is_post171 = abap_true
         notes = lv_text1
@@ -6244,11 +6231,11 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` archived View.view.xml, which declares only the inline ColorPicker and the trigger Button. // NOTE: the controller's Device.system.phone branch (phone: keep the header and add Submit/Cancel buttons;` &&
                ` otherwise setShowHeader(false)) stays a branch: abap2UI5 serves the device> named model on every view slot, so ResponsivePopover.showHeader and the two buttons' visible bind {=` &&
                ` ${device>/system/phone}} instead of being resolved to one value at render time (apps 277/279 precedent). Both buttons close the popover client-side via follow_up_action( popover_close ), matching the` &&
-               ` original's oRP.close(). // LIVE-TEST: not yet run in a system: the anchored popover round-trip and the phone-only Submit/Cancel buttons.`.
+               ` original's oRP.close(). // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the anchored popover round-trip and the phone-only Submit/Cancel buttons.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.ColorPicker`            name = `ColorPicker`                                   class = `z2ui5_cl_smpc_app_309` path = `src/01/02/z2ui5_cl_smpc_app_309.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.48.0`
         notes = lv_text1 ) ).
 
@@ -6257,12 +6244,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` archived View.view.xml, which declares only the inline ColorPicker and the trigger Button. The Large displayMode (@since 1.58) is kept 1:1 on both pickers. // NOTE: the controller's` &&
                ` Device.system.phone branch (phone: keep the header and add Submit/Cancel buttons; otherwise setShowHeader(false)) stays a branch: abap2UI5 serves the device> named model on every view slot, so` &&
                ` ResponsivePopover.showHeader and the two buttons' visible bind {= ${device>/system/phone}} instead of being resolved to one value at render time (apps 277/279 precedent). Both buttons close the` &&
-               ` popover client-side via follow_up_action( popover_close ), matching the original's oRP.close(). // LIVE-TEST: not yet run in a system: the anchored popover round-trip and the phone-only Submit/Cancel` &&
-               ` buttons.`.
+               ` popover client-side via follow_up_action( popover_close ), matching the original's oRP.close(). // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the anchored`.
+    lv_text1 = lv_text1 && ` popover round-trip and the phone-only Submit/Cancel buttons.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.ColorPicker`            name = `ColorPickerLarge`                              class = `z2ui5_cl_smpc_app_310` path = `src/01/02/z2ui5_cl_smpc_app_310.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.48.0`
         notes = lv_text1 ) ).
 
@@ -6403,12 +6390,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` archived Menu.fragment.xml declares xmlns="sap.ui.unified", so its Menu, MenuItem and MenuItemGroup controls are unprefixed there, while Page.view.xml declares xmlns="sap.m". One port view can carry`.
     lv_text1 = lv_text1 && ` only one default namespace, so it keeps sap.m (matching the view) and writes the two Menu controls, the fourteen MenuItem controls and the three MenuItemGroup controls with the u: prefix. Same tree,` &&
                ` different prefix - no functional difference. // POST-1.71: sap.ui.unified.MenuItemGroup (control @since 1.127) with itemSelectionMode SingleSelect/MultiSelect and MenuItem.selected (@since 1.127) are` &&
-               ` the whole point of this sample and are kept 1:1; sap.m.Button.ariaHasPopup (@since 1.84) is kept 1:1 on the trigger button. All newer than UI5 1.71. // LIVE-TEST: not yet run in a system: the` &&
-               ` anchored open of the unified Menu and the selectable item groups (single/multi select state).`.
+               ` the whole point of this sample and are kept 1:1; sap.m.Button.ariaHasPopup (@since 1.84) is kept 1:1 on the trigger button. All newer than UI5 1.71. // NOTE: live-verified 2026-08-16 (nightly e2e` &&
+               ` interaction): not yet run in a system: the anchored open of the unified Menu and the selectable item groups (single/multi select state).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Menu`                   name = `MenuSelectable`                                class = `z2ui5_cl_smpc_app_311` path = `src/02/02/z2ui5_cl_smpc_app_311.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.21.0`
         is_post171 = abap_true
         notes = lv_text1
@@ -6741,14 +6728,14 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` controller behaviour to port; the named ObjectPageModel (SharedJSONData/employee.json) the controller loads is never bound by the view or the blocks, so no default model is seeded and the port is` &&
                ` init-only (no model_init, no on_event). // NOTE: The three social-icon image assets (linkedInIcon.png, facebookIcon.png, twitterIcon.png) use the sample's relative` &&
                ` './test-resources/sap/uxap/images/...' src paths; rewritten to the absolute sdk.openui5.org host ('https://sdk.openui5.org/test-resources/sap/uxap/images/linkedInIcon.png' etc.) per the offline` &&
-               ` asset-URL rule (app 200/262 precedent). Same assets, literal src values only - structural-diff compares literal attribute names, not values. // LIVE-TEST: Rendering not yet verified in a running` &&
-               ` system: the port is init-only and fully static (no bindings, no events, no round-trip), so the open behaviours are render-time only - the ObjectPageHeader navigationBar Bar, the showPlaceholder=true` &&
-               ` Circle placeholder avatar (no objectImageURI is set), showTitleInHeaderContent=true and the always/snapped visibility flags (isObjectTitleAlwaysVisible/isObjectSubtitleAlwaysVisible=false,`.
-    lv_text1 = lv_text1 && ` isActionAreaAlwaysVisible=true) are unverified live.`.
+               ` asset-URL rule (app 200/262 precedent). Same assets, literal src values only - structural-diff compares literal attribute names, not values. // NOTE: live-verified 2026-08-16 (nightly e2e` &&
+               ` interaction): Rendering not yet verified in a running system: the port is init-only and fully static (no bindings, no events, no round-trip), so the open behaviours are render-time only - the` &&
+               ` ObjectPageHeader navigationBar Bar, the showPlaceholder=true Circle placeholder avatar (no objectImageURI is set), showTitleInHeaderContent=true and the always/snapped visibility flags`.
+    lv_text1 = lv_text1 && ` (isObjectTitleAlwaysVisible/isObjectSubtitleAlwaysVisible=false, isActionAreaAlwaysVisible=true) are unverified live.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeader`             name = `ProfileObjectPageHeader`                       class = `z2ui5_cl_smpc_app_413` path = `src/01/03/z2ui5_cl_smpc_app_413.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
         notes = lv_text1 ) ).
 

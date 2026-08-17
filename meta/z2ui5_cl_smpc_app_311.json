@@ -24,8 +24,8 @@
       "what": "sap.ui.unified.MenuItemGroup (control @since 1.127) with itemSelectionMode SingleSelect/MultiSelect and MenuItem.selected (@since 1.127) are the whole point of this sample and are kept 1:1; sap.m.Button.ariaHasPopup (@since 1.84) is kept 1:1 on the trigger button. All newer than UI5 1.71."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet run in a system: the anchored open of the unified Menu and the selectable item groups (single/multi select state)."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the anchored open of the unified Menu and the selectable item groups (single/multi select state)."
     }
   ]
 }

@@ -28,8 +28,8 @@
       "what": "the fragments bind {EMail} while the mock key is Email, so in the original that field renders empty. The port binds the real Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment case-insensitively), but the address is actually shown here."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore)."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore)."
     }
   ]
 }

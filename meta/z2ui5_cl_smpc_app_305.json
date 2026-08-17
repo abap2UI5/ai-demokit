@@ -28,8 +28,8 @@
       "what": "Calendar.showCurrentDateButton (@since 1.95) is kept 1:1 from the original view. Newer than UI5 1.71."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet run in a system: the CAL_SELECT expression-arg round-trip and the same-day second click clearing the label."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the CAL_SELECT expression-arg round-trip and the same-day second click clearing the label."
     }
   ]
 }

@@ -24,8 +24,8 @@
       "what": "the original loads sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street} {HouseNumber} keep their composite form with the absolute paths."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore)."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore)."
     }
   ]
 }

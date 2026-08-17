@@ -36,8 +36,8 @@
       "what": "the profile Avatar src 'test-resources/sap/tnt/images/Woman_avatar_01.png' is absolutized to the OpenUI5 host (https://sdk.openui5.org/test-resources/sap/tnt/images/Woman_avatar_01.png) per the repository asset-URL rule; the original uses the relative path. The ENABLED/EXPANDED fields the templates bind are absent from model/data.json, so every row carries the UI5 property default (true) explicitly - a flat ABAP row would otherwise serialize them as empty and override that default."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet run in a system: the IconTabHeader / SideNavigation select -> NavContainer 'to' frontend action, the two-way bound selectedKey and the SIDE_NAV_TOGGLE round-trip (sideExpanded plus the tooltip flip)."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the IconTabHeader / SideNavigation select -> NavContainer 'to' frontend action, the two-way bound selectedKey and the SIDE_NAV_TOGGLE round-trip (sideExpanded plus the tooltip flip)."
     }
   ]
 }

@@ -88,7 +88,13 @@ CLASS z2ui5_cl_smpc_app_308 IMPLEMENTATION.
                         )->a( n = `startDate`     v = `{ path: 'START_DATE', formatter: 'Formatter.DateCreateObject' }`
                         )->a( n = `endDate`       v = `{= ${END_DATE} ? Formatter.DateCreateObject(${END_DATE}) : null }`
                         )->a( n = `type`          v = `{TYPE}`
-                        )->a( n = `secondaryType` v = `{SECONDARY_TYPE}`
+                        " An enum property REFUSES an empty string - `"" is of type
+                        " string, expected sap.ui.unified.CalendarDayType` - and the
+                        " template is evaluated with no row the moment the toggle
+                        " CLEARS the table. Same shape as endDate above: fall back to
+                        " the enum's own default rather than let `` reach the control.
+                        " Found by the e2e interaction (the second press), 2026-08-16.
+                        )->a( n = `secondaryType` v = `{= ${SECONDARY_TYPE} ? ${SECONDARY_TYPE} : 'None' }`
                         )->a( n = `tooltip`       v = `{TOOLTIP}`
                         )->a( n = `color`         v = `{COLOR}`
 
@@ -121,7 +127,13 @@ CLASS z2ui5_cl_smpc_app_308 IMPLEMENTATION.
                         )->a( n = `startDate`     v = `{ path: 'START_DATE', formatter: 'Formatter.DateCreateObject' }`
                         )->a( n = `endDate`       v = `{= ${END_DATE} ? Formatter.DateCreateObject(${END_DATE}) : null }`
                         )->a( n = `type`          v = `{TYPE}`
-                        )->a( n = `secondaryType` v = `{SECONDARY_TYPE}`
+                        " An enum property REFUSES an empty string - `"" is of type
+                        " string, expected sap.ui.unified.CalendarDayType` - and the
+                        " template is evaluated with no row the moment the toggle
+                        " CLEARS the table. Same shape as endDate above: fall back to
+                        " the enum's own default rather than let `` reach the control.
+                        " Found by the e2e interaction (the second press), 2026-08-16.
+                        )->a( n = `secondaryType` v = `{= ${SECONDARY_TYPE} ? ${SECONDARY_TYPE} : 'None' }`
                         )->a( n = `tooltip`       v = `{TOOLTIP}`
                         )->a( n = `color`         v = `{COLOR}`
 

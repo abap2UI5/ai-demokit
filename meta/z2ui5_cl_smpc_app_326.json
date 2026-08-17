@@ -28,8 +28,8 @@
       "what": "the Edit button starts enabled=\"true\" instead of the original's enabled=\"false\" plus attachRequestCompleted: the ABAP model is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore)."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore)."
     }
   ]
 }
