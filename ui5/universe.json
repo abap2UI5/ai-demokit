@@ -4149,6 +4149,12 @@
    "lib": "sap.ui.unified",
    "samples": [
     {
+     "name": "CalendarAriaHasPopup",
+     "entity": "sap.ui.unified.Calendar",
+     "since": null,
+     "deprecated": null
+    },
+    {
      "name": "CalendarCalendarType",
      "entity": "sap.ui.unified.Calendar",
      "since": null,
