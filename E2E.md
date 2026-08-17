@@ -27,7 +27,7 @@ npm run node:setup     # once: clone abap2UI5 into .abap2UI5, install everything
 npm run node:serve     # start the Node backend on http://localhost:3000
 ```
 
-Then open <http://localhost:3000/?app_start=z2ui5_cl_smpc_app_overview>.
+Then open <http://localhost:3000/?app_start=z2ui5_cl_smpc_app_000>.
 
 `node:setup` clones abap2UI5 into `.abap2UI5` (in-repo, git-ignored), runs
 `npm ci` there and here, and builds the backend. Re-run it any time to pull the
@@ -60,7 +60,7 @@ one flat table (the only view of the catalog), and every row has a **Start this 
 button that launches the port right there.
 
 ```
-http://localhost:3000/?app_start=z2ui5_cl_smpc_app_overview
+http://localhost:3000/?app_start=z2ui5_cl_smpc_app_000
 ```
 
 ## Open a single port directly

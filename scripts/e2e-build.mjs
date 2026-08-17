@@ -44,7 +44,7 @@ const fix = (cmd) => { try { execSync(cmd, { cwd: A2, stdio: ['ignore', 'ignore'
 // skip is never silent). Add a port here only with a reason if the transpiler
 // chokes on it. The overview app IS served — it is the local front door,
 // listing every port with a ?app_start= launch link (open
-// ?app_start=z2ui5_cl_smpc_app_overview). It is not a numbered port, so
+// ?app_start=z2ui5_cl_smpc_app_000). It is not a numbered port, so
 // e2e-smoke never picks it up.
 const EXCLUDE = new Set([]);
 

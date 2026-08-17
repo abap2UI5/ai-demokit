@@ -4,7 +4,7 @@
 # The sample catalogue
 
 Every port in this repository — 430 of them — with what it shows and a
-link to its source. This is the [overview app](src/z2ui5_cl_smpc_app_overview.clas.abap)
+link to its source. This is the [overview app](src/z2ui5_cl_smpc_app_000.clas.abap)
 as a page you can read here, before installing anything.
 
 **What this repository is:** the UI5 demo kit, rebuilt in ABAP. Each port
@@ -19,7 +19,7 @@ All three pages have the same shape on purpose.
 **To run one:** install [abap2UI5](https://github.com/abap2UI5/abap2UI5), pull
 this repository with [abapGit](https://abapgit.org), then open
 `<your endpoint>?app_start=<the class in the right-hand column>`. Or start
-`Z2UI5_CL_SMPC_APP_OVERVIEW` and click through them there.
+`Z2UI5_CL_SMPC_APP_000` and click through them there.
 
 **To read one:** click the class. Every port is a single class, so the link is
 the whole sample.

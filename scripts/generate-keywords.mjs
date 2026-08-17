@@ -82,7 +82,7 @@ let already = 0;
  * generators writing the same file would fight: whichever ran last would win
  * and the other's drift gate would go red. It is also the one app here with no
  * `entity` and no DESCRIPT to derive from, so there is nothing to derive. */
-const GENERATED = 'z2ui5_cl_smpc_app_overview';
+const GENERATED = 'z2ui5_cl_smpc_app_000';
 
 for (const file of walk(path.join(ROOT, 'src'))) {
   const cls = path.basename(file, '.clas.abap');

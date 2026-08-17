@@ -13,7 +13,7 @@ It is a thin adaptation of the official
 (transpiler, express-icf-shim and webpacking by
 [larshp](https://github.com/larshp)) — the only change is that it assembles
 **this repo's ports** instead of the `samples` repo, and lands on the port
-overview (`z2ui5_cl_smpc_app_overview`) instead of the framework home page.
+overview (`z2ui5_cl_smpc_app_000`) instead of the framework home page.
 
 ## How it works
 
@@ -53,7 +53,7 @@ in a restricted sandbox — there the controls render but stay unthemed.
 
 ## Landing page
 
-`app/index.html` sets `?app_start=z2ui5_cl_smpc_app_overview` when no app is
+`app/index.html` sets `?app_start=z2ui5_cl_smpc_app_000` when no app is
 requested, so the bare Pages URL opens the port overview. Each overview row
 has a *"Start this abap2UI5 app in a new tab"* link (`?app_start=<class>`).
 

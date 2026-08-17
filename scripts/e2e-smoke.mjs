@@ -48,7 +48,7 @@ if (ONLY && !ONLY.length) {
 }
 // the overview app is checked alongside the numbered ports (its interaction
 // module sits in meta/interactions/ like every other)
-const OVERVIEW = 'z2ui5_cl_smpc_app_overview';
+const OVERVIEW = 'z2ui5_cl_smpc_app_000';
 
 // richer per-port checks (optional): ONE MODULE PER PORT under
 // meta/interactions/<class>.mjs, each default-exporting

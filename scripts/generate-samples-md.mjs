@@ -83,7 +83,7 @@ function scan() {
         ? meta.entity.split('.').slice(0, -1).join('.')
         : (cut === -1 ? descript : descript.slice(0, cut)),
       sapui5: !meta && cls.includes('_sapui5_'),
-      overview: cls.endsWith('_overview'),
+      overview: cls === 'z2ui5_cl_smpc_app_000',
     });
   }
   return out;

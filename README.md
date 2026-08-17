@@ -34,7 +34,7 @@ how to express a control in ABAP? Its sample is already here — or on its way.
 
 1. Install [abap2UI5](https://github.com/abap2UI5/abap2UI5).
 2. Pull this repository with [abapGit](https://abapgit.org).
-3. Start **`z2ui5_cl_smpc_app_overview`** — every sample in one searchable
+3. Start **`z2ui5_cl_smpc_app_000`** — every sample in one searchable
    table: each row links the original UI5 sample and its ABAP rebuild, and
    one click starts the app right in your system.
 
@@ -50,7 +50,7 @@ family:
 |      | Repository | What you learn | Where to start |
 |------|------------|----------------|----------------|
 | 1️⃣ | [**samples**](https://github.com/abap2UI5/samples) | **the abap2UI5 basics** — bindings, events, popups, navigation, complete apps | run `Z2UI5_CL_SMP_APP_000` |
-| 2️⃣ | **samples-controls** — 📍 *you are here* | **how to use every UI5 control** — the UI5 Demo Kit rebuilt with abap2UI5 | run `z2ui5_cl_smpc_app_overview` |
+| 2️⃣ | **samples-controls** — 📍 *you are here* | **how to use every UI5 control** — the UI5 Demo Kit rebuilt with abap2UI5 | run `z2ui5_cl_smpc_app_000` |
 | 3️⃣ | [**samples-stack**](https://github.com/abap2UI5/samples-stack) | **how abap2UI5 plays with your stack** — OData, RAP, WebSockets, the Fiori Launchpad and more | pick your technology in its package table |
 
 #### Learn by comparing
@@ -286,7 +286,7 @@ Control metadata from OpenUI5 **1.152.0**.
 
 For the full **control-level** view — one row per sample (Module · Control ·
 Since · Deprecated · Sample · ABAP), every link pointing at OpenUI5 — see
-**[api.md](api.md)**, or the in-system overview app `z2ui5_cl_smpc_app_overview`,
+**[api.md](api.md)**, or the in-system overview app `z2ui5_cl_smpc_app_000`,
 where the **Sample** column links the OpenUI5 source (its ↗ opens the live
 sample) and the **abap2UI5** column links the generated class (its ↗ starts the
 app in the system).

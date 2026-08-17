@@ -117,8 +117,8 @@ jobs:
           STATUS.md
           ui5/universe.json
           ui5/properties.json
-          src/z2ui5_cl_smpc_app_overview.clas.abap
-          src/z2ui5_cl_smpc_app_overview.clas.xml
+          src/z2ui5_cl_smpc_app_000.clas.abap
+          src/z2ui5_cl_smpc_app_000.clas.xml
         commit-message: Regenerate sample coverage
         author: 'github-actions[bot] <github-actions[bot]@users.noreply.github.com>'
         committer: 'github-actions[bot] <github-actions[bot]@users.noreply.github.com>'
