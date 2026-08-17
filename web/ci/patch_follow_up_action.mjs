@@ -43,9 +43,10 @@
 // patch therefore swaps ONLY the consumed form and leaves the 129 statement
 // calls alone; those queue an action and work either way.
 //
-// Filed upstream as pr/transpiler-returning-is-supplied. When the transpiler
-// passes the returning slot in INPUT: delete this file, its two call sites
-// (web/package.json assemble, scripts/e2e-build.mjs) and the pr/ folder.
+// Written up as backlog/items/transpiler-returning-is-supplied.md in
+// abap2UI5/abap2UI5. When the transpiler passes the returning slot in INPUT:
+// delete this file and its two call sites (web/package.json assemble,
+// scripts/e2e-build.mjs).
 import { readFileSync, writeFileSync, existsSync, readdirSync, statSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";

@@ -64,8 +64,8 @@ each port's `meta/<class>.json`. Per batch:
 4. **Distill** — the agent classifies every human correction: fidelity bug →
    rule in AGENTS/CAPABILITIES **and, where greppable, a deterministic check**
    (structural diff / pattern lint), style → convention update, new technique →
-   CAPABILITIES row, framework limitation → forwardable request under `pr/`
-   (one folder per request). Corrected ports become `checked`; the journal
+   CAPABILITIES row, framework limitation → an item in the stock
+   (`backlog/items/<id>.md` in `abap2UI5/abap2UI5`, one file per request). Corrected ports become `checked`; the journal
    entry goes into STATUS-history.md in the same change (the STATUS.md state
    block regenerates itself via generate-status.mjs).
 5. **Regression probe** (every few batches) — re-generate a handful of
