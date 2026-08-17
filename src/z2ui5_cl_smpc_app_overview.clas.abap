@@ -5612,14 +5612,13 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` 123-row catalog is returned by a method rather than held in a public attribute: only the filtered rows are bound, so only they belong in the model that travels on every round-trip (the overview-app` &&
                ` lesson in AGENTS section 10). The controller's formatAvailableToObjectState is precomputed into the AVAILABLESTATE column, since business logic belongs in the backend. // IMPROVISED: The footer` &&
                ` OverflowToolbar stays empty: onInit lazily requires sap/ui/table/sample/TableExampleUtils and appends a ToolbarSpacer plus its createInfoButton( ) to it. That helper lives in the demo kit's own` &&
-               ` sample folder, not in any UI5 library, and only opens a popover pointing at the sample's source. Every sap.ui.table sample of this batch drops it the same way. // LIVE-TEST: Unverified in a running`.
-    lv_text1 = lv_text1 && ` system: whether the two-way bound FacetFilterItem selected flags return with the listClose round-trip and produce the expected server-side selection, and whether the noData Link appears when the` &&
-               ` filters leave no rows.`.
+               ` sample folder, not in any UI5 library, and only opens a popover pointing at the sample's source. Every sap.ui.table sample of this batch drops it the same way. // NOTE: live-verified 2026-08-17`.
+    lv_text1 = lv_text1 && ` (nightly e2e interaction): Unverified in a running system: whether the two-way bound FacetFilterItem selected flags return with the listClose round-trip and produce the expected server-side` &&
+               ` selection, and whether the noData Link appears when the filters leave no rows.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Aggregations`                                  class = `z2ui5_cl_smpc_app_352` path = `src/01/02/z2ui5_cl_smpc_app_352.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: Rebuilt 1:1 from the breadth probe 2026-08-05: all THIRTEEN columns (Text/Input/Label/ObjectStatus/u:Currency/ComboBox/Link/Button/CheckBox/Select/MultiInput/c:Icon/DatePicker templates) over` &&
