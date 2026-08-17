@@ -94,7 +94,7 @@ CLASS z2ui5_cl_smpc_app_308 IMPLEMENTATION.
                         " CLEARS the table. Same shape as endDate above: fall back to
                         " the enum's own default rather than let `` reach the control.
                         " Found by the e2e interaction (the second press), 2026-08-16.
-                        )->a( n = `secondaryType` v = |\{= $\{SECONDARY_TYPE} ? $\{SECONDARY_TYPE} : 'None' }|
+                        )->a( n = `secondaryType` v = `{= ${SECONDARY_TYPE} ? ${SECONDARY_TYPE} : 'None' }`
                         )->a( n = `tooltip`       v = `{TOOLTIP}`
                         )->a( n = `color`         v = `{COLOR}`
 
@@ -133,7 +133,7 @@ CLASS z2ui5_cl_smpc_app_308 IMPLEMENTATION.
                         " CLEARS the table. Same shape as endDate above: fall back to
                         " the enum's own default rather than let `` reach the control.
                         " Found by the e2e interaction (the second press), 2026-08-16.
-                        )->a( n = `secondaryType` v = |\{= $\{SECONDARY_TYPE} ? $\{SECONDARY_TYPE} : 'None' }|
+                        )->a( n = `secondaryType` v = `{= ${SECONDARY_TYPE} ? ${SECONDARY_TYPE} : 'None' }`
                         )->a( n = `tooltip`       v = `{TOOLTIP}`
                         )->a( n = `color`         v = `{COLOR}`
 
