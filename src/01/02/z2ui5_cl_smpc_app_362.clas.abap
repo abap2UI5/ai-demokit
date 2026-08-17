@@ -46,6 +46,12 @@ CLASS z2ui5_cl_smpc_app_362 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       model_init( ).
+      " Every sortOrder starts at the enum's own None. Leaving the other three
+      " initial made them serialize as "" - which sap.ui.core.SortOrder rejects
+      " outright, so the app terminated on its first render with
+      " `"" is of type string, expected sap.ui.core.SortOrder`. The original
+      " calls _resetSortingState for the same reason; sort_clear( ) is it.
+      sort_clear( ).
       " the original sorts by Product Name ascending in onInit
       SORT t_products BY name ASCENDING.
       sort_name = `Ascending`.

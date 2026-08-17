@@ -32,8 +32,8 @@
       "what": "The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined with the columns the twelve table columns bind. The original computes DeliveryDate from Date.now() with an i-mod-10 offset in 4-day steps; a fixed base date (2026-07-23) is used here so the port is deterministic - the corpus convention of app 164. ProductPicUrl values point at the OpenUI5 host per the asset-URL rule; the mock carries them host-relative."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Unverified in a running system: whether rowSelectionChange delivers the index array as JSON to get_event_arg, whether the two bound Selects drive selectionMode/selectionBehavior without a round-trip, and the control_by_id clearSelection wire."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-17 (nightly e2e interaction): Unverified in a running system: whether rowSelectionChange delivers the index array as JSON to get_event_arg, whether the two bound Selects drive selectionMode/selectionBehavior without a round-trip, and the control_by_id clearSelection wire."
     }
   ]
 }

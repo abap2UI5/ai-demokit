@@ -5924,13 +5924,13 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` keep the original's binding-info form with templateShareable - only the path switches to the ABAP table. The Heavy CheckBox and the DeliveryDate DatePicker keep their typed complex bindings 1:1 with` &&
                ` the path pointed at the ABAP field. // NOTE: The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined with the columns the twelve table columns bind. The original` &&
                ` computes DeliveryDate from Date.now() with an i-mod-10 offset in 4-day steps; a fixed base date (2026-07-23) is used here so the port is deterministic - the corpus convention of app 164.` &&
-               ` ProductPicUrl values point at the OpenUI5 host per the asset-URL rule; the mock carries them host-relative. // LIVE-TEST: Unverified in a running system: whether rowSelectionChange delivers the index` &&
-               ` array as JSON to get_event_arg, whether the two bound Selects drive selectionMode/selectionBehavior without a round-trip, and the control_by_id clearSelection wire.`.
+               ` ProductPicUrl values point at the OpenUI5 host per the asset-URL rule; the mock carries them host-relative. // NOTE: live-verified 2026-08-17 (nightly e2e interaction): Unverified in a running` &&
+               ` system: whether rowSelectionChange delivers the index array as JSON to get_event_arg, whether the two bound Selects drive selectionMode/selectionBehavior without a round-trip, and the control_by_id`.
+    lv_text1 = lv_text1 && ` clearSelection wire.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Selection`                                     class = `z2ui5_cl_smpc_app_361` path = `src/01/02/z2ui5_cl_smpc_app_361.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: Every sort of this sample happens in ABAP. The three toolbar buttons (sortCategoriesAndName / sortCategories / clearAllSortings) and the column header menu all fire a backend event, the model` &&
