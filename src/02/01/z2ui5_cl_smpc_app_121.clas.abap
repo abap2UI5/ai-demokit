@@ -78,7 +78,15 @@ CLASS z2ui5_cl_smpc_app_121 IMPLEMENTATION.
                 )->a( n = `maxFileSize`   v = `200`
                 )->a( n = `mediaTypes`    v = `text/plain,application/msword,image/png`
                 )->a( n = `uploadUrl`     v = `../../../../upload`
-                )->a( n = `items`         v = client->_bind( t_items )
+                " omit_initial_paths so a marker that sets no visibility keeps
+                " the control's own default. The original's markers are
+                " {"type":"Draft"} and carry no visibility at all, so its
+                " visibility="{visibility}" resolves to undefined and UI5 leaves
+                " the property alone. ABAP has no undefined: the unfilled
+                " TYPE string serialized as "" and sap.m.ObjectMarkerVisibility
+                " rejects it, which TERMINATED the app on its first render.
+                )->a( n = `items`         v = client->_bind( val = t_items
+                                                             omit_initial_paths = VALUE #( ( `VISIBILITY` ) ) )
                 )->a( n = `mode`          v = `MultiSelect`
                 )->a( n = `selectionChanged`  v = client->_event( `SELECTION` )
                 )->a( n = `afterItemRemoved`  v = client->_event( `REMOVED` )

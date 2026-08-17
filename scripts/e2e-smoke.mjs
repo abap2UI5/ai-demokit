@@ -198,6 +198,23 @@ async function checkPort(browser, cls) {
     );
     // let the render settle so a late runtime error still surfaces
     await page.waitForTimeout(600);
+    /* The framework catches a fatal error and RENDERS it, so nothing reaches
+     * `pageerror` and the port passes while the user sees an overlay saying
+     * the app terminated. This has bitten twice: the sap.tnt ports passed on
+     * their Application Error popup until an interaction exposed it
+     * (2026-07-30), and app 362 passed while dying on `"" is of type string,
+     * expected sap.ui.core.SortOrder` (2026-08-17). Per-port interactions
+     * caught both, one port at a time; this catches the class.
+     *
+     * Matched on the overlay's own heading rather than on a CSS class: the
+     * heading is the framework's text and the dialog markup is UI5's, which
+     * changes between releases. */
+    const fatal = await page.evaluate(() => {
+      const t = document.body.innerText || '';
+      const m = t.match(/(Unexpected Error Occurred[^]{0,400})/);
+      return m ? m[1].replace(/\s+/g, ' ').slice(0, 220) : null;
+    });
+    if (fatal) errs.push('fatal overlay: ' + fatal);
     const interaction = INTERACTIONS[cls];
     if (interaction) await interaction(page, makeExpect(errs));
   } catch (e) {
