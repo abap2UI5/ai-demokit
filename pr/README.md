@@ -1,15 +1,15 @@
 # pr/ — the record of what porting asked the framework for
 
 **The open requests have moved.** They live in
-[`abap2UI5/abap2UI5` under `vorrat/`](https://github.com/abap2UI5/abap2UI5/tree/main/vorrat)
+[`abap2UI5/abap2UI5` under `backlog/`](https://github.com/abap2UI5/abap2UI5/tree/main/backlog)
 now — four backlogs, sorted by where each one gets filed:
 
 | | |
 |---|---|
-| [OPEN-ABAP.md](https://github.com/abap2UI5/abap2UI5/blob/main/vorrat/OPEN-ABAP.md) | `open-abap/open-abap-core`, `abaplint/transpiler` |
-| [ABAPLINT.md](https://github.com/abap2UI5/abap2UI5/blob/main/vorrat/ABAPLINT.md) | `abaplint/abaplint` |
-| [ABAP2UI5-LINTER.md](https://github.com/abap2UI5/abap2UI5/blob/main/vorrat/ABAP2UI5-LINTER.md) | `abap2UI5/linter` |
-| [ABAP2UI5.md](https://github.com/abap2UI5/abap2UI5/blob/main/vorrat/ABAP2UI5.md) | the framework |
+| [OPEN-ABAP.md](https://github.com/abap2UI5/abap2UI5/blob/main/backlog/OPEN-ABAP.md) | `open-abap/open-abap-core`, `abaplint/transpiler` |
+| [ABAPLINT.md](https://github.com/abap2UI5/abap2UI5/blob/main/backlog/ABAPLINT.md) | `abaplint/abaplint` |
+| [ABAP2UI5-LINTER.md](https://github.com/abap2UI5/abap2UI5/blob/main/backlog/ABAP2UI5-LINTER.md) | `abap2UI5/linter` |
+| [ABAP2UI5.md](https://github.com/abap2UI5/abap2UI5/blob/main/backlog/ABAP2UI5.md) | the framework |
 
 A request about the framework sat in the corpus, findable only by somebody who
 already knew the corpus existed — and the same folder held requests for three
@@ -22,7 +22,7 @@ on 2026-08-17 were carried over verbatim: `open-abap-xml-escaping`,
 TRAINING.md "Distill"): whenever porting or reviewing surfaces an improvement
 idea for the framework — a missing API parameter, a capability marked ❌ in
 CAPABILITIES.md that upstream could close, a behavior gap — write it up **in
-the same change**, as `vorrat/items/<id>.md` in `abap2UI5/abap2UI5`. An item
+the same change**, as `backlog/items/<id>.md` in `abap2UI5/abap2UI5`. An item
 without a case that actually happened is a wish; the gate there requires the
 evidence.
 

@@ -70,7 +70,7 @@ generation notes) persists a draft that the transpiled `CL_IXML` cannot parse
 back — the next round-trip then dies in an uncatchable `ASSERT` and the page
 shows `Network error: ASSERTION_FAILED` (reported 2026-07-31 for the
 overview's links / generation-notes popovers). Forwarded upstream as
-[`vorrat/items/open-abap-xml-escaping`](https://github.com/abap2UI5/abap2UI5/blob/main/vorrat/items/open-abap-xml-escaping.md)
+[`backlog/items/open-abap-xml-escaping`](https://github.com/abap2UI5/abap2UI5/blob/main/backlog/items/open-abap-xml-escaping.md)
 in abap2UI5; drop the clone, the patch and this section once it is merged
 there.
 

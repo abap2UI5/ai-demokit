@@ -461,7 +461,7 @@ source of truth:
   `popup_display`). When a port proves a new technique or disproves a ❌,
   update `CAPABILITIES.md` in the same change.
 - **Every improvement idea for the abap2UI5 framework goes into the stock in
-  `abap2UI5/abap2UI5`** — `vorrat/items/<id>.md`, self-contained and
+  `abap2UI5/abap2UI5`** — `backlog/items/<id>.md`, self-contained and
   forwardable (motivation with the sample/port that hit it, current behavior
   with source references, proposed change, example, and at least one
   `evidence:` entry). Add it in the same change that discovers the gap. Which

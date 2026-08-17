@@ -20,11 +20,11 @@ shapes, three repositories, and no way to answer *"what is there to file
 against abaplint"* without reading all of them.
 
 All five moved to `abap2UI5/abap2UI5` under
-[`vorrat/`](https://github.com/abap2UI5/abap2UI5/tree/main/vorrat), which sorts
+[`backlog/`](https://github.com/abap2UI5/abap2UI5/tree/main/backlog), which sorts
 items into four generated pages by where each one gets filed — OPEN-ABAP,
 ABAPLINT, ABAP2UI5-LINTER, ABAP2UI5 — with the item file itself written to be
 pasted into an issue as it stands. The pages are generated from the items and
-from `**Vorrat:**` lines in the skills, so the analysis stays next to the
+from `**Backlog:**` lines in the skills, so the analysis stays next to the
 defect that produced it and the backlog fills itself; converting an item into
 an issue stays a human step, and a shipped one is deleted rather than kept as a
 row (the rule `pr/README.md` already had, now enforced by a gate).

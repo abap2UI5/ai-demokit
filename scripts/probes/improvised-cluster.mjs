@@ -316,7 +316,7 @@ for (const f of fs.readdirSync(META).sort()) {
      * output groups by it, so it was only ever readable by a human; a consumer
      * of `--json` had to re-derive it from the family name, which means two
      * places deciding what counts as a framework gap. abap2UI5's
-     * `vorrat-mine.mjs` reads it and refuses to run without it. */
+     * `backlog-mine.mjs` reads it and refuses to run without it. */
     rows.push({
       port,
       sample: m.sample,

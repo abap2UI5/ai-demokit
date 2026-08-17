@@ -43,7 +43,7 @@
 // patch therefore swaps ONLY the consumed form and leaves the 129 statement
 // calls alone; those queue an action and work either way.
 //
-// Written up as vorrat/items/transpiler-returning-is-supplied.md in
+// Written up as backlog/items/transpiler-returning-is-supplied.md in
 // abap2UI5/abap2UI5. When the transpiler passes the returning slot in INPUT:
 // delete this file and its two call sites (web/package.json assemble,
 // scripts/e2e-build.mjs).

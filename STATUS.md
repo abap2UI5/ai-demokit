@@ -32,7 +32,7 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
 - [ ] **Two open-abap defects are patched in the build and open upstream.**
   Both are written up in full — analysis, emitted JS, proposed change — in
   `abap2UI5/abap2UI5`'s
-  [`vorrat/OPEN-ABAP.md`](https://github.com/abap2UI5/abap2UI5/blob/main/vorrat/OPEN-ABAP.md),
+  [`backlog/OPEN-ABAP.md`](https://github.com/abap2UI5/abap2UI5/blob/main/backlog/OPEN-ABAP.md),
   which is where the ecosystem's upstream backlog lives now; what stays here is
   what THIS repository has to undo when they land.
   - `open-abap-xml-escaping` — `CALL TRANSFORMATION id … RESULT XML` writes

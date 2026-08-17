@@ -65,7 +65,7 @@ each port's `meta/<class>.json`. Per batch:
    rule in AGENTS/CAPABILITIES **and, where greppable, a deterministic check**
    (structural diff / pattern lint), style → convention update, new technique →
    CAPABILITIES row, framework limitation → an item in the stock
-   (`vorrat/items/<id>.md` in `abap2UI5/abap2UI5`, one file per request). Corrected ports become `checked`; the journal
+   (`backlog/items/<id>.md` in `abap2UI5/abap2UI5`, one file per request). Corrected ports become `checked`; the journal
    entry goes into STATUS-history.md in the same change (the STATUS.md state
    block regenerates itself via generate-status.mjs).
 5. **Regression probe** (every few batches) — re-generate a handful of
