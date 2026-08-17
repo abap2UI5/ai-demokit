@@ -24,8 +24,8 @@
       "what": "onBeforeRendering hides the width Slider and the hint Text on a phone (Device.system.phone). Both are bound to the shared device model instead - visible=\"{= !${device>/system/phone} }\" - which is the live equivalent and needs no round-trip; the original's literal visible=\"getVisible()\" on the hint Text (a sample quirk that evaluates to nothing) is replaced by that binding. The two body texts are the sample's full Lorem paragraphs verbatim, with the XML attribute's line breaks normalized to single spaces as an XML parser would."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Unverified in a running system: the breakpointChanged round-trip enabling the Toggle button on S, the showSideContent flip, and the Slider's css width write on the container Page. The same three wires are live-verified on app 138 (the plain DynamicSideContent sample), which uses them identically."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-17 (nightly e2e interaction): Unverified in a running system: the breakpointChanged round-trip enabling the Toggle button on S, the showSideContent flip, and the Slider's css width write on the container Page. The same three wires are live-verified on app 138 (the plain DynamicSideContent sample), which uses them identically."
     }
   ]
 }
