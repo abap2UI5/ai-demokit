@@ -64,7 +64,7 @@ const BUDGET = 255 - '" @summary '.length;
  * its whole header - including its own @keywords/@summary. Rewriting it here
  * would make the two generators fight over the same file: whichever ran last
  * would win and the other's drift gate would go red. */
-const GENERATED = 'z2ui5_cl_smpc_app_overview';
+const GENERATED = 'z2ui5_cl_smpc_app_000';
 
 /** Demo kit prose -> one ABAP comment line: no markup, no exotic characters. */
 function clean(text) {

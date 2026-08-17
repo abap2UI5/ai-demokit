@@ -27,7 +27,7 @@ scripts.**
   **Sample** (→ OpenUI5 repo source, ↗ → live fullscreen sample) · **ABAP**
   (→ generated class, `—` = not ported; those rows are the backlog). There is
   no separate deprecated-controls section — everything sits in this table.
-- **`src/z2ui5_cl_smpc_app_overview.clas.*`** — the in-system overview **app**:
+- **`src/z2ui5_cl_smpc_app_000.clas.*`** — the in-system overview **app**:
   an abap2UI5 app that lists every ported app as one row of a `sap.m.Table`,
   sorted by module → control → sample. Columns (all plain text — links moved to
   the trailing **Open** column): **Module** · **Control** · **Since** (the UI5

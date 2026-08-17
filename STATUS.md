@@ -70,7 +70,7 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   **24 `aggregation-too-new`** — every one already carrying a `POST_171`
   deviation, so they pass untouched (without the `VERSION_TYPES` entry they
   would all have failed at once); **1 `toolbar-control-in-bar`**, in
-  `z2ui5_cl_smpc_app_overview`'s header — a real defect, not a port fidelity
+  `z2ui5_cl_smpc_app_000`'s header — a real defect, not a port fidelity
   question: the separator in the `sap.m.Bar` deletes every icon after it on
   1.71–1.75, and the file is GENERATED, so the fix belongs in
   `scripts/generate-overview.mjs`; and **6 `icon-too-new`** — `information`

@@ -65,7 +65,7 @@
 "! descending sort icons - both run entirely on the frontend
 "! (cs_event-binding_call via follow_up_action, no server round-trip). Do not edit
 "! by hand - regenerate with scripts/generate-overview.mjs
-CLASS z2ui5_cl_smpc_app_overview DEFINITION PUBLIC.
+CLASS z2ui5_cl_smpc_app_000 DEFINITION PUBLIC.
 
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
@@ -171,8 +171,11 @@ CLASS z2ui5_cl_smpc_app_overview DEFINITION PUBLIC.
       BEGIN OF cs_overview,
         samples      TYPE string VALUE `z2ui5_cl_smp_app_000`,
         samples_old  TYPE string VALUE `z2ui5_cl_demo_app_g00`,
-        controls     TYPE string VALUE `z2ui5_cl_smpc_app_overview`,
-        controls_old TYPE string VALUE `z2ui5_cl_dmo_app_overview`,
+        controls     TYPE string VALUE `z2ui5_cl_smpc_app_000`,
+        " this overview app before its 2026-08 rename to the three-digit
+        " number scheme - an installation that predates it still answers to
+        " this name (the dmo-era name is older still and no longer tried)
+        controls_old TYPE string VALUE `z2ui5_cl_smpc_app_overview`,
         stack        TYPE string VALUE `z2ui5_cl_smps_app_000`,
         " the overview app of samples-stack before its 2026-08 rename to
         " three-digit app numbers - an installation that predates it still
@@ -249,7 +252,7 @@ CLASS z2ui5_cl_smpc_app_overview DEFINITION PUBLIC.
 ENDCLASS.
 
 
-CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
+CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
 
   METHOD z2ui5_if_app~main.
 

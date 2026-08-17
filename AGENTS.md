@@ -50,7 +50,7 @@ reads the files directly. **Read the matching guide BEFORE starting the task**
 generated table), `STATUS-history.md` (~228 KB journal), `CAPABILITIES.md`
 (~45 KB — grep for the feature row),
 `scripts/generate-overview.mjs` (~58 KB),
-`src/z2ui5_cl_smpc_app_overview.clas.abap` (generated). (The e2e
+`src/z2ui5_cl_smpc_app_000.clas.abap` (generated). (The e2e
 interactions live as one module per port under `meta/interactions/` —
 read only the port you work on.)
 
@@ -649,7 +649,7 @@ which `npm ci` / `npm install` runs automatically via the `prepare` script.
 Five artefacts are generated, never hand-edited — edit the scripts instead:
 the `README.md` coverage block, the `STATUS.md` state block, `api.md`,
 `SAMPLES.md`, and the
-in-system overview app `src/z2ui5_cl_smpc_app_overview.clas.*`. They regenerate
+in-system overview app `src/z2ui5_cl_smpc_app_000.clas.*`. They regenerate
 as part of `npm run gates` (or via the individual `generate-*.mjs` scripts)
 and must leave `git diff` clean before every commit — the `meta_valid` CI job
 enforces exactly that. The full spec (overview app columns and behaviour, the
