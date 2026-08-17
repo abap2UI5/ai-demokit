@@ -225,7 +225,7 @@ generation/review batch a port came from is recorded in its
 | [`SAMPLES.md`](SAMPLES.md) | The catalogue: every port with what it shows, grouped by UI5 library — the same page shape as [samples](https://github.com/abap2UI5/samples/blob/main/SAMPLES.md) and [samples-stack](https://github.com/abap2UI5/samples-stack/blob/main/SAMPLES.md) |
 | [`api.md`](api.md) | One row per demo kit sample: ported, backlog or out of scope |
 | [`meta/`](meta) | One sidecar per port — status, checked, typed deviations |
-| [`pr/`](pr) | Forwardable improvement requests for the abap2UI5 framework, distilled from porting gaps |
+| [`pr/`](pr) | The record of what porting asked the framework for — implemented and declined. Open requests moved to [`backlog/`](https://github.com/abap2UI5/abap2UI5/tree/main/backlog) in abap2UI5, where the whole ecosystem's upstream backlog lives |
 | [ai-mcp](https://github.com/abap2UI5/ai-mcp) | MCP server for AI coding agents — capability queries, view validation, deploy, headless run + screenshot on this repo's infrastructure (separate repository) |
 | [abap2UI5-linter](https://github.com/abap2UI5/linter) | The view gates as standalone CLI, library and GitHub Action — extracted from this repo and now used BY it (`scripts/view-gates.mjs`) |
 
