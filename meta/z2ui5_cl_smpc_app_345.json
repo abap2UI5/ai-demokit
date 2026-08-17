@@ -20,8 +20,8 @@
       "what": "resources/styles.css (.GridPropertiesSample .exampleDiv and .contrastColor) is injected through an extra core:HTML <style> leaf, so the port has 38 core:HTML controls where the original view has 37 - abap2UI5 ships no separate stylesheet. The CSS braces are escaped \\{ \\} in a backtick literal so the XMLView parser does not read them as bindings; without the rules behind them the 37 example divs would render as unstyled empty boxes (the app-122/124 lesson)."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Unverified in a running system: whether the expression binding over the Slider value resizes its own wrapper live while dragging (it needs no round-trip, so it should follow the slider continuously, unlike the original's per-event DOM write)."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-17 (nightly e2e interaction): Unverified in a running system: whether the expression binding over the Slider value resizes its own wrapper live while dragging (it needs no round-trip, so it should follow the slider continuously, unlike the original's per-event DOM write)."
     }
   ]
 }

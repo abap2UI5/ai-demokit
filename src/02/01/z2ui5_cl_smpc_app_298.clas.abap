@@ -396,6 +396,8 @@ CLASS z2ui5_cl_smpc_app_298 IMPLEMENTATION.
 
   METHOD on_event_filter_confirm.
 
+    DATA lt_keep LIKE t_products.
+
     " the item key encodes the whole condition: <field>___<operator>___<v1>___<v2>
     DATA(t_item) = event_items( client->get_event_arg( ) ).
 
@@ -409,6 +411,11 @@ CLASS z2ui5_cl_smpc_app_298 IMPLEMENTATION.
       DATA(low)  = CONV decfloat34( value1 ).
       DATA(high) = CONV decfloat34( COND string( WHEN value2 = `X` THEN `0` ELSE value2 ) ).
 
+      " Collected rather than deleted in place: DELETE ... INDEX sy-tabix inside
+      " a LOOP over the same table shifts the rows under the loop's own cursor -
+      " on a system it silently SKIPS the row after each deletion, on the
+      " transpiled backend it raises TABLE_INVALID_INDEX (2026-08-17).
+      CLEAR lt_keep.
       LOOP AT t_products INTO DATA(s_row).
         DATA(compare) = COND decfloat34( WHEN field = `WeightMeasure` THEN s_row-weight_measure ELSE s_row-price ).
         DATA(keep) = SWITCH abap_bool( operator
@@ -416,10 +423,11 @@ CLASS z2ui5_cl_smpc_app_298 IMPLEMENTATION.
                                        WHEN `GT` THEN xsdbool( compare > low )
                                        WHEN `BT` THEN xsdbool( compare >= low AND compare <= high )
                                        ELSE abap_true ).
-        IF keep = abap_false.
-          DELETE t_products INDEX sy-tabix.
+        IF keep = abap_true.
+          APPEND s_row TO lt_keep.
         ENDIF.
       ENDLOOP.
+      t_products = lt_keep.
     ENDLOOP.
 
 

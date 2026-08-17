@@ -18,8 +18,8 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 | Ports | **416** sidecars in `meta/` (src/01 OpenUI5 <= 1.71: 291 · src/02 OpenUI5 > 1.71: 125) |
 | Per library | sap.f: 19 · sap.m: 219 · sap.tnt: 17 · sap.ui: 130 · sap.uxap: 31 |
 | Status ladder | 209 `generated` · 146 `reviewed` · 61 `checked` (live-verified) |
-| Deviations | 5 DROPPED_171 · 66 IMPROVISED · 33 LIVE_TEST · 927 NOTE · 173 POST_171 |
-| Open LIVE_TESTs | **33 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
+| Deviations | 5 DROPPED_171 · 66 IMPROVISED · 27 LIVE_TEST · 933 NOTE · 173 POST_171 |
+| Open LIVE_TESTs | **27 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 2 structural-diff · 4 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_smpc_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_smpc_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_smpc_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_smpc_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_smpc_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
 
@@ -192,20 +192,12 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   closing it means renumbering the ~60 ports above (class names, sidecars,
   e2e INTERACTIONS keys, history references) — a maintainer decision, not a
   gate side effect. Any NEW gap fails the gate.
-- [ ] **App 298 renders the products mock's integer dimensions with a
-  trailing `.0`.** Its row type declares `Width`/`Depth`/`Height` as
-  `p LENGTH 4 DECIMALS 1`, but the shared mock mixes integers (`30`) with
-  one-decimal values (`40.8`) in those columns and they are only bound into
-  the text template `{WIDTH} x {DEPTH} x {HEIGHT} {DIM_UNIT}` — so the port
-  shows `30.0 x 18.0 x 3.0 cm` where the original shows `30 x 18 x 3 cm`.
-  `port-a-sample` already states the rule (a display-only value with variable
-  decimals in a text template stays `TYPE string`); app 377 follows it on the
-  same mock. No gate sees this — `data-fidelity` does not compare numbers.
-  Fixing 298 is a one-line type change plus a re-check of its `checked` state.
-- [ ] **App 089 binds a device-model path the framework does not carry.**
-  `expanded="{device>/isNoPhone}"` is kept verbatim from the demo kit, but
-  `isNoPhone` is a demo-kit helper property; the framework's `device>` model
-  wraps raw `sap.ui.Device`, which has no such key, so the binding resolves to
-  nothing. Apps 030 and 378–381 express the same intent as
-  `{= !${device>/system/phone} }`. The sidecar's NOTE currently describes the
-  verbatim form as intentional.
+- [x] **App 298's dimensions — DONE.** The row type declares `Width`/`Depth`/
+  `Height` as `TYPE string`, so the text template `{WIDTH} x {DEPTH} x
+  {HEIGHT} {DIM_UNIT}` renders `30 x 18 x 3 cm` the way the original does. The
+  fix landed without this entry being ticked, which is why it was re-verified
+  from the source on 2026-08-17 rather than trusted.
+- [x] **App 089's device path — DONE.** The port binds
+  `{= !${device>/system/phone} }`, the same expression apps 030 and 378–381
+  use; the demo kit's `isNoPhone` helper property is not bound anywhere. Also
+  re-verified from the source on 2026-08-17.

@@ -4620,18 +4620,17 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` visible for as long as the real request takes, just not artificially stretched. Consequently onExit's stub restore has no counterpart either. // NOTE: onFormSubmit's two branches are both reproduced:` &&
                ` the first press publishes the manifests through the model (the original's setManifest branch), every later press issues a follow_up_action control_by_id <cardId>/refresh for each of the eleven Cards`.
     lv_text1 = lv_text1 && ` (the original's oCard.refresh() branch). refresh( ) is a public sap.ui.integration.widgets.Card method that does not match the FrontendAction deny regex, so it runs through the unlisted-method path;` &&
-               ` it is unverified in a running system. // LIVE-TEST: Unverified in a running system: whether the eleven spliced JSON manifests render their Cards, whether an empty-string manifest shows the original's` &&
-               ` manifest-less placeholder before the first press, and the control_by_id refresh wire on the second press. // NOTE: The eleven manifests reach the Cards as real JSON OBJECTS through client->_bind( val` &&
-               ` = manifest_x json = abap_true ). This port is what raised that flag: sap.ui.integration.widgets.Card.createManifest branches on the JS type and reads a STRING manifest as a manifest URL (``if (typeof` &&
-               ` vManifest === "string") { mOptions.manifestUrl = vManifest; }``, Card.js), so an inline manifest has to arrive as an object - and a model value could not be one: every value is typed ABAP data, and a`.
-    lv_text1 = lv_text1 && ` manifest's keys (``sap.app``, ``sap.card``, ``_version``) are not valid ABAP field names, so it cannot be modelled as a structure either. The framework now splices such a string into the model as a` &&
-               ` JSON node instead of quoting it (pr/card-manifest-object, implemented upstream), which is why CardsLoading works at all: unlike LazyLoading (app 342) it keeps all eleven manifests in one combined` &&
-               ` manifests/cardManifests.json, so there is no per-card URL to bind instead.`.
+               ` it is unverified in a running system. // NOTE: live-verified 2026-08-17 (nightly e2e interaction): Unverified in a running system: whether the eleven spliced JSON manifests render their Cards,` &&
+               ` whether an empty-string manifest shows the original's manifest-less placeholder before the first press, and the control_by_id refresh wire on the second press. // NOTE: The eleven manifests reach the` &&
+               ` Cards as real JSON OBJECTS through client->_bind( val = manifest_x json = abap_true ). This port is what raised that flag: sap.ui.integration.widgets.Card.createManifest branches on the JS type and` &&
+               ` reads a STRING manifest as a manifest URL (``if (typeof vManifest === "string") { mOptions.manifestUrl = vManifest; }``, Card.js), so an inline manifest has to arrive as an object - and a model value` &&
+               ` could not be one: every value is typed ABAP data, and a manifest's keys (``sap.app``, ``sap.card``, ``_version``) are not valid ABAP field names, so it cannot be modelled as a structure either. The`.
+    lv_text1 = lv_text1 && ` framework now splices such a string into the model as a JSON node instead of quoting it (pr/card-manifest-object, implemented upstream), which is why CardsLoading works at all: unlike LazyLoading` &&
+               ` (app 342) it keeps all eleven manifests in one combined manifests/cardManifests.json, so there is no per-card URL to bind instead.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.integration` control = `sap.ui.integration.widgets.Card`       name = `CardsLoading`                                  class = `z2ui5_cl_smpc_app_341` path = `src/01/02/z2ui5_cl_smpc_app_341.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.62`
         notes = lv_text1 ) ).
 
@@ -4648,14 +4647,13 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` IMPROVISED: The artificial request delay is not reproducible and is dropped: the controller monkey-patches sap.ui.integration.util.RequestDataProvider._fetch with a sinon stub` &&
                ` (sap/ui/thirdparty/sinon-4) that wraps every card data request in a setTimeout of the entered number of seconds, and onExit restores it. There is no server-side equivalent for delaying a request the`.
     lv_text1 = lv_text1 && ` CLIENT issues to a foreign host, and stubbing a UI5 private module from the backend is exactly the frontend logic the thin-frontend principle forbids. The 'Time for requesting the card data' Input is` &&
-               ` kept 1:1 (the original view gives it no value either) but nothing reads it; the loading placeholders are still visible for as long as the real request takes. // LIVE-TEST: Unverified in a running` &&
-               ` system: whether the bound items aggregation instantiates the Cards with their per-row manifest URL, columns and dataMode, and whether the number-of-cards Input round-trip rebuilds the container as` &&
-               ` the original's destroyItems/addItem loop does.`.
+               ` kept 1:1 (the original view gives it no value either) but nothing reads it; the loading placeholders are still visible for as long as the real request takes. // NOTE: live-verified 2026-08-17` &&
+               ` (nightly e2e interaction): Unverified in a running system: whether the bound items aggregation instantiates the Cards with their per-row manifest URL, columns and dataMode, and whether the` &&
+               ` number-of-cards Input round-trip rebuilds the container as the original's destroyItems/addItem loop does.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.integration` control = `sap.ui.integration.widgets.Card`       name = `LazyLoading`                                   class = `z2ui5_cl_smpc_app_342` path = `src/01/02/z2ui5_cl_smpc_app_342.clas.abap`
-        score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.62`
         notes = lv_text1 ) ).
 
@@ -4679,12 +4677,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` through a core:HTML <style> leaf (abap2UI5 ships no separate stylesheet), so the port adds one core:HTML control the original view does not have. The CSS braces are escaped \{ \} in a backtick`.
     lv_text1 = lv_text1 && ` literal so the XMLView parser does not read them as bindings, and the background-image url("Night_sky.jpg") is absolutized to the OpenUI5 host` &&
                ` (https://sdk.openui5.org/test-resources/sap/ui/layout/demokit/sample/BlockLayoutCustomBackgroundPerCell/resources/Night_sky.jpg) per the asset-URL rule - relative to the served app it would not` &&
-               ` resolve. // LIVE-TEST: Unverified in a running system: whether the per-cell context binding round-trips (a Select changing its cell's colorSet/colorShade writes back into the nested ABAP structure)` &&
-               ` and whether the injected stylesheet paints the image cell.`.
+               ` resolve. // NOTE: live-verified 2026-08-17 (nightly e2e interaction): Unverified in a running system: whether the per-cell context binding round-trips (a Select changing its cell's` &&
+               ` colorSet/colorShade writes back into the nested ABAP structure) and whether the injected stylesheet paints the image cell.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.BlockLayout`             name = `BlockLayoutCustomBackgroundPerCell`            class = `z2ui5_cl_smpc_app_343` path = `src/01/02/z2ui5_cl_smpc_app_343.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
         notes = lv_text1 ) ).
 
@@ -4765,13 +4763,13 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` app-222/176 idiom. (b) onInputChanged switches on the Input id and calls setGridGap / setGridRowGap / setGridColumnGap; each Input is two-way bound to its own field and the CSSGrid binds the matching` &&
                ` property to the SAME field, so typing a value reaches the grid with no dispatcher at all. // NOTE: css/main.css (.sapMFlexBox.demoBox, .demoBox .sapMText, .sapMText.infoText) is injected through an` &&
                ` extra core:HTML <style> leaf - abap2UI5 ships no separate stylesheet, and without the rules the ten demo boxes render unstyled. The CSS braces are escaped \{ \} in a backtick literal so the XMLView` &&
-               ` parser does not read them as bindings; the view declares xmlns:core for it, which the original does not need. // LIVE-TEST: Unverified in a running system: whether an empty gridRowGap / gridColumnGap`.
-    lv_text1 = lv_text1 && ` serializes acceptably for the CSSGrid's CSSSize properties (the two Inputs carry no value attribute in the original either, so the grid starts on gridGap alone), and whether the Panel width` &&
-               ` expression follows the slider live.`.
+               ` parser does not read them as bindings; the view declares xmlns:core for it, which the original does not need. // NOTE: live-verified 2026-08-17 (nightly e2e interaction): Unverified in a running`.
+    lv_text1 = lv_text1 && ` system: whether an empty gridRowGap / gridColumnGap serializes acceptably for the CSSGrid's CSSSize properties (the two Inputs carry no value attribute in the original either, so the grid starts on` &&
+               ` gridGap alone), and whether the Panel width expression follows the slider live.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `GridGap`                                       class = `z2ui5_cl_smpc_app_347` path = `src/01/02/z2ui5_cl_smpc_app_347.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.60`
         notes = lv_text1 ) ).
 
@@ -4826,12 +4824,12 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` 1fr" rather than the view's literal "repeat(2,1fr)": both express the same two equal columns, and binding the grid to the ComboBox field is what makes the selection drive the grid at all.` &&
                ` gridTemplateRows keeps "1fr 2fr 1fr", which is both the view literal and the rFr item text. The ComboBoxes keep their selectedKey attributes 1:1. // NOTE: css/main.css (.sapMFlexBox.demoBox and the`.
     lv_text1 = lv_text1 && ` white .sapMTitle/.sapMText inside it) is injected through an extra core:HTML <style> leaf - abap2UI5 ships no separate stylesheet, and without the rules the six demo boxes render unstyled. The CSS` &&
-               ` braces are escaped \{ \} in a backtick literal so the XMLView parser does not read them as bindings. // LIVE-TEST: Unverified in a running system: whether a ComboBox free-text entry (the original` &&
-               ` reads the change event's value, not the selected key) round-trips into the bound field and re-templates the grid.`.
+               ` braces are escaped \{ \} in a backtick literal so the XMLView parser does not read them as bindings. // NOTE: live-verified 2026-08-17 (nightly e2e interaction): Unverified in a running system:` &&
+               ` whether a ComboBox free-text entry (the original reads the change event's value, not the selected key) round-trips into the bound field and re-templates the grid.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `GridTemplateRows`                              class = `z2ui5_cl_smpc_app_349` path = `src/01/02/z2ui5_cl_smpc_app_349.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.60`
         notes = lv_text1 ) ).
 
@@ -5495,12 +5493,13 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` happens entirely on the client, with no round-trip, no DOM walk and no frontend action. That is the bindable-property route the porting recipe asks for over an imperative setWidth` &&
                ` (sap.ui.layout.VerticalLayout.width is a plain bindable property). // NOTE: resources/styles.css (.GridPropertiesSample .exampleDiv and .contrastColor) is injected through an extra core:HTML <style>` &&
                ` leaf, so the port has 38 core:HTML controls where the original view has 37 - abap2UI5 ships no separate stylesheet. The CSS braces are escaped \{ \} in a backtick literal so the XMLView parser does` &&
-               ` not read them as bindings; without the rules behind them the 37 example divs would render as unstyled empty boxes (the app-122/124 lesson). // LIVE-TEST: Unverified in a running system: whether the`.
-    lv_text1 = lv_text1 && ` expression binding over the Slider value resizes its own wrapper live while dragging (it needs no round-trip, so it should follow the slider continuously, unlike the original's per-event DOM write).`.
+               ` not read them as bindings; without the rules behind them the 37 example divs would render as unstyled empty boxes (the app-122/124 lesson). // NOTE: live-verified 2026-08-17 (nightly e2e`.
+    lv_text1 = lv_text1 && ` interaction): Unverified in a running system: whether the expression binding over the Slider value resizes its own wrapper live while dragging (it needs no round-trip, so it should follow the slider` &&
+               ` continuously, unlike the original's per-event DOM write).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.Grid`                    name = `GridProperties`                                class = `z2ui5_cl_smpc_app_345` path = `src/01/02/z2ui5_cl_smpc_app_345.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.15.0`
         notes = lv_text1 ) ).
 
