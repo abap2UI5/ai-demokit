@@ -7,6 +7,35 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-17 — the open requests leave `pr/`, and the ecosystem gets four backlogs
+
+`pr/` held five open requests aimed at **three different upstreams** —
+open-abap-core, the abaplint transpiler, the abap2UI5 linter and the framework
+— with nothing in the folder distinguishing them, and it held them in the wrong
+repository: a request about the framework was findable only by somebody who
+already knew this corpus existed. Meanwhile the same kind of finding was being
+written down in two other shapes elsewhere: upstream compiler bugs as bullets
+in STATUS.md, linter rule candidates as prose in the framework's skills. Three
+shapes, three repositories, and no way to answer *"what is there to file
+against abaplint"* without reading all of them.
+
+All five moved to `abap2UI5/abap2UI5` under
+[`vorrat/`](https://github.com/abap2UI5/abap2UI5/tree/main/vorrat), which sorts
+items into four generated pages by where each one gets filed — OPEN-ABAP,
+ABAPLINT, ABAP2UI5-LINTER, ABAP2UI5 — with the item file itself written to be
+pasted into an issue as it stands. The pages are generated from the items and
+from `**Vorrat:**` lines in the skills, so the analysis stays next to the
+defect that produced it and the backlog fills itself; converting an item into
+an issue stays a human step, and a shipped one is deleted rather than kept as a
+row (the rule `pr/README.md` already had, now enforced by a gate).
+
+**What stays here** is `pr/README.md`'s Implemented and Declined tables. They
+are this repository's own record — every row came out of a port in `meta/`, and
+`CAPABILITIES.md` cites them when it says a capability exists because somebody
+asked for it. The two STATUS.md open-abap bullets now carry only what THIS
+repository has to undo when each patch lands upstream; the analysis lives in
+the item.
+
 ## 2026-08-13 — namespace `dmo` → `smpc`, the red badges, and why the nightly went red
 
 Three unrelated pieces of housekeeping, one of which turned into a real

@@ -460,16 +460,20 @@ source of truth:
   Dialog with a toast although app 044 shows Dialogs work 1:1 via
   `popup_display`). When a port proves a new technique or disproves a ❌,
   update `CAPABILITIES.md` in the same change.
-- **Every improvement idea for the abap2UI5 framework goes into `pr/`** — one
-  folder per request with a self-contained, forwardable README (motivation
-  with the sample/port that hit it, current behavior with source references,
-  proposed change, example). Add it in the same change that discovers the
-  gap; see `pr/README.md`. **`pr/` is a pure backlog folder — it holds OPEN
-  requests only:** once a request is live (merged upstream, or landed in this
-  repo's tooling) delete its folder in that same change and leave only a row in
-  the `pr/README.md` "Implemented" table; the details then live upstream and in
-  `CAPABILITIES.md`/`STATUS.md`. Never mark a folder "implemented, kept until
-  merged" — that is what the table is for.
+- **Every improvement idea for the abap2UI5 framework goes into the stock in
+  `abap2UI5/abap2UI5`** — `vorrat/items/<id>.md`, self-contained and
+  forwardable (motivation with the sample/port that hit it, current behavior
+  with source references, proposed change, example, and at least one
+  `evidence:` entry). Add it in the same change that discovers the gap. Which
+  of the four backlogs it lands in follows from its `target:` — the framework,
+  the linter, abaplint, or the open-abap compiler stack — and a request whose
+  change is live is **deleted** there rather than marked implemented.
+  This used to be a `pr/` folder here; the open requests moved on 2026-08-17
+  because a request about the framework belongs in the framework's repository,
+  and because the same folder was holding requests for three different
+  upstreams with nothing distinguishing them. What is left in `pr/README.md` is
+  this repository's own record of what was shipped and what was declined —
+  which is what `CAPABILITIES.md` cites.
 - Every port must pass all three CI checks (§6).
 
 

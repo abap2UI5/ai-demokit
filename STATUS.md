@@ -29,32 +29,28 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
 
 ## Open findings (backlog)
 
-- [ ] **open-abap XML escaping — patched here, open upstream.**
-  `CALL TRANSFORMATION id … RESULT XML` writes character data unescaped in
-  open-abap-core, so any app whose model carries a `<` persists a draft its own
-  `CL_IXML` cannot parse back and every later round-trip fails with
-  `Network error: ASSERTION_FAILED` (user report 2026-07-31 on the Pages demo's
-  overview; STATUS-history has the analysis). Both transpiled builds now
-  transpile against a locally patched clone
-  (`web/ci/patch_open_abap_xml.mjs`); the request is filed as
-  `pr/open-abap-xml-escaping`. When it is merged upstream: drop the patch
-  script, the two clone steps (`web/package.json` assemble,
-  `scripts/e2e-build.mjs`) and the `folder` lib entries, and delete the pr/
-  folder.
-- [ ] **`IS SUPPLIED` on a RETURNING parameter — patched here, open upstream.**
-  `follow_up_action( )` tells its view-wired form from its statement form with
-  `IF result IS SUPPLIED`, which is correct ABAP but always false in
-  transpiled code: the transpiler compiles it to `INPUT.result` and no call
-  site ever sets that key (verified on transpiler 2.13.40 and 2.13.59 — the
-  emitted JS is in the pr/ folder). So every handler wired into a view
-  attribute arrives empty, which is what took 26 ports red in the nightly of
-  2026-08-13 and is live on the Pages demo. Both transpiled builds now rewrite
-  the 430 consumed call sites back to `_event_client( )` **in the build copy**
-  (`web/ci/patch_follow_up_action.mjs`); the committed corpus keeps
-  `follow_up_action( )`, which is right on a real server. The request is filed
-  as `pr/transpiler-returning-is-supplied`. When it is merged upstream: drop
-  the patch script, its two call sites (`web/package.json` assemble,
-  `scripts/e2e-build.mjs`) and delete the pr/ folder.
+- [ ] **Two open-abap defects are patched in the build and open upstream.**
+  Both are written up in full — analysis, emitted JS, proposed change — in
+  `abap2UI5/abap2UI5`'s
+  [`vorrat/OPEN-ABAP.md`](https://github.com/abap2UI5/abap2UI5/blob/main/vorrat/OPEN-ABAP.md),
+  which is where the ecosystem's upstream backlog lives now; what stays here is
+  what THIS repository has to undo when they land.
+  - `open-abap-xml-escaping` — `CALL TRANSFORMATION id … RESULT XML` writes
+    character data unescaped, so any app whose model carries a `<` persists a
+    draft its own `CL_IXML` cannot parse back (user report 2026-07-31 on the
+    Pages demo's overview; STATUS-history has the analysis). Both transpiled
+    builds transpile against a locally patched clone
+    (`web/ci/patch_open_abap_xml.mjs`). **On merge:** drop the patch script,
+    the two clone steps (`web/package.json` assemble, `scripts/e2e-build.mjs`)
+    and the `folder` lib entries.
+  - `transpiler-returning-is-supplied` — `IF result IS SUPPLIED` is correct
+    ABAP and always false transpiled, so every handler wired into a view
+    attribute arrives empty (26 ports red in the nightly of 2026-08-13, same
+    breakage live on the Pages demo). Both transpiled builds rewrite the 430
+    consumed call sites back to `_event_client( )` **in the build copy**
+    (`web/ci/patch_follow_up_action.mjs`); the committed corpus keeps
+    `follow_up_action( )`, which is right on a real server. **On merge:** drop
+    the patch script and its two call sites.
 - [x] **Linter bump done — the corpus is green on `@abap2ui5/linter` 0.1.0,
   taken from npm instead of a git SHA.** Everything below was decided before
   the bump landed: the six icons carry `POST_171` deviations (042, 109, 128,

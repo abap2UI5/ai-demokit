@@ -1,66 +1,36 @@
-# pr/ — forwardable framework requests
+# pr/ — the record of what porting asked the framework for
 
-Every gap in the **abap2UI5 framework** that porting a UI5 demo kit sample
-reveals is written up here as a ready-to-forward request — **one folder per
-request, one README.md each**, self-contained (motivation, current behavior
-with source references, proposed change, example) so it can be pasted
-directly into an issue/PR at
-[abap2UI5/abap2UI5](https://github.com/abap2UI5/abap2UI5).
+**The open requests have moved.** They live in
+[`abap2UI5/abap2UI5` under `vorrat/`](https://github.com/abap2UI5/abap2UI5/tree/main/vorrat)
+now — four backlogs, sorted by where each one gets filed:
 
-**This is a pure backlog folder: it holds OPEN requests only.** A request whose
-change is live (merged upstream, or landed in this repo's tooling) has its
-folder **deleted** in that same change — the details then live upstream, in
-`CAPABILITIES.md` and in `STATUS.md`; only a one-line row in the "Implemented"
-table below stays behind as the pointer. So every folder present here is work
-still to be done — nothing in it is already shipped.
+| | |
+|---|---|
+| [OPEN-ABAP.md](https://github.com/abap2UI5/abap2UI5/blob/main/vorrat/OPEN-ABAP.md) | `open-abap/open-abap-core`, `abaplint/transpiler` |
+| [ABAPLINT.md](https://github.com/abap2UI5/abap2UI5/blob/main/vorrat/ABAPLINT.md) | `abaplint/abaplint` |
+| [ABAP2UI5-LINTER.md](https://github.com/abap2UI5/abap2UI5/blob/main/vorrat/ABAP2UI5-LINTER.md) | `abap2UI5/linter` |
+| [ABAP2UI5.md](https://github.com/abap2UI5/abap2UI5/blob/main/vorrat/ABAP2UI5.md) | the framework |
 
-Convention (see AGENTS.md §10 / TRAINING.md "Distill"): whenever porting or
-reviewing surfaces an improvement idea for the framework — a missing API
-parameter, a capability marked ❌ in CAPABILITIES.md that upstream could
-close, a behavior gap — add or extend a request folder here **in the same
-change**.
+A request about the framework sat in the corpus, findable only by somebody who
+already knew the corpus existed — and the same folder held requests for three
+*different* upstreams with nothing distinguishing them. The five that were open
+on 2026-08-17 were carried over verbatim: `open-abap-xml-escaping`,
+`transpiler-returning-is-supplied`, `linter-sapui5-metadata`,
+`event-auto-model-update`, `frontend-action-named-api`.
 
-## Open
+**The convention is unchanged, only its destination is** (AGENTS.md §10 /
+TRAINING.md "Distill"): whenever porting or reviewing surfaces an improvement
+idea for the framework — a missing API parameter, a capability marked ❌ in
+CAPABILITIES.md that upstream could close, a behavior gap — write it up **in
+the same change**, as `vorrat/items/<id>.md` in `abap2UI5/abap2UI5`. An item
+without a case that actually happened is a wish; the gate there requires the
+evidence.
 
-Genuinely open — not yet implemented.
-
-The **IMPROVISED harvest** (2026-08-05) filed six abap2UI5 requests — every
-`IMPROVISED` deviation in `meta/` classified into gap · probe · rework ·
-boundary · policy, repeatably, by
-`node scripts/probes/improvised-cluster.mjs` (`--family <key>` re-reads the
-evidence). **All six are implemented** (see the Implemented table) - the last one, the
-path-scoped half of `model-empty-vs-default`, the same day it was written up.
-What stayed open after it targeted open-abap-core, not abap2UI5 - until the
-**second sweep 2026-08-05** turned two of the leftover PROBE families into
-measured requests (`live-device-model`, `conditional-prevent-default`): both
-premises were probed against real OpenUI5 first, both held, and **both were
-implemented upstream the same day** - see the Implemented table.
-
-| Request | Summary | Priority |
-|---------|---------|----------|
-| [`open-abap-xml-escaping`](open-abap-xml-escaping/) | `CALL TRANSFORMATION id` writes element values raw, so a model value containing `<` produces a draft the transpiled `CL_IXML` cannot parse back | high — breaks every round-trip of the Pages demo's front door |
-| [`transpiler-returning-is-supplied`](transpiler-returning-is-supplied/) | **transpiler** — `IS SUPPLIED` on a RETURNING parameter compiles to `INPUT.result`, which no call site ever sets, so `follow_up_action( )`'s wired branch is dead in transpiled ABAP and every view-wired handler arrives empty (430 call sites) | high — 26 ports red in the nightly, same breakage live on the Pages demo |
-| [`event-auto-model-update`](event-auto-model-update/) | detect a model change during an event round-trip and send the model automatically — removes the mandatory `view_model_update( )` (230 calls / 125 ports) and its silent-stale-UI failure mode. **Implemented, always on** (abap2UI5 PR #2545), pending merge | medium — ergonomics + a bug class no gate can see |
-| [`frontend-action-named-api`](frontend-action-named-api/) | named frontend-action API over the positional `t_arg` wire (425 + 99 calls / 130 ports) — **deferred to a future dedicated ACTION OBJECT** (maintainer decision 2026-08-11; a per-method variant was implemented and reverted, see the folder) | medium — the corpus' most error-prone API, four arg-shape incidents to date |
-| [`linter-sapui5-metadata`](linter-sapui5-metadata/) | **linter** — let `generate-metadata.mjs` also read the pinned `@sapui5/*` packages (a third resolve candidate + an additive `--libs`), so `ui5/properties.json` can cover the SAPUI5-only libraries. Without it the property and scope gates are blind in `src/03`/`src/04`, and a control not in the snapshot is silently passed | medium — prerequisite for opening `src/03`/`src/04` (AGENTS §3) |
-
-The two 2026-08-11 rows came out of the corpus review "can the samples get
-simpler?": sample-side, the round-trip→binding and dead-wire sweeps (see
-STATUS.md) have exhausted what 1:1 fidelity allows — the remaining
-simplification potential sits in the framework API, which is what these
-request. The review's third request, `app-lifecycle-base-class`, was
-**declined** the same day (see the Declined table): apps stay interface-only
-and the dispatcher boilerplate is accepted.
-
-The two requests filed on 2026-08-09 — `control-method-named-removeall` (abap2UI5)
-and `linter-openui5-1151` (linter) — were both implemented upstream the next
-day and left this list on 2026-08-10; see the Implemented table. What stays
-open targets **open-abap-core**, not abap2UI5 or the linter.
-
-_`menu-item-selected-path` left this list on 2026-07-31: it was closed by
-**option 2** of its own proposal — a documented capability boundary, measured
-rather than assumed, with the "an event arg is a full UI5 expression"
-capability as the by-product (see the Implemented table)._
+**What stays here** is the two tables below: what was asked for and shipped,
+and what was asked for and declined. They are this repository's own record —
+every row came out of a port in `meta/`, and the "Implemented" table is what
+`CAPABILITIES.md` cites when it says a capability exists because somebody asked
+for it. Nothing below is open work.
 
 ## Declined / deferred (folders removed)
 
