@@ -109,7 +109,7 @@ CLASS z2ui5_cl_smpc_app_295 IMPLEMENTATION.
       WHEN `SLIDER_CHANGE`.
         " the original compares the new value against the last confirmed one
         " and marks the custom filter active when they differ
-        slider_value = CONV i( client->get_event_arg( ) ).
+        slider_value = client->get_event_arg( ).
         filter_state_set( xsdbool( slider_value <> previous_value ) ).
 
       WHEN `CONFIRM`.

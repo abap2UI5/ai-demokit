@@ -268,10 +268,9 @@ CLASS z2ui5_cl_smpc_app_241 IMPLEMENTATION.
     " the five items the sample declares on the main NavigationList, with the
     " two children of Mileage
     t_nav_items = VALUE #(
-      selectable = abap_true
-      ( text = `Home`     icon = `sap-icon://home` )
-      ( text = `Building` icon = `sap-icon://building` )
-      ( text = `Mileage`  icon = `sap-icon://mileage`
+      ( text = `Home`     icon = `sap-icon://home`     selectable = abap_true )
+      ( text = `Building` icon = `sap-icon://building` selectable = abap_true )
+      ( text = `Mileage`  icon = `sap-icon://mileage`  selectable = abap_true
         items = VALUE #( ( text = `Driven` ) ( text = `Walked` ) ) )
       ( text = `Link 1` icon = `sap-icon://attachment` selectable = abap_false
         href = `https://sap.com` target = `_blank` )
