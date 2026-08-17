@@ -312,7 +312,22 @@ for (const f of fs.readdirSync(META).sort()) {
     if (d.type !== 'IMPROVISED') continue;
     const what = String(d.what || '').replace(/\s+/g, ' ');
     const fam = FAMILIES.find((x) => x.re.test(what)) || null;
-    rows.push({ port, sample: m.sample, entity: m.entity, status: m.status, what, family: fam?.key ?? null });
+    /* The VERDICT travels with the row, not just the family key. The console
+     * output groups by it, so it was only ever readable by a human; a consumer
+     * of `--json` had to re-derive it from the family name, which means two
+     * places deciding what counts as a framework gap. abap2UI5's
+     * `vorrat-mine.mjs` reads it and refuses to run without it. */
+    rows.push({
+      port,
+      sample: m.sample,
+      entity: m.entity,
+      status: m.status,
+      what,
+      family: fam?.key ?? null,
+      verdict: fam?.verdict ?? null,
+      label: fam?.label ?? null,
+      pr: fam?.pr ?? null,
+    });
   }
 }
 
