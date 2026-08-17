@@ -85,8 +85,15 @@ CLASS z2ui5_cl_smpc_app_121 IMPLEMENTATION.
                 " the property alone. ABAP has no undefined: the unfilled
                 " TYPE string serialized as "" and sap.m.ObjectMarkerVisibility
                 " rejects it, which TERMINATED the app on its first render.
+                " STATE and ICON are the same story one control down: only one
+                " of the original's four statuses carries a state and none
+                " carries an icon, so ObjectStatus.state got "" and
+                " sap.ui.core.ValueState rejected THAT - the app died again,
+                " one enum further along, after VISIBILITY was fixed.
                 )->a( n = `items`         v = client->_bind( val = t_items
-                                                             omit_initial_paths = VALUE #( ( `VISIBILITY` ) ) )
+                                                             omit_initial_paths = VALUE #( ( `VISIBILITY` )
+                                                                                          ( `STATE` )
+                                                                                          ( `ICON` ) ) )
                 )->a( n = `mode`          v = `MultiSelect`
                 )->a( n = `selectionChanged`  v = client->_event( `SELECTION` )
                 )->a( n = `afterItemRemoved`  v = client->_event( `REMOVED` )
