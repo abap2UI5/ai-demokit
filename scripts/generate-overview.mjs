@@ -648,10 +648,11 @@ CLASS ${CLASS} DEFINITION PUBLIC.
         samples_old  TYPE string VALUE \`z2ui5_cl_demo_app_g00\`,
         controls     TYPE string VALUE \`z2ui5_cl_smpc_app_overview\`,
         controls_old TYPE string VALUE \`z2ui5_cl_dmo_app_overview\`,
-        stack        TYPE string VALUE \`z2ui5_cl_smps_app_00\`,
-        " samples-stack moved every object from the SMPE token to SMPS in
-        " 2026-08; an installation that predates it still answers to this name
-        stack_old    TYPE string VALUE \`z2ui5_cl_smpe_app_00\`,
+        stack        TYPE string VALUE \`z2ui5_cl_smps_app_000\`,
+        " the overview app of samples-stack before its 2026-08 rename to
+        " three-digit app numbers - an installation that predates it still
+        " answers to this name
+        stack_old    TYPE string VALUE \`z2ui5_cl_smps_app_00\`,
       END OF cs_overview.
 
     CONSTANTS:
