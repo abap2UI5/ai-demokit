@@ -284,11 +284,17 @@ CLASS z2ui5_cl_smpc_app_354 IMPLEMENTATION.
 
     IF global_filter IS NOT INITIAL.
       DATA(lv_query) = to_upper( global_filter ).
+      " Collected rather than deleted in place: DELETE ... INDEX sy-tabix inside
+      " a LOOP over the same table shifts the rows under the loop's own cursor -
+      " on a system it silently SKIPS the row after each deletion, on the
+      " transpiled backend it raises TABLE_INVALID_INDEX (2026-08-17).
+      DATA(lt_keep) = VALUE ty_t_product( ).
       LOOP AT t_products INTO DATA(ls_row).
-        IF to_upper( ls_row-name ) NS lv_query AND to_upper( ls_row-category ) NS lv_query.
-          DELETE t_products INDEX sy-tabix.
+        IF to_upper( ls_row-name ) CS lv_query OR to_upper( ls_row-category ) CS lv_query.
+          APPEND ls_row TO lt_keep.
         ENDIF.
       ENDLOOP.
+      t_products = lt_keep.
     ENDIF.
 
     IF availability_filter_on = abap_true.

@@ -292,13 +292,20 @@ CLASS z2ui5_cl_smpc_app_352 IMPLEMENTATION.
     " with a selection takes part - exactly the two nested Filter groups
     t_products = catalog( ).
 
+    " Collected rather than deleted in place: DELETE ... INDEX sy-tabix inside
+    " a LOOP over the same table shifts the rows under the loop's own cursor -
+    " on a system it silently SKIPS the row after each deletion, and on the
+    " transpiled backend it raises TABLE_INVALID_INDEX (found by the e2e
+    " interaction, 2026-08-17). Building the keep list has neither problem.
     IF filter_value IS NOT INITIAL.
       DATA(lv_query) = to_upper( filter_value ).
+      DATA(lt_keep) = VALUE ty_t_product( ).
       LOOP AT t_products INTO DATA(ls_row).
-        IF to_upper( ls_row-name ) NS lv_query AND to_upper( ls_row-status ) NS lv_query.
-          DELETE t_products INDEX sy-tabix.
+        IF to_upper( ls_row-name ) CS lv_query OR to_upper( ls_row-status ) CS lv_query.
+          APPEND ls_row TO lt_keep.
         ENDIF.
       ENDLOOP.
+      t_products = lt_keep.
     ENDIF.
 
     LOOP AT t_filters INTO DATA(ls_filter).
@@ -308,14 +315,16 @@ CLASS z2ui5_cl_smpc_app_352 IMPLEMENTATION.
       IF lt_selected IS INITIAL.
         CONTINUE.
       ENDIF.
+      DATA(lt_facet_keep) = VALUE ty_t_product( ).
       LOOP AT t_products INTO DATA(ls_product).
         DATA(lv_value) = COND string( WHEN ls_filter-type = `Category`
                                       THEN ls_product-category
                                       ELSE ls_product-suppliername ).
-        IF NOT line_exists( lt_selected[ table_line = lv_value ] ).
-          DELETE t_products INDEX sy-tabix.
+        IF line_exists( lt_selected[ table_line = lv_value ] ).
+          APPEND ls_product TO lt_facet_keep.
         ENDIF.
       ENDLOOP.
+      t_products = lt_facet_keep.
     ENDLOOP.
 
   ENDMETHOD.

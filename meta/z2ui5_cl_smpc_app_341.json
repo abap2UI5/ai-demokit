@@ -28,8 +28,8 @@
       "what": "onFormSubmit's two branches are both reproduced: the first press publishes the manifests through the model (the original's setManifest branch), every later press issues a follow_up_action control_by_id <cardId>/refresh for each of the eleven Cards (the original's oCard.refresh() branch). refresh( ) is a public sap.ui.integration.widgets.Card method that does not match the FrontendAction deny regex, so it runs through the unlisted-method path; it is unverified in a running system."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Unverified in a running system: whether the eleven spliced JSON manifests render their Cards, whether an empty-string manifest shows the original's manifest-less placeholder before the first press, and the control_by_id refresh wire on the second press."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-17 (nightly e2e interaction): Unverified in a running system: whether the eleven spliced JSON manifests render their Cards, whether an empty-string manifest shows the original's manifest-less placeholder before the first press, and the control_by_id refresh wire on the second press."
     },
     {
       "type": "NOTE",

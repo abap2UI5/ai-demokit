@@ -28,8 +28,8 @@
       "what": "The artificial request delay is not reproducible and is dropped: the controller monkey-patches sap.ui.integration.util.RequestDataProvider._fetch with a sinon stub (sap/ui/thirdparty/sinon-4) that wraps every card data request in a setTimeout of the entered number of seconds, and onExit restores it. There is no server-side equivalent for delaying a request the CLIENT issues to a foreign host, and stubbing a UI5 private module from the backend is exactly the frontend logic the thin-frontend principle forbids. The 'Time for requesting the card data' Input is kept 1:1 (the original view gives it no value either) but nothing reads it; the loading placeholders are still visible for as long as the real request takes."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Unverified in a running system: whether the bound items aggregation instantiates the Cards with their per-row manifest URL, columns and dataMode, and whether the number-of-cards Input round-trip rebuilds the container as the original's destroyItems/addItem loop does."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-17 (nightly e2e interaction): Unverified in a running system: whether the bound items aggregation instantiates the Cards with their per-row manifest URL, columns and dataMode, and whether the number-of-cards Input round-trip rebuilds the container as the original's destroyItems/addItem loop does."
     }
   ]
 }

@@ -202,9 +202,13 @@ CLASS z2ui5_cl_smpc_app_377 IMPLEMENTATION.
     " binding; the thin frontend filters the model table in ABAP instead.
     " The thresholds are the controller's: 1 KG / 1000 G is "Ok", up to
     " 5 KG / 5000 G is "Heavy", anything above is "Overweight".
-    t_products = t_all.
+    " Collected rather than deleted in place: DELETE ... INDEX sy-tabix inside
+    " a LOOP over the same table shifts the rows under the loop's own cursor -
+    " on a system it silently SKIPS the row after each deletion, on the
+    " transpiled backend it raises TABLE_INVALID_INDEX (2026-08-17).
+    CLEAR t_products.
 
-    LOOP AT t_products INTO DATA(row).
+    LOOP AT t_all INTO DATA(row).
       DATA(keep) = abap_false.
       DATA(grams) = COND #( WHEN row-weight_unit = `G` THEN row-weight_measure ELSE row-weight_measure * 1000 ).
 
@@ -219,8 +223,8 @@ CLASS z2ui5_cl_smpc_app_377 IMPLEMENTATION.
           keep = abap_true.
       ENDCASE.
 
-      IF keep = abap_false.
-        DELETE t_products INDEX sy-tabix.
+      IF keep = abap_true.
+        APPEND row TO t_products.
       ENDIF.
     ENDLOOP.
 

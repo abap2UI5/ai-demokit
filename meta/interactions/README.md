@@ -113,6 +113,21 @@ the per-port modules here):
     ToggleButton twice clears the table, UI5 evaluates the template with no
     row, and an enum-typed property refuses the `` it gets. The port was
     FIXED by this module; see abap2UI5's ui5-check §4
-  still open: 233's confirm leg (neither click nor Enter on a dialog row
+  a facet selection that must SURVIVE listClose (2026-08-17): 352 - the
+    round-trip used to answer HTTP 500 (`DELETE ... INDEX sy-tabix` inside its
+    own `LOOP AT`, abap2UI5's abap-check section 5). Two traps: not crashing is
+    not the assertion the LIVE_TEST asks for, and filtering to LAPTOPS proves
+    nothing because the unfiltered table already opens with Notebook Basic
+    15/17/18 - measured, 10 rows before and the same 10 after. Accessories
+    changes the first row, which is the cheap way to see the selection travel
+  a SearchField that is not on the page (2026-08-17): 354 - the toolbar
+    OVERFLOWS at the smoke's viewport, so the field exists only inside the
+    "Additional Options" popover; without opening it first the module dies in a
+    30s locator timeout that reads like a broken port. Same class as the
+    overflow note above. This module reaches `filter_apply( )` - the method the
+    sy-tabix fix touched - but it deliberately does NOT close 354's LIVE_TEST,
+    which is about the COLUMN filter's prevented default and enableCellFilter;
+    those need a sap.ui.table column header menu
+  still open: 354's column-filter leg (see above), 233's confirm leg (neither click nor Enter on a dialog row
     reaches the SelectDialog's confirm headless) and the hidden-picker
     openBy class (016/256/257, Popover.onfocusin recursion)
