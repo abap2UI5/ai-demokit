@@ -87,8 +87,9 @@ Reviewed, curated samples graduate to the hand-maintained
 The **generation prompt** the porting agent is given — the condensed form of
 the porting recipe — is `scripts/generation-prompt.txt`. It is the single
 source: AGENTS.md §5 says when to change it, the `port-a-sample` guide is its
-authoritative long form, and the abap2UI5 [ai-mcp](https://github.com/abap2UI5/ai-mcp)
-server serves that same file as its `generation_rules` rulebook.
+authoritative long form, and abap2UI5's
+[mcp-server](https://github.com/abap2UI5/mcp-server) serves that same file as
+its `generation_rules` rulebook.
 
 Ports are filed by **what a system needs to run them**, then by library:
 `src/01` (OpenUI5 ≤ 1.71 — the portable half), `src/02` (needs a UI5 runtime
@@ -120,7 +121,7 @@ built from [`web/`](web) and published by `deploy-web`; see
 | [`web/`](web) | The GitHub Pages demo: framework and every port transpiled to run client-side |
 | [`docs/history.md`](docs/history.md) | The chronological journal — batches, probes, audits, one section per event |
 | [`docs/upstream-requests.md`](docs/upstream-requests.md) | The record of what porting asked the framework for — implemented and declined. Open requests live in [`backlog/`](https://github.com/abap2UI5/abap2UI5/tree/main/backlog) in abap2UI5, where the whole ecosystem's upstream backlog is |
-| [ai-mcp](https://github.com/abap2UI5/ai-mcp) | MCP server for AI coding agents — capability queries, view validation, deploy, headless run + screenshot on this repo's infrastructure (separate repository) |
+| [mcp-server](https://github.com/abap2UI5/mcp-server) | MCP server for AI coding agents — capability queries, view validation, deploy, headless run + screenshot on this repo's infrastructure (separate repository) |
 | [abap2UI5-linter](https://github.com/abap2UI5/linter) | The view gates as standalone CLI, library and GitHub Action — extracted from this repo and now used BY it (`scripts/view-gates.mjs`) |
 
 </details>

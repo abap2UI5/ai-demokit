@@ -1,6 +1,6 @@
 /* Directories under `src/` that are on disk but are not this repository.
  *
- * `src/zz_dev` is where abap2UI5/ai-mcp's `deploy_app` writes the class an
+ * `src/zz_dev` is where abap2UI5/mcp-server's `deploy_app` writes the class an
  * agent is working on: it is in `.gitignore`, it is scratch, and it is the
  * documented way an agent gets an app onto the transpiled backend to run and
  * screenshot it.
