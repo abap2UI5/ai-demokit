@@ -701,14 +701,27 @@ CI job checks). **Every step here has a CI job with the same name** — the
 chain and the workflows are one list, and a step that runs only locally is a
 gate nobody enforces (chain-format was exactly that until 2026-08-18).
 
-**Before every PR, additionally:**
+**Before every PR:**
+```bash
+npm run check        # every CI job that runs offline, without a browser
+```
+It is `gates` plus the three that are CI jobs but were in no local command
+until 2026-08-18 — `check:app-rules`, `check:keywords`, `check:summary` — plus
+`npm test` (the golden-file fixture tests for the gate and generator tooling
+in `scripts/test/`, also a CI job). `check` is the ecosystem-wide name for
+"what CI will say about this tree", and it means the same thing in every
+repository.
+
+It stops short of two CI layers on purpose, because both need more than a
+checkout:
 ```bash
 npm ci               # once - installs abaplint, @abap2ui5/linter + the OpenUI5 runtime
 npm run gates:full   # gates + `npx abaplint ./abaplint.jsonc` (0 issues)
                      #       + view-gates --strict (properties/structure/headless render)
-npm test             # fixture tests for the gate/generator tooling itself
-                     # (scripts/test/, golden-file based; also a CI job)
 ```
+plus `abap-cloud` / `abap-702`, which lint the downported tree against two more
+abaplint configs. Run `gates:full` before a PR that touches views or ABAP; the
+702 job is a full downport and is left to CI.
 
 
 ### Developer tooling — starting a port
