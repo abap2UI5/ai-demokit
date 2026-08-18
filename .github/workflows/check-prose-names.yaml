@@ -1,0 +1,44 @@
+name: check-prose-names
+
+# A class name written in prose is a class that exists - including when it
+# lives in a sibling repository. The three sample READMEs name each other's
+# overview apps, and when one of them was renamed the other two went on
+# pointing at a class that no longer exists, because nothing here reads that
+# repository. The script is byte-identical in samples, samples-controls and
+# samples-stack; only scripts/prose-absent.json differs.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-prose-names-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  prose_names:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        repository: abap2UI5/abap2UI5
+        ref: main
+        path: .abap2UI5
+        fetch-depth: 1
+        sparse-checkout: src
+        sparse-checkout-cone-mode: false
+    - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      with:
+        node-version: '22'
+    # A runner cannot check a repository out above the workspace, so the
+    # framework lands inside it and the variable says where - the same
+    # env-over-sibling resolution abap2UI5/ai-mcp uses.
+    - run: node scripts/check-prose-names.mjs
+      env:
+        A2UI5_HOME: ${{ github.workspace }}/.abap2UI5
