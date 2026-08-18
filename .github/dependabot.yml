@@ -1,4 +1,4 @@
-# Weekly dependency updates, opened as pull requests so the gates decide
+# Monthly dependency updates, opened as pull requests so the gates decide
 # whether they are safe.
 #
 # @abap2ui5/linter is deliberately NOT here. bump_linter.yaml already owns it
@@ -14,9 +14,10 @@ updates:
   - package-ecosystem: npm
     directory: /
     schedule:
-      interval: weekly
-      day: tuesday
-      # Tuesday, clear of Monday's 06:23 bump_linter run.
+      interval: monthly
+      # Monthly runs land on the 1st, so this no longer sits clear of Monday's
+      # 06:23 bump_linter run the way the old Tuesday slot did. When the two
+      # collide it is a rebase, not a failure.
       time: "06:30"
     open-pull-requests-limit: 5
     ignore:
@@ -24,14 +25,21 @@ updates:
     groups:
       toolchain:
         patterns: ["*"]
+        update-types: ["minor", "patch"]
+      toolchain-major:
+        patterns: ["*"]
+        update-types: ["major"]
 
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
-      day: tuesday
+      interval: monthly
       time: "06:30"
     open-pull-requests-limit: 5
     groups:
       actions:
         patterns: ["*"]
+        update-types: ["minor", "patch"]
+      actions-major:
+        patterns: ["*"]
+        update-types: ["major"]
