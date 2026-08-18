@@ -106,7 +106,8 @@ built from [`web/`](web) and published by `deploy-web`; see
 
 | File | What it is |
 |------|------------|
-| [`AGENTS.md`](AGENTS.md) | The complete generation rulebook (conventions, skeleton, gates) |
+| [`AGENTS.md`](AGENTS.md) | The complete generation rulebook (conventions, skeleton, gates) — [`CLAUDE.md`](CLAUDE.md) points here |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) | How to change a generated repository: what not to hand-edit, and the commands CI runs |
 | [`CAPABILITIES.md`](CAPABILITIES.md) | What abap2UI5 can express — each entry backed by a proving port or a source-verified trace |
 | [`TRAINING.md`](TRAINING.md) | The improvement loop: batches, quality ladder, reference repositories |
 | [`STATUS.md`](STATUS.md) | Generated point-in-time state + the open findings backlog |
