@@ -25,6 +25,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { libFolder, catFolder, CAT_CTEXT, LIB_CTEXT } from './lib-packages.mjs';
+import { isSkippedDir } from './lib/src-tree.mjs';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const META = path.join(ROOT, 'meta');
@@ -322,6 +323,7 @@ const meta = {
 function collect(dir, base = dir, out = []) {
   for (const n of fs.readdirSync(dir)) {
     const full = path.join(dir, n);
+    if (isSkippedDir(name)) continue;
     if (fs.statSync(full).isDirectory()) collect(full, base, out);
     else out.push(path.relative(base, full));
   }

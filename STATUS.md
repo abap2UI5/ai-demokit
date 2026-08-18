@@ -5,8 +5,8 @@ by hand, `scripts/generate-status.mjs` regenerates it via the pre-commit hook
 and the `meta_valid` CI job fails a PR with a stale block) and the
 **hand-maintained** open-findings backlog below it. The chronological journal
 (batches, probes, audits — one section per event) moved to
-[docs/history.md](docs/history.md); **new journal entries go there**, in
-the same same-change discipline as AGENTS.md §10. For the process itself see
+[docs/history.md](docs/history.md); **new journal entries go there**, under the
+same-change discipline of AGENTS.md §10. For the process itself see
 TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 
 ## Current state (generated)

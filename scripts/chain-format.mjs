@@ -49,6 +49,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { isSkippedDir } from './lib/src-tree.mjs';
 
 const CODE = 0, LIT = 1, COMMENT = 2;
 
@@ -227,6 +228,7 @@ export function formatSource(text) {
 function walk(dir, acc = []) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     const f = path.join(dir, e.name);
+    if (isSkippedDir(e.name)) continue;
     if (e.isDirectory()) walk(f, acc);
     else if (e.name.endsWith('.abap')) acc.push(f);
   }

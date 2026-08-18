@@ -36,6 +36,8 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { readDescript } from './lib/descript.mjs';
+import { isSkippedDir } from './lib/src-tree.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CHECK = process.argv.includes('--check');
@@ -57,6 +59,7 @@ const NOISE = new Set([
 const walk = (dir, out = []) => {
   for (const name of fs.readdirSync(dir)) {
     const full = path.join(dir, name);
+    if (isSkippedDir(name)) continue;
     if (fs.statSync(full).isDirectory()) walk(full, out);
     else if (full.endsWith('.clas.abap')) out.push(full);
   }
@@ -93,10 +96,7 @@ for (const file of walk(path.join(ROOT, 'src'))) {
   const metaPath = path.join(ROOT, 'meta', `${cls}.json`);
   const meta = fs.existsSync(metaPath) ? JSON.parse(fs.readFileSync(metaPath, 'utf8')) : {};
 
-  const xmlPath = file.replace(/\.clas\.abap$/, '.clas.xml');
-  const descript = fs.existsSync(xmlPath)
-    ? (fs.readFileSync(xmlPath, 'utf8').match(/<DESCRIPT>([^<]*)<\/DESCRIPT>/) || [, ''])[1]
-    : '';
+  const descript = readDescript(file);
   // the half after the ` - `: the demo kit's own words, not the entity again
   const said = descript.includes(' - ') ? descript.slice(descript.indexOf(' - ') + 3) : '';
 

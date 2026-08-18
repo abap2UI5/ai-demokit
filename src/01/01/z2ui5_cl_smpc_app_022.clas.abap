@@ -1,4 +1,4 @@
-" @keywords facetfilter facet filter sap.m aposlightapos version vbox facetfilterlist facetfilteritem table overflowtoolbar title
+" @keywords facetfilter facet filter sap.m light version vbox facetfilterlist facetfilteritem table overflowtoolbar title
 " @summary This is a 'Light' version of the Facet Filter. It is for small displays where only a selectable summary bar is shown, and a dialog is shown for setting the facet values.
 CLASS z2ui5_cl_smpc_app_022 DEFINITION PUBLIC.
 

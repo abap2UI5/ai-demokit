@@ -22,6 +22,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { loadUniverseSnapshot, loadPropertiesControls, enrichFromProperties } from './lib-universe.mjs';
 import { formatSource } from './chain-format.mjs';
+import { isSkippedDir } from './lib/src-tree.mjs';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'src');
@@ -33,6 +34,7 @@ const OUT_XML = path.join(SRC, `${CLASS}.clas.xml`);
 function walk(dir, out = []) {
   for (const name of fs.readdirSync(dir)) {
     const full = path.join(dir, name);
+    if (isSkippedDir(name)) continue;
     if (fs.statSync(full).isDirectory()) walk(full, out);
     else out.push(full);
   }

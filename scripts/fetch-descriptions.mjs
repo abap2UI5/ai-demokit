@@ -40,6 +40,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { execFileSync } from 'child_process';
+import { isSkippedDir } from './lib/src-tree.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'ui5', 'descriptions.json');
@@ -56,6 +57,7 @@ if (!CHECKOUT || !fs.existsSync(CHECKOUT)) {
 function docuindexes(dir, out = []) {
   for (const name of fs.readdirSync(dir)) {
     const full = path.join(dir, name);
+    if (isSkippedDir(name)) continue;
     if (fs.statSync(full).isDirectory()) {
       if (name === 'node_modules' || name === '.git') continue;
       docuindexes(full, out);

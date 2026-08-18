@@ -3,7 +3,7 @@
 
 # The sample catalogue
 
-Every port in this repository — 434 of them — with what it shows and a
+Every port in this repository — 430 of them — with what it shows and a
 link to its source. This is the [overview app](src/z2ui5_cl_smpc_app_000.clas.abap)
 as a page you can read here, before installing anything.
 
@@ -31,7 +31,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 
 ## The ports — by UI5 library
 
-[sap.m](#sapm) · [sap.uxap](#sapuxap) · [sap.ui.layout.form](#sapuilayoutform) · [sap.ui.layout](#sapuilayout) · [sap.ui.table](#sapuitable) · [sap.ui.unified](#sapuiunified) · [sap.f](#sapf) · [sap.tnt](#saptnt) · [sap.ui.core](#sapuicore) · [sap.ui.layout.cssgrid](#sapuilayoutcssgrid) · [sap.ui.model.type](#sapuimodeltype) · [MCP dev app](#mcp-dev-app) · [sap.m.semantic](#sapmsemantic) · [sap.ui.integration.widgets](#sapuiintegrationwidgets) · [sap.ui.codeeditor](#sapuicodeeditor) · [sap.ui.model](#sapuimodel) · [sap.f.semantic](#sapfsemantic) · [sap.m.upload](#sapmupload) · [sap.ui.core.hyphenation](#sapuicorehyphenation) · [sap.ui.core.theming](#sapuicoretheming) · [sap.ui.integration](#sapuiintegration)
+[sap.m](#sapm) · [sap.uxap](#sapuxap) · [sap.ui.layout.form](#sapuilayoutform) · [sap.ui.layout](#sapuilayout) · [sap.ui.table](#sapuitable) · [sap.ui.unified](#sapuiunified) · [sap.f](#sapf) · [sap.tnt](#saptnt) · [sap.ui.core](#sapuicore) · [sap.ui.layout.cssgrid](#sapuilayoutcssgrid) · [sap.ui.model.type](#sapuimodeltype) · [sap.m.semantic](#sapmsemantic) · [sap.ui.integration.widgets](#sapuiintegrationwidgets) · [sap.ui.codeeditor](#sapuicodeeditor) · [sap.ui.model](#sapuimodel) · [sap.f.semantic](#sapfsemantic) · [sap.m.upload](#sapmupload) · [sap.ui.core.hyphenation](#sapuicorehyphenation) · [sap.ui.core.theming](#sapuicoretheming) · [sap.ui.integration](#sapuiintegration)
 
 ### sap.m
 
@@ -56,7 +56,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.m.Dialog**<br>Creating a dialog with confirm and reject options that replaces the confirmDialog functionality.<br><sub>dialog sap.m confirm reject submit order dialogs button text label textarea</sub> | [`Z2UI5_CL_SMPC_APP_019`](src/01/01/z2ui5_cl_smpc_app_019.clas.abap) |
 | **sap.m.DisplayListItem**<br>Use the Display List Item for showing name/value pairs.<br><sub>displaylistitem display list item sap.m represent label</sub> | [`Z2UI5_CL_SMPC_APP_020`](src/01/01/z2ui5_cl_smpc_app_020.clas.abap) |
 | **sap.m.DraftIndicator**<br>The Draft Indicator shows that eighter currently a draft is saving or that it is already saved. It does not block the current UI screen so other operations could be triggered in parallel.<br><sub>draftindicator draft indicator sap.m sap.m.label button</sub> | [`Z2UI5_CL_SMPC_APP_021`](src/01/01/z2ui5_cl_smpc_app_021.clas.abap) |
-| **sap.m.FacetFilter**<br>This is a 'Light' version of the Facet Filter. It is for small displays where only a selectable summary bar is shown, and a dialog is shown for setting the facet values.<br><sub>facetfilter facet filter sap.m aposlightapos version vbox facetfilterlist facetfilteritem table overflowtoolbar title</sub> | [`Z2UI5_CL_SMPC_APP_022`](src/01/01/z2ui5_cl_smpc_app_022.clas.abap) |
+| **sap.m.FacetFilter**<br>This is a 'Light' version of the Facet Filter. It is for small displays where only a selectable summary bar is shown, and a dialog is shown for setting the facet values.<br><sub>facetfilter facet filter sap.m light version vbox facetfilterlist facetfilteritem table overflowtoolbar title</sub> | [`Z2UI5_CL_SMPC_APP_022`](src/01/01/z2ui5_cl_smpc_app_022.clas.abap) |
 | **sap.m.FeedContent**<br>Shows the tile containing the text of the feed, a subheader, and a numeric value.<br><sub>feedcontent feed content sap.m displays tile containing text</sub> | [`Z2UI5_CL_SMPC_APP_023`](src/01/01/z2ui5_cl_smpc_app_023.clas.abap) |
 | **sap.m.FeedInput**<br>This sample shows you how to build a complete feed user interface by combining a FeedInput with a list of FeedListItems.<br><sub>feedinput feed input sap.m allows user list feedlistitem</sub> | [`Z2UI5_CL_SMPC_APP_024`](src/01/01/z2ui5_cl_smpc_app_024.clas.abap) |
 | **sap.m.FeedListItem**<br>The Feed List Item provides a standard UI for 'feeds' where multiple users publish information on regular basis on a certain topic.<br><sub>feedlistitem feed list item sap.m provides set feedlistitemaction</sub> | [`Z2UI5_CL_SMPC_APP_025`](src/01/01/z2ui5_cl_smpc_app_025.clas.abap) |
@@ -510,17 +510,6 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.ui.core**<br>This sample explains the formatting options of the Date type with the date being available as date object.<br><sub>date sap.ui.model.type typedateasdate label datepicker text</sub> | [`Z2UI5_CL_SMPC_APP_282`](src/01/02/z2ui5_cl_smpc_app_282.clas.abap) |
 | **sap.ui.core**<br>Formats and parses both integer and decimal digits.<br><sub>float sap.ui.model.type typefloat label input text</sub> | [`Z2UI5_CL_SMPC_APP_179`](src/02/02/z2ui5_cl_smpc_app_179.clas.abap) |
 | **sap.ui.core**<br>This sample explains the formatting options of the FileSize type.<br><sub>filesize file size sap.ui.model.type typefilesize label input text</sub> | [`Z2UI5_CL_SMPC_APP_180`](src/02/02/z2ui5_cl_smpc_app_180.clas.abap) |
-
-### MCP dev app
-
-4 port(s).
-
-| Sample | Class |
-|---|---|
-| **MCP dev app**<br> | [`YCL_APP`](src/zz_dev/ycl_app.clas.abap) |
-| **MCP dev app**<br> | [`Z2UI5_CL_MY_APP`](src/zz_dev/z2ui5_cl_my_app.clas.abap) |
-| **MCP dev app**<br> | [`ZCL_APP_001`](src/zz_dev/zcl_app_001.clas.abap) |
-| **MCP dev app**<br> | [`ZCX_ERROR`](src/zz_dev/zcx_error.clas.abap) |
 
 ### sap.m.semantic
 

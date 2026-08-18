@@ -6,8 +6,8 @@ name: check-prose-names
 # repository renamed its overview to z2ui5_cl_smpc_app_000 the other two went
 # on telling readers to run a class that no longer existed anywhere - which
 # nothing over there could notice, because nothing over there reads this
-# repository. The gate was written in samples and samples-stack after that;
-# the repository the incident started in did not have it until 2026-08-18.
+# repository. The gate was written in samples and samples-stack after that,
+# and reached the repository the incident started in last.
 #
 # Foreign sample names resolve through the owning repository's generated
 # SAMPLES.md over raw.githubusercontent.com; framework names need the sources,

@@ -163,17 +163,20 @@ the root is documentation or tooling, not a tree the pipeline reads: `meta/`
 generators and gates), `web/` (the GitHub Pages build) and `docs/` (the
 journal and the upstream-request record).
 
-**There was a third tree, `todo/`, and it is gone** — deleted 2026-08-12
+**There is no `todo/` staging tree any more** — deleted 2026-08-12
 (`f9afe94`), so `git ls-files` shows nothing under it. It was the staging area
 for samples imported from
 [abap2UI5/samples](https://github.com/abap2UI5/samples): 53 of them arrived on
 2026-08-12 (the `src/00/02` "restricted" set and the `src/01/03` "Control
 Library" set) and were all triaged the same day — 1 rebuilt as a port
 (`z2ui5_cl_smpc_app_403`), 14 collected in `src/03` (the SAPUI5-only ones), 38
-dropped. Nothing there was ever a port: no `meta/` sidecar, no `ui5/` template,
-and no gate walked it (`STARTING_FOLDER=/src/`, abaplint globs `/src/**`), so
-nothing there could reach a system. The decision table it carried is in the
-journal ([docs/history.md](docs/history.md), 2026-08-12).
+dropped. Its per-sample decision table survives in the **git history**
+(`todo/README.md` at commit `37e77b6`); read it there before re-importing, so
+the same 53 classes are not re-analysed. The summary of it is in the journal
+([docs/history.md](docs/history.md), 2026-08-12). Nothing there was ever a
+port: no `meta/` sidecar, no `ui5/` template, and no gate walked it
+(`STARTING_FOLDER=/src/`, abaplint globs `/src/**`), so nothing there could
+reach a system.
 
 Should samples be imported again, stage them wherever is convenient outside
 `src/` and apply the same rules. A file leaves staging by being **rebuilt** as
@@ -207,9 +210,13 @@ requirement.
 
 | Folder   | CTEXT (`package.devc.xml`) | Runs on | Status |
 |----------|----------------------------|---------|--------|
-| `src/01` | `OpenUI5 <= 1.71` | any OpenUI5/SAPUI5 from 1.71 on — the portable half | 280 ports |
-| `src/02` | `OpenUI5 > 1.71`  | needs a UI5 runtime newer than 1.71 | 121 ports |
-| `src/03` | `SAPUI5-only controls - collection` | needs SAPUI5 (a library OpenUI5 does not ship) | 14 samples, **not** ports — see below |
+| `src/01` | `OpenUI5 <= 1.71` | any OpenUI5/SAPUI5 from 1.71 on — the portable half | ports |
+| `src/02` | `OpenUI5 > 1.71`  | needs a UI5 runtime newer than 1.71 | ports |
+| `src/03` | `SAPUI5-only controls - collection` | needs SAPUI5 (a library OpenUI5 does not ship) | samples, **not** ports — see below |
+
+The per-folder counts are **not** written here: they change with every batch,
+and [`STATUS.md`](STATUS.md) carries the generated live ones (`Ports` row) with
+the per-library split beside them.
 
 **Level 2 — the library** of the demo kit sample, numbered once and globally: a
 library keeps the same number in every category folder, so `src/01/01` and
@@ -550,26 +557,49 @@ Three abaplint checks run on every pull request; all must report **0 issues**:
 | `abap-cloud`    | `abaplint .github/abaplint/abap_cloud.jsonc`    | `Cloud` |
 | `abap-702`      | `npm run downport` → `abaplint .github/abaplint/abap_702.jsonc` | `v702` |
 
-**The rule block in the root `abaplint.jsonc` is byte-identical in three
-repositories** — this one, [samples](https://github.com/abap2UI5/samples) and
-[samples-stack](https://github.com/abap2UI5/samples-stack) — the same way
-`scripts/chain-format.mjs` already is. abaplint has no `extends`, so the copy
-is the mechanism, and the block carries a header saying so. **Change it here
-and copy it to the other two**, then re-run their gates: what is checked is a
-joint decision of the three corpora, not a local preference.
+**The rule block below the marker in the root `abaplint.jsonc` is a CHECKED
+COPY of the shared app rule set, and its source is
+[abap2UI5/abap2UI5](https://github.com/abap2UI5/abap2UI5)
+`.github/abaplint/app-rules.json`** — the repository where the rest of "how to
+write an abap2UI5 app" already lives (the `build-an-app` and
+`view-chain-layout` skills, `docs/agents/building-apps.md`, `abap-check`,
+`ui5-check`), because a shared thing needs one owner. **Change it THERE first,
+then copy it here**; this repository,
+[samples](https://github.com/abap2UI5/samples) and
+[samples-stack](https://github.com/abap2UI5/samples-stack) are consumers of
+that file, not peers of each other. abaplint has no `extends`, so the checked
+copy is the mechanism, and the block carries a header saying so.
+
+**The gate is `scripts/check-app-rules.mjs`** (`npm run check:app-rules`, and
+the `check-app-rules` workflow on every pull request and push to `main` — it
+is not part of `npm run gates`, which is offline). It compares PARSED SETTINGS
+against the source, preferring an `abap2UI5` checkout next to this one and
+otherwise fetching it, and it is the one gate here that needs the network: an
+unreachable source SAYS SO and passes, rather than turning this repository red
+because github.com is. It replaced a three-way peer comparison for three
+reasons — three peers have no answer to which of them is right; a repository
+without its own copy of the checker turned the *other* repositories' CI red
+when it drifted; and the peer checker compared rule NAMES only, so flipping a
+rule to `false` to get a pull request through, the exact drift it existed to
+catch, read to it as no change at all. abap2UI5 checks the same thing from its
+side (`shared-file-gate.mjs`).
 
 Only `global`, `dependencies` and `syntax` are per repository — plus exactly
-**one** rule: `object_naming`, which carries the `SMPC` token. It sits last in
-the file behind a marker that says so; everything above that marker must stay
-identical. All 188 rules abaplint ships are named: 171 on, 17 off, each with
+**one** rule: `object_naming`, which carries the `SMPC` token and is the only
+rule `check-app-rules` excludes from the comparison. It sits last in the file
+behind a marker that says so; everything above that marker must match the
+source. All 188 rules abaplint ships are named: 171 on, 17 off, each with
 its reason in a comment. **A rule is never left out of the file** — when an
-upgrade adds one, add the key in all three: on if all three corpora pass, off
-with the reason if they do not.
+upgrade adds one, add the key to `app-rules.json` and copy the block into all
+three consumers: on if all three corpora pass, off with the reason if they do
+not.
 
 The cloud/702 configs stay on the correctness core, because the 702 config
 also drives `abaplint --fix` in the downport — they are NOT part of the shared
-block. When changing the shared block, run all three builds here *and* the
-other two repositories' gates.
+block. A change to the shared block starts in `app-rules.json`; after copying
+it here, run all three builds here *and* the other two repositories' gates —
+what is checked is still a joint decision of the three corpora, the source
+just says where that decision is written down.
 
 Two things this corpus contributes to the shared decisions, both of which look
 like over-permissiveness until you know why:
