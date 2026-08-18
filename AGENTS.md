@@ -285,7 +285,30 @@ reproducible pipeline can rely on.)
 
 **`src/03` is the answer instead: a collection, not a package of ports.** It
 holds hand-written abap2UI5 samples for SAPUI5-only controls — how the control
-is expressed with the framework, as orientation. That is a knowledge store, so:
+is expressed with the framework, as orientation.
+
+> **Which repository a SAPUI5-only control belongs in.** Being SAPUI5-only
+> puts a control here *or* in
+> [samples-stack](https://github.com/abap2UI5/samples-stack), and the question
+> that decides it is **what the sample needs besides the runtime**:
+>
+> - it renders from a **bound ABAP table and nothing else** — a chart, a micro
+>   chart, a network graph, a map, a barcode button — so the class is
+>   self-contained and installable anywhere → **here, `src/03`**;
+> - it needs a **system artefact**: OData metadata, an annotation, a CDS view,
+>   a service binding, an RAP object, a launchpad → **samples-stack**, where a
+>   sample may assume a backend and ships those artefacts with it.
+>
+> That is why every `sap.ui.comp` sample lives in `samples-stack/src/02`
+> ("Smart Controls") and none here: a SmartTable / SmartFilterBar / SmartField
+> reads its columns, its filters and its value help **from the service's
+> metadata**, so with no OData service it has nothing to render. A
+> `sap.ui.comp` XML namespace declared in a class here (app 012 declares
+> `xmlns:fb`) is not a counter-example — a declared prefix is not a used
+> control. `abap2ui5lint-collection.jsonc` named `sap.ui.comp` as part of this
+> folder's scope until 2026-08-18; it was never true.
+
+A knowledge store, so:
 
 - **flat** (`src/03/<class>.clas.abap`), because there is no path to derive:
   no library level, and no `<= 1.71` / `> 1.71` split — that split is a porting
