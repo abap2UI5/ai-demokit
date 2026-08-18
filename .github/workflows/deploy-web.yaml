@@ -1,4 +1,4 @@
-name: deploy_web
+name: deploy-web
 
 # Rebuilds the in-browser demo (web/ -> transpile + webpack) and deploys it to
 # this repo's GitHub Pages. A thin adaptation of abap2UI5/web-abap2UI5's
@@ -29,9 +29,9 @@ on:
     paths:
       - 'src/**'
       - 'web/**'
-      - '.github/workflows/deploy_web.yaml'
+      - '.github/workflows/deploy-web.yaml'
   schedule:
-    - cron: '0 8 * * *'   # daily; picks up merged port changes and A2UI5_PIN bumps (framework is pinned, see bump_a2ui5.yaml)
+    - cron: '0 8 * * *'   # daily; picks up merged port changes and A2UI5_PIN bumps (framework is pinned, see bump-a2ui5.yaml)
 
 permissions:
   contents: read

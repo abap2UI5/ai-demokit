@@ -1,4 +1,4 @@
-name: ABAP_CLOUD
+name: abap-standard
 
 on:
   pull_request:
@@ -11,11 +11,11 @@ permissions:
   contents: read
 
 concurrency:
-  group: ABAP_CLOUD-${{ github.ref }}
+  group: abap-standard-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  ABAP_CLOUD:
+  abap-standard:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -25,4 +25,4 @@ jobs:
         node-version: '22'
         cache: 'npm'
     - run: npm ci
-    - run: npx abaplint .github/abaplint/abap_cloud.jsonc
+    - run: npx abaplint ./abaplint.jsonc

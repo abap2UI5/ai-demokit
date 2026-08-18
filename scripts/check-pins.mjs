@@ -3,7 +3,7 @@
  * check-pins — the abap2UI5 pin policy, gated.
  *
  * WHY: the framework version the corpus builds against is pinned in exactly
- * one place — A2UI5_PIN (a commit SHA, moved via bump_a2ui5.yaml). The
+ * one place — A2UI5_PIN (a commit SHA, moved via bump-a2ui5.yaml). The
  * abaplint configs resolve the same dependency by URL, and abaplint accepts
  * an optional `"branch"` key there. That key is a second, silent pin: a
  * feature-branch re-point that survives a merge keeps CI linting against a

@@ -1,6 +1,6 @@
 ---
 name: regenerate-artefacts
-description: Full spec of the generated artefacts (README coverage block, STATUS.md state block, api.md, the in-system overview app) and their generators: universe and openui5-entities snapshots, api.md link targets, the generate_result workflow, gap-free renumbering, plus the generator gotchas. Use when changing a generate-*.mjs script, when the meta_valid gate fails, or when touching anything between generated markers.
+description: Full spec of the generated artefacts (README coverage block, STATUS.md state block, api.md, the in-system overview app) and their generators: universe and openui5-entities snapshots, api.md link targets, the generate-result workflow, gap-free renumbering, plus the generator gotchas. Use when changing a generate-*.mjs script, when the meta_valid gate fails, or when touching anything between generated markers.
 ---
 
 # Coverage & overview — the generated artefacts
@@ -79,7 +79,7 @@ node scripts/pattern-lint.mjs               # distilled-lesson gate
   `generate-coverage.mjs`) with entity/Since/deprecation from the release's
   `api.json`. When an OpenUI5 checkout is present (`$OPENUI5_DIR`),
   `generate-coverage.mjs` REBUILDS the snapshot from it (the weekly
-  `generate_result` workflow does exactly that); offline it reads the
+  `generate-result` workflow does exactly that); offline it reads the
   snapshot, so coverage regenerates without a checkout.
 - **Ported set** — the `meta/<class>.json` sidecars; a port matches a sample on
   `(library, Name)` from `meta.sample`. Ports matching no universe sample are
@@ -94,7 +94,7 @@ node scripts/pattern-lint.mjs               # distilled-lesson gate
   (`DEMOKIT`/resources/…/index.html?sap-ui-xx-sample-id=…&sap-ui-xx-sample-lib=…),
   ABAP → the generated `.clas.abap` (`REPO`/`REF`).
 
-The `generate_result` workflow (`workflow_dispatch` + weekly) shallow-clones
+The `generate-result` workflow (`workflow_dispatch` + weekly) shallow-clones
 OpenUI5, refreshes `ui5/universe.json`, regenerates coverage + overview, stamps
 the `<!-- last-run -->` timestamp into `README.md`, and opens a pull request.
 The overview app must stay abaplint-clean (§6) — it lives in `src/` and is part

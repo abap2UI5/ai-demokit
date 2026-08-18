@@ -1,4 +1,4 @@
-name: e2e_nightly
+name: e2e-nightly
 
 # Runs every port as the REAL app (transpiled abap2UI5 backend + headless
 # Chromium, scripts/e2e-build.mjs + e2e-smoke.mjs) — the heavy gate that the

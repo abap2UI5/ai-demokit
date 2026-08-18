@@ -3,7 +3,7 @@
  * close-live-tests — turn verified LIVE_TEST deviations into NOTEs.
  *
  * A LIVE_TEST deviation says "this wire is not verified in a running app".
- * The nightly e2e (e2e_nightly.yaml) runs every port with its interaction
+ * The nightly e2e (e2e-nightly.yaml) runs every port with its interaction
  * module (meta/interactions/<class>.mjs) — the moment that module drives
  * exactly the wire the deviation names
  * and stays green, the deviation is closable. Closing used to be manual

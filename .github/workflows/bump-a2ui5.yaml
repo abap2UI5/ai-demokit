@@ -5,7 +5,7 @@
 # that commit, runs the e2e smoke over every port, and opens a PR — so a
 # breaking framework change arrives as a red bump PR instead of a broken
 # Pages deploy.
-name: bump_a2ui5
+name: bump-a2ui5
 
 on:
   schedule:
@@ -17,10 +17,10 @@ permissions:
   pull-requests: write
 
 jobs:
-  bump:
+  bump-a2ui5:
     runs-on: ubuntu-latest
     # same full build + smoke the nightly runs, so the same budget (see
-    # e2e_nightly.yaml) plus the browser install
+    # e2e-nightly.yaml) plus the browser install
     timeout-minutes: 90
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -47,13 +47,13 @@ jobs:
         fi
 
     # the proof: full build + smoke at the new pin, exactly what node-setup
-    # gives a user and what deploy_web will ship.
+    # gives a user and what deploy-web will ship.
     #
     # `npm ci` must come FIRST. Without it there is no local playwright, so
     # `npx` fetches the CURRENT release into a temp prefix and installs THAT
     # version's browser build; node-setup then runs its own `npm ci`, which
     # puts the pinned playwright in place, and the smoke asks for a browser
-    # build that was never downloaded. That is exactly how the only bump_a2ui5
+    # build that was never downloaded. That is exactly how the only bump-a2ui5
     # run so far died (2026-08-11: "Executable doesn't exist at
     # …/chromium_headless_shell-1228" right after installing build 1234).
     - if: steps.pin.outputs.changed == 'true'

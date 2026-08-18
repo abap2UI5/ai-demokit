@@ -93,7 +93,7 @@ hard scope gate as a deprecated/newer one.
 > **⚠️ Verify scope from source before porting.** The gate is not blind:
 > `ui5/properties.json` carries each control's class-level
 > `@since`/`@deprecated` (parsed from the OpenUI5 sources by the **linter's**
-> `generate-metadata.mjs`, run from `generate_result`), and `scopeOf` in
+> `generate-metadata.mjs`, run from `generate-result`), and `scopeOf` in
 > `generate-coverage.mjs` falls
 > back to it when `ui5/universe.json` carries null — so out-of-scope samples
 > surface offline in coverage/backlog. The check is a **hard gate**:
@@ -433,7 +433,7 @@ source of truth:
   linter's own snapshot for the gate — the difference is only the OpenUI5
   version each is run against. Either way each control is resolved via the port's own
   `xmlns` declarations and the parent chain is walked — so a post-1.71
-  member in any library is caught automatically (the `generate_result` CI step
+  member in any library is caught automatically (the `generate-result` CI step
   clones the full OpenUI5 repo, so this holds in CI). Two facts about how the
   generator reads `@since` matter when verifying a flag: **(a)** an inherited
   member's `@since` lives in the **parent class file** (the gate walks
@@ -507,9 +507,9 @@ Three abaplint checks run on every pull request; all must report **0 issues**:
 
 | Build           | Command | abaplint syntax |
 |-----------------|---------|-----------------|
-| `ABAP_STANDARD` | `abaplint ./abaplint.jsonc`                     | `v750` |
-| `ABAP_CLOUD`    | `abaplint .github/abaplint/abap_cloud.jsonc`    | `Cloud` |
-| `ABAP_702`      | `npm run downport` → `abaplint .github/abaplint/abap_702.jsonc` | `v702` |
+| `abap-standard` | `abaplint ./abaplint.jsonc`                     | `v750` |
+| `abap-cloud`    | `abaplint .github/abaplint/abap_cloud.jsonc`    | `Cloud` |
+| `abap-702`      | `npm run downport` → `abaplint .github/abaplint/abap_702.jsonc` | `v702` |
 
 **The rule block in the root `abaplint.jsonc` is byte-identical in three
 repositories** — this one, [samples](https://github.com/abap2UI5/samples) and
@@ -562,11 +562,19 @@ generator run undoes it.
 
 Every sample must be **ABAP Cloud ready** *and* **downportable to 7.02** — there
 is no `src/00` "restricted" area here (unlike abap2UI5/samples); everything must
-survive all three builds. The self-contained `auto_downport.yaml` workflow
+survive all three builds. The self-contained `auto-downport.yaml` workflow
 rebuilds the `702` branch on every push to `main`.
 
+**Workflow files are `lower-kebab-case.yaml`, and the file name, the `name:`
+and — where a workflow has one job — the job id are the same string.** The
+repository mixed three styles
+(`ABAP_702.yaml`, `auto_downport.yaml`, `check-app-rules.yaml`) until
+2026-08-18; a badge URL and a required-check name both spell the file name, so
+a second style is a second thing to get wrong. Renaming a workflow renames its
+check — the maintainer has to re-point branch protection in the same change.
+
 The `checks` workflow runs the deterministic gates on every PR; the heavy
-`e2e_smoke` runs in `e2e_nightly.yaml` (scheduled + on demand). The gate set:
+`e2e_smoke` runs in `e2e-nightly.yaml` (scheduled + on demand). The gate set:
 `pattern_lint`, `check_pins` (A2UI5_PIN well-formed, no stray/duplicate
 `"branch"` on the abap2UI5 dependency in any abaplint config),
 `structural_diff`, `view_gates` (properties + structure +
@@ -654,7 +662,7 @@ as part of `npm run gates` (or via the individual `generate-*.mjs` scripts)
 and must leave `git diff` clean before every commit — the `meta_valid` CI job
 enforces exactly that. The full spec (overview app columns and behaviour, the
 `ui5/universe.json` + `ui5/openui5-entities.json` snapshots, api.md link
-targets, the weekly `generate_result` workflow, gap-free renumbering) is in
+targets, the weekly `generate-result` workflow, gap-free renumbering) is in
 **`.claude/skills/regenerate-artefacts/SKILL.md`** — read it before touching a
 generator, a generated file, or the sidecar shape they read.
 
@@ -840,7 +848,7 @@ e2e gotchas in `e2e-debugging`, generator gotchas in `regenerate-artefacts`).
   `duplicate-for-iterator`, gated via `view_gates`).
 - **After a repo rename, grep for the old `owner/name` — a
   `github.repository` guard fails SILENTLY.** The rename to `ai-demokit` left
-  `abap2UI5/api` in the `auto_downport.yaml` `if:` guard (the workflow was
+  `abap2UI5/api` in the `auto-downport.yaml` `if:` guard (the workflow was
   *skipped*, not red, so the 702 branch silently stopped rebuilding), in the
   README badge URLs, in `package.json`, and in the repo URLs baked into
   `generate-coverage.mjs`/`generate-overview.mjs`. A skipped workflow shows no
@@ -848,7 +856,7 @@ e2e gotchas in `e2e-debugging`, generator gotchas in `regenerate-artefacts`).
 - **A blocked protocol is not a blocked network** — this environment refuses
   `curl https://raw.githubusercontent.com/…` at the proxy, which reads like "no
   OpenUI5 source reachable". **`git clone https://github.com/SAP/openui5.git`
-  works**, and that is the transport the pipeline (`generate_result`,
+  works**, and that is the transport the pipeline (`generate-result`,
   `scaffold`, the metadata refresh) uses anyway. Before declaring a task
   blocked on network access, try the transport the tooling itself uses.
 - **A code change to a `checked` port invalidates the check** — `checked`

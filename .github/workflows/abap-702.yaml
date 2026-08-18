@@ -1,4 +1,4 @@
-name: ABAP_702
+name: abap-702
 
 on:
   pull_request:
@@ -11,11 +11,11 @@ permissions:
   contents: read
 
 concurrency:
-  group: ABAP_702-${{ github.ref }}
+  group: abap-702-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  ABAP_702:
+  abap-702:
     runs-on: ubuntu-latest
     # `npm run downport` is abaplint --fix iterating the downport rule to a
     # fixpoint over the whole corpus — ~27 passes at 416 ports, each one a
