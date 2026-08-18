@@ -1,4 +1,4 @@
-name: generate_result
+name: generate-result
 
 # Regenerates the four generated artefacts (AGENTS §7): the README.md coverage
 # summary, api.md, the STATUS.md state block and the in-system overview app —
@@ -17,11 +17,11 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: generate_result
+  group: generate-result
   cancel-in-progress: false
 
 jobs:
-  generate_result:
+  generate-result:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -122,7 +122,7 @@ jobs:
         commit-message: Regenerate sample coverage
         author: 'github-actions[bot] <github-actions[bot]@users.noreply.github.com>'
         committer: 'github-actions[bot] <github-actions[bot]@users.noreply.github.com>'
-        branch: generate_result/regenerate
+        branch: generate-result/regenerate
         delete-branch: true
         title: Regenerate sample coverage
         body: Automated coverage regeneration from the latest OpenUI5 demo kit samples.

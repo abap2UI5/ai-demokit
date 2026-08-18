@@ -1,4 +1,8 @@
-name: ABAP_STANDARD
+name: structural-diff
+
+# Every port against the original it rebuilds, controls and binding values
+# included. An undeclared difference fails: a deviation from the sample is
+# allowed, silently drifting away from it is not.
 
 on:
   pull_request:
@@ -11,11 +15,11 @@ permissions:
   contents: read
 
 concurrency:
-  group: ABAP_STANDARD-${{ github.ref }}
+  group: structural-diff-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  ABAP_STANDARD:
+  structural_diff:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -23,6 +27,4 @@ jobs:
     - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
       with:
         node-version: '22'
-        cache: 'npm'
-    - run: npm ci
-    - run: npx abaplint ./abaplint.jsonc
+    - run: node scripts/structural-diff.mjs --strict

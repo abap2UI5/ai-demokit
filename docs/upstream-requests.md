@@ -1,4 +1,9 @@
-# pr/ — the record of what porting asked the framework for
+# Upstream requests — the record of what porting asked the framework for
+
+_This file was `pr/README.md` until 2026-08-18. The directory held nothing
+else by then, and a folder called `pr/` at a repository root reads as "pull
+requests" to everyone who did not write it. `CAPABILITIES.md` cites the rows
+below by their request id — `pr/<id>` — and those ids are unchanged._
 
 **The open requests have moved.** They live in
 [`abap2UI5/abap2UI5` under `backlog/`](https://github.com/abap2UI5/abap2UI5/tree/main/backlog)

@@ -1,4 +1,4 @@
-name: auto_downport
+name: auto-downport
 
 # Rebuilds the 702 branch: downports the sources, lints with the 702 config
 # and force-pushes the result to the 702 branch.
@@ -8,19 +8,19 @@ on:
     branches: [main]
 
 concurrency:
-  group: auto_downport
+  group: auto-downport
   cancel-in-progress: false
 
 permissions:
   contents: read
 
 jobs:
-  auto_downport:
+  auto-downport:
     if: github.repository == 'abap2UI5/samples-controls'
     permissions:
       contents: write
     runs-on: ubuntu-latest
-    # same `npm run downport` as ABAP_702, same budget — see the note there.
+    # same `npm run downport` as abap-702, same budget — see the note there.
     # Every run of this workflow had been dying in that step too, which is why
     # the 702 branch stopped being rebuilt.
     timeout-minutes: 60

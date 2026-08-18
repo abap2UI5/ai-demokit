@@ -6,7 +6,7 @@ JavaScript, bundled with webpack, and run in the browser with **no ABAP
 backend** — the transpiled `z2ui5_cl_http_handler` answers the app's own
 roundtrips in-page (a `fetch` interceptor), and sql.js (WASM) provides the
 draft database. The result is the static site in `build/`, which the
-`deploy_web` workflow uploads to GitHub Pages.
+`deploy-web` workflow uploads to GitHub Pages.
 
 It is a thin adaptation of the official
 [abap2UI5/web-abap2UI5](https://github.com/abap2UI5/web-abap2UI5) build
@@ -27,7 +27,7 @@ overview (`z2ui5_cl_smpc_app_000`) instead of the framework home page.
 4. **webpack:build** — bundle `app/web.mjs` + the transpiled backend + sql.js
    into `build/` (one `app.bundle.js` + the WASM files).
 
-`build/` is what `deploy_web` uploads to GitHub Pages, and it is not
+`build/` is what `deploy-web` uploads to GitHub Pages, and it is not
 committed: the bundle is ~28 MB, and a copy of it in the repository was both
 a second thing to keep current and the largest object in the history.
 
@@ -39,7 +39,7 @@ npm ci
 npm run all        # assemble → downport → transpile → webpack
 ```
 
-Nothing to commit afterwards — `build/` is a build output and `deploy_web`
+Nothing to commit afterwards — `build/` is a build output and `deploy-web`
 produces its own. Test locally (the `document.write` boot does not work with
 webpack-dev-server HMR):
 

@@ -27,6 +27,7 @@
     "abaplintpathfix": "sed -i 's|\"files\": \"/\\.\\.\\/\\.\\.\\/src\\/\\*\\*\\/\\*\\.\\*\"|\"files\": \"/src/**/*.*\"|g' abaplint.jsonc",
     "downport": "abaplint --fix .github/abaplint/abap_702.jsonc && npm run syfixes && cp -f .github/abaplint/abap_702.jsonc abaplint.jsonc && npm run abaplintpathfix",
     "check:app-rules": "node scripts/check-app-rules.mjs",
+    "check:prose": "node scripts/check-prose-names.mjs",
     "keywords": "node scripts/generate-keywords.mjs",
     "check:keywords": "node scripts/generate-keywords.mjs --check",
     "summary": "node scripts/generate-summary.mjs",

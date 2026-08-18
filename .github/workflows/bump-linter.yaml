@@ -11,7 +11,7 @@
 # against a registry instead of a branch. The full strict view gates run before
 # the PR exists, which is what makes that safe: a rule regression over the 416
 # ports fails this workflow instead of landing on main.
-name: bump_linter
+name: bump-linter
 
 on:
   schedule:
@@ -23,7 +23,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  bump:
+  bump-linter:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:

@@ -20,6 +20,13 @@ new technique, or disproves a ❌, update this table **in the same change** and
 reference the port. Never declare an `IMPROVISED`/`DROPPED_171` deviation for a
 feature this table marks ✅/🔶.
 
+A `pr/<id>` in the Evidence column is an **upstream request id**. What each one
+asked for and what came of it is in
+[docs/upstream-requests.md](docs/upstream-requests.md) (`pr/README.md` until
+2026-08-18); requests still open live in
+[`backlog/`](https://github.com/abap2UI5/abap2UI5/tree/main/backlog) in
+abap2UI5.
+
 ## Views & controls
 
 | UI5 feature | Status | How in abap2UI5 | Evidence |

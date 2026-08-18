@@ -5,7 +5,7 @@ by hand, `scripts/generate-status.mjs` regenerates it via the pre-commit hook
 and the `meta_valid` CI job fails a PR with a stale block) and the
 **hand-maintained** open-findings backlog below it. The chronological journal
 (batches, probes, audits — one section per event) moved to
-[STATUS-history.md](STATUS-history.md); **new journal entries go there**, under the
+[docs/history.md](docs/history.md); **new journal entries go there**, under the
 same-change discipline of AGENTS.md §10. For the process itself see
 TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 
@@ -29,6 +29,20 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
 
 ## Open findings (backlog)
 
+- [ ] **CAPABILITIES.md names nine classes under a prefix no repository uses
+  any more.** The `prose_names` gate (added 2026-08-18) checks README,
+  AGENTS.md, CLAUDE.md, CONTRIBUTING.md, TRAINING.md and this file — the same
+  six files it checks in samples and samples-stack, since the script is
+  byte-identical in all three. CAPABILITIES.md is deliberately outside that
+  list, and a one-off run with it added reports nine evidence citations still
+  written as `z2ui5_cl_demo_app_<n>`, the pre-rename spelling of
+  abap2UI5/samples' classes. Five of them (450, 453, 454, 455, 456) are
+  `z2ui5_cl_smp_app_<n>` in samples today and seven more (313, 319, 475-479)
+  moved to samples-stack as `z2ui5_cl_smps_app_<n>`; four (038, 172, 369, 458)
+  resolve to no class in either repository and need the maintainer to say what
+  they became. Fixing the resolvable ones is mechanical; widening the shared
+  script's file list is not — it would have to change in all three
+  repositories at once.
 - [ ] **Two open-abap defects are patched in the build and open upstream.**
   Both are written up in full — analysis, emitted JS, proposed change — in
   `abap2UI5/abap2UI5`'s
@@ -38,7 +52,7 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   - `open-abap-xml-escaping` — `CALL TRANSFORMATION id … RESULT XML` writes
     character data unescaped, so any app whose model carries a `<` persists a
     draft its own `CL_IXML` cannot parse back (user report 2026-07-31 on the
-    Pages demo's overview; STATUS-history has the analysis). Both transpiled
+    Pages demo's overview; the journal has the analysis). Both transpiled
     builds transpile against a locally patched clone
     (`web/ci/patch_open_abap_xml.mjs`). **On merge:** drop the patch script,
     the two clone steps (`web/package.json` assemble, `scripts/e2e-build.mjs`)

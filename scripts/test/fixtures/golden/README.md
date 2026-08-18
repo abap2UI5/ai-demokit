@@ -18,11 +18,3 @@ Control metadata from OpenUI5 **1.152.0**.
 | **Total** | **3** | **3** | **2** | **66.7 %** | ███████░░░ |
 
 <!-- coverage:end -->
-
-## Prompt
-
-<!-- prompt:start -->
-```
-Fixture generation prompt (one line, spliced into the fixture README).
-```
-<!-- prompt:end -->

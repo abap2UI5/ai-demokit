@@ -1,4 +1,9 @@
-name: ABAP_CLOUD
+name: check-pins
+
+# the abap2UI5 pin policy: A2UI5_PIN is a well-formed commit SHA and no
+# abaplint config carries a stray/duplicate "branch" on the abap2UI5
+# dependency (only abap_702.jsonc's "702" is allowlisted) — a silent
+# second pin once pointed at a deleted branch (the journal, 2026-08-10)
 
 on:
   pull_request:
@@ -11,11 +16,11 @@ permissions:
   contents: read
 
 concurrency:
-  group: ABAP_CLOUD-${{ github.ref }}
+  group: check-pins-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  ABAP_CLOUD:
+  check_pins:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -23,6 +28,4 @@ jobs:
     - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
       with:
         node-version: '22'
-        cache: 'npm'
-    - run: npm ci
-    - run: npx abaplint .github/abaplint/abap_cloud.jsonc
+    - run: node scripts/check-pins.mjs

@@ -47,7 +47,7 @@ reads the files directly. **Read the matching guide BEFORE starting the task**
 | Run or debug the e2e smoke (Playwright) | `.claude/skills/e2e-debugging/SKILL.md` |
 
 **Large files — grep them, never read them whole:** `api.md` (~316 KB
-generated table), `STATUS-history.md` (~228 KB journal), `CAPABILITIES.md`
+generated table), `docs/history.md` (~330 KB journal), `CAPABILITIES.md`
 (~45 KB — grep for the feature row),
 `scripts/generate-overview.mjs` (~58 KB),
 `src/z2ui5_cl_smpc_app_000.clas.abap` (generated). (The e2e
@@ -93,7 +93,7 @@ hard scope gate as a deprecated/newer one.
 > **⚠️ Verify scope from source before porting.** The gate is not blind:
 > `ui5/properties.json` carries each control's class-level
 > `@since`/`@deprecated` (parsed from the OpenUI5 sources by the **linter's**
-> `generate-metadata.mjs`, run from `generate_result`), and `scopeOf` in
+> `generate-metadata.mjs`, run from `generate-result`), and `scopeOf` in
 > `generate-coverage.mjs` falls
 > back to it when `ui5/universe.json` carries null — so out-of-scope samples
 > surface offline in coverage/backlog. The check is a **hard gate**:
@@ -157,27 +157,35 @@ Everything lives on the working branch, in separate top-level trees:
 | `ui5/`  | The original UI5 demo kit templates (JS/XML/manifest), one folder per ported sample (§4). |
 
 Keep them separate: only `src/` is the abapGit / abaplint scope; `ui5/` is
-plain JS/XML held for reference and to feed the generator.
+plain JS/XML held for reference and to feed the generator. Everything else at
+the root is documentation or tooling, not a tree the pipeline reads: `meta/`
+(one sidecar per port, plus the e2e interaction modules), `scripts/` (the
+generators and gates), `web/` (the GitHub Pages build) and `docs/` (the
+journal and the upstream-request record).
 
-**There is no `todo/` staging tree any more.** The 53 samples imported from
-[abap2UI5/samples](https://github.com/abap2UI5/samples) on 2026-08-12 (the
-`src/00/02` "restricted" set and the `src/01/03` "Control Library" set) were
-all triaged the same day — 1 rebuilt as a port (`z2ui5_cl_smpc_app_403`), 14
-collected in `src/03` (the SAPUI5-only ones), 38 dropped — and the folder was
-deleted with the closed triage. Its per-sample decision table survives in the
-**git history** (`todo/README.md` at commit `37e77b6`); read it there before
-re-importing, so the same 53 classes are not re-analysed. Nothing there was
-ever a port: no `meta/` sidecar, no `ui5/` template, and no gate walked it
+**There is no `todo/` staging tree any more** — deleted 2026-08-12
+(`f9afe94`), so `git ls-files` shows nothing under it. It was the staging area
+for samples imported from
+[abap2UI5/samples](https://github.com/abap2UI5/samples): 53 of them arrived on
+2026-08-12 (the `src/00/02` "restricted" set and the `src/01/03` "Control
+Library" set) and were all triaged the same day — 1 rebuilt as a port
+(`z2ui5_cl_smpc_app_403`), 14 collected in `src/03` (the SAPUI5-only ones), 38
+dropped. Its per-sample decision table survives in the **git history**
+(`todo/README.md` at commit `37e77b6`); read it there before re-importing, so
+the same 53 classes are not re-analysed. The summary of it is in the journal
+([docs/history.md](docs/history.md), 2026-08-12). Nothing there was ever a
+port: no `meta/` sidecar, no `ui5/` template, and no gate walked it
 (`STARTING_FOLDER=/src/`, abaplint globs `/src/**`), so nothing there could
 reach a system.
 
-Should samples be imported again, the same rules apply, and a staging folder
-outside `src/` is again the place for them. A file leaves staging by being
-**rebuilt** as a `z2ui5_cl_smpc_app_<n>` port under
-`src/<category>/<library>/`, never by being moved: a port is a 1:1 rebuild of
-the *demo kit original*, not of another repo's interpretation of it. Delete a
-file there once its decision is made — ported, or dropped with the reason
-recorded. Three traps that decided rows last time: the
+Should samples be imported again, stage them wherever is convenient outside
+`src/` and apply the same rules. A file leaves staging by being **rebuilt** as
+a `z2ui5_cl_smpc_app_<n>` port under
+`src/<category>/<library>/`, never by being moved: the samples are built on the
+framework's `z2ui5_cl_xml_view`, ports use `z2ui5_cl_ui5_view_builder` (§5), and a port is
+a 1:1 rebuild of the *demo kit original*, not of another repo's interpretation of
+it. Delete a file there once its decision is made — ported, or dropped with the
+reason recorded in the journal. Three traps that decided rows last time: the
 entity in `<DESCRIPT>` is the control the class was *filed under*, not
 necessarily the sample it *rebuilds* (read the body of every class whose URL
 names only an entity — that is where the one take-over was hiding); a
@@ -284,7 +292,30 @@ reproducible pipeline can rely on.)
 
 **`src/03` is the answer instead: a collection, not a package of ports.** It
 holds hand-written abap2UI5 samples for SAPUI5-only controls — how the control
-is expressed with the framework, as orientation. That is a knowledge store, so:
+is expressed with the framework, as orientation.
+
+> **Which repository a SAPUI5-only control belongs in.** Being SAPUI5-only
+> puts a control here *or* in
+> [samples-stack](https://github.com/abap2UI5/samples-stack), and the question
+> that decides it is **what the sample needs besides the runtime**:
+>
+> - it renders from a **bound ABAP table and nothing else** — a chart, a micro
+>   chart, a network graph, a map, a barcode button — so the class is
+>   self-contained and installable anywhere → **here, `src/03`**;
+> - it needs a **system artefact**: OData metadata, an annotation, a CDS view,
+>   a service binding, an RAP object, a launchpad → **samples-stack**, where a
+>   sample may assume a backend and ships those artefacts with it.
+>
+> That is why every `sap.ui.comp` sample lives in `samples-stack/src/02`
+> ("Smart Controls") and none here: a SmartTable / SmartFilterBar / SmartField
+> reads its columns, its filters and its value help **from the service's
+> metadata**, so with no OData service it has nothing to render. A
+> `sap.ui.comp` XML namespace declared in a class here (app 012 declares
+> `xmlns:fb`) is not a counter-example — a declared prefix is not a used
+> control. `abap2ui5lint-collection.jsonc` named `sap.ui.comp` as part of this
+> folder's scope until 2026-08-18; it was never true.
+
+A knowledge store, so:
 
 - **flat** (`src/03/<class>.clas.abap`), because there is no path to derive:
   no library level, and no `<= 1.71` / `> 1.71` split — that split is a porting
@@ -296,7 +327,7 @@ is expressed with the framework, as orientation. That is a knowledge store, so:
   all sidecar-driven. A class here is invisible to every one of them **by
   construction**, not by an exclusion list that could rot;
 - **the VIEW check is not part of that**, and `npm run check:collection` is it
-  (`abap2ui5lint-collection.jsonc`, run in `checks.yaml` and in `gates:full`).
+  (`abap2ui5lint-collection.jsonc`, run in `view-gates.yaml` and in `gates:full`).
   Being outside the *port* machinery is a decision about `structural_diff` and
   friends; whether the view a class builds is one UI5 can load is a question
   that applies to every abap2UI5 class in the repository, exactly as `abaplint`
@@ -436,7 +467,7 @@ source of truth:
   linter's own snapshot for the gate — the difference is only the OpenUI5
   version each is run against. Either way each control is resolved via the port's own
   `xmlns` declarations and the parent chain is walked — so a post-1.71
-  member in any library is caught automatically (the `generate_result` CI step
+  member in any library is caught automatically (the `generate-result` CI step
   clones the full OpenUI5 repo, so this holds in CI). Two facts about how the
   generator reads `@since` matter when verifying a flag: **(a)** an inherited
   member's `@since` lives in the **parent class file** (the gate walks
@@ -474,9 +505,12 @@ source of truth:
   This used to be a `pr/` folder here; the open requests moved on 2026-08-17
   because a request about the framework belongs in the framework's repository,
   and because the same folder was holding requests for three different
-  upstreams with nothing distinguishing them. What is left in `pr/README.md` is
-  this repository's own record of what was shipped and what was declined —
-  which is what `CAPABILITIES.md` cites.
+  upstreams with nothing distinguishing them. What was left of it is this
+  repository's own record of what was shipped and what was declined — the two
+  tables `CAPABILITIES.md` cites by request id (`pr/<id>`). They live in
+  **`docs/upstream-requests.md`** since 2026-08-18; the empty directory named
+  `pr/` was deleted, because to anyone arriving at the repository root it read
+  as "pull requests".
 - Every port must pass all three CI checks (§6).
 
 
@@ -496,11 +530,20 @@ consult it whenever the original does something the recipe does not cover 1:1.
 ### Generation prompt
 
 A condensed version of the porting recipe, phrased as a porting task, lives in
-**`scripts/generation-prompt.txt`** — the single source; `generate-coverage.mjs`
-splices it into `README.md` between the `<!-- prompt:start/end -->` markers
-(never edit the README block by hand). When the recipe changes in substance
-(the `port-a-sample` guide), update the prompt file in the same change — that
-guide is the authoritative long form.
+**`scripts/generation-prompt.txt`** — the single source, and the only place it
+is written out. `generate-coverage.mjs` used to splice it into `README.md`
+between `<!-- prompt:start/end -->` markers; that block was removed on
+2026-08-18, because ~120 lines of agent instructions under a fold is not what
+a reader opens a learning repository's README for. The README links the file
+instead.
+
+**The file itself must not go away.** abap2UI5/ai-mcp serves it verbatim as its
+`generation_rules` rulebook (`lib/guide.mjs` reads
+`scripts/generation-prompt.txt`, and `scripts/check-mcp-contract.mjs` gates
+that it is there), so deleting or renaming it breaks a consumer outside this
+repository. When the recipe changes in substance (the `port-a-sample` guide),
+update the prompt file in the same change — that guide is the authoritative
+long form.
 
 ---
 
@@ -510,9 +553,9 @@ Three abaplint checks run on every pull request; all must report **0 issues**:
 
 | Build           | Command | abaplint syntax |
 |-----------------|---------|-----------------|
-| `ABAP_STANDARD` | `abaplint ./abaplint.jsonc`                     | `v750` |
-| `ABAP_CLOUD`    | `abaplint .github/abaplint/abap_cloud.jsonc`    | `Cloud` |
-| `ABAP_702`      | `npm run downport` → `abaplint .github/abaplint/abap_702.jsonc` | `v702` |
+| `abap-standard` | `abaplint ./abaplint.jsonc`                     | `v750` |
+| `abap-cloud`    | `abaplint .github/abaplint/abap_cloud.jsonc`    | `Cloud` |
+| `abap-702`      | `npm run downport` → `abaplint .github/abaplint/abap_702.jsonc` | `v702` |
 
 **The rule block below the marker in the root `abaplint.jsonc` is a CHECKED
 COPY of the shared app rule set, and its source is
@@ -588,21 +631,47 @@ generator run undoes it.
 
 Every sample must be **ABAP Cloud ready** *and* **downportable to 7.02** — there
 is no `src/00` "restricted" area here (unlike abap2UI5/samples); everything must
-survive all three builds. The self-contained `auto_downport.yaml` workflow
+survive all three builds. The self-contained `auto-downport.yaml` workflow
 rebuilds the `702` branch on every push to `main`.
 
-The `checks` workflow runs the deterministic gates on every PR; the heavy
-`e2e_smoke` runs in `e2e_nightly.yaml` (scheduled + on demand). The gate set:
-`pattern_lint`, `check_pins` (A2UI5_PIN well-formed, no stray/duplicate
-`"branch"` on the abap2UI5 dependency in any abaplint config),
-`structural_diff`, `view_gates` (properties + structure +
-headless render — the three former view gates, now run from
-[abap2UI5-linter](https://github.com/abap2UI5/linter) with only the
-corpus policy kept here in `scripts/view-gates.mjs`), `data_fidelity`,
-`meta_valid`, plus `e2e_smoke`. What each gate checks, what a failure means
-and every legitimate escape hatch is in
-**`.claude/skills/run-the-gates/SKILL.md`** — read it the moment a gate fails,
-and before declaring any skip or deviation to satisfy one.
+**Workflow files are `lower-kebab-case.yaml`, and the file name and the `name:`
+are the same string.** The repository mixed three styles
+(`ABAP_702.yaml`, `auto_downport.yaml`, `check-app-rules.yaml`) until
+2026-08-18; a badge URL spells the file name, so a second style is a second
+thing to get wrong. The **job id** is the file name too — *except* where the
+job is a named gate: `structural_diff`, `data_fidelity` and friends are also
+`meta/<class>.json` field names and the vocabulary the whole corpus is written
+in, so those job ids keep their established snake_case spelling. A required
+check tracks the JOB name, which is what makes moving a gate between workflow
+files invisible to branch protection and renaming a workflow *not*.
+
+**One concern, one workflow, one badge.** Every gate runs in a workflow of its
+own, so a red badge names the thing that is actually broken. Seven of them
+shared `checks.yaml` until 2026-08-18, which meant the `check-abap2UI5` badge
+went red when `check_pins` failed — a reader could not tell a stale pin from a
+broken view. Splitting cost nothing: the jobs never shared a setup step (each
+one checks out and installs node for itself, and only `view_gates` runs
+`npm ci`), so they were already seven runners in parallel and still are.
+
+The deterministic gates run on every PR, one workflow each; the heavy
+`e2e_smoke` runs in `e2e-nightly.yaml` (scheduled + on demand):
+
+| Workflow | Job | What it gates |
+|----------|-----|---------------|
+| `pattern-lint.yaml` | `pattern_lint` | the distilled corpus-policy rules |
+| `check-pins.yaml` | `check_pins` | A2UI5_PIN well-formed, no stray/duplicate `"branch"` on the abap2UI5 dependency in any abaplint config |
+| `chain-format.yaml` | `chain_format` | the view-chain layout (`npm run fmt:chains` fixes it) |
+| `structural-diff.yaml` | `structural_diff` | port vs. archived original, binding values included |
+| `data-fidelity.yaml` | `data_fidelity` | seeded values vs. the archived sample mocks |
+| `view-gates.yaml` | `view_gates` | properties + structure + headless render — the three former view gates, now run from [abap2UI5-linter](https://github.com/abap2UI5/linter) with only the corpus policy kept here in `scripts/view-gates.mjs`; also `npm run check:collection` for `src/03`, and it publishes the two README badges |
+| `meta-valid.yaml` | `meta_valid` | sidecar schema + referential integrity, and that every generated artefact (overview app, `README.md`, `api.md`, `STATUS.md`, `SAMPLES.md`) is in sync |
+| `tooling-tests.yaml` | `tooling_tests` | the gate/generator tooling's own fixture tests |
+| `check-prose-names.yaml` | `prose_names` | every `z2ui5_cl_*` class named in prose exists, here or in the repository that owns it |
+| `check-app-rules.yaml`, `check-keywords.yaml`, `check-summary.yaml` | same | the shared abaplint app rules, the `@keywords` and the `@summary` lines |
+
+What each gate checks, what a failure means and every legitimate escape hatch
+is in **`.claude/skills/run-the-gates/SKILL.md`** — read it the moment a gate
+fails, and before declaring any skip or deviation to satisfy one.
 
 **When a distilled lesson is greppable, encode it as a rule in the same
 change** — that is what makes a lesson unrepeatable rather than advisory.
@@ -623,10 +692,14 @@ at the bump PR, where the debt decision belongs.
 ```bash
 npm run gates        # full offline gate set, fail-fast; needs NO node_modules and no network
 ```
-It chains: pattern-lint → validate-meta → structural-diff → data-fidelity →
-regenerate overview/coverage/status →
-`git diff --exit-code -- src README.md api.md STATUS.md` (regenerated
-artefacts must leave the tree clean, exactly as the `meta_valid` CI job checks).
+It chains: chain-format → check-prose-names → pattern-lint → check-pins →
+validate-meta → structural-diff → data-fidelity → check-mcp-contract →
+regenerate overview/coverage/status/SAMPLES.md →
+`git diff --exit-code -- src README.md api.md STATUS.md SAMPLES.md`
+(regenerated artefacts must leave the tree clean, exactly as the `meta_valid`
+CI job checks). **Every step here has a CI job with the same name** — the
+chain and the workflows are one list, and a step that runs only locally is a
+gate nobody enforces (chain-format was exactly that until 2026-08-18).
 
 **Before every PR, additionally:**
 ```bash
@@ -680,7 +753,7 @@ as part of `npm run gates` (or via the individual `generate-*.mjs` scripts)
 and must leave `git diff` clean before every commit — the `meta_valid` CI job
 enforces exactly that. The full spec (overview app columns and behaviour, the
 `ui5/universe.json` + `ui5/openui5-entities.json` snapshots, api.md link
-targets, the weekly `generate_result` workflow, gap-free renumbering) is in
+targets, the weekly `generate-result` workflow, gap-free renumbering) is in
 **`.claude/skills/regenerate-artefacts/SKILL.md`** — read it before touching a
 generator, a generated file, or the sidecar shape they read.
 
@@ -799,7 +872,7 @@ How to record it:
   keeping it lean is what keeps it loadable in every session.
 - Write the **rule**, not the war story: one line on what to do / avoid, and a
   short why. Reference the app or class where it bit us, so it can be checked.
-  The full story, if worth keeping, goes in the `STATUS-history.md` journal.
+  The full story, if worth keeping, goes in the `docs/history.md` journal.
 - Keep it deduplicated — extend the existing bullet rather than adding a second.
 
 
@@ -866,7 +939,7 @@ e2e gotchas in `e2e-debugging`, generator gotchas in `regenerate-artefacts`).
   `duplicate-for-iterator`, gated via `view_gates`).
 - **After a repo rename, grep for the old `owner/name` — a
   `github.repository` guard fails SILENTLY.** The rename to `ai-demokit` left
-  `abap2UI5/api` in the `auto_downport.yaml` `if:` guard (the workflow was
+  `abap2UI5/api` in the `auto-downport.yaml` `if:` guard (the workflow was
   *skipped*, not red, so the 702 branch silently stopped rebuilding), in the
   README badge URLs, in `package.json`, and in the repo URLs baked into
   `generate-coverage.mjs`/`generate-overview.mjs`. A skipped workflow shows no
@@ -874,7 +947,7 @@ e2e gotchas in `e2e-debugging`, generator gotchas in `regenerate-artefacts`).
 - **A blocked protocol is not a blocked network** — this environment refuses
   `curl https://raw.githubusercontent.com/…` at the proxy, which reads like "no
   OpenUI5 source reachable". **`git clone https://github.com/SAP/openui5.git`
-  works**, and that is the transport the pipeline (`generate_result`,
+  works**, and that is the transport the pipeline (`generate-result`,
   `scaffold`, the metadata refresh) uses anyway. Before declaring a task
   blocked on network access, try the transport the tooling itself uses.
 - **A code change to a `checked` port invalidates the check** — `checked`
@@ -897,6 +970,16 @@ e2e gotchas in `e2e-debugging`, generator gotchas in `regenerate-artefacts`).
   port's mock data — the porting recipe (`port-a-sample`) still requires the
   full row set; it is about text that is never rendered from the model.
 
+<!-- The section below is SHARED. Its source is
+     abap2UI5/abap2UI5 .github/shared/agents-metadata.md - change it THERE
+     first, or the change is drift. abap2UI5's `npm run check:shared`
+     compares this section against the source, from the heading down to the
+     next `##`; anything above this comment is this repository's own.
+
+     This repository adds one subsection the others do not have,
+     `### In this repository`, declared in the gate's METADATA_EXTENSIONS.
+     It is cut out before the comparison, so it may say anything - but its
+     heading text must stay exactly that, or the gate fails by name. -->
 ## Metadata: what goes on the class, and what goes beside it
 
 Shared across `abap2UI5/samples`, `abap2UI5/samples-controls` and

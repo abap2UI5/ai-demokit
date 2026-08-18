@@ -7,8 +7,3 @@ one open backlog row.
 
 <!-- coverage:start -->
 <!-- coverage:end -->
-
-## Prompt
-
-<!-- prompt:start -->
-<!-- prompt:end -->

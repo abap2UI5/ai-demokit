@@ -66,7 +66,7 @@ each port's `meta/<class>.json`. Per batch:
    (structural diff / pattern lint), style → convention update, new technique →
    CAPABILITIES row, framework limitation → an item in the stock
    (`backlog/items/<id>.md` in `abap2UI5/abap2UI5`, one file per request). Corrected ports become `checked`; the journal
-   entry goes into STATUS-history.md in the same change (the STATUS.md state
+   entry goes into docs/history.md in the same change (the STATUS.md state
    block regenerates itself via generate-status.mjs).
 5. **Regression probe** (every few batches) — re-generate a handful of
    `checked` reference ports plus the hold-out set from scratch with the current setup
@@ -229,10 +229,10 @@ looped controls. Values are not compared — that stays with review/live checks.
   numbers: 21/25 CI-green first try, 4 undeclared structural diffs,
   0 genuine render failures, 6 MAJOR / 5 MINOR review findings across
   3 root causes) lives in
-  [`probes/holdout-2026-07-19.md`](probes/holdout-2026-07-19.md). Repeat
-  the protocol identically for every future probe and compare against that
-  file — probe #2 (2026-07-26) is in
-  [`probes/holdout-2026-07-26.md`](probes/holdout-2026-07-26.md).
+  the journal, under "Hold-out regeneration probe #1 (2026-07-19)"
+  ([docs/history.md](docs/history.md)). Repeat the protocol identically for
+  every future probe and compare against that section — probe #2 (2026-07-26)
+  is the "Hold-out probe #2" section of the same file.
 - **Regeneration diff:** re-run old ports with the improved setup and diff
   against their checked version.
 

@@ -14,9 +14,19 @@
   //
   // The render gate is OFF and cannot be turned on: it serves the OpenUI5
   // runtime, and the whole point of this folder is controls that ship with
-  // SAPUI5 only (sap.gantt, sap.ui.vbm, sap.suite.*, sap.ndc, sap.ui.comp).
-  // There is no OpenUI5 build that could load them. --distribution sapui5 is
-  // what keeps sapui5-only-control quiet for the same reason.
+  // SAPUI5 only. There is no OpenUI5 build that could load them.
+  // --distribution sapui5 is what keeps sapui5-only-control quiet for the same
+  // reason.
+  //
+  // What is actually in here (2026-08-18): sap.gantt, sap.ndc, sap.suite.*,
+  // sap.ui.vbm and sap.viz - fourteen classes, all of them pure client-side
+  // controls that need nothing from the system but the SAPUI5 runtime.
+  // sap.ui.comp is NOT in scope here and this comment used to claim it was:
+  // a Smart Control reads its columns, its filters and its value help from
+  // OData metadata, so the sample is only a sample with a service behind it.
+  // Those live in abap2UI5/samples-stack (src/02, "Smart Controls"). The line
+  // is AGENTS section 3: needs a system artefact or OData metadata ->
+  // samples-stack; renders from a bound ABAP table alone -> src/03 here.
   "$schema": "./node_modules/@abap2ui5/linter/data/abap2ui5lint.schema.json",
 
   "paths": ["src/03"],
