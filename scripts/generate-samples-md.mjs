@@ -14,7 +14,7 @@
  *
  * Since the ports carry `" @keywords` and `" @summary`, the catalogue can be
  * written from the classes themselves - which is the point: the same two lines
- * feed this page, the overview app's search box and abap2UI5/ai-mcp, so none
+ * feed this page, the overview app's search box and abap2UI5/mcp-server, so none
  * of the three can say something the class does not.
  *
  * The row shape is deliberately IDENTICAL to abap2UI5/samples and
@@ -24,7 +24,7 @@
  *     <br>the summary sentence
  *     <br><sub>the search terms</sub>
  *
- * One parser reads all three catalogues (ai-mcp's `examples` tool), and a
+ * One parser reads all three catalogues (mcp-server's `examples` tool), and a
  * reader who has seen one page can read the other two. A change to the shape
  * here is a change to a contract, not to a layout.
  *

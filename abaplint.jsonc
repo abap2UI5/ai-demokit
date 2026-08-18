@@ -1,8 +1,8 @@
 {
   "global": {
     "files": "/src/**/*.*",
-    // src/zz_dev is the gitignored dev sandbox the ai-mcp server deploys into
-    // (github.com/abap2UI5/ai-mcp) - it is linted separately with a relaxed
+    // src/zz_dev is the gitignored dev sandbox the MCP server deploys into
+    // (github.com/abap2UI5/mcp-server) - it is linted separately with a relaxed
     // object_naming via the server's deploy_app lint step
     "exclude": ["zz_dev"]
   },

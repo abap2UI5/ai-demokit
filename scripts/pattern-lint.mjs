@@ -272,7 +272,7 @@ for (const key of BASELINE) {
 // It fell a rename behind once: the ports moved from z2ui5_cl_ai_xml to
 // z2ui5_cl_ui5_view_builder and its open( )/leaf( )/shut( ) became
 // ele( )/tag( )/end( ), but the prompt kept teaching the old three — and it
-// is not only read here, ai-mcp serves it to agents as `generation_rules`
+// is not only read here, mcp-server serves it to agents as `generation_rules`
 // (see check-mcp-contract.mjs). Every port generated from it would have been
 // written against methods that do not exist, and nothing said so.
 const PROMPT = path.join(ROOT, 'scripts', 'generation-prompt.txt');
@@ -285,7 +285,7 @@ if (fs.existsSync(PROMPT)) {
     const re = new RegExp(`\\b${verb}\\s*\\(`, 'g');
     for (const m of prompt.matchAll(re)) {
       console.log(`ERROR ${rel}:${lineOf(prompt, m.index)} [prompt-builder-verb] ${verb}( ) is not a method of z2ui5_cl_ui5_view_builder`);
-      console.log('      the builder is ele( ) / tag( ) / a( ) / end( ) — the prompt is also served to agents as ai-mcp generation_rules');
+      console.log('      the builder is ele( ) / tag( ) / a( ) / end( ) — the prompt is also served to agents as mcp-server generation_rules');
       errors++;
     }
   }

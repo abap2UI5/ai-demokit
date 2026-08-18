@@ -480,7 +480,7 @@ readme = readme.replace(new RegExp(`${START}[\\s\\S]*?${END}`), () => block);
 // The generation prompt is NOT spliced into the README any more (2026-08-18):
 // a ~120-line agent prompt in the public README of a learning repository put
 // the pipeline's internals where a reader looks for the samples. It lives in
-// scripts/generation-prompt.txt alone - which is also what abap2UI5/ai-mcp
+// scripts/generation-prompt.txt alone - which is also what abap2UI5/mcp-server
 // serves as its `generation_rules` rulebook, so the file itself must not go
 // away. The README links it; AGENTS.md §5 says when to change it, and the
 // port-a-sample guide stays the authoritative long form.

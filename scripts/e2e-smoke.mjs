@@ -109,7 +109,7 @@ function resolveLocal(pathname) {
   return null;
 }
 
-// benign-noise contract shared with the ai-mcp server — see lib-smoke.mjs
+// benign-noise contract shared with the MCP server — see lib-smoke.mjs
 import { benign } from './lib-smoke.mjs';
 
 function startBackend() {

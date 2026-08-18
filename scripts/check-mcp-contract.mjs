@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /*
- * check-mcp-contract — the files and shapes the ai-mcp server consumes.
+ * check-mcp-contract — the files and shapes the MCP server consumes.
  *
- * The MCP server (github.com/abap2UI5/ai-mcp) reaches into this checkout by
+ * The MCP server (github.com/abap2UI5/mcp-server) reaches into this checkout by
  * file path: it spawns scripts, reads the capability map and patches the
  * lint config. Those names are therefore a public API of this repo — this
  * check makes renaming one of them fail here, where the rename happens,
@@ -19,16 +19,16 @@ const need = (rel, why) => {
   if (!fs.existsSync(path.join(ROOT, rel))) fail.push(`${rel} missing — ${why}`);
 };
 
-// spawned / read directly by ai-mcp (lib/repos.mjs probe, server.mjs, lib/runtime.mjs)
-need('scripts/e2e-build.mjs', 'ai-mcp build_backend spawns it (and probes the checkout with it)');
-need('scripts/scope-of.mjs', 'ai-mcp scope_of spawns it');
-need('scripts/generation-prompt.txt', 'ai-mcp generation_rules reads it');
-need('scripts/lib-smoke.mjs', 'ai-mcp run_app imports the BENIGN noise contract from it');
-need('web/ci/patch_open_abap_xml.mjs', 'ai-mcp incremental build (and scripts/e2e-build.mjs) execute it');
-need('abaplint.jsonc', 'ai-mcp deploy_app derives its dev lint config from it');
-need('CAPABILITIES.md', 'ai-mcp capabilities parses it on every query');
+// spawned / read directly by mcp-server (lib/repos.mjs probe, server.mjs, lib/runtime.mjs)
+need('scripts/e2e-build.mjs', 'mcp-server build_backend spawns it (and probes the checkout with it)');
+need('scripts/scope-of.mjs', 'mcp-server scope_of spawns it');
+need('scripts/generation-prompt.txt', 'mcp-server generation_rules reads it');
+need('scripts/lib-smoke.mjs', 'mcp-server run_app imports the BENIGN noise contract from it');
+need('web/ci/patch_open_abap_xml.mjs', 'mcp-server incremental build (and scripts/e2e-build.mjs) execute it');
+need('abaplint.jsonc', 'mcp-server deploy_app derives its dev lint config from it');
+need('CAPABILITIES.md', 'mcp-server capabilities parses it on every query');
 
-// the CAPABILITIES.md table shape the ai-mcp parser expects: 4-column rows
+// the CAPABILITIES.md table shape the mcp-server parser expects: 4-column rows
 // whose status cell carries one of the legend marks
 const caps = fs.readFileSync(path.join(ROOT, 'CAPABILITIES.md'), 'utf8');
 const MARKS = ['\u{2705}', '\u{1F536}', '\u{1F9EA}', '\u{274C}'];
@@ -37,13 +37,13 @@ const rows = caps
   .filter((l) => /^\|/.test(l) && MARKS.some((m) => l.includes(m)))
   .filter((l) => l.split('|').length >= 5);
 if (rows.length < 20) {
-  fail.push(`CAPABILITIES.md: only ${rows.length} 4-column marked table rows found (expected 20+) — did the table shape change? ai-mcp parses it`);
+  fail.push(`CAPABILITIES.md: only ${rows.length} 4-column marked table rows found (expected 20+) — did the table shape change? mcp-server parses it`);
 }
 
 // lib-smoke must actually export the list run_app imports
 const smoke = await import(pathToFileURL(path.join(ROOT, 'scripts', 'lib-smoke.mjs')).href);
 if (!Array.isArray(smoke.BENIGN) || !smoke.BENIGN.length) {
-  fail.push('scripts/lib-smoke.mjs: BENIGN export missing or empty — ai-mcp run_app imports it');
+  fail.push('scripts/lib-smoke.mjs: BENIGN export missing or empty — mcp-server run_app imports it');
 }
 
 if (fail.length) {

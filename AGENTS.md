@@ -537,7 +537,7 @@ between `<!-- prompt:start/end -->` markers; that block was removed on
 a reader opens a learning repository's README for. The README links the file
 instead.
 
-**The file itself must not go away.** abap2UI5/ai-mcp serves it verbatim as its
+**The file itself must not go away.** abap2UI5/mcp-server serves it verbatim as its
 `generation_rules` rulebook (`lib/guide.mjs` reads
 `scripts/generation-prompt.txt`, and `scripts/check-mcp-contract.mjs` gates
 that it is there), so deleting or renaming it breaks a consumer outside this
@@ -766,7 +766,7 @@ grouped by UI5 library, for somebody asking "is there a port for X".
 `SAMPLES.md` is written from the classes (`DESCRIPT`, `" @summary`,
 `" @keywords`), and its **row shape is a contract, not a layout**:
 `abap2UI5/samples` and `abap2UI5/samples-stack` render the identical shape and
-one parser reads all three (`abap2UI5/ai-mcp`, the `examples` tool). Change it
+one parser reads all three (`abap2UI5/mcp-server`, the `examples` tool). Change it
 here and you change it for them.
 
 ---
