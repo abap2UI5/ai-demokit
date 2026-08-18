@@ -623,10 +623,14 @@ at the bump PR, where the debt decision belongs.
 ```bash
 npm run gates        # full offline gate set, fail-fast; needs NO node_modules and no network
 ```
-It chains: pattern-lint → validate-meta → structural-diff → data-fidelity →
-regenerate overview/coverage/status →
-`git diff --exit-code -- src README.md api.md STATUS.md` (regenerated
-artefacts must leave the tree clean, exactly as the `meta_valid` CI job checks).
+It chains: chain-format → check-prose-names → pattern-lint → check-pins →
+validate-meta → structural-diff → data-fidelity → check-mcp-contract →
+regenerate overview/coverage/status/SAMPLES.md →
+`git diff --exit-code -- src README.md api.md STATUS.md SAMPLES.md`
+(regenerated artefacts must leave the tree clean, exactly as the `meta_valid`
+CI job checks). **Every step here has a CI job with the same name** — the
+chain and the workflows are one list, and a step that runs only locally is a
+gate nobody enforces (chain-format was exactly that until 2026-08-18).
 
 **Before every PR, additionally:**
 ```bash

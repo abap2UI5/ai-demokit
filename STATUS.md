@@ -29,6 +29,20 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
 
 ## Open findings (backlog)
 
+- [ ] **CAPABILITIES.md names nine classes under a prefix no repository uses
+  any more.** The `prose_names` gate (added 2026-08-18) checks README,
+  AGENTS.md, CLAUDE.md, CONTRIBUTING.md, TRAINING.md and this file — the same
+  six files it checks in samples and samples-stack, since the script is
+  byte-identical in all three. CAPABILITIES.md is deliberately outside that
+  list, and a one-off run with it added reports nine evidence citations still
+  written as `z2ui5_cl_demo_app_<n>`, the pre-rename spelling of
+  abap2UI5/samples' classes. Five of them (450, 453, 454, 455, 456) are
+  `z2ui5_cl_smp_app_<n>` in samples today and seven more (313, 319, 475-479)
+  moved to samples-stack as `z2ui5_cl_smps_app_<n>`; four (038, 172, 369, 458)
+  resolve to no class in either repository and need the maintainer to say what
+  they became. Fixing the resolvable ones is mechanical; widening the shared
+  script's file list is not — it would have to change in all three
+  repositories at once.
 - [ ] **Two open-abap defects are patched in the build and open upstream.**
   Both are written up in full — analysis, emitted JS, proposed change — in
   `abap2UI5/abap2UI5`'s
