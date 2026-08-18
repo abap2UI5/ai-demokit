@@ -3,7 +3,7 @@
 
 # The sample catalogue
 
-Every port in this repository — 430 of them — with what it shows and a
+Every port in this repository — 434 of them — with what it shows and a
 link to its source. This is the [overview app](src/z2ui5_cl_smpc_app_000.clas.abap)
 as a page you can read here, before installing anything.
 
@@ -31,7 +31,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 
 ## The ports — by UI5 library
 
-[sap.m](#sapm) · [sap.uxap](#sapuxap) · [sap.ui.layout.form](#sapuilayoutform) · [sap.ui.layout](#sapuilayout) · [sap.ui.table](#sapuitable) · [sap.ui.unified](#sapuiunified) · [sap.f](#sapf) · [sap.tnt](#saptnt) · [sap.ui.core](#sapuicore) · [sap.ui.layout.cssgrid](#sapuilayoutcssgrid) · [sap.ui.model.type](#sapuimodeltype) · [sap.m.semantic](#sapmsemantic) · [sap.ui.integration.widgets](#sapuiintegrationwidgets) · [sap.ui.codeeditor](#sapuicodeeditor) · [sap.ui.model](#sapuimodel) · [sap.f.semantic](#sapfsemantic) · [sap.m.upload](#sapmupload) · [sap.ui.core.hyphenation](#sapuicorehyphenation) · [sap.ui.core.theming](#sapuicoretheming) · [sap.ui.integration](#sapuiintegration)
+[sap.m](#sapm) · [sap.uxap](#sapuxap) · [sap.ui.layout.form](#sapuilayoutform) · [sap.ui.layout](#sapuilayout) · [sap.ui.table](#sapuitable) · [sap.ui.unified](#sapuiunified) · [sap.f](#sapf) · [sap.tnt](#saptnt) · [sap.ui.core](#sapuicore) · [sap.ui.layout.cssgrid](#sapuilayoutcssgrid) · [sap.ui.model.type](#sapuimodeltype) · [MCP dev app](#mcp-dev-app) · [sap.m.semantic](#sapmsemantic) · [sap.ui.integration.widgets](#sapuiintegrationwidgets) · [sap.ui.codeeditor](#sapuicodeeditor) · [sap.ui.model](#sapuimodel) · [sap.f.semantic](#sapfsemantic) · [sap.m.upload](#sapmupload) · [sap.ui.core.hyphenation](#sapuicorehyphenation) · [sap.ui.core.theming](#sapuicoretheming) · [sap.ui.integration](#sapuiintegration)
 
 ### sap.m
 
@@ -510,6 +510,17 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.ui.core**<br>This sample explains the formatting options of the Date type with the date being available as date object.<br><sub>date sap.ui.model.type typedateasdate label datepicker text</sub> | [`Z2UI5_CL_SMPC_APP_282`](src/01/02/z2ui5_cl_smpc_app_282.clas.abap) |
 | **sap.ui.core**<br>Formats and parses both integer and decimal digits.<br><sub>float sap.ui.model.type typefloat label input text</sub> | [`Z2UI5_CL_SMPC_APP_179`](src/02/02/z2ui5_cl_smpc_app_179.clas.abap) |
 | **sap.ui.core**<br>This sample explains the formatting options of the FileSize type.<br><sub>filesize file size sap.ui.model.type typefilesize label input text</sub> | [`Z2UI5_CL_SMPC_APP_180`](src/02/02/z2ui5_cl_smpc_app_180.clas.abap) |
+
+### MCP dev app
+
+4 port(s).
+
+| Sample | Class |
+|---|---|
+| **MCP dev app**<br> | [`YCL_APP`](src/zz_dev/ycl_app.clas.abap) |
+| **MCP dev app**<br> | [`Z2UI5_CL_MY_APP`](src/zz_dev/z2ui5_cl_my_app.clas.abap) |
+| **MCP dev app**<br> | [`ZCL_APP_001`](src/zz_dev/zcl_app_001.clas.abap) |
+| **MCP dev app**<br> | [`ZCX_ERROR`](src/zz_dev/zcx_error.clas.abap) |
 
 ### sap.m.semantic
 
