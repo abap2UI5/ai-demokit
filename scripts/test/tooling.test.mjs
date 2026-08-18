@@ -47,6 +47,10 @@ function makeFixtureRoot() {
   for (const s of SCRIPTS) {
     fs.copyFileSync(path.join(REPO, 'scripts', s), path.join(root, 'scripts', s));
   }
+  /* The scripts under test import from scripts/lib/, so the fixture needs it
+   * too — copying only the entry point made them fail to RESOLVE, which the
+   * assertions then reported as wrong output rather than as a missing file. */
+  fs.cpSync(path.join(REPO, 'scripts', 'lib'), path.join(root, 'scripts', 'lib'), { recursive: true });
   return root;
 }
 

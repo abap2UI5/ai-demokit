@@ -32,6 +32,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { isSkippedDir } from './lib/src-tree.mjs';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'src');
@@ -213,6 +214,7 @@ function grepLines(re) {
 function walk(dir, ext = '.clas.abap', out = []) {
   for (const name of fs.readdirSync(dir)) {
     const full = path.join(dir, name);
+    if (isSkippedDir(name)) continue;
     if (fs.statSync(full).isDirectory()) walk(full, ext, out);
     else if (full.endsWith(ext)) out.push(full);
   }

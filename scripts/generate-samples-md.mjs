@@ -34,16 +34,27 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { readDescript } from './lib/descript.mjs';
+import { isSkippedDir } from './lib/src-tree.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'SAMPLES.md');
 const CHECK = process.argv.includes('--check');
 
-const cell = (s) => String(s || '').replace(/\|/g, '\\|').trim();
+/* `|` ends a table cell, and `<` opens a tag: the DESCRIPT is read unescaped
+ * now (scripts/lib/descript.mjs), so a description containing `<` would reach
+ * the page as markup rather than as text. No port's text contains one today —
+ * this costs nothing and stops the next one being a rendering bug. */
+const cell = (s) => String(s || '')
+  .replace(/\|/g, '\\|')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .trim();
 
 const walk = (dir, out = []) => {
   for (const name of fs.readdirSync(dir).sort()) {
     const full = path.join(dir, name);
+    if (isSkippedDir(name)) continue;
     if (fs.statSync(full).isDirectory()) walk(full, out);
     else if (full.endsWith('.clas.abap')) out.push(full);
   }
@@ -58,10 +69,7 @@ function scan() {
     const source = fs.readFileSync(file, 'utf8');
     if (!/INTERFACES\s+z2ui5_if_app\s*\./i.test(source)) continue;
 
-    const xml = file.replace(/\.clas\.abap$/, '.clas.xml');
-    const descript = fs.existsSync(xml)
-      ? (fs.readFileSync(xml, 'utf8').match(/<DESCRIPT>([^<]*)<\/DESCRIPT>/) || [, ''])[1]
-      : '';
+    const descript = readDescript(file);
     const cut = descript.indexOf(' - ');
     const rel = path.relative(ROOT, file).split(path.sep).join('/');
     const metaPath = path.join(ROOT, 'meta', `${cls}.json`);

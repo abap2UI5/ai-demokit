@@ -52,6 +52,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { isSkippedDir } from './lib/src-tree.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CHECK = process.argv.includes('--check');
@@ -113,6 +114,7 @@ function fit(text, budget = BUDGET) {
 const walk = (dir, out = []) => {
   for (const name of fs.readdirSync(dir)) {
     const full = path.join(dir, name);
+    if (isSkippedDir(name)) continue;
     if (fs.statSync(full).isDirectory()) walk(full, out);
     else if (full.endsWith('.clas.abap')) out.push(full);
   }
