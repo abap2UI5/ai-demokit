@@ -12,7 +12,7 @@
  * every consumer that just parses the file. Both actually happened: on
  * 2026-08-10 the 702 config carried the branch of the already-merged-and-
  * deleted `ai-demokit-next-steps` branch next to its own `"branch": "702"`
- * (STATUS-history). This check makes that class of drift fail offline, in
+ * (docs/history.md). This check makes that class of drift fail offline, in
  * `npm run gates`, where the edit happens.
  *
  * Policy:

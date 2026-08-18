@@ -47,7 +47,7 @@ reads the files directly. **Read the matching guide BEFORE starting the task**
 | Run or debug the e2e smoke (Playwright) | `.claude/skills/e2e-debugging/SKILL.md` |
 
 **Large files — grep them, never read them whole:** `api.md` (~316 KB
-generated table), `STATUS-history.md` (~228 KB journal), `CAPABILITIES.md`
+generated table), `docs/history.md` (~330 KB journal), `CAPABILITIES.md`
 (~45 KB — grep for the feature row),
 `scripts/generate-overview.mjs` (~58 KB),
 `src/z2ui5_cl_smpc_app_000.clas.abap` (generated). (The e2e
@@ -147,7 +147,7 @@ port here is still the reviewed artifact; it just no longer moves.
 
 ---
 
-## 2. Layout — three trees in one branch
+## 2. Layout — two trees in one branch
 
 Everything lives on the working branch, in separate top-level trees:
 
@@ -155,30 +155,34 @@ Everything lives on the working branch, in separate top-level trees:
 |---------|---------|
 | `src/`  | The generated abap2UI5 ports (`*.clas.abap`) — the abapGit project (§3). |
 | `ui5/`  | The original UI5 demo kit templates (JS/XML/manifest), one folder per ported sample (§4). |
-| `todo/` | Staging area for imported abap2UI5 samples — **empty**, holds only the closed triage record. |
 
 Keep them separate: only `src/` is the abapGit / abaplint scope; `ui5/` is
-plain JS/XML held for reference and to feed the generator.
+plain JS/XML held for reference and to feed the generator. Everything else at
+the root is documentation or tooling, not a tree the pipeline reads: `meta/`
+(one sidecar per port, plus the e2e interaction modules), `scripts/` (the
+generators and gates), `web/` (the GitHub Pages build) and `docs/` (the
+journal and the upstream-request record).
 
-**`todo/` is outside `src/` on purpose** and is **exhausted**: the 53 samples
-imported from [abap2UI5/samples](https://github.com/abap2UI5/samples) on
+**There was a third tree, `todo/`, and it is gone** — deleted 2026-08-12
+(`f9afe94`), so `git ls-files` shows nothing under it. It was the staging area
+for samples imported from
+[abap2UI5/samples](https://github.com/abap2UI5/samples): 53 of them arrived on
 2026-08-12 (the `src/00/02` "restricted" set and the `src/01/03` "Control
-Library" set) were all triaged the same day — 1 rebuilt as a port
+Library" set) and were all triaged the same day — 1 rebuilt as a port
 (`z2ui5_cl_smpc_app_403`), 14 collected in `src/03` (the SAPUI5-only ones), 38
-dropped. Only `todo/README.md` is left; it carries
-the full decision table plus the re-import recipe, and stays so the same 53
-classes are not re-imported and re-analysed. Nothing there was ever a port: no
-`meta/` sidecar, no `ui5/` template, and no gate walks it
-(`STARTING_FOLDER=/src/`, abaplint globs `/src/**`), so nothing there could reach
-a system.
+dropped. Nothing there was ever a port: no `meta/` sidecar, no `ui5/` template,
+and no gate walked it (`STARTING_FOLDER=/src/`, abaplint globs `/src/**`), so
+nothing there could reach a system. The decision table it carried is in the
+journal ([docs/history.md](docs/history.md), 2026-08-12).
 
-Should samples be imported again, the same rules apply. A file leaves `todo/` by
-being **rebuilt** as a `z2ui5_cl_smpc_app_<n>` port under
+Should samples be imported again, stage them wherever is convenient outside
+`src/` and apply the same rules. A file leaves staging by being **rebuilt** as
+a `z2ui5_cl_smpc_app_<n>` port under
 `src/<category>/<library>/`, never by being moved: the samples are built on the
 framework's `z2ui5_cl_xml_view`, ports use `z2ui5_cl_ui5_view_builder` (§5), and a port is
 a 1:1 rebuild of the *demo kit original*, not of another repo's interpretation of
 it. Delete a file there once its decision is made — ported, or dropped with the
-reason recorded in `todo/README.md`. Three traps that decided rows last time: the
+reason recorded in the journal. Three traps that decided rows last time: the
 entity in `<DESCRIPT>` is the control the class was *filed under*, not
 necessarily the sample it *rebuilds* (read the body of every class whose URL
 names only an entity — that is where the one take-over was hiding); a
@@ -471,9 +475,12 @@ source of truth:
   This used to be a `pr/` folder here; the open requests moved on 2026-08-17
   because a request about the framework belongs in the framework's repository,
   and because the same folder was holding requests for three different
-  upstreams with nothing distinguishing them. What is left in `pr/README.md` is
-  this repository's own record of what was shipped and what was declined —
-  which is what `CAPABILITIES.md` cites.
+  upstreams with nothing distinguishing them. What was left of it is this
+  repository's own record of what was shipped and what was declined — the two
+  tables `CAPABILITIES.md` cites by request id (`pr/<id>`). They live in
+  **`docs/upstream-requests.md`** since 2026-08-18; the empty directory named
+  `pr/` was deleted, because to anyone arriving at the repository root it read
+  as "pull requests".
 - Every port must pass all three CI checks (§6).
 
 
@@ -493,11 +500,20 @@ consult it whenever the original does something the recipe does not cover 1:1.
 ### Generation prompt
 
 A condensed version of the porting recipe, phrased as a porting task, lives in
-**`scripts/generation-prompt.txt`** — the single source; `generate-coverage.mjs`
-splices it into `README.md` between the `<!-- prompt:start/end -->` markers
-(never edit the README block by hand). When the recipe changes in substance
-(the `port-a-sample` guide), update the prompt file in the same change — that
-guide is the authoritative long form.
+**`scripts/generation-prompt.txt`** — the single source, and the only place it
+is written out. `generate-coverage.mjs` used to splice it into `README.md`
+between `<!-- prompt:start/end -->` markers; that block was removed on
+2026-08-18, because ~120 lines of agent instructions under a fold is not what
+a reader opens a learning repository's README for. The README links the file
+instead.
+
+**The file itself must not go away.** abap2UI5/ai-mcp serves it verbatim as its
+`generation_rules` rulebook (`lib/guide.mjs` reads
+`scripts/generation-prompt.txt`, and `scripts/check-mcp-contract.mjs` gates
+that it is there), so deleting or renaming it breaks a consumer outside this
+repository. When the recipe changes in substance (the `port-a-sample` guide),
+update the prompt file in the same change — that guide is the authoritative
+long form.
 
 ---
 
@@ -803,7 +819,7 @@ How to record it:
   keeping it lean is what keeps it loadable in every session.
 - Write the **rule**, not the war story: one line on what to do / avoid, and a
   short why. Reference the app or class where it bit us, so it can be checked.
-  The full story, if worth keeping, goes in the `STATUS-history.md` journal.
+  The full story, if worth keeping, goes in the `docs/history.md` journal.
 - Keep it deduplicated — extend the existing bullet rather than adding a second.
 
 

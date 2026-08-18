@@ -14,8 +14,6 @@
 
 # abap2UI5 — samples-controls
 
-_Last generated: <!-- last-run -->2026-08-17 03:53 UTC<!-- /last-run -->_
-
 **Learn how to use every UI5 control in ABAP — the UI5 Demo Kit rebuilt with
 abap2UI5.**
 
@@ -86,129 +84,23 @@ controls are listed as out of scope. The pipeline:
 Reviewed, curated samples graduate to the hand-maintained
 [abap2UI5/samples](https://github.com/abap2UI5/samples) repository.
 
-<details>
-<summary><b>Generation prompt</b> (UI5 sample → abap2UI5 app)</summary>
+The **generation prompt** the porting agent is given — the condensed form of
+the porting recipe — is `scripts/generation-prompt.txt`. It is the single
+source: AGENTS.md §5 says when to change it, the `port-a-sample` guide is its
+authoritative long form, and the abap2UI5 [ai-mcp](https://github.com/abap2UI5/ai-mcp)
+server serves that same file as its `generation_rules` rulebook.
 
-<!-- prompt:start -->
-```
-You are porting one official UI5 demo kit sample to abap2UI5.
-
-Input:  the sample's original files (Component.js, *.view.xml, controller,
-        manifest.json) from the OpenUI5 checkout.
-Output: one ABAP class z2ui5_cl_smpc_app_<n> implementing z2ui5_if_app, that
-        rebuilds the sample's UI and behaviour 1:1.
-
-Rules:
-- Build the view with the generic builder z2ui5_cl_ui5_view_builder, translating the
-  sample's XML 1:1. Four verbs, and they are what the corpus is written in:
-    ele( )  add a child element and DESCEND into it - a container
-    tag( )  add a child element and STAY here - a leaf
-    a( )    set ONE attribute on the element the chain points at
-    end( )  ascend to the parent
-  a( ) applies to the element the chain is POINTING AT - the child just added
-  by ele( )/tag( ), or the node itself while it has no children yet - so an
-  a( ) always follows the control it belongs to, and an element gets its
-  attributes BEFORE its first child (once it has one, a( ) can no longer
-  reach it). v is any string expression (literal, a client->_bind/_event
-  result, a |...| string template). factory( ) returns an empty root: open
-  the mvc:View with ele( n = `View` ns = `mvc` ) and declare its xmlns
-  namespaces yourself. A trailing end( ) may be omitted - stringify( )
-  renders from the root wherever the chain stopped - and the whole view ends
-  in a single ).
-  Blank lines carry the structure: one after a control's last a( ) before its
-  first child, one before a run of tag( )s and none between them, one before
-  every end( ). None between a control and its own a( )s, none after a bare
-  ele( ) whose first child is another ele( ), none after an end( ) or between
-  two of them.
-  An aggregation carries the same namespace as its XML tag (its parent
-  control's): <m:content> under a Page is ele( n = `content` ns = `m` ),
-  a default-namespace <columns> inside an sap.ui.table.Table is ele( `columns` ).
-  Braces { } inside a |...| template are ALWAYS escaped \{ \} - an unescaped {
-  is read as a binding by the XMLView parser and crashes view creation.
-  Booleans: literal v = `true`/`false`, or b = flag (instead of v) when fed
-  from an ABAP boolean variable - the builder renders it as true/false itself.
-- BEFORE declaring any sample feature inexpressible, check CAPABILITIES.md -
-  the map of what abap2UI5 can express, each entry backed by a proving port.
-  Never improvise around a feature it marks expressible.
-- Structure z2ui5_if_app~main as a dispatcher:
-    me->client = client.
-    IF client->check_on_init( ).
-      model_init( ).
-      view_display( ).
-    ELSEIF client->check_on_navigated( ).
-      view_display( ).
-    ELSEIF client->check_on_event( ).
-      on_event( ).
-    ENDIF.
-  Add model_init / on_event only when the app actually has data / events.
-  The check_on_navigated branch is NOT optional and stays even in a static
-  app with no data and no events: check_on_init means "this app instance
-  never ran", so it is false when the overview app is re-entered, when a
-  z2ui5_cl_pop_* value help hands control back, or when a bookmarked state is
-  restored. Those roundtrips fire check_on_navigated alone, and without the
-  branch the browser silently keeps showing the previous app's view.
-  z2ui5_if_app~main is always the FIRST method in the implementation; the
-  remaining methods follow in the order they are called from main, EXCEPT
-  model_init which always goes LAST (after every other method, and declared
-  last in the DEFINITION too) - its large mock-data VALUE #( ) block must not
-  interrupt the reading flow of the dispatcher/view/event methods.
-- Always the simplest possible notation: omit parameters that equal the
-  default - get_event_arg( ) not get_event_arg( 1 ) (index only for 2+).
-- Move the sample's JSON model data into ABAP (VALUE #( ... )) and bind it
-  with client->_bind (two-way; the former _bind_edit is obsolete - always use
-  _bind). Absent JSON properties must not serialize as empty strings: `""`
-  crashes enum-typed properties and overrides property defaults where the
-  original's undefined picked the default - fill the UI5 default explicitly
-  or split the aggregation into per-shape templates.
-- abap2UI5 serves ONE default model - there are no named models. A named-model
-  binding ({ui>/rowMode}, {img>/x}) is folded into the default model: drop the
-  prefix and bind the field directly (client->_bind( rowmode )); structural-diff
-  matches on the last path segment. A typed/complex binding is kept as a raw
-  binding-info string, braces escaped: |\{ path: 'Q', type:
-  'sap.ui.model.type.Integer' \}| (same for Date/Currency parts and sorter) -
-  it passes through to XMLView.create unmangled. See the port-a-sample guide (.claude/skills/port-a-sample/SKILL.md)
-  "Idiom cheat-sheet".
-- Frontend actions: a control method LISTED in CONTROL_METHODS
-  (FrontendAction.js) carries explicit arg kinds and silently drops every
-  argument beyond them - verify the kinds before a parametrized call. An
-  UNLISTED public method also runs unless it matches the deny regex
-  (destroy/bind/attach/setModel/...); a denylisted or argument-dropping
-  need is a declared deviation plus a pr/ request, never a LIVE_TEST hope.
-  popover_display imports xml + by_id (the XML parameter is `xml`, not
-  `val`).
-- Map controller event handlers to check_on_event( ) branches. To pass a value
-  into an event, use the `$`-prefixed form in t_arg (a model column as
-  `${COL}`, the event object as `$event.oSource.sId` / `${$source>/text}`) and
-  read it back with get_event_arg( ) - a bare `{COL}` (the attribute
-  property-binding form) is NOT resolved there. Transport real event/source
-  values this way instead of faking a static placeholder.
-- The sample's CONTROL must exist since UI5 1.71 and not be deprecated
-  (out-of-scope samples are never ported). Members newer than 1.71 are KEPT
-  1:1 when the original uses them - declare each in the sidecar as a
-  POST_171 deviation naming the member (the property gate checks this).
-- Must pass abaplint for ABAP_STANDARD, ABAP_CLOUD and ABAP_702 (downport).
-- The class carries NO ABAP Doc header. Write the port's sidecar
-  meta/z2ui5_cl_smpc_app_<n>.json instead (sample, entity, file, batch, audit,
-  status, deviations) - see AGENTS.md section 5 and the port-a-sample guide; validate with
-  node scripts/validate-meta.mjs.
-- Any runtime asset URLs the sample uses (test-resources / resources images)
-  also point at the OpenUI5 host (sdk.openui5.org), never SAPUI5.
-- Leave the abapGit <DESCRIPT> as the scaffolder's `<library> - <sample name>`
-  default (e.g. `sap.f - GridListBoxContainerGrouping`); only improve the
-  trailing text to a human phrase when you know one. Don't agonize over
-  entity-vs-library (see AGENTS.md section 5 and the port-a-sample guide).
-- Follow all ABAP conventions in AGENTS.md.
-```
-<!-- prompt:end -->
-
-</details>
-
-Ports are filed by the sample's UI5 library — `src/01` (`sap.m`), `src/02`
-(`sap.ui.*`), `src/03` (`sap.uxap`), `src/04` (`sap.f`), `src/05` (`sap.tnt`)
-— one flat ABAP package per library; see AGENTS §3 for the folder table. The
-generation/review batch a port came from is recorded in its
-`meta/<class>.json`, not in the tree. The browser demo is built from
-[`web/`](web) and published by `deploy-web`; see [`web/README.md`](web/README.md).
+Ports are filed by **what a system needs to run them**, then by library:
+`src/01` (OpenUI5 ≤ 1.71 — the portable half), `src/02` (needs a UI5 runtime
+newer than 1.71) and, under each, one package per library (`01` = `sap.m`,
+`02` = `sap.ui.*`, `03` = `sap.uxap`, `04` = `sap.f`, `05` = `sap.tnt`).
+`src/03` is flat and is not ports at all: it collects hand-written samples for
+SAPUI5-only controls, which have no OpenUI5 original to rebuild against. Both
+levels are derived from the port's `meta/` sidecar, never chosen — see AGENTS
+§3 for the folder tables. The generation/review batch a port came from is
+recorded in its `meta/<class>.json`, not in the tree. The browser demo is
+built from [`web/`](web) and published by `deploy-web`; see
+[`web/README.md`](web/README.md).
 
 #### Repo map
 
@@ -218,11 +110,15 @@ generation/review batch a port came from is recorded in its
 | [`CAPABILITIES.md`](CAPABILITIES.md) | What abap2UI5 can express — each entry backed by a proving port or a source-verified trace |
 | [`TRAINING.md`](TRAINING.md) | The improvement loop: batches, quality ladder, reference repositories |
 | [`STATUS.md`](STATUS.md) | Generated point-in-time state + the open findings backlog |
-| [`STATUS-history.md`](STATUS-history.md) | The chronological journal (batches, probes, audits) |
+| [`E2E.md`](E2E.md) | How to run and debug the Playwright e2e smoke against the real transpiled backend |
 | [`SAMPLES.md`](SAMPLES.md) | The catalogue: every port with what it shows, grouped by UI5 library — the same page shape as [samples](https://github.com/abap2UI5/samples/blob/main/SAMPLES.md) and [samples-stack](https://github.com/abap2UI5/samples-stack/blob/main/SAMPLES.md) |
 | [`api.md`](api.md) | One row per demo kit sample: ported, backlog or out of scope |
 | [`meta/`](meta) | One sidecar per port — status, checked, typed deviations |
-| [`pr/`](pr) | The record of what porting asked the framework for — implemented and declined. Open requests moved to [`backlog/`](https://github.com/abap2UI5/abap2UI5/tree/main/backlog) in abap2UI5, where the whole ecosystem's upstream backlog lives |
+| [`ui5/`](ui5) | The archived original demo kit template of every ported sample, plus the scope/universe snapshots the coverage is computed from |
+| [`scripts/`](scripts) | The generators and the gates — one script per CI job, plus `generation-prompt.txt`, the porting agent's prompt |
+| [`web/`](web) | The GitHub Pages demo: framework and every port transpiled to run client-side |
+| [`docs/history.md`](docs/history.md) | The chronological journal — batches, probes, audits, one section per event |
+| [`docs/upstream-requests.md`](docs/upstream-requests.md) | The record of what porting asked the framework for — implemented and declined. Open requests live in [`backlog/`](https://github.com/abap2UI5/abap2UI5/tree/main/backlog) in abap2UI5, where the whole ecosystem's upstream backlog is |
 | [ai-mcp](https://github.com/abap2UI5/ai-mcp) | MCP server for AI coding agents — capability queries, view validation, deploy, headless run + screenshot on this repo's infrastructure (separate repository) |
 | [abap2UI5-linter](https://github.com/abap2UI5/linter) | The view gates as standalone CLI, library and GitHub Action — extracted from this repo and now used BY it (`scripts/view-gates.mjs`) |
 
@@ -311,3 +207,7 @@ samples — do not edit them by hand.
 #### Issues
 
 For bug reports or feature requests, please open an issue in the [abap2UI5 repository.](https://github.com/abap2UI5/abap2UI5/issues)
+
+---
+
+_Last generated: <!-- last-run -->2026-08-17 03:53 UTC<!-- /last-run -->_

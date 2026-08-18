@@ -11,7 +11,7 @@
  * hook regenerates + stages it on every commit, and the meta_valid CI job
  * fails a PR whose STATUS.md block is stale. The rest of STATUS.md (the open
  * findings backlog) stays hand-maintained; the journal lives in
- * STATUS-history.md.
+ * docs/history.md.
  *
  * Run:  node scripts/generate-status.mjs
  */

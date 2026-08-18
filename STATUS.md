@@ -5,7 +5,7 @@ by hand, `scripts/generate-status.mjs` regenerates it via the pre-commit hook
 and the `meta_valid` CI job fails a PR with a stale block) and the
 **hand-maintained** open-findings backlog below it. The chronological journal
 (batches, probes, audits — one section per event) moved to
-[STATUS-history.md](STATUS-history.md); **new journal entries go there**, in
+[docs/history.md](docs/history.md); **new journal entries go there**, in
 the same same-change discipline as AGENTS.md §10. For the process itself see
 TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 
@@ -52,7 +52,7 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   - `open-abap-xml-escaping` — `CALL TRANSFORMATION id … RESULT XML` writes
     character data unescaped, so any app whose model carries a `<` persists a
     draft its own `CL_IXML` cannot parse back (user report 2026-07-31 on the
-    Pages demo's overview; STATUS-history has the analysis). Both transpiled
+    Pages demo's overview; the journal has the analysis). Both transpiled
     builds transpile against a locally patched clone
     (`web/ci/patch_open_abap_xml.mjs`). **On merge:** drop the patch script,
     the two clone steps (`web/package.json` assemble, `scripts/e2e-build.mjs`)

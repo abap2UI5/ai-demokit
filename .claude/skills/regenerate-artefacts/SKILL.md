@@ -19,7 +19,7 @@ scripts.**
   out-of-scope ported samples), regenerated from `meta/` by
   `scripts/generate-status.mjs` so it can never drift from the corpus. The
   open-findings backlog below the block stays hand-maintained; the
-  chronological journal lives in `STATUS-history.md`.
+  chronological journal lives in `docs/history.md`.
 - **`api.md`** — ONE flat table, one row per UI5 demo kit sample, sorted
   module → control → sample. Columns: **Module** · **Control** (→ OpenUI5 API,
   ~~struck~~ when deprecated) · **Since** · **Deprecated** (deprecation version
