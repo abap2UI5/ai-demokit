@@ -2,7 +2,7 @@ name: e2e-nightly
 
 # Runs every port as the REAL app (transpiled abap2UI5 backend + headless
 # Chromium, scripts/e2e-build.mjs + e2e-smoke.mjs) — the heavy gate that the
-# fast PR `checks` deliberately skip (multi-minute transpile + browser).
+# fast PR gates deliberately skip (multi-minute transpile + browser).
 # Nightly so LIVE_TEST-class regressions surface within a day instead of at
 # the next release: every INTERACTIONS entry that stays green here is a
 # LIVE_TEST candidate for closure (STATUS.md open findings).

@@ -293,7 +293,7 @@ is expressed with the framework, as orientation. That is a knowledge store, so:
   all sidecar-driven. A class here is invisible to every one of them **by
   construction**, not by an exclusion list that could rot;
 - **the VIEW check is not part of that**, and `npm run check:collection` is it
-  (`abap2ui5lint-collection.jsonc`, run in `checks.yaml` and in `gates:full`).
+  (`abap2ui5lint-collection.jsonc`, run in `view-gates.yaml` and in `gates:full`).
   Being outside the *port* machinery is a decision about `structural_diff` and
   friends; whether the view a class builds is one UI5 can load is a question
   that applies to every abap2UI5 class in the repository, exactly as `abaplint`
@@ -565,26 +565,44 @@ is no `src/00` "restricted" area here (unlike abap2UI5/samples); everything must
 survive all three builds. The self-contained `auto-downport.yaml` workflow
 rebuilds the `702` branch on every push to `main`.
 
-**Workflow files are `lower-kebab-case.yaml`, and the file name, the `name:`
-and — where a workflow has one job — the job id are the same string.** The
-repository mixed three styles
+**Workflow files are `lower-kebab-case.yaml`, and the file name and the `name:`
+are the same string.** The repository mixed three styles
 (`ABAP_702.yaml`, `auto_downport.yaml`, `check-app-rules.yaml`) until
-2026-08-18; a badge URL and a required-check name both spell the file name, so
-a second style is a second thing to get wrong. Renaming a workflow renames its
-check — the maintainer has to re-point branch protection in the same change.
+2026-08-18; a badge URL spells the file name, so a second style is a second
+thing to get wrong. The **job id** is the file name too — *except* where the
+job is a named gate: `structural_diff`, `data_fidelity` and friends are also
+`meta/<class>.json` field names and the vocabulary the whole corpus is written
+in, so those job ids keep their established snake_case spelling. A required
+check tracks the JOB name, which is what makes moving a gate between workflow
+files invisible to branch protection and renaming a workflow *not*.
 
-The `checks` workflow runs the deterministic gates on every PR; the heavy
-`e2e_smoke` runs in `e2e-nightly.yaml` (scheduled + on demand). The gate set:
-`pattern_lint`, `check_pins` (A2UI5_PIN well-formed, no stray/duplicate
-`"branch"` on the abap2UI5 dependency in any abaplint config),
-`structural_diff`, `view_gates` (properties + structure +
-headless render — the three former view gates, now run from
-[abap2UI5-linter](https://github.com/abap2UI5/linter) with only the
-corpus policy kept here in `scripts/view-gates.mjs`), `data_fidelity`,
-`meta_valid`, plus `e2e_smoke`. What each gate checks, what a failure means
-and every legitimate escape hatch is in
-**`.claude/skills/run-the-gates/SKILL.md`** — read it the moment a gate fails,
-and before declaring any skip or deviation to satisfy one.
+**One concern, one workflow, one badge.** Every gate runs in a workflow of its
+own, so a red badge names the thing that is actually broken. Seven of them
+shared `checks.yaml` until 2026-08-18, which meant the `check-abap2UI5` badge
+went red when `check_pins` failed — a reader could not tell a stale pin from a
+broken view. Splitting cost nothing: the jobs never shared a setup step (each
+one checks out and installs node for itself, and only `view_gates` runs
+`npm ci`), so they were already seven runners in parallel and still are.
+
+The deterministic gates run on every PR, one workflow each; the heavy
+`e2e_smoke` runs in `e2e-nightly.yaml` (scheduled + on demand):
+
+| Workflow | Job | What it gates |
+|----------|-----|---------------|
+| `pattern-lint.yaml` | `pattern_lint` | the distilled corpus-policy rules |
+| `check-pins.yaml` | `check_pins` | A2UI5_PIN well-formed, no stray/duplicate `"branch"` on the abap2UI5 dependency in any abaplint config |
+| `chain-format.yaml` | `chain_format` | the view-chain layout (`npm run fmt:chains` fixes it) |
+| `structural-diff.yaml` | `structural_diff` | port vs. archived original, binding values included |
+| `data-fidelity.yaml` | `data_fidelity` | seeded values vs. the archived sample mocks |
+| `view-gates.yaml` | `view_gates` | properties + structure + headless render — the three former view gates, now run from [abap2UI5-linter](https://github.com/abap2UI5/linter) with only the corpus policy kept here in `scripts/view-gates.mjs`; also `npm run check:collection` for `src/03`, and it publishes the two README badges |
+| `meta-valid.yaml` | `meta_valid` | sidecar schema + referential integrity, and that every generated artefact (overview app, `README.md`, `api.md`, `STATUS.md`, `SAMPLES.md`) is in sync |
+| `tooling-tests.yaml` | `tooling_tests` | the gate/generator tooling's own fixture tests |
+| `check-prose-names.yaml` | `prose_names` | every `z2ui5_cl_*` class named in prose exists, here or in the repository that owns it |
+| `check-app-rules.yaml`, `check-keywords.yaml`, `check-summary.yaml` | same | the shared abaplint app rules, the `@keywords` and the `@summary` lines |
+
+What each gate checks, what a failure means and every legitimate escape hatch
+is in **`.claude/skills/run-the-gates/SKILL.md`** — read it the moment a gate
+fails, and before declaring any skip or deviation to satisfy one.
 
 **When a distilled lesson is greppable, encode it as a rule in the same
 change** — that is what makes a lesson unrepeatable rather than advisory.

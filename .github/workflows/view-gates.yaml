@@ -1,4 +1,4 @@
-name: checks
+name: view-gates
 
 on:
   pull_request:
@@ -7,60 +7,16 @@ on:
   push:
     branches: [main]
 
+# view_gates writes the two README badges and commits them onto the pull
+# request branch, so its job - alone among the gates - raises contents: write.
 permissions:
   contents: read
 
 concurrency:
-  group: checks-${{ github.ref }}
+  group: view-gates-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  pattern_lint:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-    - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-      with:
-        node-version: '22'
-    - run: node scripts/pattern-lint.mjs
-
-  check_pins:
-    # the abap2UI5 pin policy: A2UI5_PIN is a well-formed commit SHA and no
-    # abaplint config carries a stray/duplicate "branch" on the abap2UI5
-    # dependency (only abap_702.jsonc's "702" is allowlisted) — a silent
-    # second pin once pointed at a deleted branch (STATUS-history 2026-08-10)
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-    - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-      with:
-        node-version: '22'
-    - run: node scripts/check-pins.mjs
-
-  structural_diff:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-    - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-      with:
-        node-version: '22'
-    - run: node scripts/structural-diff.mjs --strict
-
-  data_fidelity:
-    # seeded asset values must match the archived sample mocks — catches the
-    # wrong-neighbour-copy class (apps 162/142/119) no other gate can see
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-    - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-      with:
-        node-version: '22'
-    - run: node scripts/data-fidelity.mjs
-
   view_gates:
     # abap2UI5-linter over every port: the view is reconstructed from the
     # builder calls, checked against the UI5 metadata (@since floor,
@@ -70,8 +26,8 @@ jobs:
     # XMLView.create. scripts/view-gates.mjs adds the corpus policy on top:
     # POST_171 deviations, declared render_smoke skips.
     #
-    # It also writes the two README badges, which is why this job - alone in
-    # this workflow - needs contents: write.
+    # It also writes the two README badges, which is why this job needs
+    # contents: write.
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -127,34 +83,3 @@ jobs:
         git commit -qm 'Refresh the abap2UI5-linter badges' -- .github/badges
         git push
         echo "Badges refreshed and pushed onto the pull request branch."
-
-  tooling_tests:
-    # fixture tests for the gate/generator tooling itself (scripts/test/):
-    # structural-diff, data-fidelity and generate-coverage run as black boxes
-    # over a tiny fixture corpus and are compared against golden files — a
-    # behavior change in a gate script now needs a reviewed golden diff
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-    - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-      with:
-        node-version: '22'
-    - run: npm test
-
-  meta_valid:
-    # meta/ sidecars are the source of truth (schema + referential integrity),
-    # and the overview app is generated from them — fail on invalid sidecars
-    # or when a change forgot to regenerate the overview
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-    - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-      with:
-        node-version: '22'
-    - run: node scripts/validate-meta.mjs
-    - run: node scripts/generate-overview.mjs
-    - run: node scripts/generate-coverage.mjs
-    - run: node scripts/generate-status.mjs
-    - run: git diff --exit-code -- src README.md api.md STATUS.md

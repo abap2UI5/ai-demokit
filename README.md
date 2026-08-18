@@ -6,14 +6,11 @@
 <br>
 [![abap-standard](https://github.com/abap2UI5/samples-controls/actions/workflows/abap-standard.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/abap-standard.yaml)
 [![abap-cloud](https://github.com/abap2UI5/samples-controls/actions/workflows/abap-cloud.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/abap-cloud.yaml)
+[![abap-702](https://github.com/abap2UI5/samples-controls/actions/workflows/abap-702.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/abap-702.yaml)
 <br>
-[![checks](https://github.com/abap2UI5/samples-controls/actions/workflows/checks.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/checks.yaml)
-[![check-abap2UI5](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fabap2UI5%2Fsamples-controls%2Fmain%2F.github%2Fbadges%2Fcheck-abap2ui5.json)](https://github.com/abap2UI5/samples-controls/actions/workflows/checks.yaml)
+[![check-abap2UI5](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fabap2UI5%2Fsamples-controls%2Fmain%2F.github%2Fbadges%2Fcheck-abap2ui5.json)](https://github.com/abap2UI5/samples-controls/actions/workflows/view-gates.yaml)
+[![structural-diff](https://github.com/abap2UI5/samples-controls/actions/workflows/structural-diff.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/structural-diff.yaml)
 [![e2e-nightly](https://github.com/abap2UI5/samples-controls/actions/workflows/e2e-nightly.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/e2e-nightly.yaml)
-<br>
-[![auto-downport](https://github.com/abap2UI5/samples-controls/actions/workflows/auto-downport.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/auto-downport.yaml)
-[![generate-result](https://github.com/abap2UI5/samples-controls/actions/workflows/generate-result.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/generate-result.yaml)
-[![deploy-web](https://github.com/abap2UI5/samples-controls/actions/workflows/deploy-web.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/deploy-web.yaml)
 
 # abap2UI5 — samples-controls
 
@@ -244,12 +241,24 @@ Every app is ABAP Cloud ready and downportable to 7.02. In detail, every app:
 
 CI enforces this on every change:
 
-| Build            | What it does                                                    |
-|------------------|----------------------------------------------------------------|
-| `abap-standard` | `abaplint ./abaplint.jsonc` (syntax `v750`)                    |
-| `abap-cloud`    | `abaplint .github/abaplint/abap_cloud.jsonc` (syntax `Cloud`)  |
-| `abap-702`      | `npm run downport` → `abaplint .github/abaplint/abap_702.jsonc` |
-| `checks`         | `pattern-lint` (distilled lessons), `structural-diff --strict` (port vs original view incl. binding values, undeclared deviations fail), `view-gates` (abap2UI5-linter: UI5 metadata, builder structure, headless `XMLView.create` per port), `data-fidelity` (seeded values vs the archived mocks), `validate-meta` + overview/coverage sync |
+Each check is a workflow of its own, so a red badge names the thing that is
+actually broken:
+
+| Workflow | What it does |
+|----------|--------------|
+| `abap-standard` | `abaplint ./abaplint.jsonc` (syntax `v750`) |
+| `abap-cloud` | `abaplint .github/abaplint/abap_cloud.jsonc` (syntax `Cloud`) |
+| `abap-702` | `npm run downport` → `abaplint .github/abaplint/abap_702.jsonc` |
+| `view-gates` | abap2UI5-linter per port: UI5 metadata, builder structure, headless `XMLView.create` — plus `check:collection` for the SAPUI5-only classes |
+| `structural-diff` | port vs. original view incl. binding values; an undeclared deviation fails |
+| `data-fidelity` | seeded values vs. the archived sample mocks |
+| `pattern-lint` | the corpus-policy rules distilled from review findings |
+| `chain-format` | the view-chain layout (`npm run fmt:chains` fixes it) |
+| `meta-valid` | sidecar schema + referential integrity, and every generated artefact in sync |
+| `check-pins` | the abap2UI5 pin policy (`A2UI5_PIN`, no stray dependency branch) |
+| `check-app-rules`, `check-keywords`, `check-summary`, `check-prose-names` | the shared abaplint app rules, the `@keywords`/`@summary` lines, and every class name written in prose |
+| `tooling-tests` | the gate/generator tooling's own fixture tests |
+| `e2e-nightly` | every port booted as the real app in headless Chromium (scheduled) |
 
 Every port also carries a machine-readable sidecar `meta/<class>.json`
 (sample, status, declared deviations) — the source of truth the overview app,

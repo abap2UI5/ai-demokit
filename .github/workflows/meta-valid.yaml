@@ -1,0 +1,34 @@
+name: meta-valid
+
+# meta/ sidecars are the source of truth (schema + referential integrity),
+# and the overview app is generated from them — fail on invalid sidecars
+# or when a change forgot to regenerate the overview
+
+on:
+  pull_request:
+  # also on main, so the README badge carries this gate's real verdict -
+  # a workflow that never runs on the default branch shows "no status"
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: meta-valid-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  meta_valid:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+    - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      with:
+        node-version: '22'
+    - run: node scripts/validate-meta.mjs
+    - run: node scripts/generate-overview.mjs
+    - run: node scripts/generate-coverage.mjs
+    - run: node scripts/generate-status.mjs
+    - run: git diff --exit-code -- src README.md api.md STATUS.md
