@@ -163,6 +163,15 @@ const idOf = (name) => {
   return controlIds.get(name);
 };
 
+/* The in-system overview app is not a sample. It implements z2ui5_if_app like
+ * every port, so the walk finds it, but it rebuilds no demo kit original — it
+ * is the table that LISTS them, this page's own counterpart inside a system.
+ * Left in, it answered every second query: it builds 25 control types, so it
+ * matched sap.m.Table, SearchField and half the corpus' controls, and being
+ * app_000 it sorted to the top of all of them. The catalogue links it from the
+ * footer, where a reader looking for the overview will look. */
+const OVERVIEW = 'z2ui5_cl_smpc_app_000';
+
 const apps = [];
 let failed = 0;
 
@@ -171,6 +180,7 @@ for (const file of files) {
   if (!/INTERFACES\s+z2ui5_if_app\s*\./i.test(source)) continue;
 
   const cls = path.basename(file, '.clas.abap');
+  if (cls === OVERVIEW) continue;
   const rel = path.relative(ROOT, file).split(path.sep).join('/');
   const metaPath = path.join(ROOT, 'meta', `${cls}.json`);
   const meta = fs.existsSync(metaPath) ? JSON.parse(fs.readFileSync(metaPath, 'utf8')) : null;
@@ -252,7 +262,6 @@ for (const file of files) {
     controls: controls.map(idOf),
     controlCount: Object.values(types).reduce((a, b) => a + b, 0),
     sapui5Only,
-    overview: cls === 'z2ui5_cl_smpc_app_000',
     runnable,
     ...(note ? { note } : {}),
   });
