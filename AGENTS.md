@@ -160,7 +160,9 @@ Keep them separate: only `src/` is the abapGit / abaplint scope; `ui5/` is
 plain JS/XML held for reference and to feed the generator. Everything else at
 the root is documentation or tooling, not a tree the pipeline reads: `meta/`
 (one sidecar per port, plus the e2e interaction modules), `scripts/` (the
-generators and gates), `web/` (the GitHub Pages build) and `docs/` (the
+generators and gates), `web/` (the GitHub Pages build - the transpiled
+in-browser demo and, under `web/search/`, the searchable catalogue the bare
+Pages URL lands on) and `docs/` (the
 journal and the upstream-request record).
 
 **There is no `todo/` staging tree any more** — deleted 2026-08-12
@@ -775,6 +777,16 @@ generator, a generated file, or the sidecar shape they read.
 not ported, keyed by control, built to show what is missing. `SAMPLES.md` is
 the CATALOGUE — one row per port with the sentence that says what it shows,
 grouped by UI5 library, for somebody asking "is there a port for X".
+
+A **sixth** artefact is generated and deliberately NOT committed:
+`web/search/apps.json`, the data behind the searchable catalogue on GitHub
+Pages (`scripts/generate-search-index.mjs`, spec in `web/README.md`). It is
+derived twice over — from the sidecars and from an `@abap2UI5/linter` run that
+reconstructs each port's view — and it is ~360 KB. Committing it would put
+that diff on every port PR and add a gate that can only ever restate what the
+linter already says; `deploy-web` regenerates it on every deploy instead, so
+it cannot be staler than the site serving it. Do not add it to `npm run
+gates`, and do not commit it.
 
 `SAMPLES.md` is written from the classes (`DESCRIPT`, `" @summary`,
 `" @keywords`), and its **row shape is a contract, not a layout**:

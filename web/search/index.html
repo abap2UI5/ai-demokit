@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Find a sample · abap2UI5 samples-controls</title>
+<meta name="description" content="Search every abap2UI5 port of the UI5 demo kit by control, UI5 release and keyword — then read the source or run the class in the playground.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="search.css">
+</head>
+<body>
+
+<header class="masthead">
+  <p class="brand"><a href="https://github.com/abap2UI5/samples-controls">abap2UI5 · samples-controls</a></p>
+  <h1>Find a sample</h1>
+  <p class="lede">
+    The UI5 demo kit, rebuilt in ABAP — <strong id="total">…</strong> ports, each one
+    a single class. Search them by control, by keyword, or by the UI5 release
+    your system actually runs. Then read the source, or start the class in the
+    playground without installing anything.
+  </p>
+  <ul class="legend">
+    <li><b>Source&nbsp;↗</b> the class on GitHub — one file, the whole sample</li>
+    <li><b>Playground&nbsp;↗</b> the ABAP in an editor with the app running beside it</li>
+    <li><b>Run here&nbsp;↗</b> just the app, from this site's own transpiled build</li>
+  </ul>
+</header>
+
+<main>
+  <form class="panel" id="filters" autocomplete="off" role="search">
+    <div class="q">
+      <label class="sr-only" for="q">Search</label>
+      <input type="search" id="q" name="q" placeholder="table, wizard, upload, sap.m.Dialog, drag and drop …" spellcheck="false">
+      <kbd class="hint">/</kbd>
+    </div>
+
+    <div class="facets">
+      <p class="facet">
+        <label for="release">Runs on UI5</label>
+        <select id="release" name="release"></select>
+        <span class="note">needs at most this release</span>
+      </p>
+      <p class="facet">
+        <label for="control">Uses control</label>
+        <select id="control" name="control"></select>
+        <span class="note">anywhere in its view</span>
+      </p>
+      <p class="facet">
+        <label for="library">Library</label>
+        <select id="library" name="library"></select>
+        <span class="note">the one it is filed under</span>
+      </p>
+      <p class="facet">
+        <label for="status">Review state</label>
+        <select id="status" name="status"></select>
+        <span class="note">how far it has been checked</span>
+      </p>
+    </div>
+
+    <p class="resultline">
+      <label class="check" title="The playground's UI5 build carries eight libraries; a port outside them would open a frame that renders nothing.">
+        <input type="checkbox" id="runnable" name="runnable"> playground-runnable only
+      </label>
+      <span id="count">…</span>
+      <button type="button" id="reset" class="linkish" hidden>clear filters</button>
+    </p>
+  </form>
+
+  <section id="results" aria-live="polite"></section>
+  <p id="empty" hidden class="empty">
+    Nothing matches. <button type="button" id="reset2" class="linkish">Clear the filters</button>
+    — or look at <a href="https://github.com/abap2UI5/samples-controls/blob/main/api.md">api.md</a>,
+    the coverage table, which also lists what is <em>not</em> ported and why.
+  </p>
+  <p id="more" hidden class="more"><button type="button" id="loadmore">Show more</button></p>
+</main>
+
+<footer>
+  <p>
+    Built from the repository itself: the sidecars under <code>meta/</code>, the
+    <code>@keywords</code> line in each class, and
+    <a href="https://www.npmjs.com/package/@abap2ui5/linter">@abap2UI5/linter</a>,
+    which reconstructs the view each builder chain produces — that is where the
+    control list and the UI5 release come from. Regenerated on every deploy.
+  </p>
+  <p>
+    <a href="https://github.com/abap2UI5/samples-controls">Repository</a> ·
+    <a href="https://github.com/abap2UI5/samples-controls/blob/main/SAMPLES.md">Catalogue as a page</a> ·
+    <a href="https://github.com/abap2UI5/samples-controls/blob/main/api.md">Coverage</a> ·
+    <!-- the overview app by name, not `../`: the site root redirects back
+         here unless the URL names an app, so a bare `../` would bounce. -->
+    <a href="../?app_start=z2ui5_cl_smpc_app_000" target="_blank" rel="noopener">The overview app, in the browser ↗</a> ·
+    <a href="https://abap2ui5.github.io/playground/">Playground</a>
+  </p>
+</footer>
+
+<script src="search.js"></script>
+</body>
+</html>

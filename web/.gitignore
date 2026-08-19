@@ -7,3 +7,5 @@ abap2UI5/
 abap2UI5-samples/
 *.log
 open-abap-core/
+# derived: written by scripts/generate-search-index.mjs on every deploy
+search/apps.json

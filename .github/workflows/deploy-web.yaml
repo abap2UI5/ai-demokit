@@ -29,6 +29,12 @@ on:
     paths:
       - 'src/**'
       - 'web/**'
+      # the catalogue at /search/ is built from these too: the sidecars decide
+      # a port's review state and deviations, ui5/ its title and description
+      - 'meta/**'
+      - 'ui5/descriptions.json'
+      - 'ui5/universe.json'
+      - 'scripts/generate-search-index.mjs'
       - '.github/workflows/deploy-web.yaml'
   schedule:
     - cron: '0 8 * * *'   # daily; picks up merged port changes and A2UI5_PIN bumps (framework is pinned, see bump-a2ui5.yaml)
@@ -81,6 +87,20 @@ jobs:
       - name: Smoke — transpiled unit run
         working-directory: web
         run: node output/index.mjs || echo "unit run reported issues (non-blocking)"
+
+      # The searchable catalogue at /search/, which is what the bare Pages URL
+      # lands on. Written into web/search/ (not committed - it is derived, and
+      # 360 KB of it), from where webpack's CopyPlugin picks it up below.
+      #
+      # A root install, because the index is derived by @abap2UI5/linter
+      # reconstructing each port's view - the same pass view-gates runs, and
+      # the only thing in this repository that knows which UI5 release a port
+      # needs. --ignore-scripts skips Playwright's browser download: the
+      # render gate is off here (render: false), so no browser is used.
+      - name: Search index for the catalogue
+        run: |
+          npm ci --ignore-scripts
+          node scripts/generate-search-index.mjs
 
       - name: Bundle for Pages
         working-directory: web
