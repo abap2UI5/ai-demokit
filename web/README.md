@@ -1,139 +1,119 @@
-# web — run the samples-controls ports in the browser (GitHub Pages)
+# web — the searchable catalogue on GitHub Pages
 
-This folder builds a **fully client-side** version of the samples-controls ports:
-the abap2UI5 framework and every `z2ui5_cl_smpc_app_*` port are transpiled to
-JavaScript, bundled with webpack, and run in the browser with **no ABAP
-backend** — the transpiled `z2ui5_cl_http_handler` answers the app's own
-roundtrips in-page (a `fetch` interceptor), and sql.js (WASM) provides the
-draft database. The result is the static site in `build/`, which the
-`deploy-web` workflow uploads to GitHub Pages.
+**<https://abap2ui5.github.io/samples-controls/>** — every port in this
+repository, searchable, as a static page. `web/search/` is the whole site:
+three hand-written files and one generated JSON, uploaded as the Pages
+artefact by the [`deploy-web`](../.github/workflows/deploy-web.yaml) workflow.
 
-It is a thin adaptation of the official
-[abap2UI5/web-abap2UI5](https://github.com/abap2UI5/web-abap2UI5) build
-(transpiler, express-icf-shim and webpacking by
-[larshp](https://github.com/larshp)) — the only change is that it assembles
-**this repo's ports** instead of the `samples` repo, and lands on the
-searchable catalogue below instead of the framework home page.
-
-## How it works
-
-1. **assemble** — clone the abap2UI5 framework into `src/` (which brings the
-   `z2ui5_cl_ui5_view_builder` builder along), then copy this repo's `../src` (every
-   `z2ui5_cl_smpc_app_*` port + the overview) into `src/ai-demokit/`.
-2. **downport** — copy `src/` → `downport/` and `abaplint --fix` it to v702
-   (the transpiler cannot take modern ABAP directly).
-3. **transpile** — `@abaplint/transpiler` emits `output/*.mjs` (+ the
-   express-icf-shim and open-abap-core runtime libs).
-4. **webpack:build** — bundle `app/web.mjs` + the transpiled backend + sql.js
-   into `build/` (one `app.bundle.js` + the WASM files).
-
-`build/` is what `deploy-web` uploads to GitHub Pages, and it is not
-committed: the bundle is ~28 MB, and a copy of it in the repository was both
-a second thing to keep current and the largest object in the history.
-
-## Rebuild
-
-```bash
-cd web
-npm ci
-npm run all        # assemble → downport → transpile → webpack
+```
+web/search/index.html   the page
+web/search/search.css   light and dark off one set of custom properties
+web/search/search.js    filtering and drawing — plain ES2020, no dependencies
+web/search/apps.json    generated, NOT committed (see below)
 ```
 
-Nothing to commit afterwards — `build/` is a build output and `deploy-web`
-produces its own. Test locally (the `document.write` boot does not work with
-webpack-dev-server HMR):
+## What it answers
 
-```bash
-npm run serve:build   # serves web/build on http://localhost:8081
-```
+`SAMPLES.md` answers "is there a port that shows X" for somebody who scrolls.
+The two questions this corpus is actually asked, nothing here could answer:
 
-Note: the served frontend loads OpenUI5 from `https://sdk.openui5.org` (CDN),
-which is reachable from GitHub Pages and any normal browser but may be blocked
-in a restricted sandbox — there the controls render but stay unthemed.
+> *"my system runs UI5 1.84 — which of these will render on it?"*
+> *"which ports use `sap.m.Table` at all, not just the one filed under it?"*
 
-## Landing page — the searchable catalogue
+Neither is in the sidecars. `entity` is the ONE control a sample is *about*, so
+a port that merely uses a Table inside a page about something else is invisible
+to it; and a port's UI5 floor is written nowhere — the `POST_171` deviations
+name it in prose, which is a sentence for a human, not a filter.
 
-The bare Pages URL opens **`/search/`**, a static catalogue of every port:
-free text over the demo kit's own descriptions and each class's `@keywords`
-line, plus four facets — *runs on UI5 &lt;release&gt;*, *uses control*,
-*library*, *review state* — and three links per port: the class on GitHub, the
-class in the [playground](https://abap2ui5.github.io/playground/) (`?src=` its
-raw URL), and the port running here (`?app_start=<class>`).
+Both come out of [`@abap2UI5/linter`](https://www.npmjs.com/package/@abap2ui5/linter),
+which already reconstructs the view a builder chain produces and resolves every
+control against the UI5 metadata snapshot — the same pass `view-gates` runs,
+render gate off. It is asked for two things it computes anyway:
 
-The release facet is the one nothing else in this repository answers. A port's
-floor is not written anywhere: the `POST_171` deviations name it in prose, and
-`entity` names the one control the sample is *about* rather than the ones its
-view builds. Both come out of `@abap2UI5/linter` — the view reconstructed from
-the builder chain, every control and member resolved against the UI5 metadata
-snapshot, and the highest `@since` above the 1.71 floor **is** the port's
-minimum release. Same pass as `view-gates`, render gate off.
+| | |
+|---|---|
+| `stats.types` | every control the port **builds**, with occurrences |
+| `*-too-new` findings | everything above the 1.71 floor, each carrying its `@since` |
 
-`scripts/generate-search-index.mjs` writes `web/search/apps.json` (~360 KB) from
-the `meta/` sidecars, `ui5/descriptions.json` and that linter run. It is **not
-committed** — a build output like `build/`, regenerated by `deploy-web` on
-every deploy, so it is never staler than the site serving it. Locally:
+The highest of those `@since` values **is** the port's minimum release, and the
+floor itself when there are none. Derived rather than restated, so the page
+cannot drift from the corpus.
+
+Free text runs over the demo kit's descriptions, each class's `@summary` and
+`@keywords` line, the entity and the controls. Three facets: *runs on UI5
+&lt;release&gt;*, *uses control*, *library*. Filters live in the URL, so a
+search is linkable.
+
+## `apps.json` is not committed
+
+It is derived twice over — from the sidecars and from a linter run — and it is
+~350 KB. Committing it would put that diff on every port PR while adding a gate
+that can only restate what the linter already says. `deploy-web` regenerates it
+on every deploy instead, so it is never staler than the site serving it.
 
 ```bash
 npm ci                                    # in the repository root
 node scripts/generate-search-index.mjs    # or: npm run search:index
 ```
 
-`webpack:build` copies `web/search/` into `build/search/` verbatim — no
-bundling, no dependencies, nothing to install. Which also means the page can be
-served straight from the source folder, without building the 28 MB demo at all:
+## Running it locally
+
+Nothing to build:
 
 ```bash
-npx http-server web/search -p 8099      # or: python3 -m http.server 8099 -d web/search
+npx http-server web/search -p 8099
+#  or: python3 -m http.server 8099 -d web/search
 ```
 
-The *Source* and *Playground* links work there (both absolute); *Run here*
-does not — it points at the transpiled build, which only `npm run all` in
-`web/` produces (`npm run serve:build`, port 8081).
+Both links on every card are absolute (GitHub, and the playground), so they
+work from a local server exactly as they do in production.
 
-### `/` is a switch, not a page
+## The two links per port
 
-`app/index.html` redirects to `search/` unless the URL carries
-`?app_start=`. `?app_start=<class>` still boots the transpiled backend
-directly, which is what the catalogue's *"Run here"* links, the overview app's
-launch links (`z2ui5_cl_smpc_app_000`) and every existing bookmark use — none
-of them come through the branch.
+**Source** is the class on GitHub. Every port is a single class, so that link
+is the whole sample.
 
-The bundle tag is **written by that script rather than injected** by
-HtmlWebpackPlugin (`inject: false`). A `<script src>` in the markup is found by
-the browser's preload scanner and fetched while the script is still deciding,
-so a visitor who only wanted to search would start pulling 28 MB of transpiled
-ABAP before being sent away from it. Written by `document.write`, the tag does
-not exist until the branch has been taken. If the two ever drift — a renamed
-bundle, a second entry — the template reads `htmlWebpackPlugin.files.js`, so
-there is nothing to keep in step by hand.
+**Run in the playground** opens the class in
+[abap2UI5/playground](https://abap2ui5.github.io/playground/) via
+`?src=<its raw URL>` — the ABAP in an editor with the app running beside it, no
+system anywhere.
 
-## Patched transpiler lib (`open-abap-core`)
+That build carries eight UI5 libraries (`sap.ui.core`, `sap.m`, `sap.f`,
+`sap.ui.layout`, `sap.ui.table`, `sap.ui.unified`, `sap.tnt`, `sap.uxap`) at one
+pinned release, and a port outside them would open a frame that renders
+nothing. Such a port keeps the button **disabled**, with a title naming the
+library that is missing — a dead link is worse than no link, and a button that
+silently vanished would leave a reader wondering whether they misread the row.
+Those two constants are copied from the playground's `tools/build-ui5.mjs`; if
+that build gains a library, the copy here goes stale in the safe direction — a
+button greyed out, never a link that fails.
 
-`assemble` clones [open-abap-core](https://github.com/open-abap/open-abap-core)
-into `open-abap-core/` and runs
-[`ci/patch_open_abap_xml.mjs`](ci/patch_open_abap_xml.mjs) over it;
-`ci/abap_transpile.json` points at that folder instead of letting the
-transpiler clone the lib itself. The patch makes
-`CALL TRANSFORMATION id … RESULT XML` **escape character data**: upstream
-writes element values raw, so an app whose model holds a `<` (the overview's
-generation notes) persists a draft that the transpiled `CL_IXML` cannot parse
-back — the next round-trip then dies in an uncatchable `ASSERT` and the page
-shows `Network error: ASSERTION_FAILED` (reported 2026-07-31 for the
-overview's links / generation-notes popovers). Forwarded upstream as
-[`backlog/items/open-abap-xml-escaping`](https://github.com/abap2UI5/abap2UI5/blob/main/backlog/items/open-abap-xml-escaping.md)
-in abap2UI5; drop the clone, the patch and this section once it is merged
-there.
+## What used to be here
 
-## Known limitation
+Until 2026-08-19 this folder built the whole **in-browser demo**: the abap2UI5
+framework and all 430 ports cloned, downported to 702 with `abaplint --fix`,
+transpiled to JavaScript, and webpacked with sql.js into a 28 MB bundle that
+answered the apps' own round-trips in-page — a *"Run here"* link per port and
+no backend anywhere. It was removed by maintainer decision.
 
-A few ports drive behaviour through backend roundtrips (toggles, mode
-switches, toasts) — these work in-browser. Interactions that depend on
-recently whitelisted frontend methods need a framework clone that already
-carries them (the split-container navigation set was merged upstream as
-abap2UI5 #2470, 2026-07-24). Initial render of every port is unaffected.
+The downport alone cost twenty minutes of every deploy, and what it bought the
+playground does better and maintains in its own repository: an editor beside the
+app, abaplint and the abap2UI5 linter live against the real framework sources,
+and one UI5 build kept current there rather than here. It is one `git revert`
+away if that changes.
 
-A round-trip is also **noticeably slower here than on a real server**: the
-transpiled `CL_IXML` re-parses the persisted draft on every request and its
-parser is quadratic in the draft size. Keep the bound model small (only what
-the view renders — see AGENTS §10) and round-trips stay in the
-fraction-of-a-second range.
+## `web/ci/` is NOT part of this page
+
+Two scripts survived the removal because they were never only about it:
+
+| | |
+|---|---|
+| `patch_open_abap_xml.mjs` | makes `CALL TRANSFORMATION id … RESULT XML` escape character data — upstream writes element values raw, so a model holding a `<` persists a draft the transpiled `CL_IXML` cannot parse back, and the next round-trip dies in an uncatchable `ASSERT`. |
+| `patch_follow_up_action.mjs` | the follow-up-action rewrite both transpiled builds need. |
+
+`scripts/e2e-build.mjs` executes both, and **abap2UI5/mcp-server executes
+`web/ci/patch_open_abap_xml.mjs` by that exact path** — which is why
+`scripts/check-mcp-contract.mjs` fails the build if it moves. Do not "tidy" them
+into `scripts/` without changing mcp-server first. Upstream fix tracked as
+[`backlog/items/open-abap-xml-escaping`](https://github.com/abap2UI5/abap2UI5/blob/main/backlog/items/open-abap-xml-escaping.md);
+drop both the patch and this section once it is merged there.

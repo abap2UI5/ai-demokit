@@ -34,8 +34,9 @@ how to express a control in ABAP? Its sample is already here — or on its way.
    one click starts the app right in your system.
 
 No ABAP system at hand? Open the
-[GitHub Pages demo](https://abap2ui5.github.io/samples-controls/) — the framework
-and every sample run fully client-side in your browser.
+[searchable catalogue](https://abap2ui5.github.io/samples-controls/) — every port,
+filtered by control or by the UI5 release your system runs, each one a click from
+its source and from running in the browser playground.
 
 #### The learning path
 
@@ -118,7 +119,7 @@ built from [`web/`](web) and published by `deploy-web`; see
 | [`meta/`](meta) | One sidecar per port — status, checked, typed deviations |
 | [`ui5/`](ui5) | The archived original demo kit template of every ported sample, plus the scope/universe snapshots the coverage is computed from |
 | [`scripts/`](scripts) | The generators and the gates — one script per CI job, plus `generation-prompt.txt`, the porting agent's prompt |
-| [`web/`](web) | The GitHub Pages demo: framework and every port transpiled to run client-side |
+| [`web/`](web) | The GitHub Pages site: the searchable catalogue of every port |
 | [`docs/history.md`](docs/history.md) | The chronological journal — batches, probes, audits, one section per event |
 | [`docs/upstream-requests.md`](docs/upstream-requests.md) | The record of what porting asked the framework for — implemented and declined. Open requests live in [`backlog/`](https://github.com/abap2UI5/abap2UI5/tree/main/backlog) in abap2UI5, where the whole ecosystem's upstream backlog is |
 | [mcp-server](https://github.com/abap2UI5/mcp-server) | MCP server for AI coding agents — capability queries, view validation, deploy, headless run + screenshot on this repo's infrastructure (separate repository) |

@@ -17,12 +17,11 @@
     The UI5 demo kit, rebuilt in ABAP — <strong id="total">…</strong> ports, each one
     a single class. Search them by control, by keyword, or by the UI5 release
     your system actually runs. Then read the source, or start the class in the
-    playground without installing anything.
+    playground — no system, no installation.
   </p>
   <ul class="legend">
     <li><b>Source&nbsp;↗</b> the class on GitHub — one file, the whole sample</li>
-    <li><b>Playground&nbsp;↗</b> the ABAP in an editor with the app running beside it</li>
-    <li><b>Run here&nbsp;↗</b> just the app, from this site's own transpiled build</li>
+    <li><b>Run in the playground&nbsp;↗</b> the ABAP in an editor, the app running beside it, no system</li>
   </ul>
 </header>
 
@@ -50,17 +49,9 @@
         <select id="library" name="library"></select>
         <span class="note">the one it is filed under</span>
       </p>
-      <p class="facet">
-        <label for="status">Review state</label>
-        <select id="status" name="status"></select>
-        <span class="note">how far it has been checked</span>
-      </p>
     </div>
 
     <p class="resultline">
-      <label class="check" title="The playground's UI5 build carries eight libraries; a port outside them would open a frame that renders nothing.">
-        <input type="checkbox" id="runnable" name="runnable"> playground-runnable only
-      </label>
       <span id="count">…</span>
       <button type="button" id="reset" class="linkish" hidden>clear filters</button>
     </p>
@@ -87,9 +78,6 @@
     <a href="https://github.com/abap2UI5/samples-controls">Repository</a> ·
     <a href="https://github.com/abap2UI5/samples-controls/blob/main/SAMPLES.md">Catalogue as a page</a> ·
     <a href="https://github.com/abap2UI5/samples-controls/blob/main/api.md">Coverage</a> ·
-    <!-- the overview app by name, not `../`: the site root redirects back
-         here unless the URL names an app, so a bare `../` would bounce. -->
-    <a href="../?app_start=z2ui5_cl_smpc_app_000" target="_blank" rel="noopener">The overview app, in the browser ↗</a> ·
     <a href="https://abap2ui5.github.io/playground/">Playground</a>
   </p>
 </footer>

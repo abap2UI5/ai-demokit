@@ -12,10 +12,10 @@
  *   `minUi5 <= chosen`, and the option labels carry the resulting count so the
  *   cost of an old system is visible before the click.
  *
- *   The playground link is only drawn for a port the playground can actually
- *   run. That build carries eight UI5 libraries and one pinned release; a port
- *   outside them would open a frame that renders nothing, which is worse than
- *   no link, so it gets a disabled marker that says why.
+ *   The playground button is live only for a port that build can actually
+ *   run. It carries eight UI5 libraries and one pinned release; a port outside
+ *   them would open a frame that renders nothing, so the button stays but goes
+ *   disabled, with a title saying exactly what is missing.
  */
 
 /* ------------------------------------------------------------------ state */
@@ -27,8 +27,6 @@ const els = {
   release: $('release'),
   control: $('control'),
   library: $('library'),
-  status: $('status'),
-  runnable: $('runnable'),
   results: $('results'),
   count: $('count'),
   total: $('total'),
@@ -130,8 +128,6 @@ function buildFacets() {
 
   fillSelect(els.library, 'any library',
     tally((a) => a.library).map(([v, n]) => [v, `${v} — ${n}`]));
-  fillSelect(els.status, 'any state',
-    tally((a) => a.status).map(([v, n]) => [v, `${STATUS[v] || v} — ${n}`]));
 }
 
 /** What the sidecar's `status` means to somebody who has not read AGENTS.md. */
@@ -159,8 +155,6 @@ function currentFilters() {
     release: els.release.value,
     control: els.control.value,
     library: els.library.value,
-    status: els.status.value,
-    runnable: els.runnable.checked,
   };
 }
 
@@ -172,8 +166,6 @@ function apply() {
     if (f.release && cmpVersion(app.minUi5, f.release) > 0) return false;
     if (f.control && !app.controlNames.includes(f.control)) return false;
     if (f.library && app.library !== f.library) return false;
-    if (f.status && app.status !== f.status) return false;
-    if (f.runnable && !app.runnable) return false;
     return tokens.every((t) => app.hay.includes(t));
   });
 
@@ -195,7 +187,7 @@ function apply() {
     ? `${n} ports`
     : `${n} of ${DATA.apps.length} port${n === 1 ? '' : 's'}`;
 
-  const dirty = !!(f.q || f.release || f.control || f.library || f.status || f.runnable);
+  const dirty = !!(f.q || f.release || f.control || f.library);
   els.reset.hidden = !dirty;
   els.empty.hidden = n > 0;
 
@@ -238,9 +230,17 @@ function card(app, tokens) {
         <ul>${app.controlNames.map((c) => `<li>${highlight(c, tokens)}</li>`).join('')}</ul>
       </details>` : '';
 
+  /* A port the playground's UI5 build cannot serve keeps the button, disabled
+   * and saying why: a link to a frame that renders nothing is worse than no
+   * link, and dropping the button silently leaves a reader wondering whether
+   * they misread the row. */
+  const missing = app.libraries.filter((l) => !DATA.playgroundLibraries.includes(l) && !l.startsWith('z2ui5.'));
+  const why = missing.length
+    ? `The playground's UI5 build does not carry ${missing.join(', ')} — only ${DATA.playgroundLibraries.join(', ')}.`
+    : `The playground's UI5 build is ${DATA.playgroundUi5}; this port needs ${app.minUi5}.`;
   const run = app.runnable
-    ? `<a class="primary" href="${esc(play)}" target="_blank" rel="noopener">Playground ↗</a>`
-    : `<span title="The playground's UI5 build carries ${esc(DATA.playgroundLibraries.join(', '))} at ${esc(DATA.playgroundUi5)}; this port needs ${esc(app.libraries.join(', ') || 'more')} at ${esc(app.minUi5)}.">Playground —</span>`;
+    ? `<a class="primary" href="${esc(play)}" target="_blank" rel="noopener">Run in the playground ↗</a>`
+    : `<span class="disabled" title="${esc(why)}" aria-disabled="true">Run in the playground</span>`;
 
   return `
     <article class="card">
@@ -252,7 +252,6 @@ function card(app, tokens) {
       <div class="actions">
         <a href="${esc(src)}" target="_blank" rel="noopener">Source ↗</a>
         ${run}
-        <a href="../?app_start=${esc(app.class)}" target="_blank" rel="noopener" title="Run it here, in the transpiled in-browser build of this repository">Run here ↗</a>
       </div>
     </article>`;
 }
@@ -266,13 +265,12 @@ function draw(tokens) {
 
 /* -------------------------------------------------------------- url state */
 
-const PARAMS = ['q', 'release', 'control', 'library', 'status', 'runnable'];
+const PARAMS = ['q', 'release', 'control', 'library'];
 
 function writeUrl(f) {
   const p = new URLSearchParams();
   for (const key of PARAMS) {
-    const v = key === 'runnable' ? (f.runnable ? '1' : '') : f[key];
-    if (v) p.set(key, v);
+    if (f[key]) p.set(key, f[key]);
   }
   const q = p.toString();
   history.replaceState(null, '', q ? `?${q}` : location.pathname);
@@ -281,8 +279,7 @@ function writeUrl(f) {
 function readUrl() {
   const p = new URLSearchParams(location.search);
   els.q.value = p.get('q') || '';
-  els.runnable.checked = p.get('runnable') === '1';
-  for (const key of ['release', 'control', 'library', 'status']) {
+  for (const key of ['release', 'control', 'library']) {
     const v = p.get(key);
     /* Only a value the current index still knows — a link from before a
      * control was renamed must not leave a dead filter selected. */
@@ -292,8 +289,7 @@ function readUrl() {
 
 function reset() {
   els.q.value = '';
-  els.runnable.checked = false;
-  for (const key of ['release', 'control', 'library', 'status']) els[key].value = '';
+  for (const key of ['release', 'control', 'library']) els[key].value = '';
   apply();
   els.q.focus();
 }
@@ -326,8 +322,7 @@ async function boot() {
   apply();
 
   els.q.addEventListener('input', apply);
-  for (const key of ['release', 'control', 'library', 'status']) els[key].addEventListener('change', apply);
-  els.runnable.addEventListener('change', apply);
+  for (const key of ['release', 'control', 'library']) els[key].addEventListener('change', apply);
   els.reset.addEventListener('click', reset);
   els.reset2.addEventListener('click', reset);
   els.loadmore.addEventListener('click', () => draw(els.q.value.trim().toLowerCase().split(/\s+/).filter(Boolean)));

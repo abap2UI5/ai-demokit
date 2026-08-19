@@ -8,10 +8,9 @@
  * The first candidate that actually contains the express shim wins.
  *
  * A2UI5_PIN (repo root) holds the framework commit the reproducible paths
- * build against: node-setup checks the in-repo clone out at that SHA, and
- * web/ci/clone_a2ui5.mjs does the same for the Pages build. The pin moves via
- * .github/workflows/bump-a2ui5.yaml; the nightly e2e stays on main tip as the
- * upstream canary.
+ * build against: node-setup checks the in-repo clone out at that SHA. The pin
+ * moves via .github/workflows/bump-a2ui5.yaml; the nightly e2e stays on main
+ * tip as the upstream canary.
  */
 import fs from 'fs';
 import path from 'path';

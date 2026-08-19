@@ -1,6 +1,6 @@
-/* The searchable catalogue — no framework, no build step: this file is copied
-   into build/search/ as it is. Light and dark are both driven off one set of
-   custom properties, so a colour is decided once. */
+/* The searchable catalogue — no framework, no build step: this folder IS the
+   deployed site, uploaded as the Pages artefact unchanged. Light and dark are
+   both driven off one set of custom properties, so a colour is decided once. */
 
 :root {
   color-scheme: light dark;
@@ -198,16 +198,6 @@ main { max-width: 62rem; margin: 0 auto; }
   color: var(--ink-soft);
 }
 
-.resultline .check {
-  display: inline-flex;
-  align-items: center;
-  gap: .35rem;
-  margin-right: .2rem;
-  padding-right: .9rem;
-  border-right: 1px solid var(--line);
-  cursor: pointer;
-}
-
 .linkish {
   padding: 0;
   font: inherit;
@@ -316,7 +306,18 @@ main { max-width: 62rem; margin: 0 auto; }
   border-color: var(--accent);
 }
 .actions a.primary:hover { color: var(--accent-ink); filter: brightness(1.08); }
-.actions span { color: var(--ink-faint); cursor: help; border-style: dashed; }
+
+/* The same button as .primary, switched off: same size and position in the row
+   so the cards still line up, but flat, dimmed and not clickable. `cursor:
+   help` because the title says which library is missing — the answer to "why
+   is this one greyed out" is on the button itself. */
+.actions span.disabled {
+  color: var(--ink-faint);
+  background: var(--line-soft);
+  border-color: var(--line);
+  cursor: help;
+  opacity: .75;
+}
 
 mark {
   padding: 0 .1em;

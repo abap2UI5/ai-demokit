@@ -81,9 +81,10 @@ function main() {
   // 2b. rewire the view-wired follow_up_action( ) calls ON THE COPY. The
   //     transpiler does not model `IS SUPPLIED` for a RETURNING parameter, so
   //     the branch that returns the roundtrip-free wire is dead and every
-  //     handler written into a view attribute comes out empty. Same patch the
-  //     browser build applies (web/ci/patch_follow_up_action.mjs is the single
-  //     source, and carries the full analysis).
+  //     handler written into a view attribute comes out empty.
+  //     web/ci/patch_follow_up_action.mjs is the single source and carries the
+  //     full analysis; it sits under web/ because it was written for the Pages
+  //     demo, which was removed 2026-08-19 — this is now its only consumer.
   execSync(`node ${path.join(AIDEMOKIT, 'web/ci/patch_follow_up_action.mjs')} ${downport}`, { stdio: 'inherit' });
 
   // 3. downport the copy to v702 (in place, on the copy) — abaplint --fix, a few
@@ -119,8 +120,9 @@ function main() {
   //    unescaped, so any app whose model carries a `<` (the overview's
   //    generation notes) produces a draft that CL_IXML cannot parse back and
   //    the next roundtrip dies in an uncatchable ASSERT
-  //    ("Network error: ASSERTION_FAILED"). Same patch the browser build
-  //    applies (web/ci/patch_open_abap_xml.mjs is the single source).
+  //    ("Network error: ASSERTION_FAILED"). web/ci/patch_open_abap_xml.mjs is
+  //    the single source; it must keep that path because abap2UI5/mcp-server
+  //    executes it by name (scripts/check-mcp-contract.mjs enforces it).
   const lib = path.join(A2, 'node/open-abap-core');
   if (!fs.existsSync(path.join(lib, 'src'))) {
     fs.rmSync(lib, { recursive: true, force: true });

@@ -74,8 +74,9 @@ verdicts below turned out to be harness effects.
   `CALL TRANSFORMATION id … RESULT XML` writes character data **unescaped**, so
   an app whose model carries a `<` saves a draft its own `CL_IXML` cannot parse
   back and **every** later round-trip dies in the parser — patched at build
-  time by `web/ci/patch_open_abap_xml.mjs`, which both transpiled builds apply
-  (`web/` and `scripts/e2e-build.mjs`), and forwarded upstream as
+  time by `web/ci/patch_open_abap_xml.mjs`, applied by `scripts/e2e-build.mjs`
+  and by abap2UI5/mcp-server (which is why the script keeps that path even
+  though the Pages build it was written for is gone), and forwarded upstream as
   `pr/open-abap-xml-escaping`. Prefer `READ TABLE` over `tab[ … ]` in an app
   that must run there.
 - **Type with a delay when the wire round-trips.** A per-keystroke round-trip

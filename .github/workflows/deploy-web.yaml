@@ -1,43 +1,43 @@
 name: deploy-web
 
-# Rebuilds the in-browser demo (web/ -> transpile + webpack) and deploys it to
-# this repo's GitHub Pages. A thin adaptation of abap2UI5/web-abap2UI5's
-# build_web workflow, pointed at this repo's ports.
+# Builds the searchable catalogue (web/search) and deploys it to this repo's
+# GitHub Pages. A static page and one generated JSON — a couple of minutes.
 #
-# This is the ONLY way the demo is published: Settings -> Pages -> Source
-# must be "GitHub Actions". There used to be a second one - a committed
-# docs/ folder serving as a zero-CI fallback on branch source - and it cost
-# 28 MB of the repository per rebuild while being, at the moment it was
-# removed, twelve hours behind src/. A fallback nobody can tell is stale is
-# not a fallback.
+# It used to be the whole in-browser demo: the abap2UI5 framework and all 430
+# ports cloned, downported to 702 with abaplint --fix, transpiled and webpacked
+# into a 28 MB bundle that ran the apps client-side. That was removed
+# 2026-08-19 (maintainer decision). The downport alone took twenty minutes of
+# every deploy, and what it bought — running a port without a system — the
+# playground does better and maintains in its own repository: an editor beside
+# the app, abaplint and the abap2UI5 linter live, and one UI5 build kept
+# current there rather than here. Each result on the page links straight into
+# it. If it ever needs to come back, it is one `git revert` away.
 #
-# If you see a red "pages build and deployment" on main: that is GitHub's
-# BUILT-IN Jekyll builder, not this workflow, and it is a leftover of the old
-# branch source. It chdirs to ./docs, which no longer exists, and fails with
-# "No such file or directory @ dir_chdir0 - /github/workspace/docs". It
-# publishes nothing either way - this workflow's deploy job is what serves the
-# site, and it is green (checked 2026-08-16: deploy-pages succeeded minutes
-# after the built-in builder failed on the same commit, which it could not do
-# unless the source were already "GitHub Actions"). Re-saving the Pages source
-# in Settings clears the leftover; do NOT answer it by committing a docs/
-# folder again.
+# This is the ONLY way the site is published: Settings -> Pages -> Source must
+# be "GitHub Actions". If you see a red "pages build and deployment" on main:
+# that is GitHub's BUILT-IN Jekyll builder, not this workflow, and a leftover
+# of the old branch source. It publishes nothing either way — this workflow's
+# deploy job is what serves the site. Re-saving the Pages source in Settings
+# clears the leftover; do NOT answer it by committing a docs/ folder.
 
 on:
   workflow_dispatch:
   push:
     branches: [ main ]
     paths:
+      # the index is derived from all four: the classes (@keywords, @summary,
+      # and the view the linter reconstructs from each builder chain), the
+      # sidecars (review state, deviations), ui5/ (titles, descriptions) and
+      # the generator itself
       - 'src/**'
-      - 'web/**'
-      # the catalogue at /search/ is built from these too: the sidecars decide
-      # a port's review state and deviations, ui5/ its title and description
       - 'meta/**'
       - 'ui5/descriptions.json'
       - 'ui5/universe.json'
       - 'scripts/generate-search-index.mjs'
+      - 'web/**'
       - '.github/workflows/deploy-web.yaml'
   schedule:
-    - cron: '0 8 * * *'   # daily; picks up merged port changes and A2UI5_PIN bumps (framework is pinned, see bump-a2ui5.yaml)
+    - cron: '0 8 * * *'   # daily; picks up anything merged without touching the paths above
 
 permissions:
   contents: read
@@ -52,7 +52,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -60,55 +60,43 @@ jobs:
         with:
           node-version: '22'
 
-      # assemble (clone framework + copy this repo's ports) -> downport ->
-      # transpile -> webpack. Produces web/build (the static site).
-      - name: Build in-browser bundle
-        working-directory: web
+      # --ignore-scripts skips Playwright's browser download: the index is
+      # derived with the linter's render gate off, so no browser is used.
+      - name: Install
+        run: npm ci --ignore-scripts
+
+      # writes web/search/apps.json, which is not committed — derived, and
+      # 350 KB. Regenerated here on every deploy, so the page can never be
+      # staler than the repository it describes.
+      - name: Search index
+        run: node scripts/generate-search-index.mjs
+
+      # The gate this pipeline needs now that there is no build to fail: a page
+      # whose data file is missing deploys exactly like a working one — it just
+      # shows "the catalogue could not be loaded" to every visitor. Assert the
+      # three static files and a non-trivial index before uploading.
+      - name: Check the artefact is complete
         run: |
-          npm ci
-          npm run build
-
-      # The gate this pipeline did not have. A green build proves nothing here:
-      # the transpiler does not fail on an unresolved type or a wrong runtime
-      # guard, it emits code that THROWS, so a dead bundle builds and deploys
-      # exactly like a working one. Two of them reached the published demo that
-      # way (the z2ui5_cl_http_handler rename -> "Void type" on every request,
-      # and the dissolve guard swallowing the shipped apps -> 500 BINDING_ERROR
-      # on the first roundtrip). Both were one HTTP request away from obvious,
-      # and neither needed a browser, so this asks the built backend to answer:
-      # GET the bootstrap HTML, POST the first roundtrip, POST an event and get
-      # the draft back. It FAILS the run - nothing is deployed untested again.
-      - name: Smoke — the built backend answers
-        working-directory: web
-        run: npm run smoke
-
-      # the transpiled unit run on top (framework + ajson test classes). Kept
-      # non-blocking: it exercises the framework's own tests, not this bundle
-      - name: Smoke — transpiled unit run
-        working-directory: web
-        run: node output/index.mjs || echo "unit run reported issues (non-blocking)"
-
-      # The searchable catalogue at /search/, which is what the bare Pages URL
-      # lands on. Written into web/search/ (not committed - it is derived, and
-      # 360 KB of it), from where webpack's CopyPlugin picks it up below.
-      #
-      # A root install, because the index is derived by @abap2UI5/linter
-      # reconstructing each port's view - the same pass view-gates runs, and
-      # the only thing in this repository that knows which UI5 release a port
-      # needs. --ignore-scripts skips Playwright's browser download: the
-      # render gate is off here (render: false), so no browser is used.
-      - name: Search index for the catalogue
-        run: |
-          npm ci --ignore-scripts
-          node scripts/generate-search-index.mjs
-
-      - name: Bundle for Pages
-        working-directory: web
-        run: npm run webpack:build
+          cd web/search
+          for f in index.html search.css search.js apps.json; do
+            test -s "$f" || { echo "deploy-web: $f is missing or empty"; exit 1; }
+          done
+          node -e '
+            const x = require("./apps.json");
+            if (!Array.isArray(x.apps) || x.apps.length < 400) {
+              console.error(`deploy-web: apps.json holds ${x.apps?.length} ports, expected 400+`);
+              process.exit(1);
+            }
+            if (!Array.isArray(x.controls) || !x.controls.length) {
+              console.error("deploy-web: apps.json has no control dictionary");
+              process.exit(1);
+            }
+            console.log(`deploy-web: ${x.apps.length} ports, ${x.controls.length} controls`);
+          '
 
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
-          path: web/build
+          path: web/search
 
   deploy:
     needs: build
