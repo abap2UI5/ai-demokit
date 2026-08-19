@@ -58,9 +58,14 @@ module.exports = ({mode} = {mode: "development"}) => ({
     },
   },
   plugins: [
+    // inject: false - app/index.html writes the bundle tag itself, so that a
+    // visitor sent on to /search/ never starts fetching it. The template
+    // still gets the emitted filename from htmlWebpackPlugin.files.js, so
+    // nothing here is hard-coded.
     new HtmlWebpackPlugin({
       template: "app/index.html",
       scriptLoading: "blocking",
+      inject: false,
     }),
     new CopyPlugin({
       patterns: [
@@ -74,6 +79,14 @@ module.exports = ({mode} = {mode: "development"}) => ({
         // The z2ui5 frontend manifest includes css/style.css; without the
         // file every boot of the GitHub Pages demo logs a 404.
         { from: './app/css/style.css', to: "./css/style.css" },
+        // The searchable catalogue at /search/ - plain HTML/CSS/JS plus the
+        // apps.json written by scripts/generate-search-index.mjs, so it is
+        // copied rather than bundled. It is what the bare Pages URL lands on
+        // (app/index.html), and it needs none of the 28 MB below: a visitor
+        // pays for the transpiled backend only once they open an app.
+        // `noErrorOnMissing` so a webpack:build without the generator step
+        // still produces a working demo, minus the catalogue.
+        { from: './search', to: "./search", noErrorOnMissing: true },
       ],
     }),
     new webpack.ProvidePlugin({
