@@ -12,8 +12,8 @@ It is a thin adaptation of the official
 [abap2UI5/web-abap2UI5](https://github.com/abap2UI5/web-abap2UI5) build
 (transpiler, express-icf-shim and webpacking by
 [larshp](https://github.com/larshp)) — the only change is that it assembles
-**this repo's ports** instead of the `samples` repo, and lands on the port
-overview (`z2ui5_cl_smpc_app_000`) instead of the framework home page.
+**this repo's ports** instead of the `samples` repo, and lands on the
+searchable catalogue below instead of the framework home page.
 
 ## How it works
 
@@ -79,7 +79,16 @@ node scripts/generate-search-index.mjs    # or: npm run search:index
 ```
 
 `webpack:build` copies `web/search/` into `build/search/` verbatim — no
-bundling, no dependencies, nothing to install.
+bundling, no dependencies, nothing to install. Which also means the page can be
+served straight from the source folder, without building the 28 MB demo at all:
+
+```bash
+npx http-server web/search -p 8099      # or: python3 -m http.server 8099 -d web/search
+```
+
+The *Source* and *Playground* links work there (both absolute); *Run here*
+does not — it points at the transpiled build, which only `npm run all` in
+`web/` produces (`npm run serve:build`, port 8081).
 
 ### `/` is a switch, not a page
 
