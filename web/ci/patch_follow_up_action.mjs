@@ -35,7 +35,8 @@
 // e2e says it literally — "no StepInput carries a change handler"), and the
 // press/change/select never fires. 26 ports regressed in the nightly the day
 // the corpus renamed its `_event_client( )` wires to `follow_up_action( )`,
-// and the GitHub Pages demo carries the same breakage.
+// and the since-removed GitHub Pages demo carried the same breakage. Applied
+// by scripts/e2e-build.mjs; kept under web/ci/ beside its sibling patch.
 //
 // `_event_client( )` is the same wire with no second role — the framework's
 // own interface documentation calls it "the identical roundtrip-free wire,

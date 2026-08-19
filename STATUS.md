@@ -52,15 +52,16 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   - `open-abap-xml-escaping` — `CALL TRANSFORMATION id … RESULT XML` writes
     character data unescaped, so any app whose model carries a `<` persists a
     draft its own `CL_IXML` cannot parse back (user report 2026-07-31 on the
-    Pages demo's overview; the journal has the analysis). Both transpiled
-    builds transpile against a locally patched clone
-    (`web/ci/patch_open_abap_xml.mjs`). **On merge:** drop the patch script,
-    the two clone steps (`web/package.json` assemble, `scripts/e2e-build.mjs`)
-    and the `folder` lib entries.
+    since-removed Pages demo; the journal has the analysis). The e2e build
+    transpiles against a locally patched clone
+    (`web/ci/patch_open_abap_xml.mjs` — kept there because
+    abap2UI5/mcp-server executes that exact path). **On merge:** drop the
+    patch script, its call sites in `scripts/e2e-build.mjs`, the
+    `check-mcp-contract` entry and the `folder` lib entries.
   - `transpiler-returning-is-supplied` — `IF result IS SUPPLIED` is correct
     ABAP and always false transpiled, so every handler wired into a view
-    attribute arrives empty (26 ports red in the nightly of 2026-08-13, same
-    breakage live on the Pages demo). Both transpiled builds rewrite the 430
+    attribute arrives empty (26 ports red in the nightly of 2026-08-13, and
+    live on the since-removed Pages demo). The e2e build rewrites the 430
     consumed call sites back to `_event_client( )` **in the build copy**
     (`web/ci/patch_follow_up_action.mjs`); the committed corpus keeps
     `follow_up_action( )`, which is right on a real server. **On merge:** drop

@@ -160,10 +160,11 @@ Keep them separate: only `src/` is the abapGit / abaplint scope; `ui5/` is
 plain JS/XML held for reference and to feed the generator. Everything else at
 the root is documentation or tooling, not a tree the pipeline reads: `meta/`
 (one sidecar per port, plus the e2e interaction modules), `scripts/` (the
-generators and gates), `web/` (the GitHub Pages build - the transpiled
-in-browser demo and, under `web/search/`, the searchable catalogue the bare
-Pages URL lands on) and `docs/` (the
-journal and the upstream-request record).
+generators and gates), `web/` (the GitHub Pages site - `web/search/` IS the
+published catalogue, three static files plus a generated index; the transpiled
+in-browser demo that used to live here was removed 2026-08-19, and `web/ci/`
+keeps the two patch scripts `scripts/e2e-build.mjs` and abap2UI5/mcp-server
+still execute) and `docs/` (the journal and the upstream-request record).
 
 **There is no `todo/` staging tree any more** — deleted 2026-08-12
 (`f9afe94`), so `git ls-files` shows nothing under it. It was the staging area
@@ -988,7 +989,7 @@ e2e gotchas in `e2e-debugging`, generator gotchas in `regenerate-artefacts`).
   model: pass the row **key** in the `t_arg` and look the payload up
   server-side (the catalog/DB read is cheap, the transport is not). The
   overview app once shipped every row's generation notes + four URLs in the
-  model (~578 kB draft, ~30 s clicks in the in-browser demo) just to fill two
+  model (~578 kB draft, ~30 s clicks in a transpiled runtime) just to fill two
   popovers; now only bound columns are public, the full catalog stays in a
   local (`get_catalog( )` is a METHOD) and `row_of( val )` fetches the pressed
   row (draft 199 kB, clicks ~4 s). This is **not** a licence to subset a

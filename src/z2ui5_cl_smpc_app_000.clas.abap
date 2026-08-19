@@ -57,8 +57,8 @@
 "! CLASS: the generation notes, the live-check text and the four reference URLs
 "! are looked up from the catalog in on_event, so they never enter the bound
 "! model. Only bound columns are public state, which keeps the persisted draft
-"! (and the model JSON of every render) small - the in-browser demo re-parses
-"! that draft on every round-trip.
+"! (and the model JSON of every render) small - a transpiled runtime such as
+"! the playground re-parses that draft on every round-trip.
 "! The search field above the table filters all rows by a
 "! substring over the text columns (module, control, since, sample,
 "! class) only, and each sortable column header carries ascending/
@@ -76,7 +76,7 @@ CLASS z2ui5_cl_smpc_app_000 DEFINITION PUBLIC.
     " (generation notes, live-check note, the four reference URLs) is
     " deliberately NOT here: it is looked up server-side from the catalog when
     " a popover asks for it (see on_event). Keeping it in the model made the
-    " draft ~578 kB and every round-trip of the transpiled in-browser demo took
+    " draft ~578 kB and every round-trip of a transpiled runtime took
     " ~30 s in the XML parse (which is quadratic there); the split brings the
     " draft to ~199 kB and the round-trip to ~3-4 s on the same machine.
     TYPES:

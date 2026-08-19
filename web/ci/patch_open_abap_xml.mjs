@@ -20,7 +20,11 @@
 // runtime, so the whole roundtrip 500s and the frontend shows
 // "Network error: ASSERTION_FAILED". On a real ABAP server asXML escapes the
 // value and the same app works, which is why this only ever bit the
-// transpiled builds (GitHub Pages demo + `npm run e2e`).
+// transpiled builds. This script lives under web/ci/ for historical reasons -
+// it was written for the GitHub Pages demo, which was removed 2026-08-19 - and
+// STAYS at this path because abap2UI5/mcp-server executes it by name, which
+// scripts/check-mcp-contract.mjs enforces. Consumers now: scripts/e2e-build.mjs
+// (`npm run e2e`) and mcp-server's incremental build.
 //
 // Two edits, both written in the same transpiler-friendly ABAP subset the lib
 // itself uses:

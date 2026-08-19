@@ -93,7 +93,8 @@ See `scripts/e2e-build.mjs` / `scripts/e2e-smoke.mjs` for details, and AGENTS.md
 
 `e2e-build` clones [open-abap-core](https://github.com/open-abap/open-abap-core)
 into `<abap2UI5 checkout>/node/open-abap-core`, patches it with
-`web/ci/patch_open_abap_xml.mjs` (the same patch the browser build applies) and
+`web/ci/patch_open_abap_xml.mjs` (which lives there because abap2UI5/mcp-server
+executes that exact path — see `web/README.md`) and
 transpiles against that copy. Upstream's `CALL TRANSFORMATION id … RESULT XML`
 writes character data unescaped, so any app whose model carries a `<` saves a
 draft its own `CL_IXML` cannot parse back — every later round-trip then fails
