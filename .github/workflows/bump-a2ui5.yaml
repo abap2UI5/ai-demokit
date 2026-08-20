@@ -28,6 +28,29 @@ jobs:
       with:
         node-version: '22'
 
+    # The abaplint configs pin a RELEASE TAG, not this SHA - abaplint's
+    # "branch" key feeds `git clone --branch` and takes a tag or a branch,
+    # never a commit. Different question, too: the SHA is what the transpiled
+    # backend and the e2e smoke run against, the tag is whether the corpus
+    # compiles against the framework its readers installed. Both move here so
+    # one weekly pull request carries the whole framework bump.
+    - name: Resolve the newest abap2UI5 release and move the abaplint pin
+      id: release
+      run: |
+        set -euo pipefail
+        # --exit-code: `git ls-remote` prints nothing and still exits 0 when no
+        # ref matches, so a repository that stopped tagging would resolve to an
+        # EMPTY version and this step would happily write it.
+        TAG=$(git ls-remote --exit-code --tags --refs https://github.com/abap2UI5/abap2UI5 \
+              | sed 's#.*refs/tags/##' \
+              | sed 's/-702$//' \
+              | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' \
+              | sort -V | tail -1)
+        test -n "$TAG"
+        echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+        node scripts/check-pins.mjs --set "$TAG"
+        node scripts/check-pins.mjs
+
     - name: Resolve abap2UI5 main and move the pin
       id: pin
       run: |
@@ -39,10 +62,14 @@ jobs:
         # exactly this hole and went blind for as long as it was there.)
         SHA=$(git ls-remote --exit-code https://github.com/abap2UI5/abap2UI5 refs/heads/main | cut -f1)
         echo "sha=$SHA" >> "$GITHUB_OUTPUT"
-        if [ "$SHA" = "$(cat A2UI5_PIN)" ]; then
+        if [ "$SHA" != "$(cat A2UI5_PIN)" ]; then
+          echo "$SHA" > A2UI5_PIN
+        fi
+        # `changed` covers the abaplint pin too - the release tag can move on a
+        # week where main did not, and vice versa.
+        if git diff --quiet; then
           echo "changed=false" >> "$GITHUB_OUTPUT"
         else
-          echo "$SHA" > A2UI5_PIN
           echo "changed=true" >> "$GITHUB_OUTPUT"
         fi
 
@@ -72,12 +99,21 @@ jobs:
         title: 'chore: bump the pinned abap2UI5 framework commit'
         commit-message: 'chore: bump A2UI5_PIN to abap2UI5/abap2UI5@${{ steps.pin.outputs.sha }}'
         body: |
-          Weekly re-resolve of the framework pin against abap2UI5 main
-          (`${{ steps.pin.outputs.sha }}`). node-setup and the Pages build
-          check out this commit; the nightly e2e keeps testing main tip.
+          Weekly re-resolve of the two framework references:
+
+          - `A2UI5_PIN` against abap2UI5 main (`${{ steps.pin.outputs.sha }}`) —
+            what node-setup, the Pages build and the e2e smoke run against;
+          - the abaplint configs against the newest release
+            (`${{ steps.release.outputs.tag }}`) — whether the corpus compiles
+            against the framework its readers have installed.
+
+          The nightly e2e keeps testing main tip, so all three questions stay
+          separately answered.
 
           The full backend build and the strict e2e smoke over all ports ran
           at the new pin in the workflow that opened this PR.
         add-paths: |
           A2UI5_PIN
+          abaplint.jsonc
+          .github/abaplint
         delete-branch: true

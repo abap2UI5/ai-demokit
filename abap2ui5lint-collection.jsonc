@@ -52,31 +52,7 @@
     // collection's assets legitimately come from ui5.sap.com/test-resources
     // (AGENTS §3). The rule is about an app loading its RUNTIME from the
     // commercial host; a documentation hyperlink is not that.
-    "commercial-ui5-host": false,
-
-    // TEMPORARY, and only until the @abap2ui5/linter pin reaches 0.2.0.
-    // Both are linter defects this folder is the first corpus to hit, both are
-    // fixed on the linter's main branch, and both produce findings that are
-    // simply not true here:
-    //
-    //   unknown-aggregation   an aggregation under a control the SNAPSHOT does
-    //                         not have (every SAPUI5-only control is outside
-    //                         it) was attributed to the nearest control the
-    //                         snapshot DOES have - "sap.m.Page has no
-    //                         aggregation vos", naming a control four levels up
-    //   undeclared-namespace  an XML prefix is an NCName, so `xmlns:viz.data`
-    //                         is a declaration; the matcher used \w and read it
-    //                         as absent, then reported every use of it
-    //
-    // VERIFIED 2026-08-15 against the linter's main branch: with both lines
-    // removed the collection reports the same three findings it reports
-    // with them (aggregation-too-new, control-too-new, member-too-new -
-    // all three the SAPUI5-only API this package exists for). So the pin
-    // bump is a delete, not an investigation.
-    // Nothing else in this repo is affected - the ports in src/01 and
-    // src/02 are OpenUI5 and fully in the snapshot.
-    "unknown-aggregation": false,
-    "undeclared-namespace": false
+    "commercial-ui5-host": false
   },
 
   // Hints stay visible and decide nothing. An error is a view UI5 would fail
