@@ -37,8 +37,7 @@
     "descriptions": "node scripts/fetch-descriptions.mjs",
     "samples:md": "node scripts/generate-samples-md.mjs",
     "search:index": "node scripts/generate-search-index.mjs",
-    "check:samples-md": "node scripts/generate-samples-md.mjs --check",
-    "check:prose": "node scripts/check-prose-names.mjs"
+    "check:samples-md": "node scripts/generate-samples-md.mjs --check"
   },
   "repository": {
     "type": "git",
