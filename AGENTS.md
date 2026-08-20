@@ -637,6 +637,27 @@ is no `src/00` "restricted" area here (unlike abap2UI5/samples); everything must
 survive all three builds. The self-contained `auto-downport.yaml` workflow
 rebuilds the `702` branch on every push to `main`.
 
+**The downport runs only when the change reaches the ABAP.** `npm run downport`
+is the longest thing this repository does by an order of magnitude — half an
+hour of `abaplint --fix` iterated to a fixpoint, against every other gate's
+minute — and it used to run on every pull request, so a change to the Pages
+site, a README or a sidecar waited it out to relint ABAP that is byte for byte
+the ABAP on main. `abap-702` and `auto-downport` now ask
+`scripts/abap-scope.mjs` first, which answers from the changed files alone:
+
+- it carries **two** lists — what the 702 verdict is computed from (`src/`, the
+  abaplint configs, `package*.json`, `A2UI5_PIN`, the two workflows) and what
+  provably cannot move it (`web/`, `meta/`, `ui5/`, `scripts/`, prose);
+- **a path in neither list runs the downport.** A new folder, a new config, a
+  file nobody classified is unknown, and unknown means run — so this goes stale
+  as a slow pull request, never as a gate that quietly stopped gating. Adding a
+  path to the inert list is a claim that the 702 lint cannot see it; the
+  fixture tests hold the shape of both lists;
+- the **job always runs and always reports**, only its expensive steps are
+  skipped. Branch protection tracks the job name, and a required check that
+  never reports blocks the merge — which is why this is a guard inside the job
+  rather than a `paths:` filter on the trigger.
+
 **Workflow files are `lower-kebab-case.yaml`, and the file name and the `name:`
 are the same string.** The repository mixed three styles
 (`ABAP_702.yaml`, `auto_downport.yaml`, `check-app-rules.yaml`) until
