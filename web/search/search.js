@@ -239,8 +239,8 @@ function card(app, tokens) {
     ? `The playground's UI5 build does not carry ${missing.join(', ')} — only ${DATA.playgroundLibraries.join(', ')}.`
     : `The playground's UI5 build is ${DATA.playgroundUi5}; this port needs ${app.minUi5}.`;
   const run = app.runnable
-    ? `<a class="primary" href="${esc(play)}" target="_blank" rel="noopener">Run in the playground ↗</a>`
-    : `<span class="disabled" title="${esc(why)}" aria-disabled="true">Run in the playground</span>`;
+    ? `<a class="primary" href="${esc(play)}" target="_blank" rel="noopener">Live Demo ↗</a>`
+    : `<span class="disabled" title="${esc(why)}" aria-disabled="true">Live Demo</span>`;
 
   return `
     <article class="card">
