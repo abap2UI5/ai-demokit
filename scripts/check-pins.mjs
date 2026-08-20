@@ -15,12 +15,31 @@
  * (docs/history.md). This check makes that class of drift fail offline, in
  * `npm run gates`, where the edit happens.
  *
+ * This repository resolves abap2UI5 THREE times, and that is deliberate — each
+ * answers a different question, so one value could not serve all three:
+ *
+ *   A2UI5_PIN (a commit SHA)   what the transpiled backend and the e2e smoke
+ *                              run against. Moved weekly by bump-a2ui5.
+ *   the abaplint configs       a RELEASE TAG: does the corpus compile against
+ *                              the framework its readers have installed.
+ *   e2e-nightly                main tip, unpinned, as the upstream canary.
+ *
+ * The middle one used to be absent, and its absence looked like the policy:
+ * with no `"branch"` key abaplint clones the DEFAULT branch, so the corpus was
+ * checked against the development tip while every reader of it has a release.
+ * Two silent failures — a port using API that only exists on main stays green
+ * here and breaks for the reader, and a framework change on main reddens three
+ * workflows here overnight with no commit to explain it. abaplint cannot be
+ * given the SHA instead: `"branch"` feeds `git clone --branch`, which takes a
+ * branch or a tag and never a commit.
+ *
  * Policy:
  *   1. A2UI5_PIN must be a single well-formed 40-hex commit SHA (the
  *      ancestor-of-main check needs the network and stays with the bump
  *      workflow — not verified here).
- *   2. An abaplint config's abap2UI5 dependency entry carries NO `"branch"`
- *      key — the pin governs — with ONE allowlisted exception:
+ *   2. An abaplint config's abap2UI5 dependency entry carries a `"branch"` key
+ *      naming a RELEASE TAG (x.y.z), and all of them name the SAME one, so a
+ *      bump cannot leave one config behind. ONE allowlisted exception:
  *      `.github/abaplint/abap_702.jsonc` needs `"branch": "702"`, because the
  *      702 build must resolve the framework against its downported branch
  *      (the framework's own auto_downport rebuilds it from main; main itself
@@ -42,7 +61,13 @@
  * flow) must therefore edit ALLOWED_BRANCHES below in the same change — the
  * temporary state then shows in the diff and cannot survive a merge unseen.
  *
- * Run:  node scripts/check-pins.mjs     (offline, exit 1 on any violation)
+ * Run:  node scripts/check-pins.mjs               (offline, exit 1)
+ *       node scripts/check-pins.mjs --set 1.144.0 (move the release pin)
+ *
+ * `--set` lives here rather than in bump-a2ui5.yaml so the policy has ONE
+ * implementation: which configs carry the release and which carry an
+ * allowlisted branch are the same two answers whether they are being checked
+ * or written.
  */
 
 import fs from 'fs';
@@ -52,12 +77,14 @@ import { fileURLToPath } from 'url';
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 // config path (repo-relative) -> Set of branch values its abap2UI5 dependency
-// may carry. Absent entry = no branch key allowed at all.
+// may carry INSTEAD of the release tag. Absent entry = must carry the tag.
 const ALLOWED_BRANCHES = new Map([
   ['.github/abaplint/abap_702.jsonc', new Set(['702'])],
 ]);
 
 const A2UI5_URL_RE = /github\.com\/abap2UI5\/abap2UI5/i;
+const RELEASE_RE = /^\d+\.\d+\.\d+$/;
+const releases = new Map();   // config -> release tag it names
 
 let errors = 0;
 const err = (m) => { console.log(`ERROR ${m}`); errors++; };
@@ -118,6 +145,34 @@ function configFiles() {
   return files.filter((f) => fs.existsSync(path.join(ROOT, f)));
 }
 
+const SET = (() => {
+  const i = process.argv.indexOf('--set');
+  return i !== -1 ? process.argv[i + 1] : null;
+})();
+
+if (SET !== null) {
+  if (!RELEASE_RE.test(SET || '')) {
+    console.log(`ERROR --set wants a release tag (x.y.z), got ${JSON.stringify(SET)}`);
+    process.exit(1);
+  }
+  let written = 0;
+  for (const rel of configFiles()) {
+    if (ALLOWED_BRANCHES.has(rel)) continue;
+    const full = path.join(ROOT, rel);
+    const raw = fs.readFileSync(full, 'utf8');
+    /* Rewritten in the RAW text: these are .jsonc files whose comments carry
+     * the reasoning, and a parse/serialise round trip would drop every one.
+     * Anchored on the abap2UI5 url line so a `branch` belonging to another
+     * dependency is left alone. */
+    const next = raw.replace(
+      /("url"\s*:\s*"https:\/\/github\.com\/abap2UI5\/abap2UI5"\s*,\s*\n\s*"branch"\s*:\s*")[^"]*(")/,
+      `$1${SET}$2`,
+    );
+    if (next !== raw) { fs.writeFileSync(full, next); written++; }
+  }
+  console.log(`check-pins: set ${written} config(s) to ${SET}`);
+}
+
 let checked = 0;
 for (const rel of configFiles()) {
   const txt = stripComments(fs.readFileSync(path.join(ROOT, rel), 'utf8'));
@@ -127,16 +182,35 @@ for (const rel of configFiles()) {
     if (!A2UI5_URL_RE.test(entry)) continue;
     checked++;
     const branches = [...entry.matchAll(/"branch"\s*:\s*"([^"]*)"/g)].map((m) => m[1]);
-    const allowed = ALLOWED_BRANCHES.get(rel) || new Set();
+    const allowed = ALLOWED_BRANCHES.get(rel);
     if (branches.length > 1) {
-      err(`${rel}: abap2UI5 dependency carries ${branches.length} "branch" keys (${branches.map((b) => JSON.stringify(b)).join(', ')}) — duplicate keys silently shadow each other; keep at most one`);
+      err(`${rel}: abap2UI5 dependency carries ${branches.length} "branch" keys (${branches.map((b) => JSON.stringify(b)).join(', ')}) — duplicate keys silently shadow each other; keep exactly one`);
+      continue;
     }
-    for (const b of branches) {
-      if (!allowed.has(b)) {
-        err(`${rel}: abap2UI5 dependency carries "branch": ${JSON.stringify(b)} — pin policy: only A2UI5_PIN governs the framework version${allowed.size ? ` (allowed here: ${[...allowed].join(', ')})` : ' (no branch key allowed in this config)'}; a deliberate temporary re-point must edit ALLOWED_BRANCHES in scripts/check-pins.mjs in the same change`);
+    if (branches.length === 0) {
+      err(`${rel}: abap2UI5 dependency carries no "branch" key — abaplint then clones the DEFAULT branch, so this config lints the corpus against the framework's development tip instead of a release${allowed ? `; this config wants "branch": ${JSON.stringify([...allowed][0])}` : ''}`);
+      continue;
+    }
+    const [branch] = branches;
+    if (allowed) {
+      if (!allowed.has(branch)) {
+        err(`${rel}: abap2UI5 dependency carries "branch": ${JSON.stringify(branch)}, but this config is allowlisted for ${[...allowed].map((b) => JSON.stringify(b)).join(' / ')} — a deliberate re-point must edit ALLOWED_BRANCHES in scripts/check-pins.mjs in the same change`);
       }
+      continue;
     }
+    if (!RELEASE_RE.test(branch)) {
+      err(`${rel}: abap2UI5 dependency is pinned to ${JSON.stringify(branch)}, which is not a release tag (x.y.z) — only the allowlisted configs may name a branch`);
+      continue;
+    }
+    releases.set(rel, branch);
   }
+}
+
+// --- 2b. one release across the repository ----------------------------------
+const distinct = [...new Set(releases.values())];
+if (distinct.length > 1) {
+  err(`the abaplint configs name ${distinct.length} different releases (${distinct.join(', ')}) — a bump has to move all of them:\n`
+    + [...releases].map(([f, v]) => `        ${v}  ${f}`).join('\n'));
 }
 if (!checked) err('no abap2UI5 dependency entry found in any abaplint config — did the dependency URL change? (this check would go blind)');
 
@@ -170,4 +244,4 @@ if (errors) {
   console.log(`check-pins: ${errors} error(s).`);
   process.exit(1);
 }
-console.log(`check-pins: ok (A2UI5_PIN well-formed, ${checked} abap2UI5 dependency entr${checked === 1 ? 'y' : 'ies'} clean, ${snapshotNote})`);
+console.log(`check-pins: ok (A2UI5_PIN well-formed, ${checked} abap2UI5 dependency entr${checked === 1 ? 'y' : 'ies'} on release ${distinct[0] ?? 'none'}, ${snapshotNote})`);
