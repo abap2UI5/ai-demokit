@@ -74,11 +74,11 @@ jobs:
       # The gate this pipeline needs now that there is no build to fail: a page
       # whose data file is missing deploys exactly like a working one — it just
       # shows "the catalogue could not be loaded" to every visitor. Assert the
-      # three static files and a non-trivial index before uploading.
+      # four static files and a non-trivial index before uploading.
       - name: Check the artefact is complete
         run: |
           cd web/search
-          for f in index.html search.css search.js apps.json; do
+          for f in index.html search.css search.js apps.json favicon.ico; do
             test -s "$f" || { echo "deploy-web: $f is missing or empty"; exit 1; }
           done
           node -e '

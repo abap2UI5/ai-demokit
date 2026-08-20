@@ -2,13 +2,14 @@
 
 **<https://abap2ui5.github.io/samples-controls/>** — every port in this
 repository, searchable, as a static page. `web/search/` is the whole site:
-three hand-written files and one generated JSON, uploaded as the Pages
-artefact by the [`deploy-web`](../.github/workflows/deploy-web.yaml) workflow.
+three hand-written files, one icon and one generated JSON, uploaded as the
+Pages artefact by the [`deploy-web`](../.github/workflows/deploy-web.yaml) workflow.
 
 ```
 web/search/index.html   the page
 web/search/search.css   light and dark off one set of custom properties
 web/search/search.js    filtering and drawing — plain ES2020, no dependencies
+web/search/favicon.ico  the abap2UI5 logo in the tab (see below)
 web/search/apps.json    generated, NOT committed (see below)
 ```
 
@@ -43,6 +44,22 @@ Free text runs over the demo kit's descriptions, each class's `@summary` and
 `@keywords` line, the entity and the controls. Three facets: *runs on UI5
 &lt;release&gt;*, *uses control*, *library*. Filters live in the URL, so a
 search is linkable.
+
+## The icon in the tab
+
+`favicon.ico` is the abap2UI5 logo — the same mark
+[the documentation](https://abap2ui5.github.io/docs/) puts in the tab, so the
+four pages of the project read as one project in a row of browser tabs rather
+than as three anonymous ones beside it.
+
+It is the artwork of `docs/public/favicon.ico` in
+[abap2UI5/docs](https://github.com/abap2UI5/docs), rescaled: that file is one
+256 px frame stored uncompressed, 265 KB, which is twenty times this whole page
+for something a browser draws at 16 px. This one carries 16/32/48/64/128 px as
+PNG frames in ~16 KB, so every size the browser asks for is a frame that was
+drawn for it and none of them is squashed — the source is 256 × 251, not
+square, so a single frame is what a browser distorts. Identical in all three
+sample repositories.
 
 ## The bar at the top is shared, and so is the strip at the bottom
 
