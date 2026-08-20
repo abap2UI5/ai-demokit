@@ -27,6 +27,16 @@
  *      is not v702-parseable).
  *   3. Never two `"branch"` keys in one dependency entry — duplicate keys
  *      are exactly the silent-shadowing trap above.
+ *   4. ui5/properties.json is not OLDER than ui5/universe.json — the second
+ *      version pairing in this repository, and the one generate-result.yaml
+ *      warns about in prose without anything checking it. The property
+ *      snapshot answers `@since`; the universe says which release the sample
+ *      set was harvested from. A snapshot behind the universe has no `@since`
+ *      for the controls introduced in between, so scopeOf reads them as in
+ *      scope and a port gets scaffolded for a control the 1.71 floor could
+ *      never render (sap.f.HeroBanner, @1.152, is the case that named this).
+ *      Compared on major.minor: the snapshot is built from an OpenUI5 master
+ *      checkout and calls itself `-SNAPSHOT`, which is the same release line.
  *
  * A deliberate, temporary feature-branch re-point (the documented re-pin
  * flow) must therefore edit ALLOWED_BRANCHES below in the same change — the
@@ -130,8 +140,34 @@ for (const rel of configFiles()) {
 }
 if (!checked) err('no abap2UI5 dependency entry found in any abaplint config — did the dependency URL change? (this check would go blind)');
 
+// --- 4. the property snapshot covers the sample universe --------------------
+const line = (v) => {
+  const m = /^(\d+)\.(\d+)/.exec(String(v || ''));
+  return m ? [Number(m[1]), Number(m[2])] : null;
+};
+let snapshotNote = 'snapshot/universe unread';
+{
+  const propsFile = path.join(ROOT, 'ui5', 'properties.json');
+  const universeFile = path.join(ROOT, 'ui5', 'universe.json');
+  if (!fs.existsSync(propsFile) || !fs.existsSync(universeFile)) {
+    err('ui5/properties.json or ui5/universe.json missing — the snapshot pairing cannot be judged');
+  } else {
+    const snap = JSON.parse(fs.readFileSync(propsFile, 'utf8')).ui5Version;
+    const uni = JSON.parse(fs.readFileSync(universeFile, 'utf8')).release;
+    const a = line(snap);
+    const b = line(uni);
+    if (!a || !b) {
+      err(`ui5 snapshot pairing unreadable — properties.json ui5Version ${JSON.stringify(snap)}, universe.json release ${JSON.stringify(uni)}`);
+    } else if (a[0] < b[0] || (a[0] === b[0] && a[1] < b[1])) {
+      err(`ui5/properties.json is ${snap}, older than the universe it must cover (${uni}) — regenerate it against the same OpenUI5 checkout (generate-result.yaml does this), or the @since of everything added in between is missing and scopeOf lets those controls through`);
+    } else {
+      snapshotNote = `snapshot ${snap} covers universe ${uni}`;
+    }
+  }
+}
+
 if (errors) {
   console.log(`check-pins: ${errors} error(s).`);
   process.exit(1);
 }
-console.log(`check-pins: ok (A2UI5_PIN well-formed, ${checked} abap2UI5 dependency entr${checked === 1 ? 'y' : 'ies'} clean)`);
+console.log(`check-pins: ok (A2UI5_PIN well-formed, ${checked} abap2UI5 dependency entr${checked === 1 ? 'y' : 'ies'} clean, ${snapshotNote})`);
