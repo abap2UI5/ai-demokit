@@ -194,3 +194,64 @@ test('generate-summary: a missing line, an edited line and an undescribed sample
     fs.rmSync(root, { recursive: true, force: true });
   }
 });
+
+/* ------------------------------------------------------- abap-scope.mjs */
+
+// No fixture corpus: the decision is a pure function of a list of paths, so
+// the tests are the list. What they hold is the SHAPE of the answer - that
+// the ABAP runs the downport, that the site does not, and above all that an
+// unclassified path runs it. The last one is what keeps a new folder from
+// silently switching the gate off.
+
+test('abap-scope: the ABAP and what the 702 lint reads run the downport', async () => {
+  const { reachesAbap } = await import('../abap-scope.mjs');
+
+  for (const file of [
+    'src/01/sap.m/z2ui5_cl_smpc_app_001.clas.abap',
+    '.github/abaplint/abap_702.jsonc',
+    '.github/workflows/abap-702.yaml',
+    '.github/workflows/auto-downport.yaml',
+    'package.json',
+    'package-lock.json',
+    'abaplint.jsonc',
+    'A2UI5_PIN',
+  ]) {
+    const { run } = reachesAbap([file]);
+    assert.equal(run, true, `${file} must run the downport`);
+  }
+});
+
+test('abap-scope: the page, the sidecars and prose do not', async () => {
+  const { reachesAbap } = await import('../abap-scope.mjs');
+
+  const inert = [
+    'web/search/index.html',
+    'web/search/favicon.ico',
+    'web/README.md',
+    'meta/z2ui5_cl_smpc_app_001.json',
+    'ui5/descriptions.json',
+    'scripts/generate-search-index.mjs',
+    '.github/workflows/deploy-web.yaml',
+    '.claude/skills/run-the-gates/SKILL.md',
+    'README.md',
+    'AGENTS.md',
+  ];
+  const { run, reason } = reachesAbap(inert);
+  assert.equal(run, false, `none of these reach the ABAP:\n${inert.join('\n')}`);
+  assert.match(reason, /none of them ABAP/);
+
+  // one ABAP file among them is enough
+  const mixed = reachesAbap([...inert, 'src/01/sap.m/z2ui5_cl_smpc_app_001.clas.abap']);
+  assert.equal(mixed.run, true, 'a single changed class must run the downport');
+});
+
+test('abap-scope: a path in neither list, and an empty list, run the downport', async () => {
+  const { reachesAbap } = await import('../abap-scope.mjs');
+
+  const unknown = reachesAbap(['tools/whatever.mjs']);
+  assert.equal(unknown.run, true, 'an unclassified path must run the gate, not skip it');
+  assert.match(unknown.reason, /neither list/);
+
+  assert.equal(reachesAbap([]).run, true, 'no file list means CI could not tell - run');
+  assert.equal(reachesAbap(['']).run, true, 'an empty line is not a file list either');
+});

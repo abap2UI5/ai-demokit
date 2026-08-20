@@ -27,18 +27,43 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      # the scope step below diffs against the commit this push moved from
+      with:
+        fetch-depth: 0
+
+    # The 702 branch is rebuilt from a full checkout every time, so a run that
+    # is skipped leaves nothing half-done: the next merge that does reach the
+    # ABAP rebuilds the branch from the main it finds. Same decision as the
+    # abap-702 gate, same script - see the note there.
+    - name: Does this push reach the ABAP?
+      id: scope
+      env:
+        BEFORE_SHA: ${{ github.event.before }}
+      run: |
+        set -euo pipefail
+        if [ -n "${BEFORE_SHA:-}" ] && git cat-file -e "$BEFORE_SHA^{commit}" 2>/dev/null; then
+          files=$(git diff --name-only "$BEFORE_SHA..HEAD")
+        else
+          files=''   # no range to work out - abap-scope.mjs answers "run"
+        fi
+        printf '%s\n' "$files" | node scripts/abap-scope.mjs | tee -a "$GITHUB_OUTPUT"
 
     - name: Set up Node.js
+      if: steps.scope.outputs.run == 'true'
       uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
       with:
         node-version: '22'
         cache: 'npm'
 
     - run: npm ci
+      if: steps.scope.outputs.run == 'true'
     - run: npm run downport
+      if: steps.scope.outputs.run == 'true'
     - run: npx abaplint .github/abaplint/abap_702.jsonc
+      if: steps.scope.outputs.run == 'true'
 
     - name: Commit and Push Changes
+      if: steps.scope.outputs.run == 'true'
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
