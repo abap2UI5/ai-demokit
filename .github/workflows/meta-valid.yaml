@@ -8,6 +8,12 @@ name: meta-valid
 # committed generated file with nothing watching it. SAMPLES.md was exactly
 # that until 2026-08-18: `npm run gates` regenerated and diffed it, CI did
 # neither, so a batch that skipped the local gate shipped a stale catalogue.
+#
+# This job used to run plain node with no install, because every generator here
+# was dependency-free. generate-overview.mjs no longer is: it lays the class it
+# writes out in the house layout, and that layout is now decided by the linter's
+# chain-house-layout rule rather than by a second copy of the algorithm. So the
+# install is the cost of having one implementation of the rule instead of two.
 
 on:
   pull_request:
@@ -32,6 +38,8 @@ jobs:
     - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
       with:
         node-version: '22'
+    # generate-overview.mjs imports @abap2ui5/linter (scripts/lib/format-chain.mjs)
+    - run: npm ci --no-audit --no-fund
     - run: node scripts/validate-meta.mjs
     - run: node scripts/generate-overview.mjs
     - run: node scripts/generate-coverage.mjs
