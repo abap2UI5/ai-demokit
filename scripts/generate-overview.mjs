@@ -21,7 +21,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { loadUniverseSnapshot, loadPropertiesControls, enrichFromProperties } from './lib-universe.mjs';
-import { formatSource } from './chain-format.mjs';
+import { formatSource } from './lib/format-chain.mjs';
 import { isSkippedDir } from './lib/src-tree.mjs';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');

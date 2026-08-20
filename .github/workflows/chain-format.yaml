@@ -2,14 +2,24 @@ name: chain-format
 
 # The view-chain layout: one call per line, four spaces per tree level, where
 # the end( ) column sits, which blank line carries which piece of structure.
-# The abap2UI5-linter judges a chain's own rhythm and one-call-per-line;
-# neither rule judges the STEP, so this is the only check that holds the
-# four-space level. `npm run fmt:chains` fixes what it reports.
 #
-# scripts/chain-format.mjs is byte-identical in abap2UI5/samples,
-# abap2UI5/samples-stack and here, and it was gated in the first two while
-# here it only ever ran from `npm run gates` - not even from the pre-commit
-# hook. A layout violation could reach main unseen until 2026-08-18.
+# This used to run scripts/chain-format.mjs, a second implementation of a rule
+# the linter already ships. The old header here said that script was
+# "byte-identical in abap2UI5/samples, abap2UI5/samples-stack and here", and by
+# 2026-08 none of that was true any more: samples-stack had migrated to the
+# linter rule and deleted its copy, and the two remaining copies differed by
+# the zz_dev skip. Which is the argument against copies, made by the copies.
+#
+# `chain-house-layout` judges all of it, including the four-space STEP the
+# older rules deliberately left alone, and it was built FROM this corpus's
+# layout unification - measured at zero findings over 431 classes before the
+# switch. One rule, one implementation, one place it can fail.
+#
+# Only the linter is installed, not the repository's dependencies: the linter
+# has no runtime dependencies at all, while `npm ci` here pulls twenty
+# @openui5/@sapui5 packages for the render gate this check does not use. The
+# version is read out of package-lock.json, so CI and `npm run check:chains`
+# on a developer's machine run the same rule.
 
 on:
   pull_request:
@@ -34,4 +44,9 @@ jobs:
     - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
       with:
         node-version: '22'
-    - run: node scripts/chain-format.mjs
+    - name: The layout the whole tree is written in
+      run: |
+        set -euo pipefail
+        VER=$(node -p "require('./package-lock.json').packages['node_modules/@abap2ui5/linter'].version")
+        echo "linter $VER (from package-lock.json)"
+        npx --yes "@abap2ui5/linter@$VER" --config abap2ui5lint-chains.jsonc
