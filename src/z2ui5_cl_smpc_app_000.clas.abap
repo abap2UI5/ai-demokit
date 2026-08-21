@@ -6414,10 +6414,13 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
 
     lv_text1 = `NOTE: handleCalendarSelect/_updateText read the picked day off the control (oCalendar.getSelectedDates()[0].getStartDate()) and format it yyyy-MM-dd. The port transports it as three UI5 expression` &&
                ` args (year, month+1, day - the LOCAL parts, not toISOString( ), which would shift the day east of Greenwich), each guarded by getSelectedDates().length > 0, and formats server-side; the Text gets a` &&
-               ` two-way bound text attribute instead of setText (app 139 idiom, probe-verified). // NOTE: handleSelectToday does removeAllSelectedDates() + addSelectedDate(new DateRange({startDate: today})) and` &&
-               ` reformats. The port only writes the text: the server date IS today, so the label is 1:1, but the calendar's own highlight of that day is not moved - addSelectedDate takes a DateRange CONTROL, which` &&
-               ` no wire can construct (same residual as app 139). // NOTE: not yet run in a system: the CAL_SELECT expression-arg round-trip across the two displayed months and the SELECT_TODAY text update.` &&
-               ` **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_304.mjs).`.
+               ` two-way bound text attribute instead of setText (app 139 idiom, probe-verified). // NOTE: handleSelectToday's removeAllSelectedDates( ) + addSelectedDate( DateRange( today ) ) is reproduced since` &&
+               ` 2026-08-21, so the calendar's own highlight really moves to today. This carried a residual until then - 'only the calendar's own highlight is not moved, addSelectedDate takes a DateRange CONTROL` &&
+               ` which no wire can construct' - and the claim is true of the METHOD while missing the point: selectedDates is a bindable AGGREGATION of sap.ui.unified.DateRange, the same type and shape app 220 binds` &&
+               ` for disabledDates, so the aggregation never needed the method. The port binds it to a one-row table and both handlers re-state that row: replacing it IS removeAll + add. Every click round-trips`.
+    lv_text1 = lv_text1 && ` through CAL_SELECT, so the model stays the source of truth and the control's own click-selection is re-stated rather than fought. Same stale-rationale shape as apps 305 and 306, found the same day.` &&
+               ` // NOTE: not yet run in a system: the CAL_SELECT expression-arg round-trip across the two displayed months and the SELECT_TODAY text update. **e2e-verified 2026-08-16** (nightly e2e interaction,` &&
+               ` meta/interactions/z2ui5_cl_smpc_app_304.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarMultipleMonth`                         class = `z2ui5_cl_smpc_app_304` path = `src/01/02/z2ui5_cl_smpc_app_304.clas.abap`
         score = 3
@@ -6425,19 +6428,18 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.22.0`
         notes = lv_text1 ) ).
 
-    lv_text1 = `NOTE: The picked day IS transportable after all - measured 2026-08-05 with ``scripts/probes/event-arg-expression-probe.mjs`` against real OpenUI5: an event arg is a full UI5 expression, and indexed` &&
-               ` access into an array-valued getter plus chained calls resolve there (``$event.oSource.getSelectedDates()[0].getStartDate()``). The earlier rationale - 'select carries no date parameter and the` &&
-               ` selected DateRange is control state' - was wrong. The wire carries the three LOCAL date parts as three expression args (year, month+1, day) rather than ``toISOString( )``, which would shift the day` &&
-               ` for any user east of Greenwich, and each arg is guarded by ``getSelectedDates().length > 0`` so a re-click that clears the selection arrives as year 0. App 139 now formats the SELECTED day as the` &&
-               ` original's yyyy-MM-dd (DateFormat pattern) instead of the server date. Residual: 'Select Today' still only writes the text - the server date IS today, so the text is 1:1, but the calendar's own` &&
-               ` highlight is not moved, because addSelectedDate takes a DateRange CONTROL that no wire can construct. // NOTE: The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML`.
-    lv_text1 = lv_text1 && ` style leaf (no counterpart in the original view). This sample's manifest lists ``../style.css`` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the` &&
-               ` viewPadding / labelMarginLeft classes the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at` &&
-               ` ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs.`.
+    lv_text1 = `NOTE: handleSelectToday's addSelectedDate( DateRange( today ) ) is reproduced since 2026-08-21, so the calendar's own highlight really moves to today. This carried a residual until then - 'the` &&
+               ` calendar's own highlight is not moved, because addSelectedDate takes a DateRange CONTROL that no wire can construct' - and the claim is true of the METHOD while missing the point: selectedDates is a` &&
+               ` bindable AGGREGATION of sap.ui.unified.DateRange, the same type and shape app 220 binds for disabledDates, so the aggregation never needed the method. The port binds it to a one-row table and both` &&
+               ` handlers re-state that row. Every click round-trips through CAL_SELECT, so the model stays the source of truth and the control's own click-selection is re-stated rather than fought. Same` &&
+               ` stale-rationale shape as apps 305 and 306. // NOTE: The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). This sample's` &&
+               ` manifest lists ``../style.css`` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding / labelMarginLeft classes the view carries had no rule`.
+    lv_text1 = lv_text1 && ` behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only` &&
+               ` the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarSingleDaySelection`                    class = `z2ui5_cl_smpc_app_139` path = `src/01/02/z2ui5_cl_smpc_app_139.clas.abap`
-        score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
         notes = lv_text1 ) ).
 

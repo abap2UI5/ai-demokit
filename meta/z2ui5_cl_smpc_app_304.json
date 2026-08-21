@@ -17,7 +17,7 @@
     },
     {
       "type": "NOTE",
-      "what": "handleSelectToday does removeAllSelectedDates() + addSelectedDate(new DateRange({startDate: today})) and reformats. The port only writes the text: the server date IS today, so the label is 1:1, but the calendar's own highlight of that day is not moved - addSelectedDate takes a DateRange CONTROL, which no wire can construct (same residual as app 139)."
+      "what": "handleSelectToday's removeAllSelectedDates( ) + addSelectedDate( DateRange( today ) ) is reproduced since 2026-08-21, so the calendar's own highlight really moves to today. This carried a residual until then - 'only the calendar's own highlight is not moved, addSelectedDate takes a DateRange CONTROL which no wire can construct' - and the claim is true of the METHOD while missing the point: selectedDates is a bindable AGGREGATION of sap.ui.unified.DateRange, the same type and shape app 220 binds for disabledDates, so the aggregation never needed the method. The port binds it to a one-row table and both handlers re-state that row: replacing it IS removeAll + add. Every click round-trips through CAL_SELECT, so the model stays the source of truth and the control's own click-selection is re-stated rather than fought. Same stale-rationale shape as apps 305 and 306, found the same day."
     },
     {
       "type": "NOTE",

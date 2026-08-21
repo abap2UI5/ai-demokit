@@ -150,6 +150,16 @@ the per-port modules here):
     breadcrumb toasts) 416 (the breadcrumb round-trip) 417 (the breakpoint
     transport measured where it ALONE decides the flag: side content open at
     breakpoint S)
+  rewritten on 2026-08-21 after review found them asserting the wrong thing:
+    344 (clicked Toggle and asserted a Text was visible - true before, after,
+    and whether the button worked at all, which is how a Toggle that could not
+    toggle survived a green nightly; it reads the two grid cells' sapUiHidden
+    class now, and presses TWICE) 341 (pressed Start loading ONCE, so the
+    control_by_id refresh loop - which only runs on a LATER press - was never
+    executed, while the deviation it closed named exactly that branch)
+    363 (every assertion began by fill()ing over whatever was there, so a
+    seeded "0" hiding three placeholders was invisible; it asserts the empty
+    start now, and commits each Input with Enter before pressing Apply)
   the three modules that used to be DOM DUMPS (2026-08-21): 301 (the ShellBar
     menuButtonPressed popover, itemSelect -> NavContainer 'to', and the
     selectedKey surviving the popover being REBUILT - the leg that caught the
