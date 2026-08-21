@@ -8,7 +8,7 @@
     "frontend_action": true,
     "event_t_arg": true
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -21,7 +21,7 @@
     },
     {
       "type": "POST_171",
-      "what": "REVIEW FINDING (out of scope, maintainer decision needed): the ported control sap.m.OverflowToolbarTokenizer itself is tagged @ui5-experimental-since 1.139 in the OpenUI5 source and carries NO plain @since tag, so scripts/scope-of.mjs misreads it as base-version (<= 1.71, 'no @since header') and the property gate cannot see it either. The sample is out of porting scope per AGENTS \u00a71 (control must exist since UI5 1.71); the app needs a UI5 release >= 1.139 (experimental API) to render. Either drop the port or add a ui5/scope-exceptions.json entry; scope-of.mjs should also learn @ui5-experimental-since."
+      "what": "REVIEW FINDING (out of scope, maintainer decision needed): the ported control sap.m.OverflowToolbarTokenizer itself is tagged @ui5-experimental-since 1.139 in the OpenUI5 source and carries NO plain @since tag, so scripts/scope-of.mjs misreads it as base-version (<= 1.71, 'no @since header') and the property gate cannot see it either. The sample is out of porting scope per AGENTS §1 (control must exist since UI5 1.71); the app needs a UI5 release >= 1.139 (experimental API) to render. Either drop the port or add a ui5/scope-exceptions.json entry; scope-of.mjs should also learn @ui5-experimental-since."
     }
   ]
 }

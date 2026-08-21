@@ -9,7 +9,7 @@
     "event_t_arg": true,
     "note": "the trigger press round-trips and on_event builds the controller's ResponsivePopover with the f:ProductSwitch, anchored by id via popover_display; fnChange toasts and redirects off ${$parameters>/itemPressed}.getTargetSrc(). Corrected 2026-08-21: the note still described a static client toast and an IMPROVISED deviation that no longer exists - the rework landed 2026-08-05."
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {

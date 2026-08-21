@@ -8,7 +8,7 @@
     "frontend_action": true,
     "event_t_arg": true
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -40,8 +40,8 @@
       "what": "NavigationListItem.design=\"Action\" and NavigationListItem.ariaHasPopup=\"Dialog\" (both @since 1.133) are kept 1:1 on the Create item; SideNavigation.design=\"Plain\" (@since 1.132) is kept 1:1 on the popover's side navigation."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet run in a system: the ShellBar menuButtonPressed -> anchored popover round-trip, the itemSelect -> NavContainer 'to' frontend action plus the bound page text, and the quick-create popup."
+      "type": "NOTE",
+      "what": "not yet run in a system: the ShellBar menuButtonPressed -> anchored popover round-trip, the itemSelect -> NavContainer 'to' frontend action plus the bound page text, and the quick-create popup. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_301.mjs)."
     },
     {
       "type": "NOTE",
