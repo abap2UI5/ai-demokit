@@ -12,7 +12,7 @@
 // navigation: hasText matches case-insensitive substrings, so a page-wide
 // "Home is gone" would keep matching the NavContainer's own
 // "This is the home page" and pass whatever the filter did.
-import { waitForUi5, ui5All, UI5_ALL_SRC } from '../../scripts/lib-e2e.mjs';
+import { waitForUi5, ui5All, UI5_ALL_SRC, typeLive, revealInOverflow } from '../../scripts/lib-e2e.mjs';
 
 const SIDE = '[id$="sideNavigation"]';
 const FIELD = '[id$="sideNavigationSearchField"]';
@@ -37,12 +37,13 @@ export default async (page, expect) => {
   await dialog.getByRole('button', { name: 'Cancel', exact: true }).first().click();
   await expect(page.locator('.sapMDialog:visible'), 'the dialog after Cancel').toHaveCountBelow(1);
 
-  // (c) the per-keystroke filter round-trip. Typed with a delay: the wire
-  // round-trips per keystroke and events fired mid-flight are dropped.
+  // (c) the per-keystroke filter round-trip. typeLive waits for the bound
+  // value after EVERY character: this wire is lossy, not queued, and a fixed
+  // delay only makes a dropped keystroke less likely — a 300ms one swallowed
+  // the "a" here and made the backend filter on "Sles".
   const input = page.locator(`${FIELD} input`).first();
   await expect(input, 'the side navigation search field').toBeVisibleEnabled();
-  await input.click();
-  await input.pressSequentially('Sales', { delay: 300 });
+  await typeLive(page, input, 'Sales', 'sideNavigationSearchField');
   await expect(side, 'the matching parent kept by the filter').toContainText('Sales Reports');
   await expect(side, 'the non-matching sibling child').notToContainText('Customer reports');
   await expect(side, 'the non-matching root item').notToContainText('Home');
@@ -66,14 +67,33 @@ export default async (page, expect) => {
     await new Promise((r) => setTimeout(r, 100));
   }
 
-  // (e) collapse resets the search; expanding again has to show the full tree
-  const menu = page.locator('[id$="menuToggleButton"]').first();
-  await menu.dispatchEvent('click');
+  // (e) collapse resets the search; expanding again has to show the full tree.
+  // The menu button lives in the ToolHeader's OWN overflow at this viewport —
+  // measured: the control exists with no DOM at all until that popover opens —
+  // so it is revealed before each press, and pressed rather than dispatched at.
+  // Each press re-renders the ToolHeader, which re-decides what overflows, so
+  // revealing once and holding the locator is not enough: reveal and press
+  // together, and retry if the button went away between the two.
+  const pressMenu = async () => {
+    const menu = page.locator('[id$="menuToggleButton"]').first();
+    for (let attempt = 0; attempt < 3; attempt++) {
+      await revealInOverflow(page, menu);
+      try {
+        await menu.click({ timeout: 5000 });
+        return;
+      } catch {
+        await page.waitForTimeout(800);
+      }
+    }
+    throw new Error('the menu toggle button never became clickable in the ToolHeader overflow');
+  };
+
+  await pressMenu();
   await waitForUi5(page, () => {
     const t = ui5All().find((c) => c.getMetadata().getName() === 'sap.tnt.ToolPage');
     return !!t && t.getSideExpanded() === false;
   }, 'MENU_TOGGLE did not collapse the side navigation');
-  await menu.dispatchEvent('click');
+  await pressMenu();
   await waitForUi5(page, () => {
     const t = ui5All().find((c) => c.getMetadata().getName() === 'sap.tnt.ToolPage');
     return !!t && t.getSideExpanded() === true;

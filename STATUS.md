@@ -18,8 +18,8 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 | Ports | **416** sidecars in `meta/` (src/01 OpenUI5 <= 1.71: 291 · src/02 OpenUI5 > 1.71: 125) |
 | Per library | sap.f: 19 · sap.m: 219 · sap.tnt: 17 · sap.ui: 130 · sap.uxap: 31 |
 | Status ladder | 187 `generated` · 168 `reviewed` · 61 `checked` (live-verified) |
-| Deviations | 5 DROPPED_171 · 66 IMPROVISED · 25 LIVE_TEST · 940 NOTE · 183 POST_171 |
-| Open LIVE_TESTs | **25 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
+| Deviations | 5 DROPPED_171 · 66 IMPROVISED · 7 LIVE_TEST · 958 NOTE · 183 POST_171 |
+| Open LIVE_TESTs | **7 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 2 structural-diff · 4 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_smpc_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_smpc_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_smpc_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_smpc_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_smpc_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
 
@@ -107,12 +107,26 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   directory's README carries the coverage catalogue) and, after a green
   run, `node scripts/close-live-tests.mjs --close <nums>` converts the
   verified entries into `NOTE`s mechanically (text kept verbatim, so gate
-  declarations keep matching). The 2026-08-04 state "every LIVE_TEST port
-  has an interaction" no longer holds: the batches added since (apps
-  299–366) ship their LIVE_TESTs without interactions — `validate-meta`
-  reports that gap count as an advisory so it stays visible. A red
-  nightly opens/updates an issue instead of hiding in the Actions tab.
-  Every green interaction is human live-check time saved.
+  declarations keep matching). A red nightly opens/updates an issue instead of
+  hiding in the Actions tab. Every green interaction is human live-check time
+  saved.
+  **2026-08-21: the interaction gap is closed and the backlog is down from 25
+  ports to 7.** The 19 ports that shipped a LIVE_TEST without an interaction
+  (apps 356–366, 401–417) have one now, all 19 run green under
+  `--strict`, and 18 were converted to `NOTE`s. `validate-meta` reports no gap
+  count any more.
+  **App 359 is the one that stayed open, deliberately.** Its module closes the
+  bound-`rowActionCount` half; the two-placeholder toast on a row-action press
+  cannot be driven here, because the row actions never render in the smoke at
+  all — calling `setRowActionCount(2)` + `invalidate()` DIRECTLY on the table
+  through its own API, bypassing the port, still leaves every row without a
+  `_rowAction`. That rules the port out as the cause and leaves the leg to the
+  human live run.
+  The remaining 7 are 301/348/350/351/353/354 (which already had interactions
+  and were not re-run in that session) plus 359. Note 354's is not closable as
+  it stands: its module reaches `filter_apply( )` but its LIVE_TEST is about the
+  COLUMN filter's prevented default, which needs a `sap.ui.table` column header
+  menu.
 - [x] **Post-1.71 declaration debt in the gate's blind spots — DONE, and it is
   a probe now.** Surfaced by the review sweep (2026-08-21), and NOT a
   batch-freshness problem: the same gap appeared in old ports and was correctly

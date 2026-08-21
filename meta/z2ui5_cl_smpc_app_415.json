@@ -24,8 +24,8 @@
       "what": "Popover anchoring: the original controller opens each ResponsivePopover fragment with oPopover.openBy(oEvent.getParameter('domRef')) - the DOM element of the pressed title-arrow (titleSelectorPress) resp. lock marker (markLockedPress) inside the ObjectPageHeader. abap2UI5's popover_display anchors by control id, so both wires transport the event source's control id via $event.oSource.sId and the popovers open by the ObjectPageHeader control (id headerForTest) instead of the exact icon DOM element - same placement='Bottom', slightly coarser anchor. The fragments themselves (Popover.fragment.xml, PopoverLock.fragment.xml) are rebuilt 1:1 as core:FragmentDefinition chains shown via popover_display."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Round-trip behaviour unverified in a running system: the two anchored ResponsivePopover opens (TITLE_SELECTOR via titleSelectorPress, MARK_LOCKED via markLockedPress, both anchored at $event.oSource.sId), the ITEM_SELECT selectionChange round-trip that closes the popover via follow_up_action popover_close (1:1 with handleItemSelect), and the LINK1/LINK2 breadcrumb Link press toasts ('Page 1 a very long link clicked' / 'Page 2 long link clicked')."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-21 (nightly e2e interaction): Round-trip behaviour unverified in a running system: the two anchored ResponsivePopover opens (TITLE_SELECTOR via titleSelectorPress, MARK_LOCKED via markLockedPress, both anchored at $event.oSource.sId), the ITEM_SELECT selectionChange round-trip that closes the popover via follow_up_action popover_close (1:1 with handleItemSelect), and the LINK1/LINK2 breadcrumb Link press toasts ('Page 1 a very long link clicked' / 'Page 2 long link clicked')."
     }
   ]
 }

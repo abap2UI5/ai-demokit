@@ -108,6 +108,35 @@ export async function revealInOverflow(page, locator) {
   throw new Error(`the control never appeared — tried ${n} overflow popover(s)`);
 }
 
+// Type into a field whose liveChange ROUND-TRIPS per keystroke. Such a wire is
+// lossy, not queued: a round-trip in flight drops the events behind it, which
+// is what the linter's own `live-event-roundtrip` advisory says about these
+// ports. A fixed inter-key delay only makes the loss less likely, never
+// impossible — measured 2026-08-21 on app 407, `pressSequentially` with a
+// 300ms delay swallowed the "a" and the backend filtered on "Sles", which then
+// matched nothing and produced an assertion failure that looked like a broken
+// filter. So each character waits for the BOUND VALUE to catch up before the
+// next one is pressed, which is deterministic instead of merely likely.
+export async function typeLive(page, locator, text, idSuffix) {
+  const read = () => page.evaluate(`(() => { ${UI5_ALL_SRC}
+    const f = ui5All().find((c) => c.getId().endsWith(${JSON.stringify(idSuffix)}));
+    return f ? f.getValue() : null; })()`);
+  await locator.click();
+  for (let i = 0; i < text.length; i++) {
+    const want = text.slice(0, i + 1);
+    let settled = false;
+    for (let attempt = 0; attempt < 4 && !settled; attempt++) {
+      await locator.press(text[i]);
+      await page.waitForTimeout(900); // land AND settle: a late echo arrives here, not later
+      settled = (await read()) === want;
+      if (!settled) await locator.fill(text.slice(0, i)); // put the prefix back and retry
+    }
+    if (!settled) {
+      throw new Error(`the live field never settled on "${want}" — the round-trip keeps overwriting the typed value`);
+    }
+  }
+}
+
 // A uxap ObjectPageHeaderActionButton renders ICON-ONLY in the header: its
 // text is not painted and the button's accessible name comes from the TOOLTIP
 // instead, so getByRole('button', { name: <the button's text> }) matches

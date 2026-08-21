@@ -79,6 +79,55 @@ verdicts below turned out to be harness effects.
   though the Pages build it was written for is gone), and forwarded upstream as
   `pr/open-abap-xml-escaping`. Prefer `READ TABLE` over `tab[ … ]` in an app
   that must run there.
+- **Locate by what the DOM actually exposes, not by what the control is
+  called.** Four shapes measured 2026-08-21, each of which fails as a plain
+  30s locator timeout that reads like a broken port: a **Breadcrumbs link**
+  carries `aria-labelledby` pointing at ITSELF plus the current-location text,
+  so its accessible name is not its text and `getByRole('link', { name,
+  exact })` matches nothing — `getByText` does; a **uxap
+  ObjectPageHeaderActionButton** renders icon-only and takes its accessible
+  name from the TOOLTIP, so app 408's "toggle title" button answers to
+  "synchronize" — `pressHeaderAction` resolves it through the control registry;
+  a **QuickView pageLink** has no accessible name at all and its text may
+  repeat elsewhere in the popover, so match on `.sapMLnk`; and the uxap header
+  **markers** (`-changes`, `-lock`, `-titleArrow`) are internal Buttons with a
+  generated id suffix.
+- **A dispatched `click` is not always a press.** The header markers DO get a
+  layout box (123x22 unthemed), so a real `.click()` fires them while a
+  dispatched `click` reaches the DOM node and dies there. Where a control
+  genuinely has no box, one event may still not be enough: sap.ui.table's
+  pointer extension acts on the mousedown/mouseup PAIR, so its 0-wide tree
+  expand icon ignores a lone `click` — `dispatchMouse()` sends the whole
+  sequence. Try a real click first; dispatch only what has no box.
+- **Several OverflowToolbars can share one page.** App 357 has one on the table
+  and one in the footer, so "the first Additional Options button" opens the
+  wrong popover and the control still never shows; app 407's menu button hides
+  in the ToolHeader's own overflow. `revealInOverflow(page, locator)` tries them
+  in turn until the wanted control is on screen. A round-trip re-renders the
+  toolbar and re-decides what overflows, so reveal and press TOGETHER rather
+  than holding a locator across a round-trip.
+- **A two-way bound live field fights the typist.** Where a `liveChange` wire
+  round-trips AND the same field is bound two-way, the response echoes the
+  server's value back and OVERWRITES anything typed since — so a fixed
+  inter-key delay cannot fix it, only make the loss less likely (app 407: a
+  300ms delay swallowed the "a" and the backend filtered on "Sles"). `typeLive()`
+  presses one character, waits for the bound value to SETTLE on it, and retries
+  the character if a late echo rolled it back.
+- **Prove a missing control is the harness, not the port, by driving the UI5
+  API directly.** App 359's row actions never render in the smoke; calling
+  `setRowActionCount(2)` + `invalidate()` on the table itself — bypassing the
+  port entirely — still left every row without a `_rowAction`. That is what
+  turns "the port might be broken" into "the harness cannot show this", and it
+  belongs in the module as a comment plus a "still open" line in
+  `meta/interactions/README.md`, never a silently dropped assertion.
+- **A binding TEMPLATE answers for no row.** Asserting `getVisible()` on the
+  `RowAction` template (app 359) or on any aggregation template reads a state
+  with no binding context — the app-207 trap in a different control.
+- **An assertion that is already true waits for nothing.** App 362 waited for
+  an Accessories row at the head of the model after a category sort, but
+  name-ascending already put one there: the wait returned instantly and the
+  module raced its next round-trip against the one still in flight. Wait on the
+  state that CHANGES.
 - **Type with a delay when the wire round-trips.** A per-keystroke round-trip
   is lossy, not queued (events fired mid-flight are dropped) — a no-delay
   `pressSequentially` asserts a value the wire never promised. Full rule (app

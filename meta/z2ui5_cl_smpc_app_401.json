@@ -36,8 +36,8 @@
       "what": "The controller's three constant-text MessageToast handlers (handleLink1Press, handleLink2Press, handleEditBtnPress) are wired as round-trip-free client toasts (follow_up_action cs_event-control_global MESSAGE_TOAST.show, app 005 idiom), so the two breadcrumb Links and the edit-header button behave exactly as in the original without a backend round-trip."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "toggleFooter does oObjectPageLayout.setShowFooter(!getShowFooter()). showFooter IS a bindable property, so the port binds it two-way (client->_bind on the abap_bool flag; the first draft wrote a static as_bool literal the round-trip could never reach, caught by the e2e interaction before its first run) and flips the ABAP flag in on_event instead of calling the setter through a frontend action - the bindable-property-beats-frontend-action rule. The showFooter attribute is therefore present in the port where the original view does not write it, and the footer starts hidden as it does in the original. The round-trip toggle itself is not verified in a running system yet."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-21 (nightly e2e interaction): toggleFooter does oObjectPageLayout.setShowFooter(!getShowFooter()). showFooter IS a bindable property, so the port binds it two-way (client->_bind on the abap_bool flag; the first draft wrote a static as_bool literal the round-trip could never reach, caught by the e2e interaction before its first run) and flips the ABAP flag in on_event instead of calling the setter through a frontend action - the bindable-property-beats-frontend-action rule. The showFooter attribute is therefore present in the port where the original view does not write it, and the footer starts hidden as it does in the original. The round-trip toggle itself is not verified in a running system yet."
     },
     {
       "type": "NOTE",

@@ -32,8 +32,8 @@
       "what": "The original's empty blocks and moreBlocks aggregation tags on the paymentSubSection ObjectPageSubSection are not written - they hold no children, and aggregation elements are optional in XML (ignored by the structural diff). The side content's long Lorem Text keeps the original wording verbatim with the XML attribute's line breaks and tab indentation normalized to single spaces, as an XML attribute-value parser would (app 344 precedent)."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Unverified in a running system: the breakpointChanged round-trip transporting currentBreakpoint and recomputing the open button's bound visible flag, the showSideContent flip on the two press round-trips, and the SET_FOCUS follow-up on the openSideContentBtn / closeSideContentBtn ids. The breakpointChanged transport and the showSideContent flip use the same wiring that is e2e-verified on app 267 and live on apps 138/344."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-21 (nightly e2e interaction): Unverified in a running system: the breakpointChanged round-trip transporting currentBreakpoint and recomputing the open button's bound visible flag, the showSideContent flip on the two press round-trips, and the SET_FOCUS follow-up on the openSideContentBtn / closeSideContentBtn ids. The breakpointChanged transport and the showSideContent flip use the same wiring that is e2e-verified on app 267 and live on apps 138/344."
     }
   ]
 }

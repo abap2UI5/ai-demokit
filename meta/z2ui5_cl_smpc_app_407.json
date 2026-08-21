@@ -44,8 +44,8 @@
       "what": "Kept 1:1 but newer than UI5 1.71 in the navigation tree: sap.tnt.NavigationListGroup (control @since 1.121, the two group rows); NavigationListItem.selectable (@since 1.116); the tag aggregation (@since 1.149) with its sap.m.ObjectStatus and the IndicationColor enum values Indication15/16/17/18/20 (@since 1.120); design and ariaHasPopup (@since 1.133.0, incl. the design=Action / ariaHasPopup=Dialog values on the Quick Create row); expanded and hasExpander read as @since 1.121 because they live on the newer base class NavigationListItemBase - both predate 1.71 on NavigationListItem itself, declared per the relocated-member note."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet run in a system: the LIVE_CHANGE filter round-trip (bound group tables, visible flags, highlightedText), the SEARCH announceSearchMatchCount frontend action, the ITEM_SELECT to-page action, the quickCreate popup and the MENU_TOGGLE collapse-resets-search path."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-21 (nightly e2e interaction): not yet run in a system: the LIVE_CHANGE filter round-trip (bound group tables, visible flags, highlightedText), the SEARCH announceSearchMatchCount frontend action, the ITEM_SELECT to-page action, the quickCreate popup and the MENU_TOGGLE collapse-resets-search path."
     }
   ]
 }

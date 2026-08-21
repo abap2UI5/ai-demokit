@@ -24,8 +24,8 @@
       "what": "Clothing.json is inlined 1:1 - the full tree (Women/Men/Girls/Boys) with every leaf's amount/currency/size - as nested types, one per level, so absent leaf fields exist only where the JSON carries them and the Size Select stays hidden via the original's !!${size} guard. It is byte-identical to the file the sibling TreeTable.JSONTreeBinding sample uses, which app 248 ports; the model and its types are shared with that port. The rows binding keeps the original's arrayNames parameter with the ABAP (upper-cased) array name."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Unverified in a running system: the two control_by_id wires (collapseAll, and expandToLevel with its numeric argument - a listed CONTROL_METHODS entry, so the argument is declared and reaches the method)."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-21 (nightly e2e interaction): Unverified in a running system: the two control_by_id wires (collapseAll, and expandToLevel with its numeric argument - a listed CONTROL_METHODS entry, so the argument is declared and reaches the method)."
     }
   ]
 }

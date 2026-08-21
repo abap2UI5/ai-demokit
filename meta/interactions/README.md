@@ -128,6 +128,37 @@ the per-port modules here):
     sy-tabix fix touched - but it deliberately does NOT close 354's LIVE_TEST,
     which is about the COLUMN filter's prevented default and enableCellFilter;
     those need a sap.ui.table column header menu
+  the sap.ui.table batch (2026-08-21): 356 (the bound plugin limit /
+    selectionMode / showHeaderSelector reach the plugin with no round-trip, and
+    the selectionChange expression arg reports the count) 357 (both round-trips
+    re-read all 115 rows; neither answers with a toast, so the MODEL is the
+    assertion) 360 (a real ClipboardEvent dispatched at the table - its onpaste
+    bails out when the focus sits in an input and reads the cells off the
+    native event) 362 (the vetoed client sort plus the server-side SORT, read
+    off the first row's binding CONTEXT rather than a rendered cell) 363 (the
+    Apply clamp writes the corrected number back INTO the Input) 364/366 (the
+    arrayNames tree really expands - 366 also asserts it does NOT open deeper
+    than its one expanded level, without which a flat list is
+    indistinguishable) 365 (expandToLevel's numeric argument reaches the
+    method, proven by the level the tree stops at)
+  the uxap header/ObjectPage batch (2026-08-21): 401 408 414 (a bound flag
+    pressed TWICE - one press passes on a flag that latches, which is the
+    defect 401's first draft had) 409 (a static port, asserted on the nested
+    block geometry) 410 (the parent-chain event arg resolving to a runtime id)
+    412 (anchored QuickView + in-popover pageLink + setSelectedSection + two
+    client toasts) 415 (two anchored popovers, ITEM_SELECT closing one, both
+    breadcrumb toasts) 416 (the breadcrumb round-trip) 417 (the breakpoint
+    transport measured where it ALONE decides the flag: side content open at
+    breakpoint S)
+  407 (2026-08-21), the five-wire tnt one: itemSelect navigation, the
+    quickCreate popup, the LIVE_CHANGE filter, announceSearchMatchCount read
+    off the static area's polite aria-live node, and MENU_TOGGLE resetting the
+    search
   still open: 354's column-filter leg (see above), 233's confirm leg (neither click nor Enter on a dialog row
-    reaches the SelectDialog's confirm headless) and the hidden-picker
-    openBy class (016/256/257, Popover.onfocusin recursion)
+    reaches the SelectDialog's confirm headless), the hidden-picker
+    openBy class (016/256/257, Popover.onfocusin recursion), and 359's
+    row-action press: the row actions never render in the smoke at all, and
+    calling setRowActionCount(2) + invalidate() DIRECTLY on the table through
+    its own API - bypassing the port - still leaves every row without a
+    _rowAction, which rules the port out. 359's module therefore closes only
+    the bound-rowActionCount half and its LIVE_TEST stays OPEN

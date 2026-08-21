@@ -20,8 +20,8 @@
       "what": "localService/mockdata/Nodes.json is inlined in full - all sixteen nodes with the mock's own ids, levels, descriptions, parent ids and drill states; the root nodes' ParentNodeID is null in the JSON and becomes the empty string in the flat ABAP row type. The mock server itself (localService/mockserver.js over localService/metadata.xml) has no counterpart in an abap2UI5 app, whose backend IS the service."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Unverified in a running system: whether the nested model plus arrayNames renders the same expandable tree the OData tree binding produces."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-21 (nightly e2e interaction): Unverified in a running system: whether the nested model plus arrayNames renders the same expandable tree the OData tree binding produces."
     }
   ]
 }
