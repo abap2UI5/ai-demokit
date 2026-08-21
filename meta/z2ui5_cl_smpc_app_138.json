@@ -22,6 +22,10 @@
     {
       "type": "NOTE",
       "what": "The hint Text.visible is bound to a boolean model field (initial true); the original used a literal visible='getVisible()' (a sample quirk) toggled per Device.system.phone in onBeforeRendering. The two long body texts are shortened representative Lorem (not gate-compared, static)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's own style.css is archived and injected since 2026-08-21. The view carries class=\"sapUiDSCExplored\" and the rule behind it (.sapUiDSC.sapUiDSCExplored h1{font-size:2rem}) was missing entirely - a class name with nothing behind it, the same gap apps 122/124/133 had. style.css now sits in ui5/sap.ui.layout/DynamicSideContent/ (closing the AGENTS section 4 archive gap) and reaches the view through a core:HTML style leaf."
     }
   ]
 }

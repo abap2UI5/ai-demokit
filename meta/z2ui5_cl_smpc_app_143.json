@@ -18,6 +18,10 @@
     {
       "type": "NOTE",
       "what": "f:DynamicPage with title (heading, expanded/snapped tnt:InfoLabel, actions), pinnable header (ObjectAttributes), content (two long Texts) and footer. The footer message Button binds text and visible='{= !!${/MESSAGESLENGTH}}' to a model field (initial 0), reproducing the original {/messagesLength} wiring."
+    },
+    {
+      "type": "NOTE",
+      "what": "The two long body Texts are SHORTENED representative Lorem, not the original's full strings (the first runs to 1372 characters upstream and ends here at 631, the second 913 -> 410). Declared 2026-08-21 after the review sweep found it undeclared: neither structural_diff nor data_fidelity compares literal text VALUES, so nothing else would ever catch it. App 138 declares the same shortening on the same shape."
     }
   ]
 }

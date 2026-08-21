@@ -21,7 +21,7 @@
     },
     {
       "type": "NOTE",
-      "what": "DeliveryDate: the original computes Date.now() - (i % 10 * 4 days), a moving value, so it is anchored on a FIXED base date here (the corpus rule for now/random values, apps 164/181/289) and carried as an ISO date STRING rather than a JS epoch number. The DatePicker keeps its typed binding (sap.ui.model.type.Date) but its formatOptions source pattern becomes 'yyyy-MM-dd' instead of 'timestamp' - the model field type changed, the control binding did not (CAPABILITIES date row)."
+      "what": "DeliveryDate: the original computes Date.now() - (i % 10 * 4 days), a moving value, so it is anchored on a FIXED base date here (the corpus rule for now/random values, apps 164/181/289) and carried as an ISO date STRING rather than a JS epoch number. The DatePicker keeps its typed binding (sap.ui.model.type.Date) but its formatOptions source pattern becomes 'yyyy-MM-dd' instead of 'timestamp' - the model field type changed, the control binding did not (CAPABILITIES date row). CORRECTED 2026-08-21: the arithmetic produced a DAY NUMBER, not a date. A date operand inside an expression converts to its internal day count, so CONV string( CONV d( `20260101` ) - n ) yielded 739618 and the yyyy-MM-dd offsets cut that into '7.39-61-80' - measured on the running port, every row carried a value the DatePicker's sap.ui.model.type.Date binding cannot parse. Nothing caught it: the port BOOTS (the generic e2e gate passes), structural_diff compares structure and data_fidelity does not compare a DERIVED field. The arithmetic now lands in a TYPE d field before it is formatted."
     },
     {
       "type": "NOTE",

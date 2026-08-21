@@ -82,6 +82,12 @@ CLASS z2ui5_cl_smpc_app_081 IMPLEMENTATION.
   METHOD on_event.
 
     IF client->get_event( ) = `REFRESH`.
+      " handleRefresh calls pullToRefresh.hide( ) before appending: onclick puts
+      " the control in its busy state and only hide( ) resets it, so without
+      " this the spinner never goes away after the first pull
+      client->follow_up_action( val   = client->cs_event-control_by_id
+                                t_arg = VALUE #( ( `pullToRefresh` ) ( `hide` ) ) ).
+
       " _pushNewProduct: each pull-to-refresh appends the next product until the full collection is shown
       DATA(all) = fill_all( ).
       IF shown < lines( all ).

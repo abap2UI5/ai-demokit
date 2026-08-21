@@ -22,6 +22,10 @@
     {
       "type": "NOTE",
       "what": "grid:CSSGrid with gridAutoFlow + 10 VBox demo boxes, four carrying GridItemLayoutData row/column spans, 1:1."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's own css/main.css is archived and injected since 2026-08-21. All ten grid tiles carry class=\"demoBox\" and the rules behind it (.sapMFlexBox.demoBox rounded blue box, .demoBox .sapMText white) were missing entirely, so the tiles rendered as bare text instead of the blue rounded boxes the sample is a picture of - the same gap apps 122/124/133 had, and the sibling ports 346/347/271 already inject this very stylesheet. css/main.css now sits in ui5/sap.ui.layout/GridAutoFlow/css/ (closing the AGENTS section 4 archive gap). It reaches the view through an added core:HTML style leaf, which the original view does not declare."
     }
   ]
 }

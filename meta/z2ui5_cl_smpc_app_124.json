@@ -8,12 +8,12 @@
     "frontend_action": false,
     "event_t_arg": false
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
       "type": "NOTE",
-      "what": "The sample's css/main.css is now shipped with the port: injected through a core:HTML leaf carrying a <style> block (the documented CAPABILITIES form), so the port carries six core:HTML controls where the original view has five - the original loads the stylesheet through its manifest's sap.ui5/resources/css entry. The single .sapUiLayoutCSSGrid .stylePageLayout rule is verbatim, whitespace-collapsed, braces escaped \\{ \\} in a backtick literal. Until 2026-07-28 the five grid tiles carried the stylePageLayout class with no stylesheet behind them, so they rendered as unstyled text instead of the blue rounded boxes the sample shows. The stylesheet was also missing from ui5/sap.ui.layout/CSSGrid/ (a §4 archive gap) and is archived in the same change."
+      "what": "The sample's css/main.css is now shipped with the port: injected through a core:HTML leaf carrying a <style> block (the documented CAPABILITIES form), so the port carries six core:HTML controls where the original view has five - the original loads the stylesheet through its manifest's sap.ui5/resources/css entry. The single .sapUiLayoutCSSGrid .stylePageLayout rule is verbatim, whitespace-collapsed, braces escaped \\{ \\} in a backtick literal. Until 2026-07-28 the five grid tiles carried the stylePageLayout class with no stylesheet behind them, so they rendered as unstyled text instead of the blue rounded boxes the sample shows. The stylesheet was also missing from ui5/sap.ui.layout/CSSGrid/ (a \u00a74 archive gap) and is archived in the same change."
     },
     {
       "type": "NOTE",

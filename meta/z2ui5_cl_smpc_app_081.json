@@ -5,8 +5,8 @@
   "file": "src/01/01/z2ui5_cl_smpc_app_081.clas.abap",
   "batch": "b10",
   "audit": {
-    "frontend_action": false,
-    "event_t_arg": false
+    "frontend_action": true,
+    "event_t_arg": true
   },
   "status": "generated",
   "checked": null,
@@ -14,6 +14,10 @@
     {
       "type": "NOTE",
       "what": "the incremental backend load is reproduced 1:1: the model starts with the first product and each pull-to-refresh (REFRESH) appends the next until the full /ProductCollection is shown (fill_all + shown counter)."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleRefresh's this.byId('pullToRefresh').hide( ) is reproduced since 2026-08-21 through follow_up_action( cs_event-control_by_id, hide ) - an allowed unlisted control method. It was dropped and undeclared before, which the review sweep caught: PullToRefresh.onclick puts the control into its busy state (spinner + 'Loading') and ONLY hide( ) resets it to 'Refresh', so the port span after the first pull forever while the original returned to rest. The original's 1s setTimeout around it is not reproduced - the append happens on the round-trip instead."
     }
   ]
 }

@@ -18,7 +18,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the MessagePopover (built in the controller) is declared 1:1 in the button's `dependents`; the controller's toggle(button) becomes a roundtrip-free client->follow_up_action( cs_event-control_by_id, toggleBy ) on the button press (anchored by id), and onActiveTitlePress's MessageToast.show becomes roundtrip-free client->follow_up_action( cs_event-control_global, MESSAGE_TOAST/show ); the app is now init-only. Anchored to $event.oSource.sId."
+      "what": "the MessagePopover (built in the controller) is declared 1:1 in the button's `dependents`; the controller's toggle(button) becomes a roundtrip-free client->follow_up_action( cs_event-control_by_id, toggleBy ) on the button press (anchored by id), and onActiveTitlePress's MessageToast.show becomes roundtrip-free client->follow_up_action( cs_event-control_global, MESSAGE_TOAST/show ); the app is now init-only. Anchored to $event.oSource.sId. Corrected 2026-08-21: the wire actually passed the hard-coded id `messagePopoverBtn` while this text promised $event.oSource.sId, so the sidecar described a wire the port did not have - and the original's toggle(oEvent.getSource()) value was replaced by a constant. It now passes $event.oSource.sId, the form apps 060/105/106/107 use."
     },
     {
       "type": "NOTE",

@@ -44,6 +44,13 @@ CLASS z2ui5_cl_smpc_app_145 IMPLEMENTATION.
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:grid` v = `sap.ui.layout.cssgrid`
+        )->a( n = `xmlns:core` v = `sap.ui.core`
+
+        " the sample's own css/main.css - without it the ten demoBox tiles render as bare text instead of the blue rounded boxes the sample is a picture of
+        " \{ \} escaped: the XMLView parser reads an unescaped brace as a binding
+        )->tag( n = `HTML` ns = `core`
+            )->a( n = `content` v = `<style>.sapMFlexBox.demoBox\{border-radius:10px;background-color:#427cac;text-align:center\}` &&
+                                    `.demoBox .sapMText\{color:#fff\}</style>`
 
         )->tag( `ToggleButton`
             )->a( n = `id`    v = `revealGrid`
