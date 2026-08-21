@@ -150,11 +150,22 @@ the per-port modules here):
     breadcrumb toasts) 416 (the breadcrumb round-trip) 417 (the breakpoint
     transport measured where it ALONE decides the flag: side content open at
     breakpoint S)
+  the three modules that used to be DOM DUMPS (2026-08-21): 301 (the ShellBar
+    menuButtonPressed popover, itemSelect -> NavContainer 'to', and the
+    selectedKey surviving the popover being REBUILT - the leg that caught the
+    literal selectedKey defect) 351 (Add/Remove really re-render the bound
+    contentAreas, a typed Min-Size reaches SplitterLayoutData as an integer,
+    the bound orientation flips) 353 (the rowSelectionChange rowIndex moving a
+    NAMED row, and MOVE_UP reordering). validate-meta now rejects a module
+    that can never fail, which is what let these three count as coverage
   407 (2026-08-21), the five-wire tnt one: itemSelect navigation, the
     quickCreate popup, the LIVE_CHANGE filter, announceSearchMatchCount read
     off the static area's polite aria-live node, and MENU_TOGGLE resetting the
     search
-  still open: 354's column-filter leg (see above), 233's confirm leg (neither click nor Enter on a dialog row
+  still open: 353's four drag & drop wires (HTML5 dnd, which Playwright's
+    dragTo cannot produce for sap.ui.table's pointer extension - dispatching
+    the DataTransfer events by hand would test the harness), 354's
+    column-filter leg (see above), 233's confirm leg (neither click nor Enter on a dialog row
     reaches the SelectDialog's confirm headless), the hidden-picker
     openBy class (016/256/257, Popover.onfocusin recursion), and 359's
     row-action press: the row actions never render in the smoke at all, and

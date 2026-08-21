@@ -20,28 +20,49 @@
 //     btnChangeOrientation.
 import { waitForUi5 } from '../../scripts/lib-e2e.mjs';
 
-const SPLITTER = `ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.layout.Splitter')`;
+// THE RENDERED, UNDESTROYED Splitter — never simply the first one in the
+// registry. Every round-trip rebuilds the view, and the outgoing control stays
+// in Element.registry while it is torn down, so `find(…Splitter)` can answer
+// with the previous one and its previous area count. Worse, calling
+// getDomRef() on one already destroyed THROWS, and waitForUi5 turns any
+// rejection into its own message — which is how a working Remove wire reported
+// itself as "never shrank the bound contentAreas aggregation" for three runs
+// (measured 2026-08-21; a direct dump after the same press read three areas).
+// Test bIsDestroyed BEFORE touching the control.
+const SPLITTER = `ui5All().find((c) => !c.bIsDestroyed && c.getMetadata().getName() === 'sap.ui.layout.Splitter' && c.getDomRef())`;
+
+// Each of these buttons is a plain ROUND-TRIP, and the view re-renders when it
+// answers. Waiting for the response before asserting keeps the next press off
+// a node the re-render is about to replace — pressing Remove straight after
+// Add intermittently landed on the outgoing DOM and never reached the backend
+// (measured 2026-08-21).
+const press = async (page, name) => {
+  await Promise.all([
+    page.waitForResponse((r) => r.request().method() === 'POST' && r.url().includes(':3000'), { timeout: 15000 }),
+    page.getByRole('button', { name, exact: true }).click(),
+  ]);
+};
 
 export default async (page, expect) => {
   await waitForUi5(page, () => {
-    const s = ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.layout.Splitter');
+    const s = ui5All().find((c) => !c.bIsDestroyed && c.getMetadata().getName() === 'sap.ui.layout.Splitter' && c.getDomRef());
     return s && s.getContentAreas().length === 3;
   }, 'the Splitter did not start with the three declared content areas');
 
   const count = () => page.evaluate(`(() => { const ui5All = () => Object.values(sap.ui.require("sap/ui/core/Element").registry.all());
     const s = ${SPLITTER}; return s ? s.getContentAreas().length : -1; })()`);
 
-  await page.getByRole('button', { name: 'Add content area' }).click();
+  await press(page, 'Add content area');
   await waitForUi5(page, () => {
-    const s = ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.layout.Splitter');
+    const s = ui5All().find((c) => !c.bIsDestroyed && c.getMetadata().getName() === 'sap.ui.layout.Splitter' && c.getDomRef());
     return s && s.getContentAreas().length === 4;
   }, 'Add content area never grew the bound contentAreas aggregation');
   // the fourth area's own option row followed the same table
   await expect(page.locator('body'), 'the option row of the area just added').toContainText('ContentArea #4');
 
-  await page.getByRole('button', { name: 'Remove content area' }).click();
+  await press(page, 'Remove content area');
   await waitForUi5(page, () => {
-    const s = ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.layout.Splitter');
+    const s = ui5All().find((c) => !c.bIsDestroyed && c.getMetadata().getName() === 'sap.ui.layout.Splitter' && c.getDomRef());
     return s && s.getContentAreas().length === 3;
   }, 'Remove content area never shrank the bound contentAreas aggregation');
   if ((await count()) !== 3) throw new Error('the Splitter did not come back to three areas');
@@ -49,25 +70,37 @@ export default async (page, expect) => {
   // the option row and the layout data are the same row: a Min-Size typed here
   // must arrive on the FIRST area's SplitterLayoutData as the integer 250
   // (it starts at 0, so an unchanged value cannot be mistaken for a pass)
-  const minSize = page.locator('.sapMInputBaseInner').nth(1);
-  await expect(minSize, 'the first area\'s Min-Size Input').toHaveValue('0');
+  // Scoped to the options layout and taken in DOM order, which is the only
+  // ordering that means anything here. Two Inputs with an empty value render
+  // BEFORE the option rows, so a page-wide ".sapMInputBaseInner" counted from
+  // zero lands on one of those — and because it also reads "0", an index-based
+  // locator passes its own starting-value check and then fails three lines
+  // later against a wire that works. Picking the first Input in the Element
+  // REGISTRY instead is no better: the registry holds the aggregation template
+  // (unbound, never rendered, the app-207 trap) and, once a round-trip has
+  // re-rendered the rows, its order is not the rows' order either. Both were
+  // measured on 2026-08-21. Inside mainOptions each row contributes Size then
+  // Min-Size, so index 1 is row one's Min-Size.
+  const minSize = page.locator('[id$="mainOptions"] .sapMInputBaseInner').nth(1);
+  const was = await minSize.inputValue();
+  if (was !== '0') throw new Error(`expected the first area's Min-Size Input to start at 0, found "${was}"`);
   await minSize.fill('250');
   await minSize.press('Enter');
   await waitForUi5(page, () => {
-    const s = ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.layout.Splitter');
+    const s = ui5All().find((c) => !c.bIsDestroyed && c.getMetadata().getName() === 'sap.ui.layout.Splitter' && c.getDomRef());
     return s && s.getContentAreas()[0].getLayoutData().getMinSize() === 250;
   }, 'the typed Min-Size never reached the first area\'s SplitterLayoutData as a number');
 
   // orientation is a BOUND property here, so the flip travels through the model
-  await page.getByRole('button', { name: 'Change Orientation' }).click();
+  await press(page, 'Change Orientation');
   await waitForUi5(page, () => {
-    const s = ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.layout.Splitter');
+    const s = ui5All().find((c) => !c.bIsDestroyed && c.getMetadata().getName() === 'sap.ui.layout.Splitter' && c.getDomRef());
     return s && s.getOrientation() === 'Vertical';
   }, 'Change Orientation never flipped the bound Splitter.orientation');
 
   // Invalidate is a plain round-trip: it must answer, and the areas must
   // survive it (the port drops the original's invalidate() call deliberately)
-  await page.getByRole('button', { name: 'Invalidate Splitter' }).click();
+  await press(page, 'Invalidate Splitter');
   await page.waitForTimeout(1500);
   if ((await count()) !== 3) throw new Error('the Invalidate round-trip lost the content areas');
 };

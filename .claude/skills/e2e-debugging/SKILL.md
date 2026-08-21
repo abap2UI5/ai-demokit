@@ -132,3 +132,40 @@ verdicts below turned out to be harness effects.
   is lossy, not queued (events fired mid-flight are dropped) — a no-delay
   `pressSequentially` asserts a value the wire never promised. Full rule (app
   280) in the `port-a-sample` guide's porting gotchas.
+- **A predicate that THROWS is not a predicate that is false**, and the
+  difference is the whole diagnosis. `waitForFunction` rejects either way, so a
+  wrapper that reports its own message for any rejection accuses the port of a
+  defect it does not have: app 351's Remove wire read as *"never shrank the
+  bound contentAreas aggregation"* for three runs while a direct dump after the
+  same press showed three areas — the predicate was calling `getDomRef()` on a
+  control the re-render had already destroyed. `waitForUi5` now keeps a
+  non-timeout reason, and the rule for the predicate is **test `bIsDestroyed`
+  before touching a control at all**.
+- **The outgoing control is still in the registry.** Every round-trip rebuilds
+  the view, and `Element.registry` holds the previous control while it is torn
+  down — so `ui5All().find(…)` can answer with the OLD one and its OLD state,
+  and an assertion that the count went 4→3 fails against a 4 that no longer
+  exists on screen. Filter on `!c.bIsDestroyed && c.getDomRef()`. (Going 3→4
+  may pass by luck, which is what makes this look like a one-sided wire bug.)
+- **Ask what index you are counting from, and scope it.** App 351's option-row
+  Inputs are preceded by two Inputs with an empty value, so a page-wide
+  `.sapMInputBaseInner` counted from zero lands on one of those — and because
+  it also reads `"0"`, the locator passes its own starting-value check and
+  fails later against a wire that works. Scope to the container id
+  (`[id$="mainOptions"] …`). Reaching for the Element registry instead is not
+  the fix: it holds the unbound aggregation template, and after a re-render its
+  order is not the rows' order either.
+- **A round-trip whose result the NEXT step needs, with nothing bound to wait
+  on.** App 353 selects a row (`rowSelectionChange` → the backend records the
+  index) and then presses Move; no control shows that index, so there is no
+  bound value for `waitForUi5`. The round-trip itself is observable —
+  `page.waitForResponse(r => r.request().method() === 'POST' && …)` in a
+  `Promise.all` with the click. Without it the two raced and the move answered
+  "Please select a row!", which reads exactly like a dead wire.
+- **A row selector cell has a layout box and still cannot be clicked.**
+  `sapUiTableRowSelectionCell` measures 1264×20 in the unthemed harness (it
+  spans the whole row instead of its narrow column) but sits in the absolutely
+  positioned row-header layer UNDER the data cells, so every actionability
+  check reports the pointer intercepted and `.click()` dies in a 30 s timeout.
+  `dispatchMouse()` is the answer — the same one the zero-size-icon rule gives,
+  for the opposite reason.

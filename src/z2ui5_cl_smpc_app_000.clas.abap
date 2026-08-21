@@ -5688,13 +5688,13 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` dropped too - the bound Button template is shared with the three declared areas, which set only width. // NOTE: css/splitter.css (.options, .options .paddingRight, .optionTitle) is injected through`.
     lv_text1 = lv_text1 && ` an extra core:HTML <style> leaf, since abap2UI5 ships no separate stylesheet; the class names are on the controls the original also puts them on. The eventStatus Text keeps its 'Nothing happened so` &&
                ` far...' initial label, and the resize timestamp uses the ABAP system date/time in the user's format where the original uses UI5Date.getInstance().toLocaleString() - a real event timestamp, not an` &&
-               ` anchored one. // LIVE-TEST: Unverified in a running system: whether inserting/deleting a row re-renders the bound contentAreas aggregation, whether the shared table keeps the option row and the` &&
-               ` layout data in sync while dragging a splitter bar, and whether the Invalidate button's plain round-trip re-renders the Splitter the way the original's invalidate( ) does.`.
+               ` anchored one. // NOTE: live-verified 2026-08-21 (nightly e2e interaction): Unverified in a running system: whether inserting/deleting a row re-renders the bound contentAreas aggregation, whether the` &&
+               ` shared table keeps the option row and the layout data in sync while dragging a splitter bar, and whether the Invalidate button's plain round-trip re-renders the Splitter the way the original's` &&
+               ` invalidate( ) does.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.Splitter`                name = `Splitter`                                      class = `z2ui5_cl_smpc_app_351` path = `src/01/02/z2ui5_cl_smpc_app_351.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
         notes = lv_text1 ) ).
 

@@ -16,7 +16,7 @@
 // sap.ui.table selects through the row SELECTOR cell, not the row: the table
 // leaves selectionBehavior at its default RowSelector, so clicking a data cell
 // selects nothing and the round-trip never fires.
-import { waitForUi5 } from '../../scripts/lib-e2e.mjs';
+import { waitForUi5, dispatchMouse, revealInOverflow } from '../../scripts/lib-e2e.mjs';
 
 // the NAMES currently bound in one of the two tables, template rows excluded
 // (an unbound template row sits in the Element registry next to the real ones
@@ -28,9 +28,46 @@ const namesIn = (page, id) => page.evaluate(`(() => {
   return t.getRows().filter((r) => r.getBindingContext()).map((r) => r.getCells()[0].getText()).filter(Boolean);
 })()`);
 
+// Two harness effects stack on this one gesture.
+//
+// The row selector cell HAS a layout box here (1264x20, measured) — the
+// unthemed harness lets it span the whole row instead of the narrow column it
+// occupies with a theme — but it sits in the absolutely positioned row-header
+// layer UNDER the data cells, so every Playwright actionability check reports
+// the pointer as intercepted and .click() dies in a 30s timeout that reads
+// like a missing control. The dispatched mouse sequence is the same answer the
+// zero-size-icon lesson gives, and sap.ui.table's pointer extension acts on
+// the mousedown/mouseup pair, so the whole sequence is what selects.
+//
+// And selecting is a ROUND-TRIP (rowSelectionChange → SELECT_n) whose result
+// the next press depends on: the move handler answers "Please select a row!"
+// while selected_n is still 0. No bound value on the page shows that index, so
+// there is nothing to wait for in the UI — but the round-trip itself is
+// observable. Without this wait the click and the press raced and the move
+// silently toasted instead.
 const selectRow = async (page, tableId, index) => {
-  const rows = page.locator(`[id$="${tableId}"] .sapUiTableRowSelectionCell, [id$="${tableId}"] .sapUiTableRowHdr`);
-  await rows.nth(index).click();
+  const cells = page.locator(`[id$="${tableId}"] .sapUiTableRowSelectionCell`);
+  const n = await cells.count();
+  if (n <= index) throw new Error(`${tableId} rendered ${n} row selector cell(s), need index ${index}`);
+  await Promise.all([
+    page.waitForResponse((r) => r.request().method() === 'POST' && r.url().includes(':3000'), { timeout: 15000 }),
+    dispatchMouse(cells.nth(index)),
+  ]);
+};
+
+// The move buttons are ICON-ONLY, so the unthemed harness leaves them a
+// zero-size box and .click() dies in the same 30s timeout — the icon lesson,
+// one control further along. Their accessible name comes from the tooltip.
+// Move up / Move down live in table 2's extension OverflowToolbar, which folds
+// them into "Additional Options" at the smoke's viewport — so they are not on
+// the page at all until that popover is opened (measured 2026-08-21: the
+// locator simply found nothing). The two arrow buttons between the tables are
+// plain VBox children and are already there.
+const pressIcon = async (page, name) => {
+  const b = page.getByRole('button', { name });
+  if (!(await b.count())) await revealInOverflow(page, b);
+  if (!(await b.count())) throw new Error(`no button named "${name}", on the page or in any overflow`);
+  await dispatchMouse(b.first());
 };
 
 export default async (page, expect) => {
@@ -43,7 +80,7 @@ export default async (page, expect) => {
 
   // row 2 of the available table -> the selected table, by name
   await selectRow(page, 'table1', 1);
-  await page.getByRole('button', { name: 'Move to selected' }).click();
+  await pressIcon(page, 'Move to selected');
   await waitForUi5(page, () => {
     const ui5 = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
     const t = ui5.find((c) => c.getId().endsWith('table2'));
@@ -57,7 +94,7 @@ export default async (page, expect) => {
 
   // a second row, so there is an order to change
   await selectRow(page, 'table1', 2);
-  await page.getByRole('button', { name: 'Move to selected' }).click();
+  await pressIcon(page, 'Move to selected');
   await waitForUi5(page, () => {
     const ui5 = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
     const t = ui5.find((c) => c.getId().endsWith('table2'));
@@ -68,7 +105,7 @@ export default async (page, expect) => {
   // Move up on the SECOND selected row: the two must swap, which is SELECT_2's
   // index driving the reorder rather than a fixed one
   await selectRow(page, 'table2', 1);
-  await page.getByRole('button', { name: 'Move up' }).first().click();
+  await pressIcon(page, 'Move up');
   await waitForUi5(page, (want) => {
     const ui5 = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
     const t = ui5.find((c) => c.getId().endsWith('table2'));

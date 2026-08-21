@@ -175,7 +175,18 @@ export async function pressBreadcrumb(page, text) {
 // INTO page.evaluate (it is stringified there, so it must stay self-contained)
 export function ui5All() { throw new Error('ui5All() runs in the page only'); }
 export const UI5_ALL_SRC = 'const ui5All = () => Object.values(sap.ui.require("sap/ui/core/Element").registry.all());';
+// A predicate that THROWS is not a predicate that is false. waitForFunction
+// rejects either way, and swallowing the reason turns a broken assertion into a
+// confident lie about the port: app 351's Remove wire reported itself as
+// "never shrank the bound contentAreas aggregation" for three runs while a
+// direct dump after the same press showed it had shrunk — the predicate was
+// calling getDomRef() on a control the re-render had already destroyed, which
+// throws. So a rejection that is not a timeout keeps its own message.
 export async function waitForUi5(page, fn, msg, arg) {
   const expr = `(() => { ${UI5_ALL_SRC} return (${fn.toString()})(${JSON.stringify(arg ?? null)}); })()`;
-  await page.waitForFunction(expr, undefined, { timeout: 15000 }).catch(() => { throw new Error(msg); });
+  await page.waitForFunction(expr, undefined, { timeout: 15000 }).catch((e) => {
+    const why = String(e && e.message);
+    if (/Timeout .* exceeded/.test(why)) throw new Error(msg);
+    throw new Error(`${msg} — but the check itself failed: ${why.split('\n')[0].slice(0, 140)}`);
+  });
 }
