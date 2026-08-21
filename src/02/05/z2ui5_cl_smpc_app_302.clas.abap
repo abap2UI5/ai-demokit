@@ -392,7 +392,7 @@ CLASS z2ui5_cl_smpc_app_302 IMPLEMENTATION.
     side_expanded  = abap_true.
     " _setToggleButtonTooltip( !Device.system.desktop ) at init, read from the
     " device data the framework mirrors server-side
-    toggle_tooltip = COND #( WHEN client->get( )-s_device-system = z2ui5_if_types=>cs_device-system-desktop
+    toggle_tooltip = COND #( WHEN client->get( )-s_device-system = z2ui5_if_client=>cs_device-system-desktop
                              THEN `Small Size Navigation`
                              ELSE `Large Size Navigation` ).
 
