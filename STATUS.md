@@ -29,20 +29,20 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
 
 ## Open findings (backlog)
 
-- [ ] **CAPABILITIES.md names nine classes under a prefix no repository uses
-  any more.** The `prose_names` gate (added 2026-08-18) checks README,
-  AGENTS.md, CLAUDE.md, CONTRIBUTING.md, TRAINING.md and this file — the same
-  six files it checks in samples and samples-stack, since the script is
-  byte-identical in all three. CAPABILITIES.md is deliberately outside that
-  list, and a one-off run with it added reports nine evidence citations still
-  written as `z2ui5_cl_demo_app_<n>`, the pre-rename spelling of
-  abap2UI5/samples' classes. Five of them (450, 453, 454, 455, 456) are
-  `z2ui5_cl_smp_app_<n>` in samples today and seven more (313, 319, 475-479)
-  moved to samples-stack as `z2ui5_cl_smps_app_<n>`; four (038, 172, 369, 458)
-  resolve to no class in either repository and need the maintainer to say what
-  they became. Fixing the resolvable ones is mechanical; widening the shared
-  script's file list is not — it would have to change in all three
-  repositories at once.
+- [x] **CAPABILITIES.md's stale class citations — DONE.** Both halves of this
+  are closed, and neither closed the way the entry predicted. The shared
+  script's `PROSE` list now carries `CAPABILITIES.md` (and `E2E.md`) outright,
+  so no one has to weigh "widening it in all three repositories at once"
+  against leaving the file unchecked — the gate simply checks it. And the file
+  no longer names a single `z2ui5_cl_demo_app_<n>`: it cites five classes, three
+  `z2ui5_cl_smp_app_<n>` in samples and two `z2ui5_cl_smps_app_<n>` in
+  samples-stack, all current. `node scripts/check-prose-names.mjs` resolves
+  **36 class names across 8 prose files**, every one of them existing —
+  including the foreign ones, which it looks up in the owning repository's
+  generated `SAMPLES.md` rather than exempting. Re-verified from the source
+  2026-08-21. The four names the entry expected to need a maintainer decision
+  (038, 172, 369, 458) are simply not cited any more, so there is nothing left
+  to decide.
 - [ ] **Two open-abap defects are patched in the build and open upstream.**
   Both are written up in full — analysis, emitted JS, proposed change — in
   `abap2UI5/abap2UI5`'s
@@ -121,7 +121,20 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   green property-check still does not prove a port ≤ 1.71-clean — the
   control-level `scope-of` check plus by-policy POST_171 declarations remain
   required.
-- [ ] **Review-sweep rework backlog.** The 2026-07-27 sweep
+- [x] **Review-sweep rework backlog — DONE.** The last member, app 118, was
+  closed by its own 2026-08-06 rebuild and the 2026-08-10 manifest fix without
+  this entry being ticked — the same way apps 298 and 089 were, so it was
+  re-verified from the source on 2026-08-21 rather than trusted: the sidecar
+  carries no `IMPROVISED` any more, all five `action` wires transport
+  `${$parameters>/parameters}.url` instead of a constant, and
+  `node scripts/probes/faked-event-value-audit.mjs` reports **0 candidates**
+  over the whole corpus (it found the two real cases, 133 and 100, when it was
+  written). Re-run that probe after any batch that adds toast wires. What is
+  NOT closed with it is the broader ladder: 209 sidecars still read
+  `generated`, but those are ports awaiting their FIRST review, not ports with
+  a known headline gap — a different piece of work from this one. The history
+  below is kept because it is the record of what "rework" meant.
+  The 2026-07-27 sweep
   promoted 152 of 201 `generated` ports to `reviewed`; the rest stayed
   `generated` with **corrected, honest sidecars** and need real view/logic
   rework. **Closed 2026-07-28:** the whole dead-`_event`-wire class (138, 143,
