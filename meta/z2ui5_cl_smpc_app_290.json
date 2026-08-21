@@ -9,7 +9,7 @@
     "event_t_arg": true,
     "note": "binding_call filter on the dialog binding + control_by_id open( searchValue )"
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
