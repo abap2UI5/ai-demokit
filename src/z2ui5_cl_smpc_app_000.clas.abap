@@ -1845,24 +1845,34 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = lv_text1
         post171 = `the FeedInput 'actions' aggregation (a Button next to the text area) is @since 1.139 - kept 1:1 on the last two FeedInputs; the app needs a UI5 release >= 1.139 to render it.` ) ).
 
+    lv_text1 = `NOTE: the original's removeItem derives the entry index from the item's binding-context path (getBindingContext().getPath().split('/').pop()); the port transports the List's indexOfItem(item) instead` &&
+               ` - the aggregation index equals the model index for this bound list, so the spliced row is the same. // NOTE: feed.json entries 2 and 4 have no Actions property; the flat ABAP row type serializes` &&
+               ` ACTIONS as an empty array ([] instead of undefined) - the actions aggregation renders no actions either way, and an empty array is not an empty-string/enum hazard. // NOTE: the relative AuthorPicUrl` &&
+               ` asset paths (test-resources/sap/m/images/*.jpg) are rewritten to absolute https://sdk.openui5.org/test-resources/... per the project rule for runtime asset URLs. // POST-1.71: Found on 2026-08-21,` &&
+               ` when view-gates stopped letting ANY deviation excuse a version finding: a NOTE that merely contained the member's name had been satisfying the gate, and only POST_171 / DROPPED_171 carry that claim.` &&
+               ` sap.m.FeedListItem.actions is @since 1.137 - inherited from sap.m.ListItemBase, which is why the @since does not sit on FeedListItem itself. The sample's whole point is the action sheet on a feed`.
+    lv_text1 = lv_text1 && ` item, so the aggregation and its FeedListItemAction template are kept 1:1 and the app needs UI5 >= 1.137. The excusing NOTE was about feed.json rows 2 and 4 serializing ACTIONS as an empty array - a` &&
+               ` sentence about the DATA, not about the member's version. The class moves from src/01/01 to src/02/01 with this.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.FeedListItem`                    name = `FeedListItem`                                  class = `z2ui5_cl_smpc_app_025` path = `src/01/01/z2ui5_cl_smpc_app_025.clas.abap`
-        score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+      ( module = `sap.m`              control = `sap.m.FeedListItem`                    name = `FeedListItem`                                  class = `z2ui5_cl_smpc_app_025` path = `src/02/01/z2ui5_cl_smpc_app_025.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.12`
+        is_post171 = abap_true
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`
-        notes = `NOTE: the original's removeItem derives the entry index from the item's binding-context path (getBindingContext().getPath().split('/').pop()); the port transports the List's indexOfItem(item) instead` &&
-                 ` - the aggregation index equals the model index for this bound list, so the spliced row is the same. // NOTE: feed.json entries 2 and 4 have no Actions property; the flat ABAP row type serializes` &&
-                 ` ACTIONS as an empty array ([] instead of undefined) - the actions aggregation renders no actions either way, and an empty array is not an empty-string/enum hazard. // NOTE: the relative AuthorPicUrl` &&
-                 ` asset paths (test-resources/sap/m/images/*.jpg) are rewritten to absolute https://sdk.openui5.org/test-resources/... per the project rule for runtime asset URLs.` )
+        notes = lv_text1
+        post171 = `Found on 2026-08-21, when view-gates stopped letting ANY deviation excuse a version finding: a NOTE that merely contained the member's name had been satisfying the gate, and only POST_171 /` &&
+                 ` DROPPED_171 carry that claim. sap.m.FeedListItem.actions is @since 1.137 - inherited from sap.m.ListItemBase, which is why the @since does not sit on FeedListItem itself. The sample's whole point is` &&
+                 ` the action sheet on a feed item, so the aggregation and its FeedListItemAction template are kept 1:1 and the app needs UI5 >= 1.137. The excusing NOTE was about feed.json rows 2 and 4 serializing` &&
+                 ` ACTIONS as an empty array - a sentence about the DATA, not about the member's version. The class moves from src/01/01 to src/02/01 with this.` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.FlexBox`                         name = `FlexBoxBasicAlignment`                         class = `z2ui5_cl_smpc_app_392` path = `src/01/01/z2ui5_cl_smpc_app_392.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
       ( module = `sap.m`              control = `sap.m.FlexBox`                         name = `FlexBoxDirectionOrder`                         class = `z2ui5_cl_smpc_app_393` path = `src/01/01/z2ui5_cl_smpc_app_393.clas.abap`
         score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
-
-    result = VALUE #( BASE result
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
       ( module = `sap.m`              control = `sap.m.FlexBox`                         name = `FlexBoxGap`                                    class = `z2ui5_cl_smpc_app_158` path = `src/02/01/z2ui5_cl_smpc_app_158.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -1870,7 +1880,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = `NOTE: Three Panels demonstrating FlexBox gap / columnGap / rowGap (wrap=Wrap), each with nine typed Buttons, reproduced 1:1. // POST-1.71: FlexBox.gap, FlexBox.columnGap and FlexBox.rowGap (all @since` &&
                  ` 1.134) are used 1:1 - they are the sample's whole point. Newer than UI5 1.71; declared per the property-171 policy, so the app needs UI5 >= 1.134 to render the gaps.`
         post171 = `FlexBox.gap, FlexBox.columnGap and FlexBox.rowGap (all @since 1.134) are used 1:1 - they are the sample's whole point. Newer than UI5 1.71; declared per the property-171 policy, so the app needs UI5` &&
-                 ` >= 1.134 to render the gaps.` )
+                 ` >= 1.134 to render the gaps.` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.FlexBox`                         name = `FlexBoxNested`                                 class = `z2ui5_cl_smpc_app_026` path = `src/01/01/z2ui5_cl_smpc_app_026.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -1880,9 +1892,7 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` core:HTML control vs the original view). Confirmed rendering via the human visual pass 2026-07-19.` )
       ( module = `sap.m`              control = `sap.m.FlexBox`                         name = `FlexBoxOpposingAlignment`                      class = `z2ui5_cl_smpc_app_394` path = `src/01/01/z2ui5_cl_smpc_app_394.clas.abap`
         score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
-
-    result = VALUE #( BASE result
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
       ( module = `sap.m`              control = `sap.m.FlexBox`                         name = `FlexBoxRenderType`                             class = `z2ui5_cl_smpc_app_190` path = `src/01/01/z2ui5_cl_smpc_app_190.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
@@ -1890,7 +1900,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.38.0`
-        notes = `NOTE: FormattedText.htmlText bound to a model field holding the original controller's demo HTML string (headings, link, list, pre, code, cite, dl) 1:1.` )
+        notes = `NOTE: FormattedText.htmlText bound to a model field holding the original controller's demo HTML string (headings, link, list, pre, code, cite, dl) 1:1.` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.GenericTag`                      name = `GenericTag`                                    class = `z2ui5_cl_smpc_app_027` path = `src/02/01/z2ui5_cl_smpc_app_027.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -3257,7 +3269,16 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` ProductPicUrl), so only those are seeded. The mock's host-relative ProductPicUrl ('test-resources/...') is resolved to an absolute sdk.openui5.org URL. // NOTE: unverified in a running system: that` &&
                ` both ResponsivePopover fragments open anchored to their button (popover_display by_id = $event.oSource.sId), that {NAME}/{PRODUCTPICURL} resolve from the root-seeded record, and that the` &&
                ` action/footer buttons close the popover (popover_close). **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Popover with Custom Footer' press opens the` &&
-               ` ResponsivePopover anchored with its OK/Cancel footer; the phone-Dialog variant remains unexercised. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_243.mjs).`.
+               ` ResponsivePopover anchored with its OK/Cancel footer; the phone-Dialog variant remains unexercised. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_243.mjs).` &&
+               ` // POST-1.71: Found on 2026-08-21, when view-gates stopped letting ANY deviation excuse a version finding: a NOTE that merely contained the member's name had been satisfying the gate, and only` &&
+               ` POST_171 / DROPPED_171 carry that claim. sap.m.ResponsivePopover.footer is @since 1.129 and is kept 1:1 (the sample's second popover has a footer Toolbar). This is an AGGREGATION, and the gate is`.
+    lv_text1 = lv_text1 && ` explicit about the consequence below the floor: UI5 resolves an unknown tag as a control class instead, and the 404 takes the WHOLE view down rather than just that part - so the app needs UI5 >=` &&
+               ` 1.129, not merely renders without a footer. The excusing NOTE was about handleResponsivePopoverFooterPress, a HANDLER name that happens to contain the word.`.
+    lv_text2 = `Button.ariaHasPopup (since UI5 1.84.0) is kept 1:1 on the two trigger buttons (ariaHasPopup='Dialog'); the app needs a UI5 release >= 1.84 to render it. // Found on 2026-08-21, when view-gates stopped` &&
+               ` letting ANY deviation excuse a version finding: a NOTE that merely contained the member's name had been satisfying the gate, and only POST_171 / DROPPED_171 carry that claim.` &&
+               ` sap.m.ResponsivePopover.footer is @since 1.129 and is kept 1:1 (the sample's second popover has a footer Toolbar). This is an AGGREGATION, and the gate is explicit about the consequence below the` &&
+               ` floor: UI5 resolves an unknown tag as a control class instead, and the 404 takes the WHOLE view down rather than just that part - so the app needs UI5 >= 1.129, not merely renders without a footer.` &&
+               ` The excusing NOTE was about handleResponsivePopoverFooterPress, a HANDLER name that happens to contain the word.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ResponsivePopover`               name = `ResponsivePopover`                             class = `z2ui5_cl_smpc_app_243` path = `src/02/01/z2ui5_cl_smpc_app_243.clas.abap`
         score = 5
@@ -3266,7 +3287,7 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.15.1`
         is_post171 = abap_true
         notes = lv_text1
-        post171 = `Button.ariaHasPopup (since UI5 1.84.0) is kept 1:1 on the two trigger buttons (ariaHasPopup='Dialog'); the app needs a UI5 release >= 1.84 to render it.` ) ).
+        post171 = lv_text2 ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ScrollContainer`                 name = `ScrollContainer`                               class = `z2ui5_cl_smpc_app_046` path = `src/01/01/z2ui5_cl_smpc_app_046.clas.abap`
@@ -3830,7 +3851,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` point at the OpenUI5 host per the offline asset rule. The port has no structural difference from the original left, so its breadth-probe structural_diff skip is gone. Upload itself still targets the` &&
                ` abap2UI5 FileUploader path in a live system, and the control stays a decided scope exception (sap.m.upload.UploadSet is deprecated, KEEP 2026-07-30). // POST-1.71: UploadSet.mode (since UI5 1.100)` &&
                ` and UploadSet.afterItemRemoved (since UI5 1.83) kept for the 1:1 port - surfaced when the property gate gained the sap.m/upload sub-package (control-level source scan 2026-07-26). The whole control`.
-    lv_text1 = lv_text1 && ` is deprecated out-of-scope debt anyway (pr/scope-since-from-source).`.
+    lv_text1 = lv_text1 && ` is deprecated out-of-scope debt anyway (pr/scope-since-from-source). // POST-1.71: Found on 2026-08-21, when view-gates stopped letting ANY deviation excuse a version finding: a NOTE that merely` &&
+               ` contained the member's name had been satisfying the gate, and only POST_171 / DROPPED_171 carry that claim. sap.m.upload.UploadSetToolbarPlaceholder is @since 1.103.0 and is kept 1:1 from the` &&
+               ` sample's toolbar. It is a CONTROL-level finding, so nothing about it appears as an attribute; the port already sits in src/02/01 for sap.m.upload.UploadSet itself, and the app needs UI5 >= 1.103.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.upload.UploadSet`                name = `UploadSet`                                     class = `z2ui5_cl_smpc_app_121` path = `src/02/01/z2ui5_cl_smpc_app_121.clas.abap`
         score = 3
@@ -3841,7 +3864,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         dep_text = `Deprecated since 1.129: replaced by sap.m.plugins.UploadSetwithTable`
         notes = lv_text1
         post171 = `UploadSet.mode (since UI5 1.100) and UploadSet.afterItemRemoved (since UI5 1.83) kept for the 1:1 port - surfaced when the property gate gained the sap.m/upload sub-package (control-level source scan` &&
-                 ` 2026-07-26). The whole control is deprecated out-of-scope debt anyway (pr/scope-since-from-source).` ) ).
+                 ` 2026-07-26). The whole control is deprecated out-of-scope debt anyway (pr/scope-since-from-source). // Found on 2026-08-21, when view-gates stopped letting ANY deviation excuse a version finding: a` &&
+                 ` NOTE that merely contained the member's name had been satisfying the gate, and only POST_171 / DROPPED_171 carry that claim. sap.m.upload.UploadSetToolbarPlaceholder is @since 1.103.0 and is kept 1:1` &&
+                 ` from the sample's toolbar. It is a CONTROL-level finding, so nothing about it appears as an attribute; the port already sits in src/02/01 for sap.m.upload.UploadSet itself, and the app needs UI5 >=` &&
+                 ` 1.103.` ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.URLHelper`                       name = `UrlHelper`                                     class = `z2ui5_cl_smpc_app_084` path = `src/01/01/z2ui5_cl_smpc_app_084.clas.abap`
@@ -6525,13 +6551,22 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` target is known statically; (c) that the liveChange round-trip keeps the Text under the last Input in sync while the user drags in the picker. Leg (a) is closed: **e2e-verified 2026-08-01**` &&
                ` (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): clicking the first row's value-help icon opens THAT Input's own ColorPickerPopover anchored at the input (control_by_id openBy` &&
                ` + domRef), with the ColorPicker inside it. Picking a colour needs the picker's own drag/slider controls, which carry zero-size boxes headless, so (b)/(c) stay a human check. **e2e-verified`.
-    lv_text1 = lv_text1 && ` 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_268.mjs).`.
+    lv_text1 = lv_text1 && ` 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_268.mjs). // POST-1.71: Found on 2026-08-21, when view-gates stopped letting ANY deviation excuse a version finding: a NOTE` &&
+               ` that merely contained the member's name had been satisfying the gate, and only POST_171 / DROPPED_171 carry that claim. sap.ui.unified.ColorPickerPopover.liveChange is @since 1.85 and is kept 1:1` &&
+               ` from the original's lazily-created popover. The excusing NOTE was the unverified-in-a-running-system entry, which says 'the liveChange round-trip keeps the Text ...' - a sentence about what the wire` &&
+               ` DOES. The class moves from src/01/02 to src/02/02 with this; the app needs UI5 >= 1.85.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.unified`     control = `sap.ui.unified.ColorPickerPopover`     name = `ColorPickerPopover`                            class = `z2ui5_cl_smpc_app_268` path = `src/01/02/z2ui5_cl_smpc_app_268.clas.abap`
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.ColorPickerPopover`     name = `ColorPickerPopover`                            class = `z2ui5_cl_smpc_app_268` path = `src/02/02/z2ui5_cl_smpc_app_268.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
         since = `1.48.0`
-        notes = lv_text1 ) ).
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `Found on 2026-08-21, when view-gates stopped letting ANY deviation excuse a version finding: a NOTE that merely contained the member's name had been satisfying the gate, and only POST_171 /` &&
+                 ` DROPPED_171 carry that claim. sap.ui.unified.ColorPickerPopover.liveChange is @since 1.85 and is kept 1:1 from the original's lazily-created popover. The excusing NOTE was the` &&
+                 ` unverified-in-a-running-system entry, which says 'the liveChange round-trip keeps the Text ...' - a sentence about what the wire DOES. The class moves from src/01/02 to src/02/02 with this; the app` &&
+                 ` needs UI5 >= 1.85.` ) ).
 
     lv_text1 = `NOTE: The controller's Formatting.setCustomCurrencies({BGN4:{digits:4}, WWWW:{digits:5}}) is reproduced 1:1 since 2026-08-05: a follow_up_action( cs_event-control_global,` &&
                ` FORMATTING/setCustomCurrencies ) carries the same JSON payload, so list five renders BGN4 with 4 and WWWW with 5 decimals like the original. The FORMATTING global target was added upstream for` &&

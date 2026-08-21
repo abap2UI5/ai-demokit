@@ -17,8 +17,13 @@
 //   - the quick-create popup, which the original builds imperatively.
 import { waitForUi5 } from '../../scripts/lib-e2e.mjs';
 
+// The ShellBar's menu button carries no sapFShellBar… class here — the
+// harness serves the UI5 sources without themes, so it renders as a plain
+// button with a generated id (__button1) and the accessible name "Menu".
+// Locating it by class matched nothing and died in a 30s timeout that reads
+// like a missing control (measured 2026-08-21).
 const openSideNav = async (page) => {
-  await page.locator('.sapFShellBarMenuButton, [id$="-menu"]').first().click();
+  await page.getByRole('button', { name: 'Menu', exact: true }).first().click();
   await waitForUi5(page, () => {
     const ui5 = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
     const p = ui5.find((c) => c.getId().endsWith('respPopover'));

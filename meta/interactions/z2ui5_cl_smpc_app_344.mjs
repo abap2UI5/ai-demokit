@@ -18,14 +18,20 @@ import { waitForUi5 } from '../../scripts/lib-e2e.mjs';
 // is the side content area currently the visible one? Read off the control's
 // own rendered state rather than the text, because both titles exist in the
 // DOM either way — only one of the two areas is displayed.
+// _changeGridState hides a grid cell by adding the class `sapUiHidden`; it
+// never touches inline display, which a first version of this read and which
+// made the predicate answer "the side content is already visible" before any
+// toggle (measured 2026-08-21: both cells report style.display '' at every
+// breakpoint, while SCGridCell carries sapUiHidden on S until the toggle).
 const sideShown = () => {
   const ui5 = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
   const d = ui5.find((c) => !c.bIsDestroyed
-    && c.getMetadata().getName() === 'sap.ui.layout.DynamicSideContent' && c.getDomRef());
+    && c.getMetadata().getName() === 'sap.ui.layout.DynamicSideContent' && c.getDomRef() && document.body.contains(c.getDomRef()));
   if (!d) return null;
   const side = d.getDomRef('SCGridCell');
   const main = d.getDomRef('MCGridCell');
-  return !!side && side.style.display !== 'none' && (!main || main.style.display === 'none');
+  if (!side || !main) return null;
+  return !side.classList.contains('sapUiHidden') && main.classList.contains('sapUiHidden');
 };
 
 export default async (page, expect) => {
@@ -40,14 +46,29 @@ export default async (page, expect) => {
     await page.waitForTimeout(250);
   }
 
-  // on S the main content is the one on screen to begin with
-  await waitForUi5(page, sideShown, 'the side content is already the visible area before any toggle');
+  // On S the MAIN content is the one on screen to begin with. Asserted
+  // directly, not through waitForUi5 — that waits for a predicate to become
+  // TRUE, so passing sideShown here waits for the very state this line is
+  // supposed to rule out, and its message then describes a failure the wait
+  // could never produce.
+  const before = await page.evaluate(`(${sideShown.toString()})()`);
+  if (before !== false) throw new Error(`on breakpoint S the side content should start hidden, sideShown() = ${before}`);
+
   await btn.click();
   await waitForUi5(page, sideShown, 'the Toggle press never brought the side content on screen — '
     + 'the wire does not reach DynamicSideContent.toggle( )');
 
-  // and back, which a latching flag would fail
+  // and back, which a latching flag would fail. The predicate is INLINED, not
+  // a call to sideShown: waitForUi5 stringifies the function it is given and
+  // runs it in the page, where nothing else from this module exists.
   await btn.click();
-  await waitForUi5(page, () => sideShown() === false,
-    'the second Toggle press never brought the main content back');
+  await waitForUi5(page, () => {
+    const ui5 = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
+    const d = ui5.find((c) => !c.bIsDestroyed
+      && c.getMetadata().getName() === 'sap.ui.layout.DynamicSideContent' && c.getDomRef() && document.body.contains(c.getDomRef()));
+    const side = d && d.getDomRef('SCGridCell');
+    const main = d && d.getDomRef('MCGridCell');
+    return !!side && !!main
+      && side.classList.contains('sapUiHidden') && !main.classList.contains('sapUiHidden');
+  }, 'the second Toggle press never brought the main content back');
 };

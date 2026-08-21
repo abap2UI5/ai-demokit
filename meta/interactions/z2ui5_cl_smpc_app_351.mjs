@@ -29,7 +29,14 @@ import { waitForUi5 } from '../../scripts/lib-e2e.mjs';
 // itself as "never shrank the bound contentAreas aggregation" for three runs
 // (measured 2026-08-21; a direct dump after the same press read three areas).
 // Test bIsDestroyed BEFORE touching the control.
-const SPLITTER = `ui5All().find((c) => !c.bIsDestroyed && c.getMetadata().getName() === 'sap.ui.layout.Splitter' && c.getDomRef())`;
+//
+// And bIsDestroyed alone is not enough: between the round-trip's answer and
+// the old control's teardown it is neither destroyed nor null-ref'd, it is
+// simply DETACHED — so find() kept handing back the previous Splitter with its
+// previous area count, and the module passed in isolation while failing in a
+// full run. document.body.contains( ) is what separates the live one.
+const SPLITTER = `ui5All().find((c) => !c.bIsDestroyed && c.getMetadata().getName() === 'sap.ui.layout.Splitter'
+      && c.getDomRef() && document.body.contains(c.getDomRef()) && document.body.contains(c.getDomRef()))`;
 
 // Each of these buttons is a plain ROUND-TRIP, and the view re-renders when it
 // answers. Waiting for the response before asserting keeps the next press off
@@ -41,11 +48,18 @@ const press = async (page, name) => {
     page.waitForResponse((r) => r.request().method() === 'POST' && r.url().includes(':3000'), { timeout: 15000 }),
     page.getByRole('button', { name, exact: true }).click(),
   ]);
+  // The RESPONSE is not the RE-RENDER. abap2UI5 rebuilds the view after the
+  // answer arrives, so a locator resolved right here can point at a node that
+  // is about to be replaced — which is how the Min-Size typed into the option
+  // row below was silently dropped, while a dump 2.5s after the same keystroke
+  // showed it had landed (measured 2026-08-21). Let the rebuild finish.
+  await page.waitForTimeout(1200);
 };
 
 export default async (page, expect) => {
   await waitForUi5(page, () => {
-    const s = ui5All().find((c) => !c.bIsDestroyed && c.getMetadata().getName() === 'sap.ui.layout.Splitter' && c.getDomRef());
+    const s = ui5All().find((c) => !c.bIsDestroyed && c.getMetadata().getName() === 'sap.ui.layout.Splitter'
+      && c.getDomRef() && document.body.contains(c.getDomRef()) && document.body.contains(c.getDomRef()));
     return s && s.getContentAreas().length === 3;
   }, 'the Splitter did not start with the three declared content areas');
 
@@ -54,7 +68,8 @@ export default async (page, expect) => {
 
   await press(page, 'Add content area');
   await waitForUi5(page, () => {
-    const s = ui5All().find((c) => !c.bIsDestroyed && c.getMetadata().getName() === 'sap.ui.layout.Splitter' && c.getDomRef());
+    const s = ui5All().find((c) => !c.bIsDestroyed && c.getMetadata().getName() === 'sap.ui.layout.Splitter'
+      && c.getDomRef() && document.body.contains(c.getDomRef()) && document.body.contains(c.getDomRef()));
     return s && s.getContentAreas().length === 4;
   }, 'Add content area never grew the bound contentAreas aggregation');
   // the fourth area's own option row followed the same table
@@ -62,7 +77,8 @@ export default async (page, expect) => {
 
   await press(page, 'Remove content area');
   await waitForUi5(page, () => {
-    const s = ui5All().find((c) => !c.bIsDestroyed && c.getMetadata().getName() === 'sap.ui.layout.Splitter' && c.getDomRef());
+    const s = ui5All().find((c) => !c.bIsDestroyed && c.getMetadata().getName() === 'sap.ui.layout.Splitter'
+      && c.getDomRef() && document.body.contains(c.getDomRef()) && document.body.contains(c.getDomRef()));
     return s && s.getContentAreas().length === 3;
   }, 'Remove content area never shrank the bound contentAreas aggregation');
   if ((await count()) !== 3) throw new Error('the Splitter did not come back to three areas');
@@ -86,15 +102,18 @@ export default async (page, expect) => {
   if (was !== '0') throw new Error(`expected the first area's Min-Size Input to start at 0, found "${was}"`);
   await minSize.fill('250');
   await minSize.press('Enter');
+  await page.waitForTimeout(1200); // same reason as in press( ): let the rebuild land
   await waitForUi5(page, () => {
-    const s = ui5All().find((c) => !c.bIsDestroyed && c.getMetadata().getName() === 'sap.ui.layout.Splitter' && c.getDomRef());
+    const s = ui5All().find((c) => !c.bIsDestroyed && c.getMetadata().getName() === 'sap.ui.layout.Splitter'
+      && c.getDomRef() && document.body.contains(c.getDomRef()) && document.body.contains(c.getDomRef()));
     return s && s.getContentAreas()[0].getLayoutData().getMinSize() === 250;
   }, 'the typed Min-Size never reached the first area\'s SplitterLayoutData as a number');
 
   // orientation is a BOUND property here, so the flip travels through the model
   await press(page, 'Change Orientation');
   await waitForUi5(page, () => {
-    const s = ui5All().find((c) => !c.bIsDestroyed && c.getMetadata().getName() === 'sap.ui.layout.Splitter' && c.getDomRef());
+    const s = ui5All().find((c) => !c.bIsDestroyed && c.getMetadata().getName() === 'sap.ui.layout.Splitter'
+      && c.getDomRef() && document.body.contains(c.getDomRef()) && document.body.contains(c.getDomRef()));
     return s && s.getOrientation() === 'Vertical';
   }, 'Change Orientation never flipped the bound Splitter.orientation');
 

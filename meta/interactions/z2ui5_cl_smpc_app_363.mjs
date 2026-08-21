@@ -8,6 +8,30 @@ const inputValue = async (page, id) => page.evaluate(`(() => { ${UI5_ALL_SRC}
   const i = ui5All().find((c) => c.getId().endsWith('${id}'));
   return i ? i.getValue() : null; })()`);
 
+
+// Commit a toolbar Input and then press Apply.
+//
+// Three harness facts stack here. The Inputs live in the extension
+// OverflowToolbar, so they must be revealed before they can be typed into.
+// fill() sets the DOM value and dispatches `input` — it does NOT blur, and
+// sap.m.Input's two-way binding writes back on `change`, so without a commit
+// the model still holds the OLD value and Apply round-trips with it (measured
+// 2026-08-21: the Input read "20", the model sent nothing, no clamp, no
+// toast). And the commit is itself a round-trip, which re-renders the toolbar
+// and CLOSES the popover — so Apply has to be revealed again afterwards.
+const setAndApply = async (page, fills) => {
+  for (const [id, value] of fills) {
+    const input = page.locator(`[id$="${id}"] input`).first();
+    await revealInOverflow(page, input);
+    await input.fill(value);
+    await input.press('Enter');
+    await page.waitForTimeout(1200);
+  }
+  const apply = page.getByRole('button', { name: 'Apply', exact: true });
+  await revealInOverflow(page, apply);
+  await apply.first().click();
+};
+
 export default async (page, expect) => {
   await expect(page.locator('body'), 'the seeded rows').toContainText('Notebook Basic 15');
 
@@ -27,11 +51,7 @@ export default async (page, expect) => {
   }, 'the table did not start with fixedColumnCount 0');
 
   // a column count over the 12 the table has is clamped back to 12
-  const col = page.locator('[id$="inputColumn"] input').first();
-  await revealInOverflow(page, col);
-  await expect(col, 'the fixed column count input').toBeVisibleEnabled();
-  await col.fill('20');
-  await page.getByRole('button', { name: 'Apply', exact: true }).first().click();
+  await setAndApply(page, [['inputColumn', '20']]);
   await expect(page.locator('.sapMMessageToast').last(), 'the column clamp toast')
     .toContainText('Fixed column count exceeds the total column count.');
   await waitForUi5(page, () => {
@@ -43,11 +63,7 @@ export default async (page, expect) => {
   }
 
   // top + bottom over the 10 rows the table has: the bottom count is clamped
-  const rowInput = page.locator('[id$="inputRow"] input').first();
-  await revealInOverflow(page, rowInput);
-  await rowInput.fill('8');
-  await page.locator('[id$="inputBottomRow"] input').first().fill('7');
-  await page.getByRole('button', { name: 'Apply', exact: true }).first().click();
+  await setAndApply(page, [['inputRow', '8'], ['inputBottomRow', '7']]);
   await expect(page.locator('.sapMMessageToast').last(), 'the row clamp toast')
     .toContainText('Sum of fixed row count and bottom row count exceeds the total row count.');
   await waitForUi5(page, () => {

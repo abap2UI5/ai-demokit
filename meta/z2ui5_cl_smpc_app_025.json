@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_smpc_app_025",
   "sample": "sap.m.sample.FeedListItem",
   "entity": "sap.m.FeedListItem",
-  "file": "src/01/01/z2ui5_cl_smpc_app_025.clas.abap",
+  "file": "src/02/01/z2ui5_cl_smpc_app_025.clas.abap",
   "batch": "b06",
   "audit": {
     "frontend_action": false,
@@ -25,6 +25,10 @@
     {
       "type": "NOTE",
       "what": "the relative AuthorPicUrl asset paths (test-resources/sap/m/images/*.jpg) are rewritten to absolute https://sdk.openui5.org/test-resources/... per the project rule for runtime asset URLs."
+    },
+    {
+      "type": "POST_171",
+      "what": "Found on 2026-08-21, when view-gates stopped letting ANY deviation excuse a version finding: a NOTE that merely contained the member's name had been satisfying the gate, and only POST_171 / DROPPED_171 carry that claim. sap.m.FeedListItem.actions is @since 1.137 - inherited from sap.m.ListItemBase, which is why the @since does not sit on FeedListItem itself. The sample's whole point is the action sheet on a feed item, so the aggregation and its FeedListItemAction template are kept 1:1 and the app needs UI5 >= 1.137. The excusing NOTE was about feed.json rows 2 and 4 serializing ACTIONS as an empty array - a sentence about the DATA, not about the member's version. The class moves from src/01/01 to src/02/01 with this."
     }
   ]
 }

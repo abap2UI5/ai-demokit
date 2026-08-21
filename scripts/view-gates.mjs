@@ -177,9 +177,21 @@ function declares(meta, finding) {
     .filter(Boolean)
     .map((n) => n.toLowerCase());
   if (!names.length) return false;
-  return (meta.deviations || [])
-    .map((d) => String(d.what || '').toLowerCase())
-    .some((text) => names.some((n) => text.includes(n)));
+
+  /* Only a POST_171 or DROPPED_171 may excuse a VERSION finding. This is the
+   * whole meaning of those two types — "this member is newer than the floor
+   * and the port keeps it / drops it deliberately" — and until 2026-08-21 any
+   * deviation would do, which made the escape far wider than intended:
+   * app 268 kept ColorPickerPopover.liveChange (@since 1.85) with only a NOTE
+   * that happened to say "the liveChange round-trip keeps the Text …", and
+   * that sentence silently satisfied the gate, leaving a post-1.71 port filed
+   * in src/01. A NOTE describing what a member DOES is not a declaration that
+   * it is too new; the type is what carries that claim, and it is also what
+   * moves the class to src/02. */
+  const relevant = (meta.deviations || [])
+    .filter((d) => d.type === 'POST_171' || d.type === 'DROPPED_171')
+    .map((d) => String(d.what || '').toLowerCase());
+  return relevant.some((text) => names.some((n) => text.includes(n)));
 }
 
 let failing = 0;

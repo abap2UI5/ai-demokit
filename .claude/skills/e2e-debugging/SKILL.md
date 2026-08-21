@@ -162,6 +162,41 @@ verdicts below turned out to be harness effects.
   `page.waitForResponse(r => r.request().method() === 'POST' && …)` in a
   `Promise.all` with the click. Without it the two raced and the move answered
   "Please select a row!", which reads exactly like a dead wire.
+- **The RESPONSE is not the RE-RENDER.** `waitForResponse` tells you the
+  backend answered; abap2UI5 rebuilds the view *after* that, so a locator
+  resolved on the next line can point at a node about to be replaced. App
+  351's Min-Size keystroke was silently dropped that way while a dump 2.5 s
+  after the same keystroke showed it had landed — the module read as a dead
+  wire through four debugging rounds. Give the rebuild a moment after every
+  round-trip, including one triggered by `Enter` in a bound field.
+- **`fill()` does not blur, and a two-way binding writes back on `change`.**
+  So `fill('20')` leaves the CONTROL reading 20 and the MODEL holding the old
+  value, and the next round-trip sends the old one (app 363: no clamp, no
+  toast, and the port looked broken). Commit with `press('Enter')` — then
+  remember that the commit is itself a round-trip, so an OverflowToolbar
+  popover you opened to reach the field is now closed and the button you press
+  next has to be revealed again.
+- **`bIsDestroyed` is not enough — check the node is still in the document.**
+  Between a round-trip's answer and the old control's teardown it is neither
+  destroyed nor null-ref'd, just DETACHED, so `find(…)` keeps handing back the
+  previous control with its previous state. App 351 passed in isolation and
+  failed in a full run on exactly this. Use
+  `!c.bIsDestroyed && c.getDomRef() && document.body.contains(c.getDomRef())`.
+- **A predicate passed to `waitForUi5` runs in the PAGE.** It is stringified,
+  so it cannot call another function from your module — `() => sideShown() === false`
+  fails with `sideShown is not defined`. Inline the whole check. And remember
+  `waitForUi5` waits for TRUE: to assert a state is absent *now*, read it with
+  `page.evaluate` and compare, or the wait will sit there waiting for the very
+  thing you meant to rule out (app 344's first draft did, and its message then
+  described a failure the wait could never produce).
+- **UI5 hides a grid cell with a CLASS, not inline display.**
+  `DynamicSideContent._changeGridState` adds `sapUiHidden`; both cells report
+  `style.display === ''` at every breakpoint, so a predicate reading inline
+  display answers the same thing before and after a toggle (app 344).
+- **An unthemed ShellBar button has no `sapFShellBar…` class.** It renders as a
+  plain `<button>` with a generated id and the accessible name from its
+  tooltip, so `getByRole('button', { name: 'Menu' })` finds it where a class
+  locator finds nothing and dies in a 30 s timeout (app 301).
 - **A row selector cell has a layout box and still cannot be clicked.**
   `sapUiTableRowSelectionCell` measures 1264×20 in the unthemed harness (it
   spans the whole row instead of its narrow column) but sits in the absolutely
