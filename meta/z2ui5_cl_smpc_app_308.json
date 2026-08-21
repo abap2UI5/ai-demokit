@@ -37,6 +37,10 @@
     {
       "type": "NOTE",
       "what": "The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). This sample's manifest lists `../style.css` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding / labelMarginLeft classes the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs."
+    },
+    {
+      "type": "NOTE",
+      "what": "The special dates are ABAP DATS strings read through Formatter.DateAbapDateToDateObject, which builds the Date from the parsed parts - local midnight, which is what sap.ui.unified reads back (CalendarDate.fromLocalJSDate). They were ISO date-only strings through Formatter.DateCreateObject until 2026-08-21, and that is `new Date(s)`, which ECMA-262 parses as UTC midnight: west of Greenwich every marked day landed one day early. Same defect and same fix as apps 220 and 017, found by sweeping the corpus for the pattern after 220. Note the ports that pass a date-TIME without an offset (018, 109) are unaffected - that form is parsed as local."
     }
   ]
 }

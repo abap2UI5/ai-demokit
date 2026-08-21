@@ -84,7 +84,17 @@ CLASS z2ui5_cl_smpc_app_017 IMPLEMENTATION.
             )->tag( `Label`
                 )->a( n = `text`     v = `DateRangeSelection with minDate=2016-01-01 and maxDate=2016-12-31:`
                 )->a( n = `labelFor` v = `DRS2`
-            " the original controller's onInit sets minDate/maxDate imperatively - bound here via Formatter.DateCreateObject (core:require on the view root)
+            " the original controller's onInit sets minDate/maxDate imperatively
+            " - bound here instead. The values are ABAP DATS read through
+            " Formatter.DateAbapDateToDateObject, which builds the Date from the
+            " parsed parts, i.e. LOCAL midnight: that is what
+            " UI5Date.getInstance( 2016, 0, 1 ) means upstream and what the
+            " DatePicker compares against (CalendarDate.fromLocalJSDate). They
+            " were ISO date-only strings through DateCreateObject until
+            " 2026-08-21, and `new Date('2016-01-01')` is UTC midnight, so west
+            " of Greenwich the range began on 2015-12-31 - contradicting the
+            " sample's own label, which spells the intended bounds out. Same
+            " defect as app 220.
             )->tag( `DateRangeSelection`
                 )->a( n = `id`         v = `DRS2`
                 )->a( n = `change`     v = client->_event( val   = `CHANGE`
@@ -95,8 +105,8 @@ CLASS z2ui5_cl_smpc_app_017 IMPLEMENTATION.
                 )->a( n = `value`      v = |\{ 'type': 'sap.ui.model.type.DateInterval', 'parts': [| &&
                                            | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind( val = drs2_start path = abap_true ) }' \},| &&
                                            | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind( val = drs2_end path = abap_true ) }' \} ] \}|
-                )->a( n = `minDate`    v = |\{ path: '{ client->_bind( val = drs2_min_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
-                )->a( n = `maxDate`    v = |\{ path: '{ client->_bind( val = drs2_max_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
+                )->a( n = `minDate`    v = |\{ path: '{ client->_bind( val = drs2_min_date path = abap_true ) }', formatter: 'Formatter.DateAbapDateToDateObject' \}|
+                )->a( n = `maxDate`    v = |\{ path: '{ client->_bind( val = drs2_max_date path = abap_true ) }', formatter: 'Formatter.DateAbapDateToDateObject' \}|
                 )->a( n = `valueState` v = client->_bind( drs2_value_state )
             )->tag( `Label`
                 )->a( n = `text`     v = `DateRangeSelection with OK button in the footer and with shortcut for today:`
@@ -191,8 +201,8 @@ CLASS z2ui5_cl_smpc_app_017 IMPLEMENTATION.
     drs1_end         = `2014-02-17`.
     drs2_start       = `2016-02-16`.
     drs2_end         = `2016-02-18`.
-    drs2_min_date    = `2016-01-01`.
-    drs2_max_date    = `2016-12-31`.
+    drs2_min_date    = `20160101`.
+    drs2_max_date    = `20161231`.
     drs3_start       = `2014-02-02`.
     drs3_end         = `2014-02-17`.
     drs4_start       = `2019-04-02`.

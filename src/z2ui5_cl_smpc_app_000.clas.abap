@@ -1562,7 +1562,11 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` of the five DateRangeSelections (prefer a bindable property over imperative calls); the backend maps the event-source id to the matching field - five extra valueState attributes vs the original` &&
                ` view.xml, initialized to 'None' (enum property, never an empty string). // NOTE: the change handler's imperative oText.setText(...) becomes a bound text attribute on the TextEvent Text - one extra` &&
                ` attribute vs the original view.xml (there the Text has no text attribute). // NOTE: the controller's _iEvent counter is omitted - it is incremented in handleChange but never displayed or otherwise` &&
-               ` used in the sample.`.
+               ` used in the sample. // NOTE: The DRS2 minDate/maxDate the original sets imperatively in onInit (UI5Date.getInstance(2016, 0, 1) / (2016, 11, 31)) are bound instead, and since 2026-08-21 as ABAP DATS` &&
+               ` strings read through Formatter.DateAbapDateToDateObject. That formatter builds the Date from the parsed parts - local midnight - which is what UI5Date.getInstance means and what the DatePicker`.
+    lv_text1 = lv_text1 && ` compares against (CalendarDate.fromLocalJSDate). They were ISO date-only strings through Formatter.DateCreateObject until then, and that is ``new Date(s)``, which ECMA-262 parses as UTC midnight:` &&
+               ` west of Greenwich the allowed range began on 2015-12-31, contradicting the sample's own label, which spells the intended bounds out in words. Same defect and same fix as app 220. Note this affects` &&
+               ` only these two: every other date in the port travels as a typed binding with a source pattern, which parses locally.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.DateRangeSelection`              name = `DateRangeSelection`                            class = `z2ui5_cl_smpc_app_017` path = `src/02/01/z2ui5_cl_smpc_app_017.clas.abap`
         score = 5
@@ -6489,7 +6493,11 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` app needs a UI5 release >= 1.121 for those days to render as non-working. // NOTE: The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in`.
     lv_text1 = lv_text1 && ` the original view). This sample's manifest lists ``../style.css`` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding / labelMarginLeft classes` &&
                ` the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS` &&
-               ` section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs.`.
+               ` section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs. // NOTE: The special dates are ABAP DATS strings read through` &&
+               ` Formatter.DateAbapDateToDateObject, which builds the Date from the parsed parts - local midnight, which is what sap.ui.unified reads back (CalendarDate.fromLocalJSDate). They were ISO date-only` &&
+               ` strings through Formatter.DateCreateObject until 2026-08-21, and that is ``new Date(s)``, which ECMA-262 parses as UTC midnight: west of Greenwich every marked day landed one day early. Same defect` &&
+               ` and same fix as apps 220 and 017, found by sweeping the corpus for the pattern after 220. Note the ports that pass a date-TIME without an offset (018, 109) are unaffected - that form is parsed as` &&
+               ` local.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarSpecialDaysLegend`                     class = `z2ui5_cl_smpc_app_308` path = `src/02/02/z2ui5_cl_smpc_app_308.clas.abap`
         score = 4
@@ -6529,11 +6537,15 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` special dates track the current month exactly as the original UI5Date.getInstance() logic did. // NOTE: The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf` &&
                ` (no counterpart in the original view). This sample's manifest lists ``../style.css`` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding /` &&
                ` labelMarginLeft classes the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css` &&
-               ` (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs.`.
+               ` (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs. // NOTE: The special dates are ABAP DATS` &&
+               ` strings read through Formatter.DateAbapDateToDateObject, which builds the Date from the parsed parts - local midnight, which is what sap.ui.unified reads back (CalendarDate.fromLocalJSDate). They` &&
+               ` were ISO date-only strings through Formatter.DateCreateObject until 2026-08-21, and that is ``new Date(s)``, which ECMA-262 parses as UTC midnight: west of Greenwich every marked day landed one day`.
+    lv_text1 = lv_text1 && ` early. Same defect and same fix as apps 220 and 017, found by sweeping the corpus for the pattern after 220. Note the ports that pass a date-TIME without an offset (018, 109) are unaffected - that` &&
+               ` form is parsed as local.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.CalendarLegend`         name = `CalendarLegendNavigation`                      class = `z2ui5_cl_smpc_app_240` path = `src/02/02/z2ui5_cl_smpc_app_240.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
         is_post171 = abap_true
         notes = lv_text1

@@ -58,10 +58,11 @@ CLASS z2ui5_cl_smpc_app_308 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " DateTypeRange.startDate/endDate are typed "object" and demand a real JS Date;
-    " the model keeps ISO strings and Formatter.DateCreateObject converts them at
-    " the point of use (needs UI5 >= 1.74). endDate is optional, so its conversion
-    " is guarded - new Date('') is an Invalid Date, which is truthy and kills the
-    " whole view
+    " the model keeps ABAP DATS strings and Formatter.DateAbapDateToDateObject converts them at
+    " the point of use (needs UI5 >= 1.74). endDate is optional, and needs no
+    " guard: DateAbapDateToDateObject answers null for a non-date, where
+    " DateCreateObject's new Date('') is an Invalid Date - truthy, and enough to
+    " kill the whole view
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`      v = `sap.ui.layout`
         )->a( n = `xmlns:u`      v = `sap.ui.unified`
@@ -93,8 +94,14 @@ CLASS z2ui5_cl_smpc_app_308 IMPLEMENTATION.
 
                 )->ele( n = `specialDates` ns = `u`
                     )->tag( n = `DateTypeRange` ns = `u`
-                        )->a( n = `startDate`     v = `{ path: 'START_DATE', formatter: 'Formatter.DateCreateObject' }`
-                        )->a( n = `endDate`       v = `{= ${END_DATE} ? Formatter.DateCreateObject(${END_DATE}) : null }`
+                        )->a( n = `startDate`     v = `{ path: 'START_DATE', formatter: 'Formatter.DateAbapDateToDateObject' }`
+                        " a special date with no end is a single day. That used to
+                        " need a ternary guard, because an empty string through
+                        " DateCreateObject is an Invalid Date that
+                        " Month._checkDateEnabled throws on;
+                        " DateAbapDateToDateObject answers null for a non-date, so
+                        " the plain binding is enough (app 220's lesson)
+                        )->a( n = `endDate`       v = |\{ path: 'END_DATE', formatter: 'Formatter.DateAbapDateToDateObject' \}|
                         )->a( n = `type`          v = `{TYPE}`
                         " An enum property REFUSES an empty string - `"" is of type
                         " string, expected sap.ui.unified.CalendarDayType` - and the
@@ -132,8 +139,14 @@ CLASS z2ui5_cl_smpc_app_308 IMPLEMENTATION.
 
                 )->ele( n = `specialDates` ns = `u`
                     )->tag( n = `DateTypeRange` ns = `u`
-                        )->a( n = `startDate`     v = `{ path: 'START_DATE', formatter: 'Formatter.DateCreateObject' }`
-                        )->a( n = `endDate`       v = `{= ${END_DATE} ? Formatter.DateCreateObject(${END_DATE}) : null }`
+                        )->a( n = `startDate`     v = `{ path: 'START_DATE', formatter: 'Formatter.DateAbapDateToDateObject' }`
+                        " a special date with no end is a single day. That used to
+                        " need a ternary guard, because an empty string through
+                        " DateCreateObject is an Invalid Date that
+                        " Month._checkDateEnabled throws on;
+                        " DateAbapDateToDateObject answers null for a non-date, so
+                        " the plain binding is enough (app 220's lesson)
+                        )->a( n = `endDate`       v = |\{ path: 'END_DATE', formatter: 'Formatter.DateAbapDateToDateObject' \}|
                         )->a( n = `type`          v = `{TYPE}`
                         " An enum property REFUSES an empty string - `"" is of type
                         " string, expected sap.ui.unified.CalendarDayType` - and the
@@ -196,7 +209,14 @@ CLASS z2ui5_cl_smpc_app_308 IMPLEMENTATION.
 
     " the original walks a reference date through the CURRENT month with
     " setDate( n ), so every date below is day n of the current month
-    DATA(prefix) = |{ sy-datum+0(4) }-{ sy-datum+4(2) }-|.
+    " The special dates are ABAP DATS strings read through
+    " Formatter.DateAbapDateToDateObject, which builds the Date from the parsed
+    " parts - LOCAL midnight, which is what sap.ui.unified reads back
+    " (CalendarDate.fromLocalJSDate). They were ISO date-only strings through
+    " Formatter.DateCreateObject until 2026-08-21, and `new Date('yyyy-mm-dd')`
+    " is UTC midnight, so west of Greenwich every marked day landed one day
+    " early. Same defect and same fix as apps 220 and 017.
+    DATA(prefix) = |{ sy-datum+0(4) }{ sy-datum+4(2) }|.
 
     CLEAR t_special1.
     CLEAR t_special2.
