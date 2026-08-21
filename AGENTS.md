@@ -821,7 +821,12 @@ gates`, and do not commit it.
 `" @keywords`), and its **row shape is a contract, not a layout**:
 `abap2UI5/samples` and `abap2UI5/samples-stack` render the identical shape and
 one parser reads all three (`abap2UI5/mcp-server`, the `examples` tool). Change it
-here and you change it for them.
+here and you change it for them. The one extension this repository makes is the
+trailing verification-marker block per row (`<br><sub>✓ checked · n
+deviations</sub>`, from the sidecar's `status`) — safe because that parser
+reads the blocks as a group, takes the FIRST `<sub>` as the keywords and
+ignores blocks it does not know; the marker therefore always sits AFTER the
+keywords block (the generator enforces that ordering — keep it).
 
 ---
 

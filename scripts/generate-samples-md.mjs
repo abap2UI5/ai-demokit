@@ -28,6 +28,17 @@
  * reader who has seen one page can read the other two. A change to the shape
  * here is a change to a contract, not to a layout.
  *
+ * The one addition this repository makes to that shape is a TRAILING block per
+ * row — `<br><sub>✓ checked · 2 deviations</sub>` — carrying the sidecar's
+ * verification status, which used to live only in meta/<class>.json and
+ * STATUS.md, invisible to anybody browsing the catalogue. It is safe against
+ * the shared parser BY ITS DESIGN, not by luck: mcp-server matches the blocks
+ * after a row title as one group and reads the FIRST `<sub>` that does not
+ * start `docs:` as the keywords, ignoring blocks it does not know — exactly so
+ * that a catalogue can grow a block without breaking the other two. The marker
+ * therefore comes AFTER the keywords block and is only emitted when a keywords
+ * block exists, or it would be mistaken for one.
+ *
  *   node scripts/generate-samples-md.mjs          write it
  *   node scripts/generate-samples-md.mjs --check  fail if it is stale (CI)
  */
@@ -92,6 +103,8 @@ function scan() {
         : (cut === -1 ? descript : descript.slice(0, cut)),
       sapui5: !meta && cls.includes('_sapui5_'),
       overview: cls === 'z2ui5_cl_smpc_app_000',
+      status: meta?.status || '',
+      devCount: (meta?.deviations || []).length,
     });
   }
   return out;
@@ -108,11 +121,21 @@ const sapui5 = all.filter((s) => s.sapui5);
  * ActionListItem can be used like a"), and the untruncated sentence is the
  * `@summary` directly below it. Printing both would print the same words
  * twice, the first time broken off mid-word. */
+/* The verification marker — the sidecar's status ladder, one symbol each,
+ * defined in the legend at the top of the page. The SAPUI5 collection carries
+ * none: those classes have no sidecar because they are not ports. */
+const MARK = { checked: '✓ checked', reviewed: '◐ reviewed', generated: '○ generated' };
+
 const row = (s) => {
   const head = `**${cell(s.header)}**`;
   const summary = s.summary ? `<br>${cell(s.summary)}` : `<br>${cell(s.sub)}`;
   const keywords = s.keywords ? `<br><sub>${cell(s.keywords)}</sub>` : '';
-  return `| ${head}${summary}${keywords} | [\`${s.cls.toUpperCase()}\`](${s.rel}) |`;
+  /* Only ever AFTER a keywords block — the shared parser reads the first
+   * <sub> block as the keywords (see the header comment). */
+  const mark = keywords && MARK[s.status]
+    ? `<br><sub>${MARK[s.status]}${s.devCount ? ` · ${s.devCount} deviation${s.devCount === 1 ? '' : 's'}` : ''}</sub>`
+    : '';
+  return `| ${head}${summary}${keywords}${mark} | [\`${s.cls.toUpperCase()}\`](${s.rel}) |`;
 };
 
 const table = (items) => [
@@ -165,6 +188,15 @@ this repository with [abapGit](https://abapgit.org), then open
 **To read one:** click the class. Every port is a single class, so the link is
 the whole sample.
 
+**How far each one is verified** — the small marker closing a row:
+✓ \`checked\`, a human watched this port run in a real system ·
+◐ \`reviewed\`, read against its original, not yet run ·
+○ \`generated\`, machine-written and not yet reviewed.
+\`· n deviations\` counts the declared, typed differences from the original —
+what each one is lives in the port's \`meta/<class>.json\`, and
+[STATUS.md](STATUS.md) carries the corpus-wide tallies. The SAPUI5 collection
+at the end carries no marker: those are hand-written samples, not ports.
+
 For what is NOT here — which demo kit samples are still unported and why — see
 [api.md](api.md), the coverage table.
 
@@ -190,7 +222,8 @@ ${table(sapui5)}
 ---
 
 _Generated from the classes themselves: the title is the abapGit short text, the
-sentence is \`" @summary\` and the small type is \`" @keywords\`. Change one of
+sentence is \`" @summary\` and the small type is \`" @keywords\`; the
+verification marker is the \`status\` in \`meta/<class>.json\`. Change one of
 those and this page moves with it — \`npm run samples:md\`._
 `;
 
