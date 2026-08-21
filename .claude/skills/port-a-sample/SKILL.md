@@ -170,6 +170,17 @@ picked the default) and overrides non-empty property **defaults** (e.g.
 data, or split the aggregation into per-shape templates (the QuickView port's
 `QuickViewGroupElementType`/`AvatarShape` crashed every page this way).
 
+The **boolean** case is the quiet one: `abap_bool` has no absent state either,
+so an unset field serializes as a real JSON `false` and OVERRIDES a control
+default of `true`. Nothing crashes — the control simply renders the opposite of
+the sample. App 291's notification items lost their close button that way, and
+with it the port's only backend wire, because there was nothing left to press.
+Check every boolean the mock does **not** carry against the control's
+`defaultValue`, remembering it is usually declared on a BASE class
+(`showCloseButton` lives on `NotificationListBase`, not on the
+`NotificationListItem` the view names).
+`scripts/probes/absent-boolean-probe.mjs` scans the corpus for it.
+
 #### `view_display` — the view via `z2ui5_cl_ui5_view_builder`
 
 Build the view with the generic builder **`z2ui5_cl_ui5_view_builder`**. The class lives
@@ -464,6 +475,58 @@ these entries.
 
 
 #### Porting gotchas (distilled lessons — same discipline as AGENTS.md §10)
+
+- **When the original calls a METHOD, read that method before binding a
+  property in its place.** The recipe prefers a bindable property over a
+  frontend action, and that is right — but only when the property is the one
+  the method writes. `DynamicSideContent.toggle( )` does NOT write
+  `showSideContent`: it swaps a private `_MCVisible`/`_SCVisible` pair and
+  leaves the property at its default, and `setShowSideContent` re-derives those
+  flags through `_setResizeData( )`. Apps 344/138 bound the property and shipped
+  a Toggle button that could not toggle. Two minutes in
+  `node_modules/@openui5/…/<Control>.js` settles it.
+- **An event parameter can be DECLARED and never fired.** `QuickSort.change`
+  lists `key` and `sortOrder` in its `metadata.events` and its own `onChange`
+  does `this.fireChange({item: oItem})` — nothing else. App 298 read the
+  declared names, got two empty strings on every firing, and fell through to a
+  default sort. The linter's event-parameter check *prefers* the declared
+  names, so it steers you into the bug; when the sample's own controller reads
+  a different parameter, follow the sample and carry the linter finding as a
+  declared advisory. Grep the control for `fire<Event>(` and see what it
+  actually passes.
+- **Read the parameter's doc comment, not just its name.** `sap.ui.table`'s
+  `rowIndices` is "array of row indices which selection has been CHANGED
+  (either selected or deselected)", not the current selection — app 361
+  reported `[1]` where the original reports `[0,1]`. When the original asks the
+  CONTROL (`getSelectedIndices( )`), transport that:
+  `${$source>}.getSelectedIndices()`.
+- **A list the original builds from `Object.keys(SomeEnum)` must match the enum
+  in members AND order.** App 356 offered a fourth value `All` that
+  `sap.ui.table.SelectionMode` does not define, bound straight onto an
+  enum-typed property — `validateProperty` throws. Open the enum in
+  `node_modules/@openui5/…/library.js`.
+- **`check_prevent_default` is baked per WIRE, not per firing.** A handler that
+  vetoes ONE column and returns early for the others needs
+  `s_ctrl = VALUE #( prevent_default_expr = `…` )`; the boolean form vetoed all
+  five of app 354's columns and left four `filterProperty` columns plus the
+  whole `enableCellFilter` feature inert.
+- **Seeding a value the original does not set can hide a placeholder.**
+  `sap.m.Input` drops its placeholder as soon as a value exists, so app 363's
+  three `"0"`s replaced three hints the sample shows. If the original view
+  carries no `value`, the port carries none either.
+- **A formatter is business logic — port the whole rule, units included.**
+  `Formatter.weightState`'s boundaries are 1 and 5 KILOGRAMS and it divides a
+  `G` row by 1000 first; apps 377/298 compared the raw measure against
+  1000/2000 and mis-coloured 66 of 123 rows. Copy from a `checked` sibling
+  (app 009 had it right) rather than from the nearest port.
+- **Check literal texts against THIS sample's own files.** Apps 357/360 took
+  two column headers from a neighbouring sample's `metadata.xml` while their
+  deviations asserted the texts came from their own.
+- **Dropping a handler does not disarm the control that carried it.**
+  `DropInfo.isDroppable` never asks whether anyone is listening, so app 365
+  kept draggable rows and a live drop indicator that discarded every drop.
+  Switch the configuration off (`enabled="false"`) or remove it, and declare
+  which.
 
 - **A bare decimal literal is not valid ABAP** — `price = 2.3` inside a
   `VALUE #( )` lexes as `2` · `.` · `3`, and the dot ENDS the statement, so the
