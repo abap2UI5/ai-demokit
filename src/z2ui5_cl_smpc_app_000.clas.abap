@@ -1073,11 +1073,14 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` change event, both reading the pressed item off the event (${$parameters>/itemPressed}.getTargetSrc()). The port now has NO structural difference from the original at all. // POST-1.71:` &&
                ` sap.f.ProductSwitch and sap.f.ProductSwitchItem are controls @since 1.72 - one minor release past the 1.71 line. The sample IS the ProductSwitch, so the port is one of the five decided scope` &&
                ` exceptions (ui5/scope-exceptions.json, KEEP 2026-07-30); the controls only became visible to the property gate on 2026-08-05, when the popover fragment was rebuilt instead of substituted by a toast.`.
-    lv_text1 = lv_text1 && ` The app needs a UI5 release >= 1.72.`.
+    lv_text1 = lv_text1 && ` The app needs a UI5 release >= 1.72. // NOTE: fnOpen's PHONE branch is reproduced since 2026-08-21: the controller gives the popover an Emphasized 'Close' endButton on a phone only, wired to its` &&
+               ` closing handler. It was dropped and undeclared - found by the review sweep, and the deviation beside it claimed the port had 'NO structural difference from the original at all'. The branch stays a` &&
+               ` branch, the form CAPABILITIES prescribes: the Button is declared once with visible bound to {= ${device>/system/phone} }, and closing is the roundtrip-free popover_close follow-up action. That makes` &&
+               ` the port carry 2 Buttons where the original view declares 1 - the second is the controller-built one.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.ProductSwitch`                   name = `ProductSwitchNavigation`                       class = `z2ui5_cl_smpc_app_165` path = `src/02/04/z2ui5_cl_smpc_app_165.clas.abap`
-        score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.72`
         since_post171 = abap_true
         is_post171 = abap_true
@@ -2921,13 +2924,15 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = `NOTE: the token interaction is reproduced since 2026-08-05, in the two shapes the sample needs. The FIRST tokenizer - the one onAddToken/onTokenDelete work on - has its three static tokens folded into` &&
                ` a bound aggregation (the app-085 pattern), so adding appends a row (with the original's empty-input toast and the input cleared afterwards) and deleting removes the row by key; that costs 3 static` &&
                ` Token controls against the original's 24, the port now declaring one bound template instead. The other three tokenizers keep their static tokens and delete them roundtrip-free through control_by_id` &&
-               ` removeToken with the token's ID - measured with scripts/probes/event-arg-expression-probe.mjs, ManagedObject.removeAggregation accepts an id and the token really leaves the aggregation - plus the` &&
-               ` original's 'Token deleted: X' toast. The earlier claim (imperative control mutation over static tokens is 'not expressible without inventing a bound token model') was half wrong: the bound model is` &&
-               ` what the sample's own add path needs, and removal by id needs no model at all. // POST-1.71: sap.m.OverflowToolbar ariaHasPopup (since 1.79.0) is kept 1:1 from the original view; needs a UI5 release`.
-    lv_text1 = lv_text1 && ` >= 1.79 to render. // POST-1.71: REVIEW FINDING (out of scope, maintainer decision needed): the ported control sap.m.OverflowToolbarTokenizer itself is tagged @ui5-experimental-since 1.139 in the` &&
-               ` OpenUI5 source and carries NO plain @since tag, so scripts/scope-of.mjs misreads it as base-version (<= 1.71, 'no @since header') and the property gate cannot see it either. The sample is out of` &&
-               ` porting scope per AGENTS §1 (control must exist since UI5 1.71); the app needs a UI5 release >= 1.139 (experimental API) to render. Either drop the port or add a ui5/scope-exceptions.json entry;` &&
-               ` scope-of.mjs should also learn @ui5-experimental-since.`.
+               ` removeToken with the token's ID, each chained with the original's 'Token deleted: <text>' toast off the same event - measured with scripts/probes/event-arg-expression-probe.mjs,` &&
+               ` ManagedObject.removeAggregation accepts an id and the token really leaves the aggregation - plus the original's 'Token deleted: X' toast. The earlier claim (imperative control mutation over static` &&
+               ` tokens is 'not expressible without inventing a bound token model') was half wrong: the bound model is what the sample's own add path needs, and removal by id needs no model at all. Corrected`.
+    lv_text1 = lv_text1 && ` 2026-08-21: this sentence claimed all three were wired while tokenizerShowItems carried no tokenDelete at all, and claimed the toast while none of the wires composed one - so the sentence that` &&
+               ` satisfies the gate described a port that did not exist. All four tokenizers are wired now and each chains the toast, which is expressible in one attribute (the app-076 idiom). // POST-1.71:` &&
+               ` sap.m.OverflowToolbar ariaHasPopup (since 1.79.0) is kept 1:1 from the original view; needs a UI5 release >= 1.79 to render. // POST-1.71: REVIEW FINDING (out of scope, maintainer decision needed):` &&
+               ` the ported control sap.m.OverflowToolbarTokenizer itself is tagged @ui5-experimental-since 1.139 in the OpenUI5 source and carries NO plain @since tag, so scripts/scope-of.mjs misreads it as` &&
+               ` base-version (<= 1.71, 'no @since header') and the property gate cannot see it either. The sample is out of porting scope per AGENTS §1 (control must exist since UI5 1.71); the app needs a UI5` &&
+               ` release >= 1.139 (experimental API) to render. Either drop the port or add a ui5/scope-exceptions.json entry; scope-of.mjs should also learn @ui5-experimental-since.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.OverflowToolbarTokenizer`        name = `OverflowToolbarTokenizer`                      class = `z2ui5_cl_smpc_app_203` path = `src/02/01/z2ui5_cl_smpc_app_203.clas.abap`
         score = 4
@@ -4062,20 +4067,28 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` keeps working (expanded state and checkbox survive it via their two-way bindings). onCollapseExpandPress (expanded two-way + TOGGLE_EXPAND round-trip), the ITEM_PRESS modifier-key transport and the` &&
                ` popup round-trips were live-verified 2026-07-27. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): with the checkbox set, the PREVENT_TOGGLE redraw re-bakes the` &&
                ` wires and pressing 'Building' toasts 'Default was prevented:' - the eBP wire fires and round-trips; the visual no-selection-change and the popup paths remain for the live check. // POST-1.71:` &&
-               ` sap.tnt.NavigationListItem.expanded is kept 1:1 from the original view. The property PREDATES 1.71, but it now lives on sap.tnt.NavigationListItemBase and its JSDoc there carries @since 1.121, which` &&
-               ` is the version any scanner reads - the relocated-member residual limit AGENTS section 5 names. Declared by policy 2026-08-21 (scripts/probes/post171-blindspot-probe.mjs); no gate can raise it.`.
+               ` sap.tnt.NavigationListItem.expanded is carried by the port's bound item template. Corrected 2026-08-21: this said 'kept 1:1 from the original view', which is not true - no NavigationListItem in the` &&
+               ` original declares ``expanded`` at all. The attribute exists here to carry the Create dialog's expanded item, and the SideNavigation's own ``expanded`` (which the original DOES declare) is a` &&
+               ` different, base-version property needing no declaration. The property PREDATES 1.71, but it now lives on sap.tnt.NavigationListItemBase and its JSDoc there carries @since 1.121, which is the version`.
+    lv_text1 = lv_text1 && ` any scanner reads - the relocated-member residual limit AGENTS section 5 names. Declared by policy 2026-08-21 (scripts/probes/post171-blindspot-probe.mjs); no gate can raise it. // NOTE: EXPANDED` &&
+               ` joins omit_initial_paths since 2026-08-21. The original declares ``expanded`` on NO NavigationListItem, so UI5's own default (true) applies and 'Mileage' opens showing Driven and Walked; the port` &&
+               ` bound the attribute to a field no seeded row sets, and ajson emitted a real JSON false that collapsed it - the sample's only parent item silently lost its children, with selectedKey pointing at a` &&
+               ` hidden child. Omitting the INITIAL value restores the default while the Create dialog's explicit abap_true still travels. Found by the review sweep.`.
     lv_text2 = `NavigationListItemBase.press event (@since 1.133) is the whole point of this sample; wired 1:1 on every NavigationListItem (press) to a backend ITEM_PRESS event. @since verified in` &&
                ` fork-openui5/src/sap.tnt/src/sap/tnt/NavigationListItemBase.js:74-79. Requires a UI5 release >= 1.133. // The press event parameters ctrlKey/shiftKey/altKey/metaKey (@since 1.137) are transported via` &&
                ` ${$parameters>/ctrlKey} etc. in the ITEM_PRESS t_arg and echoed into the toast, exactly as the original itemPress reads them. @since verified NavigationListItemBase.js:88-109. Requires a UI5 release` &&
                ` >= 1.137 (the property gate is blind to sap.tnt event params). // NavigationListItem.selectable (@since 1.116) is used 1:1 (selectable=false) on Link 1/Link 2, Quick Create and External Link. @since` &&
                ` verified NavigationListItem.js:101-103. // NavigationListItem.design="Action" and NavigationListItem.ariaHasPopup="Dialog" (both @since 1.133.0) are kept 1:1 on the Quick Create item. @since verified` &&
-               ` NavigationListItem.js:131-139. // sap.tnt.NavigationListItem.expanded is kept 1:1 from the original view. The property PREDATES 1.71, but it now lives on sap.tnt.NavigationListItemBase and its JSDoc`.
-    lv_text2 = lv_text2 && ` there carries @since 1.121, which is the version any scanner reads - the relocated-member residual limit AGENTS section 5 names. Declared by policy 2026-08-21` &&
-               ` (scripts/probes/post171-blindspot-probe.mjs); no gate can raise it.`.
+               ` NavigationListItem.js:131-139. // sap.tnt.NavigationListItem.expanded is carried by the port's bound item template. Corrected 2026-08-21: this said 'kept 1:1 from the original view', which is not`.
+    lv_text2 = lv_text2 && ` true - no NavigationListItem in the original declares ``expanded`` at all. The attribute exists here to carry the Create dialog's expanded item, and the SideNavigation's own ``expanded`` (which the` &&
+               ` original DOES declare) is a different, base-version property needing no declaration. The property PREDATES 1.71, but it now lives on sap.tnt.NavigationListItemBase and its JSDoc there carries @since` &&
+               ` 1.121, which is the version any scanner reads - the relocated-member residual limit AGENTS section 5 names. Declared by policy 2026-08-21 (scripts/probes/post171-blindspot-probe.mjs); no gate can` &&
+               ` raise it.`.
     result = VALUE #( BASE result
       ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationPressEvent`                      class = `z2ui5_cl_smpc_app_241` path = `src/02/05/z2ui5_cl_smpc_app_241.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
         since = `1.34`
         is_post171 = abap_true
         notes = lv_text1
@@ -4270,7 +4283,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` popover_display by_id = $event.oSource.sId - Popover + 3 Buttons are extra controls vs the original view.xml (controller-built). onQuickActionPress: the design guard runs server-side on the` &&
                ` transported ${$source>/design} and a design=Action item opens the 'Create Item' Message Dialog (Text 'Create New Navigation List Item', Create/Cancel closing via popup_close) via popup_display -` &&
                ` Dialog/Text/Button extra controls declared here too. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): Child Item 1 press toasts 'Fired itemPress, item: Child` &&
-               ` Item 1' and the Alan Smith press opens the Feedback/Help/Logout popover; the side toggle, key navigation target and Quick Create dialog remain unexercised.`.
+               ` Item 1' and the Alan Smith press opens the Feedback/Help/Logout popover; the side toggle, key navigation target and Quick Create dialog remain unexercised. // NOTE: Fixed Item 1-3 are seeded` &&
+               ` selectable = abap_true since 2026-08-21. data.json omits the property for those three rows and sap.tnt.NavigationListItem declares ``selectable: { defaultValue: true }``, so the UI5 default is TRUE -`.
+    lv_text1 = lv_text1 && ` the port seeded false and silently took their selection behaviour and hover state away. The port's own rule is that a property data.json omits is seeded with the control's default explicitly; this is` &&
+               ` that rule applied correctly. Only Quick Create keeps selectable = abap_false, which data.json does set.`.
     lv_text2 = `Several members newer than UI5 1.71 are kept 1:1 from the original. sap.tnt.NavigationListItem: selectable (@since 1.116), design (@since 1.133.0, sap.tnt.NavigationListItemDesign), press (event,` &&
                ` @since 1.133 on NavigationListItemBase), ariaHasPopup (@since 1.133.0). sap.m.Button.ariaHasPopup (@since 1.84) on the header 'Alan Smith' button. Declared per the property-171 policy; the tnt` &&
                ` members were previously mis/under-declared (the earlier note cited only sap.m.Button 1.84 for ariaHasPopup, which is the Button version, not the tnt member's 1.133) because the property gate is blind` &&
@@ -4279,7 +4295,8 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     result = VALUE #( BASE result
       ( module = `sap.tnt`            control = `sap.tnt.ToolPage`                      name = `ToolPage`                                      class = `z2ui5_cl_smpc_app_167` path = `src/02/05/z2ui5_cl_smpc_app_167.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
         since = `1.34`
         is_post171 = abap_true
         notes = lv_text1

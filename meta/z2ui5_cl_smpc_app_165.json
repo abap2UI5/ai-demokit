@@ -7,7 +7,7 @@
   "audit": {
     "frontend_action": true,
     "event_t_arg": true,
-    "note": "the trigger press shows a static client-composed toast (control_global MESSAGE_TOAST.show) - see the IMPROVISED deviation, flagged for rework to the fragment popover"
+    "note": "the trigger press round-trips and on_event builds the controller's ResponsivePopover with the f:ProductSwitch, anchored by id via popover_display; fnChange toasts and redirects off ${$parameters>/itemPressed}.getTargetSrc(). Corrected 2026-08-21: the note still described a static client toast and an IMPROVISED deviation that no longer exists - the rework landed 2026-08-05."
   },
   "status": "generated",
   "checked": null,
@@ -19,6 +19,10 @@
     {
       "type": "POST_171",
       "what": "sap.f.ProductSwitch and sap.f.ProductSwitchItem are controls @since 1.72 - one minor release past the 1.71 line. The sample IS the ProductSwitch, so the port is one of the five decided scope exceptions (ui5/scope-exceptions.json, KEEP 2026-07-30); the controls only became visible to the property gate on 2026-08-05, when the popover fragment was rebuilt instead of substituted by a toast. The app needs a UI5 release >= 1.72."
+    },
+    {
+      "type": "NOTE",
+      "what": "fnOpen's PHONE branch is reproduced since 2026-08-21: the controller gives the popover an Emphasized 'Close' endButton on a phone only, wired to its closing handler. It was dropped and undeclared - found by the review sweep, and the deviation beside it claimed the port had 'NO structural difference from the original at all'. The branch stays a branch, the form CAPABILITIES prescribes: the Button is declared once with visible bound to {= ${device>/system/phone} }, and closing is the roundtrip-free popover_close follow-up action. That makes the port carry 2 Buttons where the original view declares 1 - the second is the controller-built one."
     }
   ]
 }

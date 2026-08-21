@@ -41,7 +41,11 @@
     },
     {
       "type": "POST_171",
-      "what": "sap.tnt.NavigationListItem.expanded is kept 1:1 from the original view. The property PREDATES 1.71, but it now lives on sap.tnt.NavigationListItemBase and its JSDoc there carries @since 1.121, which is the version any scanner reads - the relocated-member residual limit AGENTS section 5 names. Declared by policy 2026-08-21 (scripts/probes/post171-blindspot-probe.mjs); no gate can raise it."
+      "what": "sap.tnt.NavigationListItem.expanded is carried by the port's bound item template. Corrected 2026-08-21: this said 'kept 1:1 from the original view', which is not true - no NavigationListItem in the original declares `expanded` at all. The attribute exists here to carry the Create dialog's expanded item, and the SideNavigation's own `expanded` (which the original DOES declare) is a different, base-version property needing no declaration. The property PREDATES 1.71, but it now lives on sap.tnt.NavigationListItemBase and its JSDoc there carries @since 1.121, which is the version any scanner reads - the relocated-member residual limit AGENTS section 5 names. Declared by policy 2026-08-21 (scripts/probes/post171-blindspot-probe.mjs); no gate can raise it."
+    },
+    {
+      "type": "NOTE",
+      "what": "EXPANDED joins omit_initial_paths since 2026-08-21. The original declares `expanded` on NO NavigationListItem, so UI5's own default (true) applies and 'Mileage' opens showing Driven and Walked; the port bound the attribute to a field no seeded row sets, and ajson emitted a real JSON false that collapsed it - the sample's only parent item silently lost its children, with selectedKey pointing at a hidden child. Omitting the INITIAL value restores the default while the Create dialog's explicit abap_true still travels. Found by the review sweep."
     }
   ]
 }

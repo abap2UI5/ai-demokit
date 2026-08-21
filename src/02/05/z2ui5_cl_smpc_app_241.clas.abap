@@ -97,13 +97,19 @@ CLASS z2ui5_cl_smpc_app_241 IMPLEMENTATION.
                 " declared: creating appends a row. The rows are bound with
                 " omit_initial_paths so an item that sets no icon/href keeps the
                 " control's own default - SELECTABLE stays outside that list because
-                " an explicit false must reach the two external links
+                " an explicit false must reach the two external links. EXPANDED is
+                " omitted for the opposite reason: the original declares it on NO
+                " NavigationListItem, so UI5's own default (true) has to apply and
+                " 'Mileage' must open showing Driven/Walked. Sending the unset
+                " abap_false collapsed it. The Create dialog's explicit abap_true
+                " still travels - omit_initial_paths only drops INITIAL values.
                 )->ele( n = `NavigationList` ns = `tnt`
                     )->a( n = `items` v = client->_bind(
                                               val                = t_nav_items
                                               omit_initial_paths = VALUE #( ( `ICON` )
                                                                             ( `HREF` )
-                                                                            ( `TARGET` ) ) )
+                                                                            ( `TARGET` )
+                                                                            ( `EXPANDED` ) ) )
 
                     )->ele( n = `NavigationListItem` ns = `tnt`
                         )->a( n = `text`       v = `{TEXT}`
