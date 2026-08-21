@@ -17,7 +17,7 @@
     },
     {
       "type": "NOTE",
-      "what": "The master2 list navigates via a per-item press event that carries the target page id as a t_arg literal ('detail'/'detailDetail'/'detail2'); the original reads the pressed item's custom:to CustomData in one List.itemPress handler, which is not transportable as an event arg. custom:to is kept on the items for fidelity."
+      "what": "The master2 list navigates through ONE List.itemPress handler, as the original does, carrying the pressed item's CustomData: `${$parameters>/listItem}.getCustomData()[0].getValue()`. Corrected 2026-08-21 - until then the port wired a press per item with the target page id as a t_arg LITERAL ('detail'/'detailDetail'/'detail2') and declared that CustomData 'is not transportable as an event arg', which is wrong: an arg is a FULL UI5 expression (CAPABILITIES, proven 2026-07-31) and indexed access into an array-valued getter was measured to resolve by scripts/probes/event-arg-expression-probe.mjs. The custom:to CustomData is what the wire now READS, not decoration kept for fidelity."
     },
     {
       "type": "NOTE",
@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-07-27: SplitContainer as the root view plus the control_by_id navigation (to/toDetail/toMaster/backDetail/backMaster/setMode) need an in-system check — machine gates only verify view validity, not the runtime navigation roundtrip."
+      "what": "live-verified 2026-07-27: SplitContainer as the root view plus the control_by_id navigation (to/toDetail/toMaster/backDetail/backMaster/setMode) need an in-system check \u2014 machine gates only verify view validity, not the runtime navigation roundtrip."
     },
     {
       "type": "NOTE",

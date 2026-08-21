@@ -8,7 +8,7 @@
     "frontend_action": true,
     "event_t_arg": true
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -21,7 +21,7 @@
     },
     {
       "type": "NOTE",
-      "what": "The SortSelect items are bound to a 2-row filter-type table reproducing /ProductCollectionStats/Filters (the two `type` values Category and SupplierName; the per-type `values` sub-arrays are unused by the Select). The binding keeps the original sorter { path: 'Name' } 1:1 — a no-op there too, since the Filters entries carry `type`, not `Name`."
+      "what": "The SortSelect items are bound to a 2-row filter-type table reproducing /ProductCollectionStats/Filters (the two `type` values Category and SupplierName; the per-type `values` sub-arrays are unused by the Select). The binding keeps the original sorter { path: 'Name' } 1:1 \u2014 a no-op there too, since the Filters entries carry `type`, not `Name`."
     }
   ]
 }

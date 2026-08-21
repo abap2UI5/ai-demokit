@@ -5,6 +5,11 @@ CLASS z2ui5_cl_smpc_app_104 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
+    " the productInput's value, bound two-way: the value help preselects the
+    " row matching WHAT IS IN THE FIELD (original _configValueHelpDialog reads
+    " byId('productInput').getValue()), and the close handler writes back into it
+    DATA product_value TYPE string.
+
     TYPES: BEGIN OF ty_s_product,
              name           TYPE string,
              product_id     TYPE string,
@@ -166,7 +171,8 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
                 )->a( n = `search`            v = client->follow_up_action( val   = client->cs_event-binding_call
                                                                             t_arg = VALUE #( ( `valueHelpDialog` ) ( `items` ) ( `filter` ) ( `NAME` ) ( `Contains` ) ( `${$parameters>/value}` ) ) )
                 )->a( n = `searchPlaceholder` v = `Search Products`
-                )->a( n = `confirm`           v = client->_event( `VH_CLOSE` )
+                )->a( n = `confirm`           v = client->_event( val   = `VH_CLOSE`
+                                                                  t_arg = VALUE #( ( `${$parameters>/selectedItem} ? ${$parameters>/selectedItem}.getCells()[0].getTitle() : ''` ) ) )
                 )->a( n = `cancel`            v = client->_event( `VH_CLOSE` )
                 )->a( n = `showClearButton`   v = `true`
                 )->a( n = `id`                v = `valueHelpDialog`
@@ -249,7 +255,7 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
             )->tag( `Input`
                 )->a( n = `id`            v = `productInput`
                 )->a( n = `type`          v = `Text`
-                )->a( n = `value`         v = `Astro Phone 6`
+                )->a( n = `value`         v = client->_bind( product_value )
                 )->a( n = `placeholder`   v = `Enter Product ...`
                 )->a( n = `showValueHelp` v = `true`
                 )->a( n = `valueHelpRequest` v = client->_event( `VALUE_HELP` )
@@ -381,7 +387,7 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
       WHEN `VALUE_HELP`.
         " preselect the row matching the current input value (original _configValueHelpDialog)
         LOOP AT t_products REFERENCE INTO DATA(lr).
-          lr->selected = xsdbool( lr->name = `Astro Phone 6` ).
+          lr->selected = xsdbool( lr->name = product_value ).
         ENDLOOP.
         client->follow_up_action( val   = client->cs_event-control_by_id
                                   t_arg = VALUE #( ( `valueHelpDialog` ) ( `open` ) ) ).
@@ -390,7 +396,9 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
         client->message_toast_display( `Selection confirmed` ).
 
       WHEN `VH_CLOSE`.
-        client->message_toast_display( `Value help closed` ).
+        " handleValueHelpClose: the picked row's first cell title lands in the
+        " input, and a close with no selection resets it (resetProperty)
+        product_value = client->get_event_arg( ).
 
     ENDCASE.
 
@@ -422,6 +430,9 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
 
 
   METHOD model_init.
+
+    " the original's view seeds the input with this product
+    product_value = `Astro Phone 6`.
 
     t_products = VALUE #(
       ( name = `Notebook Basic 15` product_id = `HT-1000` category = `Laptops` main_category = `Computer Systems` supplier_name = `Very Best Screens`

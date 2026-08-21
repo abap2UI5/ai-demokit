@@ -17,8 +17,8 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 |---|---|
 | Ports | **416** sidecars in `meta/` (src/01 OpenUI5 <= 1.71: 291 · src/02 OpenUI5 > 1.71: 125) |
 | Per library | sap.f: 19 · sap.m: 219 · sap.tnt: 17 · sap.ui: 130 · sap.uxap: 31 |
-| Status ladder | 209 `generated` · 146 `reviewed` · 61 `checked` (live-verified) |
-| Deviations | 5 DROPPED_171 · 66 IMPROVISED · 25 LIVE_TEST · 937 NOTE · 173 POST_171 |
+| Status ladder | 187 `generated` · 168 `reviewed` · 61 `checked` (live-verified) |
+| Deviations | 5 DROPPED_171 · 66 IMPROVISED · 25 LIVE_TEST · 940 NOTE · 173 POST_171 |
 | Open LIVE_TESTs | **25 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 2 structural-diff · 4 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_smpc_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_smpc_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_smpc_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_smpc_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_smpc_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
@@ -113,6 +113,21 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   reports that gap count as an advisory so it stays visible. A red
   nightly opens/updates an issue instead of hiding in the Actions tab.
   Every green interaction is human live-check time saved.
+- [ ] **Post-1.71 declaration debt in the gate's blind spots.** Surfaced by the
+  review sweep (2026-08-21) and NOT a batch-freshness problem — the same gap
+  appears in old ports and is correctly declared in others, so it is
+  inconsistent policy application across the whole corpus. Every case sits in a
+  spot AGENTS §5 already names as invisible to the property gate, which is why
+  a green `view_gates` says nothing about them: **a member relocated to a newer
+  base class** — `NavigationListItem.expanded` reads @1.121 off
+  `sap.tnt.NavigationListItemBase`, declared by apps 132/167/407, undeclared by
+  299/300/302; **an aggregation-level member** — `sap.m.IconTabFilter.items`
+  @1.77, declared by app 221 with exactly this rationale, undeclared by 302;
+  **an enum VALUE** — `CalendarDayType.NonWorking` @1.121 in app 308; and a
+  plain miss, `sap.tnt.SideNavigation.width` @1.120 in apps 300/301. Each is a
+  one-line `POST_171` by policy. The sweep only covered 30 ports, so the true
+  count is higher — worth a corpus-wide pass keyed on the four shapes above
+  rather than port-by-port discovery.
 - [ ] **Property-gate residual limits** (documented in AGENTS §5): enum
   *values* newer than 1.71 are invisible at the attribute-name level; a
   member relocated to a newer base class reads as that base's version; and a

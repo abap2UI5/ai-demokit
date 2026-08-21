@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "SegmentedButton.selectionChange reproduces onModeChange server-side: GridList.mode is two-way bound to the same field as SegmentedButton.selectedKey and the headerText (bound) is recomputed as 'GridList with mode ' + key on a backend round-trip. The GridList delete / selectionChange and the GridListItem press / detailPress are wired to client-side MessageToasts (the original toasted the affected item's runtime id). mode/headerText/selectedKey carry bindings the original set statically. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): selecting 'MultiSelect' round-trips the two-way bound mode and the list renders checkboxes."
+      "what": "SegmentedButton.selectionChange reproduces onModeChange server-side: GridList.mode is two-way bound to the same field as SegmentedButton.selectedKey and the headerText (bound) is recomputed as 'GridList with mode ' + key on a backend round-trip. The GridList delete / selectionChange and the GridListItem press / detailPress are wired to client-side MessageToasts (the original toasted the affected item's runtime id). mode/headerText/selectedKey carry bindings the original set statically. **e2e-verified 2026-08-21** (the 2026-07-30 stamp was WRONG: the interaction's mode leg was shadowed by a duplicate key in the old in-file INTERACTIONS map and never ran once - found by the review sweep, and the two legs are merged into one module now) (transpiled-framework interaction, scripts/e2e-smoke.mjs): selecting 'MultiSelect' round-trips the two-way bound mode and the list renders checkboxes."
     },
     {
       "type": "NOTE",
@@ -22,6 +22,10 @@
     {
       "type": "NOTE",
       "what": "the four MessageToast handlers are reproduced as roundtrip-free CLIENT-COMPOSED toasts (follow_up_action cs_event-control_global MESSAGE_TOAST.show with a {N} template): onSelectionChange as '{0?Selected:Unselected} item with ID {1}' over ${$parameters>/selected} and ${$parameters>/listItem}.getId(), onDelete as 'Delete item with ID {0}', and onDetailPress/onPress as 'Request details for item with ID {0}' / 'Pressed item with ID {0}' over $event.oSource.sId. **Corrected 2026-08-01** (faked-event-value audit): all four used to toast a CONSTANT ('Selection changed', 'Delete item', 'Request details', 'Pressed item') and dropped the item identity the original shows. The ids are the runtime UI5 ids, exactly as in the original."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's own main.css is archived and injected since 2026-08-21. The view carries class=\"imageDisplayBlock\" and the rule behind it (.imageDisplayBlock{display:block}) was missing entirely - the class name rendered with nothing behind it, which is exactly the gap apps 122/124 had and closed: 'a sample whose stylesheet is not in ui5/ is an archive gap to close, not a reason to drop the CSS'. main.css now sits in ui5/sap.f/GridListModes/ (closing the AGENTS section 4 archive gap) and reaches the view through a core:HTML style leaf."
     }
   ]
 }

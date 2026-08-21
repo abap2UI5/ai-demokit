@@ -8,12 +8,12 @@
     "frontend_action": true,
     "event_t_arg": true
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
       "type": "NOTE",
-      "what": "The sample's style.css is now shipped with the port: it is injected through a core:HTML leaf carrying a <style> block (the documented CAPABILITIES form, as in apps 026/028), so the port adds one core:HTML control the original view does not have - the original loads the stylesheet through its manifest's sap.ui5/resources/css entry instead. The five size classes and the <600px media query are verbatim, only whitespace-collapsed; literal braces are escaped \\{ \\} in a backtick literal because the XMLView parser reads an unescaped brace as a binding. Until 2026-07-28 the port carried the size1..size5 class names with no stylesheet behind them, so every Icon rendered at the default size - the sample is about icon SIZES, so that was its whole point. The stylesheet was also missing from ui5/sap.ui.core/Icon/ (a §4 archive gap) and is archived in the same change."
+      "what": "The sample's style.css is now shipped with the port: it is injected through a core:HTML leaf carrying a <style> block (the documented CAPABILITIES form, as in apps 026/028), so the port adds one core:HTML control the original view does not have - the original loads the stylesheet through its manifest's sap.ui5/resources/css entry instead. The five size classes and the <600px media query are verbatim, only whitespace-collapsed; literal braces are escaped \\{ \\} in a backtick literal because the XMLView parser reads an unescaped brace as a binding. Until 2026-07-28 the port carried the size1..size5 class names with no stylesheet behind them, so every Icon rendered at the default size - the sample is about icon SIZES, so that was its whole point. The stylesheet was also missing from ui5/sap.ui.core/Icon/ (a \u00a74 archive gap) and is archived in the same change."
     },
     {
       "type": "NOTE",

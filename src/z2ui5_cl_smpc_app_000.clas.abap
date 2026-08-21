@@ -1031,18 +1031,22 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
 
     lv_text1 = `NOTE: SegmentedButton.selectionChange reproduces onModeChange server-side: GridList.mode is two-way bound to the same field as SegmentedButton.selectedKey and the headerText (bound) is recomputed as` &&
                ` 'GridList with mode ' + key on a backend round-trip. The GridList delete / selectionChange and the GridListItem press / detailPress are wired to client-side MessageToasts (the original toasted the` &&
-               ` affected item's runtime id). mode/headerText/selectedKey carry bindings the original set statically. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): selecting` &&
-               ` 'MultiSelect' round-trips the two-way bound mode and the list renders checkboxes. // NOTE: The 11 product rows are inlined from the sample's model/data.json. Fields the original JSON omits are given` &&
-               ` their UI5 defaults so the bound enum-ish properties stay valid: GridListItem.type -> 'Inactive' (8 rows), highlight/Status -> 'None' (5 rows). Both render identically to the original's undefined` &&
-               ` values; structural-diff compares only binding paths, not data. // NOTE: the four MessageToast handlers are reproduced as roundtrip-free CLIENT-COMPOSED toasts (follow_up_action`.
-    lv_text1 = lv_text1 && ` cs_event-control_global MESSAGE_TOAST.show with a {N} template): onSelectionChange as '{0?Selected:Unselected} item with ID {1}' over ${$parameters>/selected} and ${$parameters>/listItem}.getId(),` &&
-               ` onDelete as 'Delete item with ID {0}', and onDetailPress/onPress as 'Request details for item with ID {0}' / 'Pressed item with ID {0}' over $event.oSource.sId. **Corrected 2026-08-01**` &&
-               ` (faked-event-value audit): all four used to toast a CONSTANT ('Selection changed', 'Delete item', 'Request details', 'Pressed item') and dropped the item identity the original shows. The ids are the` &&
-               ` runtime UI5 ids, exactly as in the original.`.
+               ` affected item's runtime id). mode/headerText/selectedKey carry bindings the original set statically. **e2e-verified 2026-08-21** (the 2026-07-30 stamp was WRONG: the interaction's mode leg was` &&
+               ` shadowed by a duplicate key in the old in-file INTERACTIONS map and never ran once - found by the review sweep, and the two legs are merged into one module now) (transpiled-framework interaction,` &&
+               ` scripts/e2e-smoke.mjs): selecting 'MultiSelect' round-trips the two-way bound mode and the list renders checkboxes. // NOTE: The 11 product rows are inlined from the sample's model/data.json. Fields` &&
+               ` the original JSON omits are given their UI5 defaults so the bound enum-ish properties stay valid: GridListItem.type -> 'Inactive' (8 rows), highlight/Status -> 'None' (5 rows). Both render`.
+    lv_text1 = lv_text1 && ` identically to the original's undefined values; structural-diff compares only binding paths, not data. // NOTE: the four MessageToast handlers are reproduced as roundtrip-free CLIENT-COMPOSED toasts` &&
+               ` (follow_up_action cs_event-control_global MESSAGE_TOAST.show with a {N} template): onSelectionChange as '{0?Selected:Unselected} item with ID {1}' over ${$parameters>/selected} and` &&
+               ` ${$parameters>/listItem}.getId(), onDelete as 'Delete item with ID {0}', and onDetailPress/onPress as 'Request details for item with ID {0}' / 'Pressed item with ID {0}' over $event.oSource.sId.` &&
+               ` **Corrected 2026-08-01** (faked-event-value audit): all four used to toast a CONSTANT ('Selection changed', 'Delete item', 'Request details', 'Pressed item') and dropped the item identity the` &&
+               ` original shows. The ids are the runtime UI5 ids, exactly as in the original. // NOTE: The sample's own main.css is archived and injected since 2026-08-21. The view carries class="imageDisplayBlock"` &&
+               ` and the rule behind it (.imageDisplayBlock{display:block}) was missing entirely - the class name rendered with nothing behind it, which is exactly the gap apps 122/124 had and closed: 'a sample whose`.
+    lv_text1 = lv_text1 && ` stylesheet is not in ui5/ is an archive gap to close, not a reason to drop the CSS'. main.css now sits in ui5/sap.f/GridListModes/ (closing the AGENTS section 4 archive gap) and reaches the view` &&
+               ` through a core:HTML style leaf.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListModes`                                 class = `z2ui5_cl_smpc_app_133` path = `src/01/04/z2ui5_cl_smpc_app_133.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.60`
         notes = lv_text1 ) ).
 
@@ -3075,15 +3079,21 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = lv_text1
         post171 = `Button.ariaHasPopup (since UI5 1.84) is kept 1:1 on the two view buttons (ariaHasPopup='Dialog'); the app needs a UI5 release >= 1.84 to render it.` ) ).
 
+    lv_text1 = `POST-1.71: Link.ariaHasPopup (since 1.86) is kept 1:1 on the popover link; needs UI5 >= 1.86. // NOTE: the row Popover reproduces the original bindElement: it is built per-press with relative bindings` &&
+               ` ({PRODUCT_ID} title, {NAME}, {PRODUCT_PIC_URL}) and follow_up_action( cs_event-bind_element, view=cs_view-popover ) element-binds the popover slot to t_products/<index>, where the index comes from` &&
+               ` the pressed row's binding context ($event.oSource.getBindingContext().getPath()); the popover is anchored by $event.oSource.sId and the Action button reproduces handleActionPress 1:1 (a toast 'Action` &&
+               ` has been pressed' + follow_up_action( cs_event-popover_close )). The disable/enable-pointer-events-while-open behavior is dropped. // NOTE: Two legs of the original restored 2026-08-21, both found` &&
+               ` undeclared by the review sweep. (a) onInit's oModel.setSizeLimit( 10 ) is reproduced 1:1 through follow_up_action( cs_event-set_size_limit ) - the same listed frontend action app 252 uses; the port`.
+    lv_text1 = lv_text1 && ` rendered all 123 rows where the original shows ten. (b) The sample's headline behaviour - table clicks dead while the popover is open, which the page header advertises in so many words - was dropped.` &&
+               ` attachAfterOpen -> disablePointerEvents / afterClose -> enablePointerEvents are now the popover's afterOpen/afterClose toggling a style CLASS on idProductsTable via control_by_id addStyleClass /` &&
+               ` removeStyleClass, with the rule injected as a core:HTML style leaf. The css control method could NOT carry this: pointer-events is not on the framework's CSS_PROPERTIES whitelist, which is why the` &&
+               ` class-toggle is the expressible form rather than a stylistic choice.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Popover`                         name = `PopoverControllingCloseBehavior`               class = `z2ui5_cl_smpc_app_094` path = `src/02/01/z2ui5_cl_smpc_app_094.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
-        notes = `POST-1.71: Link.ariaHasPopup (since 1.86) is kept 1:1 on the popover link; needs UI5 >= 1.86. // NOTE: the row Popover reproduces the original bindElement: it is built per-press with relative bindings` &&
-                 ` ({PRODUCT_ID} title, {NAME}, {PRODUCT_PIC_URL}) and follow_up_action( cs_event-bind_element, view=cs_view-popover ) element-binds the popover slot to t_products/<index>, where the index comes from` &&
-                 ` the pressed row's binding context ($event.oSource.getBindingContext().getPath()); the popover is anchored by $event.oSource.sId and the Action button reproduces handleActionPress 1:1 (a toast 'Action` &&
-                 ` has been pressed' + follow_up_action( cs_event-popover_close )). The disable/enable-pointer-events-while-open behavior is dropped.`
+        notes = lv_text1
         post171 = `Link.ariaHasPopup (since 1.86) is kept 1:1 on the popover link; needs UI5 >= 1.86.` ) ).
 
     lv_text1 = `NOTE: the sample's point - Popup.setWithinArea(this.byId('withinArea')), which confines every popup to the grey VBox instead of the viewport - is reproduced through the CONTROL_GLOBAL target POPUP` &&
@@ -3251,10 +3261,14 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` two-way and each button's handler sets them before opening (responsivePadding toggles the style class via control_by_id addStyleClass/removeStyleClass). The core:CustomData is kept on the buttons for` &&
                ` fidelity; the dialog is declared once in mvc:dependents and opened via follow_up_action( cs_event-control_by_id, open ). // NOTE: Search filters the dialog's items binding client-side via` &&
                ` follow_up_action( cs_event-binding_call, filter NAME Contains ${$parameters>/value} ). The valueHelpRequest opens a second SelectDialog (also in dependents) after preselecting the row matching the` &&
-               ` input value. The confirm / value-help-close toasts are simplified — selectedContexts / selectedItem are control references not transportable as event args (original composes the chosen product names`.
-    lv_text1 = lv_text1 && ` / copies the selected title into the input). // NOTE: The StandardListItem icon binds ProductPicUrl, which is derived in ABAP from the product id (the mock's test-resources/<id>.jpg) built from a` &&
-               ` shared base pointing at the OpenUI5 host, like app 006's image flattening. The full 123-row /ProductCollection is inlined. // NOTE: live-verified 2026-08-04 (nightly e2e interaction): The per-button` &&
-               ` dialog configuration (multi/growing/remember/clear/confirm text/draggable/resizable), the client-side search filter and the value-help selection need an in-system check; machine gates only verify the` &&
+               ` input value. The value-help close is reproduced 1:1 since 2026-08-21: the event carries ``${$parameters>/selectedItem} ? ${$parameters>/selectedItem}.getTitle() : ''`` and the backend writes it into`.
+    lv_text1 = lv_text1 && ` the two-way bound productInput, so picking a product lands it in the field and closing without a selection clears it - the original's setValue / resetProperty pair. The preselection now compares` &&
+               ` against that same bound value rather than the seed literal, which is what _configValueHelpDialog does. Both were wrong before: the sidecar claimed selectedItem was 'a control reference not` &&
+               ` transportable as an event arg', which CAPABILITIES contradicts - an arg is a FULL UI5 expression and may call methods on the event's controls (proven 2026-07-31, and app 233 already transported` &&
+               ` selectedItem.getDescription()). The multi-select CONFIRM toast is still simplified: selectedContexts is an ARRAY the original iterates, and the client expression grammar has no loop - the same` &&
+               ` boundary as app 109's selectedDatesChange. // NOTE: The StandardListItem icon binds ProductPicUrl, which is derived in ABAP from the product id (the mock's test-resources/<id>.jpg) built from a` &&
+               ` shared base pointing at the OpenUI5 host, like app 006's image flattening. The full 123-row /ProductCollection is inlined. // NOTE: live-verified 2026-08-04 (nightly e2e interaction): The per-button`.
+    lv_text1 = lv_text1 && ` dialog configuration (multi/growing/remember/clear/confirm text/draggable/resizable), the client-side search filter and the value-help selection need an in-system check; machine gates only verify the` &&
                ` views are valid. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Show Select Dialog' popup opens with the 'Select Product' title; the per-button variants,` &&
                ` search and copy-back remain unexercised. // POST-1.71: sap.m.SelectDialog.searchPlaceholder (since 1.110) is kept 1:1 on the value-help dialog; needs UI5 >= 1.110.`.
     result = VALUE #( BASE result
@@ -3386,15 +3400,17 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
 
     lv_text1 = `NOTE: Master-detail navigation is driven 1:1 via follow_up_action( cs_event-control_by_id ) on the newly whitelisted SplitContainer methods: to (Go-to-Detail button), backDetail/backMaster (page` &&
                ` navButtonPress), toMaster (master list item), toDetail (master2 list items) and setMode (RadioButtonGroup). The methods were added to the abap2UI5 framework in the same change set (CONTROL_METHODS).` &&
-               ` // NOTE: The master2 list navigates via a per-item press event that carries the target page id as a t_arg literal ('detail'/'detailDetail'/'detail2'); the original reads the pressed item's custom:to` &&
-               ` CustomData in one List.itemPress handler, which is not transportable as an event arg. custom:to is kept on the items for fidelity. // NOTE: The split mode is selected via a two-way selectedIndex` &&
-               ` binding on the RadioButtonGroup (mode_idx) and mapped to the SplitAppMode string in ABAP; the original reads the selected RadioButton's custom:splitAppMode CustomData. custom:splitAppMode is kept on` &&
-               ` the buttons for fidelity. The onAfterRendering parent-height fix and the device-model onInit setup (device model is global in abap2UI5) are dropped. // NOTE: live-verified 2026-07-27: SplitContainer`.
-    lv_text1 = lv_text1 && ` as the root view plus the control_by_id navigation (to/toDetail/toMaster/backDetail/backMaster/setMode) need an in-system check — machine gates only verify view validity, not the runtime navigation` &&
+               ` // NOTE: The master2 list navigates through ONE List.itemPress handler, as the original does, carrying the pressed item's CustomData: ``${$parameters>/listItem}.getCustomData()[0].getValue()``.` &&
+               ` Corrected 2026-08-21 - until then the port wired a press per item with the target page id as a t_arg LITERAL ('detail'/'detailDetail'/'detail2') and declared that CustomData 'is not transportable as` &&
+               ` an event arg', which is wrong: an arg is a FULL UI5 expression (CAPABILITIES, proven 2026-07-31) and indexed access into an array-valued getter was measured to resolve by` &&
+               ` scripts/probes/event-arg-expression-probe.mjs. The custom:to CustomData is what the wire now READS, not decoration kept for fidelity. // NOTE: The split mode is selected via a two-way selectedIndex`.
+    lv_text1 = lv_text1 && ` binding on the RadioButtonGroup (mode_idx) and mapped to the SplitAppMode string in ABAP; the original reads the selected RadioButton's custom:splitAppMode CustomData. custom:splitAppMode is kept on` &&
+               ` the buttons for fidelity. The onAfterRendering parent-height fix and the device-model onInit setup (device model is global in abap2UI5) are dropped. // NOTE: live-verified 2026-07-27: SplitContainer` &&
+               ` as the root view plus the control_by_id navigation (to/toDetail/toMaster/backDetail/backMaster/setMode) need an in-system check — machine gates only verify view validity, not the runtime navigation` &&
                ` roundtrip. // NOTE: the mode RadioButtonGroup's handler calls oSplitContainer.setMode( ) in the original; SplitContainer.mode is a bindable property, so the port binds it two-way (added attribute, no` &&
                ` structural diff) and the handler only assigns the chosen mode - the prefer-a-bindable-property rule, gated by the linter rule settable-property-via-action. The state then survives a view rebuild` &&
-               ` instead of living only in the control. // NOTE: live-verified 2026-08-04 (nightly e2e interaction): the two-way mode binding replaces the setMode( ) action and is not live-verified. The imperative` &&
-               ` form it replaces WAS verified: verified in a running system 2026-07-27 - SplitContainer toDetail/toMaster/backDetail/backMaster/setMode navigation works across modes (2026-07-27) - kept as context. A` &&
+               ` instead of living only in the control. // NOTE: live-verified 2026-08-04 (nightly e2e interaction): the two-way mode binding replaces the setMode( ) action and is not live-verified. The imperative`.
+    lv_text1 = lv_text1 && ` form it replaces WAS verified: verified in a running system 2026-07-27 - SplitContainer toDetail/toMaster/backDetail/backMaster/setMode navigation works across modes (2026-07-27) - kept as context. A` &&
                ` fresh live run (each radio button switches the split mode and the toast names it) restamps this port to checked.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.SplitContainer`                  name = `SplitContainer`                                class = `z2ui5_cl_smpc_app_096` path = `src/01/01/z2ui5_cl_smpc_app_096.clas.abap`
@@ -3603,10 +3619,14 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` standard type path 'sap.ui.model.type.Currency' 1:1. The full 123-row /ProductCollection is inlined (ProductPicUrl is not needed — the table cells carry no icon). // NOTE: Search filters the dialog's`.
     lv_text1 = lv_text1 && ` items binding client-side via follow_up_action( cs_event-binding_call, filter NAME Contains ${$parameters>/value} ). The valueHelpRequest opens a second TableSelectDialog (also in dependents) after` &&
                ` preselecting the row matching the input value. The confirm/valueHelpClose toasts are simplified — selectedContexts / selectedItem are control references not transportable as event args (original` &&
-               ` composes the chosen product names / copies the selected title into the input). // NOTE: live-verified 2026-08-04 (nightly e2e interaction): The per-button dialog configuration, the client-side search` &&
-               ` filter, multi-select confirm and the value-help selection copy-back need an in-system check; machine gates only verify the views are valid. **e2e-verified 2026-07-30** (transpiled-framework` &&
-               ` interaction, scripts/e2e-smoke.mjs): the dialog opens with the full 123-row mock and the client-side Contains search filters to 'Gladiator MX'; multi-select confirm and the value-help copy-back` &&
-               ` remain unexercised. // POST-1.71: sap.m.TableSelectDialog.searchPlaceholder (since 1.110) is kept 1:1 on the value-help dialog; needs UI5 >= 1.110.`.
+               ` composes the chosen product names / copies the selected title into the input). CORRECTED 2026-08-21: the value-help close is reproduced 1:1. The event carries ``${$parameters>/selectedItem} ?` &&
+               ` ${$parameters>/selectedItem}.getCells()[0].getTitle() : ''`` - the probe-measured indexed-access-into-an-array-valued-getter shape - and the backend writes it into the two-way bound productInput, so` &&
+               ` picking a row lands its name in the field and closing without a selection clears it (setValue / resetProperty). The preselection compares against that same bound value instead of the seed literal,` &&
+               ` which is what _configValueHelpDialog does. The earlier claim that selectedItem is 'not transportable as an event arg' was wrong: an arg is a FULL UI5 expression and may call methods on the event's`.
+    lv_text1 = lv_text1 && ` controls. // NOTE: live-verified 2026-08-04 (nightly e2e interaction): The per-button dialog configuration, the client-side search filter, multi-select confirm and the value-help selection copy-back` &&
+               ` need an in-system check; machine gates only verify the views are valid. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the dialog opens with the full 123-row` &&
+               ` mock and the client-side Contains search filters to 'Gladiator MX'; multi-select confirm and the value-help copy-back remain unexercised. // POST-1.71: sap.m.TableSelectDialog.searchPlaceholder` &&
+               ` (since 1.110) is kept 1:1 on the value-help dialog; needs UI5 >= 1.110.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.TableSelectDialog`               name = `TableSelectDialog`                             class = `z2ui5_cl_smpc_app_104` path = `src/02/01/z2ui5_cl_smpc_app_104.clas.abap`
         score = 5
@@ -4420,17 +4440,22 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.11.1`
         notes = lv_text1 ) ).
 
+    lv_text1 = `NOTE: The four buttons announce the pressed button's type+text to the sap.ui.core.InvisibleMessage a11y service and echo it into the status Text; here a press updates the bound status Text with a` &&
+               ` generic confirmation (the a11y live-region announce and the per-button identity are not reproduced server-side). The original's 'Infromation' button-text typo is kept 1:1. **e2e-verified 2026-08-01**` &&
+               ` (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): pressing a button really round-trips and the bound status Text shows 'A new message was sent to the invisible messaging` &&
+               ` service.'. What stays unverifiable by machine is the announcement itself - a live region has no assertable rendering. // NOTE: The pressed button's identity is transported since 2026-08-21: each` &&
+               ` press carries $event.oSource.getType() and $event.oSource.getText(), and ABAP composes the original's sentence verbatim. Before that the status text was a constant - a faked event value found by the` &&
+               ` review sweep. The InvisibleMessage announce itself has no control_global entry and stays dropped, which is a separate and correctly declared loss.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.core.InvisibleMessage`          name = `InvisibleMessage`                              class = `z2ui5_cl_smpc_app_141` path = `src/02/02/z2ui5_cl_smpc_app_141.clas.abap`
-        score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.78`
         since_post171 = abap_true
         is_post171 = abap_true
-        notes = `NOTE: The four buttons announce the pressed button's type+text to the sap.ui.core.InvisibleMessage a11y service and echo it into the status Text; here a press updates the bound status Text with a` &&
-                 ` generic confirmation (the a11y live-region announce and the per-button identity are not reproduced server-side). The original's 'Infromation' button-text typo is kept 1:1. **e2e-verified 2026-08-01**` &&
-                 ` (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): pressing a button really round-trips and the bound status Text shows 'A new message was sent to the invisible messaging` &&
-                 ` service.'. What stays unverifiable by machine is the announcement itself - a live region has no assertable rendering.` )
+        notes = lv_text1 ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.core.InvisibleText`             name = `InvisibleText`                                 class = `z2ui5_cl_smpc_app_127` path = `src/01/02/z2ui5_cl_smpc_app_127.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
