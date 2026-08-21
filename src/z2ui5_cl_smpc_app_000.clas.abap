@@ -6733,15 +6733,18 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` BlockJobInfoPart3 / BlockEmpDetailPart1 / BlockEmpDetailPart2 / BlockEmpDetailPart3. A BlockBase is only a lazy-loading wrapper around a view; each of these views is static (a forms:SimpleForm with` &&
                ` core:Title / Label / Text children, BlockJobInfoPart3 a layout:HorizontalLayout / layout:VerticalLayout tree), so every block view is inlined 1:1 into its aggregation and the block's own` &&
                ` class='sapUxAPObjectPageSubSectionAlignContent' is carried onto the inlined root control. Absent from the port as a result: the 13 BlockBase controls with their ids (goalsblock, phone, social,` &&
-               ` adresses, mailing, part1, part2, jobinfopart1-3, empdetailpart1-3) and their BlockBase columnLayout='1' properties; the block views' own mvc:View roots (with their width='100%') are gone too. The`.
-    lv_text1 = lv_text1 && ` block views' default namespace is sap.m, so their bare Label / Text / SimpleForm counts move to the port's m: / forms: prefixed controls. // POST-1.71: sap.m.Avatar is a control @since 1.73` &&
-               ` (scope-of: OUT_OF_SCOPE for a sample entity, kept here because the sample's entity sap.uxap.ObjectPageDynamicHeaderTitle is in scope and 1:1 fidelity wins for members/controls used inside): two` &&
-               ` Avatars (snappedHeading, headerContent) with displayShape='Square', initials='HF', displaySize='L'. Needs a UI5 runtime >= 1.73. // POST-1.71: sap.m.Title aggregation 'content' is @since 1.87 - the` &&
-               ` original nests an m:Link inside two m:Title controls (Profile, Product Description) and the port keeps that nesting 1:1. Needs a UI5 runtime >= 1.87; below it the Link would not render. // NOTE:` &&
-               ` percentValue='42%' is copied verbatim from the original although sap.m.ProgressIndicator.percentValue is typed float - UI5 parses the leading number, so this renders like the original, but the` &&
-               ` rendered indicator plus the RatingIndicator value='4' / iconSize='16px' were not verified in a running system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend +`.
-    lv_text1 = lv_text1 && ` real browser): the header ProgressIndicator renders and displays '42%' (so UI5 parses the '42%' string on the float property exactly like the original) and the RatingIndicator renders; the goals` &&
-               ` section shows its inlined block content.`.
+               ` adresses, mailing, part1, part2, jobinfopart1-3, empdetailpart1-3) and their BlockBase columnLayout='1' properties; the block views' own mvc:View roots are gone too. The block views' default`.
+    lv_text1 = lv_text1 && ` namespace is sap.m, so their bare Label / Text / SimpleForm counts move to the port's m: / forms: prefixed controls. Corrected 2026-08-21: the parenthesis used to read "(with their width='100%')",` &&
+               ` which is not true of this sample - none of the 25 SharedBlocks views carries a width on its mvc:View root; the width='100%' belongs to the forms:SimpleForm and the port keeps it. The phrase is` &&
+               ` accurate for app 258's mySimpleBlock and was carried here where it does not hold. // POST-1.71: sap.m.Avatar is a control @since 1.73 (scope-of: OUT_OF_SCOPE for a sample entity, kept here because` &&
+               ` the sample's entity sap.uxap.ObjectPageDynamicHeaderTitle is in scope and 1:1 fidelity wins for members/controls used inside): two Avatars (snappedHeading, headerContent) with displayShape='Square',` &&
+               ` initials='HF', displaySize='L'. Needs a UI5 runtime >= 1.73. // POST-1.71: sap.m.Title aggregation 'content' is @since 1.87 - the original nests an m:Link inside two m:Title controls (Profile,` &&
+               ` Product Description) and the port keeps that nesting 1:1. Needs a UI5 runtime >= 1.87; below it the Link would not render. // NOTE: DEVIATION, not a copy: the original writes percentValue="42%" on`.
+    lv_text1 = lv_text1 && ` sap.m.ProgressIndicator, and the port writes ``42``. percentValue is a FLOAT property, so "42%" is not a valid value for it - UI5 parses the leading number leniently at runtime and the original` &&
+               ` renders, but the abap2UI5 linter rejects it outright (invalid-property-value, an error in the chain-format gate), so the port cannot carry the string verbatim. The rendered result is identical, and` &&
+               ` displayValue="42%" - which IS a string property - is copied verbatim, so the '42%' the user reads comes from the original either way. Corrected 2026-08-21: this entry used to claim the string was` &&
+               ` 'copied verbatim from the original', which the class had never done; restoring the literal to test that claim is what surfaced the linter error, and the honest deviation is the answer rather than` &&
+               ` either the false claim or a red gate.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageDynamicHeaderTitle` name = `ObjectPageProgressRatingIndicators`            class = `z2ui5_cl_smpc_app_259` path = `src/02/03/z2ui5_cl_smpc_app_259.clas.abap`
         score = 4
