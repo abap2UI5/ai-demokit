@@ -29,7 +29,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-04 (nightly e2e interaction): unverified in a running system: the six dependents-declared ColorPalettePopover configurations opening anchored via openBy and the colorSelect toast argument resolution. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the first action button opens its ColorPalettePopover anchored (palette content attached); the other five configurations are the identical wire."
+      "what": "unverified in a running system: the six dependents-declared ColorPalettePopover configurations opening anchored via openBy and the colorSelect toast argument resolution. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the first action button opens its ColorPalettePopover anchored (palette content attached); the other five configurations are the identical wire. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_250.mjs)."
     },
     {
       "type": "NOTE",

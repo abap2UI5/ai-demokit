@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-17 (nightly e2e interaction): Unverified in a running system: the breakpointChanged round-trip enabling the Toggle button on S, the Toggle press reaching the control's own toggle( ), and the Slider's css width write on the container Page. The same three wires are live-verified on app 138 (the plain DynamicSideContent sample), which uses them identically."
+      "what": "Unverified in a running system: the breakpointChanged round-trip enabling the Toggle button on S, the Toggle press reaching the control's own toggle( ), and the Slider's css width write on the container Page. The same three wires are live-verified on app 138 (the plain DynamicSideContent sample), which uses them identically. **e2e-verified 2026-08-17** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_344.mjs)."
     }
   ]
 }

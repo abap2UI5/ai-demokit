@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-21 (nightly e2e interaction): Unverified in a running system: the breadcrumb m:Link press round-trip (event LINK2_PRESS) - the controller's handleLink2Press constant-text MessageToast is served via client->message_toast_display( 'Page 2 long link clicked' ) from on_event."
+      "what": "Unverified in a running system: the breadcrumb m:Link press round-trip (event LINK2_PRESS) - the controller's handleLink2Press constant-text MessageToast is served via client->message_toast_display( 'Page 2 long link clicked' ) from on_event. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_416.mjs)."
     }
   ]
 }

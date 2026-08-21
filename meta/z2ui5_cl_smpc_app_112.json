@@ -17,7 +17,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-04 (nightly e2e interaction): the anchored ResponsivePopover open (popover_display by_id) with the embedded ColorPicker and the device-bound header/button variants are unverified in a running system. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the button press opens the ResponsivePopover anchored with the embedded ColorPicker attached (the picker's inner sliders render zero-size headless, so only the container is asserted)."
+      "what": "the anchored ResponsivePopover open (popover_display by_id) with the embedded ColorPicker and the device-bound header/button variants are unverified in a running system. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the button press opens the ResponsivePopover anchored with the embedded ColorPicker attached (the picker's inner sliders render zero-size headless, so only the container is asserted). **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_112.mjs)."
     }
   ]
 }

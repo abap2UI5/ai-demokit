@@ -143,6 +143,17 @@ CLASS z2ui5_cl_smpc_app_365 IMPLEMENTATION.
                         )->tag( n = `DragDropInfo` ns = `dnd`
                             )->a( n = `sourceAggregation` v = `rows`
                             )->a( n = `targetAggregation` v = `rows`
+                            " enabled="false" is NOT in the original, and it is
+                            " here because the re-parenting behind dragStart /
+                            " drop is dropped (see the deviation). DropInfo
+                            " .isDroppable never asks whether anyone listens, so
+                            " leaving the configuration active shipped draggable
+                            " rows and a live drop indicator that discarded
+                            " every drop - an affordance promising something the
+                            " port cannot do. Off is honest; removing the
+                            " control entirely would lose the structural trace
+                            " of what the sample declares here.
+                            )->a( n = `enabled`           v = `false`
 
                     )->end(
                     )->ele( `columns`

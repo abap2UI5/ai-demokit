@@ -17,7 +17,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-04 (nightly e2e interaction): the two-way expanded binding is not live-verified. The imperative form it replaces WAS: human live check 2026-07-20 following the interaction checklist, all listed checks passed - kept here as context. A fresh live run (toolbar press expands and collapses the third panel, and a manual expand/collapse of the panel header survives the next round-trip) restamps this port to checked."
+      "what": "the two-way expanded binding is not live-verified. The imperative form it replaces WAS: human live check 2026-07-20 following the interaction checklist, all listed checks passed - kept here as context. A fresh live run (toolbar press expands and collapses the third panel, and a manual expand/collapse of the panel header survives the next round-trip) restamps this port to checked. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_043.mjs)."
     }
   ]
 }

@@ -37,7 +37,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-21 (nightly e2e interaction): Unverified in a running system: whether inserting/deleting a row re-renders the bound contentAreas aggregation, whether the shared table keeps the option row and the layout data in sync while dragging a splitter bar, and whether the Invalidate button's plain round-trip re-renders the Splitter the way the original's invalidate( ) does."
+      "what": "Unverified in a running system: whether inserting/deleting a row re-renders the bound contentAreas aggregation, whether the shared table keeps the option row and the layout data in sync while dragging a splitter bar, and whether the Invalidate button's plain round-trip re-renders the Splitter the way the original's invalidate( ) does. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_351.mjs)."
     }
   ]
 }

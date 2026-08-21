@@ -32,8 +32,12 @@
       "what": "The footer OverflowToolbar stays empty: onInit lazily requires sap/ui/table/sample/TableExampleUtils and appends a ToolbarSpacer plus its createInfoButton( ) to it. That helper lives in the demo kit's own sample folder, not in any UI5 library, and only opens a popover pointing at the sample's source - there is nothing to port it to. Every sap.ui.table sample of this batch drops it the same way."
     },
     {
+      "type": "LIVE_TEST",
+      "what": "Unverified in a running system: whether the sort event's prevented default plus the server-side SORT produce the expected order for each column, and whether the bound Column.sortOrder renders the header indicator. (Reopened 2026-08-21: this had been closed as live-verified, but the interaction module only presses the three toolbar buttons - it never opens a column header menu, so the sort event and its prevented default were never fired. The toolbar legs it does drive are genuinely covered.)"
+    },
+    {
       "type": "NOTE",
-      "what": "live-verified 2026-08-21 (nightly e2e interaction): Unverified in a running system: whether the sort event's prevented default plus the server-side SORT produce the expected order for each column, and whether the bound Column.sortOrder renders the header indicator."
+      "what": "sortCategories passes bAdd = true to oTable.sort( ), and Table.pushSortedColumn appends the column to the active sorter list rather than replacing it - so whatever was already sorting keeps precedence and Category is added behind it. The port keeps that list as ordered model state (the equivalent of _aSortedColumns) and applies it from the last key to the first with SORT ... STABLE, since one ABAP SORT expresses one key. Until 2026-08-21 the handler issued a fresh single-key SORT, which reordered the whole table while leaving the other columns' bound sortOrder indicators standing: the header claimed Name-ascending while the rows were Category-ascending, and the button's own tooltip - \"Sort Categories in addition to current sorting\" - was kept while the behaviour was not."
     }
   ]
 }

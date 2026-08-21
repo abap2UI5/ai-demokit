@@ -29,7 +29,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-21 (nightly e2e interaction): Round-trip behaviour unverified in a running system: the MARK_CHANGES_PRESS wire (markChangesPress -> popover_display of the ResponsivePopover anchored by $event.oSource.sId) and the TOGGLE_HEADER_CONTENT wire (press -> xsdbool flip of the two-way bound showHeaderContent) have not been live-tested."
+      "what": "Round-trip behaviour unverified in a running system: the MARK_CHANGES_PRESS wire (markChangesPress -> popover_display of the ResponsivePopover anchored by $event.oSource.sId) and the TOGGLE_HEADER_CONTENT wire (press -> xsdbool flip of the two-way bound showHeaderContent) have not been live-tested. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_414.mjs)."
     }
   ]
 }

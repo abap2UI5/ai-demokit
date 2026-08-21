@@ -46,7 +46,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-04 (nightly e2e interaction): leg (c) is closed: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): F4 on the PurchaseID Input (the keyboard form of valueHelpRequest - its icon has no layout box headless) opens the SelectDialog client-side through control_by_id, and the dialog renders its bound purchase rows. Still unverified in a running system: (a) Input submit resolving the entered PurchaseID and redrawing; (b) suggestionItemSelected transporting ${$parameters>/selectedItem}.getKey(); (d) the SelectDialog search (binding_call filter) and its confirm arg - the dialog row has no layout box headless and neither a click nor a keyboard Enter reaches the confirm; (e) the ObjectPageLayout/IllustratedMessage/Table rendering."
+      "what": "leg (c) is closed: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): F4 on the PurchaseID Input (the keyboard form of valueHelpRequest - its icon has no layout box headless) opens the SelectDialog client-side through control_by_id, and the dialog renders its bound purchase rows. Still unverified in a running system: (a) Input submit resolving the entered PurchaseID and redrawing; (b) suggestionItemSelected transporting ${$parameters>/selectedItem}.getKey(); (d) the SelectDialog search (binding_call filter) and its confirm arg - the dialog row has no layout box headless and neither a click nor a keyboard Enter reaches the confirm; (e) the ObjectPageLayout/IllustratedMessage/Table rendering. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_233.mjs)."
     }
   ]
 }

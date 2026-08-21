@@ -25,10 +25,19 @@ CLASS z2ui5_cl_smpc_app_298 DEFINITION PUBLIC.
     DATA filter_bar_visible TYPE abap_bool.
     DATA filter_label TYPE string.
 
+    " onResize writes the Product column's width. A bound CSSSize carries it:
+    " an empty value is valid there (the type's 0* branch matches it), so the
+    " column keeps its automatic width until the user drags once.
+    DATA product_width TYPE string.
+
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
     DATA t_all TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
+    " the filtered set in MODEL ORDER, i.e. before any sort. Restoring it is
+    " what oBinding.sort( ) with no argument does in the original, and both the
+    " QuickSort None entry and the group dialog's Reset need exactly that.
+    DATA t_filtered TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
     DATA group_key TYPE string.
     DATA context_menu_on TYPE abap_bool.
 
@@ -99,12 +108,20 @@ CLASS z2ui5_cl_smpc_app_298 IMPLEMENTATION.
 
             )->ele( n = `Menu` ns = `tcm`
                 )->a( n = `id`         v = `columnHeaderMenu`
-                )->a( n = `beforeOpen` v = client->_event( `MENU_BEFORE_OPEN` )
 
                 )->ele( n = `QuickSort` ns = `tcm`
+                    " QuickSort.change DECLARES key and sortOrder in its event
+                    " metadata and fires neither: onChange does
+                    " fireChange({ item: oItem }) and nothing else. Reading the
+                    " declared names therefore delivered two empty strings on
+                    " every firing, and the handler's fallback sorted Name
+                    " ascending whatever was clicked. The original reads the
+                    " same `item` the control really passes, so the port asks
+                    " the item for its key and order - an event arg is a full
+                    " UI5 expression, so the two getters resolve in the client.
                     )->a( n = `change` v = client->_event( val   = `MENU_SORT`
-                                                           t_arg = VALUE #( ( `${$parameters>/key}` )
-                                                                           ( `${$parameters>/sortOrder}` ) ) )
+                                                           t_arg = VALUE #( ( `${$parameters>/item}.getKey()` )
+                                                                           ( `${$parameters>/item}.getSortOrder()` ) ) )
 
                     )->ele( n = `items` ns = `tcm`
                         )->tag( n = `QuickSortItem` ns = `tcm`
@@ -115,7 +132,8 @@ CLASS z2ui5_cl_smpc_app_298 IMPLEMENTATION.
                 )->end(
                 )->ele( n = `QuickResize` ns = `tcm`
                     )->a( n = `id`     v = `quickResize`
-                    )->a( n = `change` v = client->_event( `MENU_RESIZE` )
+                    )->a( n = `change` v = client->_event( val   = `MENU_RESIZE`
+                                                           t_arg = VALUE #( ( `${$parameters>/width}` ) ) )
 
                 )->end(
                 )->ele( n = `items` ns = `tcm`
@@ -261,6 +279,10 @@ CLASS z2ui5_cl_smpc_app_298 IMPLEMENTATION.
                     )->ele( `Column`
                         )->a( n = `id`         v = `product`
                         )->a( n = `headerMenu` v = `columnHeaderMenu`
+                        " onResize's oColumn.setWidth( iWidth + 'px' ) - a
+                        " bindable property, so the width travels back through
+                        " the model instead of a setter
+                        )->a( n = `width`      v = client->_bind( product_width )
 
                         )->tag( `Text`
                             )->a( n = `text` v = `Product`
@@ -349,9 +371,15 @@ CLASS z2ui5_cl_smpc_app_298 IMPLEMENTATION.
         ENDIF.
 
       WHEN `MENU_SORT`.
-        " the column menu's QuickSort reports key + sortOrder directly
-        table_sort( field      = abap_field( client->get_event_arg( ) )
-                    descending = xsdbool( client->get_event_arg( 2 ) = `Descending` ) ).
+        " onSortChange: sortOrder None clears the sorter (oBinding.sort( ) with
+        " no argument), which restores MODEL order rather than sorting by
+        " anything - the branch the port used to fall through
+        IF client->get_event_arg( 2 ) = `None`.
+          t_products = t_filtered.
+        ELSE.
+          table_sort( field      = abap_field( client->get_event_arg( ) )
+                      descending = xsdbool( client->get_event_arg( 2 ) = `Descending` ) ).
+        ENDIF.
 
       WHEN `GROUP_CONFIRM`.
         t_item = event_items( client->get_event_arg( ) ).
@@ -367,7 +395,12 @@ CLASS z2ui5_cl_smpc_app_298 IMPLEMENTATION.
         ENDCASE.
 
       WHEN `GROUP_RESET`.
-        group_key = ``.
+        " resetGroupDialog sets this.groupReset, and the confirm handler then
+        " calls oBinding.sort( ) - so Reset really puts the rows back in model
+        " order. Clearing group_key alone changed nothing observable: it is
+        " read only inside GROUP_CONFIRM, which reassigns it first.
+        group_key  = ``.
+        t_products = t_filtered.
 
       WHEN `FILTER_CONFIRM`.
         on_event_filter_confirm( ).
@@ -379,15 +412,14 @@ CLASS z2ui5_cl_smpc_app_298 IMPLEMENTATION.
                                                ELSE `Custom context menu disabled` ) ).
 
       WHEN `MENU_ACTION`.
-        client->message_toast_display( `Action Item pressed` ).
+        client->message_toast_display( `Action Item Pressed` ).
 
       WHEN `MENU_RESIZE`.
-        " the original's onResize only logs; nothing to change server-side
-        client->message_toast_display( `Column resized` ).
-
-      WHEN `MENU_BEFORE_OPEN`.
-        " the original's onBeforeColumnMenuOpen only inspects the opener
-        RETURN.
+        " onResize: oColumn.setWidth( oEvent.getParameter('width') + 'px' ).
+        " The width now travels as an event arg and lands on the bound
+        " property; the toast this used to show instead was not in the original
+        " at all, and the comment beside it claimed onResize only logs.
+        product_width = |{ client->get_event_arg( ) }px|.
 
     ENDCASE.
 
@@ -430,19 +462,33 @@ CLASS z2ui5_cl_smpc_app_298 IMPLEMENTATION.
       t_products = lt_keep.
     ENDLOOP.
 
+    " the filter result in model order - what a cleared sorter goes back to
+    t_filtered = t_products.
+
 
   ENDMETHOD.
 
 
   METHOD weight_state_set.
 
-    " the original's Formatter.weightState, computed in ABAP and bound as a
-    " finished value (thin frontend, same as app 009)
-    LOOP AT t_products ASSIGNING FIELD-SYMBOL(<row>).
-      <row>-weight_state = COND #( WHEN <row>-weight_measure < 0    THEN `None`
-                                   WHEN <row>-weight_measure < 1000 THEN `Success`
-                                   WHEN <row>-weight_measure < 2000 THEN `Warning`
-                                   ELSE `Error` ).
+    " weightState is business logic (the KG normalisation plus the
+    " Success/Warning/Error thresholds), not presentation - abap2UI5 is a thin
+    " frontend, so it is computed here rather than in a frontend formatter.
+    " The boundaries are KILOGRAMS (fMaxWeightSuccess = 1, fMaxWeightWarning =
+    " 5) and a G row is divided by 1000 first. Until 2026-08-21 this method
+    " compared the RAW measure against 1000 and 2000 instead, and since it runs
+    " LAST it overwrote the correct values model_init had just computed inline
+    " - so every KG row came out Success. Same body as the live-checked app
+    " 009; app 377 carried the identical defect and is fixed with it.
+    LOOP AT t_products REFERENCE INTO DATA(lr_row).
+      DATA(weight_kg) = lr_row->weight_measure.
+      IF lr_row->weight_unit = `G`.
+        weight_kg = weight_kg / 1000.
+      ENDIF.
+      lr_row->weight_state = COND #( WHEN weight_kg < 0 THEN `None`
+                                     WHEN weight_kg < 1 THEN `Success`
+                                     WHEN weight_kg < 5 THEN `Warning`
+                                     ELSE `Error` ).
     ENDLOOP.
 
   ENDMETHOD.
@@ -765,24 +811,9 @@ CLASS z2ui5_cl_smpc_app_298 IMPLEMENTATION.
         weight_measure = '0.01' weight_unit = `KG` price = '0' currency_code = `EUR` width = '46' depth = '30' height = '3' dim_unit = `cm` ) ).
 
 
-    " weightState is business logic (KG conversion + Success/Warning/Error
-    " thresholds), not presentation - abap2UI5 is a thin frontend, so the
-    " ObjectNumber state is computed here in the backend (the original does it in
-    " its frontend Formatter.js, which a faithful port moves server-side).
-    LOOP AT t_products REFERENCE INTO DATA(lr_product).
-      DATA(weight_kg) = lr_product->weight_measure.
-      IF lr_product->weight_unit = `G`.
-        weight_kg = weight_kg / 1000.
-      ENDIF.
-      lr_product->weight_state = COND #( WHEN weight_kg < 0 THEN `None`
-                                         WHEN weight_kg < 1 THEN `Success`
-                                         WHEN weight_kg < 5 THEN `Warning`
-                                         ELSE `Error` ).
-    ENDLOOP.
-
-
     weight_state_set( ).
-    t_all = t_products.
+    t_all      = t_products.
+    t_filtered = t_products.
 
   ENDMETHOD.
 

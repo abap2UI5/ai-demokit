@@ -18,7 +18,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-04 (nightly e2e interaction): the urlhelper REDIRECT on the Image press (new-window open of the relative Card Explorer URL) is unverified in a running system; the same REDIRECT action class is live-verified in app 084."
+      "what": "the urlhelper REDIRECT on the Image press (new-window open of the relative Card Explorer URL) is unverified in a running system; the same REDIRECT action class is live-verified in app 084. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_149.mjs)."
     }
   ]
 }

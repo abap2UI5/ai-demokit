@@ -175,7 +175,7 @@ CLASS z2ui5_cl_smpc_app_360 IMPLEMENTATION.
                             )->a( n = `width`          v = `11rem`
 
                             )->tag( n = `Label` ns = `m`
-                                )->a( n = `text` v = `Category`
+                                )->a( n = `text` v = `Prod. Cat.`
 
                             )->ele( `template`
                                 )->tag( n = `Text` ns = `m`
@@ -191,7 +191,7 @@ CLASS z2ui5_cl_smpc_app_360 IMPLEMENTATION.
                             )->a( n = `width`          v = `12rem`
 
                             )->tag( n = `Label` ns = `m`
-                                )->a( n = `text` v = `Supplier Company Name`
+                                )->a( n = `text` v = `Company Name`
 
                             )->ele( `template`
                                 )->tag( n = `Text` ns = `m`

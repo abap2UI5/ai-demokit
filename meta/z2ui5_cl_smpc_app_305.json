@@ -29,7 +29,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the CAL_SELECT expression-arg round-trip and the same-day second click clearing the label."
+      "what": "not yet run in a system: the CAL_SELECT expression-arg round-trip and the same-day second click clearing the label. **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_305.mjs)."
     },
     {
       "type": "NOTE",

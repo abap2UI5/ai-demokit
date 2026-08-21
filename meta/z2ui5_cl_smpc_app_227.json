@@ -30,7 +30,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-04 (nightly e2e interaction): unverified in a running system: (a) the button press opens the Menu via the 2026-07-27 anchored-open fallback - verify the open in a running system; (b) each MenuItem select toasts \"'<text>' pressed\" via ${$parameters>/item}.getText() and the MenuTextFieldItem select toasts \"'<value>' entered\" via ${$parameters>/item}.getValue(). **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the button press opens the sap.ui.unified.Menu anchored via the openBy->open() fallback ('My 1st Item' visible); the item-select toasts remain unexercised."
+      "what": "unverified in a running system: (a) the button press opens the Menu via the 2026-07-27 anchored-open fallback - verify the open in a running system; (b) each MenuItem select toasts \"'<text>' pressed\" via ${$parameters>/item}.getText() and the MenuTextFieldItem select toasts \"'<value>' entered\" via ${$parameters>/item}.getValue(). **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the button press opens the sap.ui.unified.Menu anchored via the openBy->open() fallback ('My 1st Item' visible); the item-select toasts remain unexercised. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_227.mjs)."
     }
   ]
 }

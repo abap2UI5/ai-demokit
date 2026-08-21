@@ -370,6 +370,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.ui.table**<br>Example which shows the different aggregations of the table<br><sub>table sap.ui.table aggregations column</sub> | [`Z2UI5_CL_SMPC_APP_352`](src/01/02/z2ui5_cl_smpc_app_352.clas.abap) |
 | **sap.ui.table**<br>Example showing the different facets of filtering within a table<br><sub>table sap.ui.table filtering column</sub> | [`Z2UI5_CL_SMPC_APP_354`](src/01/02/z2ui5_cl_smpc_app_354.clas.abap) |
 | **sap.ui.table**<br>Example which focuses the handling of the table related Menus<br><sub>table sap.ui.table menus column</sub> | [`Z2UI5_CL_SMPC_APP_355`](src/01/02/z2ui5_cl_smpc_app_355.clas.abap) |
+| **sap.ui.table**<br>Example showing the behavior of MultiSelectionPlugin<br><sub>table sap.ui.table multiselectionplugin column</sub> | [`Z2UI5_CL_SMPC_APP_356`](src/01/02/z2ui5_cl_smpc_app_356.clas.abap) |
 | **sap.ui.table**<br>Shows an example how an OData metadata driven table creation can look like.<br><sub>table sap.ui.table odata2 column</sub> | [`Z2UI5_CL_SMPC_APP_358`](src/01/02/z2ui5_cl_smpc_app_358.clas.abap) |
 | **sap.ui.table**<br>Selection example showing selection modes and selection behaviors of table.<br><sub>table sap.ui.table selection column</sub> | [`Z2UI5_CL_SMPC_APP_361`](src/01/02/z2ui5_cl_smpc_app_361.clas.abap) |
 | **sap.ui.table**<br>Example showing the different kinds of sorting capabilities<br><sub>table sap.ui.table sorting column</sub> | [`Z2UI5_CL_SMPC_APP_362`](src/01/02/z2ui5_cl_smpc_app_362.clas.abap) |
@@ -378,7 +379,6 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.ui.table**<br>Illustrates how to bind to data from an OData model using $metadata annotations.<br><sub>treetable tree table sap.ui.table treetable.odataannotationstreebinding column</sub> | [`Z2UI5_CL_SMPC_APP_366`](src/01/02/z2ui5_cl_smpc_app_366.clas.abap) |
 | **sap.ui.table**<br>Example for the different row modes<br><sub>table sap.ui.table rowmodes named model column</sub> | [`Z2UI5_CL_SMPC_APP_164`](src/02/02/z2ui5_cl_smpc_app_164.clas.abap) |
 | **sap.ui.table**<br>Shows various drag-and-drop capabilities along with custom context menu alternatives for each action.<br><sub>table sap.ui.table dnd column</sub> | [`Z2UI5_CL_SMPC_APP_353`](src/02/02/z2ui5_cl_smpc_app_353.clas.abap) |
-| **sap.ui.table**<br>Example showing the behavior of MultiSelectionPlugin<br><sub>table sap.ui.table multiselectionplugin column</sub> | [`Z2UI5_CL_SMPC_APP_356`](src/02/02/z2ui5_cl_smpc_app_356.clas.abap) |
 | **sap.ui.table**<br>OData related example<br><sub>table sap.ui.table odata column</sub> | [`Z2UI5_CL_SMPC_APP_357`](src/02/02/z2ui5_cl_smpc_app_357.clas.abap) |
 | **sap.ui.table**<br>Shows how row actions can be used.<br><sub>table sap.ui.table rowaction column rowactionitem rowsettings</sub> | [`Z2UI5_CL_SMPC_APP_359`](src/02/02/z2ui5_cl_smpc_app_359.clas.abap) |
 | **sap.ui.table**<br>Shows cell selection, copy and paste interaction in the table.<br><sub>table sap.ui.table selectcopypaste column</sub> | [`Z2UI5_CL_SMPC_APP_360`](src/02/02/z2ui5_cl_smpc_app_360.clas.abap) |

@@ -28,7 +28,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-17 (nightly e2e interaction): not yet run in a system: the ToggleButton round-trip filling and clearing both calendars' special dates and both legends."
+      "what": "not yet run in a system: the ToggleButton round-trip filling and clearing both calendars' special dates and both legends. **e2e-verified 2026-08-17** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_308.mjs)."
     },
     {
       "type": "POST_171",

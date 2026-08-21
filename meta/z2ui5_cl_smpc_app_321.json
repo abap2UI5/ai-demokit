@@ -29,7 +29,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore)."
+      "what": "not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore). **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_321.mjs)."
     }
   ]
 }

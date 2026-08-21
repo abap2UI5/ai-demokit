@@ -298,12 +298,15 @@ CLASS z2ui5_cl_smpc_app_356 IMPLEMENTATION.
     selection_mode       = `MultiToggle`.
 
     " the SelectionMode item set the controller builds from the sap.ui.table
-    " enum (Multi is skipped, as there)
+    " enum, in Object.keys order, with Multi skipped as there. The enum has
+    " exactly MultiToggle / Multi / Single / None - until 2026-08-21 this list
+    " carried a fourth entry `All`, which is not a member at all: it is bound
+    " straight onto the plugin's selectionMode, typed sap.ui.table.SelectionMode,
+    " so picking it reached ManagedObject.validateProperty and threw.
     t_selectionmodes = VALUE #(
       ( key = `MultiToggle` text = `MultiToggle` )
-      ( key = `None`        text = `None` )
       ( key = `Single`      text = `Single` )
-      ( key = `All`         text = `All` ) ).
+      ( key = `None`        text = `None` ) ).
 
     " the OData ProductSet the sample serves from a MockServer, inlined with
     " the columns the six table columns bind - all 115 rows of ProductSet.json

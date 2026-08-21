@@ -33,7 +33,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the IconTabHeader select -> NavContainer 'to' frontend action and the two-way bound selectedKey."
+      "what": "not yet run in a system: the IconTabHeader select -> NavContainer 'to' frontend action and the two-way bound selectedKey. **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_303.mjs)."
     },
     {
       "type": "POST_171",

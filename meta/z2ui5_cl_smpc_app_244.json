@@ -21,7 +21,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-04 (nightly e2e interaction): showFooter is two-way bound ({/SHOW_FOOTER}, default true) and the Toggle Footer button flips it on a round-trip - the faithful abap2UI5 form of the controller's setShowFooter(!getShowFooter()); the scalar literal showFooter=\"true\" -> binding is not a structural diff. The Home/Examples/Avatar presses raise client-composed MessageToasts via follow_up_action control_global MESSAGE_TOAST (roundtrip-free, apps 005/060). Both the footer round-trip and the toast wiring are unverified in a running system."
+      "what": "showFooter is two-way bound ({/SHOW_FOOTER}, default true) and the Toggle Footer button flips it on a round-trip - the faithful abap2UI5 form of the controller's setShowFooter(!getShowFooter()); the scalar literal showFooter=\"true\" -> binding is not a structural diff. The Home/Examples/Avatar presses raise client-composed MessageToasts via follow_up_action control_global MESSAGE_TOAST (roundtrip-free, apps 005/060). Both the footer round-trip and the toast wiring are unverified in a running system. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_244.mjs)."
     },
     {
       "type": "NOTE",

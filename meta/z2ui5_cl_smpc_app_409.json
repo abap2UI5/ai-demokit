@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-21 (nightly e2e interaction): Rendering not verified in a running system: the core:HTML nested-div block content inside the ObjectPageSubSection blocks aggregation (the light-blue 24em outer div containing the blue 16em inner div with 1em margin) is render-gate green but the visual result was not checked live. There is no round-trip to verify - the app is static."
+      "what": "Rendering not verified in a running system: the core:HTML nested-div block content inside the ObjectPageSubSection blocks aggregation (the light-blue 24em outer div containing the blue 16em inner div with 1em margin) is render-gate green but the visual result was not checked live. There is no round-trip to verify - the app is static. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_409.mjs)."
     }
   ]
 }

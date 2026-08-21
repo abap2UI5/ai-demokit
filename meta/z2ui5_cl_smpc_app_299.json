@@ -33,7 +33,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the TOGGLE_EXPAND round-trip (collapse/expand), the quick-create popup round-trip and the Create append (new row shows up in the bound NavigationList with the typed name/icon or the defaults)."
+      "what": "not yet run in a system: the TOGGLE_EXPAND round-trip (collapse/expand), the quick-create popup round-trip and the Create append (new row shows up in the bound NavigationList with the typed name/icon or the defaults). **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_299.mjs)."
     },
     {
       "type": "POST_171",

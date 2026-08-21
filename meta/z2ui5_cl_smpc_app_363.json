@@ -33,7 +33,11 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-21 (nightly e2e interaction): Unverified in a running system: whether the bound fixedColumnCount and the bound rowMode counts freeze the expected columns/rows, and whether the Apply clamp round-trip updates the Inputs."
+      "what": "Unverified in a running system: whether the bound fixedColumnCount and the bound rowMode counts freeze the expected columns/rows, and whether the Apply clamp round-trip updates the Inputs. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_363.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The three count Inputs start EMPTY, as in the original, which gives them no value attribute at all - so the placeholders (\"fixed column count\" and friends) are what the user sees, and buttonPress reads them as getValue( ) || 0. Until 2026-08-21 they were seeded from the freeze counts, i.e. with \"0\", and sap.m.Input hides the placeholder as soon as a value is set: the port opened with three zeroes where the sample opens with three hints. The interaction module could not see it because every assertion started by filling over whatever was there; it asserts the empty start now."
     }
   ]
 }

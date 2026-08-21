@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-21 (nightly e2e interaction): Round-trip behaviour unverified in a running system: the two anchored ResponsivePopover opens (TITLE_SELECTOR via titleSelectorPress, MARK_LOCKED via markLockedPress, both anchored at $event.oSource.sId), the ITEM_SELECT selectionChange round-trip that closes the popover via follow_up_action popover_close (1:1 with handleItemSelect), and the LINK1/LINK2 breadcrumb Link press toasts ('Page 1 a very long link clicked' / 'Page 2 long link clicked')."
+      "what": "Round-trip behaviour unverified in a running system: the two anchored ResponsivePopover opens (TITLE_SELECTOR via titleSelectorPress, MARK_LOCKED via markLockedPress, both anchored at $event.oSource.sId), the ITEM_SELECT selectionChange round-trip that closes the popover via follow_up_action popover_close (1:1 with handleItemSelect), and the LINK1/LINK2 breadcrumb Link press toasts ('Page 1 a very long link clicked' / 'Page 2 long link clicked'). **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_415.mjs)."
     }
   ]
 }

@@ -29,7 +29,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-04 (nightly e2e interaction): subSectionLayout='TitleOnLeft' is the point of the sample (subsection titles rendered in a left column instead of above the content). The property is passed through 1:1 but the resulting layout was not verified in a running system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the ObjectPage renders and the folded emp1>/emp2> ModelMapping records show ('Michael Adams'), and the Job Relationship subsection title is there. The TitleOnLeft layout itself stays a human check: measured in the source, subSectionLayout only changes the subsection's grid column math (ObjectPageSubSection._calculateLayoutConfiguration) - it emits no own CSS class an assertion could hook onto."
+      "what": "subSectionLayout='TitleOnLeft' is the point of the sample (subsection titles rendered in a left column instead of above the content). The property is passed through 1:1 but the resulting layout was not verified in a running system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the ObjectPage renders and the folded emp1>/emp2> ModelMapping records show ('Michael Adams'), and the Job Relationship subsection title is there. The TitleOnLeft layout itself stays a human check: measured in the source, subSectionLayout only changes the subsection's grid column math (ObjectPageSubSection._calculateLayoutConfiguration) - it emits no own CSS class an assertion could hook onto. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_261.mjs)."
     }
   ]
 }

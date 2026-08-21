@@ -30,9 +30,21 @@ CLASS z2ui5_cl_smpc_app_362 DEFINITION PUBLIC.
     " sortCategories alternates ascending / descending on every press
     DATA category_descending TYPE abap_bool.
 
+    " The ACTIVE sorters, in precedence order - the model equivalent of the
+    " table's own _aSortedColumns. sortCategories passes bAdd = true, which
+    " pushes its column onto that list rather than replacing it, so the port
+    " needs the list too: a single dynamic SORT can only ever express one key.
+    TYPES:
+      BEGIN OF ty_s_sortkey,
+        field      TYPE string,
+        descending TYPE abap_bool,
+      END OF ty_s_sortkey.
+    DATA t_sortkeys TYPE STANDARD TABLE OF ty_s_sortkey WITH EMPTY KEY.
+
     METHODS view_display.
     METHODS on_event.
     METHODS sort_clear.
+    METHODS sort_apply.
     METHODS model_init.
 
   PRIVATE SECTION.
@@ -270,21 +282,30 @@ CLASS z2ui5_cl_smpc_app_362 IMPLEMENTATION.
       WHEN `SORT_CATEGORIES_AND_NAME`.
         " sortCategoriesAndName: Category ascending, then Name ascending
         sort_clear( ).
-        SORT t_products BY category ASCENDING name ASCENDING.
+        t_sortkeys    = VALUE #( ( field = `CATEGORY` ) ( field = `NAME` ) ).
         sort_category = `Ascending`.
         sort_name     = `Ascending`.
+        sort_apply( ).
 
       WHEN `SORT_CATEGORIES`.
-        " sortCategories: extend the current sorting by Category, alternating
-        " ascending / descending on every press
-        IF category_descending = abap_true.
-          SORT t_products BY category DESCENDING.
-          sort_category = `Descending`.
+        " sortCategories passes bAdd = TRUE - Table.pushSortedColumn appends
+        " the column to the active sorter list, so whatever was sorting keeps
+        " precedence and Category is added behind it. Until 2026-08-21 this
+        " issued a fresh single-key SORT instead, which reordered the whole
+        " table while leaving the other columns' indicators standing: the
+        " header claimed Name-ascending while the rows were Category-ascending.
+        " The button's own tooltip says "in addition to current sorting".
+        DATA(ls_cat) = VALUE ty_s_sortkey( field      = `CATEGORY`
+                                           descending = category_descending ).
+        READ TABLE t_sortkeys TRANSPORTING NO FIELDS WITH KEY field = `CATEGORY`.
+        IF sy-subrc = 0.
+          t_sortkeys[ sy-tabix ] = ls_cat.
         ELSE.
-          SORT t_products BY category ASCENDING.
-          sort_category = `Ascending`.
+          APPEND ls_cat TO t_sortkeys.
         ENDIF.
+        sort_category       = COND #( WHEN category_descending = abap_true THEN `Descending` ELSE `Ascending` ).
         category_descending = xsdbool( category_descending = abap_false ).
+        sort_apply( ).
 
       WHEN `CLEAR_SORTINGS`.
         " clearAllSortings: drop the sorter and every column indicator - the
@@ -305,6 +326,27 @@ CLASS z2ui5_cl_smpc_app_362 IMPLEMENTATION.
     sort_category     = `None`.
     sort_quantity     = `None`.
     sort_deliverydate = `None`.
+    CLEAR t_sortkeys.
+
+  ENDMETHOD.
+
+
+  METHOD sort_apply.
+
+    " Sort by the whole key list, primary first. ABAP has one sort key per
+    " SORT, so the list is applied from the LAST key to the first with STABLE -
+    " each pass preserves the order the previous one established, which leaves
+    " the rows ordered by the list exactly as a multi-key sorter would.
+    DATA(lv_index) = lines( t_sortkeys ).
+    WHILE lv_index >= 1.
+      DATA(ls_key) = t_sortkeys[ lv_index ].
+      IF ls_key-descending = abap_true.
+        SORT t_products STABLE BY (ls_key-field) DESCENDING.
+      ELSE.
+        SORT t_products STABLE BY (ls_key-field) ASCENDING.
+      ENDIF.
+      lv_index = lv_index - 1.
+    ENDWHILE.
 
   ENDMETHOD.
 

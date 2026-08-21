@@ -29,15 +29,15 @@
     },
     {
       "type": "NOTE",
-      "what": "Formatter.weightState (parseFloat plus the 0/1000/2000 ValueState thresholds) is computed in ABAP and bound as a finished value (state=\"{WEIGHT_STATE}\"), the thin-frontend rule and the same treatment as app 009 on this mock. The Currency parts binding on the Price ObjectNumber is kept verbatim as a raw binding-info string."
+      "what": "Formatter.weightState is computed in ABAP and bound as a finished value (state=\"{WEIGHT_STATE}\"), the thin-frontend rule and the same treatment as apps 009 and 377 on this mock. Its thresholds are KILOGRAMS (fMaxWeightSuccess = 1, fMaxWeightWarning = 5) and a G row is divided by 1000 first. Until 2026-08-21 both this note and the code named 0/1000/2000 and skipped the unit normalisation, which is not the original's rule at all: every KG row falls below 1000, so 66 of the 123 rows rendered Success - HT-1000 at 4.2 KG should be Warning, HT-1030 at 21 KG should be Error. Here it was worse than wrong text: model_init computed the CORRECT values inline and then called weight_state_set( ), which overwrote all of them - so the right answer existed and lost. The inline copy is gone and the method carries the correct body. The Currency parts binding on the Price ObjectNumber is kept verbatim as a raw binding-info string."
     },
     {
       "type": "NOTE",
-      "what": "The QuickSort change wire carries the event's declared key and sortOrder parameters. The first draft used ${$parameters>/item}, which sap.m.table.columnmenu.QuickSort does not declare - the view gate's event-parameter check caught it before it could arrive empty at runtime."
+      "what": "The QuickSort change wire reads ${$parameters>/item} and asks it for getKey( ) and getSortOrder( ), which is what the sample's own onSortChange does. The event's METADATA declares key and sortOrder instead, and QuickSort.onChange fires neither - it does fireChange({ item: oItem }) and nothing else (QuickSort.js:85). An earlier draft used the declared names because the view gate's event-parameter check rejects `item`; that check is wrong here, both arguments then arrived EMPTY on every firing, and the handler's fallback sorted Name ascending whichever column was clicked. The gate finding is carried as a deliberate unknown-event-parameter budget entry with that reasoning - satisfying the rule would mean breaking the port. sortOrder None is handled the way oBinding.sort( ) with no argument behaves: the rows go back to model order."
     },
     {
       "type": "IMPROVISED",
-      "what": "Grouping loses its group headers. The original's mGroupFunctions build a sap.ui.model.Sorter group key per row - a plain supplier name, and for Price a bucketed '100 EUR or less' / 'Between 100 and 1000 EUR' / 'More than 1000 EUR' label. abap2UI5 has no client-side grouping function, so the port sorts the table by the chosen field instead: the rows end up in the same order, but without the grey group header rows. The reset button clears the grouping like the original's resetGroupDialog."
+      "what": "Grouping loses its group headers. The original's mGroupFunctions build a sap.ui.model.Sorter group key per row - a plain supplier name, and for Price a bucketed '100 EUR or less' / 'Between 100 and 1000 EUR' / 'More than 1000 EUR' label. abap2UI5 has no client-side grouping function, so the port sorts the table by the chosen field instead: the rows end up in the same order, but without the grey group header rows. The reset button restores model order, which is what the original's resetGroupDialog plus oBinding.sort( ) amounts to; until 2026-08-21 it only cleared a field that GROUP_CONFIRM reassigns before reading, so it changed nothing observable."
     },
     {
       "type": "IMPROVISED",
@@ -50,6 +50,14 @@
     {
       "type": "NOTE",
       "what": "the ViewSettingsDialog confirm payloads are unmarshalled with z2ui5_cl_ajson, the framework's VENDORED ajson copy (src/00/01) - outside abap2UI5's released API (src/02), which the linter reports as non-released-api and which is waived on those two lines with an abap2ui5lint-disable-next-line naming the rule. There is no released alternative: src/02 carries the http handler, the view builder and the four interfaces, none of which parses a string, and a sample class installed on its own cannot ship its own ajson copy. The realistic alternative is a hand-rolled parser for a payload UI5 defines, which would be the more fragile of the two. Revisit when the framework releases a JSON reader."
+    },
+    {
+      "type": "NOTE",
+      "what": "onResize's oColumn.setWidth( width + 'px' ) is reproduced through a bound Column.width: the QuickResize change event carries ${$parameters>/width} and the backend writes the CSS size. An unset value is a valid CSSSize (the type's 0* branch matches the empty string), so the column keeps its automatic width until the first drag, as in the original. Until 2026-08-21 this wire round-tripped only to show a 'Column resized' toast the original does not have, behind a comment claiming onResize merely logs."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "onBeforeColumnMenuOpen is dropped, and the Menu.beforeOpen attribute that wired it with it. It does oQuickResize.setWidth( parseInt( getComputedStyle( oColumn.getDomRef( ) ).width ) ) - it reads the column's RENDERED width out of the DOM so the resize control opens showing the current size. A rendered pixel width has no server-side equivalent, and the round-trip that used to be wired here did nothing at all with it, so the QuickResize opens at its own default instead. The port previously kept the wire as an empty RETURN branch, beside a comment saying the original 'only inspects the opener'."
     }
   ]
 }

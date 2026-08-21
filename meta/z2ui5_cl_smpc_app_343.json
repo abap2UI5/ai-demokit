@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-17 (nightly e2e interaction): Unverified in a running system: whether the per-cell context binding round-trips (a Select changing its cell's colorSet/colorShade writes back into the nested ABAP structure) and whether the injected stylesheet paints the image cell."
+      "what": "Unverified in a running system: whether the per-cell context binding round-trips (a Select changing its cell's colorSet/colorShade writes back into the nested ABAP structure) and whether the injected stylesheet paints the image cell. **e2e-verified 2026-08-17** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_343.mjs)."
     }
   ]
 }

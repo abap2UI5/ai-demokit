@@ -29,7 +29,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-17 (nightly e2e interaction): Unverified in a running system: whether the bound items aggregation instantiates the Cards with their per-row manifest URL, columns and dataMode, and whether the number-of-cards Input round-trip rebuilds the container as the original's destroyItems/addItem loop does."
+      "what": "Unverified in a running system: whether the bound items aggregation instantiates the Cards with their per-row manifest URL, columns and dataMode, and whether the number-of-cards Input round-trip rebuilds the container as the original's destroyItems/addItem loop does. **e2e-verified 2026-08-17** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_342.mjs)."
     }
   ]
 }

@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-17 (nightly e2e interaction): Unverified in a running system: whether a ComboBox free-text entry (the original reads the change event's value, not the selected key) round-trips into the bound field and re-templates the grid."
+      "what": "Unverified in a running system: whether a ComboBox free-text entry (the original reads the change event's value, not the selected key) round-trips into the bound field and re-templates the grid. **e2e-verified 2026-08-17** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_349.mjs)."
     }
   ]
 }

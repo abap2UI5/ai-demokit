@@ -103,7 +103,16 @@ const ADVISORY_BUDGET = {
   // originals, kept 1:1
   'missing-accessibility': 29,
   'event-without-handler': 4, // ratcheted down 2026-08-05: the four calendar ports wired their select handler
-  'unknown-event-parameter': 1, // app 268: ColorPickerPopover forwards colorString undeclared — works live
+  // raised 2026-08-21 (app 298, sap.m.table.columnmenu.QuickSort): the same
+  // shape as 268, and here the metadata is not merely incomplete but WRONG.
+  // QuickSort.change declares `key` and `sortOrder` and fires neither —
+  // onChange does `this.fireChange({item: oItem})` and nothing else
+  // (node_modules/@openui5/sap.m/src/sap/m/table/columnmenu/QuickSort.js:85).
+  // Reading the declared names is what the linter would accept and what
+  // delivers two empty strings at runtime, so the port reads `item`, like the
+  // sample's own onSortChange does. Satisfying this rule here would mean
+  // breaking the port.
+  'unknown-event-parameter': 2, // app 268: ColorPickerPopover forwards colorString undeclared — works live
   // both entries below are new rules from the 2026-08-12 linter bump (363c6e9),
   // budgeted here because the bump PR is where the debt decision belongs:
   // apps 101/102/144/268/280/407 — a liveChange/live wire that round-trips per

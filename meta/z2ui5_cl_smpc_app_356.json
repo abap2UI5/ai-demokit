@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_smpc_app_356",
   "sample": "sap.ui.table.sample.MultiSelectionPlugin",
   "entity": "sap.ui.table.Table",
-  "file": "src/02/02/z2ui5_cl_smpc_app_356.clas.abap",
+  "file": "src/01/02/z2ui5_cl_smpc_app_356.clas.abap",
   "batch": "b20",
   "audit": {
     "frontend_action": false,
@@ -28,12 +28,12 @@
       "what": "The six column labels are metadata bindings in the original ({/#Product/Name/@sap:label} and friends), which only an OData model can resolve. They are replaced by the literal sap:label texts from the sample's own metadata.xml (Product Name, Product ID, Prod. Cat., Company Name, Unit Price, Dimensions) - the same strings the OData model would have produced. sortProperty / filterProperty carry the ABAP (upper-cased) field names. The Price cell keeps the original's typed String binding and the dimensions cell its {WIDTH}x{HEIGHT}x{DEPTH} {DIMUNIT} template; the numeric columns stay TYPE string so the mock's exact decimals survive (the display-only rule of the porting recipe)."
     },
     {
-      "type": "POST_171",
-      "what": "sap.ui.table.plugins.MultiSelectionPlugin is @since 1.64 and in scope, but its enableNotification property is @since 1.71 and its selectionMode property @since 1.100; both are kept 1:1 since the sample is about exactly this plugin. Declared per the fidelity-first property-171 policy, so the app needs a UI5 release >= 1.100."
+      "type": "NOTE",
+      "what": "This port carried a POST_171 deviation until 2026-08-21 claiming MultiSelectionPlugin.enableNotification @since 1.71 and selectionMode @since 1.100, and it was the only thing holding the class in src/02. Neither half stands. enableNotification IS @1.71, which is the floor itself, not above it - the linter's withinFloor accepts v <= floor. And selectionMode carries no @since at all (MultiSelectionPlugin.js, and ui5/properties.json lists a since only for enableNotification), so the 'needs UI5 >= 1.100' conclusion had nothing behind it. The plugin itself is @1.64. Every other member the view uses resolves at or below 1.71, so the class now sits in src/01/02 where the scope rule puts it."
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-21 (nightly e2e interaction): Unverified in a running system: whether the plugin honours the bound limit / selectionMode / showHeaderSelector without a round-trip, and whether the selectionChange expression argument reports the selected count."
+      "what": "Unverified in a running system: whether the plugin honours the bound limit / selectionMode / showHeaderSelector without a round-trip, and whether the selectionChange expression argument reports the selected count. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_356.mjs)."
     }
   ]
 }

@@ -148,7 +148,7 @@ CLASS z2ui5_cl_smpc_app_357 IMPLEMENTATION.
                             )->a( n = `width`          v = `11rem`
 
                             )->tag( n = `Label` ns = `m`
-                                )->a( n = `text` v = `Category`
+                                )->a( n = `text` v = `Prod. Cat.`
 
                             )->ele( `template`
                                 )->tag( n = `Text` ns = `m`
@@ -164,7 +164,7 @@ CLASS z2ui5_cl_smpc_app_357 IMPLEMENTATION.
                             )->a( n = `width`          v = `12rem`
 
                             )->tag( n = `Label` ns = `m`
-                                )->a( n = `text` v = `Supplier Company Name`
+                                )->a( n = `text` v = `Company Name`
 
                             )->ele( `template`
                                 )->tag( n = `Text` ns = `m`
@@ -258,8 +258,11 @@ CLASS z2ui5_cl_smpc_app_357 IMPLEMENTATION.
 
   METHOD model_init.
 
-    " the sap.ui.model.odata.OperationMode values the controller enumerates
-    t_operationmodes = VALUE #( ( name = `Server` ) ( name = `Client` ) ( name = `Auto` ) ).
+    " the sap.ui.model.odata.OperationMode values the controller enumerates,
+    " in the for..in order it walks them. The enum has FOUR members - Default,
+    " Server, Client, Auto - and Default was missing here until 2026-08-21,
+    " while the sidecar called the three-item set 1:1 with the original.
+    t_operationmodes = VALUE #( ( name = `Default` ) ( name = `Server` ) ( name = `Client` ) ( name = `Auto` ) ).
     IF operation_mode IS INITIAL.
       operation_mode = `Server`.
     ENDIF.

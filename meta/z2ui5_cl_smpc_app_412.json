@@ -53,7 +53,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-21 (nightly e2e interaction): Round-trip behaviour not verified in a running system: the TITLE_SELECTOR event with its $event.oSource.sId anchor and the popover_display of the QuickView fragment at the pressed link (including the pageLink navigation to companyEmployeePageId inside the popover), the follow_up_action setSelectedSection frontend action on the 'Order Details' link, and the two client toasts."
+      "what": "Round-trip behaviour not verified in a running system: the TITLE_SELECTOR event with its $event.oSource.sId anchor and the popover_display of the QuickView fragment at the pressed link (including the pageLink navigation to companyEmployeePageId inside the popover), the follow_up_action setSelectedSection frontend action on the 'Order Details' link, and the two client toasts. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_412.mjs)."
     }
   ]
 }

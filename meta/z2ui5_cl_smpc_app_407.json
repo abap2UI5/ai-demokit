@@ -45,7 +45,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-21 (nightly e2e interaction): not yet run in a system: the LIVE_CHANGE filter round-trip (bound group tables, visible flags, highlightedText), the SEARCH announceSearchMatchCount frontend action, the ITEM_SELECT to-page action, the quickCreate popup and the MENU_TOGGLE collapse-resets-search path."
+      "what": "not yet run in a system: the LIVE_CHANGE filter round-trip (bound group tables, visible flags, highlightedText), the SEARCH announceSearchMatchCount frontend action, the ITEM_SELECT to-page action, the quickCreate popup and the MENU_TOGGLE collapse-resets-search path. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_407.mjs)."
     }
   ]
 }

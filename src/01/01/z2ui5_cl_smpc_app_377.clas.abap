@@ -234,11 +234,22 @@ CLASS z2ui5_cl_smpc_app_377 IMPLEMENTATION.
   METHOD weight_state_set.
 
     " the original's Formatter.weightState, computed in ABAP and bound as a
-    " finished value (thin frontend)
+    " finished value (thin frontend). Its two boundaries are KILOGRAMS
+    " (fMaxWeightSuccess = 1, fMaxWeightWarning = 5) and it normalises a G row
+    " by 1000 first - both of which this method dropped until 2026-08-21, when
+    " it compared the RAW measure against 1000 and 2000 instead. Every KG row
+    " is below 1000, so 66 of the 123 rows came out Success: HT-1000 at 4.2 KG
+    " should be Warning and HT-1030 at 21 KG should be Error. Same body as the
+    " live-checked app 009, and the same normalisation table_filter above
+    " already does for its own thresholds.
     LOOP AT t_all ASSIGNING FIELD-SYMBOL(<row>).
-      <row>-weight_state = COND #( WHEN <row>-weight_measure < 0    THEN `None`
-                                   WHEN <row>-weight_measure < 1000 THEN `Success`
-                                   WHEN <row>-weight_measure < 2000 THEN `Warning`
+      DATA(weight_kg) = <row>-weight_measure.
+      IF <row>-weight_unit = `G`.
+        weight_kg = weight_kg / 1000.
+      ENDIF.
+      <row>-weight_state = COND #( WHEN weight_kg < 0 THEN `None`
+                                   WHEN weight_kg < 1 THEN `Success`
+                                   WHEN weight_kg < 5 THEN `Warning`
                                    ELSE `Error` ).
     ENDLOOP.
 

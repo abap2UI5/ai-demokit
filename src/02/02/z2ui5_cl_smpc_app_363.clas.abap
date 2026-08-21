@@ -376,10 +376,13 @@ CLASS z2ui5_cl_smpc_app_363 IMPLEMENTATION.
 
   METHOD model_init.
 
-    " the three Inputs start on the table's own initial freeze counts, all zero
-    column_count_text     = |{ fixed_column_count }|.
-    top_row_count_text    = |{ fixed_top_row_count }|.
-    bottom_row_count_text = |{ fixed_bottom_row_count }|.
+    " The three Inputs start EMPTY, as in the original, which gives them no
+    " value at all - so their placeholders ("fixed column count" and friends)
+    " are what the user sees, and buttonPress reads them as getValue( ) || 0.
+    " Until 2026-08-21 they were seeded from the freeze counts, i.e. with "0",
+    " and sap.m.Input hides the placeholder as soon as a value is set: the port
+    " opened with three zeroes where the sample opens with three hints. The
+    " counts themselves stay 0; only the text fields are unset.
 
     " the shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json)
     " with the columns the twelve table columns bind. DeliveryDate is

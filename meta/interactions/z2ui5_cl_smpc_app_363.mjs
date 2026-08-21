@@ -10,6 +10,17 @@ const inputValue = async (page, id) => page.evaluate(`(() => { ${UI5_ALL_SRC}
 
 export default async (page, expect) => {
   await expect(page.locator('body'), 'the seeded rows').toContainText('Notebook Basic 15');
+
+  // The three Inputs must start EMPTY. The original gives them no value, so
+  // their placeholders are what the user reads; seeding them from the freeze
+  // counts writes "0" into each, and sap.m.Input drops the placeholder the
+  // moment a value is set. The port did exactly that until 2026-08-21, and
+  // this module could not see it because every assertion below starts by
+  // fill()ing over whatever was there.
+  for (const id of ['inputColumn', 'inputRow', 'inputBottomRow']) {
+    const v = await inputValue(page, id);
+    if (v !== '') throw new Error(`${id} starts at "${v}" — its placeholder is hidden, the original starts empty`);
+  }
   await waitForUi5(page, () => {
     const t = ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.table.Table');
     return !!t && t.getFixedColumnCount() === 0;

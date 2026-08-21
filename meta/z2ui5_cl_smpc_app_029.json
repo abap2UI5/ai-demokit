@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-04 (nightly e2e interaction): the scroll-step selection and the tile-press toast were switched from server round-trips to client-side expression binding / follow_up_action( control_global ) on 2026-07-22 - re-verify in a running system that selecting an item/px still changes the arrow scroll step on both containers and that pressing a NumericContent still toasts 'Fire press'. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): pressing the first NumericContent tile raises its client-composed toast ('Fire press'). The scroll-step Select (item/px) is NOT covered - it sits in the sample's option area and needs a human check."
+      "what": "the scroll-step selection and the tile-press toast were switched from server round-trips to client-side expression binding / follow_up_action( control_global ) on 2026-07-22 - re-verify in a running system that selecting an item/px still changes the arrow scroll step on both containers and that pressing a NumericContent still toasts 'Fire press'. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): pressing the first NumericContent tile raises its client-composed toast ('Fire press'). The scroll-step Select (item/px) is NOT covered - it sits in the sample's option area and needs a human check. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_029.mjs)."
     }
   ]
 }
