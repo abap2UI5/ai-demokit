@@ -9,7 +9,7 @@
     "event_t_arg": true,
     "note": "Image press is a roundtrip-free follow_up_action( cs_event-urlhelper, REDIRECT ) opening the Card Explorer in a new window - URLHelper.redirect( url, true ) 1:1. Corrected 2026-08-21: the note still named a control_global MESSAGE_TOAST substitution the class does not make."
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
