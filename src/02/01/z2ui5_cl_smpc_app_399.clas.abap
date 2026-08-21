@@ -39,7 +39,13 @@ CLASS z2ui5_cl_smpc_app_399 IMPLEMENTATION.
     " sample's own images/sap-logo.svg
     DATA(pic1)     = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg`.
     DATA(pic3)     = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6100-large.jpg`.
-    DATA(svg_logo) = `https://sdk.openui5.org/test-resources/sap/m/sample/Image/images/sap-logo.svg`.
+    " sap.ui.require.toUrl( 'sap/m/sample/Image/images/sap-logo.svg' ) resolves
+    " against the demo kit's own layout, which inserts a demokit/ segment - the
+    " file is at src/sap.m/test/sap/m/demokit/sample/Image/images/. Without it
+    " both SVG Images 404, and nothing catches that: the e2e smoke resolves only
+    " /resources/ paths locally and ignores every other miss. Same shape as app
+    " 288's sample.pdf.
+    DATA(svg_logo) = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/Image/images/sap-logo.svg`.
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -89,6 +95,10 @@ CLASS z2ui5_cl_smpc_app_399 IMPLEMENTATION.
                         )->a( n = `class` v = `sapUiSmallMarginBottom`
                     )->tag( `Image`
                         )->a( n = `src`  v = svg_logo
+                        " POST-1.71: sap.m.ImageMode.InlineSvg. The enum VALUE
+                        " carries no @since of its own, so no gate can see it -
+                        " measured against the tags instead: at 1.71.0 ImageMode
+                        " has only Image and Background
                         )->a( n = `mode` v = `InlineSvg` ).
 
     client->view_display( view->stringify( ) ).

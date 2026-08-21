@@ -2072,15 +2072,27 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` device> model as the expression {= ${device>/system/phone} ? '5em' : '10em' } instead of resolving it to one value (app 031/046 precedent) - a device BRANCH stays a branch. // NOTE: the` &&
                ` img>/products/pic1 and pic3 values and the sample's own images/sap-logo.svg are inlined as literals and host-absolutized to https://sdk.openui5.org/ - abap2UI5 serves one default model and the demo` &&
                ` kit's named img model is not carried. // NOTE: handleImage3Press is MessageToast.show('The image has been pressed') with a CONSTANT text, so the press wire is the roundtrip-free client toast` &&
-               ` (follow_up_action cs_event-control_global MESSAGE_TOAST.show, app 005 idiom) and the app stays init-only.`.
+               ` (follow_up_action cs_event-control_global MESSAGE_TOAST.show, app 005 idiom) and the app stays init-only. // POST-1.71: sap.m.ImageMode.InlineSvg is kept 1:1 from the original view and is newer than`.
+    lv_text1 = lv_text1 && ` UI5 1.71. Another enum VALUE in the property gate's blind spot (AGENTS section 5): the member carries no @since in its JSDoc - only a CORS note - so neither the linter nor ui5/properties.json's` &&
+               ` enumSince has anything to match, and mode itself is an old property. Measured against the sources rather than inferred: at tag 1.71.0 sap.m.ImageMode has exactly Image and Background, and InlineSvg` &&
+               ` first appears in 1.106. On an older runtime validateProperty rejects it. The class already sat in src/02/01 for Image.ariaDetails @1.79. // NOTE: The sample's own sap-logo.svg is re-hosted at the` &&
+               ` demo kit URL, and the path needs the demokit/ segment that sap.ui.require.toUrl( 'sap/m/sample/Image/images/sap-logo.svg' ) resolves to - the file lives at` &&
+               ` src/sap.m/test/sap/m/demokit/sample/Image/images/. It was missing until 2026-08-21, so both SVG Images fetched a 404. Nothing catches that: scripts/e2e-smoke.mjs resolves only /resources/ paths` &&
+               ` locally and passes every other miss over silently. Same construct and same fix as app 288's sample.pdf. Note the InlineSvg image fetches its source by XHR (Image.js _loadSvg -> jQuery.get), so on a`.
+    lv_text1 = lv_text1 && ` real system that cross-origin URL is subject to exactly the CORS restriction the enum's own documentation warns about; the plain-mode Image beside it is unaffected.`.
+    lv_text2 = `ariaDetails on sap.m.Image (since UI5 1.79) is newer than 1.71 but kept for the 1:1 port - it links the active-state Image to its explaining Text. The app needs a UI5 release >= 1.79 for the` &&
+               ` association to take effect. // sap.m.ImageMode.InlineSvg is kept 1:1 from the original view and is newer than UI5 1.71. Another enum VALUE in the property gate's blind spot (AGENTS section 5): the` &&
+               ` member carries no @since in its JSDoc - only a CORS note - so neither the linter nor ui5/properties.json's enumSince has anything to match, and mode itself is an old property. Measured against the` &&
+               ` sources rather than inferred: at tag 1.71.0 sap.m.ImageMode has exactly Image and Background, and InlineSvg first appears in 1.106. On an older runtime validateProperty rejects it. The class already` &&
+               ` sat in src/02/01 for Image.ariaDetails @1.79.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Image`                           name = `Image`                                         class = `z2ui5_cl_smpc_app_399` path = `src/02/01/z2ui5_cl_smpc_app_399.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
         is_post171 = abap_true
         notes = lv_text1
-        post171 = `ariaDetails on sap.m.Image (since UI5 1.79) is newer than 1.71 but kept for the 1:1 port - it links the active-state Image to its explaining Text. The app needs a UI5 release >= 1.79 for the` &&
-                 ` association to take effect.` ) ).
+        post171 = lv_text2 ) ).
 
     lv_text1 = `POST-1.71: sap.m.IllustratedMessage (control since UI5 1.98, with its description / title / illustrationType members) is newer than 1.71 but kept for the 1:1 port - it is the sample's whole point, the` &&
                ` error fallback. No gate sees it (the control is not in ui5/properties.json), so this entry is declared by policy; the app needs a UI5 release >= 1.98. // NOTE: the controller resolves` &&
@@ -7215,7 +7227,15 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` the additional m:Label / m:Text / layout:VerticalLayout / layout:HorizontalLayout the block views contain. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample`.
     lv_text1 = lv_text1 && ` entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the HeaderContainer avatar (displaySize='L'), both on the sample's own imageID_275314.png. Needs a UI5 runtime >= 1.73. //` &&
                ` NOTE: The sample has no controller at all - no model, no event handlers - so the port is init-only with neither model_init nor on_event, which is behaviour-identical. The two avatar/image paths are` &&
-               ` kept exactly as the original writes them ('./test-resources/sap/uxap/images/imageID_275314.png'), matching app 261 on the same asset.`.
+               ` kept exactly as the original writes them ('./test-resources/sap/uxap/images/imageID_275314.png'), matching app 261 on the same asset. // POST-1.71: the content aggregation of sap.m.Title (since UI5` &&
+               ` 1.87) is newer than 1.71 but kept for the 1:1 port - the 'Order Details', 'Status' and 'Average User Rating' header titles each hold an m:Link child, exactly like the original (invisible to the` &&
+               ` property gate: a default aggregation never appears as an XML attribute). Needs UI5 >= 1.87. Added 2026-08-21: the sibling ports 079, 259 and 412 - 412 for these very three header titles - all` &&
+               ` declared it and this one did not, so its stated runtime floor read 1.73 (the Avatar) when it is really 1.87.`.
+    lv_text2 = `sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the HeaderContainer avatar (displaySize='L'), both` &&
+               ` on the sample's own imageID_275314.png. Needs a UI5 runtime >= 1.73. // the content aggregation of sap.m.Title (since UI5 1.87) is newer than 1.71 but kept for the 1:1 port - the 'Order Details',` &&
+               ` 'Status' and 'Average User Rating' header titles each hold an m:Link child, exactly like the original (invisible to the property gate: a default aggregation never appears as an XML attribute). Needs` &&
+               ` UI5 >= 1.87. Added 2026-08-21: the sibling ports 079, 259 and 412 - 412 for these very three header titles - all declared it and this one did not, so its stated runtime floor read 1.73 (the Avatar)` &&
+               ` when it is really 1.87.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageWithHeaderContainer`                 class = `z2ui5_cl_smpc_app_402` path = `src/02/03/z2ui5_cl_smpc_app_402.clas.abap`
         score = 3
@@ -7223,8 +7243,7 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.26`
         is_post171 = abap_true
         notes = lv_text1
-        post171 = `sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the HeaderContainer avatar (displaySize='L'), both` &&
-                 ` on the sample's own imageID_275314.png. Needs a UI5 runtime >= 1.73.` ) ).
+        post171 = lv_text2 ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `SingleView`                                    class = `z2ui5_cl_smpc_app_161` path = `src/01/03/z2ui5_cl_smpc_app_161.clas.abap`

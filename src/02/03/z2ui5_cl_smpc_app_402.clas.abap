@@ -128,6 +128,8 @@ CLASS z2ui5_cl_smpc_app_402 IMPLEMENTATION.
                             )->ele( n = `Title` ns = `m`
                                 )->a( n = `class` v = `sapUiTinyMarginBottom`
 
+                                " POST-1.71: sap.m.Title.content @1.87 - the
+                                " title holds a Link child, as in the original
                                 )->tag( n = `Link` ns = `m`
                                     )->a( n = `text` v = `Order Details`
 
@@ -276,6 +278,8 @@ CLASS z2ui5_cl_smpc_app_402 IMPLEMENTATION.
                         )->ele( n = `Title` ns = `m`
                             )->a( n = `class` v = `sapUiTinyMarginBottom`
 
+                            " POST-1.71: sap.m.Title.content @1.87 - the title
+                            " holds a Link child, as in the original
                             )->tag( n = `Link` ns = `m`
                                 )->a( n = `text` v = `Status`
 
@@ -332,6 +336,8 @@ CLASS z2ui5_cl_smpc_app_402 IMPLEMENTATION.
                         )->ele( n = `Title` ns = `m`
                             )->a( n = `class` v = `sapUiTinyMarginBottom`
 
+                            " POST-1.71: sap.m.Title.content @1.87 - the title
+                            " holds a Link child, as in the original
                             )->tag( n = `Link` ns = `m`
                                 )->a( n = `text` v = `Average User Rating`
 
