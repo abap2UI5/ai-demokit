@@ -91,7 +91,6 @@ CLASS z2ui5_cl_smpc_app_313 IMPLEMENTATION.
                     )->end(
                 )->end(
             )->end(
-
             )->ele( `content`
 
                 " Display.fragment.xml
@@ -247,7 +246,6 @@ CLASS z2ui5_cl_smpc_app_313 IMPLEMENTATION.
 
                                                 )->end(
                                             )->end(
-
                                             )->tag( `Input`
                                                 )->a( n = `value` v = client->_bind( city )
 

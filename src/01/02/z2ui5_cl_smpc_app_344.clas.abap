@@ -5,7 +5,6 @@ CLASS z2ui5_cl_smpc_app_344 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
-    DATA show_side      TYPE abap_bool.
     DATA toggle_enabled TYPE abap_bool.
 
   PROTECTED SECTION.
@@ -24,8 +23,6 @@ CLASS z2ui5_cl_smpc_app_344 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
-      " DynamicSideContent.showSideContent default
-      show_side = abap_true.
       view_display( ).
     ELSEIF client->check_on_navigated( ).
       view_display( ).
@@ -43,8 +40,8 @@ CLASS z2ui5_cl_smpc_app_344 IMPLEMENTATION.
     " sideContentPosition Begin is what this sample adds over the plain
     " DynamicSideContent one (app 138); the controller behaviours are wired the
     " same way: breakpointChanged carries its currentBreakpoint to the backend
-    " and enables the Toggle button on S, the Toggle press flips the bound
-    " showSideContent (the property toggle( ) writes), and the Slider resizes
+    " and enables the Toggle button on S, the Toggle press calls the control's
+    " own toggle( ) through control_by_id, and the Slider resizes
     " the container's DOM node through the css control method - sap.m.Page has
     " no width property, exactly the gap the original's jQuery width( ) works
     " around. style.css is injected as a core:HTML style leaf.
@@ -73,7 +70,6 @@ CLASS z2ui5_cl_smpc_app_344 IMPLEMENTATION.
                     )->a( n = `sideContentFallDown` v = `BelowM`
                     )->a( n = `sideContentPosition` v = `Begin`
                     )->a( n = `containerQuery`      v = `true`
-                    )->a( n = `showSideContent`     v = client->_bind( show_side )
                     )->a( n = `breakpointChanged`   v = client->_event( val   = `BP_CHANGED`
                                                                         t_arg = VALUE #( ( `${$parameters>/currentBreakpoint}` ) ) )
 
@@ -126,7 +122,17 @@ CLASS z2ui5_cl_smpc_app_344 IMPLEMENTATION.
                     )->tag( `Button`
                         )->a( n = `text`    v = `Toggle`
                         )->a( n = `type`    v = `Accept`
-                        )->a( n = `press`   v = client->_event( `TOGGLE` )
+                        " handleToggleClick calls DynamicSideContent.toggle( ),
+                        " which is NOT the showSideContent setter: on breakpoint
+                        " S it swaps the control's private _MCVisible/_SCVisible
+                        " pair and leaves showSideContent at its true default.
+                        " Driving the method itself is therefore the only 1:1
+                        " route (an unlisted public method is callable - the
+                        " denylist covers teardown, model swaps and the render
+                        " lifecycle, none of which this is)
+                        )->a( n = `press`   v = client->follow_up_action(
+                                  val   = client->cs_event-control_by_id
+                                  t_arg = VALUE #( ( `DynamicSideContent` ) ( `toggle` ) ) )
                         )->a( n = `id`      v = `toggleButton`
                         )->a( n = `enabled` v = client->_bind( toggle_enabled )
 
@@ -153,18 +159,12 @@ CLASS z2ui5_cl_smpc_app_344 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get_event( ).
-
-      WHEN `BP_CHANGED`.
-        " _updateToggleButtonState: the button is only enabled on breakpoint S
-        toggle_enabled = xsdbool( client->get_event_arg( ) = `S` ).
-
-      WHEN `TOGGLE`.
-        " DynamicSideContent.toggle( ) swaps main and side content on S; the
-        " bound showSideContent is the property that setter writes
-        show_side = xsdbool( show_side = abap_false ).
-
-    ENDCASE.
+    " _updateToggleButtonState: the button is only enabled on breakpoint S.
+    " The only round-trip left - the Toggle press drives the control's own
+    " toggle( ) from the frontend, and the Slider writes its width there too
+    IF client->get_event( ) = `BP_CHANGED`.
+      toggle_enabled = xsdbool( client->get_event_arg( ) = `S` ).
+    ENDIF.
 
   ENDMETHOD.
 

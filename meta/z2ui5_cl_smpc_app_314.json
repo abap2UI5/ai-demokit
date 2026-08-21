@@ -17,7 +17,7 @@
     },
     {
       "type": "NOTE",
-      "what": "_toggleButtonsAndView sets edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (expression binding for the negated Edit case). handleEditPress clones the record into six server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode."
+      "what": "_toggleButtonsAndView sets edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (expression binding for the negated Edit case). handleEditPress clones the record into eight server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode."
     },
     {
       "type": "NOTE",

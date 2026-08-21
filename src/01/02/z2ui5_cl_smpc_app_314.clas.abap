@@ -95,7 +95,6 @@ CLASS z2ui5_cl_smpc_app_314 IMPLEMENTATION.
                     )->end(
                 )->end(
             )->end(
-
             )->ele( `content`
 
                 " Display.fragment.xml
@@ -174,7 +173,6 @@ CLASS z2ui5_cl_smpc_app_314 IMPLEMENTATION.
                                     )->end(
                                 )->end(
                             )->end(
-
                             )->ele( n = `FormContainer` ns = `f`
                                 )->a( n = `title` v = `Online`
 
@@ -280,7 +278,6 @@ CLASS z2ui5_cl_smpc_app_314 IMPLEMENTATION.
 
                                                 )->end(
                                             )->end(
-
                                             )->tag( `Input`
                                                 )->a( n = `value` v = client->_bind( city )
 
@@ -311,7 +308,6 @@ CLASS z2ui5_cl_smpc_app_314 IMPLEMENTATION.
                                     )->end(
                                 )->end(
                             )->end(
-
                             )->ele( n = `FormContainer` ns = `f`
                                 )->a( n = `title` v = `Online`
 

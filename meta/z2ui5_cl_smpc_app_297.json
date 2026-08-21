@@ -37,7 +37,7 @@
     },
     {
       "type": "IMPROVISED",
-      "what": "The custom tabs are inert, exactly as in the original: the SegmentedButtons for Theme, Compact Content Density and Right To Left Mode carry no handler in the sample either, so nothing is applied when they are pressed. The sample's own style.css (the .vsdSetting / .vsd-dp spacing rules) is not reproduced - the class attributes stay on the controls, only the stylesheet is missing, so the tab content renders slightly tighter than the original."
+      "what": "The custom tabs are inert, exactly as in the original: the SegmentedButtons for Theme, Compact Content Density and Right To Left Mode carry no handler in the sample either, so nothing is applied when they are pressed."
     },
     {
       "type": "NOTE",
