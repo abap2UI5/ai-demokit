@@ -29,17 +29,36 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
 
 ## Open findings (backlog)
 
-- [ ] **The per-port review sweep — 115 of 416 read, and it is finding real
-  defects at a steady rate.** Each port is read against its ARCHIVED ORIGINAL
+- [ ] **The per-port review sweep — every port that was `generated` has now
+  been read.** Each port is read against its ARCHIVED ORIGINAL
   (view, controller, mock, stylesheet) and, where a claim rests on UI5's own
   behaviour, against the OpenUI5 sources in `node_modules/@openui5/`. That last
   step is what separates this from a gate: every finding below is invisible to
   `structural_diff`, `data_fidelity`, `pattern_lint` and `view_gates`, all of
   which were green on all of them.
-  **Waves 1–9 (2026-08-21) read 115 ports: 76 clean, 39 with findings, every
-  one fixed.** Promotions go to `reviewed` only for the ports that came back
-  clean; a port whose defect was fixed stays `generated` until it has been
-  measured against a rebuilt backend.
+  **Waves 1–11 (2026-08-21) read all 91 ports that were `generated` when the
+  sweep began, plus 60 more that entered it along the way.** Promotions go to
+  `reviewed` only for the ports that came back clean; a port whose defect was
+  fixed stays `generated` until it has been measured against a rebuilt backend,
+  which is what most of the remaining `generated` count now is — ports waiting
+  for a nightly, not ports nobody has looked at.
+  Two of the findings were not in the ports at all but in the GATES, and they
+  are the most reusable thing the sweep produced. Both were escape hatches that
+  matched by SUBSTRING:
+  - `view-gates`' `declares( )` let ANY deviation excuse a version finding, so
+    a NOTE saying "the liveChange round-trip keeps the Text …" satisfied it for
+    `ColorPickerPopover.liveChange` @1.85. Only `POST_171` / `DROPPED_171` may
+    now — that is what those types MEAN, and what moves a class to `src/02`.
+    Tightening it found four ports filed in the wrong package.
+  - `data-fidelity` was handed the bare FIELD NAME beside the values, so a
+    deviation containing `text`, `name`, `title` or `icon` — ordinary English —
+    cleared every mismatch in that field, across every row. App 269 had
+    truncated a 1273-character mock string to 212 and the gate said 0 errors.
+    A value still matches loosely; a field name counts only in a form that
+    identifies it as a field.
+  The same shape twice suggests the rule: **an escape hatch keyed on free prose
+  should require the declaration to be unambiguous**, the way the icon branch
+  of `declares( )` already required the full `sap-icon://` URI.
   The classes that repeat, worth checking first in any new port:
   - **a bound property that is not what the original's METHOD writes.** Apps
     344/138 bound `showSideContent` to reproduce `DynamicSideContent.toggle( )`,
@@ -76,9 +95,18 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
     closed on modules that never executed the wire named. `validate-meta`
     rejects the first class now; the second needs a human reading the module
     against the deviation.
-  What is NOT done: 301 ports still await a first read. Findings cluster in the
-  older REWORK-era ports and in the newest batches; the middle is largely
-  clean.
+  Two more classes earned their own probes rather than a note, because each
+  recurred: `absent-boolean-probe.mjs` (an `abap_bool` left unset serialises as
+  a real `false` and overrides a UI5 default of `true` — app 291 lost both
+  close buttons and, with them, its only backend wire) and
+  `stale-impossibility-probe.mjs` (a deviation still declaring something the
+  framework has since learned to do — five of those in one day, each TRUE when
+  it was written).
+  What is NOT done: the ~230 ports that were already `reviewed` or `checked`
+  before this sweep have not been re-read against it, and the sweep's later
+  waves found real defects in ports of every age — so age is not evidence.
+  The highest-value re-read would be the `checked` ports, since a live check
+  proves a port RUNS, not that it does what its original does.
 
 - [x] **CAPABILITIES.md's stale class citations — DONE.** Both halves of this
   are closed, and neither closed the way the entry predicted. The shared
