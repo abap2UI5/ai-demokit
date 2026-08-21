@@ -38,6 +38,14 @@
     {
       "type": "NOTE",
       "what": "live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the IconTabHeader / SideNavigation select -> NavContainer 'to' frontend action, the two-way bound selectedKey and the SIDE_NAV_TOGGLE round-trip (sideExpanded plus the tooltip flip)."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.IconTabFilter.items @since 1.77 - the nested sub-filter aggregation - is kept 1:1 from the original view. An AGGREGATION-level member, which the property gate does not see at the attribute-name level; app 221 declares the same member with the same rationale. Declared by policy 2026-08-21 (scripts/probes/post171-blindspot-probe.mjs)."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.tnt.NavigationListItem.expanded is kept 1:1 from the original view. The property PREDATES 1.71, but it now lives on sap.tnt.NavigationListItemBase and its JSDoc there carries @since 1.121, which is the version any scanner reads - the relocated-member residual limit AGENTS section 5 names. Declared by policy 2026-08-21 (scripts/probes/post171-blindspot-probe.mjs); no gate can raise it."
     }
   ]
 }

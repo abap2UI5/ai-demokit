@@ -38,6 +38,14 @@
     {
       "type": "NOTE",
       "what": "live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the TOGGLE_EXPAND round-trip (collapse/expand of the 20rem side navigation) and the quick-create popup round-trip."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.tnt.SideNavigation.width @since 1.120 is kept 1:1 from the original view. Declared by policy 2026-08-21 (scripts/probes/post171-blindspot-probe.mjs) - the app needs a UI5 release >= 1.120 for the width to apply."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.tnt.NavigationListItem.expanded is kept 1:1 from the original view. The property PREDATES 1.71, but it now lives on sap.tnt.NavigationListItemBase and its JSDoc there carries @since 1.121, which is the version any scanner reads - the relocated-member residual limit AGENTS section 5 names. Declared by policy 2026-08-21 (scripts/probes/post171-blindspot-probe.mjs); no gate can raise it."
     }
   ]
 }
