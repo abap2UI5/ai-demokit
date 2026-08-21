@@ -38,6 +38,10 @@
     {
       "type": "NOTE",
       "what": "The three buttons read the table's CURRENT selection, so rowSelectionChange transports ${$source>}.getSelectedIndices() and ${$source>}.getSelectedIndex() - what the original's getSelectedIndices( ) and getContextByIndex( ) ask the control for. Until 2026-08-21 the wire carried ${$parameters>/rowIndices} instead, and that parameter is documented as \"array of row indices which selection has been CHANGED (either selected or deselected)\": ctrl-clicking a second row reported [1] where the original reports [0,1], and deselecting the only selected row reported [0] where the original says \"no item selected\". The interaction module selected exactly one row, the single case where the two sets coincide, so the nightly saw nothing. The toast also strips the JSON brackets now - MessageToast coerces the original's array to \"0,1\"."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency: this rewrite is now declared by all 77 ports that do it - before that day 64 declared it and thirteen did not, which left a real difference asserted nowhere and gave every review sweep the same thing to re-find."
     }
   ]
 }

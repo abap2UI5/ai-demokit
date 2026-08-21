@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_smpc_app_139",
   "sample": "sap.ui.unified.sample.CalendarSingleDaySelection",
   "entity": "sap.ui.unified.Calendar",
-  "file": "src/01/02/z2ui5_cl_smpc_app_139.clas.abap",
+  "file": "src/02/02/z2ui5_cl_smpc_app_139.clas.abap",
   "batch": "b05",
   "audit": {
     "frontend_action": false,
@@ -18,6 +18,10 @@
     {
       "type": "NOTE",
       "what": "The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). This sample's manifest lists `../style.css` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding / labelMarginLeft classes the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs."
+    },
+    {
+      "type": "POST_171",
+      "what": "core:require (UI5 >= 1.74) on the view root loads z2ui5/model/formatter for the selectedDates startDate binding through Formatter.DateAbapDateToDateObject - the app needs a UI5 release >= 1.74 to render it. Without it the XMLView parser rejects the binding outright (\"formatter function ... not found\"), which is what the render gate caught. Same shape as app 017."
     }
   ]
 }

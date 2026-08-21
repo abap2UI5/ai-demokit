@@ -1,2 +1,23 @@
-{ "class": "z2ui5_cl_smpc_app_162", "sample": "sap.ui.layout.sample.HorizontalLayout", "entity": "sap.ui.layout.HorizontalLayout", "file": "src/01/02/z2ui5_cl_smpc_app_162.clas.abap", "batch": "b09", "audit": { "frontend_action": false, "event_t_arg": false }, "status": "reviewed", "checked": null,
-  "deviations": [ { "type": "NOTE", "what": "The original uses a separate 'img' JSON model for the image src ({img>/products/pic1}) alongside the default model for the widths. abap2UI5 has one default model, so the picture path is folded into it and the src binds it directly - the 'img>' prefix is dropped and the path flattened to a single field (pic1); the last path segment is identical, which structural-diff matches. Widths use the desktop values (the original's phone branch is a client-only Device decision)." } ] }
+{
+  "class": "z2ui5_cl_smpc_app_162",
+  "sample": "sap.ui.layout.sample.HorizontalLayout",
+  "entity": "sap.ui.layout.HorizontalLayout",
+  "file": "src/01/02/z2ui5_cl_smpc_app_162.clas.abap",
+  "batch": "b09",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "reviewed",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The original uses a separate 'img' JSON model for the image src ({img>/products/pic1}) alongside the default model for the widths. abap2UI5 has one default model, so the picture path is folded into it and the src binds it directly - the 'img>' prefix is dropped and the path flattened to a single field (pic1); the last path segment is identical, which structural-diff matches. Widths use the desktop values (the original's phone branch is a client-only Device decision)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency: this rewrite is now declared by all 77 ports that do it - before that day 64 declared it and thirteen did not, which left a real difference asserted nowhere and gave every review sweep the same thing to re-find."
+    }
+  ]
+}

@@ -18,6 +18,10 @@
     {
       "type": "NOTE",
       "what": "handleRefresh's this.byId('pullToRefresh').hide( ) is reproduced since 2026-08-21 through follow_up_action( cs_event-control_by_id, hide ) - an allowed unlisted control method. It was dropped and undeclared before, which the review sweep caught: PullToRefresh.onclick puts the control into its busy state (spinner + 'Loading') and ONLY hide( ) resets it to 'Refresh', so the port span after the first pull forever while the original returned to rest. The original's 1s setTimeout around it is not reproduced - the append happens on the round-trip instead."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency: this rewrite is now declared by all 77 ports that do it - before that day 64 declared it and thirteen did not, which left a real difference asserted nowhere and gave every review sweep the same thing to re-find."
     }
   ]
 }

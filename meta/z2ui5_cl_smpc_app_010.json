@@ -11,7 +11,7 @@
   "status": "checked",
   "checked": {
     "date": "2026-07-20",
-    "note": "verified in a running system - human pass 2026-07-20: app starts and renders like the original; no interaction paths were open for this port"
+    "note": "verified in a running system - human pass 2026-07-20: app starts and renders like the original; no interaction paths were open for this port (2026-08-21 re-read: the port does ship a press -> Dialog -> close path, so the 'no interaction paths' clause understates what was there to try.)"
   },
   "deviations": [
     {

@@ -38,6 +38,10 @@
     {
       "type": "NOTE",
       "what": "The three count Inputs start EMPTY, as in the original, which gives them no value attribute at all - so the placeholders (\"fixed column count\" and friends) are what the user sees, and buttonPress reads them as getValue( ) || 0. Until 2026-08-21 they were seeded from the freeze counts, i.e. with \"0\", and sap.m.Input hides the placeholder as soon as a value is set: the port opened with three zeroes where the sample opens with three hints. The interaction module could not see it because every assertion started by filling over whatever was there; it asserts the empty start now."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency: this rewrite is now declared by all 77 ports that do it - before that day 64 declared it and thirteen did not, which left a real difference asserted nowhere and gave every review sweep the same thing to re-find."
     }
   ]
 }

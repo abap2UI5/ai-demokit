@@ -1,22 +1,16 @@
-" @keywords calendar sap.ui.unified calendarmultiplemonth button label text
-" @summary Calendar with more than one month
-CLASS z2ui5_cl_smpc_app_304 DEFINITION PUBLIC.
+" @keywords calendar sap.ui.unified single day button label text
+" @summary Calendar where the user can select a single day
+CLASS z2ui5_cl_smpc_app_139 DEFINITION PUBLIC.
 
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
     DATA selected_date TYPE string.
 
-    " The calendar's OWN selection, as the model owns it. selectedDates is a
-    " bindable aggregation of sap.ui.unified.DateRange, exactly like the
-    " disabledDates app 220 binds - so the highlight is expressible after all,
-    " and handleSelectToday's removeAllSelectedDates + addSelectedDate(today)
-    " becomes "replace the one row". The deviation here used to say the
-    " highlight could not be moved because addSelectedDate takes a DateRange
-    " CONTROL no wire can construct: true of the METHOD, and beside the point,
-    " since the aggregation never needed the method. Every click round-trips
-    " through CAL_SELECT, so the model is the source of truth and the control's
-    " own click-selection is re-stated rather than fought.
+    " The calendar's OWN selection, as the model owns it - selectedDates is a
+    " bindable aggregation of sap.ui.unified.DateRange, the same type and shape
+    " app 220 binds for disabledDates. See the SELECT_TODAY handler for why the
+    " old "no wire can construct a DateRange" rationale missed it.
     TYPES:
       BEGIN OF ty_s_day,
         start TYPE string,
@@ -33,7 +27,7 @@ CLASS z2ui5_cl_smpc_app_304 DEFINITION PUBLIC.
 ENDCLASS.
 
 
-CLASS z2ui5_cl_smpc_app_304 IMPLEMENTATION.
+CLASS z2ui5_cl_smpc_app_139 IMPLEMENTATION.
 
   METHOD z2ui5_if_app~main.
 
@@ -61,17 +55,29 @@ CLASS z2ui5_cl_smpc_app_304 IMPLEMENTATION.
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `class`     v = `viewPadding`
 
+        )->a( n = `xmlns:core` v = `sap.ui.core`
+        " the selectedDates formatter has to be loaded, or the XMLView parser
+        " rejects the binding with "formatter function ... not found"
+        )->a( n = `core:require` v = `{Formatter: 'z2ui5/model/formatter'}`
+
+        " the sample's own ../style.css (shared by the sap.ui.unified samples and
+        " listed in this sample's manifest) - the view carries the class and the
+        " rule behind it has to come with it. \{ \} escaped: the XMLView parser
+        " reads an unescaped brace as a binding
+        )->tag( n = `HTML` ns = `core`
+            )->a( n = `content` v = `<style>.viewPadding\{padding:1rem\}` &&
+                                    `.sap-phone .viewPadding\{padding:0rem\}` &&
+                                    `.labelMarginLeft\{margin:1rem\}</style>`
         )->ele( n = `VerticalLayout` ns = `l`
-            )->a( n = `class` v = `sapUiContentPadding`
 
             )->ele( n = `Calendar` ns = `u`
-                )->a( n = `id`     v = `calendar`
-                )->a( n = `months` v = `2`
-                " the picked day is read out of the event as a UI5 EXPRESSION - indexed
-                " access and chained calls resolve there (app 139 idiom). The LOCAL date
-                " parts travel, not toISOString( ), which would shift the day east of
-                " Greenwich
+                )->a( n = `id`            v = `calendar`
                 )->a( n = `selectedDates` v = client->_bind( t_selected )
+                " the picked day is read out of the event as a UI5 EXPRESSION - indexed
+                " access and chained calls resolve there (measured with
+                " scripts/probes/event-arg-expression-probe.mjs). The LOCAL date parts
+                " travel, not toISOString( ), which would shift the day east of
+                " Greenwich; the length guard reproduces the deselect case
                 )->a( n = `select` v = client->_event( val   = `CAL_SELECT`
                                                        t_arg = VALUE #(
                                                          ( `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getFullYear() : 0` )
@@ -80,28 +86,26 @@ CLASS z2ui5_cl_smpc_app_304 IMPLEMENTATION.
 
                 )->ele( n = `selectedDates` ns = `u`
                     )->tag( n = `DateRange` ns = `u`
-                        " the ABAP DATS form read through the local-parts
-                        " formatter, as app 220 does - `new Date('yyyy-mm-dd')`
-                        " would be UTC midnight and land a day early west of
-                        " Greenwich
+                        " ABAP DATS through the local-parts formatter, as app 220
+                        " does - `new Date('yyyy-mm-dd')` is UTC midnight and would
+                        " land a day early west of Greenwich
                         )->a( n = `startDate` v = |\{ path: 'START', formatter: 'Formatter.DateAbapDateToDateObject' \}|
 
                 )->end(
             )->end(
 
-            )->ele( n = `HorizontalLayout` ns = `l`
-                )->a( n = `allowWrapping` v = `true`
+            )->tag( `Button`
+                )->a( n = `press` v = client->_event( `SELECT_TODAY` )
+                )->a( n = `text`  v = `Select Today`
 
-                )->tag( `Button`
-                    )->a( n = `press` v = client->_event( `SELECT_TODAY` )
-                    )->a( n = `text`  v = `Select Today`
-                    )->a( n = `class` v = `sapUiSmallMarginEnd`
+            )->ele( n = `HorizontalLayout` ns = `l`
                 )->tag( `Label`
                     )->a( n = `text`  v = `Selected Date (yyyy-mm-dd):`
-                    )->a( n = `class` v = `sapUiSmallMarginEnd`
+                    )->a( n = `class` v = `labelMarginLeft`
                 )->tag( `Text`
-                    )->a( n = `id`   v = `selectedDate`
-                    )->a( n = `text` v = client->_bind( selected_date ) ).
+                    )->a( n = `id`    v = `selectedDate`
+                    )->a( n = `text`  v = client->_bind( selected_date )
+                    )->a( n = `class` v = `labelMarginLeft` ).
 
     client->view_display( view->stringify( ) ).
 
@@ -113,12 +117,12 @@ CLASS z2ui5_cl_smpc_app_304 IMPLEMENTATION.
     CASE client->get_event( ).
 
       WHEN `CAL_SELECT`.
-        " _updateText: format getSelectedDates()[0] as yyyy-MM-dd. The day arrives
-        " as its three LOCAL parts (see the wire in view_display)
+        " _updateText: format getSelectedDates()[0] as yyyy-MM-dd. The day
+        " arrives as its three LOCAL parts (see the wire in view_display);
+        " year 0 means the selection was cleared by re-clicking the same day
         DATA(year) = client->get_event_arg( ).
         IF year IS INITIAL OR year = `0`.
           selected_date = `No Date Selected`.
-          CLEAR t_selected.
         ELSE.
           DATA(month) = |{ CONV i( client->get_event_arg( 2 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }|.
           DATA(day)   = |{ CONV i( client->get_event_arg( 3 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }|.
@@ -129,14 +133,13 @@ CLASS z2ui5_cl_smpc_app_304 IMPLEMENTATION.
         ENDIF.
 
       WHEN `SELECT_TODAY`.
-        " handleSelectToday: removeAllSelectedDates( ) + addSelectedDate(
-        " DateRange( today ) ) + reformat. Both halves are reproduced since
-        " 2026-08-21 - replacing the one row of the bound selectedDates
-        " aggregation IS that pair - so the highlight really moves to today.
-        " Until then only the text was updated, on the claim that
-        " addSelectedDate takes a DateRange CONTROL no wire can construct; that
-        " is true of the METHOD and beside the point, because selectedDates is
-        " a bindable aggregation (app 220 binds disabledDates, the same type).
+        " handleSelectToday adds a DateRange( today ) and reformats. Both halves
+        " are reproduced since 2026-08-21 - replacing the one row of the bound
+        " selectedDates aggregation IS that add - so the highlight really moves
+        " to today. Until then only the text was updated, on the claim that
+        " addSelectedDate takes a DateRange CONTROL no wire can construct: true
+        " of the METHOD, and beside the point, since selectedDates is a bindable
+        " aggregation (app 220 binds disabledDates, the same type).
         selected_date = |{ sy-datum+0(4) }-{ sy-datum+4(2) }-{ sy-datum+6(2) }|.
         t_selected    = VALUE #( ( start = |{ sy-datum }| ) ).
 

@@ -11,7 +11,7 @@
   "status": "checked",
   "checked": {
     "date": "2026-07-21",
-    "note": "verified in a running system - human visual check 2026-07-21: the Products list renders the 11 rows with their Quantity counters (display-only app, no interaction to exercise)."
+    "note": "verified in a running system - human visual check 2026-07-21: the Products list renders all 123 rows with their Quantity counters (display-only app, no interaction to exercise)."
   },
   "deviations": [
     {

@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_smpc_app_304",
   "sample": "sap.ui.unified.sample.CalendarMultipleMonth",
   "entity": "sap.ui.unified.Calendar",
-  "file": "src/01/02/z2ui5_cl_smpc_app_304.clas.abap",
+  "file": "src/02/02/z2ui5_cl_smpc_app_304.clas.abap",
   "batch": "b15",
   "audit": {
     "frontend_action": false,
@@ -22,6 +22,10 @@
     {
       "type": "NOTE",
       "what": "not yet run in a system: the CAL_SELECT expression-arg round-trip across the two displayed months and the SELECT_TODAY text update. **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_304.mjs)."
+    },
+    {
+      "type": "POST_171",
+      "what": "core:require (UI5 >= 1.74) on the view root loads z2ui5/model/formatter for the selectedDates startDate binding through Formatter.DateAbapDateToDateObject - the app needs a UI5 release >= 1.74 to render it. Without it the XMLView parser rejects the binding outright (\"formatter function ... not found\"), which is what the render gate caught. Same shape as app 017."
     }
   ]
 }

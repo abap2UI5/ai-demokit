@@ -149,7 +149,13 @@ identically** — same data, same leaf name, `structural-diff` 0 diffs
 (`{ui>/rowMode}`→`{/ROWMODE}`, `{img>/products/pic1}`→`{/PIC1}` with the real
 value) — is faithful → **`NOTE`**. Use **`IMPROVISED`** only when the fold
 actually *loses or changes* something: drops bound columns, resolves a live
-model statically, or substitutes values (app 006's `img>`→static URLs). When
+model statically, or substitutes values with ones the original never shows.
+A URL that is merely re-HOSTED is not a substitution: app 006 folds
+`img>/products/pic1..3` to the mock's own values on sdk.openui5.org and
+therefore renders identically, which is why its sidecar types that fold as a
+`NOTE` — this guide cited it as *the* `IMPROVISED` example until 2026-08-21,
+contradicting the rule in the sentence above it and guaranteeing that every
+review sweep would re-find the disagreement. When
 binding a single record the original `bindElement`s (`/SupplierCollection/0`),
 seed those fields at the **default-model root** — and then bind them
 **absolutely** (`client->_bind( suppliername )`), *not* with the original's
@@ -158,8 +164,8 @@ a relative path to resolve against (see the flattened-element-binding trap
 below; the linter rule is `relative-binding-without-context`). Seed the
 **actual mock row-0 values**,
 verified against the mock, not a neighbour port (app 162/142 had copied wrong
-values). Worked example: app 006 (`sap.m.Carousel`, `img>` → static URLs,
-`IMPROVISED`); app 175 (`SimpleForm`, supplier row-0 flatten).
+values). Worked examples: app 006 (`sap.m.Carousel`, `img>` → the mock's own
+values, re-hosted — a `NOTE`); app 175 (`SimpleForm`, supplier row-0 flatten).
 
 **Absent JSON properties must not become empty strings.** A flat ABAP row
 serializes every field on every row; where the original JSON simply omits a
@@ -439,10 +445,12 @@ with a closed `type` vocabulary so deviations stay countable:
   binding/event path, or uncertain rendering (e.g. app 003's `${$source>/text}`
   event arg).
 - `IMPROVISED` — **materially deviates** from the sample: the port loses or
-  changes something. A named model flattened to **static values** (app 006's
-  `img>`→hardcoded URLs), a MessageManager replaced by a hardcoded message table
+  changes something: a MessageManager replaced by a hardcoded message table
   (app 038), a fold that **drops bound columns** or resolves a live model
-  statically. Only improvise what `CAPABILITIES.md` does not mark expressible —
+  statically. A named model flattened to static values is NOT automatically
+  this — app 006's `img>` fold keeps the mock's own values (re-hosted, so they
+  resolve) and renders identically, which makes it a `NOTE`; this list named it
+  as the `IMPROVISED` example until 2026-08-21, and its own sidecar disagreed. Only improvise what `CAPABILITIES.md` does not mark expressible —
   app 042's Dialog→toast substitution was a wrong improvisation; app 044 shows
   the 1:1 way (`popup_display`).
 - `DROPPED_171` — a control / property / enum value newer than 1.71 was

@@ -20,11 +20,11 @@
     },
     {
       "type": "NOTE",
-      "what": "the original controller's onInit oDRS2.setMinDate(2016-01-01)/setMaxDate(2016-12-31) become minDate/maxDate view attributes on DRS2, bound over ISO strings with formatter 'Formatter.DateCreateObject' (CAPABILITIES date-object-properties row) - two extra attributes vs the original view.xml."
+      "what": "the original controller's onInit oDRS2.setMinDate(2016-01-01)/setMaxDate(2016-12-31) become minDate/maxDate view attributes on DRS2, bound over ABAP DATS strings with formatter 'Formatter.DateAbapDateToDateObject' (CAPABILITIES date-object-properties row) - two extra attributes vs the original view.xml."
     },
     {
       "type": "POST_171",
-      "what": "core:require (UI5 >= 1.74) on the view root loads z2ui5/model/formatter for the DRS2 minDate/maxDate Formatter.DateCreateObject bindings - the app needs a UI5 release >= 1.74 to render it."
+      "what": "core:require (UI5 >= 1.74) on the view root loads z2ui5/model/formatter for the DRS2 minDate/maxDate Formatter.DateAbapDateToDateObject bindings - the app needs a UI5 release >= 1.74 to render it."
     },
     {
       "type": "POST_171",

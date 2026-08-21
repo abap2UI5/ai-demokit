@@ -109,10 +109,10 @@ CLASS z2ui5_cl_smpc_app_003 IMPLEMENTATION.
     t_items = VALUE #(
       ( key = `Slash`             text = `Slash` )
       ( key = `BackSlash`         text = `BackSlash` )
-      ( key = `DoubleBackSlash`   text = `DoubleBackSlash` )
       ( key = `DoubleSlash`       text = `DoubleSlash` )
-      ( key = `DoubleGreaterThan` text = `DoubleGreaterThan` )
-      ( key = `GreaterThan`       text = `GreaterThan` ) ).
+      ( key = `DoubleBackSlash`   text = `DoubleBackSlash` )
+      ( key = `GreaterThan`       text = `GreaterThan` )
+      ( key = `DoubleGreaterThan` text = `DoubleGreaterThan` ) ).
 
     " original: selected = oMData[0].text -> the first item's text
     selected = t_items[ 1 ]-text.

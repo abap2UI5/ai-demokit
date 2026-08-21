@@ -15,10 +15,10 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 
 | Aspect | State |
 |---|---|
-| Ports | **416** sidecars in `meta/` (src/01 OpenUI5 <= 1.71: 289 · src/02 OpenUI5 > 1.71: 127) |
+| Ports | **416** sidecars in `meta/` (src/01 OpenUI5 <= 1.71: 287 · src/02 OpenUI5 > 1.71: 129) |
 | Per library | sap.f: 19 · sap.m: 219 · sap.tnt: 17 · sap.ui: 130 · sap.uxap: 31 |
-| Status ladder | 2 `generated` · 353 `reviewed` · 61 `checked` (live-verified) |
-| Deviations | 5 DROPPED_171 · 66 IMPROVISED · 6 LIVE_TEST · 992 NOTE · 189 POST_171 |
+| Status ladder | 0 `generated` · 355 `reviewed` · 61 `checked` (live-verified) |
+| Deviations | 5 DROPPED_171 · 66 IMPROVISED · 6 LIVE_TEST · 1017 NOTE · 191 POST_171 |
 | Open LIVE_TESTs | **6 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 2 structural-diff · 4 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_smpc_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_smpc_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_smpc_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_smpc_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_smpc_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
@@ -107,6 +107,18 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   waves found real defects in ports of every age — so age is not evidence.
   The highest-value re-read would be the `checked` ports, since a live check
   proves a port RUNS, not that it does what its original does.
+  **That re-read has started and it was worth starting:** ports 001–034 have
+  been read against their originals, and the first behavioural defect turned up
+  in the very first batch — app 003 listed the six `BreadcrumbsSeparatorStyle`
+  members with positions 3/4 and 5/6 swapped against
+  `ui5/properties.json`, which no gate compares. The rest of that
+  batch was documentation drift, the sweep's most common finding: a deviation
+  naming a formatter the port stopped using (017), a garbled sentence (016), an
+  undeclared handler-to-binding swap (022), inline comments citing apps that do
+  not exist (010 cited app 534) or the wrong one (009 cited 401 for 022), and
+  a `checked.note` claiming no interaction paths were open on a port that ships
+  a press → Dialog → close wire (010). Ports 035–061 are still unread against
+  their originals.
 
 - [x] **CAPABILITIES.md's stale class citations — DONE.** Both halves of this
   are closed, and neither closed the way the entry predicted. The shared
