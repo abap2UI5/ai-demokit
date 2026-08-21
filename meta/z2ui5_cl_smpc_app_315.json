@@ -5,8 +5,8 @@
   "file": "src/01/02/z2ui5_cl_smpc_app_315.clas.abap",
   "batch": "b18",
   "audit": {
-    "frontend_action": false,
-    "event_t_arg": false
+    "frontend_action": true,
+    "event_t_arg": true
   },
   "status": "generated",
   "checked": null,
@@ -26,6 +26,10 @@
     {
       "type": "NOTE",
       "what": "not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore). **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_315.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "onInit's oSplitContainer.toDetail( this.createId('page') ) is reproduced through a control_by_id follow-up action on the init round-trip. The original comments it as \"to navigate to the page on phone and not show the split screen items\": initialDetail names the detail page but does not put a PHONE into detail mode, so without the call a phone opens on the master list (Item 1 / Item 2) where the sample opens on the form. toDetail is a listed control method taking a controlId, so it travels as-is. It was dropped silently until 2026-08-21, and the family's generator now READS Page.controller.js for it: it used to advertise that it knows this family's controller while never opening the file, so this call was invisible to the emitter as well as to structural-diff, which compares views only. The two *471 samples are the only members of the 26 whose controller differs materially from the shared one, and both ports had lost the same behaviour."
     }
   ]
 }

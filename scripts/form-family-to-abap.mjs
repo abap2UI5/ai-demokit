@@ -5,11 +5,12 @@
  *        <class> <sample id> <out .clas.abap>
  *
  * The 26 samples of that family (Form354*, Form471, Form480*, Form_Column_*,
- * SimpleForm*) share ONE Page.controller.js: a Page whose content the
+ * SimpleForm*) share ALMOST one Page.controller.js: a Page whose content the
  * controller swaps between Display.fragment.xml and Change.fragment.xml, three
  * header Buttons, and bindElement('/SupplierCollection/0'). Only the fragment
- * bodies differ, so the port shape is fixed (apps 312..337) and this emitter
- * produces it: both fragments inlined and switched by the two-way bound
+ * bodies differ — with ONE exception the emitter has to read the controller
+ * for. So the port shape is fixed (apps 312..337) and this emitter produces
+ * it: both fragments inlined and switched by the two-way bound
  * edit_mode flag, the row-0 fields seeded at the model root and bound
  * ABSOLUTELY, the Edit/Save/Cancel round-trips with a server-side clone.
  *
@@ -233,7 +234,7 @@ const SUPPLIER = {
 const TYPEOF = (f) => SUPPLIER[f][0];
 const SEEDOF = (f) => SUPPLIER[f][1];
 
-function render(cls, sample, body, fields) {
+function render(cls, sample, body, fields, initExtra) {
   const w = Math.max(...fields.map((f) => f.length));
   const pad = (f) => f + ' '.repeat(w - f.length);
   const pub = fields.map((f) => `    DATA ${pad(f)} TYPE ${TYPEOF(f)}.`).join('\n');
@@ -272,7 +273,7 @@ CLASS ${cls} IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       model_init( ).
-      view_display( ).
+      view_display( ).${initExtra}
     ELSEIF client->check_on_navigated( ).
       view_display( ).
     ELSEIF client->check_on_event( ).
@@ -331,8 +332,42 @@ ENDCLASS.
 `;
 }
 
+/* The ONE piece of per-sample controller variance in the family. Two of the 26
+ * — Form471 and SimpleForm471 — end onInit with
+ *
+ *     oSplitContainer.toDetail(this.createId("page"));
+ *
+ * commented "to navigate to the page on phone and not show the split screen
+ * items". initialDetail names the detail page but does not put a PHONE into
+ * detail mode, so without the call a phone opens on the master list where the
+ * sample opens on the form.
+ *
+ * This emitter used to claim it "knows this family's controller" while never
+ * opening Page.controller.js, so the call was invisible to it — and to
+ * structural-diff, which compares views only. Both ports had silently lost the
+ * behaviour (found by review 2026-08-21). Read the controller, and throw rather
+ * than guess if it says something this emitter does not model. */
+function initExtraFrom(sampleDir) {
+  const f = path.join(sampleDir, 'Page.controller.js');
+  if (!fs.existsSync(f)) throw new Error(`${sampleDir}: no Page.controller.js`);
+  const src = fs.readFileSync(f, 'utf8');
+  const m = src.match(/(\w+)\.toDetail\(this\.createId\("(\w+)"\)\)/);
+  if (!m) return '';
+  const id = (src.match(new RegExp(`${m[1]}\\s*=\\s*this\\.byId\\("(\\w+)"\\)`)) || [])[1];
+  if (!id) throw new Error(`${sampleDir}: toDetail( ) on a SplitContainer this emitter cannot name`);
+  return `
+      " onInit ends with oSplitContainer.toDetail( this.createId('${m[2]}') ) -
+      " "to navigate to the page on phone and not show the split screen items".
+      " initialDetail names the detail page but does not put a PHONE into detail
+      " mode, so without this a phone opens on the master list where the sample
+      " opens on the form. toDetail is a listed control method taking a
+      " controlId, so the wire carries it as-is.
+      client->follow_up_action( val   = client->cs_event-control_by_id
+                                t_arg = VALUE #( ( \`${id}\` ) ( \`toDetail\` ) ( \`${m[2]}\` ) ) ).`;
+}
+
 // ---------- CLI ----------
 const [, , sampleDir, cls, sample, outFile] = process.argv;
 const { body, fields } = build(sampleDir, cls);
-fs.writeFileSync(outFile, render(cls, sample, body, fields));
+fs.writeFileSync(outFile, render(cls, sample, body, fields, initExtraFrom(sampleDir)));
 console.log(`${cls}  <- ${path.basename(sampleDir)}  (${fields.length} fields)`);

@@ -5372,11 +5372,16 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
     lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
                ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).` &&
-               ` **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_315.mjs).`.
+               ` **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_315.mjs). // NOTE: onInit's oSplitContainer.toDetail( this.createId('page') ) is reproduced through a` &&
+               ` control_by_id follow-up action on the init round-trip. The original comments it as "to navigate to the page on phone and not show the split screen items": initialDetail names the detail page but does` &&
+               ` not put a PHONE into detail mode, so without the call a phone opens on the master list (Item 1 / Item 2) where the sample opens on the form. toDetail is a listed control method taking a controlId, so` &&
+               ` it travels as-is. It was dropped silently until 2026-08-21, and the family's generator now READS Page.controller.js for it: it used to advertise that it knows this family's controller while never`.
+    lv_text1 = lv_text1 && ` opening the file, so this call was invisible to the emitter as well as to structural-diff, which compares views only. The two *471 samples are the only members of the 26 whose controller differs` &&
+               ` materially from the shared one, and both ports had lost the same behaviour.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form471`                                       class = `z2ui5_cl_smpc_app_315` path = `src/01/02/z2ui5_cl_smpc_app_315.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = lv_text1 ) ).
 
@@ -5601,11 +5606,16 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
                ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
                ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // NOTE: not yet run in a system: the Edit/Save/Cancel` &&
-               ` round-trips (form swap through the bound visible flags and the Cancel restore). **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_328.mjs).`.
+               ` round-trips (form swap through the bound visible flags and the Cancel restore). **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_328.mjs). // NOTE: onInit's` &&
+               ` oSplitContainer.toDetail( this.createId('page') ) is reproduced through a control_by_id follow-up action on the init round-trip. The original comments it as "to navigate to the page on phone and not` &&
+               ` show the split screen items": initialDetail names the detail page but does not put a PHONE into detail mode, so without the call a phone opens on the master list (Item 1 / Item 2) where the sample`.
+    lv_text1 = lv_text1 && ` opens on the form. toDetail is a listed control method taking a controlId, so it travels as-is. It was dropped silently until 2026-08-21, and the family's generator now READS Page.controller.js for` &&
+               ` it: it used to advertise that it knows this family's controller while never opening the file, so this call was invisible to the emitter as well as to structural-diff, which compares views only. The` &&
+               ` two *471 samples are the only members of the 26 whose controller differs materially from the shared one, and both ports had lost the same behaviour.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm471`                                 class = `z2ui5_cl_smpc_app_328` path = `src/01/02/z2ui5_cl_smpc_app_328.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = lv_text1 ) ).
 
