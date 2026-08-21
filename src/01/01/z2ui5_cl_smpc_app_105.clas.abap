@@ -1,4 +1,4 @@
-" @keywords semanticpage semantic sap.m.semantic actions button overflowtoolbarbutton messagepopover messageitem
+" @keywords semanticpage semantic sap.m.semantic actions messagepopover messageitem button overflowtoolbarbutton
 " @summary Semantic Page Full Screen
 CLASS z2ui5_cl_smpc_app_105 DEFINITION PUBLIC.
 

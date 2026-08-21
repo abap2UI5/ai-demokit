@@ -84,7 +84,19 @@ CLASS z2ui5_cl_smpc_app_306 IMPLEMENTATION.
                                                                     ( `${$parameters>/weekDays}.getStartDate() ? ${$parameters>/weekDays}.getStartDate().getDate() : 0` )
                                                                     ( `${$parameters>/weekDays}.getEndDate() ? ${$parameters>/weekDays}.getEndDate().getFullYear() : 0` )
                                                                     ( `${$parameters>/weekDays}.getEndDate() ? ${$parameters>/weekDays}.getEndDate().getMonth() + 1 : 0` )
-                                                                    ( `${$parameters>/weekDays}.getEndDate() ? ${$parameters>/weekDays}.getEndDate().getDate() : 0` ) ) )
+                                                                    ( `${$parameters>/weekDays}.getEndDate() ? ${$parameters>/weekDays}.getEndDate().getDate() : 0` ) )
+                                                                  " handleWeekNumberSelect calls oEvent.preventDefault( )
+                                                                  " for a week divisible by five, so the forbidden week
+                                                                  " is not selected at all. The veto is CONDITIONAL, and
+                                                                  " the boolean check_prevent_default is baked per wire -
+                                                                  " which is why this carried an IMPROVISED deviation
+                                                                  " until 2026-08-21 saying the refusal could only be a
+                                                                  " toast. prevent_default_expr evaluates per firing (app
+                                                                  " 247's columnResize, app 354's column filter), and the
+                                                                  " condition here is a plain expression over an event
+                                                                  " parameter.
+                                                                  s_ctrl = VALUE #(
+                                                                    prevent_default_expr = `${$parameters>/weekNumber} % 5 === 0` ) )
 
             )->ele( n = `HorizontalLayout` ns = `l`
                 )->tag( `Label`
@@ -128,7 +140,9 @@ CLASS z2ui5_cl_smpc_app_306 IMPLEMENTATION.
 
       WHEN `WEEK_SELECT`.
         " handleWeekNumberSelect: every fifth calendar week is refused with a
-        " toast, any other week fills the two labels from its weekDays DateRange
+        " toast AND with the prevented default on the wire above, so the week is
+        " not selected either; any other week fills the two labels from its
+        " weekDays DateRange
         DATA(week) = CONV i( client->get_event_arg( ) ).
         IF week MOD 5 = 0.
           client->message_toast_display( `You are not allowed to select this calendar week!` ).

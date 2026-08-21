@@ -6199,16 +6199,16 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` roundtrip-free, exactly what the buttons do in the original. // IMPROVISED: The hierarchy MAINTENANCE half of the sample - Cut, Paste and the drag & drop re-parenting - is dropped, and with it the` &&
                ` DragDropInfo's dragStart and drop attributes. The control itself stays, switched off with enabled="false" (@since 1.56, inside the floor) - an attribute the original does not carry, added 2026-08-21` &&
                ` because UI5's DropInfo.isDroppable never asks whether anyone is listening: with the two handlers gone but the configuration active, the port shipped draggable rows and a live drop indicator that` &&
-               ` silently discarded every drop. The Cut and Paste buttons keep their labels, icons and the Paste button's enabled="false" from the view but do nothing; the Cut and Paste buttons keep their labels,`.
-    lv_text1 = lv_text1 && ` icons and the Paste button's enabled="false" from the view but do nothing. All three handlers move a node to an ARBITRARY new parent (onDrop pushes the dragged row's data into the dropped row's` &&
-               ` ``categories`` array and blanks the source; onCut/onPaste do the same through a clipboard). A JSON tree binding needs the children nested under their parent, and an ABAP nesting is TYPED and` &&
-               ` fixed-depth (article inside group inside area inside root, as the JSON's own four levels are), so a node cannot be re-parented to a level of a different type - which is precisely what these handlers` &&
-               ` do. The row-to-node resolution itself would be transportable (a drop event can ship ${$parameters>/draggedControl}.getBindingContext().getPath()), so this is a limit of modelling a tree as typed ABAP` &&
-               ` data, not of the event wire. // NOTE: Clothing.json is inlined 1:1 - the full tree (Women/Men/Girls/Boys) with every leaf's amount/currency/size - as nested types, one per level, so absent leaf` &&
-               ` fields exist only where the JSON carries them and the Size Select stays hidden via the original's !!${size} guard. It is byte-identical to the file the sibling TreeTable.JSONTreeBinding sample uses,`.
-    lv_text1 = lv_text1 && ` which app 248 ports; the model and its types are shared with that port. The rows binding keeps the original's arrayNames parameter with the ABAP (upper-cased) array name. // NOTE: Unverified in a` &&
-               ` running system: the two control_by_id wires (collapseAll, and expandToLevel with its numeric argument - a listed CONTROL_METHODS entry, so the argument is declared and reaches the method).` &&
-               ` **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_365.mjs).`.
+               ` silently discarded every drop. The Cut and Paste buttons keep their labels, icons and the Paste button's enabled="false" from the view but do nothing. All three handlers move a node to an ARBITRARY`.
+    lv_text1 = lv_text1 && ` new parent (onDrop pushes the dragged row's data into the dropped row's ``categories`` array and blanks the source; onCut/onPaste do the same through a clipboard). A JSON tree binding needs the` &&
+               ` children nested under their parent, and an ABAP nesting is TYPED and fixed-depth (article inside group inside area inside root, as the JSON's own four levels are), so a node cannot be re-parented to` &&
+               ` a level of a different type - which is precisely what these handlers do. The row-to-node resolution itself would be transportable (a drop event can ship` &&
+               ` ${$parameters>/draggedControl}.getBindingContext().getPath()), so this is a limit of modelling a tree as typed ABAP data, not of the event wire. // NOTE: Clothing.json is inlined 1:1 - the full tree` &&
+               ` (Women/Men/Girls/Boys) with every leaf's amount/currency/size - as nested types, one per level, so absent leaf fields exist only where the JSON carries them and the Size Select stays hidden via the` &&
+               ` original's !!${size} guard. It is byte-identical to the file the sibling TreeTable.JSONTreeBinding sample uses, which app 248 ports; the model and its types are shared with that port. The rows`.
+    lv_text1 = lv_text1 && ` binding keeps the original's arrayNames parameter with the ABAP (upper-cased) array name. // NOTE: Unverified in a running system: the two control_by_id wires (collapseAll, and expandToLevel with its` &&
+               ` numeric argument - a listed CONTROL_METHODS entry, so the argument is declared and reaches the method). **e2e-verified 2026-08-21** (nightly e2e interaction,` &&
+               ` meta/interactions/z2ui5_cl_smpc_app_365.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.TreeTable`                name = `TreeTable.HierarchyMaintenanceJSONTreeBinding` class = `z2ui5_cl_smpc_app_365` path = `src/01/02/z2ui5_cl_smpc_app_365.clas.abap`
         score = 5
@@ -6375,17 +6375,20 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` expression args (the LOCAL year/month+1/day of each end, not toISOString( ), which would shift the day east of Greenwich), each guarded so a missing end arrives as 0 and renders the original's 'No` &&
                ` Date Selected'; the two Texts get two-way bound text attributes instead of setText (app 139 idiom, probe-verified). // NOTE: handleWeekNumberSelect reads the weekNumber and the weekDays DateRange` &&
                ` parameters; both travel as expression args (${$parameters>/weekNumber} and the local date parts of ${$parameters>/weekDays}.getStartDate()/getEndDate()), and the every-fifth-week refusal toast is` &&
-               ` composed server-side, exactly as the original composes it. // IMPROVISED: the refusal is only a toast: the original also calls oEvent.preventDefault() so the forbidden week is NOT selected. abap2UI5` &&
-               ` bakes s_ctrl-check_prevent_default into the handler at RENDER time (app 241), which cannot express a condition evaluated per event (weekNumber % 5 === 0), so the week highlights and only the message`.
-    lv_text1 = lv_text1 && ` says it is not allowed. // NOTE: not yet run in a system: the CAL_SELECT interval round-trip and the WEEK_SELECT branch (toast on every fifth week, labels otherwise). **e2e-verified 2026-08-16**` &&
-               ` (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_306.mjs). // NOTE: The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the` &&
-               ` original view). This sample's manifest lists ``../style.css`` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding / labelMarginLeft classes the` &&
-               ` view carries had no rule behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS section` &&
-               ` 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs.`.
+               ` composed server-side, exactly as the original composes it. // NOTE: handleWeekNumberSelect refuses every fifth calendar week with BOTH a toast and oEvent.preventDefault( ), so the forbidden week is` &&
+               ` not selected - and both halves are reproduced since 2026-08-21. This carried an IMPROVISED deviation until then, saying the refusal could only be a toast because abap2UI5 bakes`.
+    lv_text1 = lv_text1 && ` s_ctrl-check_prevent_default in at RENDER time and cannot express a condition evaluated per event. That is true of the BOOLEAN form only: prevent_default_expr evaluates per firing, and the condition` &&
+               ` here is a plain expression over an event parameter, so the wire carries ``${$parameters>/weekNumber} % 5 === 0`` directly. Worked precedents: app 247's columnResize and app 354's column filter. The` &&
+               ` improvised-cluster harvest had this filed as the corpus' last remaining framework GAP (pr/conditional-prevent-default); it was closed upstream and the deviation had outlived it, the same way app` &&
+               ` 305's removeAllSelectedDates entry had. // NOTE: not yet run in a system: the CAL_SELECT interval round-trip and the WEEK_SELECT branch (toast on every fifth week, labels otherwise). **e2e-verified` &&
+               ` 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_306.mjs). // NOTE: The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no` &&
+               ` counterpart in the original view). This sample's manifest lists ``../style.css`` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding /`.
+    lv_text1 = lv_text1 && ` labelMarginLeft classes the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css` &&
+               ` (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarSingleIntervalSelection`               class = `z2ui5_cl_smpc_app_306` path = `src/01/02/z2ui5_cl_smpc_app_306.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
         notes = lv_text1 ) ).
 
