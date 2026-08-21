@@ -162,7 +162,8 @@ plain JS/XML held for reference and to feed the generator. Everything else at
 the root is documentation or tooling, not a tree the pipeline reads: `meta/`
 (one sidecar per port, plus the e2e interaction modules), `scripts/` (the
 generators and gates), `web/` (the GitHub Pages site - `web/search/` IS the
-published catalogue, three static files plus a generated index; the transpiled
+published catalogue, three static files plus a generated index and
+deploy-generated thumbnails; the transpiled
 in-browser demo that used to live here was removed 2026-08-19, and `web/ci/`
 keeps the two patch scripts `scripts/e2e-build.mjs` and abap2UI5/mcp-server
 still execute) and `docs/` (the journal and the upstream-request record).

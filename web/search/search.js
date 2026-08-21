@@ -255,11 +255,26 @@ function card(app, tokens) {
     ? `<a class="primary" href="${esc(play)}" target="_blank" rel="noopener">Run in the playground ↗</a>`
     : `<span class="disabled" title="${esc(why)}" aria-disabled="true">Run in the playground</span>`;
 
+  /* The thumbnail — the render gate's photograph of the port's first screen,
+   * written into thumbs/ by scripts/generate-screenshots.mjs on every deploy
+   * (never committed, like apps.json). Best effort by design: an <img> whose
+   * file the deploy could not photograph removes itself, so the card simply
+   * has no picture — the same fallback the samples overview page proved. */
+  const shot = `<img class="shot" loading="lazy" alt="" aria-hidden="true"
+      src="thumbs/${esc(app.class)}.png" onerror="this.remove()">`;
+
+  /* The .body wrapper exists for the float: the card itself is a flex
+   * column (it pins .actions to the bottom), and a float is inert inside a
+   * flex container — the image needs a block formatting context to wrap the
+   * text around it (flow-root in the CSS). */
   return `
     <article class="card">
-      <h2>${highlight(app.title || app.class, tokens)}</h2>
-      <p class="entity">${highlight(app.entity || app.class, tokens)}</p>
-      ${app.summary ? `<p class="blurb">${highlight(app.summary, tokens)}</p>` : ''}
+      <div class="body">
+        ${shot}
+        <h2>${highlight(app.title || app.class, tokens)}</h2>
+        <p class="entity">${highlight(app.entity || app.class, tokens)}</p>
+        ${app.summary ? `<p class="blurb">${highlight(app.summary, tokens)}</p>` : ''}
+      </div>
       <div class="badges">${badges.join('')}</div>
       ${needs}${controls}
       <div class="actions">

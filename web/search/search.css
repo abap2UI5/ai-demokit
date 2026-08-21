@@ -230,6 +230,32 @@ main { max-width: var(--wide); margin: 0 auto; padding: 0 var(--gutter); }
   color: var(--ink-soft);
 }
 
+/* The thumbnail: the render gate's photograph of the first screen, floated so
+ * the text keeps ruling the card — the shape the samples overview page proved.
+ * Shot at 800x600 and cropped to the same 4:3 from the top, so nothing is
+ * squashed. Always on a white ground: the screenshots are taken in the light
+ * theme, and a transparent edge on a dark card would read as a rendering
+ * mistake. An <img> that fails to load has removed itself (search.js), so
+ * there is no broken-picture state to style.
+ *
+ * The float needs .body: the card is a flex column (that is what pins the
+ * actions row to the bottom) and a float is inert on a flex item, so the
+ * title, entity and blurb sit with the image in one block wrapper —
+ * flow-root, so a picture taller than a short blurb stays contained. */
+.card .body { display: flow-root; }
+.card .shot {
+  float: right;
+  width: 148px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: top;
+  margin: 2px 0 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+@media (max-width: 620px) { .card .shot { display: none; } }
+
 .badges {
   display: flex;
   flex-wrap: wrap;

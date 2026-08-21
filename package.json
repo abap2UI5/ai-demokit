@@ -37,6 +37,7 @@
     "descriptions": "node scripts/fetch-descriptions.mjs",
     "samples:md": "node scripts/generate-samples-md.mjs",
     "search:index": "node scripts/generate-search-index.mjs",
+    "search:thumbs": "node scripts/generate-screenshots.mjs",
     "check:samples-md": "node scripts/generate-samples-md.mjs --check",
     "catalogue": "node scripts/generate-catalogue.mjs",
     "check:catalogue": "node scripts/generate-catalogue.mjs --check"

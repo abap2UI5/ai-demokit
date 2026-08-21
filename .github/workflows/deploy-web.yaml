@@ -1,7 +1,8 @@
 name: deploy-web
 
 # Builds the searchable catalogue (web/search) and deploys it to this repo's
-# GitHub Pages. A static page and one generated JSON — a couple of minutes.
+# GitHub Pages. A static page, one generated JSON and one generated thumbnail
+# per port (best effort — see that step).
 #
 # It used to be the whole in-browser demo: the abap2UI5 framework and all 430
 # ports cloned, downported to 702 with abaplint --fix, transpiled and webpacked
@@ -34,6 +35,7 @@ on:
       - 'ui5/descriptions.json'
       - 'ui5/universe.json'
       - 'scripts/generate-search-index.mjs'
+      - 'scripts/generate-screenshots.mjs'
       - 'web/**'
       - '.github/workflows/deploy-web.yaml'
   schedule:
@@ -52,7 +54,11 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # The index is a couple of minutes; the thumbnails are the budget. Measured
+    # 2026-08-21: the full corpus (416 ports) photographs in ~4 minutes at
+    # ~0.55 s/port on a dev container — double it for a Pages runner and it is
+    # still ~8-10 minutes, inside this limit with room to spare.
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -60,8 +66,9 @@ jobs:
         with:
           node-version: '22'
 
-      # --ignore-scripts skips Playwright's browser download: the index is
-      # derived with the linter's render gate off, so no browser is used.
+      # --ignore-scripts skips Playwright's browser download hook; the
+      # chromium the thumbnail step drives is installed explicitly below, so
+      # a hook change upstream cannot grow this install silently.
       - name: Install
         run: npm ci --ignore-scripts
 
@@ -70,6 +77,24 @@ jobs:
       # staler than the repository it describes.
       - name: Search index
         run: node scripts/generate-search-index.mjs
+
+      # A thumbnail per port, photographed by the linter's render harness into
+      # web/search/thumbs/ — the render gate's own view of each class, not a
+      # staged picture (scripts/generate-screenshots.mjs; the pattern the
+      # samples repository's deploy proved). Generated at deploy, never
+      # committed, exactly like apps.json. Best effort by design, in both
+      # directions: the script skips a view the headless harness cannot render
+      # (its card simply shows no picture — search.js removes the <img>
+      # onerror), and a wholesale failure here — the browser install flaking,
+      # the runtime breaking — must not stop the catalogue itself from
+      # publishing. continue-on-error is that second half; the step still
+      # shows red in the run when it happens.
+      - name: Install chromium for the render harness
+        continue-on-error: true
+        run: npx playwright install chromium --with-deps
+      - name: One thumbnail per port
+        continue-on-error: true
+        run: node scripts/generate-screenshots.mjs
 
       # The gate this pipeline needs now that there is no build to fail: a page
       # whose data file is missing deploys exactly like a working one — it just
