@@ -106,6 +106,15 @@ CLASS z2ui5_cl_smpc_app_305 IMPLEMENTATION.
         IF picked = last_selected.
           selected_date = `No Date Selected`.
           CLEAR last_selected.
+          " the original's removeSelectedDate( oSelectedDate ). selectedDates is
+          " written by the control itself, so clearing the model alone would
+          " leave the day highlighted - the aggregation has to be emptied on the
+          " control. This calendar is single-selection (the view sets neither
+          " singleSelection nor intervalSelection), so at most one DateRange
+          " exists and removeAllSelectedDates is exactly the same removal.
+          " Same wire as the sibling port 307's handleRemoveSelection.
+          client->follow_up_action( val   = client->cs_event-control_by_id
+                                    t_arg = VALUE #( ( `calendar` ) ( `removeAllSelectedDates` ) ) ).
         ELSE.
           selected_date = picked.
           last_selected = picked.

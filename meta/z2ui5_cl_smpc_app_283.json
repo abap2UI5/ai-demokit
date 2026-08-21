@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the third cell's empty class=\"\" attribute of the original Text is dropped - an empty class list is a no-op and the builder writes no attribute for an empty value."
+      "what": "the third cell's empty class=\"\" attribute of the original Text is dropped - the a( ) call is simply left out, because an empty class list adds nothing to the rendered control. Note this is a CHOICE, not something the builder does: z2ui5_cl_ui5_view_builder emits every declared pair, empty value included (render( ) writes | { pair-n }=\"{ xml_escape( pair-v ) }\"| for the whole t_pair with no emptiness test), which is why app 287 can reproduce its original's IconTabSeparator icon=\"\" verbatim with a( n = `icon` v = `` )."
     }
   ]
 }

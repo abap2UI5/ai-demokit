@@ -4542,7 +4542,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` the DOM from the frontend. The original's companion elem.style.borderWidth = '1xp' is an upstream typo (no such CSS unit, the browser drops it), so it is not reproduced; the solid border renders at`.
     lv_text1 = lv_text1 && ` the CSS default width in both. // NOTE: the core:HTML content keeps the original's {styleClass} binding as a REAL binding ({STYLECLASS} on the ABAP field), so its braces stay unescaped - the opposite` &&
                ` of the literal-CSS case (app 028), where braces inside a core:HTML content must be escaped. The markup is written decoded (<div ...>) because the builder re-escapes it on stringify. // NOTE: the` &&
-               ` third cell's empty class="" attribute of the original Text is dropped - an empty class list is a no-op and the builder writes no attribute for an empty value.`.
+               ` third cell's empty class="" attribute of the original Text is dropped - the a( ) call is simply left out, because an empty class list adds nothing to the rendered control. Note this is a CHOICE, not` &&
+               ` something the builder does: z2ui5_cl_ui5_view_builder emits every declared pair, empty value included (render( ) writes | { pair-n }="{ xml_escape( pair-v ) }"| for the whole t_pair with no emptiness` &&
+               ` test), which is why app 287 can reproduce its original's IconTabSeparator icon="" verbatim with a( n = ``icon`` v = ```` ).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.core.theming`                   name = `ThemeCustomClasses`                            class = `z2ui5_cl_smpc_app_283` path = `src/01/02/z2ui5_cl_smpc_app_283.clas.abap`
         score = 4
@@ -6197,19 +6199,22 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = `NOTE: handleCalendarSelect/_updateText read the picked day off the control (oCalendar.getSelectedDates()[0].getStartDate()) and format it yyyy-MM-dd. The port transports it as three UI5 expression` &&
                ` args (year, month+1, day - the LOCAL parts, not toISOString( ), which would shift the day east of Greenwich), each guarded by getSelectedDates().length > 0, and formats server-side; the Text gets a` &&
                ` two-way bound text attribute instead of setText (app 139 idiom, probe-verified). The controller's oLastSelectedJSDate becomes a server-side field, so the second click on the same day is recognised` &&
-               ` exactly as in the original. // IMPROVISED: the deselection is only reproduced on the LABEL, not on the calendar itself: the original calls oCalendar.removeSelectedDate(oSelectedDate), which takes a` &&
-               ` DateRange CONTROL instance no wire can address, so the day stays visually highlighted while the text goes back to 'No Date Selected'. // IMPROVISED: onInit does` &&
-               ` byId('calendar').displayDate(UI5Date.getInstance(2021, 6, 1)) to open the calendar on July 2021. Calendar exposes no bindable property for the displayed month and displayDate() takes a JS Date`.
-    lv_text1 = lv_text1 && ` argument, which the frontend-action wire cannot carry (CONTROL_METHODS casts only string/int/bool/controlId/anchor kinds), so the port opens on the current month. // POST-1.71:` &&
-               ` Calendar.showCurrentDateButton (@since 1.95) is kept 1:1 from the original view. Newer than UI5 1.71. // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the` &&
-               ` CAL_SELECT expression-arg round-trip and the same-day second click clearing the label. // NOTE: The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no` &&
-               ` counterpart in the original view). This sample's manifest lists ``../style.css`` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding /` &&
-               ` labelMarginLeft classes the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css` &&
-               ` (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs.`.
+               ` exactly as in the original. // NOTE: handleCalendarSelect's oCalendar.removeSelectedDate(oSelectedDate) is reproduced since 2026-08-21: the second click on the same day sends a control_by_id` &&
+               ` follow-up action calling removeAllSelectedDates on the calendar, so the day loses its highlight the way it does in the original. This carried an IMPROVISED deviation until then, on the claim that` &&
+               ` removeSelectedDate takes a DateRange CONTROL instance no wire can address - true of that method, but the calendar is single-selection (the view sets neither singleSelection nor intervalSelection), so`.
+    lv_text1 = lv_text1 && ` at most one DateRange exists and removeAllSelectedDates removes exactly it. abap2UI5 #2535 un-denied that method for this reason and the sibling port 307 has been calling it 1:1 since; 305's copy of` &&
+               ` the deviation had simply outlived it. // IMPROVISED: onInit does byId('calendar').displayDate(UI5Date.getInstance(2021, 6, 1)) to open the calendar on July 2021. Calendar exposes no bindable property` &&
+               ` for the displayed month and displayDate() takes a JS Date argument, which the frontend-action wire cannot carry (CONTROL_METHODS casts only string/int/bool/controlId/anchor kinds), so the port opens` &&
+               ` on the current month. // POST-1.71: Calendar.showCurrentDateButton (@since 1.95) is kept 1:1 from the original view. Newer than UI5 1.71. // NOTE: live-verified 2026-08-16 (nightly e2e interaction):` &&
+               ` not yet run in a system: the CAL_SELECT expression-arg round-trip and the same-day second click clearing the label. // NOTE: The sample's own stylesheet is injected since 2026-08-21 through an added`.
+    lv_text1 = lv_text1 && ` core:HTML style leaf (no counterpart in the original view). This sample's manifest lists ``../style.css`` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so` &&
+               ` the viewPadding / labelMarginLeft classes the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at` &&
+               ` ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarDateDeselection`                       class = `z2ui5_cl_smpc_app_305` path = `src/02/02/z2ui5_cl_smpc_app_305.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
         since = `1.22.0`
         is_post171 = abap_true
         notes = lv_text1
