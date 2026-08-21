@@ -45,6 +45,7 @@ reads the files directly. **Read the matching guide BEFORE starting the task**
 | Plan the next batch / scaffold a new port | `.claude/skills/scaffold-a-port/SKILL.md` |
 | Touch a generator, a generated artefact, or the meta/ shape they read | `.claude/skills/regenerate-artefacts/SKILL.md` |
 | Run or debug the e2e smoke (Playwright) | `.claude/skills/e2e-debugging/SKILL.md` |
+| Settle a claim by MEASURING it, or sweep the corpus for a defect no gate sees | `scripts/probes/README.md` |
 
 **Large files — grep them, never read them whole:** `api.md` (~316 KB
 generated table), `docs/history.md` (~330 KB journal), `CAPABILITIES.md`
