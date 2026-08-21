@@ -26,6 +26,13 @@ CLASS z2ui5_cl_smpc_sapui5_012 DEFINITION PUBLIC.
         viztypesel TYPE string,
       END OF ty_s_screen.
 
+    " the ComboBox items: key and text, bound as {N} and {V} in the view below
+    TYPES:
+      BEGIN OF ty_s_viztype,
+        n TYPE string,
+        v TYPE string,
+      END OF ty_s_viztype.
+
     DATA mt_data_chart     TYPE ty_t_data_chart.
 
     DATA ms_screen         TYPE ty_s_screen.
@@ -33,7 +40,7 @@ CLASS z2ui5_cl_smpc_sapui5_012 DEFINITION PUBLIC.
     DATA mv_prop           TYPE string.
     DATA mt_feed_values    TYPE STANDARD TABLE OF string WITH EMPTY KEY.
 
-    DATA mt_viztypes       TYPE z2ui5_if_types=>ty_t_name_value.
+    DATA mt_viztypes       TYPE STANDARD TABLE OF ty_s_viztype WITH EMPTY KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.

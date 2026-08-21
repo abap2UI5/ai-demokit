@@ -75,7 +75,7 @@ CLASS z2ui5_cl_smpc_app_173 IMPLEMENTATION.
 
     " original widths are Device.system.phone dependent - reproduced from the
     " server-side device mirror (client->get( )-s_device, app 012 precedent)
-    IF client->get( )-s_device-system = z2ui5_if_types=>cs_device-system-phone.
+    IF client->get( )-s_device-system = z2ui5_if_client=>cs_device-system-phone.
       widths = `2em`.
       widthm = `4em`.
       widthl = `6em`.
