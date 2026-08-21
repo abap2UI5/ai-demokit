@@ -29,6 +29,57 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
 
 ## Open findings (backlog)
 
+- [ ] **The per-port review sweep — 115 of 416 read, and it is finding real
+  defects at a steady rate.** Each port is read against its ARCHIVED ORIGINAL
+  (view, controller, mock, stylesheet) and, where a claim rests on UI5's own
+  behaviour, against the OpenUI5 sources in `node_modules/@openui5/`. That last
+  step is what separates this from a gate: every finding below is invisible to
+  `structural_diff`, `data_fidelity`, `pattern_lint` and `view_gates`, all of
+  which were green on all of them.
+  **Waves 1–9 (2026-08-21) read 115 ports: 76 clean, 39 with findings, every
+  one fixed.** Promotions go to `reviewed` only for the ports that came back
+  clean; a port whose defect was fixed stays `generated` until it has been
+  measured against a rebuilt backend.
+  The classes that repeat, worth checking first in any new port:
+  - **a bound property that is not what the original's METHOD writes.** Apps
+    344/138 bound `showSideContent` to reproduce `DynamicSideContent.toggle( )`,
+    which never writes it — the toggle could not work on the one breakpoint
+    where its button is enabled. When a port binds a property where the
+    original calls a method, read that method.
+  - **an event parameter that is declared and never fired.**
+    `QuickSort.change` declares `key`/`sortOrder` and passes only `item`
+    (`fireChange({item: oItem})`), so app 298's two args arrived empty and every
+    sort fell through to its default. The linter's event-parameter check
+    *prefers* the declared names here, so satisfying it breaks the port; that
+    finding is a deliberate `unknown-event-parameter` budget entry now.
+  - **an event parameter read with the wrong semantics.** `rowIndices` is the
+    CHANGED set, not the selected set (app 361).
+  - **an enum value the enum does not define.** App 356 offered `All` for
+    `sap.ui.table.SelectionMode`, bound onto an enum-typed property:
+    `validateProperty` throws. Where the original builds a list with
+    `Object.keys(SomeEnum)`, compare members AND order.
+  - **a flag baked per WIRE where the original decides per FIRING.** App 354's
+    `check_prevent_default` vetoed all five columns for a handler that vetoes
+    one, leaving four `filterProperty` columns and `enableCellFilter` inert.
+    `prevent_default_expr` is the conditional form.
+  - **an absent JSON key turned into an explicit `false`** — now
+    `scripts/probes/absent-boolean-probe.mjs`.
+  - **prose that outlived the code beside it.** The single most common finding:
+    a correction applied to the deviation but not to the `audit.note` or the
+    inline comment, a deviation declaring a difference the sample does not have
+    (ten sidecars carried a phantom `{EMail}` entry), or a `POST_171` naming an
+    `@since` the sources do not carry (app 356's, which alone held the class in
+    `src/02`). Nothing validates these texts, and a deviation is also a GATE
+    ESCAPE — a phantom one widens it for free.
+  - **an interaction module that cannot fail, or that never reaches the branch
+    its deviation closes.** Three modules were DOM dumps; four LIVE_TESTs were
+    closed on modules that never executed the wire named. `validate-meta`
+    rejects the first class now; the second needs a human reading the module
+    against the deviation.
+  What is NOT done: 301 ports still await a first read. Findings cluster in the
+  older REWORK-era ports and in the newest batches; the middle is largely
+  clean.
+
 - [x] **CAPABILITIES.md's stale class citations — DONE.** Both halves of this
   are closed, and neither closed the way the entry predicted. The shared
   script's `PROSE` list now carries `CAPABILITIES.md` (and `E2E.md`) outright,
@@ -122,11 +173,29 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   through its own API, bypassing the port, still leaves every row without a
   `_rowAction`. That rules the port out as the cause and leaves the leg to the
   human live run.
-  The remaining 7 are 301/348/350/351/353/354 (which already had interactions
-  and were not re-run in that session) plus 359. Note 354's is not closable as
-  it stands: its module reaches `filter_apply( )` but its LIVE_TEST is about the
-  COLUMN filter's prevented default, which needs a `sap.ui.table` column header
-  menu.
+  **The open set is now 301/348/350/353/354/359/362**, and the composition
+  changed in both directions on 2026-08-21. 351 closed once its module was
+  rewritten from a DOM dump into a real test. 362 was REOPENED: it had been
+  closed as live-verified, but its module only presses the three toolbar
+  buttons and never opens a column header menu, so the sort event and its
+  prevented default were never fired — the toolbar legs it does drive are
+  genuinely covered, and the deviation now says exactly that.
+  Three of the seven are known not to be closable by this harness as it stands,
+  and each says so in its own module rather than quietly asserting less:
+  354's is the COLUMN filter's prevented default, which needs a `sap.ui.table`
+  column header menu (its module reaches `filter_apply( )` instead); 359's is
+  the row-action press, and the row actions never render here at all (proven by
+  driving `setRowActionCount(2)` + `invalidate()` on the table directly);
+  353's four drag & drop wires ride on HTML5 dnd, which Playwright's `dragTo`
+  cannot produce for `sap.ui.table`'s pointer extension — dispatching the
+  DataTransfer events by hand would test the harness, not the port.
+  **A closure is only as good as the branch the module actually reaches.** Four
+  were found resting on modules that never executed the wire their deviation
+  named (341's refresh loop runs on a LATER press; 344's module asserted a Text
+  was visible, which is true whether the toggle works or not; 362 and 356/361's
+  modules sidestep the exact case their defect lives in). Before running
+  `close-live-tests.mjs`, read the module against the deviation sentence by
+  sentence.
 - [x] **Post-1.71 declaration debt in the gate's blind spots — DONE, and it is
   a probe now.** Surfaced by the review sweep (2026-08-21), and NOT a
   batch-freshness problem: the same gap appeared in old ports and was correctly
