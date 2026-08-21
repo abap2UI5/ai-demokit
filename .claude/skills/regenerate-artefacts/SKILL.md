@@ -27,7 +27,9 @@ scripts.**
   **Sample** (→ OpenUI5 repo source, ↗ → live fullscreen sample) · **ABAP**
   (→ generated class, `—` = not ported; those rows are the backlog). There is
   no separate deprecated-controls section — everything sits in this table.
-- **`SAMPLES.md`** — the human catalogue: one row per port (title, `@summary`,
+- **`SAMPLES.md`** — the human catalogue: one row per port (the title
+  `**<entity>** — <demo kit sample name>` from the sidecar and
+  `ui5/descriptions.json` via `scripts/lib/sample-names.mjs`, `@summary`,
   `@keywords`, the verification marker from the sidecar's `status`), grouped
   by UI5 library (`scripts/generate-samples-md.mjs`). Its row shape is a
   contract shared with the two sibling repositories — see AGENTS.md §7 before

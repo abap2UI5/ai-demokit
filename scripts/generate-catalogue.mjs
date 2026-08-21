@@ -30,10 +30,12 @@ import { fileURLToPath } from 'url';
 import { readDescript } from './lib/descript.mjs';
 import { isSkippedDir } from './lib/src-tree.mjs';
 import { universe, libraryOf, descriptLibrary } from './lib/ui5-libs.mjs';
+import { sampleNames } from './lib/sample-names.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'catalogue.json');
 const CHECK = process.argv.includes('--check');
+const nameOf = sampleNames(ROOT);
 
 const walk = (dir, out = []) => {
   for (const name of fs.readdirSync(dir).sort()) {
@@ -44,9 +46,6 @@ const walk = (dir, out = []) => {
   }
   return out;
 };
-
-const descriptions = JSON.parse(fs.readFileSync(path.join(ROOT, 'ui5', 'descriptions.json'), 'utf8'));
-const demokit = descriptions.demokit || {};
 
 /* The in-system overview app implements z2ui5_if_app like every port, but it
  * rebuilds no demo kit original — it is the table that lists them. Same
@@ -79,7 +78,10 @@ for (const file of walk(path.join(ROOT, 'src'))) {
     library: meta?.entity ? libraryOf(meta.entity) : descriptLibrary(descript, []),
     sample: meta?.sample || '',
     entity: meta?.entity || '',
-    title: (meta?.sample && demokit[meta.sample]?.name) || descript,
+    /* The demo kit's own name for the sample (both snapshot blocks, cleaned —
+     * scripts/lib/sample-names.mjs); the whole DESCRIPT only for the src/03
+     * collection, which has no demo kit sample to be named after. */
+    title: (meta?.sample && nameOf(meta.sample)) || descript,
     summary: (source.match(/^" @summary (.+?)\r?$/m) || [, ''])[1].trim(),
     keywords: (source.match(/^" @keywords (.+?)\r?$/m) || [, ''])[1].trim(),
     status: meta?.status || (collection ? 'collection' : ''),

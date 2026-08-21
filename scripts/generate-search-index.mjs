@@ -51,6 +51,7 @@ import { checkAbapSource } from '@abap2ui5/linter';
 import { readDescript } from './lib/descript.mjs';
 import { isSkippedDir } from './lib/src-tree.mjs';
 import { universe, libraryOf, descriptLibrary } from './lib/ui5-libs.mjs';
+import { sampleNames } from './lib/sample-names.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const argOut = process.argv.indexOf('--out');
@@ -126,6 +127,8 @@ const walk = (dir, out = []) => {
 
 const descriptions = JSON.parse(fs.readFileSync(path.join(ROOT, 'ui5', 'descriptions.json'), 'utf8'));
 const demokit = descriptions.demokit || {};
+const written = descriptions.written || {};
+const nameOf = sampleNames(ROOT);
 
 /* ---------------------------------------------------------------- collect */
 
@@ -159,7 +162,10 @@ for (const file of files) {
   const meta = fs.existsSync(metaPath) ? JSON.parse(fs.readFileSync(metaPath, 'utf8')) : null;
 
   const descript = readDescript(file);
-  const docu = meta?.sample ? demokit[meta.sample] : null;
+  /* Both snapshot blocks: `demokit` is the docuindex snapshot, `written` the
+   * hand-kept entries for the samples upstream leaves undocumented — the two
+   * ports whose docu came back null here were exactly those. */
+  const docu = meta?.sample ? (demokit[meta.sample] || written[meta.sample]) : null;
 
   /* The linter pass. A class it cannot reconstruct is still catalogued — it
    * keeps its sidecar facts and loses only the derived ones, which is better
@@ -208,13 +214,12 @@ for (const file of files) {
   apps.push({
     class: cls,
     file: rel,
-    /* The demo kit's own name for the sample — "Action List Item". 18 ports
-     * have no demokit entry, and the SAPUI5 collection has no sidecar at all;
-     * those fall back to the WHOLE DESCRIPT rather than its first half,
-     * because the half before the dash is the entity ("sap.m.ActionListItem",
-     * "sap.suite.ui.microchart") and a card headed by a library name says
-     * nothing about which sample it is. */
-    title: docu?.name || descript,
+    /* The demo kit's own name for the sample — "Action List Item" — from
+     * either snapshot block, cleaned (scripts/lib/sample-names.mjs). Only the
+     * SAPUI5 collection has no sample to be named after; it falls back to the
+     * WHOLE DESCRIPT rather than its first half, because the half before the
+     * dash is a library name, which says nothing about which sample it is. */
+    title: (meta?.sample && nameOf(meta.sample)) || descript,
     summary: (source.match(/^" @summary (.+?)\r?$/m) || [, ''])[1].trim(),
     keywords: (source.match(/^" @keywords (.+?)\r?$/m) || [, ''])[1].trim(),
     /* The demo kit paragraph — the longest piece of real prose about the

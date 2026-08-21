@@ -829,8 +829,12 @@ linter already says; `deploy-web` regenerates it on every deploy instead, so
 it cannot be staler than the site serving it. Do not add it to `npm run
 gates`, and do not commit it.
 
-`SAMPLES.md` is written from the classes (`DESCRIPT`, `" @summary`,
-`" @keywords`), and its **row shape is a contract, not a layout**:
+`SAMPLES.md` is written from the classes and their sidecars — the row title is
+`**<entity>** — <demo kit sample name>` (the sidecar's `entity`, then the name
+from `ui5/descriptions.json` where it says more than the control does; the
+DESCRIPT head is NOT the title, because the scaffolder default puts only the
+library there), the sentence is `" @summary`, the small type `" @keywords` —
+and its **row shape is a contract, not a layout**:
 `abap2UI5/samples` and `abap2UI5/samples-stack` render the identical shape and
 one parser reads all three (`abap2UI5/mcp-server`, the `examples` tool). Change it
 here and you change it for them. The one extension this repository makes is the
