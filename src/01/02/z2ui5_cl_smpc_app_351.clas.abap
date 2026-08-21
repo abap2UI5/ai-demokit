@@ -193,8 +193,8 @@ CLASS z2ui5_cl_smpc_app_351 IMPLEMENTATION.
         " btnInvalidateSplitter forces a re-render without changing a
         " property. invalidate( ) itself is denied by the frontend action
         " allowlist (the render lifecycle is the framework's), and it is not
-        " needed: the round-trip this event already is ends in the
-        " view_model_update( ) below, which re-renders the slot
+        " needed: the round-trip this event already is ends in the automatic
+        " model push, which re-renders the slot
 
       WHEN `CHANGE_ORIENTATION`.
         " btnChangeOrientation flips Splitter.orientation, which IS a bindable
