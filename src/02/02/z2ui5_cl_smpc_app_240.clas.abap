@@ -61,6 +61,14 @@ CLASS z2ui5_cl_smpc_app_240 IMPLEMENTATION.
         )->a( n = `class`        v = `viewPadding`
         )->a( n = `core:require` v = `{Formatter: 'z2ui5/model/formatter'}`
 
+
+        " the sample's own ../style.css (shared by the sap.ui.unified samples and
+        " listed in this sample's manifest) - the view carries the class and the
+        " rule behind it has to come with it. \{ \} escaped: the XMLView parser
+        " reads an unescaped brace as a binding
+        )->tag( n = `HTML` ns = `core`
+            )->a( n = `content` v = `<style>.viewPadding\{padding:1rem\}` &&
+                                    `.sap-phone .viewPadding\{padding:0rem\}</style>`
         )->ele( n = `VerticalLayout` ns = `l`
 
             )->ele( n = `Calendar` ns = `u`

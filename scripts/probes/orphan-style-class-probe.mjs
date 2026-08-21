@@ -40,15 +40,25 @@ const VERBOSE = process.argv.includes('--verbose');
 // Classes UI5 itself ships need no rule from us.
 const KNOWN_PREFIXES = ['sapUi', 'sapM', 'sapF', 'sapTnt', 'sapUxAP', 'sapCa', 'sapContrast'];
 
-// ...and neither do the DEMO KIT SHELL classes. These live in a style.css one
-// level ABOVE the samples (e.g. sap.ui.unified/.../demokit/sample/style.css)
-// and no sample's own manifest lists them — the demo kit page supplies them to
-// every sample in the library. A port carrying one is faithful to the sample's
-// view; there is no sample stylesheet to archive, so this is not a gap.
-// Verified 2026-08-21 against the OpenUI5 checkout.
-const SHELL_CLASSES = new Set(['viewPadding', 'labelMarginLeft', 'fullHeight']);
+const isUi5Class = (c) => KNOWN_PREFIXES.some((p) => c.startsWith(p));
 
-const isUi5Class = (c) => KNOWN_PREFIXES.some((p) => c.startsWith(p)) || SHELL_CLASSES.has(c);
+// What the SAMPLE ITSELF declares is the evidence, never a guess about which
+// class names look like demo-kit furniture. A first version of this probe
+// exempted viewPadding / labelMarginLeft as "shell classes supplied by the
+// demo kit page", on the strength of one sample whose manifest does not list
+// them — and that was wrong: it varies PER SAMPLE. CalendarMultipleMonth
+// declares no stylesheet, while CalendarMinMax's manifest carries
+// `"css": [{ "uri": "../style.css" }]` and therefore genuinely owns the rule.
+// So the manifest decides, and a `../` uri is resolved as written.
+function declaredCss(dir) {
+  const mf = path.join(dir, 'manifest.json');
+  if (!fs.existsSync(mf)) return [];
+  try {
+    const j = JSON.parse(fs.readFileSync(mf, 'utf8'));
+    const css = j?.['sap.ui5']?.resources?.css || [];
+    return css.map((e) => e.uri).filter(Boolean);
+  } catch { return []; }
+}
 
 const CLASS_RE = /\)->a\(\s*n\s*=\s*`class`\s*v\s*=\s*`([^`]+)`/g;
 
@@ -103,27 +113,53 @@ for (const m of metas) {
     };
     walk(dir);
   }
+  // ...including a stylesheet the manifest points at OUTSIDE the sample folder.
+  // The shared `../style.css` of the sap.ui.unified samples is exactly that:
+  // walking the sample directory alone would report its classes as bare and
+  // quietly excuse ten ports that render unpadded where the sample is padded.
+  for (const uri of declaredCss(dir)) {
+    const target = path.resolve(dir, uri);
+    if (!target.startsWith(dir) && fs.existsSync(target)) archived += fs.readFileSync(target, 'utf8');
+  }
 
+  // (1) the archive gap: the sample DECLARES a stylesheet that never came along
+  for (const uri of declaredCss(dir)) {
+    const target = path.resolve(dir, uri);
+    if (!fs.existsSync(target)) {
+      orphans++;
+      const rel = path.relative(ROOT, target);
+      console.log(`ARCHIVE-GAP ${m.class}  manifest declares "${uri}" — not archived (expected ${rel}) (${m.sample})`);
+    }
+  }
+
+  // (2) the injection gap: a class the port carries with no rule reaching the
+  // view. Four outcomes, and the message has to name the right one — a wrong
+  // diagnosis here sends the next reader after the wrong file.
+  const declared = declaredCss(dir);
+  const missingCss = declared.filter((u) => !fs.existsSync(path.resolve(dir, u)));
   for (const c of [...used].sort()) {
-    const inPort = injected.includes(`.${c}`);
-    const inArchive = archived.includes(`.${c}`);
-    if (inPort) {
-      if (VERBOSE) console.log(`ok         ${m.class}  .${c} — injected by the port`);
+    if (injected.includes(`.${c}`)) {
+      if (VERBOSE) console.log(`ok          ${m.class}  .${c} — injected by the port`);
       continue;
     }
-    // A class the ORIGINAL VIEW also carries with no rule anywhere is not a
-    // port defect: the sample is bare too, and reproducing that is fidelity.
-    // Checked before reporting, because it is most of the hits — measured
-    // 2026-08-21, only 2 of 13 survived this test.
-    if (!inArchive && originalUses(dir, c)) {
-      if (VERBOSE) console.log(`faithful   ${m.class}  .${c} — the original view carries it bare too`);
+    if (archived.includes(`.${c}`)) {
+      orphans++;
+      console.log(`ORPHAN      ${m.class}  .${c} — the rule IS archived, the port just never injects it (${m.sample})`);
+      continue;
+    }
+    if (missingCss.length) {
+      orphans++;
+      console.log(`ORPHAN      ${m.class}  .${c} — its rule is most likely in the unarchived ${missingCss[0]}; archive that first (${m.sample})`);
+      continue;
+    }
+    if (originalUses(dir, c)) {
+      // The sample carries the class bare too. Reproducing that is fidelity,
+      // not a defect — this is most of what a naive class scan turns up.
+      if (VERBOSE) console.log(`faithful    ${m.class}  .${c} — the original view carries it bare too`);
       continue;
     }
     orphans++;
-    const where = inArchive
-      ? 'the sample\'s CSS is archived but the port never injects it'
-      : 'no rule anywhere, and the ORIGINAL view does not carry this class — the port invented it';
-    console.log(`ORPHAN     ${m.class}  .${c} — ${where} (${m.sample})`);
+    console.log(`ORPHAN      ${m.class}  .${c} — no rule anywhere and the ORIGINAL view never carries it: the port invented it (${m.sample})`);
   }
 }
 

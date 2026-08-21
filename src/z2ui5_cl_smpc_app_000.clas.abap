@@ -4742,16 +4742,20 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.62`
         notes = lv_text1 ) ).
 
+    lv_text1 = `NOTE: BlockLayout with six rows / seven cells across background color shades A-F; the Select (11 ColorSet items) and every cell's backgroundColorSet are two-way bound to one model field (initial` &&
+               ` ColorSet5), reproducing the original {/colorSet} wiring. Cell body texts are reproduced 1:1 (long ones split with &&). // POST-1.71: sap.m.Label.showColon is used (since UI5 1.98). The BlockLayout` &&
+               ` entity itself is in scope; showColon renders the label's trailing colon 1:1. // NOTE: The sample's own resources/sample.css is archived and injected since 2026-08-21 through an added core:HTML style` &&
+               ` leaf (no counterpart in the original view). The view carries customCellImageBackground and the rule behind it - the white text and the night-sky background - was missing entirely. Its` &&
+               ` background-image is relative in the original and is absolutized to the OpenUI5 host per the asset-URL rule, like every other image in this corpus. Found by` &&
+               ` scripts/probes/orphan-style-class-probe.mjs.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.BlockLayout`             name = `BlockLayoutCustomBackground`                   class = `z2ui5_cl_smpc_app_140` path = `src/02/02/z2ui5_cl_smpc_app_140.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
         is_post171 = abap_true
         checked = `CHECKED (2026-07-27): verified in a running system 2026-07-27 - BlockLayout renders all 6 rows/7 cells with color shades after the attribute-line repair`
-        notes = `NOTE: BlockLayout with six rows / seven cells across background color shades A-F; the Select (11 ColorSet items) and every cell's backgroundColorSet are two-way bound to one model field (initial` &&
-                 ` ColorSet5), reproducing the original {/colorSet} wiring. Cell body texts are reproduced 1:1 (long ones split with &&). // POST-1.71: sap.m.Label.showColon is used (since UI5 1.98). The BlockLayout` &&
-                 ` entity itself is in scope; showColon renders the label's trailing colon 1:1.`
+        notes = lv_text1
         post171 = `sap.m.Label.showColon is used (since UI5 1.98). The BlockLayout entity itself is in scope; showColon renders the label's trailing colon 1:1.` ) ).
 
     lv_text1 = `NOTE: The six core:Fragment references (sap.ui.layout.sample.BlockLayoutCustomBackgroundPerCell.ColorSelect) are inlined: abap2UI5 serves one view per round-trip, so a fragmentName has no file to` &&
@@ -6169,7 +6173,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` byId('calendar').displayDate(UI5Date.getInstance(2021, 6, 1)) to open the calendar on July 2021. Calendar exposes no bindable property for the displayed month and displayDate() takes a JS Date`.
     lv_text1 = lv_text1 && ` argument, which the frontend-action wire cannot carry (CONTROL_METHODS casts only string/int/bool/controlId/anchor kinds), so the port opens on the current month. // POST-1.71:` &&
                ` Calendar.showCurrentDateButton (@since 1.95) is kept 1:1 from the original view. Newer than UI5 1.71. // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the` &&
-               ` CAL_SELECT expression-arg round-trip and the same-day second click clearing the label.`.
+               ` CAL_SELECT expression-arg round-trip and the same-day second click clearing the label. // NOTE: The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no` &&
+               ` counterpart in the original view). This sample's manifest lists ``../style.css`` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding /` &&
+               ` labelMarginLeft classes the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css` &&
+               ` (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarDateDeselection`                       class = `z2ui5_cl_smpc_app_305` path = `src/02/02/z2ui5_cl_smpc_app_305.clas.abap`
         score = 5
@@ -6197,7 +6204,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` original Switch (state='true') toggles Calendar week numbers via an imperative change handler (setShowWeekNumbers). This is folded into a two-way binding shared by the Switch state and a Calendar`.
     lv_text1 = lv_text1 && ` showWeekNumbers property (both bound to show_week_numbers, seeded true), so the toggle runs on the client with no round-trip - the thin-frontend move. The Switch change attribute is therefore dropped` &&
                ` and a showWeekNumbers attribute (absent from the original view) is added. // POST-1.71: Formatter.DateCreateObject is referenced via core:require, which needs UI5 >= 1.74. sap.ui.unified.Calendar` &&
-               ` itself and its minDate/maxDate/disabledDates/showWeekNumbers members are all <= 1.71 (in scope).`.
+               ` itself and its minDate/maxDate/disabledDates/showWeekNumbers members are all <= 1.71 (in scope). // NOTE: The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style` &&
+               ` leaf (no counterpart in the original view). This sample's manifest lists ``../style.css`` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding /` &&
+               ` labelMarginLeft classes the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css` &&
+               ` (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarMinMax`                                class = `z2ui5_cl_smpc_app_220` path = `src/02/02/z2ui5_cl_smpc_app_220.clas.abap`
         score = 4
@@ -6216,7 +6226,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` interaction, transpiled backend + real browser): a day is selected the keyboard way (the day cell carries no clickable layout box headless), the 31-slot expression round-trip fills the List, and`.
     lv_text1 = lv_text1 && ` "Remove All Selected Dates" clears BOTH sides - the List returns to its "No Dates Selected" noData text AND .sapUiCalItemSel drops to zero, which is the removeAllSelectedDates follow-up action doing` &&
                ` what no model write could: sap.ui.unified.Calendar writes selectedDates itself. The assertion has real discriminating power - before abap2UI5 #2535 the list emptied and the days stayed highlighted,` &&
-               ` which is exactly the state it now rejects.`.
+               ` which is exactly the state it now rejects. // NOTE: The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). This sample's` &&
+               ` manifest lists ``../style.css`` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding / labelMarginLeft classes the view carries had no rule` &&
+               ` behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only` &&
+               ` the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarMultipleDaySelection`                  class = `z2ui5_cl_smpc_app_307` path = `src/01/02/z2ui5_cl_smpc_app_307.clas.abap`
         score = 4
@@ -6242,11 +6255,14 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` selected DateRange is control state' - was wrong. The wire carries the three LOCAL date parts as three expression args (year, month+1, day) rather than ``toISOString( )``, which would shift the day` &&
                ` for any user east of Greenwich, and each arg is guarded by ``getSelectedDates().length > 0`` so a re-click that clears the selection arrives as year 0. App 139 now formats the SELECTED day as the` &&
                ` original's yyyy-MM-dd (DateFormat pattern) instead of the server date. Residual: 'Select Today' still only writes the text - the server date IS today, so the text is 1:1, but the calendar's own` &&
-               ` highlight is not moved, because addSelectedDate takes a DateRange CONTROL that no wire can construct.`.
+               ` highlight is not moved, because addSelectedDate takes a DateRange CONTROL that no wire can construct. // NOTE: The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML`.
+    lv_text1 = lv_text1 && ` style leaf (no counterpart in the original view). This sample's manifest lists ``../style.css`` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the` &&
+               ` viewPadding / labelMarginLeft classes the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at` &&
+               ` ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarSingleDaySelection`                    class = `z2ui5_cl_smpc_app_139` path = `src/01/02/z2ui5_cl_smpc_app_139.clas.abap`
         score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
         notes = lv_text1 ) ).
 
@@ -6257,7 +6273,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` composed server-side, exactly as the original composes it. // IMPROVISED: the refusal is only a toast: the original also calls oEvent.preventDefault() so the forbidden week is NOT selected. abap2UI5` &&
                ` bakes s_ctrl-check_prevent_default into the handler at RENDER time (app 241), which cannot express a condition evaluated per event (weekNumber % 5 === 0), so the week highlights and only the message`.
     lv_text1 = lv_text1 && ` says it is not allowed. // NOTE: live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the CAL_SELECT interval round-trip and the WEEK_SELECT branch (toast on every fifth week,` &&
-               ` labels otherwise).`.
+               ` labels otherwise). // NOTE: The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). This sample's manifest lists` &&
+               ` ``../style.css`` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding / labelMarginLeft classes the view carries had no rule behind them and the` &&
+               ` port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only the rules this view` &&
+               ` actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarSingleIntervalSelection`               class = `z2ui5_cl_smpc_app_306` path = `src/01/02/z2ui5_cl_smpc_app_306.clas.abap`
         score = 4
@@ -6276,11 +6295,14 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` newer than UI5 1.71. // NOTE: live-verified 2026-08-17 (nightly e2e interaction): not yet run in a system: the ToggleButton round-trip filling and clearing both calendars' special dates and both` &&
                ` legends. // POST-1.71: The sap.ui.unified.CalendarDayType ENUM VALUE NonWorking is @since 1.121 and is kept 1:1 from the original controller. The attribute it rides on is base-version, so the gate` &&
                ` sees nothing - the enum-value residual limit of AGENTS section 5. Declared by policy 2026-08-21 (scripts/probes/post171-blindspot-probe.mjs); the app needs a UI5 release >= 1.121 for those days to` &&
-               ` render as non-working.`.
+               ` render as non-working. // NOTE: The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). This sample's manifest lists`.
+    lv_text1 = lv_text1 && ` ``../style.css`` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding / labelMarginLeft classes the view carries had no rule behind them and the` &&
+               ` port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only the rules this view` &&
+               ` actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarSpecialDaysLegend`                     class = `z2ui5_cl_smpc_app_308` path = `src/02/02/z2ui5_cl_smpc_app_308.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
         is_post171 = abap_true
         notes = lv_text1
@@ -6296,11 +6318,14 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` yyyy-MM-dd, and the original's else-branch is reproduced exactly: re-clicking the same day removes it from the selection, the guard reports year 0 and the Text falls back to 'No Date Selected'.` &&
                ` Residual: 'Select Today' writes the text (server date = today) without moving the calendar's highlight. // NOTE: The CAL_SELECT / SELECT_TODAY round-trips updating the bound selectedDate Text are`.
     lv_text1 = lv_text1 && ` unverified in a running system. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): 'Select Today' round-trips and the bound #selectedDate Text shows the yyyy-MM-dd` &&
-               ` value; CAL_SELECT is the same handler.`.
+               ` value; CAL_SELECT is the same handler. // NOTE: The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). This sample's` &&
+               ` manifest lists ``../style.css`` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding / labelMarginLeft classes the view carries had no rule` &&
+               ` behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only` &&
+               ` the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.CalendarDateInterval`   name = `CalendarDateIntervalBasic`                     class = `z2ui5_cl_smpc_app_177` path = `src/01/02/z2ui5_cl_smpc_app_177.clas.abap`
-        score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30.0`
         notes = lv_text1 ) ).
 
@@ -6310,11 +6335,14 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` faithful abap2UI5 way as declared, model-bound aggregations: CalendarLegend.items = {/T_LEGEND} with a CalendarLegendItem template and Calendar.specialDates = {/T_SPECIAL} with a DateTypeRange` &&
                ` template (both templates are extra controls the original view.xml did not carry, as it added them in the controller) - CAPABILITIES marks controller-filled onInit aggregations as expressible this` &&
                ` way. The 10 legend items (Type01..Type10 / 'Placeholder 1..10') and 20 special dates (per type: day i and day i+12 of the current month) are computed server-side in model_init from sy-datum, so the`.
-    lv_text1 = lv_text1 && ` special dates track the current month exactly as the original UI5Date.getInstance() logic did.`.
+    lv_text1 = lv_text1 && ` special dates track the current month exactly as the original UI5Date.getInstance() logic did. // NOTE: The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf` &&
+               ` (no counterpart in the original view). This sample's manifest lists ``../style.css`` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding /` &&
+               ` labelMarginLeft classes the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css` &&
+               ` (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.CalendarLegend`         name = `CalendarLegendNavigation`                      class = `z2ui5_cl_smpc_app_240` path = `src/02/02/z2ui5_cl_smpc_app_240.clas.abap`
-        score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
         is_post171 = abap_true
         notes = lv_text1
@@ -6407,13 +6435,19 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         checked = `CHECKED (2026-07-27): verified in a running system 2026-07-27 - nested transactionAmount/size + currency bindings resolve at runtime (u:Currency renders values)`
         notes = `NOTE: live-verified 2026-07-27: u:Currency binds a nested object path (value={transactionAmount/size}, currency={transactionAmount/currency}). Ported as a nested ABAP structure TRANSACTION_AMOUNT` &&
                  ` (fields SIZE/CURRENCY), bound {TRANSACTION_AMOUNT/SIZE} / {TRANSACTION_AMOUNT/CURRENCY}. CAPABILITIES.md documents nested TABLES/trees but not a nested single (non-array) structure within a row, so` &&
-                 ` the nested-object serialization + relative sub-path binding needs a live render check.` )
+                 ` the nested-object serialization + relative sub-path binding needs a live render check.` ) ).
+
+    lv_text1 = `NOTE: live-verified 2026-08-04 (nightly e2e interaction): The full upload cycle is backend/endpoint dependent, so it is reduced to client-side MessageToasts: 'Upload File' press shows an` &&
+               ` upload-started toast (original handleUploadPress ran checkFileReadable().then(upload)), and FileUploader.uploadComplete shows the hardcoded success message the original built (handleUploadComplete` &&
+               ` parsed a hardcoded 'Status: 200' response and toasted '(Upload Success)'). The uploadUrl='upload/' is kept 1:1. // NOTE: The sample's own stylesheet is injected since 2026-08-21 through an added` &&
+               ` core:HTML style leaf (no counterpart in the original view). This sample's manifest lists ``../style.css`` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so` &&
+               ` the viewPadding / labelMarginLeft classes the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at` &&
+               ` ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs.`.
+    result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.FileUploader`           name = `FileUploaderBasic`                             class = `z2ui5_cl_smpc_app_126` path = `src/01/02/z2ui5_cl_smpc_app_126.clas.abap`
-        score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        notes = `NOTE: live-verified 2026-08-04 (nightly e2e interaction): The full upload cycle is backend/endpoint dependent, so it is reduced to client-side MessageToasts: 'Upload File' press shows an` &&
-                 ` upload-started toast (original handleUploadPress ran checkFileReadable().then(upload)), and FileUploader.uploadComplete shows the hardcoded success message the original built (handleUploadComplete` &&
-                 ` parsed a hardcoded 'Status: 200' response and toasted '(Upload Success)'). The uploadUrl='upload/' is kept 1:1.` ) ).
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: handleUploadPress reproduced since 2026-07-30: the Upload File press fires a backend UPLOAD round-trip; FileUploader.value is two-way bound (an added value attribute, declared) so the backend` &&
                ` runs the original's empty check - no file chosen toasts 'Choose a file first' (1:1), else follow_up_action control_by_id fileUploader upload + clear reproduce oFileUploader.upload() then clear()` &&
@@ -6426,7 +6460,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` builds it from); the original's aFileTypes.map(...) result is unused there too, so the message text matches. // NOTE: live-verified 2026-08-04 (nightly e2e interaction): The client-composed toasts` &&
                ` (change/typeMissmatch/uploadComplete/press via control_global MESSAGE_TOAST) and the ${$parameters>/newValue} / ${$parameters>/fileType} event-arg resolution are view-create verified (render-smoke)` &&
                ` but not yet live-verified in a running system. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): pressing 'Upload File' with no chosen file round-trips and toasts` &&
-               ` 'Choose a file first'; the change/typeMissmatch toasts need a real file dialog and remain unexercised.`.
+               ` 'Choose a file first'; the change/typeMissmatch toasts need a real file dialog and remain unexercised. // NOTE: The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML`.
+    lv_text1 = lv_text1 && ` style leaf (no counterpart in the original view). This sample's manifest lists ``../style.css`` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the` &&
+               ` viewPadding / labelMarginLeft classes the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at` &&
+               ` ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.FileUploader`           name = `FileUploaderComplex`                           class = `z2ui5_cl_smpc_app_246` path = `src/01/02/z2ui5_cl_smpc_app_246.clas.abap`
         score = 4

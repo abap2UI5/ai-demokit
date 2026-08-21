@@ -33,6 +33,10 @@
     {
       "type": "POST_171",
       "what": "The sap.ui.unified.CalendarDayType ENUM VALUE NonWorking is @since 1.121 and is kept 1:1 from the original controller. The attribute it rides on is base-version, so the gate sees nothing - the enum-value residual limit of AGENTS section 5. Declared by policy 2026-08-21 (scripts/probes/post171-blindspot-probe.mjs); the app needs a UI5 release >= 1.121 for those days to render as non-working."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). This sample's manifest lists `../style.css` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding / labelMarginLeft classes the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs."
     }
   ]
 }
