@@ -24,6 +24,7 @@ Fast, offline, no browser. Run any of these after a batch of edits.
 | probe | the defect no gate can see |
 |---|---|
 | `backtick-escape-probe.mjs` | a text literal carrying `\n` inside **backticks**, where it is two visible characters and never a line break (found in 008, 186, 250 — 186 carried it twice) |
+| `absent-boolean-probe.mjs` | a boolean the port asserts **false** where the sample's mock omits the key entirely, so UI5 would fall back on a control default of `true` (app 291: both notification items lost their close button, and the port's only backend wire with them) |
 | `orphan-style-class-probe.mjs` | a custom style class kept in the port with no rule reaching the view: the sample's stylesheet was never archived, or archived and never injected |
 | `post171-blindspot-probe.mjs` | post-1.71 members the property gate structurally cannot see — relocated to a newer base class, aggregations, enum *values*, plain misses |
 | `faked-event-value-audit.mjs` | a toast or an imperative `setText`/`setValue` holding a **constant** where the sample composes it from event data |
