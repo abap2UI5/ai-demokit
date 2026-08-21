@@ -3843,7 +3843,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` attribute is the original's. // NOTE: The Settings tab body is written out twice instead of through a helper method, mirroring the original, which also carries one copy per fragment. A`.
     lv_text1 = lv_text1 && ` builder-returning helper would hide the open/shut tree from the static view gates. // IMPROVISED: The custom tabs are inert, exactly as in the original: the SegmentedButtons for Theme, Compact` &&
                ` Content Density and Right To Left Mode carry no handler in the sample either, so nothing is applied when they are pressed. The sample's own style.css (the .vsdSetting / .vsd-dp spacing rules) is not` &&
-               ` reproduced - the class attributes stay on the controls, only the stylesheet is missing, so the tab content renders slightly tighter than the original.`.
+               ` reproduced - the class attributes stay on the controls, only the stylesheet is missing, so the tab content renders slightly tighter than the original. // NOTE: The sample's own style.css is injected` &&
+               ` since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). It was archived but never reached the view, so the SegmentedButton's vsdSetting margin and the` &&
+               ` DatePicker's vsd-dp insets did nothing - a class name with no rule behind it, the gap apps 122/124/133 closed. Found by scripts/probes/orphan-style-class-probe.mjs.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ViewSettingsDialog`              name = `ViewSettingsDialogCustomTabs`                  class = `z2ui5_cl_smpc_app_297` path = `src/02/01/z2ui5_cl_smpc_app_297.clas.abap`
         score = 5
@@ -5047,9 +5049,12 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
 
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.FixFlex`                 name = `FixFlexFixedSize`                              class = `z2ui5_cl_smpc_app_338` path = `src/01/02/z2ui5_cl_smpc_app_338.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        since = `1.25.0` ) ).
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.25.0`
+        notes = `NOTE: The sample's own css/style.css is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). It was archived but never reached the view, so the fixed` &&
+                 ` and flexible halves lost the two blues (#D7E9FF / #A9CFFF) the sample is a picture of - the sibling port 119 already injected the same pair. Found by scripts/probes/orphan-style-class-probe.mjs. The` &&
+                 ` bare ``column1`` class stays as it is: the ORIGINAL view carries it with no rule anywhere either, so reproducing it bare is fidelity.` ) ).
 
     lv_text1 = `NOTE: The original binds the Image src against a separate 'img' JSON model ({img>/products/pic1}) loaded from sap/ui/demo/mock/img.json. abap2UI5 serves one default model, so the picture path is` &&
                ` folded into it and the src binds it directly (client->_bind( pic1 )) - the 'img>' prefix is dropped and the last path segment is identical, which structural-diff matches. The mock's host-relative` &&

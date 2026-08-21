@@ -46,6 +46,13 @@ CLASS z2ui5_cl_smpc_app_297 IMPLEMENTATION.
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns`      v = `sap.m`
 
+        " the sample's own style.css - the view carries vsdSetting and vsd-dp
+        " and the rules behind them have to come with it (apps 122/124/133).
+        " \{ \} escaped: the XMLView parser reads an unescaped brace as a binding
+        )->tag( n = `HTML` ns = `core`
+            )->a( n = `content` v = `<style>.sapMSegB.vsdSetting\{margin-bottom:1rem\}` &&
+                                    `.vsd-dp\{margin-inline-start:2rem;margin-block-start:2rem\}</style>`
+
         " the three controller-loaded fragments, declared in the view's dependents aggregation
         )->ele( n = `dependents` ns = `mvc`
 
