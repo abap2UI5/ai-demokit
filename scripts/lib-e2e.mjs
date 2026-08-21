@@ -49,6 +49,37 @@ export async function valueStateRows(page, expect, control) {
     .toContainText('Warning message. This is an extra long text');
 }
 
+// The uxap ObjectPageHeader markers — the changes marker, the lock marker and
+// the title-selector arrow — are INTERNAL sap.m.Buttons: no text to match on,
+// a generated id ending in a known suffix (`-changes`, `-lock`, `-titleArrow`,
+// each also in a `-cont` variant used when the title sits in the header
+// content), and icon-only, so the harness' unthemed icon font leaves them a
+// zero-size box that no actionability check passes. Dispatch the click the way
+// the icon lesson prescribes rather than giving the control up.
+export async function pressHeaderMarker(page, suffix) {
+  const marks = page.locator(`[id$="-${suffix}"], [id$="-${suffix}-cont"]`);
+  const n = await marks.count();
+  if (!n) throw new Error(`the ObjectPageHeader rendered no "${suffix}" marker button`);
+  for (let i = 0; i < n; i++) {
+    if (await marks.nth(i).isVisible()) return marks.nth(i).dispatchEvent('click');
+  }
+  return marks.first().dispatchEvent('click');
+}
+
+// A Breadcrumbs control folds its links into a Select once they no longer fit,
+// and at the smoke's viewport the uxap header samples do exactly that — so a
+// plain getByRole('link') dies in a locator timeout that reads like a broken
+// port (the same shape as the OverflowToolbar lesson). Take whichever form is
+// on the page.
+export async function pressBreadcrumb(page, text) {
+  const link = page.locator('.sapMBreadcrumbs').getByRole('link', { name: text, exact: true }).first();
+  if (await link.count() && await link.isVisible()) return link.click();
+  const select = page.locator('.sapMBreadcrumbs .sapMSlt').first();
+  if (!(await select.count())) throw new Error(`no breadcrumb link "${text}", and no collapsed breadcrumbs select either`);
+  await select.click();
+  return page.locator('.sapMSltPicker li', { hasText: text }).first().click();
+}
+
 // in-page helpers for property assertions: `ui5All()` is only ever passed
 // INTO page.evaluate (it is stringified there, so it must stay self-contained)
 export function ui5All() { throw new Error('ui5All() runs in the page only'); }
