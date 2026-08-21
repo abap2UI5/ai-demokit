@@ -254,7 +254,9 @@ CLASS z2ui5_cl_smpc_app_260 IMPLEMENTATION.
                                 )->end(
 
                                 " personal:BlockMailing inlined (its BlockBase
-                                " columnLayout='1' has no counterpart here)
+                                " columnLayout='1' has no counterpart here - and neither
+                                " do PersonalBlockPart1's and Part2's below, which this
+                                " comment used to leave out)
                                 )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `layout` v = `ColumnLayout`
                                     )->a( n = `width`  v = `100%`
