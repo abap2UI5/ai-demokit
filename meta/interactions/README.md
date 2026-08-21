@@ -128,6 +128,58 @@ the per-port modules here):
     sy-tabix fix touched - but it deliberately does NOT close 354's LIVE_TEST,
     which is about the COLUMN filter's prevented default and enableCellFilter;
     those need a sap.ui.table column header menu
-  still open: 354's column-filter leg (see above), 233's confirm leg (neither click nor Enter on a dialog row
-    reaches the SelectDialog's confirm headless) and the hidden-picker
-    openBy class (016/256/257, Popover.onfocusin recursion)
+  the sap.ui.table batch (2026-08-21): 356 (the bound plugin limit /
+    selectionMode / showHeaderSelector reach the plugin with no round-trip, and
+    the selectionChange expression arg reports the count) 357 (both round-trips
+    re-read all 115 rows; neither answers with a toast, so the MODEL is the
+    assertion) 360 (a real ClipboardEvent dispatched at the table - its onpaste
+    bails out when the focus sits in an input and reads the cells off the
+    native event) 362 (the vetoed client sort plus the server-side SORT, read
+    off the first row's binding CONTEXT rather than a rendered cell) 363 (the
+    Apply clamp writes the corrected number back INTO the Input) 364/366 (the
+    arrayNames tree really expands - 366 also asserts it does NOT open deeper
+    than its one expanded level, without which a flat list is
+    indistinguishable) 365 (expandToLevel's numeric argument reaches the
+    method, proven by the level the tree stops at)
+  the uxap header/ObjectPage batch (2026-08-21): 401 408 414 (a bound flag
+    pressed TWICE - one press passes on a flag that latches, which is the
+    defect 401's first draft had) 409 (a static port, asserted on the nested
+    block geometry) 410 (the parent-chain event arg resolving to a runtime id)
+    412 (anchored QuickView + in-popover pageLink + setSelectedSection + two
+    client toasts) 415 (two anchored popovers, ITEM_SELECT closing one, both
+    breadcrumb toasts) 416 (the breadcrumb round-trip) 417 (the breakpoint
+    transport measured where it ALONE decides the flag: side content open at
+    breakpoint S)
+  rewritten on 2026-08-21 after review found them asserting the wrong thing:
+    344 (clicked Toggle and asserted a Text was visible - true before, after,
+    and whether the button worked at all, which is how a Toggle that could not
+    toggle survived a green nightly; it reads the two grid cells' sapUiHidden
+    class now, and presses TWICE) 341 (pressed Start loading ONCE, so the
+    control_by_id refresh loop - which only runs on a LATER press - was never
+    executed, while the deviation it closed named exactly that branch)
+    363 (every assertion began by fill()ing over whatever was there, so a
+    seeded "0" hiding three placeholders was invisible; it asserts the empty
+    start now, and commits each Input with Enter before pressing Apply)
+  the three modules that used to be DOM DUMPS (2026-08-21): 301 (the ShellBar
+    menuButtonPressed popover, itemSelect -> NavContainer 'to', and the
+    selectedKey surviving the popover being REBUILT - the leg that caught the
+    literal selectedKey defect) 351 (Add/Remove really re-render the bound
+    contentAreas, a typed Min-Size reaches SplitterLayoutData as an integer,
+    the bound orientation flips) 353 (the rowSelectionChange rowIndex moving a
+    NAMED row, and MOVE_UP reordering). validate-meta now rejects a module
+    that can never fail, which is what let these three count as coverage
+  407 (2026-08-21), the five-wire tnt one: itemSelect navigation, the
+    quickCreate popup, the LIVE_CHANGE filter, announceSearchMatchCount read
+    off the static area's polite aria-live node, and MENU_TOGGLE resetting the
+    search
+  still open: 353's four drag & drop wires (HTML5 dnd, which Playwright's
+    dragTo cannot produce for sap.ui.table's pointer extension - dispatching
+    the DataTransfer events by hand would test the harness), 354's
+    column-filter leg (see above), 233's confirm leg (neither click nor Enter on a dialog row
+    reaches the SelectDialog's confirm headless), the hidden-picker
+    openBy class (016/256/257, Popover.onfocusin recursion), and 359's
+    row-action press: the row actions never render in the smoke at all, and
+    calling setRowActionCount(2) + invalidate() DIRECTLY on the table through
+    its own API - bypassing the port - still leaves every row without a
+    _rowAction, which rules the port out. 359's module therefore closes only
+    the bound-rowActionCount half and its LIVE_TEST stays OPEN

@@ -49,6 +49,10 @@
     {
       "type": "NOTE",
       "what": "comparison Props are built from a fixed 19-key list in the mock JSON key order (the original iterates the FIRST selected product's own keys, skipping ProductPicUrl - so a first product without DateOfSale would drop that row, and missing values rendered '<strong>undefined</strong>' where the port renders an empty <strong></strong>); selected products are taken in model row order, not click order; the original's per-product information cache is unnecessary server-side. The controller's handleButtonPress (MessageBox) is dead code referenced by no view and not ported."
+    },
+    {
+      "type": "NOTE",
+      "what": "the comparison Props row for Price shows 956.00 where the original shows 956. The mock carries Price as a JSON number (956) and the original prints that value straight into the Props text; the port holds it in a packed field (p LENGTH 8 DECIMALS 2, needed for the ObjectNumber's sap.ui.model.type.Currency binding, which renders 956.00 in BOTH), and an ABAP packed value always serialises with its two decimals. Only the Props text differs, and only in the trailing zeros - the ObjectNumber above it is identical in both."
     }
   ]
 }

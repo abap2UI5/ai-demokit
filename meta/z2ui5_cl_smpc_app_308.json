@@ -8,7 +8,7 @@
     "frontend_action": false,
     "event_t_arg": true
   },
-  "status": "generated",
+  "status": "reviewed",
   "render_smoke": {
     "skip": true,
     "reason": "the render gate mocks the model, so the DateTypeRange/CalendarLegendItem row template resolves {TYPE} to the empty string and XMLView.create rejects it on the enum-typed CalendarDayType property - the same static-harness limit app 240 declares for the identical specialDates/legend binding."
@@ -28,7 +28,19 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-17 (nightly e2e interaction): not yet run in a system: the ToggleButton round-trip filling and clearing both calendars' special dates and both legends."
+      "what": "not yet run in a system: the ToggleButton round-trip filling and clearing both calendars' special dates and both legends. **e2e-verified 2026-08-17** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_308.mjs)."
+    },
+    {
+      "type": "POST_171",
+      "what": "The sap.ui.unified.CalendarDayType ENUM VALUE NonWorking is @since 1.121 and is kept 1:1 from the original controller. The attribute it rides on is base-version, so the gate sees nothing - the enum-value residual limit of AGENTS section 5. Declared by policy 2026-08-21 (scripts/probes/post171-blindspot-probe.mjs); the app needs a UI5 release >= 1.121 for those days to render as non-working."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). This sample's manifest lists `../style.css` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding / labelMarginLeft classes the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs."
+    },
+    {
+      "type": "NOTE",
+      "what": "The special dates are ABAP DATS strings read through Formatter.DateAbapDateToDateObject, which builds the Date from the parsed parts - local midnight, which is what sap.ui.unified reads back (CalendarDate.fromLocalJSDate). They were ISO date-only strings through Formatter.DateCreateObject until 2026-08-21, and that is `new Date(s)`, which ECMA-262 parses as UTC midnight: west of Greenwich every marked day landed one day early. Same defect and same fix as apps 220 and 017, found by sweeping the corpus for the pattern after 220. Note the ports that pass a date-TIME without an offset (018, 109) are unaffected - that form is parsed as local."
     }
   ]
 }

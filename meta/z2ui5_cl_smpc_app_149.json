@@ -7,9 +7,9 @@
   "audit": {
     "frontend_action": true,
     "event_t_arg": true,
-    "note": "Image press is a roundtrip-free follow_up_action( control_global, MESSAGE_TOAST.show ) substitution"
+    "note": "Image press is a roundtrip-free follow_up_action( cs_event-urlhelper, REDIRECT ) opening the Card Explorer in a new window - URLHelper.redirect( url, true ) 1:1. Corrected 2026-08-21: the note still named a control_global MESSAGE_TOAST substitution the class does not make."
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -18,7 +18,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-04 (nightly e2e interaction): the urlhelper REDIRECT on the Image press (new-window open of the relative Card Explorer URL) is unverified in a running system; the same REDIRECT action class is live-verified in app 084."
+      "what": "the urlhelper REDIRECT on the Image press (new-window open of the relative Card Explorer URL) is unverified in a running system; the same REDIRECT action class is live-verified in app 084. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_149.mjs)."
     }
   ]
 }

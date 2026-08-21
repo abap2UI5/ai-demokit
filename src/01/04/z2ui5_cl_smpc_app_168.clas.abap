@@ -60,7 +60,10 @@ CLASS z2ui5_cl_smpc_app_168 IMPLEMENTATION.
     " abap2UI5 keeps one default model, so those bind directly ({cities>/cities}
     " -> {/CITIES}, {products>/productItems} -> {/PRODUCTITEMS}). The switches /
     " toggle / column-change / tile / card presses are controller handlers in
-    " the original; here each raises a client toast.
+    " the original. Corrected 2026-08-21: they are NOT client toasts - the three
+    " Switches carry a two-way bound state and nothing else, the Reveal Grid
+    " ToggleButton is undecorated, and columnsChange round-trips into on_event.
+    " The sidecar was corrected on 2026-08-05 and this half was missed.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`

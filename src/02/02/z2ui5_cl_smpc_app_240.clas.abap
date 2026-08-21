@@ -50,7 +50,7 @@ CLASS z2ui5_cl_smpc_app_240 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " DateTypeRange.startDate is typed "object" and demands a real JS Date; the
-    " model keeps ISO strings and Formatter.DateCreateObject converts them at the
+    " model keeps ABAP DATS strings and Formatter.DateAbapDateToDateObject converts them at the
     " point of use (needs UI5 >= 1.74)
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`      v = `sap.ui.layout`
@@ -61,6 +61,14 @@ CLASS z2ui5_cl_smpc_app_240 IMPLEMENTATION.
         )->a( n = `class`        v = `viewPadding`
         )->a( n = `core:require` v = `{Formatter: 'z2ui5/model/formatter'}`
 
+
+        " the sample's own ../style.css (shared by the sap.ui.unified samples and
+        " listed in this sample's manifest) - the view carries the class and the
+        " rule behind it has to come with it. \{ \} escaped: the XMLView parser
+        " reads an unescaped brace as a binding
+        )->tag( n = `HTML` ns = `core`
+            )->a( n = `content` v = `<style>.viewPadding\{padding:1rem\}` &&
+                                    `.sap-phone .viewPadding\{padding:0rem\}</style>`
         )->ele( n = `VerticalLayout` ns = `l`
 
             )->ele( n = `Calendar` ns = `u`
@@ -71,7 +79,7 @@ CLASS z2ui5_cl_smpc_app_240 IMPLEMENTATION.
 
                 )->ele( n = `specialDates` ns = `u`
                     )->tag( n = `DateTypeRange` ns = `u`
-                        )->a( n = `startDate` v = `{ path: 'START_DATE', formatter: 'Formatter.DateCreateObject' }`
+                        )->a( n = `startDate` v = `{ path: 'START_DATE', formatter: 'Formatter.DateAbapDateToDateObject' }`
                         )->a( n = `type`      v = `{TYPE}`
                         )->a( n = `tooltip`   v = `{TOOLTIP}`
 
@@ -98,7 +106,14 @@ CLASS z2ui5_cl_smpc_app_240 IMPLEMENTATION.
     " (day i and day i+12 of the current month) - reproduced server-side so the
     " special dates track the current month exactly like the original UI5Date logic
     DATA lv_day TYPE i.
-    DATA(lv_prefix) = |{ sy-datum+0(4) }-{ sy-datum+4(2) }-|.
+    " The special dates are ABAP DATS strings read through
+    " Formatter.DateAbapDateToDateObject, which builds the Date from the parsed
+    " parts - LOCAL midnight, which is what sap.ui.unified reads back
+    " (CalendarDate.fromLocalJSDate). They were ISO date-only strings through
+    " Formatter.DateCreateObject until 2026-08-21, and `new Date('yyyy-mm-dd')`
+    " is UTC midnight, so west of Greenwich every marked day landed one day
+    " early. Same defect and same fix as apps 220 and 017.
+    DATA(lv_prefix) = |{ sy-datum+0(4) }{ sy-datum+4(2) }|.
 
     DO 10 TIMES.
       DATA(lv_i)    = sy-index.

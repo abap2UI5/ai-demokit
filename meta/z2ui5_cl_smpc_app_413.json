@@ -8,7 +8,7 @@
     "frontend_action": false,
     "event_t_arg": false
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -21,7 +21,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-16 (nightly e2e interaction): Rendering not yet verified in a running system: the port is init-only and fully static (no bindings, no events, no round-trip), so the open behaviours are render-time only - the ObjectPageHeader navigationBar Bar, the showPlaceholder=true Circle placeholder avatar (no objectImageURI is set), showTitleInHeaderContent=true and the always/snapped visibility flags (isObjectTitleAlwaysVisible/isObjectSubtitleAlwaysVisible=false, isActionAreaAlwaysVisible=true) are unverified live."
+      "what": "Rendering not yet verified in a running system: the port is init-only and fully static (no bindings, no events, no round-trip), so the open behaviours are render-time only - the ObjectPageHeader navigationBar Bar, the showPlaceholder=true Circle placeholder avatar (no objectImageURI is set), showTitleInHeaderContent=true and the always/snapped visibility flags (isObjectTitleAlwaysVisible/isObjectSubtitleAlwaysVisible=false, isActionAreaAlwaysVisible=true) are unverified live. **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_413.mjs)."
     }
   ]
 }

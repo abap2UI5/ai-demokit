@@ -29,7 +29,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the 2026-07-22 rework (openBy via follow_up_action instead of follow_up_action, client-composed date toast, app became init-only) is live-verified on 2026-08-02 - each anchor opens the hidden DatePicker and picking a date toasts the value."
+      "what": "the 2026-07-22 rework (openBy via follow_up_action( control_by_id, openBy, $event.oSource.sId ) instead of a scheduled round-trip, client-composed date toast, app became init-only) is live-verified on 2026-08-02 - each anchor opens the hidden DatePicker and picking a date toasts the value."
     },
     {
       "type": "NOTE",

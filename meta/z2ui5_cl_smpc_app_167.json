@@ -8,7 +8,7 @@
     "frontend_action": true,
     "event_t_arg": true
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -26,6 +26,10 @@
     {
       "type": "NOTE",
       "what": "Faked-event-value audit fix (2026-07-30): four substituted handlers are now the original behaviours. onItemPress: client-composed toast 'Fired itemPress, item: {0}' filled by ${$parameters>/item}.getText() (was the static 'Item pressed'). onItemSelect: pageContainer.to(item key page) via roundtrip-free follow_up_action control_by_id 'to' with ${$parameters>/item}.getKey() (was a static toast; a key without a matching page logs a NavContainer error client-side exactly like the original's createId miss). onSideNavButtonPress: ToolPage.sideExpanded is two-way bound (added attr, declared) and flipped on the SIDE_TOGGLE round-trip; the button's tooltip is bound (added attr, declared) and set from the PRE-toggle state ('Large/Small Size Navigation') exactly like _setToggleButtonTooltip; init seeds the desktop default 'Small Size Navigation' (the Device.system.desktop branch resolved statically). handleUserNamePress: the controller-built Popover (showHeader false, Bottom, Feedback/Help/Logout transparent buttons, sapMOTAPopover sapTntToolHeaderPopover classes) is rebuilt 1:1 via popover_display by_id = $event.oSource.sId - Popover + 3 Buttons are extra controls vs the original view.xml (controller-built). onQuickActionPress: the design guard runs server-side on the transported ${$source>/design} and a design=Action item opens the 'Create Item' Message Dialog (Text 'Create New Navigation List Item', Create/Cancel closing via popup_close) via popup_display - Dialog/Text/Button extra controls declared here too. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): Child Item 1 press toasts 'Fired itemPress, item: Child Item 1' and the Alan Smith press opens the Feedback/Help/Logout popover; the side toggle, key navigation target and Quick Create dialog remain unexercised."
+    },
+    {
+      "type": "NOTE",
+      "what": "Fixed Item 1-3 are seeded selectable = abap_true since 2026-08-21. data.json omits the property for those three rows and sap.tnt.NavigationListItem declares `selectable: { defaultValue: true }`, so the UI5 default is TRUE - the port seeded false and silently took their selection behaviour and hover state away. The port's own rule is that a property data.json omits is seeded with the control's default explicitly; this is that rule applied correctly. Only Quick Create keeps selectable = abap_false, which data.json does set."
     }
   ]
 }

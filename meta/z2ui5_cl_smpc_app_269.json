@@ -8,7 +8,7 @@
     "frontend_action": true,
     "event_t_arg": true
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "handleSideContentHide / handleSideContentShow call oDSC.setShowSideContent(false/true) in the original. DynamicSideContent.showSideContent is a bindable property, so the port binds it two-way and only flips the flag server-side (added attribute, no structural diff) - the prefer-a-bindable-property rule, now gated by the linter rule settable-property-via-action. The state then survives a view rebuild, and the control's own toggle( ) - the Toggle button's client-side wire, kept as it is - writes back into the model instead of drifting from it."
+      "what": "handleSideContentHide / handleSideContentShow call oDSC.setShowSideContent(false/true) in the original. DynamicSideContent.showSideContent is a bindable property, so the port binds it two-way and only flips the flag server-side (added attribute, no structural diff) - the prefer-a-bindable-property rule, now gated by the linter rule settable-property-via-action. The state then survives a view rebuild, and the control's own toggle( ) - the Toggle button's client-side wire, kept as it is - does NOT write the bound flag back: it swaps the private _MCVisible/_SCVisible pair and calls setShowSideContent only while showSideContent is already false, immediately setting _SCVisible = false again (DynamicSideContent.js). With the flag at its seeded true the property is never written, so a client-side toggle leaves the model unchanged and the next redraw restores the pre-toggle state. The bound show_side_content therefore reflects the two backend press handlers and nothing else - this entry claimed the opposite until 2026-08-21."
     },
     {
       "type": "IMPROVISED",
@@ -33,7 +33,7 @@
     },
     {
       "type": "NOTE",
-      "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the feed list renders all four feed.json rows, the side content's Close button hides the side content through the SIDE_CONTENT_HIDE follow-up action (setShowSideContent false), the Open Side Content button then shows (its visible flag comes from the breakpointChanged round-trip) and brings it back through SIDE_CONTENT_SHOW. Residual (nothing headless can assert): the FeedListItem layout with its remote author pictures, and toggle() on a real S-breakpoint device."
+      "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the feed list renders all four feed.json rows, the side content's Close button hides the side content through the SIDE_CONTENT_HIDE round-trip that flips the two-way-bound showSideContent (setShowSideContent false), the Open Side Content button then shows (its visible flag comes from the breakpointChanged round-trip) and brings it back through SIDE_CONTENT_SHOW. Residual (nothing headless can assert): the FeedListItem layout with its remote author pictures, and toggle() on a real S-breakpoint device."
     }
   ]
 }

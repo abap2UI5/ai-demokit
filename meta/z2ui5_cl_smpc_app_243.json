@@ -34,7 +34,11 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-04 (nightly e2e interaction): unverified in a running system: that both ResponsivePopover fragments open anchored to their button (popover_display by_id = $event.oSource.sId), that {NAME}/{PRODUCTPICURL} resolve from the root-seeded record, and that the action/footer buttons close the popover (popover_close). **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Popover with Custom Footer' press opens the ResponsivePopover anchored with its OK/Cancel footer; the phone-Dialog variant remains unexercised."
+      "what": "unverified in a running system: that both ResponsivePopover fragments open anchored to their button (popover_display by_id = $event.oSource.sId), that {NAME}/{PRODUCTPICURL} resolve from the root-seeded record, and that the action/footer buttons close the popover (popover_close). **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Popover with Custom Footer' press opens the ResponsivePopover anchored with its OK/Cancel footer; the phone-Dialog variant remains unexercised. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_243.mjs)."
+    },
+    {
+      "type": "POST_171",
+      "what": "Found on 2026-08-21, when view-gates stopped letting ANY deviation excuse a version finding: a NOTE that merely contained the member's name had been satisfying the gate, and only POST_171 / DROPPED_171 carry that claim. sap.m.ResponsivePopover.footer is @since 1.129 and is kept 1:1 (the sample's second popover has a footer Toolbar). This is an AGGREGATION, and the gate is explicit about the consequence below the floor: UI5 resolves an unknown tag as a control class instead, and the 404 takes the WHOLE view down rather than just that part - so the app needs UI5 >= 1.129, not merely renders without a footer. The excusing NOTE was about handleResponsivePopoverFooterPress, a HANDLER name that happens to contain the word."
     }
   ]
 }

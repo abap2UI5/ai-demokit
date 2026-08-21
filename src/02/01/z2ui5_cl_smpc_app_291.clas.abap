@@ -161,15 +161,17 @@ CLASS z2ui5_cl_smpc_app_291 IMPLEMENTATION.
             description       = `Aliquam quis varius ligula. In justo lorem, lacinia ac ex at, vulputate dictum turpis.`
             priority          = `High`
             unread            = abap_true
+            showclosebutton   = abap_true
             authorpicture     = `sap-icon://person-placeholder`
             authoravatarcolor = `Accent2`
             itembuttons       = VALUE #( ( text = `Accept` ) ( text = `Reject` ) ) )
-          ( title          = `New order (#2526)`
-            description    = `Lacinia ac ex at, vulputate dictum turpis.`
-            priority       = `Low`
-            unread         = abap_true
-            authorinitials = `JS`
-            itembuttons    = VALUE #( ( text = `Accept` ) ( text = `Reject` ) ) ) )
+          ( title           = `New order (#2526)`
+            description     = `Lacinia ac ex at, vulputate dictum turpis.`
+            priority        = `Low`
+            unread          = abap_true
+            showclosebutton = abap_true
+            authorinitials  = `JS`
+            itembuttons     = VALUE #( ( text = `Accept` ) ( text = `Reject` ) ) ) )
         groupbuttons    = VALUE #( ( text = `Accept All` ) ) )
       ( title           = `New order (#2527)`
         showemptygroup  = abap_true

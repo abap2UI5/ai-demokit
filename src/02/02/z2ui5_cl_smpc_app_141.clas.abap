@@ -52,7 +52,9 @@ CLASS z2ui5_cl_smpc_app_141 IMPLEMENTATION.
                 )->ele( `HBox`
                     )->ele( `Button`
                         )->a( n = `text`  v = `Infromation`
-                        )->a( n = `press` v = client->_event( `PRESS` )
+                        )->a( n = `press` v = client->_event( val   = `PRESS`
+                                                              t_arg = VALUE #( ( `$event.oSource.getType()` )
+                                                                               ( `$event.oSource.getText()` ) ) )
                         )->ele( `layoutData`
                             )->tag( `FlexItemData`
                                 )->a( n = `growFactor` v = `1`
@@ -62,7 +64,9 @@ CLASS z2ui5_cl_smpc_app_141 IMPLEMENTATION.
                     )->ele( `Button`
                         )->a( n = `type`  v = `Accept`
                         )->a( n = `text`  v = `Success`
-                        )->a( n = `press` v = client->_event( `PRESS` )
+                        )->a( n = `press` v = client->_event( val   = `PRESS`
+                                                              t_arg = VALUE #( ( `$event.oSource.getType()` )
+                                                                               ( `$event.oSource.getText()` ) ) )
                         )->ele( `layoutData`
                             )->tag( `FlexItemData`
                                 )->a( n = `growFactor` v = `1`
@@ -72,7 +76,9 @@ CLASS z2ui5_cl_smpc_app_141 IMPLEMENTATION.
                     )->ele( `Button`
                         )->a( n = `type`  v = `Reject`
                         )->a( n = `text`  v = `Error`
-                        )->a( n = `press` v = client->_event( `PRESS` )
+                        )->a( n = `press` v = client->_event( val   = `PRESS`
+                                                              t_arg = VALUE #( ( `$event.oSource.getType()` )
+                                                                               ( `$event.oSource.getText()` ) ) )
                         )->ele( `layoutData`
                             )->tag( `FlexItemData`
                                 )->a( n = `growFactor` v = `1`
@@ -82,7 +88,9 @@ CLASS z2ui5_cl_smpc_app_141 IMPLEMENTATION.
                     )->tag( `Button`
                         )->a( n = `type`  v = `Emphasized`
                         )->a( n = `text`  v = `Emphasized`
-                        )->a( n = `press` v = client->_event( `PRESS` )
+                        )->a( n = `press` v = client->_event( val   = `PRESS`
+                                                              t_arg = VALUE #( ( `$event.oSource.getType()` )
+                                                                               ( `$event.oSource.getText()` ) ) )
 
                 )->end(
                 )->ele( `HBox`
@@ -99,9 +107,14 @@ CLASS z2ui5_cl_smpc_app_141 IMPLEMENTATION.
 
     IF client->get_event( ) = `PRESS`.
       " original onPress: announces the pressed button's type+text to the
-      " InvisibleMessage a11y service and echoes it into the status Text.
-      " The pressed button's identity is not read back here (simplified).
-      statustext = `A new message was sent to the invisible messaging service.`.
+      " InvisibleMessage a11y service and echoes it into the status Text. The
+      " announce itself has no control_global entry and stays dropped, but the
+      " pressed button's identity IS read back - type and text ride along as
+      " event args and the sentence is composed here, exactly as the original
+      " concatenates it.
+      statustext = |A new message with text: "Button with type { client->get_event_arg( ) } | &&
+                   |and text { client->get_event_arg( 2 ) } is pressed" | &&
+                   |was sent to the invisible messaging service.|.
     ENDIF.
 
   ENDMETHOD.

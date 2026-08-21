@@ -8,7 +8,7 @@
     "frontend_action": true,
     "event_t_arg": true
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -21,7 +21,7 @@
     },
     {
       "type": "NOTE",
-      "what": "The named `selectionmodel>` model (the SelectionMode / SelectionBehavior enum values the controller enumerates at runtime, skipping Multi) is folded onto the one default model as two tables; the values are the sap.ui.table enum members as of the current release. The controller's two formatters are computed in ABAP per the thin-frontend principle: formatAvailableToObjectState and formatAvailableToIcon become the precomputed AVAILABLESTATE (Success/Error) and AVAILABLEICON (sap-icon://accept / sap-icon://decline) columns. handleDetailsPress is client-composed and roundtrip-free: control_global MESSAGE_TOAST with 'Details for product with id {0}' and the row's ${PRODUCTID}."
+      "what": "The named `selectionmodel>` model (the SelectionMode / SelectionBehavior enum values the controller enumerates at runtime, skipping Multi) is folded onto the one default model as two tables; the values are the sap.ui.table enum members as of the current release. The controller's two formatters are computed in ABAP per the thin-frontend principle: formatAvailableToObjectState and formatAvailableToIcon become the precomputed AVAILABLESTATE (Success/Error) and AVAILABLEICON (sap-icon://accept / sap-icon://decline) columns. handleDetailsPress is client-composed and roundtrip-free: control_global MESSAGE_TOAST with 'Details for product with id {0}' and the row's ${PRODUCTID}. Corrected 2026-08-21: the first list carried a fourth entry `All`, which SelectionMode does not define, and both lists were in an order the enums do not have. Unlike app 356, where the same wrong entry crashes on validateProperty, on_event refuses `All` here before it reaches selection_mode - it still showed an item the original never shows and made a dead upstream branch reachable."
     },
     {
       "type": "NOTE",
@@ -33,7 +33,15 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-17 (nightly e2e interaction): Unverified in a running system: whether rowSelectionChange delivers the index array as JSON to get_event_arg, whether the two bound Selects drive selectionMode/selectionBehavior without a round-trip, and the control_by_id clearSelection wire."
+      "what": "Unverified in a running system: whether rowSelectionChange delivers the index array as JSON to get_event_arg, whether the two bound Selects drive selectionMode/selectionBehavior without a round-trip, and the control_by_id clearSelection wire. **e2e-verified 2026-08-17** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_361.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The three buttons read the table's CURRENT selection, so rowSelectionChange transports ${$source>}.getSelectedIndices() and ${$source>}.getSelectedIndex() - what the original's getSelectedIndices( ) and getContextByIndex( ) ask the control for. Until 2026-08-21 the wire carried ${$parameters>/rowIndices} instead, and that parameter is documented as \"array of row indices which selection has been CHANGED (either selected or deselected)\": ctrl-clicking a second row reported [1] where the original reports [0,1], and deselecting the only selected row reported [0] where the original says \"no item selected\". The interaction module selected exactly one row, the single case where the two sets coincide, so the nightly saw nothing. The toast also strips the JSON brackets now - MessageToast coerces the original's array to \"0,1\"."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency: this rewrite is now declared by all 77 ports that do it - before that day 64 declared it and thirteen did not, which left a real difference asserted nowhere and gave every review sweep the same thing to re-find."
     }
   ]
 }

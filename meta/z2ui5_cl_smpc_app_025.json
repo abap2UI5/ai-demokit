@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_smpc_app_025",
   "sample": "sap.m.sample.FeedListItem",
   "entity": "sap.m.FeedListItem",
-  "file": "src/01/01/z2ui5_cl_smpc_app_025.clas.abap",
+  "file": "src/02/01/z2ui5_cl_smpc_app_025.clas.abap",
   "batch": "b06",
   "audit": {
     "frontend_action": false,
@@ -25,6 +25,10 @@
     {
       "type": "NOTE",
       "what": "the relative AuthorPicUrl asset paths (test-resources/sap/m/images/*.jpg) are rewritten to absolute https://sdk.openui5.org/test-resources/... per the project rule for runtime asset URLs."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.FeedListItem.actions is carried 1:1 from the original - the sample's whole point is the action sheet on a feed item. The aggregation PREDATES 1.71: at tag 1.71.0 sap.m.FeedListItem declares `actions: {type: 'sap.m.FeedListItemAction', multiple: true}` itself, and it is even that control's defaultAggregation there (sap.m.FeedListItemAction is @since 1.52.0). What changed is that the aggregation was GENERALISED and relocated to sap.m.ListItemBase, whose JSDoc carries @since 1.137 - and that is the version any scanner reads, so the property gate reports it. The relocated-member residual limit AGENTS section 5 names, the same shape as apps 241/299/300/301/302/407. Declared by policy so the gate has something to match. IMPORTANT, because the first version of this entry (2026-08-21, a few hours earlier) said the opposite and was wrong: the app does NOT need UI5 >= 1.137, it runs on the 1.71 floor. The class nevertheless sits in src/02/01, because AGENTS section 3 derives the package mechanically from 'has a POST_171' - this is the corpus' first port whose ONLY POST_171 is a scanner artefact rather than a real runtime floor, so the folder here records the declaration, not a requirement."
     }
   ]
 }

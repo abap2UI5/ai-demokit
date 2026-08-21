@@ -8,7 +8,7 @@
     "frontend_action": true,
     "event_t_arg": true
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the anchored open of the unified Menu and the selectable item groups (single/multi select state)."
+      "what": "not yet run in a system: the anchored open of the unified Menu and the selectable item groups (single/multi select state). **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_311.mjs)."
     }
   ]
 }

@@ -8,7 +8,7 @@
     "frontend_action": true,
     "event_t_arg": true
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -18,6 +18,14 @@
     {
       "type": "NOTE",
       "what": "the row Popover reproduces the original bindElement: it is built per-press with relative bindings ({PRODUCT_ID} title, {NAME}, {PRODUCT_PIC_URL}) and follow_up_action( cs_event-bind_element, view=cs_view-popover ) element-binds the popover slot to t_products/<index>, where the index comes from the pressed row's binding context ($event.oSource.getBindingContext().getPath()); the popover is anchored by $event.oSource.sId and the Action button reproduces handleActionPress 1:1 (a toast 'Action has been pressed' + follow_up_action( cs_event-popover_close )). The disable/enable-pointer-events-while-open behavior is dropped."
+    },
+    {
+      "type": "NOTE",
+      "what": "Two legs of the original restored 2026-08-21, both found undeclared by the review sweep. (a) onInit's oModel.setSizeLimit( 10 ) is reproduced 1:1 through follow_up_action( cs_event-set_size_limit ) - the same listed frontend action app 252 uses; the port rendered all 123 rows where the original shows ten. (b) The sample's headline behaviour - table clicks dead while the popover is open, which the page header advertises in so many words - was dropped. attachAfterOpen -> disablePointerEvents / afterClose -> enablePointerEvents are now the popover's afterOpen/afterClose toggling a style CLASS on idProductsTable via control_by_id addStyleClass / removeStyleClass, with the rule injected as a core:HTML style leaf. The css control method could NOT carry this: pointer-events is not on the framework's CSS_PROPERTIES whitelist, which is why the class-toggle is the expressible form rather than a stylistic choice."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency: this rewrite is now declared by all 77 ports that do it - before that day 64 declared it and thirteen did not, which left a real difference asserted nowhere and gave every review sweep the same thing to re-find."
     }
   ]
 }

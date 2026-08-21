@@ -94,7 +94,14 @@ CLASS z2ui5_cl_smpc_app_354 IMPLEMENTATION.
                                         val    = `COLUMN_FILTER`
                                         t_arg  = VALUE #( ( `${$parameters>/column}.getFilterProperty()` )
                                                           ( `${$parameters>/value}` ) )
-                                        s_ctrl = VALUE #( check_prevent_default = abap_true ) )
+                                        " filterPrice returns BEFORE preventDefault for
+                                        " every column but price, so the other four keep
+                                        " the table's own client-side filtering. A boolean
+                                        " check_prevent_default is baked per WIRE and would
+                                        " veto all five - the conditional form is what this
+                                        " needs (worked precedent: app 247's columnResize)
+                                        s_ctrl = VALUE #(
+                                          prevent_default_expr = `${$parameters>/column}.getId().indexOf('price') >= 0` ) )
                     )->a( n = `ariaLabelledBy`   v = `title`
 
                     )->ele( `extension`
@@ -255,9 +262,11 @@ CLASS z2ui5_cl_smpc_app_354 IMPLEMENTATION.
 
       WHEN `COLUMN_FILTER`.
         " filterPrice: the price column filters a +/- 20 BAND around the entered
-        " value instead of an exact match - every other column filters on its
-        " own filterProperty. The client-side default is vetoed for all of them
-        " because the model here is already the filtered result
+        " value instead of an exact match, so its client-side default is vetoed
+        " and the band is computed server-side. Every other column keeps the
+        " default and filters on its own filterProperty in the client, which is
+        " what the original does by returning before preventDefault - the veto
+        " is therefore conditional on the column, not baked into the wire
         IF client->get_event_arg( ) = `PRICE`.
           price_filter = client->get_event_arg( 2 ).
         ENDIF.

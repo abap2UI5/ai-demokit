@@ -8,7 +8,7 @@
     "frontend_action": false,
     "event_t_arg": true
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -33,7 +33,15 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "Unverified in a running system: whether the sort event's prevented default plus the server-side SORT produce the expected order for each column, and whether the bound Column.sortOrder renders the header indicator."
+      "what": "Unverified in a running system: whether the sort event's prevented default plus the server-side SORT produce the expected order for each column, and whether the bound Column.sortOrder renders the header indicator. (Reopened 2026-08-21: this had been closed as live-verified, but the interaction module only presses the three toolbar buttons - it never opens a column header menu, so the sort event and its prevented default were never fired. The toolbar legs it does drive are genuinely covered.)"
+    },
+    {
+      "type": "NOTE",
+      "what": "sortCategories passes bAdd = true to oTable.sort( ), and Table.pushSortedColumn appends the column to the active sorter list rather than replacing it - so whatever was already sorting keeps precedence and Category is added behind it. The port keeps that list as ordered model state (the equivalent of _aSortedColumns) and applies it from the last key to the first with SORT ... STABLE, since one ABAP SORT expresses one key. Until 2026-08-21 the handler issued a fresh single-key SORT, which reordered the whole table while leaving the other columns' bound sortOrder indicators standing: the header claimed Name-ascending while the rows were Category-ascending, and the button's own tooltip - \"Sort Categories in addition to current sorting\" - was kept while the behaviour was not."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency: this rewrite is now declared by all 77 ports that do it - before that day 64 declared it and thirteen did not, which left a real difference asserted nowhere and gave every review sweep the same thing to re-find."
     }
   ]
 }

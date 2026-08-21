@@ -7,9 +7,9 @@
   "audit": {
     "frontend_action": true,
     "event_t_arg": true,
-    "note": "button presses show static client-composed toasts (control_global MESSAGE_TOAST.show, per-button hardcoded text) - see the IMPROVISED deviation, flagged for rework"
+    "note": "every button press carries the pressed control's own text - control_global MESSAGE_TOAST.show with a {0} template filled by ${$source>/text} - and the ActionSheet is a real fragment anchored via popover_display. Corrected 2026-08-21: the note still described per-button HARDCODED text and pointed at an IMPROVISED deviation that no longer exists, contradicting the deviation beside it."
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {

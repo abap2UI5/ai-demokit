@@ -34,7 +34,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-04 (nightly e2e interaction): partly verified 2026-08-01 (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the first popover opens anchored to its button (popover_display by_id = $event.oSource.sId) AND the root-seeded record now reaches it - the popover shows 'Notebook Basic 15' (it rendered empty until the relative bindings were made absolute the same day, see the corrected NOTE above). Still unverified in a running system: the second popover's placement, and that the Email / Close footer buttons close it (popover_close) with the Email one opening the mail client."
+      "what": "partly verified 2026-08-01 (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the first popover opens anchored to its button (popover_display by_id = $event.oSource.sId) AND the root-seeded record now reaches it - the popover shows 'Notebook Basic 15' (it rendered empty until the relative bindings were made absolute the same day, see the corrected NOTE above). Still unverified in a running system: the second popover's placement, and that the Email / Close footer buttons close it (popover_close) with the Email one opening the mail client. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_229.mjs)."
     }
   ]
 }

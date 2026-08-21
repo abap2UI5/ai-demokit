@@ -6,7 +6,6 @@ CLASS z2ui5_cl_smpc_app_138 DEFINITION PUBLIC.
     INTERFACES z2ui5_if_app.
 
     DATA hint_visible   TYPE abap_bool.
-    DATA show_side      TYPE abap_bool.
     DATA toggle_enabled TYPE abap_bool.
 
   PROTECTED SECTION.
@@ -26,8 +25,6 @@ CLASS z2ui5_cl_smpc_app_138 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       hint_visible = abap_true.
-      " DynamicSideContent.showSideContent default
-      show_side    = abap_true.
       view_display( ).
     ELSEIF client->check_on_navigated( ).
       view_display( ).
@@ -45,8 +42,8 @@ CLASS z2ui5_cl_smpc_app_138 IMPLEMENTATION.
     " two of the three controller behaviours are reproduced: breakpointChanged
     " carries its currentBreakpoint parameter to the backend, which enables the
     " Toggle button on breakpoint S exactly as _updateToggleButtonState does,
-    " and the Toggle press flips the bound showSideContent (the property behind
-    " toggle( )). The Slider's DOM resize is roundtrip-free too since the `css`
+    " and the Toggle press calls the control's own toggle( ) through
+    " control_by_id. The Slider's DOM resize is roundtrip-free too since the `css`
     " control method exists: sap.m.Page has no width property, so the width goes
     " onto the container's DOM node, like the original's jQuery .width( )
     view->ele( n = `View` ns = `mvc`
@@ -54,6 +51,12 @@ CLASS z2ui5_cl_smpc_app_138 IMPLEMENTATION.
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:core` v = `sap.ui.core`
+
+        " the sample's own style.css - the view carries sapUiDSCExplored and the rule behind it has to come with it (apps 122/124/133)
+        " \{ \} escaped: the XMLView parser reads an unescaped brace as a binding
+        )->tag( n = `HTML` ns = `core`
+            )->a( n = `content` v = `<style>.sapUiDSC.sapUiDSCExplored h1\{font-size:2rem\}</style>`
 
         )->ele( `Page`
             )->a( n = `showHeader`    v = `false`
@@ -69,7 +72,6 @@ CLASS z2ui5_cl_smpc_app_138 IMPLEMENTATION.
                     )->a( n = `class`               v = `sapUiDSCExplored sapUiContentPadding`
                     )->a( n = `sideContentFallDown` v = `BelowM`
                     )->a( n = `containerQuery`      v = `true`
-                    )->a( n = `showSideContent`     v = client->_bind( show_side )
                     )->a( n = `breakpointChanged`   v = client->_event( val   = `BP_CHANGED`
                                                                         t_arg = VALUE #( ( `${$parameters>/currentBreakpoint}` ) ) )
 
@@ -97,7 +99,17 @@ CLASS z2ui5_cl_smpc_app_138 IMPLEMENTATION.
                     )->tag( `Button`
                         )->a( n = `text`    v = `Toggle`
                         )->a( n = `type`    v = `Accept`
-                        )->a( n = `press`   v = client->_event( `TOGGLE` )
+                        " handleToggleClick calls DynamicSideContent.toggle( ),
+                        " which is NOT the showSideContent setter: on breakpoint
+                        " S it swaps the control's private _MCVisible/_SCVisible
+                        " pair and leaves showSideContent at its true default.
+                        " Driving the method itself is therefore the only 1:1
+                        " route (an unlisted public method is callable - the
+                        " denylist covers teardown, model swaps and the render
+                        " lifecycle, none of which this is)
+                        )->a( n = `press`   v = client->follow_up_action(
+                                  val   = client->cs_event-control_by_id
+                                  t_arg = VALUE #( ( `DynamicSideContent` ) ( `toggle` ) ) )
                         )->a( n = `id`      v = `toggleButton`
                         )->a( n = `enabled` v = client->_bind( toggle_enabled )
                     )->tag( `Slider`
@@ -121,18 +133,12 @@ CLASS z2ui5_cl_smpc_app_138 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get_event( ).
-
-      WHEN `BP_CHANGED`.
-        " _updateToggleButtonState: the button is only enabled on breakpoint S
-        toggle_enabled = xsdbool( client->get_event_arg( ) = `S` ).
-
-      WHEN `TOGGLE`.
-        " DynamicSideContent.toggle( ) swaps main and side content on S; the
-        " bound showSideContent is the property that setter writes
-        show_side = xsdbool( show_side = abap_false ).
-
-    ENDCASE.
+    " _updateToggleButtonState: the button is only enabled on breakpoint S.
+    " The only round-trip left - the Toggle press drives the control's own
+    " toggle( ) from the frontend, and the Slider writes its width there too
+    IF client->get_event( ) = `BP_CHANGED`.
+      toggle_enabled = xsdbool( client->get_event_arg( ) = `S` ).
+    ENDIF.
 
   ENDMETHOD.
 

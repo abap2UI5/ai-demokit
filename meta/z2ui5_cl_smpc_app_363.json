@@ -8,7 +8,7 @@
     "frontend_action": true,
     "event_t_arg": true
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -32,8 +32,16 @@
       "what": "The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined with the columns the twelve table columns bind. The original computes DeliveryDate from Date.now() with an i-mod-10 offset in 4-day steps; a fixed base date (2026-07-23) is used here so the port is deterministic - the corpus convention of app 164. Heavy is WeightMeasure > 1000 as the string the typed CheckBox binding expects. ProductPicUrl values point at the OpenUI5 host per the asset-URL rule; the mock carries them host-relative."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Unverified in a running system: whether the bound fixedColumnCount and the bound rowMode counts freeze the expected columns/rows, and whether the Apply clamp round-trip updates the Inputs."
+      "type": "NOTE",
+      "what": "Unverified in a running system: whether the bound fixedColumnCount and the bound rowMode counts freeze the expected columns/rows, and whether the Apply clamp round-trip updates the Inputs. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_363.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The three count Inputs start EMPTY, as in the original, which gives them no value attribute at all - so the placeholders (\"fixed column count\" and friends) are what the user sees, and buttonPress reads them as getValue( ) || 0. Until 2026-08-21 they were seeded from the freeze counts, i.e. with \"0\", and sap.m.Input hides the placeholder as soon as a value is set: the port opened with three zeroes where the sample opens with three hints. The interaction module could not see it because every assertion started by filling over whatever was there; it asserts the empty start now."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency: this rewrite is now declared by all 77 ports that do it - before that day 64 declared it and thirteen did not, which left a real difference asserted nowhere and gave every review sweep the same thing to re-find."
     }
   ]
 }

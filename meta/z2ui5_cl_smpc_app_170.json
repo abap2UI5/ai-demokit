@@ -8,7 +8,7 @@
     "frontend_action": false,
     "event_t_arg": true
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -29,7 +29,7 @@
     },
     {
       "type": "NOTE",
-      "what": "Width/Depth/Height are TYPE string (not i): the mock carries decimal dimensions (40.8, 3.1) and they bind display-only into a text template ({WIDTH} x {DEPTH} x {HEIGHT} {DIMUNIT}), so a string keeps the exact value; TYPE i would truncate (an earlier version did, via json-to-abap's first-row inference — tool since fixed). Price stays packed (DECIMALS 2) for the Currency type binding, decimals preserved."
+      "what": "Width/Depth/Height are TYPE string (not i): the mock carries decimal dimensions (40.8, 3.1) and they bind display-only into a text template ({WIDTH} x {DEPTH} x {HEIGHT} {DIMUNIT}), so a string keeps the exact value; TYPE i would truncate (an earlier version did, via json-to-abap's first-row inference \u2014 tool since fixed). Price stays packed (DECIMALS 2) for the Currency type binding, decimals preserved."
     }
   ]
 }

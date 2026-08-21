@@ -8,7 +8,7 @@
     "frontend_action": false,
     "event_t_arg": false
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -21,7 +21,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-17 (nightly e2e interaction): Unverified in a running system: whether an empty gridRowGap / gridColumnGap serializes acceptably for the CSSGrid's CSSSize properties (the two Inputs carry no value attribute in the original either, so the grid starts on gridGap alone), and whether the Panel width expression follows the slider live."
+      "what": "Unverified in a running system: whether an empty gridRowGap / gridColumnGap serializes acceptably for the CSSGrid's CSSSize properties (the two Inputs carry no value attribute in the original either, so the grid starts on gridGap alone), and whether the Panel width expression follows the slider live. **e2e-verified 2026-08-17** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_347.mjs)."
     }
   ]
 }

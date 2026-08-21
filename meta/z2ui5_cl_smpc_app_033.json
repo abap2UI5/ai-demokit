@@ -13,5 +13,10 @@
     "date": "2026-07-19",
     "note": "verified in a running system - human visual pass 2026-07-19 over all apps: the Currency composite binding renders the formatted price per currency (raw binding-info string over PRICE TYPE p)."
   },
-  "deviations": []
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The 123 ProductPicUrl values are host-absolutized: ui5/mock/products.json carries the demo-kit-relative test-resources/sap/ui/documentation/sdk/images/..., which an abap2UI5 app has no document root to resolve against, so they are served from https://sdk.openui5.org/... The port binds that value live, as the original does. Declared 2026-08-21: the deviations array was EMPTY, which asserts a byte-for-byte data match this port does not have - data-fidelity tolerates the absolutization, so nothing else would have said so."
+    }
+  ]
 }

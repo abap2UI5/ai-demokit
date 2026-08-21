@@ -8,7 +8,7 @@
     "frontend_action": false,
     "event_t_arg": true
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -20,12 +20,16 @@
       "what": "handleWeekNumberSelect reads the weekNumber and the weekDays DateRange parameters; both travel as expression args (${$parameters>/weekNumber} and the local date parts of ${$parameters>/weekDays}.getStartDate()/getEndDate()), and the every-fifth-week refusal toast is composed server-side, exactly as the original composes it."
     },
     {
-      "type": "IMPROVISED",
-      "what": "the refusal is only a toast: the original also calls oEvent.preventDefault() so the forbidden week is NOT selected. abap2UI5 bakes s_ctrl-check_prevent_default into the handler at RENDER time (app 241), which cannot express a condition evaluated per event (weekNumber % 5 === 0), so the week highlights and only the message says it is not allowed."
+      "type": "NOTE",
+      "what": "handleWeekNumberSelect refuses every fifth calendar week with BOTH a toast and oEvent.preventDefault( ), so the forbidden week is not selected - and both halves are reproduced since 2026-08-21. This carried an IMPROVISED deviation until then, saying the refusal could only be a toast because abap2UI5 bakes s_ctrl-check_prevent_default in at RENDER time and cannot express a condition evaluated per event. That is true of the BOOLEAN form only: prevent_default_expr evaluates per firing, and the condition here is a plain expression over an event parameter, so the wire carries `${$parameters>/weekNumber} % 5 === 0` directly. Worked precedents: app 247's columnResize and app 354's column filter. The improvised-cluster harvest had this filed as the corpus' last remaining framework GAP (pr/conditional-prevent-default); it was closed upstream and the deviation had outlived it, the same way app 305's removeAllSelectedDates entry had."
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the CAL_SELECT interval round-trip and the WEEK_SELECT branch (toast on every fifth week, labels otherwise)."
+      "what": "not yet run in a system: the CAL_SELECT interval round-trip and the WEEK_SELECT branch (toast on every fifth week, labels otherwise). **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_306.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). This sample's manifest lists `../style.css` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding / labelMarginLeft classes the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs."
     }
   ]
 }

@@ -108,7 +108,7 @@ CLASS z2ui5_cl_smpc_app_289 IMPLEMENTATION.
       client->follow_up_action( val   = client->cs_event-control_global
                                 t_arg = VALUE #( ( `INVISIBLE_MESSAGE` )
                                                  ( `announce` )
-                                                 ( |New Information Bar of type { strip_type }| )
+                                                 ( |New Information Bar of type { strip_type } { strip_text }| )
                                                  ( `Assertive` ) ) ).
     ENDIF.
 

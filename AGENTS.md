@@ -45,6 +45,7 @@ reads the files directly. **Read the matching guide BEFORE starting the task**
 | Plan the next batch / scaffold a new port | `.claude/skills/scaffold-a-port/SKILL.md` |
 | Touch a generator, a generated artefact, or the meta/ shape they read | `.claude/skills/regenerate-artefacts/SKILL.md` |
 | Run or debug the e2e smoke (Playwright) | `.claude/skills/e2e-debugging/SKILL.md` |
+| Settle a claim by MEASURING it, or sweep the corpus for a defect no gate sees | `scripts/probes/README.md` |
 
 **Large files — grep them, never read them whole:** `api.md` (~316 KB
 generated table), `docs/history.md` (~330 KB journal), `CAPABILITIES.md`
@@ -763,7 +764,13 @@ share one `Page.controller.js`, so the port shape is fixed and only the
 fragment bodies differ. It is deliberately narrow — it knows that controller,
 its supplier fields and its event names, and throws on anything else rather
 than guessing; the output is reviewed and its sidecar written by hand, exactly
-like a hand-written port. Regenerating 312..337 with it is byte-identical.
+like a hand-written port. Regenerating 312..337 with it is byte-identical
+below the two generated header lines (`npm run keywords` / `npm run summary`
+write those) — **re-verify that after any corpus-wide sweep**, because the
+emitter does not move with one: between 2026-08-16 and 2026-08-21 it had
+silently rotted through four of them and emitted `open( )`/`leaf( )`, builder
+methods that no longer exist, so this sentence was pointing at a class that
+could not activate.
 
 Artefact regeneration is automated by the tracked **`.githooks/pre-commit`**
 hook: on every commit it regenerates the overview app, the coverage docs and

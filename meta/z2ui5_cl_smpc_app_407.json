@@ -8,12 +8,12 @@
     "frontend_action": true,
     "event_t_arg": true
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
       "type": "IMPROVISED",
-      "what": "The control-returning item factory is resolved server-side. The original binds the main list as items=\"{path: '/navigation', factory: '.navigationItemFactory'}\" - a JS factory that returns a NavigationListGroup for a type=group row and a NavigationListItem otherwise; abap2UI5 cannot ship a frontend factory function. The port declares the /navigation top level statically (its shape is fixed in the mock: one plain Home item, then the two groups) and keeps everything below model-bound: each tnt:NavigationListGroup binds its items table ({/T_GROUP1} / {/T_GROUP2}) with the factory's _createNavigationItem as a bound tnt:NavigationListItem template (nested {ITEMS} sub-template and sap.m.ObjectStatus tag with the original's visible=\"{= !!${TAGTEXT} }\" expression, both levels). So the port view carries extra controls the original view built at runtime - NavigationListGroup (2), NavigationListItem (Home plus the two-level template per group), ObjectStatus tags - and the main NavigationList drops the original's items/factory attribute in favour of the static skeleton."
+      "what": "The control-returning item factory is resolved server-side. The original binds the main list as items=\"{path: '/navigation', factory: '.navigationItemFactory'}\" - a JS factory that returns a NavigationListGroup for a type=group row and a NavigationListItem otherwise; abap2UI5 cannot ship a frontend factory function. The port declares the /navigation top level statically (its shape is fixed in the mock: one plain Home item, then the two groups) and keeps everything below model-bound: each tnt:NavigationListGroup binds its items table ({/T_GROUP1} / {/T_GROUP2}) with the factory's _createNavigationItem as a bound tnt:NavigationListItem template (nested {ITEMS} sub-template and sap.m.ObjectStatus tag with the original's visible=\"{= !!${TAGTEXT} }\" expression, both levels). So the port view carries extra controls the original view built at runtime - NavigationListGroup (2), NavigationListItem (Home plus the two-level template per group), ObjectStatus tags - and the main NavigationList drops the original's items/factory attribute in favour of the static skeleton. On the data side this means no single mock array corresponds to a port table: the group tables carry rows from NESTED levels of /navigation - t_group1_full's first two rows are Favorites' own children, 'My Accounts' and 'My Orders', which live at navigation[1].items[0].items[] in data.json. data-fidelity compares a block against the one best-matching FLAT array and picked /fixedNavigation for this one, so those two verbatim rows read as invented data; naming them here is what makes the declaration true rather than merely quiet."
     },
     {
       "type": "IMPROVISED",
@@ -44,8 +44,16 @@
       "what": "Kept 1:1 but newer than UI5 1.71 in the navigation tree: sap.tnt.NavigationListGroup (control @since 1.121, the two group rows); NavigationListItem.selectable (@since 1.116); the tag aggregation (@since 1.149) with its sap.m.ObjectStatus and the IndicationColor enum values Indication15/16/17/18/20 (@since 1.120); design and ariaHasPopup (@since 1.133.0, incl. the design=Action / ariaHasPopup=Dialog values on the Quick Create row); expanded and hasExpander read as @since 1.121 because they live on the newer base class NavigationListItemBase - both predate 1.71 on NavigationListItem itself, declared per the relocated-member note."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet run in a system: the LIVE_CHANGE filter round-trip (bound group tables, visible flags, highlightedText), the SEARCH announceSearchMatchCount frontend action, the ITEM_SELECT to-page action, the quickCreate popup and the MENU_TOGGLE collapse-resets-search path."
+      "type": "NOTE",
+      "what": "not yet run in a system: the LIVE_CHANGE filter round-trip (bound group tables, visible flags, highlightedText), the SEARCH announceSearchMatchCount frontend action, the to-page action (which arrives as ITEM_PRESS, see above), the quickCreate popup and the MENU_TOGGLE collapse-resets-search path. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_407.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "announceSearchMatchCount receives the match count as a STRING. It is not in the framework's CONTROL_METHODS, so no arg kinds are registered and castArgAuto passes anything that is not X/true/false through unchanged. NavigationList._announceSearchMatchCount then does `iCount === 1 ? SIDE_NAVIGATION_SEARCH_MATCH_FOUND : SIDE_NAVIGATION_SEARCH_MATCHES_FOUND`, and \"1\" === 1 is false - so a single match is announced with the plural text where the original announces the singular. Closing this needs an [\"int\"] entry for the method upstream, the same shape as scrollToIndex; noted 2026-08-21."
+    },
+    {
+      "type": "NOTE",
+      "what": "Each item's press wire carries ${$source>/selectable} beside its key, and ITEM_PRESS navigates only when it is true. NavigationListItem._selectItem fires `select` unconditionally but reaches the list's _selectItem - and so itemSelect, and so the original's navigation - only if getSelectable( ) is true, while `press` fires either way. Customer Management is selectable:false in the mock, so upstream it navigates nowhere; the port navigated it until 2026-08-21, making a page unreachable in the original reachable here."
     }
   ]
 }

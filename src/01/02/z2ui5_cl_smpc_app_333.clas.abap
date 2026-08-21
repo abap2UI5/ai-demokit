@@ -71,10 +71,11 @@ CLASS z2ui5_cl_smpc_app_333 IMPLEMENTATION.
             )->ele( `customHeader`
                 )->ele( `Bar`
                     )->ele( `contentRight`
-                        " the original enables Edit once the mock request completes; the ABAP model is seeded synchronously, so it starts enabled
                         )->tag( `Button`
                             )->a( n = `id`      v = `edit`
                             )->a( n = `text`    v = `Edit`
+                            " the original enables Edit once the mock request completes;
+                            " the ABAP model is seeded synchronously, so it starts enabled
                             )->a( n = `enabled` v = `true`
                             )->a( n = `visible` v = |\{= !${ client->_bind( edit_mode ) }\}|
                             )->a( n = `press`   v = client->_event( `EDIT` )
@@ -94,6 +95,7 @@ CLASS z2ui5_cl_smpc_app_333 IMPLEMENTATION.
                 )->end(
             )->end(
             )->ele( `content`
+
                 " Display.fragment.xml
                 )->ele( `VBox`
                     )->a( n = `class`   v = `sapUiSmallMargin`
@@ -128,6 +130,7 @@ CLASS z2ui5_cl_smpc_app_333 IMPLEMENTATION.
                         )->end(
                     )->end(
                 )->end(
+
                 " Change.fragment.xml
                 )->ele( `VBox`
                     )->a( n = `class`   v = `sapUiSmallMargin`

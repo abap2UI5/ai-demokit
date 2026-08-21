@@ -50,6 +50,16 @@ CLASS z2ui5_cl_smpc_app_305 IMPLEMENTATION.
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `class`     v = `viewPadding`
 
+        )->a( n = `xmlns:core` v = `sap.ui.core`
+
+        " the sample's own ../style.css (shared by the sap.ui.unified samples and
+        " listed in this sample's manifest) - the view carries the class and the
+        " rule behind it has to come with it. \{ \} escaped: the XMLView parser
+        " reads an unescaped brace as a binding
+        )->tag( n = `HTML` ns = `core`
+            )->a( n = `content` v = `<style>.viewPadding\{padding:1rem\}` &&
+                                    `.sap-phone .viewPadding\{padding:0rem\}` &&
+                                    `.labelMarginLeft\{margin:1rem\}</style>`
         )->ele( n = `VerticalLayout` ns = `l`
 
             )->tag( n = `Calendar` ns = `u`
@@ -96,6 +106,15 @@ CLASS z2ui5_cl_smpc_app_305 IMPLEMENTATION.
         IF picked = last_selected.
           selected_date = `No Date Selected`.
           CLEAR last_selected.
+          " the original's removeSelectedDate( oSelectedDate ). selectedDates is
+          " written by the control itself, so clearing the model alone would
+          " leave the day highlighted - the aggregation has to be emptied on the
+          " control. This calendar is single-selection (the view sets neither
+          " singleSelection nor intervalSelection), so at most one DateRange
+          " exists and removeAllSelectedDates is exactly the same removal.
+          " Same wire as the sibling port 307's handleRemoveSelection.
+          client->follow_up_action( val   = client->cs_event-control_by_id
+                                    t_arg = VALUE #( ( `calendar` ) ( `removeAllSelectedDates` ) ) ).
         ELSE.
           selected_date = picked.
           last_selected = picked.

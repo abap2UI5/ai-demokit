@@ -6,14 +6,18 @@
   "batch": "b05",
   "audit": {
     "frontend_action": false,
-    "event_t_arg": false
+    "event_t_arg": true
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
       "type": "NOTE",
       "what": "The four buttons announce the pressed button's type+text to the sap.ui.core.InvisibleMessage a11y service and echo it into the status Text; here a press updates the bound status Text with a generic confirmation (the a11y live-region announce and the per-button identity are not reproduced server-side). The original's 'Infromation' button-text typo is kept 1:1. **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): pressing a button really round-trips and the bound status Text shows 'A new message was sent to the invisible messaging service.'. What stays unverifiable by machine is the announcement itself - a live region has no assertable rendering."
+    },
+    {
+      "type": "NOTE",
+      "what": "The pressed button's identity is transported since 2026-08-21: each press carries $event.oSource.getType() and $event.oSource.getText(), and ABAP composes the original's sentence verbatim. Before that the status text was a constant - a faked event value found by the review sweep. The InvisibleMessage announce itself has no control_global entry and stays dropped, which is a separate and correctly declared loss."
     }
   ]
 }

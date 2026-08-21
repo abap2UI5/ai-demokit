@@ -9,7 +9,7 @@
     "event_t_arg": true,
     "note": "control_global POPUP setWithinArea, set once with the view"
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -31,6 +31,10 @@
     {
       "type": "POST_171",
       "what": "sap.m.Button.ariaHasPopup (since UI5 1.84) is kept 1:1 on all three buttons - the app needs a UI5 release >= 1.84 for the aria-haspopup attribute."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency: this rewrite is now declared by all 77 ports that do it - before that day 64 declared it and thirteen did not, which left a real difference asserted nowhere and gave every review sweep the same thing to re-find."
     }
   ]
 }

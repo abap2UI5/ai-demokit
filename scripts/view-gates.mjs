@@ -103,7 +103,16 @@ const ADVISORY_BUDGET = {
   // originals, kept 1:1
   'missing-accessibility': 29,
   'event-without-handler': 4, // ratcheted down 2026-08-05: the four calendar ports wired their select handler
-  'unknown-event-parameter': 1, // app 268: ColorPickerPopover forwards colorString undeclared — works live
+  // raised 2026-08-21 (app 298, sap.m.table.columnmenu.QuickSort): the same
+  // shape as 268, and here the metadata is not merely incomplete but WRONG.
+  // QuickSort.change declares `key` and `sortOrder` and fires neither —
+  // onChange does `this.fireChange({item: oItem})` and nothing else
+  // (node_modules/@openui5/sap.m/src/sap/m/table/columnmenu/QuickSort.js:85).
+  // Reading the declared names is what the linter would accept and what
+  // delivers two empty strings at runtime, so the port reads `item`, like the
+  // sample's own onSortChange does. Satisfying this rule here would mean
+  // breaking the port.
+  'unknown-event-parameter': 2, // app 268: ColorPickerPopover forwards colorString undeclared — works live
   // both entries below are new rules from the 2026-08-12 linter bump (363c6e9),
   // budgeted here because the bump PR is where the debt decision belongs:
   // apps 101/102/144/268/280/407 — a liveChange/live wire that round-trips per
@@ -168,9 +177,21 @@ function declares(meta, finding) {
     .filter(Boolean)
     .map((n) => n.toLowerCase());
   if (!names.length) return false;
-  return (meta.deviations || [])
-    .map((d) => String(d.what || '').toLowerCase())
-    .some((text) => names.some((n) => text.includes(n)));
+
+  /* Only a POST_171 or DROPPED_171 may excuse a VERSION finding. This is the
+   * whole meaning of those two types — "this member is newer than the floor
+   * and the port keeps it / drops it deliberately" — and until 2026-08-21 any
+   * deviation would do, which made the escape far wider than intended:
+   * app 268 kept ColorPickerPopover.liveChange (@since 1.85) with only a NOTE
+   * that happened to say "the liveChange round-trip keeps the Text …", and
+   * that sentence silently satisfied the gate, leaving a post-1.71 port filed
+   * in src/01. A NOTE describing what a member DOES is not a declaration that
+   * it is too new; the type is what carries that claim, and it is also what
+   * moves the class to src/02. */
+  const relevant = (meta.deviations || [])
+    .filter((d) => d.type === 'POST_171' || d.type === 'DROPPED_171')
+    .map((d) => String(d.what || '').toLowerCase());
+  return relevant.some((text) => names.some((n) => text.includes(n)));
 }
 
 let failing = 0;

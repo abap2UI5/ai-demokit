@@ -5,15 +5,19 @@
   "file": "src/01/01/z2ui5_cl_smpc_app_105.clas.abap",
   "batch": "b13",
   "audit": {
-    "frontend_action": false,
+    "frontend_action": true,
     "event_t_arg": true
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
       "type": "NOTE",
       "what": "onSemanticButtonPress toasts the pressed control's class name (getMetadata().getName() minus the library); reproduced by passing each semantic action's name as a t_arg literal ('AddAction', 'EditAction', ...) and toasting 'Pressed: <name>'. The custom footer buttons toast the pressed control id via $event.oSource.sId (original onPress). The MessagesIndicator toast is simplified to a fixed message (the original opens a MessagePopover, dropped here)."
+    },
+    {
+      "type": "NOTE",
+      "what": "onMessagesButtonPress reproduced 1:1 since 2026-08-21 - the port toasted a bare 'Messages' before, which the review sweep found: the whole message-handling leg of the sample was missing, undeclared, while sibling ports 106/107 built from the BYTE-IDENTICAL controller already carried it. The controller-built MessagePopover over the message model is now declared as a dependent of the MessagesIndicator (added controls vs the original view.xml: MessagePopover + MessageItem with the original's {message>description} / {message>type} / {message>message} template) and toggled roundtrip-free via follow_up_action control_by_id toggleBy ($event.oSource.sId) - the _messagePopover.toggle(oMessagesButton) equivalent. onInit's MessageManager.addMessages seed ('Something wrong happened', Error) rides on an added z2ui5.cc.MessageManager bridge control in an added semantic content aggregation (declared) with its one-row items table - the app-065 idiom, identical to apps 106/107."
     }
   ]
 }

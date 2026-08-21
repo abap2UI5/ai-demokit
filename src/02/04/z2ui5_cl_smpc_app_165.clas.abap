@@ -94,6 +94,20 @@ CLASS z2ui5_cl_smpc_app_165 IMPLEMENTATION.
               )->a( n = `placement`  v = `Bottom`
               )->a( n = `showHeader` v = `false`
 
+              " fnOpen gives the popover an Emphasized Close endButton on a
+              " phone only, wired to the controller's closing handler. The
+              " branch stays a branch: the button is declared once and its
+              " visibility bound to the device model, the form apps 030/089
+              " use, and closing is the roundtrip-free popover_close action.
+              )->ele( `endButton`
+                  )->tag( `Button`
+                      )->a( n = `text`    v = `Close`
+                      )->a( n = `type`    v = `Emphasized`
+                      )->a( n = `visible` v = |\{= $\{device>/system/phone\} \}|
+                      )->a( n = `press`   v = client->follow_up_action( client->cs_event-popover_close )
+
+              )->end(
+
               )->ele( n = `ProductSwitch` ns = `f`
                   )->a( n = `items`  v = client->_bind( t_items )
                   " fnChange toasts 'Redirecting to <targetSrc>' and calls

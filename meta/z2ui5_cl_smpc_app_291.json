@@ -8,7 +8,7 @@
     "frontend_action": true,
     "event_t_arg": true
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -30,6 +30,10 @@
     {
       "type": "NOTE",
       "what": "the item rows bind datetime={CREATIONDATE}, but only the GROUPS carry a creationDate in the mock and the group template does not bind it - so the field exists on the item row type and stays empty on both items, exactly as the original renders it."
+    },
+    {
+      "type": "NOTE",
+      "what": "The two groupItems rows carry showclosebutton = abap_true since 2026-08-21, though the mock gives them no showCloseButton key at all. That is what reproduces the original: an ABSENT JSON property leaves UI5 to fall back on the control's own default, and sap.m.NotificationListBase declares showCloseButton with defaultValue true, so both items render a close button there. An ABAP abap_bool has no absent state - it serialises as a real JSON false - so leaving the field initial did the opposite of the original and, with it, made the ITEM_CLOSE wire unreachable: there was no button left to press. Found by the review sweep; the sibling absent property creationDate is handled in its own deviation above."
     }
   ]
 }

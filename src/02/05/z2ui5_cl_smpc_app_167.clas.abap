@@ -483,14 +483,18 @@ CLASS z2ui5_cl_smpc_app_167 IMPLEMENTATION.
           ( title = `Child Item 3` key = `` enabled = abap_true ) ) )
       ).
 
-    " data.json omits ariaHasPopup and design on Fixed Item 1-3; the UI5 enum
+    " data.json omits ariaHasPopup, design AND selectable on Fixed Item 1-3;
+    " each is seeded with the control's own default - selectable is TRUE
+    " (NavigationListItem.selectable defaultValue: true), corrected 2026-08-21
+    " after the review sweep found all three seeded false, which silently took
+    " their selection behaviour away. The UI5 enum
     " defaults (None, Default) are seeded explicitly because an empty string
     " would be rejected by the enum validation (AGENTS section 5)
     fixednavigation = VALUE #(
       ( title = `Quick Create` icon = `sap-icon://write-new` ariahaspopup = `Dialog` design = `Action` selectable = abap_false )
-      ( title = `Fixed Item 1` icon = `sap-icon://employee` ariahaspopup = `None` design = `Default` selectable = abap_false )
-      ( title = `Fixed Item 2` icon = `sap-icon://building` ariahaspopup = `None` design = `Default` selectable = abap_false )
-      ( title = `Fixed Item 3` icon = `sap-icon://card` ariahaspopup = `None` design = `Default` selectable = abap_false )
+      ( title = `Fixed Item 1` icon = `sap-icon://employee` ariahaspopup = `None` design = `Default` selectable = abap_true )
+      ( title = `Fixed Item 2` icon = `sap-icon://building` ariahaspopup = `None` design = `Default` selectable = abap_true )
+      ( title = `Fixed Item 3` icon = `sap-icon://card` ariahaspopup = `None` design = `Default` selectable = abap_true )
       ).
 
   ENDMETHOD.

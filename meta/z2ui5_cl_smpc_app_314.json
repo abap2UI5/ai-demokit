@@ -8,7 +8,7 @@
     "frontend_action": false,
     "event_t_arg": false
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -17,7 +17,7 @@
     },
     {
       "type": "NOTE",
-      "what": "_toggleButtonsAndView sets edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (expression binding for the negated Edit case). handleEditPress clones the record into six server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode."
+      "what": "_toggleButtonsAndView sets edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (expression binding for the negated Edit case). handleEditPress clones the record into eight server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode."
     },
     {
       "type": "NOTE",
@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore)."
+      "what": "not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore). **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_314.mjs)."
     }
   ]
 }

@@ -8,6 +8,14 @@ CLASS z2ui5_cl_smpc_app_301 DEFINITION PUBLIC.
     DATA home_text TYPE string.
     DATA page_text TYPE string.
 
+    " The original loads the popover fragment ONCE and keeps it as a dependent,
+    " so the fragment's own selectedKey="home" applies once and the highlight
+    " then follows the user. Here the fragment is rebuilt on every
+    " menuButtonPressed, so a literal would reset the highlight to Home after
+    " every navigation - the selected key has to live in the model instead
+    " (the same two-way bound selectedKey the sibling port 303 uses).
+    DATA selectedkey TYPE string.
+
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
@@ -339,6 +347,9 @@ CLASS z2ui5_cl_smpc_app_301 IMPLEMENTATION.
         DATA(lv_selectable) = CONV abap_bool( client->get_event_arg( 2 ) ).
 
         IF lv_key IS NOT INITIAL AND lv_selectable = abap_true.
+          " the highlight has to survive the popover being rebuilt on the next
+          " open, so the key goes into the model the fragment binds
+          selectedkey = lv_key.
           DATA(lv_text) = |Fired event to load page { replace( val = lv_key sub = `page` with = `` ) }|.
           IF lv_key = `home`.
             home_text = lv_text.
@@ -381,6 +392,11 @@ CLASS z2ui5_cl_smpc_app_301 IMPLEMENTATION.
             )->a( n = `placement`         v = `Bottom`
             )->a( n = `verticalScrolling` v = `false`
             )->a( n = `ariaLabelledBy`    v = `sn-label`
+            " onToggleSideNav's setShowHeader( Device.system.phone ): a header on
+            " the phone, none anywhere else. Bound rather than resolved on the
+            " server, so it follows a live device change (apps 309/310 bind the
+            " same branch)
+            )->a( n = `showHeader`        v = `{= ${device>/system/phone}}`
 
             )->tag( n = `InvisibleText` ns = `core`
                 )->a( n = `id`   v = `sn-label`
@@ -391,7 +407,7 @@ CLASS z2ui5_cl_smpc_app_301 IMPLEMENTATION.
                 )->a( n = `width`       v = `17rem`
                 )->a( n = `itemSelect`  v = client->_event( val   = `ITEM_SELECT`
                                                             t_arg = VALUE #( ( `${$parameters>/item}.getKey()` ) ( `${$parameters>/item}.getSelectable()` ) ) )
-                )->a( n = `selectedKey` v = `home`
+                )->a( n = `selectedKey` v = client->_bind( selectedkey )
                 )->a( n = `design`      v = `Plain`
 
                 )->ele( n = `NavigationList` ns = `tnt`
@@ -545,6 +561,9 @@ CLASS z2ui5_cl_smpc_app_301 IMPLEMENTATION.
                 `incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud ` &&
                 `exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure ` &&
                 `dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.`.
+
+    " the fragment's selectedKey="home"
+    selectedkey = `home`.
 
   ENDMETHOD.
 

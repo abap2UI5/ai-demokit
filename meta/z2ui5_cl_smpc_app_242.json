@@ -34,7 +34,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-04 (nightly e2e interaction): unverified in a running system: that navCon.to()/back() navigate the four pages with the selected transition (follow_up_action cs_event-control_by_id 'to'/'back'), that the two-way bound animation Select is applied before NAV runs, and that navigationFinished fires the client-composed toast with the resolved page title. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'To 2' button navigates to Page 2 via the control_by_id to() call; the transition-type select and back() remain unexercised."
+      "what": "unverified in a running system: that navCon.to()/back() navigate the four pages with the selected transition (follow_up_action cs_event-control_by_id 'to'/'back'), that the two-way bound animation Select is applied before NAV runs, and that navigationFinished fires the client-composed toast with the resolved page title. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'To 2' button navigates to Page 2 via the control_by_id to() call; the transition-type select and back() remain unexercised. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_242.mjs)."
     }
   ]
 }

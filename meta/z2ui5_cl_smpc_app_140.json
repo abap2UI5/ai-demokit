@@ -21,6 +21,14 @@
     {
       "type": "POST_171",
       "what": "sap.m.Label.showColon is used (since UI5 1.98). The BlockLayout entity itself is in scope; showColon renders the label's trailing colon 1:1."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's own resources/sample.css is archived and injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). The view carries customCellImageBackground and the rule behind it - the white text and the night-sky background - was missing entirely. Its background-image is relative in the original and is absolutized to the OpenUI5 host per the asset-URL rule, like every other image in this corpus. Found by scripts/probes/orphan-style-class-probe.mjs."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency: this rewrite is now declared by all 77 ports that do it - before that day 64 declared it and thirteen did not, which left a real difference asserted nowhere and gave every review sweep the same thing to re-find."
     }
   ]
 }

@@ -590,8 +590,14 @@ CLASS z2ui5_cl_smpc_app_115 IMPLEMENTATION.
     LOOP AT productcollection REFERENCE INTO DATA(product).
       " Date.now() - (i % 10 * 4 days): a moving value, so it is anchored on a
       " FIXED base here (the corpus rule for now/random values, apps 164/181/289)
-      product->deliverydate   = CONV string( CONV d( `20260101` ) - ( ( sy-tabix - 1 ) MOD 10 ) * 4 ).
-      product->deliverydate   = |{ product->deliverydate(4) }-{ product->deliverydate+4(2) }-{ product->deliverydate+6(2) }|.
+      " the arithmetic has to land in a TYPE d field before it is formatted: a
+      " date operand inside an expression is converted to its DAY NUMBER, so
+      " CONV string( CONV d( ... ) - n ) yields 739618, not 20260101, and the
+      " offsets then cut that into '7.39-61-80'. Measured 2026-08-21 - every
+      " row carried a nonsense date the DatePicker's yyyy-MM-dd binding could
+      " not parse, and nothing failed loudly enough for a gate to see it.
+      DATA(delivery) = CONV d( CONV d( `20260101` ) - ( ( sy-tabix - 1 ) MOD 10 ) * 4 ).
+      product->deliverydate   = |{ delivery(4) }-{ delivery+4(2) }-{ delivery+6(2) }|.
       product->available      = xsdbool( product->status = `Available` ).
       product->availablestate = COND #( WHEN product->available = abap_true THEN `Success` ELSE `Error` ).
       product->availableicon  = COND #( WHEN product->available = abap_true

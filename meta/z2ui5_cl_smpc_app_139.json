@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_smpc_app_139",
   "sample": "sap.ui.unified.sample.CalendarSingleDaySelection",
   "entity": "sap.ui.unified.Calendar",
-  "file": "src/01/02/z2ui5_cl_smpc_app_139.clas.abap",
+  "file": "src/02/02/z2ui5_cl_smpc_app_139.clas.abap",
   "batch": "b05",
   "audit": {
     "frontend_action": false,
@@ -13,7 +13,15 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "The picked day IS transportable after all - measured 2026-08-05 with `scripts/probes/event-arg-expression-probe.mjs` against real OpenUI5: an event arg is a full UI5 expression, and indexed access into an array-valued getter plus chained calls resolve there (`$event.oSource.getSelectedDates()[0].getStartDate()`). The earlier rationale - 'select carries no date parameter and the selected DateRange is control state' - was wrong. The wire carries the three LOCAL date parts as three expression args (year, month+1, day) rather than `toISOString( )`, which would shift the day for any user east of Greenwich, and each arg is guarded by `getSelectedDates().length > 0` so a re-click that clears the selection arrives as year 0. App 139 now formats the SELECTED day as the original's yyyy-MM-dd (DateFormat pattern) instead of the server date. Residual: 'Select Today' still only writes the text - the server date IS today, so the text is 1:1, but the calendar's own highlight is not moved, because addSelectedDate takes a DateRange CONTROL that no wire can construct."
+      "what": "handleSelectToday's addSelectedDate( DateRange( today ) ) is reproduced since 2026-08-21, so the calendar's own highlight really moves to today. This carried a residual until then - 'the calendar's own highlight is not moved, because addSelectedDate takes a DateRange CONTROL that no wire can construct' - and the claim is true of the METHOD while missing the point: selectedDates is a bindable AGGREGATION of sap.ui.unified.DateRange, the same type and shape app 220 binds for disabledDates, so the aggregation never needed the method. The port binds it to a one-row table and both handlers re-state that row. Every click round-trips through CAL_SELECT, so the model stays the source of truth and the control's own click-selection is re-stated rather than fought. Same stale-rationale shape as apps 305 and 306."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). This sample's manifest lists `../style.css` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding / labelMarginLeft classes the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs."
+    },
+    {
+      "type": "POST_171",
+      "what": "core:require (UI5 >= 1.74) on the view root loads z2ui5/model/formatter for the selectedDates startDate binding through Formatter.DateAbapDateToDateObject - the app needs a UI5 release >= 1.74 to render it. Without it the XMLView parser rejects the binding outright (\"formatter function ... not found\"), which is what the render gate caught. Same shape as app 017."
     }
   ]
 }

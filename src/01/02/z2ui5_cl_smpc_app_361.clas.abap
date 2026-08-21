@@ -137,9 +137,20 @@ CLASS z2ui5_cl_smpc_app_361 IMPLEMENTATION.
                     )->a( n = `selectionMode`      v = client->_bind( selection_mode )
                     )->a( n = `selectionBehavior`  v = client->_bind( selection_behavior )
                     )->a( n = `enableSelectAll`    v = client->_bind( enable_select_all )
+                    " The three buttons all read the table's CURRENT selection,
+                    " so the wire has to carry that - not the event's delta.
+                    " rowIndices is documented as "array of row indices which
+                    " selection has been changed (either selected or
+                    " deselected)", so ctrl-clicking a second row reported [1]
+                    " where the original reports [0,1], and deselecting the only
+                    " selected row reported [0] where the original says "no item
+                    " selected". Ask the source control, exactly as
+                    " getSelectedIndices( ) does (the idiom app 356 uses on this
+                    " same control).
                     )->a( n = `rowSelectionChange` v = client->_event(
                               val   = `SELECTION_CHANGE`
-                              t_arg = VALUE #( ( `${$parameters>/rowIndices}` ) ( `${$parameters>/rowIndex}` ) ) )
+                              t_arg = VALUE #( ( `${$source>}.getSelectedIndices()` )
+                                               ( `${$source>}.getSelectedIndex()` ) ) )
                     )->a( n = `ariaLabelledBy`     v = `title`
 
                     )->ele( `extension`
@@ -377,10 +388,12 @@ CLASS z2ui5_cl_smpc_app_361 IMPLEMENTATION.
         selected_index   = client->get_event_arg( 2 ).
 
       WHEN `SHOW_INDICES`.
-        " getSelectedIndices
+        " getSelectedIndices: the original toasts the ARRAY, which MessageToast
+        " coerces to "0,1" - the JSON brackets the wire carries are not part of
+        " what the sample shows
         client->message_toast_display( COND #( WHEN selected_indices IS INITIAL OR selected_indices = `[]`
                                                THEN `no item selected`
-                                               ELSE selected_indices ) ).
+                                               ELSE condense( translate( val = selected_indices from = `[]` to = `  ` ) ) ) ).
 
       WHEN `SHOW_CONTEXT`.
         " getContextByIndex: the original toasts the binding context of the
@@ -406,17 +419,24 @@ CLASS z2ui5_cl_smpc_app_361 IMPLEMENTATION.
   METHOD model_init.
 
     " the two Select item sets the controller builds from the sap.ui.table
-    " SelectionMode / SelectionBehavior enums (Multi is skipped, as there)
+    " SelectionMode / SelectionBehavior enums, in the Object.keys order it
+    " walks them (Multi is skipped, as there). Until 2026-08-21 the first list
+    " carried a fourth entry `All`, which is not a member of SelectionMode at
+    " all, and both lists were in an order the enums do not have - while the
+    " sidecar asserted they were the enum members as of the current release.
+    " Unlike app 356, where the same wrong entry crashes, here on_event refuses
+    " `All` before it can reach selection_mode; it still put an item on screen
+    " the original never shows, and turned a DEAD upstream branch into a live
+    " one. The guard stays - it is a faithful copy of that dead code.
     t_selectionitems = VALUE #(
       ( key = `MultiToggle` text = `MultiToggle` )
-      ( key = `None`        text = `None` )
       ( key = `Single`      text = `Single` )
-      ( key = `All`         text = `All` ) ).
+      ( key = `None`        text = `None` ) ).
 
     t_behavioritems = VALUE #(
       ( key = `Row`         text = `Row` )
-      ( key = `RowOnly`     text = `RowOnly` )
-      ( key = `RowSelector` text = `RowSelector` ) ).
+      ( key = `RowSelector` text = `RowSelector` )
+      ( key = `RowOnly`     text = `RowOnly` ) ).
 
     " the view's initial selectedKey values, and the Switch's state="true"
     select_mode_key    = `MultiToggle`.

@@ -8,7 +8,7 @@
     "frontend_action": true,
     "event_t_arg": true
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -40,12 +40,20 @@
       "what": "NavigationListItem.design=\"Action\" and NavigationListItem.ariaHasPopup=\"Dialog\" (both @since 1.133) are kept 1:1 on the Create item; SideNavigation.design=\"Plain\" (@since 1.132) is kept 1:1 on the popover's side navigation."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet run in a system: the ShellBar menuButtonPressed -> anchored popover round-trip, the itemSelect -> NavContainer 'to' frontend action plus the bound page text, and the quick-create popup."
+      "type": "NOTE",
+      "what": "not yet run in a system: the ShellBar menuButtonPressed -> anchored popover round-trip, the itemSelect -> NavContainer 'to' frontend action plus the bound page text, and the quick-create popup. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_301.mjs)."
     },
     {
       "type": "NOTE",
       "what": "two URLs are re-hosted per the repository's offline asset/host rule: the ShellBar homeIcon './resources/sap/ui/documentation/sdk/images/logo_sap.png' is absolutized to https://sdk.openui5.org/resources/sap/ui/documentation/sdk/images/logo_sap.png (app 110 precedent), and the 'App Finder' href https://openui5.hana.ondemand.com/demoapps points at the commercial SAPUI5 host, so it is served from https://sdk.openui5.org/demoapps instead."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.tnt.SideNavigation.width @since 1.120 is kept 1:1 from the original view. Declared by policy 2026-08-21 (scripts/probes/post171-blindspot-probe.mjs) - the app needs a UI5 release >= 1.120 for the width to apply."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.tnt.NavigationListItem.expanded is kept 1:1 from the original view. The property PREDATES 1.71, but it now lives on sap.tnt.NavigationListItemBase and its JSDoc there carries @since 1.121, which is the version any scanner reads - the relocated-member residual limit AGENTS section 5 names. Declared by policy 2026-08-21 (scripts/probes/post171-blindspot-probe.mjs); no gate can raise it."
     }
   ]
 }

@@ -8,7 +8,7 @@
     "frontend_action": false,
     "event_t_arg": true
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -28,8 +28,8 @@
       "what": "Namespace representation and block-root fold (app 239 precedent): EventingBlock.view.xml declares sap.m as its default xmlns, so its Button is bare there; the single port view keeps the main view's default xmlns sap.uxap, so the inlined button is m:Button - control counts are prefix-sensitive in structural-diff, the bare Button (with its text and press attributes) reads as missing with m:Button in its place. The block's own root mvc:View wrapper is dropped with the content-only inlining, so its width='100%' attribute (attr View.width) is absent; the main view root keeps height='100%'."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Unverified in a running system: (a) the DUMMY press round-trip - the $event.oSource.getParent().getParent().sId parent-chain arg resolving to the stand-in VBox's runtime id and the server-composed message_toast_display text; (b) the injected .dummyContainer2 display:inline-block rule winning over the m:VBox flex display so the inner container shrink-wraps the button like the original html:div."
+      "type": "NOTE",
+      "what": "Unverified in a running system: (a) the DUMMY press round-trip - the $event.oSource.getParent().getParent().sId parent-chain arg resolving to the stand-in VBox's runtime id and the server-composed message_toast_display text; (b) the injected .dummyContainer2 display:inline-block rule winning over the m:VBox flex display so the inner container shrink-wraps the button like the original html:div. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_410.mjs)."
     }
   ]
 }

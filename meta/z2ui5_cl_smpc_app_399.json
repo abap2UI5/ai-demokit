@@ -8,7 +8,7 @@
     "frontend_action": true,
     "event_t_arg": true
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -26,6 +26,14 @@
     {
       "type": "NOTE",
       "what": "handleImage3Press is MessageToast.show('The image has been pressed') with a CONSTANT text, so the press wire is the roundtrip-free client toast (follow_up_action cs_event-control_global MESSAGE_TOAST.show, app 005 idiom) and the app stays init-only."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.ImageMode.InlineSvg is kept 1:1 from the original view and is newer than UI5 1.71. Another enum VALUE in the property gate's blind spot (AGENTS section 5): the member carries no @since in its JSDoc - only a CORS note - so neither the linter nor ui5/properties.json's enumSince has anything to match, and mode itself is an old property. Measured against the sources rather than inferred: at tag 1.71.0 sap.m.ImageMode has exactly Image and Background, and InlineSvg first appears in 1.106. On an older runtime validateProperty rejects it. The class already sat in src/02/01 for Image.ariaDetails @1.79."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's own sap-logo.svg is re-hosted at the demo kit URL, and the path needs the demokit/ segment that sap.ui.require.toUrl( 'sap/m/sample/Image/images/sap-logo.svg' ) resolves to - the file lives at src/sap.m/test/sap/m/demokit/sample/Image/images/. It was missing until 2026-08-21, so both SVG Images fetched a 404. Nothing catches that: scripts/e2e-smoke.mjs resolves only /resources/ paths locally and passes every other miss over silently. Same construct and same fix as app 288's sample.pdf. Note the InlineSvg image fetches its source by XHR (Image.js _loadSvg -> jQuery.get), so on a real system that cross-origin URL is subject to exactly the CORS restriction the enum's own documentation warns about; the plain-mode Image beside it is unaffected."
     }
   ]
 }

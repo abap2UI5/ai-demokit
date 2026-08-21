@@ -219,9 +219,14 @@ CLASS z2ui5_cl_smpc_app_252 IMPLEMENTATION.
 
   METHOD model_init.
 
-    " Device.system: desktop 4 / tablet 2 / else 1 - the desktop default
-    " resolved statically (declared)
-    pages_count    = 4.
+    " onInit's device branch, resolved SERVER-SIDE from the framework's own
+    " device mirror rather than hard-coded to the desktop leg (apps 012/173/302
+    " precedent): desktop 4 / tablet 2 / else 1, exactly as the original seeds
+    " it once in onInit
+    pages_count    = COND #(
+        WHEN client->get( )-s_device-system = z2ui5_if_types=>cs_device-system-desktop THEN 4
+        WHEN client->get( )-s_device-system = z2ui5_if_types=>cs_device-system-tablet  THEN 2
+        ELSE 1 ).
     scroll_visible = abap_false.
 
     " sap/ui/demo/mock/products.json - the full 123-row ProductCollection,

@@ -2,18 +2,22 @@
   "class": "z2ui5_cl_smpc_app_292",
   "sample": "sap.m.sample.PanelBackgroundDesign",
   "entity": "sap.m.Panel",
-  "file": "src/01/01/z2ui5_cl_smpc_app_292.clas.abap",
+  "file": "src/02/01/z2ui5_cl_smpc_app_292.clas.abap",
   "batch": "b23",
   "audit": {
     "frontend_action": false,
     "event_t_arg": false
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
       "type": "NOTE",
       "what": "the Select's change attribute is dropped, and with it the whole controller. onBackgroundDesignChange only reads the selected key and pushes it into the panel with setBackgroundDesign - both ends are bindable properties, so Select.selectedKey and Panel.backgroundDesign bind the SAME field: the Select writes it, the Panel reads it, and no event and no round-trip are needed at all (prefer-a-bindable-property, linter rule settable-property-via-action). The class has no on_event and no model_init; the initial Solid comes from the field's own VALUE."
+    },
+    {
+      "type": "POST_171",
+      "what": "The Select offers Contrast, and sap.m.PanelBackgroundDesign.Contrast is newer than UI5 1.71 - which moves the class from src/01 to src/02 (2026-08-21). The enum VALUE is exactly the blind spot AGENTS section 5 names: the property gate matches attribute NAMES against a control's metadata, and backgroundDesign itself is @since 1.30, so nothing flagged this. Neither does an @since tag on the value - there is none. Measured against the sources instead: at tag 1.71.0 sap.m.Panel.backgroundDesign is typed sap.m.BackgroundDesign, whose three values are Solid, Transparent and Translucent, and sap.m.PanelBackgroundDesign does not exist in that library.js at all. The Panel-specific enum, and with it Contrast, came later; the sample's own MessageStrip says the design is only visible in the Horizon themes. Selecting it on a 1.71 runtime fails validateProperty."
     }
   ]
 }

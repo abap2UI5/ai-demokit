@@ -18,6 +18,14 @@
     {
       "type": "POST_171",
       "what": "UploadSet.mode (since UI5 1.100) and UploadSet.afterItemRemoved (since UI5 1.83) kept for the 1:1 port - surfaced when the property gate gained the sap.m/upload sub-package (control-level source scan 2026-07-26). The whole control is deprecated out-of-scope debt anyway (pr/scope-since-from-source)."
+    },
+    {
+      "type": "POST_171",
+      "what": "Found on 2026-08-21, when view-gates stopped letting ANY deviation excuse a version finding: a NOTE that merely contained the member's name had been satisfying the gate, and only POST_171 / DROPPED_171 carry that claim. sap.m.upload.UploadSetToolbarPlaceholder is @since 1.103.0 and is kept 1:1 from the sample's toolbar. It is a CONTROL-level finding, so nothing about it appears as an attribute; the port already sits in src/02/01 for sap.m.upload.UploadSet itself, and the app needs UI5 >= 1.103."
+    },
+    {
+      "type": "NOTE",
+      "what": "The items' `url` field is host-absolutized: items.json carries the demo kit's relative 'demokit/sample/UploadCollection/LinkedDocuments/Business Plan Agenda.doc', and the port serves it from https://sdk.openui5.org/test-resources/sap/m/... because an abap2UI5 app has no demo-kit document root to resolve a relative path against. Declared explicitly on 2026-08-21: data-fidelity used to clear this because an unrelated deviation contained the word 'url', and it now requires the field to be named as a field."
     }
   ]
 }

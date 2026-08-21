@@ -181,6 +181,7 @@ function mockArrays(doc, name) {
       if (v && typeof v === 'object' && !Array.isArray(v)) for (const [k2, v2] of Object.entries(v)) take(`${k}/${k2}`, v2);
     }
   }
+
   return out;
 }
 
@@ -292,7 +293,23 @@ for (const mf of fs.readdirSync(META).sort()) {
   }
   const blocks = parseValueBlocks(abap);
   const declaredLc = declared.toLowerCase();
-  const isDeclared = (...cands) => cands.some((c) => c && declaredLc.includes(String(c).toLowerCase()));
+  /* A VALUE is specific enough to match loosely — "Notebook Basic 15" occurs in
+   * a deviation only because somebody meant it. A bare FIELD NAME is not:
+   * `text`, `name`, `title`, `icon` are ordinary English, so any deviation
+   * containing one of them excused every mismatch in that field, across every
+   * row. App 269 truncated feed.json row 1's Text from 1273 characters to 212
+   * and data-fidelity reported 0 errors, because an unrelated deviation said
+   * "the Slider and the width hint Text keep their original visibility rules".
+   * (Same shape as the version-finding escape in view-gates, fixed the same
+   * day.) So a field name counts as declared only in a form that IDENTIFIES it
+   * as a field: backticked, or written as the ABAP component in upper case. */
+  const isDeclaredValue = (...cands) => cands.some((c) => c && declaredLc.includes(String(c).toLowerCase()));
+  const isDeclaredField = (f) => !!f && (declaredLc.includes('`' + String(f).toLowerCase() + '`')
+    || new RegExp(`\\b${String(f).toUpperCase()}\\b`).test(declared));
+  const isDeclared = (...cands) => {
+    const f = cands[cands.length - 1];
+    return isDeclaredValue(...cands.slice(0, -1)) || isDeclaredField(f);
+  };
   // each ABAP table block is compared against its ONE best-matching mock
   // array — never against every array that shares field names (a sample may
   // carry its own modified products.json NEXT TO the shared mock, app 010).

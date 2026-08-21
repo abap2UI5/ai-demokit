@@ -8,7 +8,7 @@
     "frontend_action": true,
     "event_t_arg": true
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -37,7 +37,11 @@
     },
     {
       "type": "IMPROVISED",
-      "what": "The custom tabs are inert, exactly as in the original: the SegmentedButtons for Theme, Compact Content Density and Right To Left Mode carry no handler in the sample either, so nothing is applied when they are pressed. The sample's own style.css (the .vsdSetting / .vsd-dp spacing rules) is not reproduced - the class attributes stay on the controls, only the stylesheet is missing, so the tab content renders slightly tighter than the original."
+      "what": "The custom tabs are inert, exactly as in the original: the SegmentedButtons for Theme, Compact Content Density and Right To Left Mode carry no handler in the sample either, so nothing is applied when they are pressed."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's own style.css is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). It was archived but never reached the view, so the SegmentedButton's vsdSetting margin and the DatePicker's vsd-dp insets did nothing - a class name with no rule behind it, the gap apps 122/124/133 closed. Found by scripts/probes/orphan-style-class-probe.mjs."
     }
   ]
 }

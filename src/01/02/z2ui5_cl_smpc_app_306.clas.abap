@@ -47,6 +47,16 @@ CLASS z2ui5_cl_smpc_app_306 IMPLEMENTATION.
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `class`     v = `viewPadding`
 
+        )->a( n = `xmlns:core` v = `sap.ui.core`
+
+        " the sample's own ../style.css (shared by the sap.ui.unified samples and
+        " listed in this sample's manifest) - the view carries the class and the
+        " rule behind it has to come with it. \{ \} escaped: the XMLView parser
+        " reads an unescaped brace as a binding
+        )->tag( n = `HTML` ns = `core`
+            )->a( n = `content` v = `<style>.viewPadding\{padding:1rem\}` &&
+                                    `.sap-phone .viewPadding\{padding:0rem\}` &&
+                                    `.labelMarginLeft\{margin:1rem\}</style>`
         )->ele( n = `VerticalLayout` ns = `l`
 
             )->tag( n = `Calendar` ns = `u`
@@ -74,7 +84,19 @@ CLASS z2ui5_cl_smpc_app_306 IMPLEMENTATION.
                                                                     ( `${$parameters>/weekDays}.getStartDate() ? ${$parameters>/weekDays}.getStartDate().getDate() : 0` )
                                                                     ( `${$parameters>/weekDays}.getEndDate() ? ${$parameters>/weekDays}.getEndDate().getFullYear() : 0` )
                                                                     ( `${$parameters>/weekDays}.getEndDate() ? ${$parameters>/weekDays}.getEndDate().getMonth() + 1 : 0` )
-                                                                    ( `${$parameters>/weekDays}.getEndDate() ? ${$parameters>/weekDays}.getEndDate().getDate() : 0` ) ) )
+                                                                    ( `${$parameters>/weekDays}.getEndDate() ? ${$parameters>/weekDays}.getEndDate().getDate() : 0` ) )
+                                                                  " handleWeekNumberSelect calls oEvent.preventDefault( )
+                                                                  " for a week divisible by five, so the forbidden week
+                                                                  " is not selected at all. The veto is CONDITIONAL, and
+                                                                  " the boolean check_prevent_default is baked per wire -
+                                                                  " which is why this carried an IMPROVISED deviation
+                                                                  " until 2026-08-21 saying the refusal could only be a
+                                                                  " toast. prevent_default_expr evaluates per firing (app
+                                                                  " 247's columnResize, app 354's column filter), and the
+                                                                  " condition here is a plain expression over an event
+                                                                  " parameter.
+                                                                  s_ctrl = VALUE #(
+                                                                    prevent_default_expr = `${$parameters>/weekNumber} % 5 === 0` ) )
 
             )->ele( n = `HorizontalLayout` ns = `l`
                 )->tag( `Label`
@@ -118,7 +140,9 @@ CLASS z2ui5_cl_smpc_app_306 IMPLEMENTATION.
 
       WHEN `WEEK_SELECT`.
         " handleWeekNumberSelect: every fifth calendar week is refused with a
-        " toast, any other week fills the two labels from its weekDays DateRange
+        " toast AND with the prevented default on the wire above, so the week is
+        " not selected either; any other week fills the two labels from its
+        " weekDays DateRange
         DATA(week) = CONV i( client->get_event_arg( ) ).
         IF week MOD 5 = 0.
           client->message_toast_display( `You are not allowed to select this calendar week!` ).

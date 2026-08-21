@@ -116,6 +116,12 @@ CLASS z2ui5_cl_smpc_app_203 IMPLEMENTATION.
                         " an id (measured, scripts/probes/event-arg-expression-probe.mjs) - and
                         " the toast is composed on the client from the same event
                         )->a( n = `tokenDelete` v = client->follow_up_action(
+                                  val   = client->cs_event-control_global
+                                  t_arg = VALUE #( ( `MESSAGE_TOAST` )
+                                                   ( `show` )
+                                                   ( `Token deleted: {0}` )
+                                                   ( `${$parameters>/tokens}[0].getText()` ) ) ) && `; ` &&
+                                              client->follow_up_action(
                                   val   = client->cs_event-control_by_id
                                   t_arg = VALUE #( ( `overflowToolbarTokenizer` )
                                                    ( `removeToken` )
@@ -184,6 +190,12 @@ CLASS z2ui5_cl_smpc_app_203 IMPLEMENTATION.
                         " an id (measured, scripts/probes/event-arg-expression-probe.mjs) - and
                         " the toast is composed on the client from the same event
                         )->a( n = `tokenDelete` v = client->follow_up_action(
+                                  val   = client->cs_event-control_global
+                                  t_arg = VALUE #( ( `MESSAGE_TOAST` )
+                                                   ( `show` )
+                                                   ( `Token deleted: {0}` )
+                                                   ( `${$parameters>/tokens}[0].getText()` ) ) ) && `; ` &&
+                                              client->follow_up_action(
                                   val   = client->cs_event-control_by_id
                                   t_arg = VALUE #( ( `tokenizerMaxWidth` )
                                                    ( `removeToken` )
@@ -339,7 +351,17 @@ CLASS z2ui5_cl_smpc_app_203 IMPLEMENTATION.
                         )->a( n = `id`        v = `tokenizerShowItems`
                         )->a( n = `width`     v = `35%`
                         )->a( n = `labelText` v = `Show items:`
-                        " tokenDelete event handler dropped - it removes static tokens imperatively
+                        )->a( n = `tokenDelete` v = client->follow_up_action(
+                                  val   = client->cs_event-control_global
+                                  t_arg = VALUE #( ( `MESSAGE_TOAST` )
+                                                   ( `show` )
+                                                   ( `Token deleted: {0}` )
+                                                   ( `${$parameters>/tokens}[0].getText()` ) ) ) && `; ` &&
+                                              client->follow_up_action(
+                                  val   = client->cs_event-control_by_id
+                                  t_arg = VALUE #( ( `tokenizerShowItems` )
+                                                   ( `removeToken` )
+                                                   ( `${$parameters>/tokens}[0].getId()` ) ) )
                         )->ele( `layoutData`
                             )->tag( `OverflowToolbarLayoutData`
                                 )->a( n = `priority` v = `High`

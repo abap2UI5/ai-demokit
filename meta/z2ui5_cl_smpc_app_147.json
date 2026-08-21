@@ -7,9 +7,9 @@
   "audit": {
     "frontend_action": true,
     "event_t_arg": true,
-    "note": "all three button presses are roundtrip-free follow_up_action( control_global, MESSAGE_TOAST.show ) substitutions"
+    "note": "all three button presses ROUND-TRIP and the backend answers with follow_up_action( control_global, BUSY_INDICATOR show/hide ) plus cs_event-start_timer - the global BusyIndicator reproduced 1:1. Corrected 2026-08-21: the note still described the pre-rework MESSAGE_TOAST substitution, which the port's own deviation says is gone."
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {

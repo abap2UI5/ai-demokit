@@ -241,10 +241,23 @@ CLASS z2ui5_cl_smpc_app_417 IMPLEMENTATION.
         open_btn_visible = xsdbool( breakpoint = `S` OR show_side = abap_false ).
 
       WHEN `OPEN_SIDE_CONTENT`.
-        " handleSCBtnPress shows the side content - on S the original calls
-        " toggle, otherwise the setter of the bound showSideContent property -
-        " then hides its own button and moves the focus to the Close button
-        show_side        = abap_true.
+        " handleSCBtnPress branches on the breakpoint: toggle( ) on S, the
+        " setShowSideContent setter everywhere else. Both legs used to fold
+        " into the bound flip here, and on S that could never work -
+        " setShowSideContent re-derives the private visibility pair through
+        " _setResizeData( S ), which sets _SCVisible back to
+        " sideContentVisibility = AlwaysShow (false, the default is ShowAboveS)
+        " and _MCVisible to true, so the main content stays and the side
+        " content never appears. toggle( ) is the branch that swaps them. The
+        " same defect as apps 344/138, and worse here: the open button hides
+        " itself in the same round-trip and SET_FOCUS targets a button inside
+        " the side content that never came up.
+        IF breakpoint = `S`.
+          client->follow_up_action( val   = client->cs_event-control_by_id
+                                    t_arg = VALUE #( ( `DynamicSideContent` ) ( `toggle` ) ) ).
+        ELSE.
+          show_side = abap_true.
+        ENDIF.
         open_btn_visible = abap_false.
         client->follow_up_action( val   = client->cs_event-set_focus
                                   t_arg = VALUE #( ( `closeSideContentBtn` ) ) ).

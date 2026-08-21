@@ -102,6 +102,7 @@ CLASS z2ui5_cl_smpc_app_317 IMPLEMENTATION.
                 )->end(
             )->end(
             )->ele( `content`
+
                 " Display.fragment.xml
                 )->ele( `VBox`
                     )->a( n = `class`   v = `sapUiSmallMargin`
@@ -267,6 +268,7 @@ CLASS z2ui5_cl_smpc_app_317 IMPLEMENTATION.
                         )->end(
                     )->end(
                 )->end(
+
                 " Change.fragment.xml
                 )->ele( `VBox`
                     )->a( n = `class`   v = `sapUiSmallMargin`

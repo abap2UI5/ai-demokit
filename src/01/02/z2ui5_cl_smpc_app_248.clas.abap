@@ -7,8 +7,11 @@ CLASS z2ui5_cl_smpc_app_248 DEFINITION PUBLIC.
 
     " the Clothing.json tree has a fixed depth: 4 root categories, their
     " subcategories, then either leaf articles or one more category level -
-    " modeled as nested types so absent leaf fields exist only where the JSON
-    " carries them (a category row serializes no AMOUNT/SIZE of its own level)
+    " modeled as nested types. A flat ABAP row serializes EVERY field, so a
+    " level-3 category row (Dresses) does carry initial AMOUNT/CURRENCY/SIZE
+    " fields its own JSON node omits - which is what the Currency > 0 and the
+    " !!SIZE guards in the view exist for. Corrected 2026-08-21: this comment
+    " used to claim the opposite of the two deviations that declare it.
     TYPES:
       BEGIN OF ty_s_article,
         name     TYPE string,

@@ -20,11 +20,11 @@
     },
     {
       "type": "NOTE",
-      "what": "the original controller's onInit oDRS2.setMinDate(2016-01-01)/setMaxDate(2016-12-31) become minDate/maxDate view attributes on DRS2, bound over ISO strings with formatter 'Formatter.DateCreateObject' (CAPABILITIES date-object-properties row) - two extra attributes vs the original view.xml."
+      "what": "the original controller's onInit oDRS2.setMinDate(2016-01-01)/setMaxDate(2016-12-31) become minDate/maxDate view attributes on DRS2, bound over ABAP DATS strings with formatter 'Formatter.DateAbapDateToDateObject' (CAPABILITIES date-object-properties row) - two extra attributes vs the original view.xml."
     },
     {
       "type": "POST_171",
-      "what": "core:require (UI5 >= 1.74) on the view root loads z2ui5/model/formatter for the DRS2 minDate/maxDate Formatter.DateCreateObject bindings - the app needs a UI5 release >= 1.74 to render it."
+      "what": "core:require (UI5 >= 1.74) on the view root loads z2ui5/model/formatter for the DRS2 minDate/maxDate Formatter.DateAbapDateToDateObject bindings - the app needs a UI5 release >= 1.74 to render it."
     },
     {
       "type": "POST_171",
@@ -41,6 +41,10 @@
     {
       "type": "NOTE",
       "what": "the controller's _iEvent counter is omitted - it is incremented in handleChange but never displayed or otherwise used in the sample."
+    },
+    {
+      "type": "NOTE",
+      "what": "The DRS2 minDate/maxDate the original sets imperatively in onInit (UI5Date.getInstance(2016, 0, 1) / (2016, 11, 31)) are bound instead, and since 2026-08-21 as ABAP DATS strings read through Formatter.DateAbapDateToDateObject. That formatter builds the Date from the parsed parts - local midnight - which is what UI5Date.getInstance means and what the DatePicker compares against (CalendarDate.fromLocalJSDate). They were ISO date-only strings through Formatter.DateCreateObject until then, and that is `new Date(s)`, which ECMA-262 parses as UTC midnight: west of Greenwich the allowed range began on 2015-12-31, contradicting the sample's own label, which spells the intended bounds out in words. Same defect and same fix as app 220. Note this affects only these two: every other date in the port travels as a typed binding with a source pattern, which parses locally."
     }
   ]
 }

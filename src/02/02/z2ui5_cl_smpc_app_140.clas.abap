@@ -42,6 +42,18 @@ CLASS z2ui5_cl_smpc_app_140 IMPLEMENTATION.
         )->a( n = `xmlns:f`    v = `sap.ui.layout.form`
         )->a( n = `xmlns`      v = `sap.m`
 
+
+        " the sample's own resources/sample.css - the view carries
+        " customCellImageBackground and the rule behind it has to come with it.
+        " Its background-image is relative in the original; absolutized to the
+        " OpenUI5 host per the asset-URL rule. \{ \} escaped: the XMLView parser
+        " reads an unescaped brace as a binding
+        )->tag( n = `HTML` ns = `core`
+            )->a( n = `content` v = `<style>.customCellImageBackground\{color:#fff;` &&
+                                    `background-image:url("https://sdk.openui5.org/test-resources/sap/ui/layout/demokit/sample/BlockLayoutCustomBackground/resources/Night_sky.jpg");` &&
+                                    `background-size:100% auto;background-position:0 80%\}` &&
+                                    `.customCellImageBackground .sapUiBlockCellContent,` &&
+                                    `.customCellImageBackground .sapUiBlockCellContent .sapMText\{color:#fff\}</style>`
         )->ele( `VBox`
             )->ele( `HBox`
                 )->a( n = `alignItems` v = `Center`

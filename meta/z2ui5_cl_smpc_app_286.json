@@ -9,7 +9,7 @@
     "event_t_arg": true,
     "note": "client-composed MESSAGE_TOAST per Link, no round-trip"
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {

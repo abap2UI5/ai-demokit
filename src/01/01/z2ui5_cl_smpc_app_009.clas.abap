@@ -133,7 +133,7 @@ CLASS z2ui5_cl_smpc_app_009 IMPLEMENTATION.
                 )->ele( `Column`
                     )->a( n = `width` v = `12em`
 
-                    " p:ColumnAIAction dependents dropped - plugin class newer than 1.71, see DROPPED_171 (as app 401)
+                    " p:ColumnAIAction dependents dropped - plugin class newer than 1.71, see DROPPED_171 (as app 022)
                     )->tag( `Text`
                         )->a( n = `text` v = `Product`
 
@@ -216,7 +216,7 @@ CLASS z2ui5_cl_smpc_app_009 IMPLEMENTATION.
 
   METHOD model_init.
 
-    " the shared mock /ProductCollection flattened to the bound columns, all 123 rows kept verbatim (see the IMPROVISED deviation)
+    " the shared mock /ProductCollection flattened to the bound columns, all 123 rows kept verbatim (see the model-flattening NOTE)
     t_products = VALUE #(
       ( product_id = `HT-1000` name = `Notebook Basic 15` supplier_name = `Very Best Screens`
         weight_measure = '4.2' weight_unit = `KG` price = '956' currency_code = `EUR` width = '30' depth = '18' height = '3' dim_unit = `cm` )

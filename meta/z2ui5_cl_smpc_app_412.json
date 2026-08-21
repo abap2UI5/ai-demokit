@@ -8,7 +8,7 @@
     "frontend_action": true,
     "event_t_arg": true
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -52,8 +52,8 @@
       "what": "the content aggregation of sap.m.Title (since UI5 1.87) is newer than 1.71 but kept for the 1:1 port - the 'Order Details', 'Status' and 'Average User Rating' header titles each hold an m:Link child, exactly like the original (invisible to the property gate: a default aggregation never appears as an XML attribute). Needs UI5 >= 1.87."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Round-trip behaviour not verified in a running system: the TITLE_SELECTOR event with its $event.oSource.sId anchor and the popover_display of the QuickView fragment at the pressed link (including the pageLink navigation to companyEmployeePageId inside the popover), the follow_up_action setSelectedSection frontend action on the 'Order Details' link, and the two client toasts."
+      "type": "NOTE",
+      "what": "Round-trip behaviour not verified in a running system: the TITLE_SELECTOR event with its $event.oSource.sId anchor and the popover_display of the QuickView fragment at the pressed link (including the pageLink navigation to companyEmployeePageId inside the popover), the follow_up_action setSelectedSection frontend action on the 'Order Details' link, and the two client toasts. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_412.mjs)."
     }
   ]
 }

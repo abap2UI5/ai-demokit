@@ -56,6 +56,14 @@ CLASS z2ui5_cl_smpc_app_133 IMPLEMENTATION.
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:grid` v = `sap.ui.layout.cssgrid`
         )->a( n = `xmlns:f`    v = `sap.f`
+        )->a( n = `xmlns:core`  v = `sap.ui.core`
+
+        " the sample's own main.css, injected as a style leaf (apps 122/124):
+        " the view carries the imageDisplayBlock class and the rule behind it
+        " has to come with it. \{ \} in a backtick literal: the XMLView parser
+        " reads an unescaped brace as a binding
+        )->tag( n = `HTML` ns = `core`
+            )->a( n = `content` v = `<style>.imageDisplayBlock\{display:block\}</style>`
 
         )->ele( `HBox`
             )->a( n = `justifyContent` v = `End`

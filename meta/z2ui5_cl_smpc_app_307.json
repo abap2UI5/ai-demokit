@@ -8,7 +8,7 @@
     "frontend_action": true,
     "event_t_arg": true
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -22,6 +22,10 @@
     {
       "type": "NOTE",
       "what": "e2e-verified 2026-08-10 (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): a day is selected the keyboard way (the day cell carries no clickable layout box headless), the 31-slot expression round-trip fills the List, and \"Remove All Selected Dates\" clears BOTH sides - the List returns to its \"No Dates Selected\" noData text AND .sapUiCalItemSel drops to zero, which is the removeAllSelectedDates follow-up action doing what no model write could: sap.ui.unified.Calendar writes selectedDates itself. The assertion has real discriminating power - before abap2UI5 #2535 the list emptied and the days stayed highlighted, which is exactly the state it now rejects."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). This sample's manifest lists `../style.css` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding / labelMarginLeft classes the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs."
     }
   ]
 }

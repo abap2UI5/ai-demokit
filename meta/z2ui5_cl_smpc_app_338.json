@@ -8,7 +8,12 @@
     "frontend_action": false,
     "event_t_arg": false
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
-  "deviations": []
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The sample's own css/style.css is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). It was archived but never reached the view, so the fixed and flexible halves lost the two blues (#D7E9FF / #A9CFFF) the sample is a picture of - the sibling port 119 already injected the same pair. Found by scripts/probes/orphan-style-class-probe.mjs. The bare `column1` class stays as it is: the ORIGINAL view carries it with no rule anywhere either, so reproducing it bare is fidelity."
+    }
+  ]
 }

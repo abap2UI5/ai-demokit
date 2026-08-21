@@ -67,7 +67,7 @@ CLASS z2ui5_cl_smpc_app_067 IMPLEMENTATION.
                         )->a( n = `text`         v = client->_bind( highest_count )
                         )->a( n = `ariaHasPopup` v = `Dialog`
                         )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                               t_arg = VALUE #( ( `messagePopover` ) ( `toggleBy` ) ( `messagePopoverBtn` ) ) )
+                                                                               t_arg = VALUE #( ( `messagePopover` ) ( `toggleBy` ) ( `$event.oSource.sId` ) ) )
 
                         )->ele( `dependents`
                             )->ele( `MessagePopover`

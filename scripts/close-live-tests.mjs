@@ -70,9 +70,14 @@ for (const f of fs.readdirSync(META).filter((f) => /app_\d+\.json$/.test(f)).sor
   for (const d of m.deviations) {
     if (d.type !== 'LIVE_TEST') continue;
     d.type = 'NOTE';
-    // prefix only — the original wording stays verbatim so every substring a
-    // gate matches against ("declared" coverage) keeps matching
-    d.what = `live-verified ${today} (nightly e2e interaction): ${d.what}`;
+    // APPEND, never prefix — the original wording stays verbatim either way (so
+    // every substring a gate matches against keeps matching), but a prefix
+    // leaves the entry reading "live-verified …: Unverified in a running
+    // system: …", which says both things at once and is exactly what a reader
+    // checking whether a wire is covered must not have to untangle. It stated
+    // itself 23 times before this was fixed on 2026-08-21. The house form is
+    // app 264's: what was unverified, then the verification.
+    d.what = `${d.what} **e2e-verified ${today}** (nightly e2e interaction, meta/interactions/${m.class}.mjs).`;
   }
   fs.writeFileSync(p, JSON.stringify(m, null, 2) + '\n');
   closed++;

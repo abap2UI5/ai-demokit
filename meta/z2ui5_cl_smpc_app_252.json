@@ -8,7 +8,7 @@
     "frontend_action": true,
     "event_t_arg": true
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -26,6 +26,10 @@
     {
       "type": "NOTE",
       "what": "unverified in a running system: the set_size_limit(10, MAIN) follow-up capping the pages binding, the shared /PAGES_COUNT driving Input and visiblePagesCount, and the scrollMode expression flip. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): exactly 10 carousel items render from the 123 bound rows (the set_size_limit(10, MAIN) follow-up caps the binding) with the first product card visible; the pages-count input and scrollMode flip remain unexercised but are the proven 007/128 client-side class."
+    },
+    {
+      "type": "NOTE",
+      "what": "onInit's device branch is resolved SERVER-SIDE since 2026-08-21: pages_count comes from client->get( )-s_device-system (desktop 4 / tablet 2 / else 1), the mirror apps 012/173/302 already read. It was hard-coded to the desktop leg with a NOTE calling that 'resolved statically' - but CAPABILITIES marks the device model ✅ and the branch is expressible, so declaring it did not make it right. The original seeds the value once in onInit and so does the port."
     }
   ]
 }

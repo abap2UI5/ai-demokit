@@ -17,7 +17,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-04 (nightly e2e interaction): The original computes widthS/M/L from Device.system.phone in the controller (phone: 2/4/6em, else 5/10/15em). The bindings {/widthS..L} are ported 1:1 on the default model and the seed reproduces the device branch server-side from client->get( )-s_device-system (app 012 precedent, review fix 2026-07-27); the phone-branch seeding is unverified in a running system."
+      "what": "The original computes widthS/M/L from Device.system.phone in the controller (phone: 2/4/6em, else 5/10/15em). The bindings {/widthS..L} are ported 1:1 on the default model and the seed reproduces the device branch server-side from client->get( )-s_device-system (app 012 precedent, review fix 2026-07-27); the phone-branch seeding is unverified in a running system. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_173.mjs)."
     }
   ]
 }

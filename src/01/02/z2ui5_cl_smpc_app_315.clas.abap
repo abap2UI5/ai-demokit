@@ -41,6 +41,14 @@ CLASS z2ui5_cl_smpc_app_315 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+      " onInit ends with oSplitContainer.toDetail( this.createId('page') ) -
+      " "to navigate to the page on phone and not show the split screen items".
+      " initialDetail names the detail page but does not put a PHONE into detail
+      " mode, so without this a phone opens on the master list where the sample
+      " opens on the form. toDetail is a listed control method taking a
+      " controlId, so the wire carries it as-is.
+      client->follow_up_action( val   = client->cs_event-control_by_id
+                                t_arg = VALUE #( ( `FormSplitscreen` ) ( `toDetail` ) ( `page` ) ) ).
     ELSEIF client->check_on_navigated( ).
       view_display( ).
     ELSEIF client->check_on_event( ).
@@ -98,6 +106,7 @@ CLASS z2ui5_cl_smpc_app_315 IMPLEMENTATION.
                         )->end(
                     )->end(
                     )->ele( `content`
+
                         " Display.fragment.xml
                         )->ele( `VBox`
                             )->a( n = `class`   v = `sapUiSmallMargin`
@@ -175,6 +184,7 @@ CLASS z2ui5_cl_smpc_app_315 IMPLEMENTATION.
                                 )->end(
                             )->end(
                         )->end(
+
                         " Change.fragment.xml
                         )->ele( `VBox`
                             )->a( n = `class`   v = `sapUiSmallMargin`

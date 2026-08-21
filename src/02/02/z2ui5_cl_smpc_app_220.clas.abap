@@ -50,7 +50,7 @@ CLASS z2ui5_cl_smpc_app_220 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " Calendar min/max/disabled dates are typed "object" and demand real JS Date
-    " objects; the model keeps ISO strings and Formatter.DateCreateObject from the
+    " objects; the model keeps ABAP DATS strings and Formatter.DateAbapDateToDateObject from the
     " curated module converts them at the point of use (needs UI5 >= 1.74). The
     " original's imperative Switch handler (setShowWeekNumbers) is replaced by a
     " two-way binding shared between the Switch state and Calendar showWeekNumbers
@@ -68,12 +68,20 @@ CLASS z2ui5_cl_smpc_app_220 IMPLEMENTATION.
         )->a( n = `class`        v = `viewPadding`
         )->a( n = `core:require` v = `{Formatter: 'z2ui5/model/formatter'}`
 
+
+        " the sample's own ../style.css (shared by the sap.ui.unified samples and
+        " listed in this sample's manifest) - the view carries the class and the
+        " rule behind it has to come with it. \{ \} escaped: the XMLView parser
+        " reads an unescaped brace as a binding
+        )->tag( n = `HTML` ns = `core`
+            )->a( n = `content` v = `<style>.viewPadding\{padding:1rem\}` &&
+                                    `.sap-phone .viewPadding\{padding:0rem\}</style>`
         )->ele( n = `VerticalLayout` ns = `l`
 
             )->ele( n = `Calendar` ns = `u`
                 )->a( n = `id`              v = `calendar`
-                )->a( n = `minDate`         v = |\{ path: '{ client->_bind( val = min_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
-                )->a( n = `maxDate`         v = |\{ path: '{ client->_bind( val = max_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
+                )->a( n = `minDate`         v = |\{ path: '{ client->_bind( val = min_date path = abap_true ) }', formatter: 'Formatter.DateAbapDateToDateObject' \}|
+                )->a( n = `maxDate`         v = |\{ path: '{ client->_bind( val = max_date path = abap_true ) }', formatter: 'Formatter.DateAbapDateToDateObject' \}|
                 )->a( n = `disabledDates`   v = client->_bind( t_disabled )
                 )->a( n = `showWeekNumbers` v = client->_bind( show_week_numbers )
                 )->a( n = `select`          v = client->_event( val   = `CAL_SELECT`
@@ -84,11 +92,14 @@ CLASS z2ui5_cl_smpc_app_220 IMPLEMENTATION.
 
                 )->ele( n = `disabledDates` ns = `u`
                     )->tag( n = `DateRange` ns = `u`
-                        )->a( n = `startDate` v = |\{ path: 'START', formatter: 'Formatter.DateCreateObject' \}|
-                        " the second range is a single day and carries no end: an empty string
-                        " through DateCreateObject is an Invalid Date, which Month._checkDateEnabled
-                        " throws on - the guard keeps endDate null there (probe-verified, see sidecar)
-                        )->a( n = `endDate`   v = `{= ${END} ? Formatter.DateCreateObject(${END}) : null }`
+                        )->a( n = `startDate` v = |\{ path: 'START', formatter: 'Formatter.DateAbapDateToDateObject' \}|
+                        " the second range is a single day and carries no end. That used to need
+                        " a ternary guard in the view, because an empty string through
+                        " DateCreateObject is an Invalid Date and Month._checkDateEnabled throws on
+                        " it (probe-verified, see sidecar). DateAbapDateToDateObject answers null
+                        " for a non-date instead, so the plain binding is enough and the expression
+                        " is gone
+                        )->a( n = `endDate`   v = |\{ path: 'END', formatter: 'Formatter.DateAbapDateToDateObject' \}|
 
                 )->end(
             )->end(
@@ -150,14 +161,20 @@ CLASS z2ui5_cl_smpc_app_220 IMPLEMENTATION.
   METHOD model_init.
 
     " original values are UI5Date.getInstance(year, month0, day) - month is
-    " 0-based, normalized to ISO 1:1 (min 2000-01-01, max 2050-12-31)
-    min_date          = `2000-01-01`.
-    max_date          = `2050-12-31`.
+    " 0-based, and those are LOCAL dates. They are kept in the ABAP DATS form
+    " (yyyymmdd) and read with Formatter.DateAbapDateToDateObject, which builds
+    " the Date from the parsed parts - i.e. local midnight - matching what
+    " Calendar does at the other end (CalendarDate.fromLocalJSDate takes the
+    " local parts). The ISO date-only form these used to carry is parsed as UTC
+    " midnight by `new Date(s)`, so west of Greenwich every fixed date landed a
+    " day early: minDate became 1999-12-31 and the disabled range Jan 3-9.
+    min_date          = `20000101`.
+    max_date          = `20501231`.
     show_week_numbers = abap_true.
     selected_date     = `No Date Selected`.
     t_disabled        = VALUE #(
-      ( start = `2016-01-04` end = `2016-01-10` )
-      ( start = `2016-01-15` end = `` ) ).
+      ( start = `20160104` end = `20160110` )
+      ( start = `20160115` end = `` ) ).
 
   ENDMETHOD.
 

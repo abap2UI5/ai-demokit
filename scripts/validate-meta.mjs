@@ -254,6 +254,16 @@ for (const cls of sidecarSet) if (!portSet.has(cls)) err(`meta/${cls}.json has n
  *   - HARD: every module must belong to a port sidecar (or the overview app)
  *     — an orphan module is a renamed/deleted port's leftover and would never
  *     run again.
+ *   - HARD: every module must be able to FAIL. A module that only reads the
+ *     DOM and console.logs it passes whatever the port does, and the whole
+ *     coverage bookkeeping then counts the port as verified: the LIVE_TEST gap
+ *     below reads 0, the README lists it among the covered classes, and a
+ *     green nightly says nothing about it. Three such recon scripts (301, 351,
+ *     353) sat in here from the session that used them to learn the DOM and
+ *     were never rewritten — found 2026-08-21, and cheap to detect, because a
+ *     module that can fail always says so somewhere: `expect(`, a `throw`, a
+ *     `waitFor…` (Playwright's own waits reject on timeout), or an import from
+ *     lib-e2e, whose helpers all throw.
  *   - ADVISORY: every port with an open LIVE_TEST deviation should have a
  *     module — that is the automated close path (STATUS.md). Not a hard gate
  *     yet: the newest batches ship their LIVE_TESTs before their interactions
@@ -268,8 +278,13 @@ if (fs.existsSync(INTERACTIONS_DIR)) {
     .filter((f) => f.endsWith('.mjs'))
     .map((f) => f.replace(/\.mjs$/, ''));
   const validClasses = new Set([...sidecars.map((f) => f.replace(/\.json$/, '')), OVERVIEW_CLASS]);
+  const CAN_FAIL = /expect\(|throw\s|waitFor|lib-e2e/;
   for (const c of mods) {
     if (!validClasses.has(c)) err(`meta/interactions/${c}.mjs matches no port sidecar (or the overview app) — orphan interaction module`);
+    const src = fs.readFileSync(path.join(INTERACTIONS_DIR, `${c}.mjs`), 'utf8');
+    if (!CAN_FAIL.test(src)) {
+      err(`meta/interactions/${c}.mjs asserts nothing — it can never fail, so it counts as coverage the nightly does not actually provide. Assert the wire the LIVE_TEST names (expect(…), a throw, a waitFor…, or a lib-e2e helper).`);
+    }
   }
   const modSet = new Set(mods);
   interactionGaps = liveTestClasses.filter((c) => !modSet.has(c)).sort();

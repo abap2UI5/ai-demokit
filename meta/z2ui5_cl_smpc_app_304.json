@@ -2,13 +2,13 @@
   "class": "z2ui5_cl_smpc_app_304",
   "sample": "sap.ui.unified.sample.CalendarMultipleMonth",
   "entity": "sap.ui.unified.Calendar",
-  "file": "src/01/02/z2ui5_cl_smpc_app_304.clas.abap",
+  "file": "src/02/02/z2ui5_cl_smpc_app_304.clas.abap",
   "batch": "b15",
   "audit": {
     "frontend_action": false,
     "event_t_arg": true
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -17,11 +17,15 @@
     },
     {
       "type": "NOTE",
-      "what": "handleSelectToday does removeAllSelectedDates() + addSelectedDate(new DateRange({startDate: today})) and reformats. The port only writes the text: the server date IS today, so the label is 1:1, but the calendar's own highlight of that day is not moved - addSelectedDate takes a DateRange CONTROL, which no wire can construct (same residual as app 139)."
+      "what": "handleSelectToday's removeAllSelectedDates( ) + addSelectedDate( DateRange( today ) ) is reproduced since 2026-08-21, so the calendar's own highlight really moves to today. This carried a residual until then - 'only the calendar's own highlight is not moved, addSelectedDate takes a DateRange CONTROL which no wire can construct' - and the claim is true of the METHOD while missing the point: selectedDates is a bindable AGGREGATION of sap.ui.unified.DateRange, the same type and shape app 220 binds for disabledDates, so the aggregation never needed the method. The port binds it to a one-row table and both handlers re-state that row: replacing it IS removeAll + add. Every click round-trips through CAL_SELECT, so the model stays the source of truth and the control's own click-selection is re-stated rather than fought. Same stale-rationale shape as apps 305 and 306, found the same day."
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-16 (nightly e2e interaction): not yet run in a system: the CAL_SELECT expression-arg round-trip across the two displayed months and the SELECT_TODAY text update."
+      "what": "not yet run in a system: the CAL_SELECT expression-arg round-trip across the two displayed months and the SELECT_TODAY text update. **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_304.mjs)."
+    },
+    {
+      "type": "POST_171",
+      "what": "core:require (UI5 >= 1.74) on the view root loads z2ui5/model/formatter for the selectedDates startDate binding through Formatter.DateAbapDateToDateObject - the app needs a UI5 release >= 1.74 to render it. Without it the XMLView parser rejects the binding outright (\"formatter function ... not found\"), which is what the render gate caught. Same shape as app 017."
     }
   ]
 }

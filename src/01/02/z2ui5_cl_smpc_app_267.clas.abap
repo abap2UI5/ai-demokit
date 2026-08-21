@@ -42,9 +42,15 @@ CLASS z2ui5_cl_smpc_app_267 IMPLEMENTATION.
 
     " handleToggleClick calls DynamicSideContent.toggle() - reproduced
     " roundtrip-free with control_by_id (a public control method). The Slider's
-    " liveChange sets the container width through jQuery in the original, which
-    " has no abap2UI5 equivalent (app 213/214 precedent); the Slider stays with
-    " its two-way bound value. The img> model folds to the mock's literal URLs.
+    " liveChange sets the container width through jQuery in the original, and
+    " that IS reproduced, roundtrip-free too: the `css` control method writes
+    " the width onto the container Page's DOM node, since sap.m.Page has no
+    " width property to bind. This comment said the opposite - no abap2UI5
+    " equivalent, and a two-way bound Slider value - until 2026-08-21; it had
+    " been left behind by the 2026-08-05 change that added the wire, which the
+    " sidecar has described correctly ever since. The Slider keeps the
+    " original's literal value=100. The img> model folds to the mock's literal
+    " URLs.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
         )->a( n = `xmlns`     v = `sap.m`
@@ -80,9 +86,35 @@ CLASS z2ui5_cl_smpc_app_267 IMPLEMENTATION.
                             )->a( n = `text` v = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor `
                                               && `incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud `
                                               && `exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure `
-                                              && `dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. `
-                                              && `Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt `
-                                              && `mollit anim id est laborum.`
+                                              && `dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.`
+                                              && ` Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt `
+                                              && `mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, `
+                                              && `sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim `
+                                              && `veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo `
+                                              && `consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum `
+                                              && `dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt `
+                                              && `in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, `
+                                              && `consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore `
+                                              && `magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi `
+                                              && `ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in `
+                                              && `voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat `
+                                              && `cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`
+                                              && ` Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor `
+                                              && `incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud `
+                                              && `exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure `
+                                              && `dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.`
+                                              && ` Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt `
+                                              && `mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, `
+                                              && `sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim `
+                                              && `veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo `
+                                              && `consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum `
+                                              && `dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt `
+                                              && `in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, `
+                                              && `consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore `
+                                              && `magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi `
+                                              && `ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in `
+                                              && `voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat `
+                                              && `cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`
 
                     )->end(
 
@@ -100,9 +132,35 @@ CLASS z2ui5_cl_smpc_app_267 IMPLEMENTATION.
                                 )->a( n = `text`  v = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor `
                                                    && `incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud `
                                                    && `exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure `
-                                                   && `dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. `
-                                                   && `Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt `
-                                                   && `mollit anim id est laborum.`
+                                                   && `dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.`
+                                                   && ` Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt `
+                                                   && `mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, `
+                                                   && `sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim `
+                                                   && `veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo `
+                                                   && `consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum `
+                                                   && `dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt `
+                                                   && `in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, `
+                                                   && `consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore `
+                                                   && `magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi `
+                                                   && `ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in `
+                                                   && `voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat `
+                                                   && `cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`
+                                                   && ` Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor `
+                                                   && `incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud `
+                                                   && `exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure `
+                                                   && `dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.`
+                                                   && ` Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt `
+                                                   && `mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, `
+                                                   && `sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim `
+                                                   && `veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo `
+                                                   && `consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum `
+                                                   && `dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt `
+                                                   && `in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, `
+                                                   && `consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore `
+                                                   && `magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi `
+                                                   && `ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in `
+                                                   && `voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat `
+                                                   && `cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`
 
                         )->end(
                     )->end(
