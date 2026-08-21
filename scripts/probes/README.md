@@ -29,6 +29,7 @@ Fast, offline, no browser. Run any of these after a batch of edits.
 | `post171-blindspot-probe.mjs` | post-1.71 members the property gate structurally cannot see — relocated to a newer base class, aggregations, enum *values*, plain misses |
 | `faked-event-value-audit.mjs` | a toast or an imperative `setText`/`setValue` holding a **constant** where the sample composes it from event data |
 | `improvised-cluster.mjs` | sorts every `IMPROVISED` deviation into GAP / policy / boundary / needs-REWORK, so the gap harvest is repeatable |
+| `stale-impossibility-probe.mjs` | a deviation still declaring something the framework has since learned to do — the port goes on doing less than its original *because the note says it must* (five found on one day: 139, 304, 305, 306 and 267's comment). Expect ~1 in 3 to be real; the arguments may still be untransportable |
 
 ## Runtime experiments — drive real OpenUI5 in headless Chromium
 
