@@ -1,15 +1,23 @@
-" @keywords semanticpage semantic sap.m.semantic actions button overflowtoolbarbutton
+" @keywords semanticpage semantic sap.m.semantic actions button overflowtoolbarbutton messagepopover messageitem
 " @summary Semantic Page Full Screen
 CLASS z2ui5_cl_smpc_app_105 DEFINITION PUBLIC.
 
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
+    TYPES: BEGIN OF ty_s_message,
+             message     TYPE string,
+             description TYPE string,
+             type        TYPE string,
+           END OF ty_s_message.
+    DATA t_messages TYPE STANDARD TABLE OF ty_s_message WITH EMPTY KEY.
+
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
     METHODS on_event.
+    METHODS model_init.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -21,6 +29,7 @@ CLASS z2ui5_cl_smpc_app_105 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
+      model_init( ).
       view_display( ).
     ELSEIF client->check_on_navigated( ).
       view_display( ).
@@ -41,6 +50,7 @@ CLASS z2ui5_cl_smpc_app_105 IMPLEMENTATION.
         )->a( n = `xmlns:mvc`      v = `sap.ui.core.mvc`
         )->a( n = `xmlns`          v = `sap.m`
         )->a( n = `xmlns:semantic` v = `sap.m.semantic`
+        )->a( n = `xmlns:z2ui5`    v = `z2ui5.cc`
         )->a( n = `xmlns:ui`       v = `sap.ca.ui`
         )->a( n = `displayBlock`   v = `true`
 
@@ -100,8 +110,31 @@ CLASS z2ui5_cl_smpc_app_105 IMPLEMENTATION.
 
             )->end(
             )->ele( n = `messagesIndicator` ns = `semantic`
-                )->tag( n = `MessagesIndicator` ns = `semantic`
-                    )->a( n = `press` v = client->_event( `MESSAGES` )
+                )->ele( n = `MessagesIndicator` ns = `semantic`
+                    )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                    t_arg = VALUE #( ( `semMessagePopover` ) ( `toggleBy` ) ( `$event.oSource.sId` ) ) )
+
+                    " the original's controller-built MessagePopover over the
+                    " message model, declared as a dependent of its anchor
+                    )->ele( n = `dependents` ns = `semantic`
+                        )->ele( `MessagePopover`
+                            )->a( n = `id`    v = `semMessagePopover`
+                            )->a( n = `items` v = `{message>/}`
+
+                            )->tag( `MessageItem`
+                                )->a( n = `description` v = `{message>description}`
+                                )->a( n = `type`        v = `{message>type}`
+                                )->a( n = `title`       v = `{message>message}`
+
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+            )->ele( n = `content` ns = `semantic`
+                " added container (declared): the z2ui5.cc.MessageManager bridge
+                " reproducing onInit's MessageManager.addMessages seed
+                )->tag( n = `MessageManager` ns = `z2ui5`
+                    )->a( n = `items` v = client->_bind( t_messages )
 
             )->end(
             )->ele( n = `customFooterContent` ns = `semantic`
@@ -128,13 +161,19 @@ CLASS z2ui5_cl_smpc_app_105 IMPLEMENTATION.
       WHEN `NAV`.
         client->message_toast_display( `Pressed navigation button` ).
 
-      WHEN `MESSAGES`.
-        client->message_toast_display( `Messages` ).
-
       WHEN `PRESS`.
         client->message_toast_display( |Pressed custom button { client->get_event_arg( ) }| ).
 
     ENDCASE.
+
+  ENDMETHOD.
+
+  METHOD model_init.
+
+    " onInit: MessageManager.addMessages( new Message( { message: 'Something
+    " wrong happened', type: Error } ) ) - reconciled by the
+    " z2ui5.cc.MessageManager bridge control in the view
+    t_messages = VALUE #( ( message = `Something wrong happened` type = `Error` ) ).
 
   ENDMETHOD.
 

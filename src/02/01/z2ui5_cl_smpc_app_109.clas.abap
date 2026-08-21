@@ -5,6 +5,12 @@ CLASS z2ui5_cl_smpc_app_109 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
+    " onPress flips the calendar's dateSelectionMode and swaps the button's
+    " tooltip - both are bindable properties, so they are held here and bound
+    " two-way rather than driven through a frontend action
+    DATA date_selection_mode TYPE string.
+    DATA multiselect_tooltip TYPE string.
+
     TYPES: BEGIN OF ty_s_appointment,
              title      TYPE string,
              text       TYPE string,
@@ -70,7 +76,7 @@ CLASS z2ui5_cl_smpc_app_109 IMPLEMENTATION.
                 )->ele( `ToggleButton`
                     )->a( n = `id`      v = `MultiSelect`
                     )->a( n = `icon`    v = `sap-icon://select-appointments`
-                    )->a( n = `tooltip` v = `Enable multi-day selection`
+                    )->a( n = `tooltip` v = client->_bind( multiselect_tooltip )
                     )->a( n = `press`   v = client->_event( `PRESS` )
 
                     )->ele( `layoutData`
@@ -85,6 +91,7 @@ CLASS z2ui5_cl_smpc_app_109 IMPLEMENTATION.
                 )->a( n = `id`                  v = `SPC1`
                 )->a( n = `class`               v = `sapUiSmallMarginTop`
                 )->a( n = `title`               v = `My Calendar`
+                )->a( n = `dateSelectionMode`   v = client->_bind( date_selection_mode )
                 )->a( n = `viewChange`          v = client->_event( `VIEW_CHANGE` )
                 )->a( n = `selectedDatesChange` v = client->_event( `SELECTED_DATE` )
                 )->a( n = `weekNumberPress`     v = client->_event( val   = `WEEK`
@@ -128,7 +135,15 @@ CLASS z2ui5_cl_smpc_app_109 IMPLEMENTATION.
     CASE client->get_event( ).
 
       WHEN `PRESS`.
-        client->message_toast_display( `Day selection mode toggled` ).
+        " onPress: SingleSelect <-> MultiSelect, and the tooltip follows the
+        " pressed state exactly as the original's setTooltip does
+        IF date_selection_mode = `SingleSelect`.
+          date_selection_mode = `MultiSelect`.
+          multiselect_tooltip = `Disable multi-day selection`.
+        ELSE.
+          date_selection_mode = `SingleSelect`.
+          multiselect_tooltip = `Enable multi-day selection`.
+        ENDIF.
 
       WHEN `VIEW_CHANGE`.
         client->message_toast_display( |'viewChange' event fired.| ).
@@ -150,6 +165,11 @@ CLASS z2ui5_cl_smpc_app_109 IMPLEMENTATION.
 
 
   METHOD model_init.
+
+    " the calendar opens in single-day selection, and the button offers to
+    " enable the multi-day one - the original's view defaults
+    date_selection_mode = `SingleSelect`.
+    multiselect_tooltip = `Enable multi-day selection`.
 
     start_date = `2018-07-09T00:00:00`.
     t_appointments = VALUE #(

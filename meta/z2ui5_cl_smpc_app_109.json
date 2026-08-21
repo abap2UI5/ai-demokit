@@ -25,7 +25,11 @@
     },
     {
       "type": "POST_171",
-      "what": "the icon `sap-icon://select-appointments` reached the SAP icon font in 1.96 and is kept 1:1 from the original Page.view.xml, which names it on the 'Enable multi-day selection' ToggleButton. Newer than the 1.71 floor: there IconPool resolves nothing and the button renders with NO icon, silently - the app needs a UI5 release >= 1.96 to show it."
+      "what": "the icon `sap-icon://select-appointments` reached the SAP icon font in 1.96 and is kept 1:1 from the original Page.view.xml, which names it on the 'Enable multi-day selection' ToggleButton. Newer than the 1.71 floor: there IconPool resolves nothing and the button renders with NO icon, silently - the app needs a UI5 release >= 1.96 to show it. The dateSelectionMode property the same button drives carries no @since of its own, but its ENUM TYPE sap.m.SinglePlanningCalendarSelectionMode is @since 1.113 - invisible to the property gate at the attribute-name level (AGENTS section 5, the enum-value residual limit), so it is declared here BY POLICY: the app needs a UI5 release >= 1.113 for the multi-day selection to mean anything."
+    },
+    {
+      "type": "NOTE",
+      "what": "onPress reproduced 1:1 since 2026-08-21. The port toasted a constant 'Day selection mode toggled' before and carried NO dateSelectionMode at all, so the one behaviour SinglePlanningCalendarDateSelection exists to demonstrate was silently absent and undeclared - found by the review sweep. Both halves of the original handler are bindable properties, so both are held in the model and bound two-way rather than driven through a frontend action (the prefer-a-bindable-property rule): dateSelectionMode flips SingleSelect <-> MultiSelect and the ToggleButton's tooltip follows with 'Enable multi-day selection' / 'Disable multi-day selection', exactly the strings the original's setTooltip uses."
     }
   ]
 }

@@ -517,7 +517,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 
 | Sample | Class |
 |---|---|
-| **sap.m.semantic.FullscreenPage**<br>Semantic Page Full Screen<br><sub>semanticpage semantic sap.m.semantic actions button overflowtoolbarbutton</sub> | [`Z2UI5_CL_SMPC_APP_105`](src/01/01/z2ui5_cl_smpc_app_105.clas.abap) |
+| **sap.m.semantic.FullscreenPage**<br>Semantic Page Full Screen<br><sub>semanticpage semantic sap.m.semantic actions button overflowtoolbarbutton messagepopover messageitem</sub> | [`Z2UI5_CL_SMPC_APP_105`](src/01/01/z2ui5_cl_smpc_app_105.clas.abap) |
 | **sap.m.semantic.SemanticPage**<br>Integration of Floating Footer inside Semantic Page<br><sub>semanticpage semantic sap.m.semantic floating footer splitcontainer messagepopover messageitem pagingbutton overflowtoolbarbutton button</sub> | [`Z2UI5_CL_SMPC_APP_106`](src/01/01/z2ui5_cl_smpc_app_106.clas.abap) |
 | **sap.m.semantic.SemanticPage**<br>Semantic Page Master/Detail<br><sub>semanticpage semantic sap.m.semantic master-detail actions splitcontainer pageaccessiblelandmarkinfo messagepopover messageitem pagingbutton overflowtoolbarbutton button</sub> | [`Z2UI5_CL_SMPC_APP_107`](src/01/01/z2ui5_cl_smpc_app_107.clas.abap) |
 

@@ -3309,14 +3309,20 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.30.0`
         notes = lv_text1 ) ).
 
+    lv_text1 = `NOTE: onSemanticButtonPress toasts the pressed control's class name (getMetadata().getName() minus the library); reproduced by passing each semantic action's name as a t_arg literal ('AddAction',` &&
+               ` 'EditAction', ...) and toasting 'Pressed: <name>'. The custom footer buttons toast the pressed control id via $event.oSource.sId (original onPress). The MessagesIndicator toast is simplified to a` &&
+               ` fixed message (the original opens a MessagePopover, dropped here). // NOTE: onMessagesButtonPress reproduced 1:1 since 2026-08-21 - the port toasted a bare 'Messages' before, which the review sweep` &&
+               ` found: the whole message-handling leg of the sample was missing, undeclared, while sibling ports 106/107 built from the BYTE-IDENTICAL controller already carried it. The controller-built` &&
+               ` MessagePopover over the message model is now declared as a dependent of the MessagesIndicator (added controls vs the original view.xml: MessagePopover + MessageItem with the original's` &&
+               ` {message>description} / {message>type} / {message>message} template) and toggled roundtrip-free via follow_up_action control_by_id toggleBy ($event.oSource.sId) - the`.
+    lv_text1 = lv_text1 && ` _messagePopover.toggle(oMessagesButton) equivalent. onInit's MessageManager.addMessages seed ('Something wrong happened', Error) rides on an added z2ui5.cc.MessageManager bridge control in an added` &&
+               ` semantic content aggregation (declared) with its one-row items table - the app-065 idiom, identical to apps 106/107.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.semantic.SemanticPage`           name = `SemanticPageFullScreen`                        class = `z2ui5_cl_smpc_app_105` path = `src/01/01/z2ui5_cl_smpc_app_105.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30.0`
-        notes = `NOTE: onSemanticButtonPress toasts the pressed control's class name (getMetadata().getName() minus the library); reproduced by passing each semantic action's name as a t_arg literal ('AddAction',` &&
-                 ` 'EditAction', ...) and toasting 'Pressed: <name>'. The custom footer buttons toast the pressed control id via $event.oSource.sId (original onPress). The MessagesIndicator toast is simplified to a` &&
-                 ` fixed message (the original opens a MessagePopover, dropped here).` ) ).
+        notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: The object-typed date properties (SinglePlanningCalendar.startDate, CalendarAppointment.startDate/endDate) are fed from ISO strings and converted with Formatter.DateCreateObject (core:require).` &&
                ` The original UI5Date.getInstance values are normalized to ISO 1:1 (0-based months). The first appointment used UI5Date.getInstance() (the current time); it is pinned to the calendar's start date` &&
@@ -3331,7 +3337,18 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` and its DayView/WorkWeekView/WeekView/MonthView are since 1.61 (in scope). Also the SinglePlanningCalendar events weekNumberPress and selectedDatesChange (@since 1.123) are kept 1:1 from the original` &&
                ` view; newer than 1.71, declared per the property-171 policy. // POST-1.71: the icon ``sap-icon://select-appointments`` reached the SAP icon font in 1.96 and is kept 1:1 from the original`.
     lv_text1 = lv_text1 && ` Page.view.xml, which names it on the 'Enable multi-day selection' ToggleButton. Newer than the 1.71 floor: there IconPool resolves nothing and the button renders with NO icon, silently - the app` &&
-               ` needs a UI5 release >= 1.96 to show it.`.
+               ` needs a UI5 release >= 1.96 to show it. The dateSelectionMode property the same button drives carries no @since of its own, but its ENUM TYPE sap.m.SinglePlanningCalendarSelectionMode is @since 1.113` &&
+               ` - invisible to the property gate at the attribute-name level (AGENTS section 5, the enum-value residual limit), so it is declared here BY POLICY: the app needs a UI5 release >= 1.113 for the` &&
+               ` multi-day selection to mean anything. // NOTE: onPress reproduced 1:1 since 2026-08-21. The port toasted a constant 'Day selection mode toggled' before and carried NO dateSelectionMode at all, so the` &&
+               ` one behaviour SinglePlanningCalendarDateSelection exists to demonstrate was silently absent and undeclared - found by the review sweep. Both halves of the original handler are bindable properties, so` &&
+               ` both are held in the model and bound two-way rather than driven through a frontend action (the prefer-a-bindable-property rule): dateSelectionMode flips SingleSelect <-> MultiSelect and the`.
+    lv_text1 = lv_text1 && ` ToggleButton's tooltip follows with 'Enable multi-day selection' / 'Disable multi-day selection', exactly the strings the original's setTooltip uses.`.
+    lv_text2 = `Formatter.DateCreateObject is referenced via core:require (UI5 >= 1.74). sap.m.SinglePlanningCalendar and its DayView/WorkWeekView/WeekView/MonthView are since 1.61 (in scope). Also the` &&
+               ` SinglePlanningCalendar events weekNumberPress and selectedDatesChange (@since 1.123) are kept 1:1 from the original view; newer than 1.71, declared per the property-171 policy. // the icon` &&
+               ` ``sap-icon://select-appointments`` reached the SAP icon font in 1.96 and is kept 1:1 from the original Page.view.xml, which names it on the 'Enable multi-day selection' ToggleButton. Newer than the` &&
+               ` 1.71 floor: there IconPool resolves nothing and the button renders with NO icon, silently - the app needs a UI5 release >= 1.96 to show it. The dateSelectionMode property the same button drives` &&
+               ` carries no @since of its own, but its ENUM TYPE sap.m.SinglePlanningCalendarSelectionMode is @since 1.113 - invisible to the property gate at the attribute-name level (AGENTS section 5, the` &&
+               ` enum-value residual limit), so it is declared here BY POLICY: the app needs a UI5 release >= 1.113 for the multi-day selection to mean anything.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.SinglePlanningCalendar`          name = `SinglePlanningCalendarDateSelection`           class = `z2ui5_cl_smpc_app_109` path = `src/02/01/z2ui5_cl_smpc_app_109.clas.abap`
         score = 4
@@ -3339,10 +3356,7 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.61`
         is_post171 = abap_true
         notes = lv_text1
-        post171 = `Formatter.DateCreateObject is referenced via core:require (UI5 >= 1.74). sap.m.SinglePlanningCalendar and its DayView/WorkWeekView/WeekView/MonthView are since 1.61 (in scope). Also the` &&
-                 ` SinglePlanningCalendar events weekNumberPress and selectedDatesChange (@since 1.123) are kept 1:1 from the original view; newer than 1.71, declared per the property-171 policy. // the icon` &&
-                 ` ``sap-icon://select-appointments`` reached the SAP icon font in 1.96 and is kept 1:1 from the original Page.view.xml, which names it on the 'Enable multi-day selection' ToggleButton. Newer than the` &&
-                 ` 1.71 floor: there IconPool resolves nothing and the button renders with NO icon, silently - the app needs a UI5 release >= 1.96 to show it.` ) ).
+        post171 = lv_text2 ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Slider`                          name = `Slider`                                        class = `z2ui5_cl_smpc_app_068` path = `src/01/01/z2ui5_cl_smpc_app_068.clas.abap`
