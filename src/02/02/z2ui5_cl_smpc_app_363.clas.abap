@@ -28,9 +28,16 @@ CLASS z2ui5_cl_smpc_app_363 DEFINITION PUBLIC.
     DATA t_suppliers  TYPE STANDARD TABLE OF ty_s_name WITH EMPTY KEY.
     DATA t_categories TYPE STANDARD TABLE OF ty_s_name WITH EMPTY KEY.
 
-    " the three freeze Inputs are two-way bound and the Table / its rowMode
-    " bind the SAME fields, so Apply only has to clamp them - the original
-    " calls setFixedColumnCount / setFixedTopRowCount / setFixedBottomRowCount
+    " the Inputs and the Table are bound to DIFFERENT fields on purpose: an
+    " Input writes its value back as a STRING, and feeding that into the
+    " int-typed fixedColumnCount / fixedTopRowCount / fixedBottomRowCount kills
+    " the view outright ("20" is of type string, expected int). The original
+    " keeps them apart the same way - it parseInts the Input and only then
+    " calls setFixedColumnCount - so Apply converts, clamps, and writes the
+    " corrected number back into the Input, which is the original's setValue.
+    DATA column_count_text      TYPE string.
+    DATA top_row_count_text     TYPE string.
+    DATA bottom_row_count_text  TYPE string.
     DATA fixed_column_count     TYPE i.
     DATA fixed_top_row_count    TYPE i.
     DATA fixed_bottom_row_count TYPE i.
@@ -111,21 +118,21 @@ CLASS z2ui5_cl_smpc_app_363 IMPLEMENTATION.
                                 )->a( n = `width`       v = `20%`
                                 )->a( n = `placeholder` v = `fixed column count`
                                 )->a( n = `tooltip`     v = `fixed column count`
-                                )->a( n = `value`       v = client->_bind( fixed_column_count )
+                                )->a( n = `value`       v = client->_bind( column_count_text )
 
                             )->tag( n = `Input` ns = `m`
                                 )->a( n = `id`          v = `inputRow`
                                 )->a( n = `width`       v = `20%`
                                 )->a( n = `placeholder` v = `fixed row count`
                                 )->a( n = `tooltip`     v = `fixed row count`
-                                )->a( n = `value`       v = client->_bind( fixed_top_row_count )
+                                )->a( n = `value`       v = client->_bind( top_row_count_text )
 
                             )->tag( n = `Input` ns = `m`
                                 )->a( n = `id`          v = `inputBottomRow`
                                 )->a( n = `width`       v = `20%`
                                 )->a( n = `placeholder` v = `fixed bottom row count`
                                 )->a( n = `tooltip`     v = `fixed bottom row count`
-                                )->a( n = `value`       v = client->_bind( fixed_bottom_row_count )
+                                )->a( n = `value`       v = client->_bind( bottom_row_count_text )
 
                             )->tag( n = `Button` ns = `m`
                                 )->a( n = `id`    v = `button`
@@ -324,8 +331,20 @@ CLASS z2ui5_cl_smpc_app_363 IMPLEMENTATION.
   METHOD on_event.
 
     IF client->get_event( ) = `APPLY`.
-      " buttonPress: clamp the entered counts against the table's own totals
-      " and tell the user when a value had to be corrected
+      " buttonPress: read the Inputs the way the original parseInts them, then
+      " clamp against the table's own totals and tell the user when a value
+      " had to be corrected. A non-numeric entry keeps the last value - the
+      " original's parseInt would hand setFixedColumnCount a NaN there.
+      IF column_count_text CO ` 0123456789` AND column_count_text IS NOT INITIAL.
+        fixed_column_count = CONV i( column_count_text ).
+      ENDIF.
+      IF top_row_count_text CO ` 0123456789` AND top_row_count_text IS NOT INITIAL.
+        fixed_top_row_count = CONV i( top_row_count_text ).
+      ENDIF.
+      IF bottom_row_count_text CO ` 0123456789` AND bottom_row_count_text IS NOT INITIAL.
+        fixed_bottom_row_count = CONV i( bottom_row_count_text ).
+      ENDIF.
+
       IF fixed_column_count > cv_total_columns.
         fixed_column_count = cv_total_columns.
         client->message_toast_display( `Fixed column count exceeds the total column count. Value in column count input got updated.` ).
@@ -344,12 +363,23 @@ CLASS z2ui5_cl_smpc_app_363 IMPLEMENTATION.
         ENDIF.
         client->message_toast_display( `Sum of fixed row count and bottom row count exceeds the total row count. Input values got updated.` ).
       ENDIF.
+
+      " the original's oView.byId( ... ).setValue( ) - the corrected numbers
+      " travel back into the Inputs
+      column_count_text     = |{ fixed_column_count }|.
+      top_row_count_text    = |{ fixed_top_row_count }|.
+      bottom_row_count_text = |{ fixed_bottom_row_count }|.
     ENDIF.
 
   ENDMETHOD.
 
 
   METHOD model_init.
+
+    " the three Inputs start on the table's own initial freeze counts, all zero
+    column_count_text     = |{ fixed_column_count }|.
+    top_row_count_text    = |{ fixed_top_row_count }|.
+    bottom_row_count_text = |{ fixed_bottom_row_count }|.
 
     " the shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json)
     " with the columns the twelve table columns bind. DeliveryDate is

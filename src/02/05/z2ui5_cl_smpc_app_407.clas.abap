@@ -69,6 +69,8 @@ CLASS z2ui5_cl_smpc_app_407 DEFINITION PUBLIC.
     METHODS view_display.
     METHODS on_event.
     METHODS popup_quick_create.
+    METHODS navigate_to
+      IMPORTING key TYPE string.
     METHODS apply_filter.
     METHODS filter_items
       IMPORTING it_items        TYPE ty_t_nav_item
@@ -421,20 +423,23 @@ CLASS z2ui5_cl_smpc_app_407 IMPLEMENTATION.
         ENDIF.
 
       WHEN `ITEM_SELECT`.
-        " onItemSelect: navContainer.to( item key ) - only when a page with that
-        " id exists, exactly like the original's getPage check
-        DATA(key) = client->get_event_arg( ).
-        IF key = `home` OR key = `myAccounts` OR key = `myOrders` OR key = `CustomerManagement`.
-          client->follow_up_action( val   = client->cs_event-control_by_id
-                                    t_arg = VALUE #( ( `navContainer` )
-                                                     ( `to` )
-                                                     ( key ) ) ).
-        ENDIF.
+        " onItemSelect: navContainer.to( item key ). Kept wired 1:1 with the
+        " original, but a click on an item does NOT arrive here - see
+        " ITEM_PRESS below.
+        navigate_to( client->get_event_arg( ) ).
 
       WHEN `ITEM_PRESS`.
-        " onItemPress: only the fixed 'Quick Create' item opens the dialog
+        " The original runs BOTH handlers on one click: the SideNavigation's
+        " itemSelect navigates, and the item's own press opens Quick Create.
+        " One gesture delivers ONE round-trip here and the item's press wins
+        " it, so the itemSelect branch above never runs - both behaviours are
+        " served from here instead, which is what the user of the original
+        " sees. Measured 2026-08-21: the click sends EVENT ITEM_PRESS and the
+        " itemSelect wire is swallowed.
         IF client->get_event_arg( ) = `quickCreate`.
           popup_quick_create( ).
+        ELSE.
+          navigate_to( client->get_event_arg( ) ).
         ENDIF.
 
       WHEN `LIVE_CHANGE`.
@@ -454,6 +459,20 @@ CLASS z2ui5_cl_smpc_app_407 IMPLEMENTATION.
         ENDIF.
 
     ENDCASE.
+
+  ENDMETHOD.
+
+
+  METHOD navigate_to.
+
+    " navContainer.to( key ) - only for a key the NavContainer actually has a
+    " page for, exactly like the original's getPage check
+    IF key = `home` OR key = `myAccounts` OR key = `myOrders` OR key = `CustomerManagement`.
+      client->follow_up_action( val   = client->cs_event-control_by_id
+                                t_arg = VALUE #( ( `navContainer` )
+                                                 ( `to` )
+                                                 ( key ) ) ).
+    ENDIF.
 
   ENDMETHOD.
 

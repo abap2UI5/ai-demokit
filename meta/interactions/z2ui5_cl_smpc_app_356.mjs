@@ -4,7 +4,12 @@
 // the selectionChange expression argument has to report the selected count
 // (its second half: the count is computed on the client from
 // getSelectedIndices().length and travels as an event arg).
-import { waitForUi5, ui5All, UI5_ALL_SRC } from '../../scripts/lib-e2e.mjs';
+//
+// Every toolbar control here lives in the OverflowToolbar's "Additional
+// Options" popover at the smoke's viewport (measured: input1 has no DOM at
+// all until it is opened), so each toolbar step opens it first. The overflow
+// MOVES the real controls, ids and all, so the locators stay the same.
+import { waitForUi5, ui5All, UI5_ALL_SRC, revealInOverflow } from '../../scripts/lib-e2e.mjs';
 
 const readPlugin = async (page) => page.evaluate(`(() => { ${UI5_ALL_SRC}
   const p = ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.table.plugins.MultiSelectionPlugin');
@@ -22,6 +27,7 @@ export default async (page, expect) => {
 
   // the limit round-trip, which answers with a toast and re-binds the plugin
   const input = page.locator('[id$="input1"] input').first();
+  await revealInOverflow(page, input);
   await expect(input, 'the limit input').toBeVisibleEnabled();
   await input.fill('5');
   await input.press('Enter');
@@ -35,8 +41,11 @@ export default async (page, expect) => {
   await page.locator('.sapUiTableRowSelectionCell').first().click();
   await expect(page.locator('.sapMMessageToast').last(), 'the selectionChange toast').toContainText('1 row(s) selected.');
 
-  // the selectionMode Select, again with no event of its own
-  await page.locator('[id$="select1"]').first().click();
+  // the selectionMode Select, again with no event of its own. The limit
+  // round-trip re-rendered the toolbar, so the overflow has to be reopened.
+  const modeSelect = page.locator('[id$="select1"]').first();
+  await revealInOverflow(page, modeSelect);
+  await modeSelect.click();
   await page.locator('.sapMSltPicker').getByText('Single', { exact: true }).first().click();
   await waitForUi5(page, () => {
     const p = ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.table.plugins.MultiSelectionPlugin');

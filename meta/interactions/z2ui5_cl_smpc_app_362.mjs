@@ -7,7 +7,7 @@
 // context is what the server actually put at the head of the model. This port
 // is also the one that used to die on `"" is of type string, expected
 // sap.ui.core.SortOrder`, so the sortOrder values are asserted as such.
-import { waitForUi5, ui5All, UI5_ALL_SRC } from '../../scripts/lib-e2e.mjs';
+import { waitForUi5, ui5All, UI5_ALL_SRC, revealInOverflow } from '../../scripts/lib-e2e.mjs';
 
 const head = async (page) => page.evaluate(`(() => { ${UI5_ALL_SRC}
   const t = ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.table.Table');
@@ -28,21 +28,29 @@ export default async (page, expect) => {
   }
 
   // sort ascending across Categories AND Name
-  await page.getByRole('button', { name: 'Sort ascending across Categories and Name' }).first().click();
+  const sortBoth = page.getByRole('button', { name: 'Sort ascending across Categories and Name' }).first();
+  await revealInOverflow(page, sortBoth);
+  await sortBoth.click();
+  // Waited on the CATEGORY column's own sortOrder, not on the head row's
+  // category: the model already opens with an Accessories row at the head
+  // (name-ascending puts `10" Portable DVD player` first), so a head-row check
+  // is true BEFORE the click and waits for nothing — the module then raced its
+  // next round-trip against this one. The category sortOrder is None until
+  // this button lands, so it is the state that actually changes.
   await waitForUi5(page, () => {
     const t = ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.table.Table');
-    const rows = t ? t.getRows() : [];
-    const ctx = rows.length ? rows[0].getBindingContext() : null;
-    return !!ctx && ctx.getProperty('CATEGORY') === 'Accessories';
-  }, 'the category+name sort did not put an Accessories row at the head of the model');
+    return !!t && t.getColumns().some((c) => c.getSortOrder() === 'Ascending'
+      && c.getSortProperty() === 'CATEGORY');
+  }, 'the category+name sort did not reach the bound Column.sortOrder');
   const sorted = await head(page);
-  const orders = Object.values(sorted.order);
-  if (!orders.includes('Ascending')) {
-    throw new Error(`no column carried the bound Ascending sortOrder after the sort (got ${JSON.stringify(sorted.order)})`);
+  if (sorted.category !== 'Accessories') {
+    throw new Error(`the sorted model does not start on Accessories (got "${sorted.category}")`);
   }
 
   // clearing re-seeds the model and resets every column to None
-  await page.getByRole('button', { name: 'Clear all sortings' }).first().click();
+  const clear = page.getByRole('button', { name: 'Clear all sortings' }).first();
+  await revealInOverflow(page, clear);
+  await clear.click();
   await waitForUi5(page, () => {
     const t = ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.table.Table');
     const rows = t ? t.getRows() : [];

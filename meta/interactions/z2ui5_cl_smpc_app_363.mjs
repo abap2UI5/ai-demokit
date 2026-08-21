@@ -2,7 +2,7 @@
 // reach the table, and the Apply clamp round-trip has to write the corrected
 // values back INTO the Inputs — the clamp is the whole point of the sample, so
 // the assertion is the value the user gets handed back, not just the toast.
-import { waitForUi5, ui5All, UI5_ALL_SRC } from '../../scripts/lib-e2e.mjs';
+import { waitForUi5, ui5All, UI5_ALL_SRC, revealInOverflow } from '../../scripts/lib-e2e.mjs';
 
 const inputValue = async (page, id) => page.evaluate(`(() => { ${UI5_ALL_SRC}
   const i = ui5All().find((c) => c.getId().endsWith('${id}'));
@@ -17,6 +17,7 @@ export default async (page, expect) => {
 
   // a column count over the 12 the table has is clamped back to 12
   const col = page.locator('[id$="inputColumn"] input').first();
+  await revealInOverflow(page, col);
   await expect(col, 'the fixed column count input').toBeVisibleEnabled();
   await col.fill('20');
   await page.getByRole('button', { name: 'Apply', exact: true }).first().click();
@@ -31,7 +32,9 @@ export default async (page, expect) => {
   }
 
   // top + bottom over the 10 rows the table has: the bottom count is clamped
-  await page.locator('[id$="inputRow"] input').first().fill('8');
+  const rowInput = page.locator('[id$="inputRow"] input').first();
+  await revealInOverflow(page, rowInput);
+  await rowInput.fill('8');
   await page.locator('[id$="inputBottomRow"] input').first().fill('7');
   await page.getByRole('button', { name: 'Apply', exact: true }).first().click();
   await expect(page.locator('.sapMMessageToast').last(), 'the row clamp toast')

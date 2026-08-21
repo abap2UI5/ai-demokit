@@ -21,8 +21,12 @@ export default async (page, expect) => {
   await expect(pop, 'the QuickView popover').toContainText('Adventure Company');
   await expect(pop, 'the QuickView first page').toContainText('Contact Details');
 
-  // (b) the in-popover pageLink navigation to the employee page
-  const pageLink = pop.getByRole('link', { name: 'John Doe', exact: true }).first();
+  // (b) the in-popover pageLink navigation to the employee page. Matched on
+  // the Link CLASS, not by role or by text: a QuickView link carries no
+  // accessible name of its own (getByRole finds nothing), and "John Doe"
+  // appears twice in the popover — once as the page DESCRIPTION and once as
+  // this pageLink, so a plain getByText would be ambiguous.
+  const pageLink = pop.locator('.sapMLnk', { hasText: /^John Doe$/ }).first();
   await expect(pageLink, 'the Main Contact pageLink').toBeVisibleEnabled();
   await pageLink.click();
   await expect(pop, 'the QuickView employee page').toContainText('Department Manager');

@@ -19,7 +19,11 @@ export default async (page, expect) => {
     if (!inner) return { err: 'the outer block contains no blue inner block' };
     const o = outer.getBoundingClientRect();
     const i = inner.getBoundingClientRect();
-    return { outerH: o.height, innerH: i.height, margin: getComputedStyle(inner).marginTop, inset: i.top - o.top };
+    // measured on the LEFT edge: the outer div has neither padding nor border,
+    // so the inner div's TOP margin collapses straight through it and
+    // `i.top - o.top` is 0 even though the margin is applied. Horizontal
+    // margins never collapse, so the left inset is the honest witness.
+    return { outerH: o.height, innerH: i.height, margin: getComputedStyle(inner).marginLeft, inset: i.left - o.left };
   });
   if (box.err) throw new Error(box.err);
   if (!(box.outerH > box.innerH && box.innerH > 0)) {

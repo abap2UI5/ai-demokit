@@ -5,8 +5,10 @@
 // underneath it actually appear — that is what "tree binding" means here.
 //
 // The expand icon is an icon-font glyph with no layout box of its own in the
-// unthemed harness, so it is dispatched at rather than clicked.
-import { waitForUi5, ui5All, UI5_ALL_SRC } from '../../scripts/lib-e2e.mjs';
+// unthemed harness (measured 0x17), so it cannot be clicked — and a lone
+// dispatched 'click' is not enough either: the table's pointer extension acts
+// on the mousedown/mouseup pair. dispatchMouse sends the whole sequence.
+import { waitForUi5, ui5All, UI5_ALL_SRC, dispatchMouse } from '../../scripts/lib-e2e.mjs';
 
 const descriptions = async (page) => page.evaluate(`(() => { ${UI5_ALL_SRC}
   const t = ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.table.TreeTable');
@@ -26,7 +28,7 @@ export default async (page, expect) => {
   if (roots.includes('1.1')) throw new Error('the tree rendered expanded — the collapsed roots are the starting state');
 
   // expanding the first root has to reveal the children the model nests in it
-  await page.locator('.sapUiTableTreeIcon').first().dispatchEvent('click');
+  await dispatchMouse(page.locator('.sapUiTableTreeIcon').first());
   await waitForUi5(page, () => {
     const t = ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.table.TreeTable');
     const d = t.getRows().map((r) => { const c = r.getBindingContext(); return c ? c.getProperty('DESCRIPTION') : null; });

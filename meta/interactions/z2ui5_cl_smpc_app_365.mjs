@@ -4,7 +4,7 @@
 // actually reaches the method, and the only way to see that is the level the
 // tree ends up on. Expand first, then collapse, so each button is measured
 // against a state the other one produced.
-import { waitForUi5, ui5All, UI5_ALL_SRC } from '../../scripts/lib-e2e.mjs';
+import { waitForUi5, ui5All, UI5_ALL_SRC, revealInOverflow } from '../../scripts/lib-e2e.mjs';
 
 const names = async (page) => page.evaluate(`(() => { ${UI5_ALL_SRC}
   const t = ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.table.TreeTable');
@@ -19,7 +19,9 @@ export default async (page, expect) => {
   if (!roots.includes('Women')) throw new Error(`the roots did not render (rows carried ${JSON.stringify(roots)})`);
 
   // expandToLevel( 1 ) — one level down, so the roots' children appear
-  await page.getByRole('button', { name: 'Expand first level', exact: true }).first().click();
+  const expand = page.getByRole('button', { name: 'Expand first level', exact: true }).first();
+  await revealInOverflow(page, expand);
+  await expand.click();
   await waitForUi5(page, () => {
     const t = ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.table.TreeTable');
     const n = t.getRows().map((r) => { const c = r.getBindingContext(); return c ? c.getProperty('NAME') : null; });
@@ -32,7 +34,9 @@ export default async (page, expect) => {
     throw new Error('expandToLevel opened more than the one level its argument asked for');
   }
 
-  await page.getByRole('button', { name: 'Collapse all', exact: true }).first().click();
+  const collapse = page.getByRole('button', { name: 'Collapse all', exact: true }).first();
+  await revealInOverflow(page, collapse);
+  await collapse.click();
   await waitForUi5(page, () => {
     const t = ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.table.TreeTable');
     const n = t.getRows().map((r) => { const c = r.getBindingContext(); return c ? c.getProperty('NAME') : null; });

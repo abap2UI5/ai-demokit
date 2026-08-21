@@ -3,7 +3,7 @@
 // load and the assertion is that the level BELOW it is not — and that
 // expanding a level-1 node reveals its own children. Asserting only "1.1 is
 // visible" would pass on a flat list of the first two levels.
-import { waitForUi5, ui5All, UI5_ALL_SRC } from '../../scripts/lib-e2e.mjs';
+import { waitForUi5, ui5All, UI5_ALL_SRC, dispatchMouse } from '../../scripts/lib-e2e.mjs';
 
 const descriptions = async (page) => page.evaluate(`(() => { ${UI5_ALL_SRC}
   const t = ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.table.TreeTable');
@@ -23,7 +23,7 @@ export default async (page, expect) => {
 
   // expanding a level-1 node reveals the level below it
   const idx = start.indexOf('1.2');
-  await page.locator('.sapUiTableTreeIcon').nth(idx).dispatchEvent('click');
+  await dispatchMouse(page.locator('.sapUiTableTreeIcon').nth(idx));
   await waitForUi5(page, () => {
     const t = ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.table.TreeTable');
     const d = t.getRows().map((r) => { const c = r.getBindingContext(); return c ? c.getProperty('DESCRIPTION') : null; });

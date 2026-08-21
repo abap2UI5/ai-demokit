@@ -61,9 +61,66 @@ export async function pressHeaderMarker(page, suffix) {
   const n = await marks.count();
   if (!n) throw new Error(`the ObjectPageHeader rendered no "${suffix}" marker button`);
   for (let i = 0; i < n; i++) {
-    if (await marks.nth(i).isVisible()) return marks.nth(i).dispatchEvent('click');
+    // measured 2026-08-21: these markers DO get a layout box (123x22) even
+    // unthemed, so a real click is what fires their press — a dispatched
+    // 'click' alone reaches the DOM node without ever becoming a UI5 press.
+    if (await marks.nth(i).isVisible()) return marks.nth(i).click();
   }
-  return marks.first().dispatchEvent('click');
+  return dispatchMouse(marks.first());
+}
+
+// A control that measures zero in the unthemed harness cannot be clicked, and
+// a lone dispatched 'click' is not enough for everything: sap.ui.table's
+// pointer extension acts on the mousedown/mouseup pair, so its tree expand
+// icon ignores a bare click event and only the whole sequence toggles the node
+// (measured 2026-08-21 on app 364 — click alone left the tree collapsed).
+export async function dispatchMouse(locator) {
+  await locator.dispatchEvent('mousedown');
+  await locator.dispatchEvent('mouseup');
+  await locator.dispatchEvent('click');
+}
+
+// The sap.ui.table extension toolbar is an OverflowToolbar, and at the smoke's
+// viewport it folds EVERY one of its controls into the "Additional Options"
+// popover — so a direct locator for a toolbar control fails with "not visible"
+// or a 30s timeout that reads like a broken port. This puts the wanted control
+// back on screen: it returns at once if the control is already visible (the
+// port may render wide enough not to overflow at all), and otherwise opens the
+// overflows in turn until the control appears.
+//
+// Trying them IN TURN rather than taking the first is the point: a page can
+// carry several OverflowToolbars — app 357 has one on the table and a second
+// in the footer, so "the first Additional Options button" opens the wrong one
+// and the control still never shows. A round-trip re-renders the toolbar and
+// closes the popover, so call this again before each toolbar interaction.
+export async function revealInOverflow(page, locator) {
+  const shown = async () => (await locator.count()) && (await locator.first().isVisible());
+  if (await shown()) return;
+  const more = page.getByRole('button', { name: 'Additional Options' });
+  const n = await more.count();
+  for (let i = 0; i < n; i++) {
+    await more.nth(i).click();
+    await page.waitForTimeout(600);
+    if (await shown()) return;
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(300);
+  }
+  throw new Error(`the control never appeared — tried ${n} overflow popover(s)`);
+}
+
+// A uxap ObjectPageHeaderActionButton renders ICON-ONLY in the header: its
+// text is not painted and the button's accessible name comes from the TOOLTIP
+// instead, so getByRole('button', { name: <the button's text> }) matches
+// nothing at all (measured 2026-08-21 on app 408, where the "toggle title"
+// button answers to "synchronize"). Resolve it through the control registry,
+// which is the only place its text still exists.
+export async function pressHeaderAction(page, text) {
+  const id = await page.evaluate(`(() => { ${UI5_ALL_SRC}
+    const b = ui5All().find((c) => /ActionButton$/.test(c.getMetadata().getName())
+      && c.getText && c.getText() === ${JSON.stringify(text)});
+    return b ? b.getId() : null; })()`);
+  if (!id) throw new Error(`the header has no action button with text "${text}"`);
+  return page.locator(`[id="${id}"]`).first().click();
 }
 
 // A Breadcrumbs control folds its links into a Select once they no longer fit,
@@ -71,9 +128,14 @@ export async function pressHeaderMarker(page, suffix) {
 // plain getByRole('link') dies in a locator timeout that reads like a broken
 // port (the same shape as the OverflowToolbar lesson). Take whichever form is
 // on the page.
+// Located by TEXT, never by role+name: a Breadcrumbs link renders as
+// `<a aria-labelledby="<itself> <the current-location text>">`, so its
+// ACCESSIBLE NAME is its own text plus the trailing location — and
+// getByRole('link', { name, exact: true }) therefore matches nothing at all
+// (measured 2026-08-21 on app 416: byRole 0 hits, byText 1).
 export async function pressBreadcrumb(page, text) {
-  const link = page.locator('.sapMBreadcrumbs').getByRole('link', { name: text, exact: true }).first();
-  if (await link.count() && await link.isVisible()) return link.click();
+  const link = page.locator('.sapMBreadcrumbs').getByText(text, { exact: true }).first();
+  if ((await link.count()) && (await link.isVisible())) return link.click();
   const select = page.locator('.sapMBreadcrumbs .sapMSlt').first();
   if (!(await select.count())) throw new Error(`no breadcrumb link "${text}", and no collapsed breadcrumbs select either`);
   await select.click();

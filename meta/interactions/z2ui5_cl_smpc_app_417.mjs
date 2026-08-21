@@ -10,7 +10,9 @@
 //       breakpoint S" — the open button must come back while show_side stays
 //       true. Asserting the resize with the side content closed would pass
 //       even if currentBreakpoint never arrived.
-// The open button is icon-only, so it is dispatched at rather than clicked.
+// The open button is icon-only but still gets a layout box, so a real click
+// is what fires its press — a dispatched 'click' reaches the DOM node without
+// ever becoming a UI5 press (measured 2026-08-21).
 import { waitForUi5, ui5All, UI5_ALL_SRC } from '../../scripts/lib-e2e.mjs';
 
 const state = async (page) => page.evaluate(`(() => { ${UI5_ALL_SRC}
@@ -28,7 +30,7 @@ export default async (page, expect) => {
   if (start.openVisible !== true) throw new Error('the open button did not start visible');
 
   // (a) + (b) open: side content shows, the open button hides, focus moves on
-  await openBtn.dispatchEvent('click');
+  await openBtn.click();
   await waitForUi5(page, () => {
     const all = ui5All();
     const dsc = all.find((c) => c.getMetadata().getName() === 'sap.ui.layout.DynamicSideContent');
@@ -55,7 +57,7 @@ export default async (page, expect) => {
   }
 
   // (c) the breakpoint transport, measured where it alone decides the flag
-  await openBtn.dispatchEvent('click');
+  await openBtn.click();
   await waitForUi5(page, () => {
     const open = ui5All().find((c) => c.getId().endsWith('openSideContentBtn'));
     return !!open && open.getVisible() === false;

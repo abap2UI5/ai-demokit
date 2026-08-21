@@ -8,7 +8,7 @@
 // when the focus sits in an input or textarea, and it reads the pasted cells
 // off the native event's clipboardData, so the gesture has to be a real
 // ClipboardEvent landing on the table itself.
-import { waitForUi5, ui5All, UI5_ALL_SRC } from '../../scripts/lib-e2e.mjs';
+import { waitForUi5, ui5All, UI5_ALL_SRC, revealInOverflow } from '../../scripts/lib-e2e.mjs';
 
 export default async (page, expect) => {
   await expect(page.locator('body'), 'the seeded rows').toContainText('Notebook Basic 15');
@@ -30,7 +30,9 @@ export default async (page, expect) => {
   await expect(toast, 'the pasted cells carried by the event arg').toContainText('Pasted Name');
 
   // the bound selectionMode, driven by a Select with no event of its own
-  await page.locator('.sapMSlt').first().click();
+  const sel = page.locator('.sapMSlt').first();
+  await revealInOverflow(page, sel);
+  await sel.click();
   await page.locator('.sapMSltPicker').getByText('Single', { exact: true }).first().click();
   await waitForUi5(page, () => {
     const p = ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.table.plugins.MultiSelectionPlugin');
