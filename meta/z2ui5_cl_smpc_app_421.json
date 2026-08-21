@@ -1,0 +1,43 @@
+{
+  "class": "z2ui5_cl_smpc_app_421",
+  "sample": "sap.m.sample.QuickViewCardScrollBar",
+  "entity": "sap.m.QuickViewCard",
+  "file": "src/02/01/z2ui5_cl_smpc_app_421.clas.abap",
+  "batch": "b31",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.Avatar (control since 1.73) is kept 1:1 as the page icon via the QuickViewPage avatar aggregation, which itself is since UI5 1.92 - so the app needs UI5 >= 1.92 to render the avatar."
+    },
+    {
+      "type": "NOTE",
+      "what": "The view's core:Fragment include (fragmentName sap.m.sample.QuickViewCardScrollBar.QuickViewCardScrollBar) is inlined into the main view, so the port has no core:Fragment reference element; the fragment's core:FragmentDefinition root has no counterpart either."
+    },
+    {
+      "type": "NOTE",
+      "what": "onButtonBackClick drives the card 1:1 via follow_up_action( control_by_id, navigateBack ), roundtrip-free; the Back button's enabled state is two-way bound and kept in sync by the afterNavigate isTopPage transport (the original seeds enabled='false' and resets it in onBeforeRendering)."
+    },
+    {
+      "type": "NOTE",
+      "what": "onScrollSwitchChange's setShowVerticalScrollBar becomes an added showVerticalScrollBar attribute two-way bound to the same flag as the Switch state; the Switch change wire only resets the Back button server-side (the card re-renders to its first page)."
+    },
+    {
+      "type": "NOTE",
+      "what": "onAfterRendering's demo-harness DOM tweaks (the touchmove stopPropagation listener for iPhone scrolling and the jQuery maxWidth 320px on the container) are dropped - they have no view counterpart."
+    },
+    {
+      "type": "NOTE",
+      "what": "Elements the mock leaves without an elementType (Address, Slogan) seed the QuickViewGroupElementType default 'text', target seeds the UI5 default '_blank', and page 2 seeds iconVisibility=true - a serialized empty string/false would override the control defaults where the original's undefined picks them."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The HEADER_TOGGLE round-trip mutates page 1 in the model and re-renders the card to its first page (the behaviour the original expects after a header switch); unverified in a running system."
+    }
+  ]
+}

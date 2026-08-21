@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_smpc_app_420",
+  "sample": "sap.m.sample.SearchFieldSuggestions",
+  "entity": "sap.m.SearchField",
+  "file": "src/01/01/z2ui5_cl_smpc_app_420.clas.abap",
+  "batch": "b31",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onSuggest is a backend round-trip: the SUGGEST event transports ${$parameters>/suggestValue}, the server applies the compound OR filter ([[PRODUCTID Contains v],[NAME Contains v]]) to the suggestionItems binding via follow_up_action( binding_call, filter ) and re-opens the popover via follow_up_action( control_by_id, suggest ) - the original's two custom Filter test functions (case-insensitive indexOf on ProductId and Name) map to the Contains operator, which client JSON models match case-insensitively; an empty value clears the filter like the original's empty aFilters."
+    },
+    {
+      "type": "NOTE",
+      "what": "onSearch's MessageToast branches are composed on the client, roundtrip-free: a '{0}' template filled by the ternary ${$parameters>/suggestionItem} ? 'Search for: ' + getText() : 'Search is fired!'."
+    },
+    {
+      "type": "NOTE",
+      "what": "Price is kept TYPE string: it is display-only inside the SuggestionItem description text template {path:'PRICE'} {path:'CURRENCYCODE'}, and a packed field with fixed DECIMALS would add trailing zeros to the mock's variable-decimal values."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The per-keystroke suggest round-trip is serialized and lossy under fast typing (events fired while a trip is in flight are dropped; it converges when typing pauses); the filter + suggest() follow-up pair is unverified in a running system."
+    }
+  ]
+}

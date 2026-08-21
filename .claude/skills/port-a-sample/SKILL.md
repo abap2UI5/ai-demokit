@@ -367,9 +367,13 @@ found them following opposite conventions — and `node scripts/chain-format.mjs
 
   Read the event with `client->get_event( )`, **not** `client->get( )-event` —
   the latter builds the whole `ty_s_get` structure to use one field of it, and
-  the corpus was converted away from it on 2026-08-16. After changing bound
-  data in an event, call `client->view_model_update( )` to push it back (no
-  full redraw).
+  the corpus was converted away from it on 2026-08-16. Changed bound data is
+  pushed back **automatically** at the end of the round-trip (a before/after
+  comparison in the framework) — do **not** write
+  `client->view_model_update( )`: it has been an empty method since abap2UI5
+  1.143.0, and the linter's `obsolete-model-update` fix (`npm run fmt:chains`)
+  silently deletes the call, so a port relying on it would ship a diff you
+  never wrote (batch b31 hit exactly that).
 - **Client handle strings (`_event`, `_bind`, `follow_up_action`, …) are
   written inline at each control — never captured in a variable**, even when
   the same call repeats on many controls and even inside expression bindings
@@ -629,8 +633,8 @@ these entries.
   every `CASE` and the app does nothing, while *looking* wired (pattern-lint
   rule `dead-event-wire`: no class with `->_event(` and no
   `on_event`/`check_on_event`). Two legitimate resolutions, no third:
-  **dispatch it** (a `CASE` branch that changes bound state and calls
-  `view_model_update`, or a `message_box_display`/`popover_display`), or
+  **dispatch it** (a `CASE` branch that changes bound state — the model push
+  back is automatic — or a `message_box_display`/`popover_display`), or
   **drop the wire** — if the behaviour is genuinely inexpressible, the
   attribute goes away and the loss is declared. Before dropping, check
   CAPABILITIES.md: most "not reproducible" rationales in this class turned

@@ -3,7 +3,7 @@
 
 # The sample catalogue
 
-Every port in this repository — 430 of them — with what it shows and a
+Every port in this repository — 435 of them — with what it shows and a
 link to its source. This is the [overview app](src/z2ui5_cl_smpc_app_000.clas.abap)
 as a page you can read here, before installing anything.
 
@@ -44,7 +44,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 
 ### sap.m
 
-212 port(s).
+217 port(s).
 
 | Sample | Class |
 |---|---|
@@ -188,6 +188,8 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.m.Panel**<br>Panels are helpful to group custom content. They can be decorated with header and info toolbars.<br><sub>panel sap.m overflowtoolbar title image text toolbarspacer button</sub><br><sub>◐ reviewed · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_397`](src/01/01/z2ui5_cl_smpc_app_397.clas.abap) |
 | **sap.m.ObjectHeader** — Object Header - with Circle-shaped Image<br>An Object Header can set shape of the image by using 'imageShape' property. The shapes could be Square (by default) and Circle. Note: This example shows the image inside ObjectHeader with the responsive property set to true.<br><sub>objectheader object header sap.m objectheadercircleimage objectattribute</sub><br><sub>◐ reviewed · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_400`](src/01/01/z2ui5_cl_smpc_app_400.clas.abap) |
 | **sap.m.TimePicker** — Time Picker - Value States<br>This example shows different TimePicker value states.<br><sub>timepicker time picker sap.m timepickervaluestate flexbox vbox label</sub><br><sub>◐ reviewed</sub> | [`Z2UI5_CL_SMPC_APP_404`](src/01/01/z2ui5_cl_smpc_app_404.clas.abap) |
+| **sap.m.Title** — Title Properties<br>This sample shows the different behaviors of a title.<br><sub>title sap.m titlewrapping label switch slider panel messagestrip</sub><br><sub>○ generated · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_418`](src/01/01/z2ui5_cl_smpc_app_418.clas.abap) |
+| **sap.m.SearchField** — Search Field - Suggestions<br>Add suggestion capabilities to a basic Search Field.<br><sub>searchfield search field sap.m searchfieldsuggestions label suggestionitem</sub><br><sub>○ generated · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_420`](src/01/01/z2ui5_cl_smpc_app_420.clas.abap) |
 | **sap.m.Carousel** — Carousel with Controls<br>With the Carousel a user can browse through multi-page content by swiping left or right.<br><sub>carousel sap.m user browse through title image text scrollcontainer list standardlistitem</sub><br><sub>✓ checked · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_006`](src/02/01/z2ui5_cl_smpc_app_006.clas.abap) |
 | **sap.m.DatePicker** — Date Picker - Open by Another Control<br>This example shows Date Picker which is opened by another control.<br><sub>datepicker date picker sap.m open another title vbox label button link</sub><br><sub>✓ checked · 5 deviations</sub> | [`Z2UI5_CL_SMPC_APP_016`](src/02/01/z2ui5_cl_smpc_app_016.clas.abap) |
 | **sap.m.DateRangeSelection**<br>The Date Range Selection is an extension of the Date Picker Control and enables the user to select range of dates.<br><sub>daterangeselection date range selection sap.m single-field input vbox label text</sub><br><sub>✓ checked · 8 deviations</sub> | [`Z2UI5_CL_SMPC_APP_017`](src/02/01/z2ui5_cl_smpc_app_017.clas.abap) |
@@ -260,6 +262,9 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.m.Image**<br>Images are faster than words and attract people's attention. Images can also have an active state or be used in SVG format.<br><sub>image sap.m vbox hbox text</sub><br><sub>◐ reviewed · 6 deviations</sub> | [`Z2UI5_CL_SMPC_APP_399`](src/02/01/z2ui5_cl_smpc_app_399.clas.abap) |
 | **sap.m.Page** — Flexible sizing - Toolbar<br>This page shows flexible sizing with a Toolbar. The upper part extends with its content, but doesn't react to viewport changes. The lower part reacts to the viewport size. The table inside takes the available space.<br><sub>sap.m pagelistreporttoolbar vbox label text flexitemdata overflowtoolbar title toolbarspacer searchfield segmentedbutton segmentedbuttonitem</sub><br><sub>◐ reviewed · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_405`](src/02/01/z2ui5_cl_smpc_app_405.clas.abap) |
 | **sap.m.Page** — Flexible sizing - Icon Tab Bar<br>This page shows flexible sizing with an Icon Tab Bar: The upper part extends with its content, but doesn't react to viewport changes. The Icon Tab Bar reacts to the viewport size. The table inside takes the available space.<br><sub>sap.m pagelistreporticontabbar vbox label text flexitemdata icontabbar icontabfilter overflowtoolbar toolbarspacer searchfield segmentedbutton</sub><br><sub>◐ reviewed · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_406`](src/02/01/z2ui5_cl_smpc_app_406.clas.abap) |
+| **sap.m.Menu** — Menu with Selectable Items<br>Some menu items can be added to groups to allow single or multiple item selection.<br><sub>menu sap.m menuselectable vbox button menuitem menuitemgroup</sub><br><sub>○ generated · 6 deviations</sub> | [`Z2UI5_CL_SMPC_APP_419`](src/02/01/z2ui5_cl_smpc_app_419.clas.abap) |
+| **sap.m.QuickViewCard** — QuickViewCard Scroll Example<br>QuickViewCard embedded in container with scroll bar<br><sub>quickviewcard quick card sap.m quickviewcardscrollbar button label switch panel quickviewpage avatar quickviewgroup</sub><br><sub>○ generated · 7 deviations</sub> | [`Z2UI5_CL_SMPC_APP_421`](src/02/01/z2ui5_cl_smpc_app_421.clas.abap) |
+| **sap.m.SelectDialog** — Select Dialog Lazy Loading<br>Select Dialog lazy loading example with JSON model.<br><sub>selectdialog select dialog sap.m selectdialoglazyloading button standardlistitem</sub><br><sub>○ generated · 7 deviations</sub> | [`Z2UI5_CL_SMPC_APP_422`](src/02/01/z2ui5_cl_smpc_app_422.clas.abap) |
 
 ### sap.uxap
 
