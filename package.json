@@ -10,7 +10,7 @@
     "check:chains": "abap2ui5lint --config abap2ui5lint-chains.jsonc",
     "fmt:chains": "abap2ui5lint --config abap2ui5lint-chains.jsonc --fix",
     "check": "npm run gates && npm run check:app-rules && npm run check:keywords && npm run check:summary && npm run check:family-nav && npm test",
-    "gates": "npm run check:chains && node scripts/check-prose-names.mjs && node scripts/pattern-lint.mjs && node scripts/check-pins.mjs && node scripts/validate-meta.mjs && node scripts/structural-diff.mjs --strict && node scripts/data-fidelity.mjs && node scripts/check-mcp-contract.mjs && node scripts/generate-overview.mjs && node scripts/generate-coverage.mjs && node scripts/generate-status.mjs && node scripts/generate-samples-md.mjs && git diff --exit-code -- src README.md api.md STATUS.md SAMPLES.md",
+    "gates": "npm run check:chains && node scripts/check-prose-names.mjs && node scripts/pattern-lint.mjs && node scripts/check-pins.mjs && node scripts/validate-meta.mjs && node scripts/structural-diff.mjs --strict && node scripts/data-fidelity.mjs && node scripts/check-mcp-contract.mjs && node scripts/generate-overview.mjs && node scripts/generate-coverage.mjs && node scripts/generate-status.mjs && node scripts/generate-samples-md.mjs && node scripts/generate-catalogue.mjs && git diff --exit-code -- src README.md api.md STATUS.md SAMPLES.md catalogue.json",
     "gates:full": "npm run gates && npx abaplint ./abaplint.jsonc && node scripts/view-gates.mjs --strict && npm run check:collection",
     "test": "node --test scripts/test/*.test.mjs",
     "view-gates": "node scripts/view-gates.mjs --strict",
@@ -37,7 +37,9 @@
     "descriptions": "node scripts/fetch-descriptions.mjs",
     "samples:md": "node scripts/generate-samples-md.mjs",
     "search:index": "node scripts/generate-search-index.mjs",
-    "check:samples-md": "node scripts/generate-samples-md.mjs --check"
+    "check:samples-md": "node scripts/generate-samples-md.mjs --check",
+    "catalogue": "node scripts/generate-catalogue.mjs",
+    "check:catalogue": "node scripts/generate-catalogue.mjs --check"
   },
   "repository": {
     "type": "git",

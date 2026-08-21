@@ -1,15 +1,15 @@
 ---
 name: regenerate-artefacts
-description: Full spec of the generated artefacts (README coverage block, STATUS.md state block, api.md, the in-system overview app) and their generators: universe and openui5-entities snapshots, api.md link targets, the generate-result workflow, gap-free renumbering, plus the generator gotchas. Use when changing a generate-*.mjs script, when the meta_valid gate fails, or when touching anything between generated markers.
+description: Full spec of the generated artefacts (README coverage block, STATUS.md state block, api.md, SAMPLES.md, catalogue.json, the in-system overview app) and their generators: universe and openui5-entities snapshots, api.md link targets, the generate-result workflow, gap-free renumbering, plus the generator gotchas. Use when changing a generate-*.mjs script, when the meta_valid gate fails, or when touching anything between generated markers.
 ---
 
 # Coverage & overview — the generated artefacts
 
-Part of the ai-demokit rulebook — AGENTS.md §7 states the rule (four generated
+Part of the ai-demokit rulebook — AGENTS.md §7 states the rule (six generated
 artefacts, never hand-edit, `git diff` must stay clean); this guide is the full
 spec.
 
-Four generated, never hand-edited artefacts. **Never hand-edit them — edit the
+Six generated, never hand-edited artefacts. **Never hand-edit them — edit the
 scripts.**
 
 - **`README.md`** (between the `<!-- coverage:start/end -->` markers) — the
@@ -27,6 +27,20 @@ scripts.**
   **Sample** (→ OpenUI5 repo source, ↗ → live fullscreen sample) · **ABAP**
   (→ generated class, `—` = not ported; those rows are the backlog). There is
   no separate deprecated-controls section — everything sits in this table.
+- **`SAMPLES.md`** — the human catalogue: one row per port (title, `@summary`,
+  `@keywords`, the verification marker from the sidecar's `status`), grouped
+  by UI5 library (`scripts/generate-samples-md.mjs`). Its row shape is a
+  contract shared with the two sibling repositories — see AGENTS.md §7 before
+  changing it.
+- **`catalogue.json`** — the machine catalogue at the repository root
+  (`scripts/generate-catalogue.mjs`): one JSON entry per port with class,
+  path, category, library, sample id, entity, status, deviation types,
+  summary and keywords, joined from the sidecars and the class scan; the
+  top-level block identifies the repository and names the
+  `Z2UI5_CL_SMPC_*`/`Z2UI5_CL_SMP_*` class-name caveat. Offline and
+  dependency-free on purpose (it runs inside `npm run gates`), so it carries
+  committed facts only — the linter-derived facts stay in the uncommitted
+  Pages `apps.json`. `--check` is the freshness gate.
 - **`src/z2ui5_cl_smpc_app_000.clas.*`** — the in-system overview **app**:
   an abap2UI5 app that lists every ported app as one row of a `sap.m.Table`,
   sorted by module → control → sample. Columns (all plain text — links moved to
@@ -60,6 +74,8 @@ scripts.**
 node scripts/generate-coverage.mjs          # README + api.md (offline, from ui5/universe.json)
 node scripts/generate-overview.mjs          # the overview app (src only, from meta/)
 node scripts/generate-status.mjs            # STATUS.md state block (from meta/)
+node scripts/generate-samples-md.mjs        # SAMPLES.md (from the classes + meta/)
+node scripts/generate-catalogue.mjs         # catalogue.json (from the classes + meta/)
 node scripts/validate-meta.mjs              # sidecar schema + referential integrity
 node scripts/structural-diff.mjs [--strict] # port vs original view check
 node scripts/pattern-lint.mjs               # distilled-lesson gate

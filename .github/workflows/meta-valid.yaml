@@ -45,4 +45,5 @@ jobs:
     - run: node scripts/generate-coverage.mjs
     - run: node scripts/generate-status.mjs
     - run: node scripts/generate-samples-md.mjs
-    - run: git diff --exit-code -- src README.md api.md STATUS.md SAMPLES.md
+    - run: node scripts/generate-catalogue.mjs
+    - run: git diff --exit-code -- src README.md api.md STATUS.md SAMPLES.md catalogue.json

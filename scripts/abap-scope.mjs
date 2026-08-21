@@ -62,6 +62,7 @@ const INERT = [
   '.gitignore',
   '.abapgit.xml',
   'abap2ui5lint-collection.jsonc',
+  'catalogue.json',             // generated index of the sidecars - derived data, no ABAP
   'LICENSE',
 ];
 

@@ -719,8 +719,8 @@ npm run gates        # full offline gate set, fail-fast; needs NO node_modules a
 ```
 It chains: chain-format → check-prose-names → pattern-lint → check-pins →
 validate-meta → structural-diff → data-fidelity → check-mcp-contract →
-regenerate overview/coverage/status/SAMPLES.md →
-`git diff --exit-code -- src README.md api.md STATUS.md SAMPLES.md`
+regenerate overview/coverage/status/SAMPLES.md/catalogue.json →
+`git diff --exit-code -- src README.md api.md STATUS.md SAMPLES.md catalogue.json`
 (regenerated artefacts must leave the tree clean, exactly as the `meta_valid`
 CI job checks). **Every step here has a CI job with the same name** — the
 chain and the workflows are one list, and a step that runs only locally is a
@@ -789,9 +789,9 @@ which `npm ci` / `npm install` runs automatically via the `prepare` script.
 
 ## 7. Coverage & overview — always (re)generated
 
-Five artefacts are generated, never hand-edited — edit the scripts instead:
+Six artefacts are generated, never hand-edited — edit the scripts instead:
 the `README.md` coverage block, the `STATUS.md` state block, `api.md`,
-`SAMPLES.md`, and the
+`SAMPLES.md`, `catalogue.json`, and the
 in-system overview app `src/z2ui5_cl_smpc_app_000.clas.*`. They regenerate
 as part of `npm run gates` (or via the individual `generate-*.mjs` scripts)
 and must leave `git diff` clean before every commit — the `meta_valid` CI job
@@ -807,7 +807,19 @@ not ported, keyed by control, built to show what is missing. `SAMPLES.md` is
 the CATALOGUE — one row per port with the sentence that says what it shows,
 grouped by UI5 library, for somebody asking "is there a port for X".
 
-A **sixth** artefact is generated and deliberately NOT committed:
+**`catalogue.json`** is the same catalogue for a MACHINE
+(`scripts/generate-catalogue.mjs`): one JSON entry per port — class, path,
+category, library, demo kit sample id, entity, status, deviation types,
+summary, keywords — joined from the sidecars and the class scan, plus a
+top-level block saying what this repository is and naming the
+`Z2UI5_CL_SMPC_*` vs `Z2UI5_CL_SMP_*` class-name trap for a tool that has
+seen abap2UI5/samples. Committed (unlike the Pages `apps.json` below) because
+it carries only committed facts — no linter pass, so it is offline,
+deterministic and gated by the same regenerate-and-diff as the other five;
+the derived view facts (controls built, minimum UI5 release) stay in
+`apps.json`, which serves them fresher than a commit could.
+
+One more artefact is generated and deliberately NOT committed:
 `web/search/apps.json`, the data behind the searchable catalogue on GitHub
 Pages (`scripts/generate-search-index.mjs`, spec in `web/README.md`). It is
 derived twice over — from the sidecars and from an `@abap2UI5/linter` run that
