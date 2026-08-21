@@ -22,6 +22,10 @@
     {
       "type": "NOTE",
       "what": "The two PaneContainer resize handlers (resize='.onRootContainerResize' on the root container and resize='.onInnerContainerResize' on the inner one) compose an informational MessageToast listing the oldSizes/newSizes pane-size arrays. **Reproduced roundtrip-free since 2026-08-05**: measured with scripts/probes/event-arg-expression-probe.mjs, `.join( ',' )` over an ARRAY-valued event parameter resolves inside an event arg, so both arrays travel into a client-composed toast with the original's two-line text (each guarded, since the first resize carries no oldSizes). The earlier rationale - 'an array-valued container-resize event has no bound-model equivalent' - looked for a MODEL equivalent where the client expression was the answer."
+    },
+    {
+      "type": "NOTE",
+      "what": "The toast's line break is a REAL newline since 2026-08-21. An ABAP backtick literal has no escapes, so the `\\n` the template used to carry reached the visible text as two literal characters - the client's formatTemplate only substitutes {N}. The wire concatenates ` ... ` && |\\n| && ` ... ` now, the string-template form where \\n IS an escape. Same defect and same fix as app 250, where the review sweep found it."
     }
   ]
 }

@@ -1303,11 +1303,14 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` 'VisiblePages' : 'SinglePage' } over the same field - the original's imperative setScrollMode as a binding. // NOTE: unverified in a running system: the set_size_limit(10, MAIN) follow-up capping the` &&
                ` pages binding, the shared /PAGES_COUNT driving Input and visiblePagesCount, and the scrollMode expression flip. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs):` &&
                ` exactly 10 carousel items render from the 123 bound rows (the set_size_limit(10, MAIN) follow-up caps the binding) with the first product card visible; the pages-count input and scrollMode flip` &&
-               ` remain unexercised but are the proven 007/128 client-side class.`.
+               ` remain unexercised but are the proven 007/128 client-side class. // NOTE: onInit's device branch is resolved SERVER-SIDE since 2026-08-21: pages_count comes from client->get( )-s_device-system` &&
+               ` (desktop 4 / tablet 2 / else 1), the mirror apps 012/173/302 already read. It was hard-coded to the desktop leg with a NOTE calling that 'resolved statically' - but CAPABILITIES marks the device`.
+    lv_text1 = lv_text1 && ` model ✅ and the branch is expressible, so declaring it did not make it right. The original seeds the value once in onInit and so does the port.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Carousel`                        name = `CarouselWithMorePages`                         class = `z2ui5_cl_smpc_app_252` path = `src/02/01/z2ui5_cl_smpc_app_252.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
         is_post171 = abap_true
         notes = lv_text1
         post171 = `Members newer than 1.71 kept 1:1: sap.m.Carousel.ariaLabelledBy (@1.125) and sap.m.CarouselLayout.scrollMode (@1.121); the CarouselLayout control itself is @1.62. The app needs a UI5 release >= 1.125` &&
@@ -1328,15 +1331,18 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         checked = `CHECKED (2026-07-15): manually verified in a running system - the select-all parent checkbox and its tri-state expression bindings behave like the original.; live-checked reference example for:` &&
                  ` expression bindings, two-way bind, boolean event arg` ) ).
 
+    lv_text1 = `NOTE: the color-select toast was switched to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template with {0}/{1} filled by ${$parameters>/value} and` &&
+               ` ${$parameters>/defaultAction}; on_event dropped, init-only). **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): picking a colour (the swatch has a` &&
+               ` zero-height box headless, so it is focused and activated with Enter) toasts 'Color Selected: value - gold, \n defaultAction - false' - the client-composed template with ${$parameters>/value} and` &&
+               ` ${$parameters>/defaultAction} filled in, with no round-trip. // NOTE: The toast's line break is a REAL newline since 2026-08-21. An ABAP backtick literal has no escapes, so the ``\n`` the template` &&
+               ` used to carry reached the visible text as two literal characters - the client's formatTemplate only substitutes {N}. The wire concatenates `` ... `` && |\n| && `` ... `` now, the string-template form` &&
+               ` where \n IS an escape. Same defect and same fix as app 250, where the review sweep found it.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ColorPalette`                    name = `ColorPalette`                                  class = `z2ui5_cl_smpc_app_008` path = `src/01/01/z2ui5_cl_smpc_app_008.clas.abap`
-        score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.54`
-        notes = `NOTE: the color-select toast was switched to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template with {0}/{1} filled by ${$parameters>/value} and` &&
-                 ` ${$parameters>/defaultAction}; on_event dropped, init-only). **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): picking a colour (the swatch has a` &&
-                 ` zero-height box headless, so it is focused and activated with Enter) toasts 'Color Selected: value - gold, \n defaultAction - false' - the client-composed template with ${$parameters>/value} and` &&
-                 ` ${$parameters>/defaultAction} filled in, with no round-trip.` ) ).
+        notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: The controller lazily builds six differently configured ColorPalettePopover instances and openBy()s them; the port declares all six 1:1 in the view's mvc:dependents (ColorPalettePopover x6 -` &&
                ` extra controls vs the original view.xml, controller-built there) with the original ids/configurations, and every button press opens its popover roundtrip-free via follow_up_action control_by_id` &&
@@ -1352,11 +1358,15 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` without touching internal DOM. The wire is roundtrip-free - the rgba() string is composed on the client from the four liveChange parameters, an event argument being a full UI5 expression. Still NOT`.
     lv_text1 = lv_text1 && ` ported: onExit's popover destroy calls - the declared dependents die with the view. // NOTE: live-verified 2026-08-04 (nightly e2e interaction): unverified in a running system: the six` &&
                ` dependents-declared ColorPalettePopover configurations opening anchored via openBy and the colorSelect toast argument resolution. **e2e-verified 2026-07-30** (transpiled-framework interaction,` &&
-               ` scripts/e2e-smoke.mjs): the first action button opens its ColorPalettePopover anchored (palette content attached); the other five configurations are the identical wire.`.
+               ` scripts/e2e-smoke.mjs): the first action button opens its ColorPalettePopover anchored (palette content attached); the other five configurations are the identical wire. // NOTE: The colorSelect toast` &&
+               ` carries a REAL line break since 2026-08-21. The original's JS double-quoted "...\n..." is a newline and .sapMMessageToast is white-space: pre-line, so it renders as one; an ABAP BACKTICK literal has` &&
+               ` no escapes, so the port's ``\n`` was two literal characters that the client's formatTemplate (which only substitutes {N}) passed straight through to the visible text. All five wires now concatenate` &&
+               ` `` ... `` && |\n| && `` ... `` - the string-template form, where \n IS an escape, and the form app 284 already used. Apps 008 and 186 carried the same defect and are fixed with it. Found by the`.
+    lv_text1 = lv_text1 && ` review sweep; no gate compares a literal toast text.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ColorPalette`                    name = `ColorPalettePopover`                           class = `z2ui5_cl_smpc_app_250` path = `src/02/01/z2ui5_cl_smpc_app_250.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         since = `1.54`
         is_post171 = abap_true
@@ -5647,11 +5657,13 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` handlers (resize='.onRootContainerResize' on the root container and resize='.onInnerContainerResize' on the inner one) compose an informational MessageToast listing the oldSizes/newSizes pane-size` &&
                ` arrays. **Reproduced roundtrip-free since 2026-08-05**: measured with scripts/probes/event-arg-expression-probe.mjs, ``.join( ',' )`` over an ARRAY-valued event parameter resolves inside an event`.
     lv_text1 = lv_text1 && ` arg, so both arrays travel into a client-composed toast with the original's two-line text (each guarded, since the first resize carries no oldSizes). The earlier rationale - 'an array-valued` &&
-               ` container-resize event has no bound-model equivalent' - looked for a MODEL equivalent where the client expression was the answer.`.
+               ` container-resize event has no bound-model equivalent' - looked for a MODEL equivalent where the client expression was the answer. // NOTE: The toast's line break is a REAL newline since 2026-08-21.` &&
+               ` An ABAP backtick literal has no escapes, so the ``\n`` the template used to carry reached the visible text as two literal characters - the client's formatTemplate only substitutes {N}. The wire` &&
+               ` concatenates `` ... `` && |\n| && `` ... `` now, the string-template form where \n IS an escape. Same defect and same fix as app 250, where the review sweep found it.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.ResponsiveSplitter`      name = `ResponsiveSplitter`                            class = `z2ui5_cl_smpc_app_186` path = `src/01/02/z2ui5_cl_smpc_app_186.clas.abap`
-        score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.38`
         notes = lv_text1 ) ).
 

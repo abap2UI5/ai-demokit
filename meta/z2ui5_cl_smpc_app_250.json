@@ -30,6 +30,10 @@
     {
       "type": "NOTE",
       "what": "live-verified 2026-08-04 (nightly e2e interaction): unverified in a running system: the six dependents-declared ColorPalettePopover configurations opening anchored via openBy and the colorSelect toast argument resolution. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the first action button opens its ColorPalettePopover anchored (palette content attached); the other five configurations are the identical wire."
+    },
+    {
+      "type": "NOTE",
+      "what": "The colorSelect toast carries a REAL line break since 2026-08-21. The original's JS double-quoted \"...\\n...\" is a newline and .sapMMessageToast is white-space: pre-line, so it renders as one; an ABAP BACKTICK literal has no escapes, so the port's `\\n` was two literal characters that the client's formatTemplate (which only substitutes {N}) passed straight through to the visible text. All five wires now concatenate ` ... ` && |\\n| && ` ... ` - the string-template form, where \\n IS an escape, and the form app 284 already used. Apps 008 and 186 carried the same defect and are fixed with it. Found by the review sweep; no gate compares a literal toast text."
     }
   ]
 }
