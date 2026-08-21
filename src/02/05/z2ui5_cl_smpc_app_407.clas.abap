@@ -214,7 +214,7 @@ CLASS z2ui5_cl_smpc_app_407 IMPLEMENTATION.
                                 )->a( n = `key`     v = `home`
                                 )->a( n = `visible` v = client->_bind( home_visible )
                                 )->a( n = `press`   v = client->_event( val   = `ITEM_PRESS`
-                                                                        t_arg = VALUE #( ( `${$source>/key}` ) ) )
+                                                                        t_arg = VALUE #( ( `${$source>/key}` ) ( `${$source>/selectable}` ) ) )
 
                             )->ele( n = `NavigationListGroup` ns = `tnt`
                                 )->a( n = `text`     v = `Business Operations`
@@ -236,7 +236,7 @@ CLASS z2ui5_cl_smpc_app_407 IMPLEMENTATION.
                                     )->a( n = `design`       v = `{DESIGN}`
                                     )->a( n = `items`        v = `{ITEMS}`
                                     )->a( n = `press`        v = client->_event( val   = `ITEM_PRESS`
-                                                                                 t_arg = VALUE #( ( `${$source>/key}` ) ) )
+                                                                                 t_arg = VALUE #( ( `${$source>/key}` ) ( `${$source>/selectable}` ) ) )
 
                                     )->ele( n = `tag` ns = `tnt`
                                         )->tag( `ObjectStatus`
@@ -256,7 +256,7 @@ CLASS z2ui5_cl_smpc_app_407 IMPLEMENTATION.
                                         )->a( n = `ariaHasPopup` v = `{ARIAHASPOPUP}`
                                         )->a( n = `design`       v = `{DESIGN}`
                                         )->a( n = `press`        v = client->_event( val   = `ITEM_PRESS`
-                                                                                     t_arg = VALUE #( ( `${$source>/key}` ) ) )
+                                                                                     t_arg = VALUE #( ( `${$source>/key}` ) ( `${$source>/selectable}` ) ) )
 
                                         )->ele( n = `tag` ns = `tnt`
                                             )->tag( `ObjectStatus`
@@ -290,7 +290,7 @@ CLASS z2ui5_cl_smpc_app_407 IMPLEMENTATION.
                                     )->a( n = `design`       v = `{DESIGN}`
                                     )->a( n = `items`        v = `{ITEMS}`
                                     )->a( n = `press`        v = client->_event( val   = `ITEM_PRESS`
-                                                                                 t_arg = VALUE #( ( `${$source>/key}` ) ) )
+                                                                                 t_arg = VALUE #( ( `${$source>/key}` ) ( `${$source>/selectable}` ) ) )
 
                                     )->ele( n = `tag` ns = `tnt`
                                         )->tag( `ObjectStatus`
@@ -310,7 +310,7 @@ CLASS z2ui5_cl_smpc_app_407 IMPLEMENTATION.
                                         )->a( n = `ariaHasPopup` v = `{ARIAHASPOPUP}`
                                         )->a( n = `design`       v = `{DESIGN}`
                                         )->a( n = `press`        v = client->_event( val   = `ITEM_PRESS`
-                                                                                     t_arg = VALUE #( ( `${$source>/key}` ) ) )
+                                                                                     t_arg = VALUE #( ( `${$source>/key}` ) ( `${$source>/selectable}` ) ) )
 
                                         )->ele( n = `tag` ns = `tnt`
                                             )->tag( `ObjectStatus`
@@ -340,7 +340,7 @@ CLASS z2ui5_cl_smpc_app_407 IMPLEMENTATION.
                                 )->a( n = `ariaHasPopup` v = `{ARIAHASPOPUP}`
                                 )->a( n = `design`       v = `{DESIGN}`
                                 )->a( n = `press`        v = client->_event( val   = `ITEM_PRESS`
-                                                                             t_arg = VALUE #( ( `${$source>/key}` ) ) )
+                                                                             t_arg = VALUE #( ( `${$source>/key}` ) ( `${$source>/selectable}` ) ) )
 
                                 )->ele( n = `tag` ns = `tnt`
                                     )->tag( `ObjectStatus`
@@ -436,9 +436,19 @@ CLASS z2ui5_cl_smpc_app_407 IMPLEMENTATION.
         " served from here instead, which is what the user of the original
         " sees. Measured 2026-08-21: the click sends EVENT ITEM_PRESS and the
         " itemSelect wire is swallowed.
+        " NavigationListItem._selectItem fires `select` unconditionally but
+        " reaches the list's own _selectItem - and with it itemSelect, and with
+        " it the original's navigation - only `if (this.getSelectable())`.
+        " `press` fires unconditionally either way. So an item the mock marks
+        " selectable:false navigates NOWHERE in the original: Customer
+        " Management runs onItemPress, whose key is not quickCreate, and
+        " nothing else. The port navigated it anyway until 2026-08-21, which
+        " made a page unreachable upstream reachable here. Each press wire
+        " carries the item's own selectable flag now, so the guard is the same
+        " one the control applies.
         IF client->get_event_arg( ) = `quickCreate`.
           popup_quick_create( ).
-        ELSE.
+        ELSEIF client->get_event_arg( 2 ) = abap_true.
           navigate_to( client->get_event_arg( ) ).
         ENDIF.
 

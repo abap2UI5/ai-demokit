@@ -25,7 +25,11 @@
     },
     {
       "type": "NOTE",
-      "what": "Round-trip behaviour unverified in a running system: the two anchored ResponsivePopover opens (TITLE_SELECTOR via titleSelectorPress, MARK_LOCKED via markLockedPress, both anchored at $event.oSource.sId), the ITEM_SELECT selectionChange round-trip that closes the popover via follow_up_action popover_close (1:1 with handleItemSelect), and the LINK1/LINK2 breadcrumb Link press toasts ('Page 1 a very long link clicked' / 'Page 2 long link clicked'). **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_415.mjs)."
+      "what": "Round-trip behaviour unverified in a running system: the two anchored ResponsivePopover opens (TITLE_SELECTOR via titleSelectorPress, MARK_LOCKED via markLockedPress, both anchored at $event.oSource.sId), the ITEM_SELECT selectionChange round-trip that closes the popover via follow_up_action popover_close (the INTENT of handleItemSelect (selecting an item closes the popover). Not literally 1:1: the original's handler reads this._oPopover, which its controller never assigns - it only ever sets _oPopoverPromise and _oPopoverLock - so upstream the handler throws a TypeError and the popover stays open. The port's behaviour is the intended one; the word '1:1' was wrong and is corrected 2026-08-21), and the LINK1/LINK2 breadcrumb Link press toasts ('Page 1 a very long link clicked' / 'Page 2 long link clicked'). **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_415.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The header's objectImageURI is re-hosted: the view carries the demo-kit-relative './test-resources/sap/uxap/images/imageID_275314.png', which an abap2UI5 app has no document root to resolve against, so the port serves it from https://sdk.openui5.org/test-resources/sap/uxap/images/. The sibling ports 413 and 417 declare exactly this and 415 did not - only an inline comment recorded it, and data-fidelity tolerates the absolutization, so nothing else would have said so. Added 2026-08-21."
     }
   ]
 }

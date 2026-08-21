@@ -10,5 +10,10 @@
   },
   "status": "generated",
   "checked": null,
-  "deviations": []
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the original view writes minSize=\"200px\" on the Content 5 SplitterLayoutData, but sap.ui.layout.SplitterLayoutData.minSize is typed int - UI5 cannot parse the px suffix, and the chain linter rejects the literal outright (invalid-property-value, expected int). The port writes the numeric value 200 the original means, which renders identically. Same as app 340, which declared it and this one did not: structural-diff never compares a LITERAL attribute value, so the sidecar's empty deviations array was the only thing claiming a clean 1:1 port, and it was wrong. Declared 2026-08-21."
+    }
+  ]
 }

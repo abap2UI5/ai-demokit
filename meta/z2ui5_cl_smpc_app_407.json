@@ -45,7 +45,15 @@
     },
     {
       "type": "NOTE",
-      "what": "not yet run in a system: the LIVE_CHANGE filter round-trip (bound group tables, visible flags, highlightedText), the SEARCH announceSearchMatchCount frontend action, the ITEM_SELECT to-page action, the quickCreate popup and the MENU_TOGGLE collapse-resets-search path. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_407.mjs)."
+      "what": "not yet run in a system: the LIVE_CHANGE filter round-trip (bound group tables, visible flags, highlightedText), the SEARCH announceSearchMatchCount frontend action, the to-page action (which arrives as ITEM_PRESS, see above), the quickCreate popup and the MENU_TOGGLE collapse-resets-search path. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_407.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "announceSearchMatchCount receives the match count as a STRING. It is not in the framework's CONTROL_METHODS, so no arg kinds are registered and castArgAuto passes anything that is not X/true/false through unchanged. NavigationList._announceSearchMatchCount then does `iCount === 1 ? SIDE_NAVIGATION_SEARCH_MATCH_FOUND : SIDE_NAVIGATION_SEARCH_MATCHES_FOUND`, and \"1\" === 1 is false - so a single match is announced with the plural text where the original announces the singular. Closing this needs an [\"int\"] entry for the method upstream, the same shape as scrollToIndex; noted 2026-08-21."
+    },
+    {
+      "type": "NOTE",
+      "what": "Each item's press wire carries ${$source>/selectable} beside its key, and ITEM_PRESS navigates only when it is true. NavigationListItem._selectItem fires `select` unconditionally but reaches the list's _selectItem - and so itemSelect, and so the original's navigation - only if getSelectable( ) is true, while `press` fires either way. Customer Management is selectable:false in the mock, so upstream it navigates nowhere; the port navigated it until 2026-08-21, making a page unreachable in the original reachable here."
     }
   ]
 }

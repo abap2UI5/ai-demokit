@@ -4217,8 +4217,15 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` sap.tnt.NavigationListGroup (control @since 1.121, the two group rows); NavigationListItem.selectable (@since 1.116); the tag aggregation (@since 1.149) with its sap.m.ObjectStatus and the` &&
                ` IndicationColor enum values Indication15/16/17/18/20 (@since 1.120); design and ariaHasPopup (@since 1.133.0, incl. the design=Action / ariaHasPopup=Dialog values on the Quick Create row); expanded` &&
                ` and hasExpander read as @since 1.121 because they live on the newer base class NavigationListItemBase - both predate 1.71 on NavigationListItem itself, declared per the relocated-member note. //` &&
-               ` NOTE: not yet run in a system: the LIVE_CHANGE filter round-trip (bound group tables, visible flags, highlightedText), the SEARCH announceSearchMatchCount frontend action, the ITEM_SELECT to-page` &&
-               ` action, the quickCreate popup and the MENU_TOGGLE collapse-resets-search path. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_407.mjs).`.
+               ` NOTE: not yet run in a system: the LIVE_CHANGE filter round-trip (bound group tables, visible flags, highlightedText), the SEARCH announceSearchMatchCount frontend action, the to-page action (which` &&
+               ` arrives as ITEM_PRESS, see above), the quickCreate popup and the MENU_TOGGLE collapse-resets-search path. **e2e-verified 2026-08-21** (nightly e2e interaction,` &&
+               ` meta/interactions/z2ui5_cl_smpc_app_407.mjs). // NOTE: announceSearchMatchCount receives the match count as a STRING. It is not in the framework's CONTROL_METHODS, so no arg kinds are registered and`.
+    lv_text1 = lv_text1 && ` castArgAuto passes anything that is not X/true/false through unchanged. NavigationList._announceSearchMatchCount then does ``iCount === 1 ? SIDE_NAVIGATION_SEARCH_MATCH_FOUND :` &&
+               ` SIDE_NAVIGATION_SEARCH_MATCHES_FOUND``, and "1" === 1 is false - so a single match is announced with the plural text where the original announces the singular. Closing this needs an ["int"] entry for` &&
+               ` the method upstream, the same shape as scrollToIndex; noted 2026-08-21. // NOTE: Each item's press wire carries ${$source>/selectable} beside its key, and ITEM_PRESS navigates only when it is true.` &&
+               ` NavigationListItem._selectItem fires ``select`` unconditionally but reaches the list's _selectItem - and so itemSelect, and so the original's navigation - only if getSelectable( ) is true, while` &&
+               ` ``press`` fires either way. Customer Management is selectable:false in the mock, so upstream it navigates nowhere; the port navigated it until 2026-08-21, making a page unreachable in the original` &&
+               ` reachable here.`.
     lv_text2 = `The sample's core feature is newer than the 1.71 floor and is kept 1:1: sap.tnt.SideNavigationSearchField (control @since 1.151), the SideNavigation.filterSection aggregation that hosts it (@since` &&
                ` 1.151), NavigationList.highlightedText (@since 1.151), the NavigationList.announceSearchMatchCount control method (@since 1.151, invoked via follow_up_action - a method is invisible to the property` &&
                ` gate, declared by policy) and the SearchField ariaControls association (@since 1.150). The app needs UI5 >= 1.151; the repo's @openui5 runtime pin was raised from 1.150.0 to 1.151.0 with this port so` &&
@@ -5167,14 +5174,16 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` !${device>/system/phone}} on the same data - the Close button, the Slider and the width hint Text keep their original visibility rules. A device-branch fold onto the framework's own model, no loss.`.
     lv_text1 = lv_text1 && ` // NOTE: handleSideContentHide / handleSideContentShow call oDSC.setShowSideContent(false/true) in the original. DynamicSideContent.showSideContent is a bindable property, so the port binds it` &&
                ` two-way and only flips the flag server-side (added attribute, no structural diff) - the prefer-a-bindable-property rule, now gated by the linter rule settable-property-via-action. The state then` &&
-               ` survives a view rebuild, and the control's own toggle( ) - the Toggle button's client-side wire, kept as it is - writes back into the model instead of drifting from it. // IMPROVISED:` &&
-               ` updateShowSideContentButtonVisibility is reproduced only by its breakpoint half. The original computes !(breakpoint === 'S' || oDSC.isSideContentVisible()), i.e. it also hides the 'Open Side Content'` &&
-               ` button whenever the side content happens to be visible; isSideContentVisible() is client state the backend cannot read. The port keeps the button's visibility bound to the breakpoint (visible unless` &&
-               ` 'S') and flips the same flag in the two press handlers (hide -> button shows, show -> button hides), which matches the original in every path the sample offers - but a side-content visibility change`.
-    lv_text1 = lv_text1 && ` caused by anything else (e.g. the Toggle button) does not update it. // NOTE: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the feed list renders` &&
-               ` all four feed.json rows, the side content's Close button hides the side content through the SIDE_CONTENT_HIDE follow-up action (setShowSideContent false), the Open Side Content button then shows (its` &&
-               ` visible flag comes from the breakpointChanged round-trip) and brings it back through SIDE_CONTENT_SHOW. Residual (nothing headless can assert): the FeedListItem layout with its remote author` &&
-               ` pictures, and toggle() on a real S-breakpoint device.`.
+               ` survives a view rebuild, and the control's own toggle( ) - the Toggle button's client-side wire, kept as it is - does NOT write the bound flag back: it swaps the private _MCVisible/_SCVisible pair` &&
+               ` and calls setShowSideContent only while showSideContent is already false, immediately setting _SCVisible = false again (DynamicSideContent.js). With the flag at its seeded true the property is never` &&
+               ` written, so a client-side toggle leaves the model unchanged and the next redraw restores the pre-toggle state. The bound show_side_content therefore reflects the two backend press handlers and` &&
+               ` nothing else - this entry claimed the opposite until 2026-08-21. // IMPROVISED: updateShowSideContentButtonVisibility is reproduced only by its breakpoint half. The original computes !(breakpoint ===`.
+    lv_text1 = lv_text1 && ` 'S' || oDSC.isSideContentVisible()), i.e. it also hides the 'Open Side Content' button whenever the side content happens to be visible; isSideContentVisible() is client state the backend cannot read.` &&
+               ` The port keeps the button's visibility bound to the breakpoint (visible unless 'S') and flips the same flag in the two press handlers (hide -> button shows, show -> button hides), which matches the` &&
+               ` original in every path the sample offers - but a side-content visibility change caused by anything else (e.g. the Toggle button) does not update it. // NOTE: **e2e-verified 2026-08-01**` &&
+               ` (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the feed list renders all four feed.json rows, the side content's Close button hides the side content through the` &&
+               ` SIDE_CONTENT_HIDE round-trip that flips the two-way-bound showSideContent (setShowSideContent false), the Open Side Content button then shows (its visible flag comes from the breakpointChanged` &&
+               ` round-trip) and brings it back through SIDE_CONTENT_SHOW. Residual (nothing headless can assert): the FeedListItem layout with its remote author pictures, and toggle() on a real S-breakpoint device.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.DynamicSideContent`      name = `DynamicSideContentProduct`                     class = `z2ui5_cl_smpc_app_269` path = `src/01/02/z2ui5_cl_smpc_app_269.clas.abap`
         score = 5
@@ -5799,8 +5808,11 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` value 200 the original means.` )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.Splitter`                name = `SplitterNested1`                               class = `z2ui5_cl_smpc_app_266` path = `src/01/02/z2ui5_cl_smpc_app_266.clas.abap`
         score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        since = `1.22.0` ) ).
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22.0`
+        notes = `NOTE: the original view writes minSize="200px" on the Content 5 SplitterLayoutData, but sap.ui.layout.SplitterLayoutData.minSize is typed int - UI5 cannot parse the px suffix, and the chain linter` &&
+                 ` rejects the literal outright (invalid-property-value, expected int). The port writes the numeric value 200 the original means, which renders identically. Same as app 340, which declared it and this` &&
+                 ` one did not: structural-diff never compares a LITERAL attribute value, so the sidecar's empty deviations array was the only thing claiming a clean 1:1 port, and it was wrong. Declared 2026-08-21.` ) ).
 
     lv_text1 = `NOTE: The original binds the image src against a separate 'img' JSON model ({img>/products/pic1} from sap/ui/demo/mock/img.json) alongside the default model for the widths. abap2UI5 has one default` &&
                ` model, so the picture path is folded into it and the src binds it directly (client->_bind( pic1 )) - the 'img>' prefix is dropped, the last path segment (pic1) is identical and the value is the` &&
@@ -6337,25 +6349,41 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = `NOTE: The object-typed calendar date properties (Calendar.minDate, Calendar.maxDate and the disabledDates DateRange startDate/endDate) are fed from plain ISO strings in the model and converted at the` &&
                ` point of use with Formatter.DateCreateObject from the curated module (core:require='{Formatter: z2ui5/model/formatter}'). A plain string binding would crash view creation (Date must be a JS/UI5Date` &&
                ` object). The original's UI5Date.getInstance(year, month0, day) values are normalized to ISO 1:1 (month is 0-based: minDate 2000-01-01, maxDate 2050-12-31, disabled ranges 2016-01-04..2016-01-10 and` &&
-               ` 2016-01-15). // NOTE: The second disabled range is a SINGLE day: the original's row omits end entirely (undefined is falsy), and one bound DateRange template cannot omit an attribute per row. A plain` &&
-               ` formatter binding over the empty end field crashed the app - Formatter.DateCreateObject('') is new Date('') = Invalid Date, DateRange.endDate accepts it (type object) and Month._checkDateEnabled then`.
-    lv_text1 = lv_text1 && ` runs CalendarDate.fromLocalJSDate on every TRUTHY endDate, which throws. Fixed 2026-07-28 by guarding the conversion in the binding itself: endDate="{= ${END} ? Formatter.DateCreateObject(${END}) :` &&
-               ` null }" - written as a backtick literal so the braces survive to the attribute. Probe-verified against the real OpenUI5 runtime (scripts/probes/calendar-empty-enddate-probe.mjs, headless Chromium,` &&
-               ` calendar focused on the affected month): the old binding throws and renders 0 days, the guarded one yields endDate null for the empty row and renders all 42. This also matters for the semantics, not` &&
-               ` only the crash: Month._checkDateEnabled disables a single day ONLY through the no-endDate branch (the range branch compares strictly exclusive, oTimeStamp > start && < end), so seeding end = start` &&
-               ` would disable nothing. // NOTE: handleCalendarSelect formats the picked day with DateFormat.getInstance({style:'long'}) and writes it into the 'selectedDate' Text. The picked day IS transportable` &&
-               ` after all - measured 2026-08-05 with ``scripts/probes/event-arg-expression-probe.mjs`` against real OpenUI5: an event arg is a full UI5 expression, and indexed access into an array-valued getter plus`.
-    lv_text1 = lv_text1 && ` chained calls resolve there (``$event.oSource.getSelectedDates()[0].getStartDate()``). The earlier rationale - 'select carries no date parameter and the selected DateRange is control state' - was` &&
-               ` wrong. The wire carries the three LOCAL date parts as three expression args (year, month+1, day) rather than ``toISOString( )``, which would shift the day for any user east of Greenwich, and each arg` &&
-               ` is guarded by ``getSelectedDates().length > 0`` so a re-click that clears the selection arrives as year 0. The port reproduces it: the select wire was added (the Text is bound instead of carrying the` &&
-               ` literal 'No Date Selected'), and the English long form ('March 17, 2026') is composed in ABAP from the transported parts - the thin-frontend answer to a locale formatter, as in app 024. // NOTE: The` &&
-               ` original Switch (state='true') toggles Calendar week numbers via an imperative change handler (setShowWeekNumbers). This is folded into a two-way binding shared by the Switch state and a Calendar`.
-    lv_text1 = lv_text1 && ` showWeekNumbers property (both bound to show_week_numbers, seeded true), so the toggle runs on the client with no round-trip - the thin-frontend move. The Switch change attribute is therefore dropped` &&
-               ` and a showWeekNumbers attribute (absent from the original view) is added. // POST-1.71: Formatter.DateCreateObject is referenced via core:require, which needs UI5 >= 1.74. sap.ui.unified.Calendar` &&
-               ` itself and its minDate/maxDate/disabledDates/showWeekNumbers members are all <= 1.71 (in scope). // NOTE: The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style` &&
-               ` leaf (no counterpart in the original view). This sample's manifest lists ``../style.css`` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding /` &&
-               ` labelMarginLeft classes the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css` &&
-               ` (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs.`.
+               ` 2016-01-15). Corrected 2026-08-21: the dates are ABAP DATS strings read through Formatter.DateAbapDateToDateObject, not ISO date-only strings read through DateCreateObject. The latter is ``new` &&
+               ` Date(s)``, and ECMA-262 parses the date-ONLY form as UTC midnight, while Calendar takes the LOCAL parts at the other end (CalendarDate.fromLocalJSDate) - so every fixed date in this sample shifted a` &&
+               ` day earlier west of Greenwich: minDate became 1999-12-31 and the disabled range Jan 3-9 instead of Jan 4-10. DateAbapDateToDateObject builds the Date from the parsed parts, i.e. local midnight, and`.
+    lv_text1 = lv_text1 && ` additionally answers null for a non-date - so the ternary guard the empty ``end`` needed in the view is gone with it. // NOTE: The second disabled range is a SINGLE day: the original's row omits end` &&
+               ` entirely (undefined is falsy), and one bound DateRange template cannot omit an attribute per row. A plain formatter binding over the empty end field crashed the app - Formatter.DateCreateObject('')` &&
+               ` is new Date('') = Invalid Date, DateRange.endDate accepts it (type object) and Month._checkDateEnabled then runs CalendarDate.fromLocalJSDate on every TRUTHY endDate, which throws. Fixed 2026-07-28` &&
+               ` by guarding the conversion in the binding itself: endDate="{= ${END} ? Formatter.DateCreateObject(${END}) : null }" - written as a backtick literal so the braces survive to the attribute.` &&
+               ` Probe-verified against the real OpenUI5 runtime (scripts/probes/calendar-empty-enddate-probe.mjs, headless Chromium, calendar focused on the affected month): the old binding throws and renders 0` &&
+               ` days, the guarded one yields endDate null for the empty row and renders all 42. This also matters for the semantics, not only the crash: Month._checkDateEnabled disables a single day ONLY through the`.
+    lv_text1 = lv_text1 && ` no-endDate branch (the range branch compares strictly exclusive, oTimeStamp > start && < end), so seeding end = start would disable nothing. Corrected 2026-08-21: the dates are ABAP DATS strings read` &&
+               ` through Formatter.DateAbapDateToDateObject, not ISO date-only strings read through DateCreateObject. The latter is ``new Date(s)``, and ECMA-262 parses the date-ONLY form as UTC midnight, while` &&
+               ` Calendar takes the LOCAL parts at the other end (CalendarDate.fromLocalJSDate) - so every fixed date in this sample shifted a day earlier west of Greenwich: minDate became 1999-12-31 and the disabled` &&
+               ` range Jan 3-9 instead of Jan 4-10. DateAbapDateToDateObject builds the Date from the parsed parts, i.e. local midnight, and additionally answers null for a non-date - so the ternary guard the empty` &&
+               ` ``end`` needed in the view is gone with it. // NOTE: handleCalendarSelect formats the picked day with DateFormat.getInstance({style:'long'}) and writes it into the 'selectedDate' Text. The picked day` &&
+               ` IS transportable after all - measured 2026-08-05 with ``scripts/probes/event-arg-expression-probe.mjs`` against real OpenUI5: an event arg is a full UI5 expression, and indexed access into an`.
+    lv_text1 = lv_text1 && ` array-valued getter plus chained calls resolve there (``$event.oSource.getSelectedDates()[0].getStartDate()``). The earlier rationale - 'select carries no date parameter and the selected DateRange is` &&
+               ` control state' - was wrong. The wire carries the three LOCAL date parts as three expression args (year, month+1, day) rather than ``toISOString( )``, which would shift the day for any user east of` &&
+               ` Greenwich, and each arg is guarded by ``getSelectedDates().length > 0`` so a re-click that clears the selection arrives as year 0. The port reproduces it: the select wire was added (the Text is bound` &&
+               ` instead of carrying the literal 'No Date Selected'), and the English long form ('March 17, 2026') is composed in ABAP from the transported parts - the thin-frontend answer to a locale formatter, as` &&
+               ` in app 024. // NOTE: The original Switch (state='true') toggles Calendar week numbers via an imperative change handler (setShowWeekNumbers). This is folded into a two-way binding shared by the Switch`.
+    lv_text1 = lv_text1 && ` state and a Calendar showWeekNumbers property (both bound to show_week_numbers, seeded true), so the toggle runs on the client with no round-trip - the thin-frontend move. The Switch change attribute` &&
+               ` is therefore dropped and a showWeekNumbers attribute (absent from the original view) is added. // POST-1.71: Formatter.DateCreateObject is referenced via core:require, which needs UI5 >= 1.74.` &&
+               ` sap.ui.unified.Calendar itself and its minDate/maxDate/disabledDates/showWeekNumbers members are all <= 1.71 (in scope). Corrected 2026-08-21: the dates are ABAP DATS strings read through` &&
+               ` Formatter.DateAbapDateToDateObject, not ISO date-only strings read through DateCreateObject. The latter is ``new Date(s)``, and ECMA-262 parses the date-ONLY form as UTC midnight, while Calendar` &&
+               ` takes the LOCAL parts at the other end (CalendarDate.fromLocalJSDate) - so every fixed date in this sample shifted a day earlier west of Greenwich: minDate became 1999-12-31 and the disabled range` &&
+               ` Jan 3-9 instead of Jan 4-10. DateAbapDateToDateObject builds the Date from the parsed parts, i.e. local midnight, and additionally answers null for a non-date - so the ternary guard the empty ``end```.
+    lv_text1 = lv_text1 && ` needed in the view is gone with it. // NOTE: The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). This sample's` &&
+               ` manifest lists ``../style.css`` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding class the view carries had no rule behind them and the port` &&
+               ` rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only the rules this view` &&
+               ` actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs.`.
+    lv_text2 = `Formatter.DateCreateObject is referenced via core:require, which needs UI5 >= 1.74. sap.ui.unified.Calendar itself and its minDate/maxDate/disabledDates/showWeekNumbers members are all <= 1.71 (in` &&
+               ` scope). Corrected 2026-08-21: the dates are ABAP DATS strings read through Formatter.DateAbapDateToDateObject, not ISO date-only strings read through DateCreateObject. The latter is ``new Date(s)``,` &&
+               ` and ECMA-262 parses the date-ONLY form as UTC midnight, while Calendar takes the LOCAL parts at the other end (CalendarDate.fromLocalJSDate) - so every fixed date in this sample shifted a day earlier` &&
+               ` west of Greenwich: minDate became 1999-12-31 and the disabled range Jan 3-9 instead of Jan 4-10. DateAbapDateToDateObject builds the Date from the parsed parts, i.e. local midnight, and additionally` &&
+               ` answers null for a non-date - so the ternary guard the empty ``end`` needed in the view is gone with it.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarMinMax`                                class = `z2ui5_cl_smpc_app_220` path = `src/02/02/z2ui5_cl_smpc_app_220.clas.abap`
         score = 4
@@ -6363,8 +6391,7 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.22.0`
         is_post171 = abap_true
         notes = lv_text1
-        post171 = `Formatter.DateCreateObject is referenced via core:require, which needs UI5 >= 1.74. sap.ui.unified.Calendar itself and its minDate/maxDate/disabledDates/showWeekNumbers members are all <= 1.71 (in` &&
-                 ` scope).` ) ).
+        post171 = lv_text2 ) ).
 
     lv_text1 = `NOTE: handleCalendarSelect walks oCalendar.getSelectedDates() and rebuilds the JSON model with one yyyy-MM-dd string per selected day. An event arg is a full UI5 expression but the grammar has no` &&
                ` loop, so the wire carries a FIXED set of 31 index-guarded expression args (one per selectable slot), each formatting getSelectedDates()[i].getStartDate() to yyyy-MM-dd from its LOCAL parts on the` &&
@@ -6624,8 +6651,8 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): pressing 'Upload File' with no chosen file round-trips and toasts 'Choose a file first'; the` &&
                ` change/typeMissmatch toasts need a real file dialog and remain unexercised. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_246.mjs). // NOTE: The sample's`.
     lv_text1 = lv_text1 && ` own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). This sample's manifest lists ``../style.css`` - the sheet the sap.ui.unified` &&
-               ` samples SHARE one folder up - and it was never archived, so the viewPadding / labelMarginLeft classes the view carries had no rule behind them and the port rendered flush against the page edge where` &&
-               ` the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by` &&
+               ` samples SHARE one folder up - and it was never archived, so the viewPadding class the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders` &&
+               ` padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by` &&
                ` scripts/probes/orphan-style-class-probe.mjs.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.FileUploader`           name = `FileUploaderComplex`                           class = `z2ui5_cl_smpc_app_246` path = `src/01/02/z2ui5_cl_smpc_app_246.clas.abap`
@@ -6967,25 +6994,22 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.26`
         notes = lv_text1 ) ).
 
-    lv_text1 = `NOTE: All three controller behaviours are reproduced through bound properties instead of the imperative setters. (a) handleSCBtnPress / handleSideContentHide drive the side content through the two-way` &&
-               ` bound showSideContent property (the property setShowSideContent writes; the original view's literal showSideContent="false" becomes the binding's initial value). On breakpoint S the original calls` &&
-               ` toggle( ) instead of the setter, and toggle only flips side-content visibility on S, so both branches fold into the same bound flip: OPEN_SIDE_CONTENT sets it true, CLOSE_SIDE_CONTENT false (apps` &&
-               ` 138/344 precedent). (b) The open button's visibility (the controller's oOPSideContentBtn.setVisible calls) is the bound visible attribute the port adds on the sideContentButton m:Button - an` &&
-               ` attribute the original view does not carry. (c) updateToggleButtonState: breakpointChanged carries its own currentBreakpoint event parameter to the backend (t_arg ${$parameters>/currentBreakpoint})` &&
-               ` and on_event recomputes the open button's visibility exactly as the controller does - visible when the breakpoint is 'S' or the side content is hidden. The focus moves (closeSideContentBtn after`.
-    lv_text1 = lv_text1 && ` opening, openSideContentBtn after closing - the original's setTimeout focus) go through the SET_FOCUS follow-up action; focus has no bindable equivalent. onAfterRendering seeds sCurrentBreakpoint` &&
-               ` once; abap2UI5 has no equivalent hook, so the port takes the breakpoint from the first breakpointChanged event (app 138 precedent). // NOTE: style.css (.sapUiTheme-sap_bluecrystal .sapUiDSC gets` &&
-               ` background-color rgb(242, 248, 252) - a blue-crystal-theme-only rule) is injected through a core:HTML <style> leaf, so the port adds one core:HTML control the original view does not have - abap2UI5` &&
-               ` ships no separate stylesheet. The CSS braces are escaped \{ \} in a backtick literal so the XMLView parser does not read them as bindings (app 344 precedent). // NOTE: The controller's JSONModel` &&
-               ` (SharedJSONData/employee.json, set as the named 'ObjectPageModel') is never bound by any control in this view - every text is a literal - so the port seeds no model data and has no model_init (app` &&
-               ` 217/260 precedent); the two bound flags are control state, seeded inline in main. // NOTE: The three image assets point at the sdk.openui5.org host per the offline asset-URL rule -`.
-    lv_text1 = lv_text1 && ` https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_273624.png (objectImageURI), twitterIcon.png and linkedInIcon.png (the two m:Image src values); the original uses relative` &&
-               ` test-resources paths (app 263 precedent). // NOTE: The original's empty blocks and moreBlocks aggregation tags on the paymentSubSection ObjectPageSubSection are not written - they hold no children,` &&
-               ` and aggregation elements are optional in XML (ignored by the structural diff). The side content's long Lorem Text keeps the original wording verbatim with the XML attribute's line breaks and tab` &&
-               ` indentation normalized to single spaces, as an XML attribute-value parser would (app 344 precedent). // NOTE: Unverified in a running system: the breakpointChanged round-trip transporting` &&
-               ` currentBreakpoint and recomputing the open button's bound visible flag, the showSideContent flip on the two press round-trips, and the SET_FOCUS follow-up on the openSideContentBtn /` &&
-               ` closeSideContentBtn ids. The breakpointChanged transport and the showSideContent flip use the same wiring that is e2e-verified on app 267 and live on apps 138/344. **e2e-verified 2026-08-21**`.
-    lv_text1 = lv_text1 && ` (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_417.mjs).`.
+    lv_text1 = `NOTE: handleSCBtnPress branches on the breakpoint - DynamicSideContent.toggle( ) on S, setShowSideContent( true ) everywhere else - and the port branches with it since 2026-08-21, driving toggle( )` &&
+               ` through control_by_id on S and flipping the bound showSideContent otherwise. Until then this entry claimed the two legs fold into one bound flip because 'toggle only flips side-content visibility on` &&
+               ` S'. They do not fold: setShowSideContent re-derives the control's private visibility pair through _setResizeData( S ), which puts _SCVisible back to (sideContentVisibility === AlwaysShow) - false,` &&
+               ` since the default is ShowAboveS - and _MCVisible to true, so _changeGridState keeps the MAIN content on screen and the side content never appears. toggle( ) is the branch that swaps the pair. On S` &&
+               ` the port therefore showed nothing while hiding the open button in the same round-trip, with SET_FOCUS pointing at a Close button inside the invisible side content - a dead end until the viewport was` &&
+               ` resized. Same defect as apps 344 and 138. // NOTE: style.css (.sapUiTheme-sap_bluecrystal .sapUiDSC gets background-color rgb(242, 248, 252) - a blue-crystal-theme-only rule) is injected through a`.
+    lv_text1 = lv_text1 && ` core:HTML <style> leaf, so the port adds one core:HTML control the original view does not have - abap2UI5 ships no separate stylesheet. The CSS braces are escaped \{ \} in a backtick literal so the` &&
+               ` XMLView parser does not read them as bindings (app 344 precedent). // NOTE: The controller's JSONModel (SharedJSONData/employee.json, set as the named 'ObjectPageModel') is never bound by any control` &&
+               ` in this view - every text is a literal - so the port seeds no model data and has no model_init (app 217/260 precedent); the two bound flags are control state, seeded inline in main. // NOTE: The` &&
+               ` three image assets point at the sdk.openui5.org host per the offline asset-URL rule - https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_273624.png (objectImageURI), twitterIcon.png and` &&
+               ` linkedInIcon.png (the two m:Image src values); the original uses relative test-resources paths (app 263 precedent). // NOTE: The original's empty blocks and moreBlocks aggregation tags on the` &&
+               ` paymentSubSection ObjectPageSubSection are not written - they hold no children, and aggregation elements are optional in XML (ignored by the structural diff). The side content's long Lorem Text keeps`.
+    lv_text1 = lv_text1 && ` the original wording verbatim with the XML attribute's line breaks and tab indentation normalized to single spaces, as an XML attribute-value parser would (app 344 precedent). // NOTE: Unverified in` &&
+               ` a running system: the breakpointChanged round-trip transporting currentBreakpoint and recomputing the open button's bound visible flag, the showSideContent flip on the two press round-trips, and the` &&
+               ` SET_FOCUS follow-up on the openSideContentBtn / closeSideContentBtn ids. The breakpointChanged transport and the showSideContent flip use the same wiring that is e2e-verified on app 267 and live on` &&
+               ` apps 138/344. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_417.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeader`             name = `ObjectPageDynamicSideContentBtn`               class = `z2ui5_cl_smpc_app_417` path = `src/01/03/z2ui5_cl_smpc_app_417.clas.abap`
         score = 5
@@ -7010,8 +7034,13 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` the ObjectPageHeader control (id headerForTest) instead of the exact icon DOM element - same placement='Bottom', slightly coarser anchor. The fragments themselves (Popover.fragment.xml,` &&
                ` PopoverLock.fragment.xml) are rebuilt 1:1 as core:FragmentDefinition chains shown via popover_display. // NOTE: Round-trip behaviour unverified in a running system: the two anchored ResponsivePopover` &&
                ` opens (TITLE_SELECTOR via titleSelectorPress, MARK_LOCKED via markLockedPress, both anchored at $event.oSource.sId), the ITEM_SELECT selectionChange round-trip that closes the popover via` &&
-               ` follow_up_action popover_close (1:1 with handleItemSelect), and the LINK1/LINK2 breadcrumb Link press toasts ('Page 1 a very long link clicked' / 'Page 2 long link clicked'). **e2e-verified`.
-    lv_text1 = lv_text1 && ` 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_415.mjs).`.
+               ` follow_up_action popover_close (the INTENT of handleItemSelect (selecting an item closes the popover). Not literally 1:1: the original's handler reads this._oPopover, which its controller never`.
+    lv_text1 = lv_text1 && ` assigns - it only ever sets _oPopoverPromise and _oPopoverLock - so upstream the handler throws a TypeError and the popover stays open. The port's behaviour is the intended one; the word '1:1' was` &&
+               ` wrong and is corrected 2026-08-21), and the LINK1/LINK2 breadcrumb Link press toasts ('Page 1 a very long link clicked' / 'Page 2 long link clicked'). **e2e-verified 2026-08-21** (nightly e2e` &&
+               ` interaction, meta/interactions/z2ui5_cl_smpc_app_415.mjs). // NOTE: The header's objectImageURI is re-hosted: the view carries the demo-kit-relative` &&
+               ` './test-resources/sap/uxap/images/imageID_275314.png', which an abap2UI5 app has no document root to resolve against, so the port serves it from` &&
+               ` https://sdk.openui5.org/test-resources/sap/uxap/images/. The sibling ports 413 and 417 declare exactly this and 415 did not - only an inline comment recorded it, and data-fidelity tolerates the` &&
+               ` absolutization, so nothing else would have said so. Added 2026-08-21.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeader`             name = `ObjectPageHeaderWithAllControls`               class = `z2ui5_cl_smpc_app_415` path = `src/01/03/z2ui5_cl_smpc_app_415.clas.abap`
         score = 5
