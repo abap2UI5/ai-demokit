@@ -3,7 +3,7 @@
 
 # The sample catalogue
 
-Every port in this repository — 568 of them — with what it shows and a
+Every port in this repository — 578 of them — with what it shows and a
 link to its source. This is the [overview app](src/z2ui5_cl_smpc_app_000.clas.abap)
 as a page you can read here, before installing anything.
 
@@ -44,7 +44,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 
 ### sap.m
 
-335 port(s).
+343 port(s).
 
 | Sample | Class |
 |---|---|
@@ -264,6 +264,8 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.m.PlanningCalendar** — Planning Calendar - with header that remains visible (fixed on top) on scroll<br>PlanningCalendarWithStickyHeader | [`Z2UI5_CL_SMPC_APP_542`](src/01/01/z2ui5_cl_smpc_app_542.clas.abap) |
 | **sap.m.PlanningCalendar** — Planning Calendar - Drag and Drop<br>PlanningCalendarDnD | [`Z2UI5_CL_SMPC_APP_546`](src/01/01/z2ui5_cl_smpc_app_546.clas.abap) |
 | **sap.m.SinglePlanningCalendar** — Single Planning Calendar with Custom Views<br>SinglePlanningCalendarWithCustomViews | [`Z2UI5_CL_SMPC_APP_552`](src/01/01/z2ui5_cl_smpc_app_552.clas.abap) |
+| **sap.m.DatePicker** — Date Picker Mass Editing Scenario<br>DatePickerMassEdit | [`Z2UI5_CL_SMPC_APP_556`](src/01/01/z2ui5_cl_smpc_app_556.clas.abap) |
+| **sap.m.TabContainer** — Tab Container - Multi-instance handling concept<br>TabContainerMHC<br><sub>tabcontainer tab container sap.m tabcontainermhc navcontainer page table columnlistitem tabcontaineritem objectheader simpleform</sub><br><sub>○ generated · 13 deviations</sub> | [`Z2UI5_CL_SMPC_APP_558`](src/01/01/z2ui5_cl_smpc_app_558.clas.abap) |
 | **sap.m.Carousel** — Carousel with Controls<br>With the Carousel a user can browse through multi-page content by swiping left or right.<br><sub>carousel sap.m user browse through title image text scrollcontainer list standardlistitem</sub><br><sub>✓ checked · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_006`](src/02/01/z2ui5_cl_smpc_app_006.clas.abap) |
 | **sap.m.DatePicker** — Date Picker - Open by Another Control<br>This example shows Date Picker which is opened by another control.<br><sub>datepicker date picker sap.m open another title vbox label button link</sub><br><sub>✓ checked · 5 deviations</sub> | [`Z2UI5_CL_SMPC_APP_016`](src/02/01/z2ui5_cl_smpc_app_016.clas.abap) |
 | **sap.m.DateRangeSelection**<br>The Date Range Selection is an extension of the Date Picker Control and enables the user to select range of dates.<br><sub>daterangeselection date range selection sap.m single-field input vbox label text</sub><br><sub>✓ checked · 8 deviations</sub> | [`Z2UI5_CL_SMPC_APP_017`](src/02/01/z2ui5_cl_smpc_app_017.clas.abap) |
@@ -383,6 +385,12 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.m.SinglePlanningCalendar** — Single Planning Calendar with Legend and defined working hours<br>SinglePlanningCalendarWithLegend | [`Z2UI5_CL_SMPC_APP_553`](src/02/01/z2ui5_cl_smpc_app_553.clas.abap) |
 | **sap.m.SinglePlanningCalendar** — Single Planning Calendar with Zoom In and Zoom Out behavior<br>SinglePlanningCalendarWithZoomInZoomOut | [`Z2UI5_CL_SMPC_APP_554`](src/02/01/z2ui5_cl_smpc_app_554.clas.abap) |
 | **sap.m.SinglePlanningCalendar** — Single Planning Calendar with Recurring Calendar Items<br>SinglePlanningCalendarRecurringItem | [`Z2UI5_CL_SMPC_APP_555`](src/02/01/z2ui5_cl_smpc_app_555.clas.abap) |
+| **sap.m.FacetFilter** — Facet Filter - Custom Filters<br>FacetFilterCustomFilters<br><sub>facetfilter facet filter sap.m facetfiltercustomfilters vbox facetfilterlist facetfilteritem table objectidentifier</sub><br><sub>○ generated · 11 deviations</sub> | [`Z2UI5_CL_SMPC_APP_557`](src/02/01/z2ui5_cl_smpc_app_557.clas.abap) |
+| **sap.m.Dialog** — Dialog in Custom Within Area<br>DialogWithinArea | [`Z2UI5_CL_SMPC_APP_561`](src/02/01/z2ui5_cl_smpc_app_561.clas.abap) |
+| **sap.m.Dialog** — Dialog with Custom Footer<br>DialogWithMessagePopover<br><sub>dialog message popover sap.m dialogwithmessagepopover page button simpleform label input select messagepopover messageitem toolbar</sub><br><sub>○ generated · 12 deviations</sub> | [`Z2UI5_CL_SMPC_APP_562`](src/02/01/z2ui5_cl_smpc_app_562.clas.abap) |
+| **sap.m.MessageView** — Message View inside Popover<br>MessageViewInsidePopover<br><sub>messageview message sap.m messageviewinsidepopover page button popover bar title messageitem link</sub><br><sub>○ generated · 8 deviations</sub> | [`Z2UI5_CL_SMPC_APP_563`](src/02/01/z2ui5_cl_smpc_app_563.clas.abap) |
+| **sap.m.MessageView** — Message View inside ResponsivePopover<br>MessageViewInsideResponsivePopover<br><sub>messageview message sap.m messageviewinsideresponsivepopover page button responsivepopover bar title messageitem link</sub><br><sub>○ generated · 8 deviations</sub> | [`Z2UI5_CL_SMPC_APP_564`](src/02/01/z2ui5_cl_smpc_app_564.clas.abap) |
+| **sap.m.Popover** — Popover with NavContainer<br>PopoverNavCon<br><sub>popover navcontainer sap.m popovernavcon verticallayout button page list standardlistitem objectheader objectattribute text</sub><br><sub>○ generated · 7 deviations</sub> | [`Z2UI5_CL_SMPC_APP_565`](src/02/01/z2ui5_cl_smpc_app_565.clas.abap) |
 
 ### sap.uxap
 
@@ -459,7 +467,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 
 ### sap.f
 
-24 port(s).
+26 port(s).
 
 | Sample | Class |
 |---|---|
@@ -477,6 +485,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.f.GridContainer** — Grid Container - Drag and Drop<br>GridContainerDragAndDrop | [`Z2UI5_CL_SMPC_APP_526`](src/01/04/z2ui5_cl_smpc_app_526.clas.abap) |
 | **sap.f.GridContainer** — Grid Container - Drag and Drop From List to GridContainer<br>GridContainerDragAndDropFromList | [`Z2UI5_CL_SMPC_APP_527`](src/01/04/z2ui5_cl_smpc_app_527.clas.abap) |
 | **sap.f.GridContainer** — Grid Container - Keyboard navigation between multiple grids<br>GridContainersNavigation | [`Z2UI5_CL_SMPC_APP_528`](src/01/04/z2ui5_cl_smpc_app_528.clas.abap) |
+| **sap.f.DynamicPage** — Dynamic Page with Wizard<br>DynamicPageWithWizard | [`Z2UI5_CL_SMPC_APP_560`](src/01/04/z2ui5_cl_smpc_app_560.clas.abap) |
 | **sap.f.DynamicPage** — InfoLabel in DynamicPage<br>InfoLabel used as subheader in DynamicPage<br><sub>dynamicpage dynamic sap.f infolabel title button flexbox panel objectattribute text overflowtoolbar toolbarspacer</sub><br><sub>◐ reviewed · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_143`](src/01/05/z2ui5_cl_smpc_app_143.clas.abap) |
 | **sap.f.ShellBar** — Shell Bar with title mega menu<br>Shell Bar example showing the control title as part of a mega menu, configurable by the app developer.<br><sub>shellbar shell bar sap.f application header</sub><br><sub>◐ reviewed · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_110`](src/02/04/z2ui5_cl_smpc_app_110.clas.abap) |
 | **sap.f.SidePanel** — Side Panel with single action item<br>Demonstrates the usage of Side Panel with single action item.<br><sub>sidepanel side panel sap.f single item button vbox label switch text</sub><br><sub>◐ reviewed · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_136`](src/02/04/z2ui5_cl_smpc_app_136.clas.abap) |
@@ -487,6 +496,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.f.DynamicPage** — Dynamic Page with Responsive Avatar<br>Dynamic Page demonstrating the breakpointChange event to adjust Avatar sizes responsively based on breakpoints.<br><sub>dynamicpage dynamic sap.f dynamicpageresponsiveavatar breadcrumbs link hbox title objectmarker text flexbox avatar</sub><br><sub>◐ reviewed · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_244`](src/02/04/z2ui5_cl_smpc_app_244.clas.abap) |
 | **sap.f.FlexibleColumnLayout** — Flexible Column Layout Landmark Info For Columns<br>Flexible Column Layout where the first and the last columns have custom Landmark Info<br><sub>flexiblecolumnlayout flexible column layout sap.f flexiblecolumnlayoutlandmarkinfo button vbox</sub><br><sub>○ generated · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_449`](src/02/04/z2ui5_cl_smpc_app_449.clas.abap) |
 | **sap.f.FlexibleColumnLayout** — Flexible Column Layout Landmark Info For Arrows<br>Flexible Column Layout where the all the arrows have custom Landmark Info<br><sub>flexiblecolumnlayout flexible column layout sap.f flexiblecolumnlayoutlandmarkinfoarrow button vbox</sub><br><sub>○ generated · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_450`](src/02/04/z2ui5_cl_smpc_app_450.clas.abap) |
+| **sap.f.DynamicPage** — Dynamic Page with Analytical Table<br>DynamicPageAnalyticalTable<br><sub>dynamicpage sap.f dynamicpageanalyticaltable dynamicpagetitle dynamicpageheader table column generictag card numericheader popover</sub><br><sub>○ generated · 8 deviations</sub> | [`Z2UI5_CL_SMPC_APP_559`](src/02/04/z2ui5_cl_smpc_app_559.clas.abap) |
 
 ### sap.ui.layout
 

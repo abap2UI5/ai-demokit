@@ -1,0 +1,35 @@
+{
+  "class": "z2ui5_cl_smpc_app_556",
+  "sample": "sap.m.sample.DatePickerMassEdit",
+  "entity": "sap.m.DatePicker",
+  "file": "src/01/01/z2ui5_cl_smpc_app_556.clas.abap",
+  "batch": "b46",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onInit builds the Select-New-Date Dialog, its sap.ui.unified.Calendar and its two Buttons in the CONTROLLER (new Dialog({ ... })). The port builds the same dialog in a chain and shows it with popup_display, which is why structural-diff reports Dialog, unified:Calendar and two extra Buttons as control extra - the sample's view declares none of them."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleTableSelectionChange enables the Change Dates button while at least one row is selected. The row selection is bound two-way here, so the selectionChange round-trip only has to recompute the bound enabled flag - the same rule the original applies from getSelectedItems().length."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleCalendarSelect enables the dialog's OK button once a date is picked, and the OK press writes that date into the DateOfSale of every selected row. The picked date's local year, month and day travel with the select event, ABAP composes the same yyyy-MM-dd string the sample's DateFormat produces, and the OK button's enabled state is an expression over the bound date."
+    },
+    {
+      "type": "NOTE",
+      "what": "setSizeLimit( 10 ) caps the bound rows at the first ten of the mock collection, so the port seeds exactly those ten. The original binds them through a named products> model; abap2UI5 keeps one default model, so the prefix is dropped and the last path segment is identical."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The multi-select, the date dialog and the mass date change are unverified in a running system."
+    }
+  ]
+}

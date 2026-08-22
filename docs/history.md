@@ -7,6 +7,61 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-22 — batch b46 (sap.m + sap.f): the popup-and-page tail (apps 556–565)
+
+Ten samples with nothing in common but their shape: each one builds most of its
+UI in a controller and shows it in a popup or a second page, so the port is
+mostly a matter of rebuilding what the demo kit's `view.xml` does not contain.
+
+| app | sample | what it adds |
+|---|---|---|
+| 556 | DatePickerMassEdit | a selection-gated Edit button and the mass-edit dialog behind it |
+| 557 | FacetFilterCustomFilters | `lists="{…/Filters}"` kept BOUND, with the group's own values nested one level down |
+| 558 | TabContainerMHC | the corpus's first `sap.m.TabContainer`, built over a bound items aggregation |
+| 559 | DynamicPageAnalyticalTable | a `sap.ui.table.Table` in a `f:DynamicPage`, plus a numeric card in a popover |
+| 560 | DynamicPageWithWizard | app 535's branching wizard, this time inside a `f:DynamicPage` |
+| 561 | DialogWithinArea | three dialogs from one parameterised builder; `Popup.setWithinArea` has no declarative form |
+| 562 | DialogWithMessagePopover | app 065's message handling, moved into a Dialog, with the severity formatters RESTORED |
+| 563 | MessageViewInsidePopover | app 284's MessageView, anchored in a `Popover` instead of a Dialog |
+| 564 | MessageViewInsideResponsivePopover | the same, in a `ResponsivePopover` with an `endButton` |
+| 565 | PopoverNavCon | a `NavContainer` inside a popover; `bindElement` folded to root-seeded fields |
+
+Five findings:
+
+- **`sap.m.TabContainer` has no default aggregation.** App 558's item template
+  as a direct child produced `Cannot add direct child without default
+  aggregation` and the view never rendered. The template has to sit in an
+  explicit ``)->ele( `items` )`` next to the `items` binding — the render gate
+  caught it, the static gates did not.
+- **A view-builder attribute whose value is a METHOD PARAMETER is invisible to
+  every gate.** App 558 first built its Edit form in a helper taking the four
+  binding strings; the reconstructed view came out with `<Input type="Text"/>`
+  and no `value` at all, because the linter resolves literals and
+  `client->_bind( <attribute> )`, not parameters. Nothing failed — the form was
+  simply absent from the property gate, the render gate and the structural diff.
+  Inline the attributes, or the gates are checking a different view than the one
+  that ships.
+- **The demo kit's shared `forms.json` has no `recipient` node**, so app 562's
+  fragment title `Hello {/recipient/name}` renders a bare `Hello ` in the
+  ORIGINAL. Confirmed against the upstream file rather than guessed; the port
+  keeps the binding shape over an empty field so it renders identically. The
+  rest of that mock is byte-equivalent to the snapshot the sibling sample
+  (app 065) already carries.
+- **The severity formatters app 065 dropped are portable after all.** App 562's
+  `buttonIconFormatter` / `buttonTypeFormatter` / `highestSeverityMessages` scan
+  the message list for the highest severity — a domain computation, so it runs
+  in ABAP and feeds the button's bound `icon`, `type` and `text`. `btn_type` is
+  seeded `Default`: an empty string would override the `sap.m.ButtonType` enum
+  default and reject the whole view, the same trap b45 hit with `AvatarColor`.
+- **Two advisory ratchets had been red since earlier batches.** `b43` landed
+  apps 533/535's per-keystroke `liveChange` wires and `b45` landed apps 553/554's
+  tooltip-less legend buttons, neither with a budget raise — so `view-gates
+  --strict` has been failing on the committed tree for three batches. Both
+  budgets are raised here with dated comments naming every port, rather than
+  quietly re-baselined. b46 itself adds one `live-event-roundtrip` (app 560,
+  inherited from app 535) and no accessibility debt: every icon-only button it
+  ports got a tooltip.
+
 ## 2026-08-22 — batch b45 (sap.m): the calendar tail — three PlanningCalendars and seven SinglePlanningCalendars (apps 546–555)
 
 The rest of the PlanningCalendar family plus seven of the nine

@@ -1,0 +1,64 @@
+{
+  "class": "z2ui5_cl_smpc_app_562",
+  "sample": "sap.m.sample.DialogWithMessagePopover",
+  "entity": "sap.m.Dialog",
+  "file": "src/02/01/z2ui5_cl_smpc_app_562.clas.abap",
+  "batch": "b46",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "app-authored messages ride the z2ui5.cc.MessageManager companion (items table), the popover is toggled/opened through control_by_id"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "four post-1.71 members are kept for the 1:1 port: Button.ariaHasPopup (since UI5 1.84) on the page button, the message-popover button and the Reject button; MessagePopover.groupItems (since UI5 1.73); the Dialog footer aggregation (sap.m.Dialog.footer, since UI5 1.110) which is exactly how MPDialog.fragment.xml puts its Toolbar under the dialog; and the sap-icon://information glyph (in the icon font since UI5 1.80), the default branch of the ported buttonIconFormatter."
+    },
+    {
+      "type": "NOTE",
+      "what": "the fragment MPDialog.fragment.xml is built in popup_dialog_display and shown with client->popup_display( ), the original's loadFragment( ) + oDialog.open( ) on the page button's press; _closeDialog becomes client->popup_destroy( ). onOpenPopoverDialog's MessageToast.show('Press \"Save\" to trigger validation.') is ported as client->message_toast_display( ) in the same handler, and Messaging.registerObject( formContainer ) has no counterpart - abap2UI5 registers handleValidation on every view slot already."
+    },
+    {
+      "type": "NOTE",
+      "what": "the Dialog title is title=\"Hello {/recipient/name}\" but the shared demo kit mock sap/ui/demo/mock/forms.json carries only the top-level keys \"forms\" and \"employment\" - there is no \"recipient\" node, so the original renders a bare \"Hello \". The port keeps the binding shape (title bound to an empty RECIPIENT_NAME field) so it renders identically."
+    },
+    {
+      "type": "NOTE",
+      "what": "sap/ui/demo/mock/forms.json is not snapshotted under ui5/mock/ (raw download is blocked in this environment). Its content was verified against the upstream file and is byte-equivalent to the sibling sample's local snapshot ui5/sap.m/MessagePopoverMessageHandling/localService/mockdata/FormsModel.json - the same 8 forms and the single employment row - which is what the port seeds verbatim (Julie Armstrong, Denise Smith, Richard Wilson, Gerd Becker, John Miller with the built-in invalid ZIP AAA, Stefan Bosch, Maria Fontes with empty email + malformed website, Antonio Ferrari)."
+    },
+    {
+      "type": "NOTE",
+      "what": "the sample's nested JSON model (street/name, zip/code, phone/number) is flattened into a flat ABAP row (STREET_NAME, ZIP_CODE, PHONE_NUMBER, ...) - abap2UI5 serves one default model; the bindings use the flattened field names. The three f:ColumnElementData layoutData hints are kept 1:1."
+    },
+    {
+      "type": "NOTE",
+      "what": "onChange/handleRequiredField/checkInputConstraints are replaced by the framework: the typed value bindings with constraints (NAME sap.ui.model.type.String required, ZIP_CODE Integer, EMAIL String with the search regex, WEEKLYHOURS Integer maximum 40) collect and clear their validation messages AUTOMATICALLY into the message> model with no app code. Save ports _generateInvalidUserInput in effect: since abap2UI5 auto-collects validation messages only from USER input and not from programmatically-set model values, Save injects the four demo issues on the SAME rows the original targets (formContainer.getItems()[4/5/6] = John Miller Name empty, Stefan Bosch ZIP 'AAA', Maria Fontes email malformed, plus the employment row's weekly hours 400) AND authors the matching four messages (3 Errors + 1 Warning) with their /T_FORMS/4|5|6 and /T_EMPLOYMENT/0 targets, then opens the MessagePopover via follow_up_action( control_by_id openBy ) anchored to messagePopoverBtn - the original's setTimeout( oMP.openBy(oButton), 100 ). The app-authored messages ride the z2ui5.cc.MessageManager companion control (items bound to /T_MESSAGES) - an added control the original does not have (control extra z2ui5:MessageManager), which is how abap2UI5 feeds the message> model with messages the application itself raises."
+    },
+    {
+      "type": "NOTE",
+      "what": "buttonIconFormatter / buttonTypeFormatter / highestSeverityMessages are RESTORED (app 065 dropped them): the severity ranking Error > Warning > Success > Info is a domain computation, so - abap2UI5 being a thin frontend - it runs in ABAP (button_severity_set) over the app-authored message table and feeds the button's bound icon, type and text, matching the original's values exactly for this sample's Save flow (3 Errors -> type Negative, icon sap-icon://error, text '3'). The framework-collected validation messages that the typed bindings raise on user input are not visible to the backend, so they do not shift the ranking the way the original's formatters (which scan the whole message model) would; visible=\"{= !!${message>/}.length }\" is kept 1:1 as a frontend expression over the full model. btn_type is seeded 'Default' because an empty string would override the sap.m.ButtonType enum DEFAULT and reject the whole view."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleMessagePopoverPress (this.oMP.toggle(oEvent.getSource())) becomes a roundtrip-free client->follow_up_action( cs_event-control_by_id, toggleBy ) on the button press, anchored to messagePopoverBtn - the same frontend-action pattern as apps 065/066/067. The MessagePopover itself is declared in the button's dependents aggregation, which is where the original adds it (addDependent)."
+    },
+    {
+      "type": "NOTE",
+      "what": "MessageItem grouping (groupItems=true) is RESTORED: the original derives groupName in its controller (getGroupName reads the form titles around the target control). That is a domain classification, so it is computed in the ABAP backend and carried on the Message code field (sap.ui.core.message.Message has no groupName slot), bound groupName=\"{message>code}\" - Name and ZIP land in 'Personal, Information', Email in 'Personal, Contact' and Standard Weekly Hours in 'Personal, Rating' (the employment form puts it in its Rating group)."
+    },
+    {
+      "type": "NOTE",
+      "what": "activeTitlePress scroll-to-control navigation is RESTORED (activeTitle=true): pressing a message title fires ACTIVE_TITLE with the message's target control id (${$parameters>/item}.getBindingContext('message').getObject().getControlIds()[0]), and the handler runs follow_up_action( scroll_into_view ) + control_by_id close + set_focus on it - the 1:1 equivalent of the sample's scrollToElement + focus. isReachable (which returns true unconditionally) becomes the constant activeTitle=\"true\"."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the original re-renders the footer button from an attachChange handler on the MessagePopover's items binding (navigateBack + setType/setIcon/setText). abap2UI5 has no binding-change hook, so the button's three properties are recomputed on the SAVE round-trip that authors the messages - the only moment they change in this sample - and MessagePopover.navigateBack has no whitelisted frontend-action counterpart, so the popover opens on its list page (which is where a freshly opened popover starts anyway)."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: the Dialog + MessagePopover-in-dependents combination, the toggleBy/openBy anchoring from inside a popup, and the backend-computed button severity."
+    }
+  ]
+}

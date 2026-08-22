@@ -1,0 +1,48 @@
+{
+  "class": "z2ui5_cl_smpc_app_559",
+  "sample": "sap.f.sample.DynamicPageAnalyticalTable",
+  "entity": "sap.f.DynamicPage",
+  "file": "src/02/04/z2ui5_cl_smpc_app_559.clas.abap",
+  "batch": "b46",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "control_global MESSAGE_TOAST with the row's ProductId on the Details button; the GenericTag ships its own id to anchor the card popover"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "one post-1.71 member is kept for the 1:1 port: sap.ui.table.Table.rowMode=\"Auto\" (the rowMode aggregation replaced visibleRowCountMode in UI5 1.119); it is what makes the table fill the DynamicPage's fitContent area."
+    },
+    {
+      "type": "NOTE",
+      "what": "Card.fragment.xml is rebuilt as a core:FragmentDefinition and shown with client->popover_display( by_id ), anchored to the pressed GenericTag exactly as onGenericTagPress's openBy(oSourceControl) does (app 229 idiom) - so the Popover, the f:Card, its card:NumericHeader and the two card:NumericSideIndicators are extra against the archived DynamicPageAnalyticalTable.view.xml. The original caches the fragment and re-opens the same instance; the port rebuilds it per press, which is equivalent because the card is entirely static."
+    },
+    {
+      "type": "NOTE",
+      "what": "the two frontend formatters are computed in the ABAP backend (thin-frontend rule, app 115 does the same for the same table): formatAvailableToObjectState becomes the AVAILABLESTATE field bound to ObjectStatus.state, and formatAvailableToIcon becomes AVAILABLEICON bound to c:Icon.src. Both are derived from Status = 'Available', exactly as initSampleDataModel derives Available."
+    },
+    {
+      "type": "NOTE",
+      "what": "initSampleDataModel is reproduced in model_init: the full mock /ProductCollection (123 rows) plus the Suppliers and Categories arrays it derives from the distinct SupplierName / Category values, the Heavy flag (WeightMeasure > 1000 as the string 'true'/'false', which is why the CheckBox keeps its sap.ui.model.type.String binding) and headerExpanded, which the DynamicPage binds."
+    },
+    {
+      "type": "NOTE",
+      "what": "DeliveryDate is Date.now() - (i % 10 * 4 days) in the original - a moving value, so it is anchored on a FIXED base date here (the corpus rule for now/random values, apps 164/181/289) and carried as an ISO date STRING. The DatePicker keeps its sap.ui.model.type.Date binding but takes an ISO source pattern instead of the original's 'timestamp': the model carries a date string, not a JS epoch number (CAPABILITIES date row). DeliveryDateStr, which the controller computes and no control binds, has no counterpart."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleDetailsPress composes its MessageToast from the pressed row's ProductId; the row field resolves on the client, so it stays there as a roundtrip-free control_global MESSAGE_TOAST show with the {0} placeholder - the same wire app 115 uses for the same button."
+    },
+    {
+      "type": "NOTE",
+      "what": "the icon-only share Button in the title's actions is text-less and tooltip-less in the sample. The port gives it tooltip=\"Share\" so it is reachable with a screen reader - the one accessibility addition in this port."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: the DynamicPage with a sap.ui.table.Table in fitContent mode and the card popover anchored on the GenericTag."
+    }
+  ]
+}

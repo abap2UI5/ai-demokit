@@ -860,6 +860,31 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` ObjectStatus state. The two named models fold into the one default model (cities> -> T_CITIES, products> -> T_PRODUCTS, last path segment identical) and the ComboBox sorter rides along as a raw` &&
                  ` binding-info string. The port has NO structural difference from the original left, so its structural_diff skip is gone - the gate reported it stale, which is what that ratchet is for.` ) ).
 
+    lv_text1 = `POST-1.71: one post-1.71 member is kept for the 1:1 port: sap.ui.table.Table.rowMode="Auto" (the rowMode aggregation replaced visibleRowCountMode in UI5 1.119); it is what makes the table fill the` &&
+               ` DynamicPage's fitContent area. // NOTE: Card.fragment.xml is rebuilt as a core:FragmentDefinition and shown with client->popover_display( by_id ), anchored to the pressed GenericTag exactly as` &&
+               ` onGenericTagPress's openBy(oSourceControl) does (app 229 idiom) - so the Popover, the f:Card, its card:NumericHeader and the two card:NumericSideIndicators are extra against the archived` &&
+               ` DynamicPageAnalyticalTable.view.xml. The original caches the fragment and re-opens the same instance; the port rebuilds it per press, which is equivalent because the card is entirely static. // NOTE:` &&
+               ` the two frontend formatters are computed in the ABAP backend (thin-frontend rule, app 115 does the same for the same table): formatAvailableToObjectState becomes the AVAILABLESTATE field bound to` &&
+               ` ObjectStatus.state, and formatAvailableToIcon becomes AVAILABLEICON bound to c:Icon.src. Both are derived from Status = 'Available', exactly as initSampleDataModel derives Available. // NOTE:`.
+    lv_text1 = lv_text1 && ` initSampleDataModel is reproduced in model_init: the full mock /ProductCollection (123 rows) plus the Suppliers and Categories arrays it derives from the distinct SupplierName / Category values, the` &&
+               ` Heavy flag (WeightMeasure > 1000 as the string 'true'/'false', which is why the CheckBox keeps its sap.ui.model.type.String binding) and headerExpanded, which the DynamicPage binds. // NOTE:` &&
+               ` DeliveryDate is Date.now() - (i % 10 * 4 days) in the original - a moving value, so it is anchored on a FIXED base date here (the corpus rule for now/random values, apps 164/181/289) and carried as` &&
+               ` an ISO date STRING. The DatePicker keeps its sap.ui.model.type.Date binding but takes an ISO source pattern instead of the original's 'timestamp': the model carries a date string, not a JS epoch` &&
+               ` number (CAPABILITIES date row). DeliveryDateStr, which the controller computes and no control binds, has no counterpart. // NOTE: handleDetailsPress composes its MessageToast from the pressed row's` &&
+               ` ProductId; the row field resolves on the client, so it stays there as a roundtrip-free control_global MESSAGE_TOAST show with the {0} placeholder - the same wire app 115 uses for the same button. //`.
+    lv_text1 = lv_text1 && ` NOTE: the icon-only share Button in the title's actions is text-less and tooltip-less in the sample. The port gives it tooltip="Share" so it is reachable with a screen reader - the one accessibility` &&
+               ` addition in this port. // LIVE-TEST: not yet verified in a running system: the DynamicPage with a sap.ui.table.Table in fitContent mode and the card popover anchored on the GenericTag.`.
+    result = VALUE #( BASE result
+      ( module = `sap.f`              control = `sap.f.DynamicPage`                     name = `DynamicPageAnalyticalTable`                    class = `z2ui5_cl_smpc_app_559` path = `src/02/04/z2ui5_cl_smpc_app_559.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.42`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `one post-1.71 member is kept for the 1:1 port: sap.ui.table.Table.rowMode="Auto" (the rowMode aggregation replaced visibleRowCountMode in UI5 1.119); it is what makes the table fill the DynamicPage's` &&
+                 ` fitContent area.` ) ).
+
     lv_text1 = `NOTE: The controller's Card popover (onPressOpenPopover, wired to the GenericTag press and the 'Button with layoutData' press) is reproduced 1:1 since 2026-07-30: both presses fire OPEN_POPOVER with` &&
                ` $event.oSource.sId and the backend rebuilds view/Card.fragment.xml verbatim (Popover placement Bottom / showHeader false / contentWidth 300px > f:Card > card:NumericHeader 'Sales Revenue' with the` &&
                ` two card:NumericSideIndicator Target/Deviation rows) shown via popover_display( by_id = pressed control ) - the Fragment.load + openBy equivalent. The fragment's Popover, Card, NumericHeader and` &&
@@ -927,6 +952,36 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
       ( module = `sap.f`              control = `sap.f.DynamicPage`                     name = `DynamicPageWithStickySubheader`                class = `z2ui5_cl_smpc_app_238` path = `src/01/04/z2ui5_cl_smpc_app_238.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.42`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: this sample is sap.m.sample.WizardBranching (app 535) with its wizard page replaced by an f:DynamicPage, and the port follows that: the same eight-step branching wizard and the same review page,` &&
+               ` wrapped in a DynamicPage (id dynamicPage, class sapUiNoContentPadding, showFooter, stickySubheaderProvider=ShoppingCartWizard) whose f:title carries the 'Header Title' Title and whose f:footer` &&
+               ` carries the Accept/Reject OverflowToolbar. The other differences from the sibling are kept 1:1 as well: the wizard gains height="auto", its four step forms use ColumnLayout instead of` &&
+               ` ResponsiveGridLayout, the review page's product List drops mode/enableBusyIndicator, and the wizard page's footer buttons are the handler-less Accept/Reject pair (Submit/Cancel live on the review` &&
+               ` page, as in the sibling). // NOTE: toggleHeaderOnTitleClick="{/titleClickable}" is kept as a bound field. The controller never writes /titleClickable, so the binding resolves to undefined in the` &&
+               ` original and the property falls back to its default; the port binds an abap_bool that stays false, which is what undefined evaluates to. // NOTE: The original keeps the form data in nested paths on`.
+    lv_text1 = lv_text1 && ` one JSON model (/CreditCard/Name, /CashOnDelivery/FirstName, /BillingAddress/Address ...). abap2UI5 keeps one default model, so the nested paths are folded to flat fields whose last segment is` &&
+               ` identical - the same fold app 166 makes. /CashOnDelivery/Phone Number, whose last segment carries a space, becomes phonenumber. // NOTE: goToPaymentStep and billingAddressComplete branch the wizard` &&
+               ` by calling setNextStep on the completed step. Both are reproduced 1:1 through the framework's whitelisted control_by_id setNextStep call, so enableBranching still drives the same three payment paths` &&
+               ` and the same two delivery paths. // NOTE: checkCreditCardStep / checkCashOnDeliveryStep / checkBillingStep call validateStep and invalidateStep imperatively. Each step's validated property is bound` &&
+               ` two-way here and the same liveChange wires recompute it in ABAP with the same rule (at least three characters), so the Next button gates exactly as in the original. // IMPROVISED:` &&
+               ` setDiscardableProperty only asks for confirmation while the wizard's PROGRESS STEP is past the step being discarded (getProgressStep() !== discardStep). A backend cannot read getProgressStep(), so`.
+    lv_text1 = lv_text1 && ` the port keeps two flags that stand in for the two comparisons: each is raised by the activate wire of the step that follows the compared one, and cleared again when the progress is discarded. This` &&
+               ` costs two added activate attributes (BankAccountStep, DeliveryAddressStep and DeliveryTypeStep, which the sample leaves unwired) and gets the question asked in the same situations. The YES branch` &&
+               ` discards the progress through control_by_id and remembers the new value; the NO branch restores the remembered one, both as in the original. // NOTE: handleDelete removes the row whose title the` &&
+               ` delete event carries and never removes the last one; the port sends the title with the event and does the same, then recomputes the total the way calcTotal does. attachRequestCompleted keeps the` &&
+               ` first FIVE rows of the mock product collection and seeds the payment and delivery defaults - the port seeds exactly those five rows. // NOTE: completedHandler, _navBackToStep and` &&
+               ` _handleMessageBoxOpen navigate the NavContainer and the wizard imperatively. All three go through control_by_id here ('to', 'goToStep', 'discardProgress' - all whitelisted), the same idiom app 101`.
+    lv_text1 = lv_text1 && ` uses for the sibling sample. _navBackToStep's backToPage/attachAfterNavigate pair collapses to one 'to' on the DynamicPage followed by 'goToStep' - abap2UI5 schedules the two frontend actions in` &&
+               ` order, so the after-navigate callback the original needs has no counterpart. // NOTE: The five product images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org. // LIVE-TEST:` &&
+               ` The three payment branches, the delivery-address branch, the discard confirmations, the per-step validation, the review page's six Edit links and the DynamicPage's sticky subheader over the wizard` &&
+               ` are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.f`              control = `sap.f.DynamicPage`                     name = `DynamicPageWithWizard`                         class = `z2ui5_cl_smpc_app_560` path = `src/01/04/z2ui5_cl_smpc_app_560.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
         since = `1.42`
         notes = lv_text1 ) ).
 
@@ -1748,6 +1803,22 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.86 to render it. // DatePicker.hideInput (since UI5 1.97) is newer than 1.71 but kept for the 1:1 port - the sample's central` &&
                  ` property (the picker input stays hidden, opened only via the anchor controls); openBy is also since 1.97, so the app needs a UI5 release >= 1.97 to render this sample's behavior.` ) ).
 
+    lv_text1 = `NOTE: onInit builds the Select-New-Date Dialog, its sap.ui.unified.Calendar and its two Buttons in the CONTROLLER (new Dialog({ ... })). The port builds the same dialog in a chain and shows it with` &&
+               ` popup_display, which is why structural-diff reports Dialog, unified:Calendar and two extra Buttons as control extra - the sample's view declares none of them. // NOTE: handleTableSelectionChange` &&
+               ` enables the Change Dates button while at least one row is selected. The row selection is bound two-way here, so the selectionChange round-trip only has to recompute the bound enabled flag - the same` &&
+               ` rule the original applies from getSelectedItems().length. // NOTE: handleCalendarSelect enables the dialog's OK button once a date is picked, and the OK press writes that date into the DateOfSale of` &&
+               ` every selected row. The picked date's local year, month and day travel with the select event, ABAP composes the same yyyy-MM-dd string the sample's DateFormat produces, and the OK button's enabled` &&
+               ` state is an expression over the bound date. // NOTE: setSizeLimit( 10 ) caps the bound rows at the first ten of the mock collection, so the port seeds exactly those ten. The original binds them`.
+    lv_text1 = lv_text1 && ` through a named products> model; abap2UI5 keeps one default model, so the prefix is dropped and the last path segment is identical. // LIVE-TEST: The multi-select, the date dialog and the mass date` &&
+               ` change are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.DatePicker`                      name = `DatePickerMassEdit`                            class = `z2ui5_cl_smpc_app_556` path = `src/01/01/z2ui5_cl_smpc_app_556.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.22.0`
+        notes = lv_text1 ) ).
+
     lv_text1 = `NOTE: The onInit-seeded JSON model rides 1:1 in model_init (5 rows, the derived label texts written out); every row carries a valueState so the absent-enum-empty-string trap does not apply, and the` &&
                ` rows without a valueStateText keep the empty string - a string property, where the empty value falls back to the state default text like the original undefined. // NOTE: **e2e-verified 2026-08-01**` &&
                ` (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): all five rows render from the real backend model - the labels arrive, each of the four non-None value states reaches the DOM` &&
@@ -1930,6 +2001,68 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         checked = `CHECKED (2026-08-02): verified in a running system - human live check 2026-08-02 (maintainer): app started and exercised, no findings.`
         notes = lv_text1 ) ).
 
+    lv_text1 = `POST-1.71: sap.m.Button ariaHasPopup is @since 1.84.0 - newer than the 1.71 floor. All three buttons carry it in the sample, so it is kept and the port is filed under src/02. // NOTE: The three` &&
+               ` dialogs, their List and their Buttons are built in the CONTROLLER (new Dialog({ ... })). The port builds the same dialog in a chain and shows it with popup_display, so structural-diff reports Dialog,` &&
+               ` List, StandardListItem and the extra Buttons as control extra - the sample's view declares none of them. The three presses differ only in the flags they set (contentWidth/contentHeight, resizable,` &&
+               ` draggable) and in whether an OK button is there, which the port passes as parameters. // IMPROVISED: Popup.setWithinArea( withinArea ) is the POINT of the sample: it confines every popup - dialogs` &&
+               ` included - to the bordered HBox on the right. It is a static call on sap.ui.core.Popup with no declarative counterpart and no whitelisted frontend action, so the port keeps the within-area box (and` &&
+               ` its layout data) but the dialogs open unconfined, in the middle of the page. onExit's reset goes with it. // LIVE-TEST: The three dialogs and their resizable / draggable flags are unverified in a`.
+    lv_text1 = lv_text1 && ` running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Dialog`                          name = `DialogWithinArea`                              class = `z2ui5_cl_smpc_app_561` path = `src/02/01/z2ui5_cl_smpc_app_561.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.m.Button ariaHasPopup is @since 1.84.0 - newer than the 1.71 floor. All three buttons carry it in the sample, so it is kept and the port is filed under src/02.` ) ).
+
+    lv_text1 = `POST-1.71: four post-1.71 members are kept for the 1:1 port: Button.ariaHasPopup (since UI5 1.84) on the page button, the message-popover button and the Reject button; MessagePopover.groupItems (since` &&
+               ` UI5 1.73); the Dialog footer aggregation (sap.m.Dialog.footer, since UI5 1.110) which is exactly how MPDialog.fragment.xml puts its Toolbar under the dialog; and the sap-icon://information glyph (in` &&
+               ` the icon font since UI5 1.80), the default branch of the ported buttonIconFormatter. // NOTE: the fragment MPDialog.fragment.xml is built in popup_dialog_display and shown with client->popup_display(` &&
+               ` ), the original's loadFragment( ) + oDialog.open( ) on the page button's press; _closeDialog becomes client->popup_destroy( ). onOpenPopoverDialog's MessageToast.show('Press "Save" to trigger` &&
+               ` validation.') is ported as client->message_toast_display( ) in the same handler, and Messaging.registerObject( formContainer ) has no counterpart - abap2UI5 registers handleValidation on every view`.
+    lv_text1 = lv_text1 && ` slot already. // NOTE: the Dialog title is title="Hello {/recipient/name}" but the shared demo kit mock sap/ui/demo/mock/forms.json carries only the top-level keys "forms" and "employment" - there is` &&
+               ` no "recipient" node, so the original renders a bare "Hello ". The port keeps the binding shape (title bound to an empty RECIPIENT_NAME field) so it renders identically. // NOTE:` &&
+               ` sap/ui/demo/mock/forms.json is not snapshotted under ui5/mock/ (raw download is blocked in this environment). Its content was verified against the upstream file and is byte-equivalent to the sibling` &&
+               ` sample's local snapshot ui5/sap.m/MessagePopoverMessageHandling/localService/mockdata/FormsModel.json - the same 8 forms and the single employment row - which is what the port seeds verbatim (Julie` &&
+               ` Armstrong, Denise Smith, Richard Wilson, Gerd Becker, John Miller with the built-in invalid ZIP AAA, Stefan Bosch, Maria Fontes with empty email + malformed website, Antonio Ferrari). // NOTE: the` &&
+               ` sample's nested JSON model (street/name, zip/code, phone/number) is flattened into a flat ABAP row (STREET_NAME, ZIP_CODE, PHONE_NUMBER, ...) - abap2UI5 serves one default model; the bindings use the`.
+    lv_text1 = lv_text1 && ` flattened field names. The three f:ColumnElementData layoutData hints are kept 1:1. // NOTE: onChange/handleRequiredField/checkInputConstraints are replaced by the framework: the typed value bindings` &&
+               ` with constraints (NAME sap.ui.model.type.String required, ZIP_CODE Integer, EMAIL String with the search regex, WEEKLYHOURS Integer maximum 40) collect and clear their validation messages` &&
+               ` AUTOMATICALLY into the message> model with no app code. Save ports _generateInvalidUserInput in effect: since abap2UI5 auto-collects validation messages only from USER input and not from` &&
+               ` programmatically-set model values, Save injects the four demo issues on the SAME rows the original targets (formContainer.getItems()[4/5/6] = John Miller Name empty, Stefan Bosch ZIP 'AAA', Maria` &&
+               ` Fontes email malformed, plus the employment row's weekly hours 400) AND authors the matching four messages (3 Errors + 1 Warning) with their /T_FORMS/4|5|6 and /T_EMPLOYMENT/0 targets, then opens the` &&
+               ` MessagePopover via follow_up_action( control_by_id openBy ) anchored to messagePopoverBtn - the original's setTimeout( oMP.openBy(oButton), 100 ). The app-authored messages ride the`.
+    lv_text1 = lv_text1 && ` z2ui5.cc.MessageManager companion control (items bound to /T_MESSAGES) - an added control the original does not have (control extra z2ui5:MessageManager), which is how abap2UI5 feeds the message>` &&
+               ` model with messages the application itself raises. // NOTE: buttonIconFormatter / buttonTypeFormatter / highestSeverityMessages are RESTORED (app 065 dropped them): the severity ranking Error >` &&
+               ` Warning > Success > Info is a domain computation, so - abap2UI5 being a thin frontend - it runs in ABAP (button_severity_set) over the app-authored message table and feeds the button's bound icon,` &&
+               ` type and text, matching the original's values exactly for this sample's Save flow (3 Errors -> type Negative, icon sap-icon://error, text '3'). The framework-collected validation messages that the` &&
+               ` typed bindings raise on user input are not visible to the backend, so they do not shift the ranking the way the original's formatters (which scan the whole message model) would; visible="{=` &&
+               ` !!${message>/}.length }" is kept 1:1 as a frontend expression over the full model. btn_type is seeded 'Default' because an empty string would override the sap.m.ButtonType enum DEFAULT and reject the`.
+    lv_text1 = lv_text1 && ` whole view. // NOTE: handleMessagePopoverPress (this.oMP.toggle(oEvent.getSource())) becomes a roundtrip-free client->follow_up_action( cs_event-control_by_id, toggleBy ) on the button press,` &&
+               ` anchored to messagePopoverBtn - the same frontend-action pattern as apps 065/066/067. The MessagePopover itself is declared in the button's dependents aggregation, which is where the original adds it` &&
+               ` (addDependent). // NOTE: MessageItem grouping (groupItems=true) is RESTORED: the original derives groupName in its controller (getGroupName reads the form titles around the target control). That is a` &&
+               ` domain classification, so it is computed in the ABAP backend and carried on the Message code field (sap.ui.core.message.Message has no groupName slot), bound groupName="{message>code}" - Name and ZIP` &&
+               ` land in 'Personal, Information', Email in 'Personal, Contact' and Standard Weekly Hours in 'Personal, Rating' (the employment form puts it in its Rating group). // NOTE: activeTitlePress` &&
+               ` scroll-to-control navigation is RESTORED (activeTitle=true): pressing a message title fires ACTIVE_TITLE with the message's target control id`.
+    lv_text1 = lv_text1 && ` (${$parameters>/item}.getBindingContext('message').getObject().getControlIds()[0]), and the handler runs follow_up_action( scroll_into_view ) + control_by_id close + set_focus on it - the 1:1` &&
+               ` equivalent of the sample's scrollToElement + focus. isReachable (which returns true unconditionally) becomes the constant activeTitle="true". // IMPROVISED: the original re-renders the footer button` &&
+               ` from an attachChange handler on the MessagePopover's items binding (navigateBack + setType/setIcon/setText). abap2UI5 has no binding-change hook, so the button's three properties are recomputed on` &&
+               ` the SAVE round-trip that authors the messages - the only moment they change in this sample - and MessagePopover.navigateBack has no whitelisted frontend-action counterpart, so the popover opens on` &&
+               ` its list page (which is where a freshly opened popover starts anyway). // LIVE-TEST: not yet verified in a running system: the Dialog + MessagePopover-in-dependents combination, the toggleBy/openBy` &&
+               ` anchoring from inside a popup, and the backend-computed button severity.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Dialog`                          name = `DialogWithMessagePopover`                      class = `z2ui5_cl_smpc_app_562` path = `src/02/01/z2ui5_cl_smpc_app_562.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `four post-1.71 members are kept for the 1:1 port: Button.ariaHasPopup (since UI5 1.84) on the page button, the message-popover button and the Reject button; MessagePopover.groupItems (since UI5 1.73);` &&
+                 ` the Dialog footer aggregation (sap.m.Dialog.footer, since UI5 1.110) which is exactly how MPDialog.fragment.xml puts its Toolbar under the dialog; and the sap-icon://information glyph (in the icon` &&
+                 ` font since UI5 1.80), the default branch of the ported buttonIconFormatter.` ) ).
+
     lv_text1 = `NOTE: the shared mock model sap/ui/demo/mock/supplier.json is flattened into the default model: the row type keeps only the six bound columns (SupplierName, Street, HouseNumber, ZIPCode, City,` &&
                ` Country) of the single /SupplierCollection record and drops the unbound columns (Url, Twitter, Tel, Sms, Mobile, Pager, Fax, Email, Rating, Prime, Disposable); the record itself is kept verbatim. //` &&
                ` NOTE: the sample controller loads the shared mock sap/ui/demo/mock/supplier.json - snapshotted byte-identical into ui5/mock/supplier.json (2026-07-20, git sparse checkout of SAP/openui5 master); one` &&
@@ -1973,6 +2106,41 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.32.0`
         notes = lv_text1 ) ).
+
+    lv_text1 = `POST-1.71: one post-1.71 member is kept for the 1:1 port: the FacetFilterList search event (since UI5 1.76), which is the whole point of this sample - it is what lets the application replace the` &&
+               ` list's built-in filtering with its own. // NOTE: lists="{/ProductCollectionStats/Filters}" stays BOUND here (unlike app 235, which unrolled the same collection into two static lists): the` &&
+               ` FacetFilterList is a template over T_FILTERS and its items come from the group's own nested VALUES table, so the port keeps the original's two-level binding shape. The stats entries carry only type +` &&
+               ` values (no key field), so the original's key="{key}" resolves undefined against the same mock and the port leaves KEY empty; the value objects carry text + data, so the item template binds counter to` &&
+               ` {COUNT} and - like app 235 - key to {TEXT}. // NOTE: handleSearch reads oEvent.getParameter('clearButtonPressed'), which sap.m.FacetFilterList.search does not declare (its only parameter is term), so` &&
+               ` the port does not transport it. It makes no difference: the original's ternary builds Filter('text', Contains, '') for the clear button and Filter('text', Contains, term) otherwise, and clearing the`.
+    lv_text1 = lv_text1 && ` search field delivers an empty term - so the port simply treats an empty term as the reset, producing the same list both ways. Contains on a client model is case-insensitive, which is why the` &&
+               ` original's toLowerCase() has no counterpart; the ABAP search compares upper-cased. // IMPROVISED: oEvent.preventDefault() in handleSearch (which suppresses the FacetFilterList's internal search` &&
+               ` filtering so the custom filter is the only one) has no abap2UI5 counterpart - a thin frontend cannot cancel a UI5 event. The built-in filtering therefore still runs, on top of the backend-narrowed` &&
+               ` value list; both apply the same 'text contains term' criterion, so the rendered list is the same. The custom filtering itself is ported: the term round-trips and the backend narrows the group's` &&
+               ` values, keeping the selection flags of the values it hides. // NOTE: selection transport - every FacetFilterItem binds selected two-way; on the FacetFilter confirm (and on reset) the backend` &&
+               ` reads/clears the flags and re-filters. This is the documented 1:1 path (CAPABILITIES.md marks controller-read FacetFilter/List multi-select as expressible, with app 022 as its evidence port).`.
+    lv_text1 = lv_text1 && ` handleFacetFilterReset also drops the per-list search filters, which the port does by restoring the untouched master list. // NOTE: the original's nested items-binding filter (_filterModel: ORs` &&
+               ` inside each facet group, AND across the groups, model untouched) is expressed 1:1 as a declarative compound filter: apply_filter builds the groups JSON from the two-way bound selected flags and` &&
+               ` schedules follow_up_action cs_event-binding_call filter on idProductsTable/items. The filter column is the list TITLE, exactly as the original uses oList.getTitle() - Category / SupplierName. //` &&
+               ` NOTE: onInit creates the sap.m.sample.Table component, swaps the first cell for an ObjectIdentifier {Name}/{Category} and appends the table to idVBox; that table is rebuilt inline (the same inline` &&
+               ` rebuild app 235 carries), which is why the whole Table subtree - its header toolbar with the popin-layout ComboBox, the sticky CheckBoxes and the Hide/Show InfoToolbar ToggleButton, the info toolbar,` &&
+               ` the five columns and the ColumnListItem cells - counts as extra against the archived FacetFilter.view.xml. The price column keeps the original sap.ui.model.type.Currency composite binding 1:1. //`.
+    lv_text1 = lv_text1 && ` NOTE: the appended demo table's own controller logic is expressed the way app 235 expresses it: Table.sticky is bound to an ABAP string table maintained from the CheckBox round-trip (the app-009` &&
+               ` pattern), the ComboBox selectedKey is bound two-way and popinLayout is an expression over it (so the ComboBox change attribute is not emitted), and the ToggleButton's pressed flag drives the info` &&
+               ` toolbar's visible expression. // 1.71: the p:ColumnAIAction column plugin of the appended sap.m.sample.Table view (sap.m.plugins, far newer than UI5 1.71) is dropped with its dependents aggregation` &&
+               ` and press toast - the plugin class does not exist on a 1.71 runtime, so keeping it would crash view creation there. // NOTE: the original derives the ObjectNumber weight state in the demo table's` &&
+               ` frontend Formatter.js (weightState: KG conversion + Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin frontend - it is computed in ABAP model_init into a` &&
+               ` WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via a frontend formatter. // LIVE-TEST: not yet verified in a running system: the two-level lists/{VALUES} binding (a nested table inside a`.
+    lv_text1 = lv_text1 && ` bound aggregation row) and the search round-trip.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.FacetFilter`                     name = `FacetFilterCustomFilters`                      class = `z2ui5_cl_smpc_app_557` path = `src/02/01/z2ui5_cl_smpc_app_557.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `one post-1.71 member is kept for the 1:1 port: the FacetFilterList search event (since UI5 1.76), which is the whole point of this sample - it is what lets the application replace the list's built-in` &&
+                 ` filtering with its own.` ) ).
 
     lv_text1 = `NOTE: the bound lists="{/ProductCollectionStats/Filters}" collection is represented as two static FacetFilterLists (Category, SupplierName) - the original's stats model yields exactly these two lists,` &&
                ` so this is a faithful equivalent; the facet values inside each list stay bound to a FacetFilterItem template. A doubly-nested variant (bind the FacetFilter lists aggregation to a nested table,` &&
@@ -3147,6 +3315,55 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.46`
         notes = lv_text1 ) ).
 
+    lv_text1 = `POST-1.71: one post-1.71 member is kept for the 1:1 port: Button.ariaHasPopup (since UI5 1.84) on the Messages button, which the sample's own view.xml carries. // NOTE: the sample's view.xml is only` &&
+               ` the Page with the Messages Button - everything else is built in onInit. The controller-built popover, its customHeader Bar with the nav-back Button and the Title, the MessageView with its MessageItem` &&
+               ` template and the item's Link, and the Close button are rebuilt 1:1 as a core:FragmentDefinition and shown with client->popover_display( by_id ), anchored to the pressed button exactly as` &&
+               ` handlePopoverPress's openBy(oEvent.getSource()) does (app 229 idiom). So the popover, Bar, Title, MessageView, MessageItem, Link and the two extra Buttons are extra against the original view.xml. //` &&
+               ` NOTE: the Popover keeps the controller's geometry 1:1 - contentWidth/contentHeight 440px, verticalScrolling false, modal true - and the Close button sits in a footer Bar's contentRight, with the` &&
+               ` sapUiTinyMarginEnd class the controller adds with addStyleClass. // NOTE: the two controller handlers that reach into controls become bound state, per the prefer-a-bindable-property rule:`.
+    lv_text1 = lv_text1 && ` oBackButton.setVisible(...) is visible={/BACK_VISIBLE} and oPopoverTitle.setText(...) is text={/POPOVER_TITLE}. Only navigateBack has no bindable equivalent - it is the one frontend action` &&
+               ` (control_by_id, view = cs_view-popup, on the MessageView id messageView), the same path app 284 uses. handlePopoverPress's own navigateBack is not needed: popover_display rebuilds the fragment, so` &&
+               ` the MessageView always opens on its list page; only the header state is reset in ABAP. // NOTE: the back button's press also calls oPopover.focus() to keep keyboard focus inside the popover after` &&
+               ` navigating back. The port does not: the popover keeps focus because it is never re-anchored, and a set_focus on a popup that is already focused would be a no-op round trip. // NOTE: a flat ABAP row` &&
+               ` serializes every field, so the properties the mock omits carry their UI5 defaults: markupDescription is false on all five messages (the template binds it, the data never sets it), and the second` &&
+               ` message (Warning without description) has no subtitle and counter 0 - ListItemBaseRenderer.renderCounter only renders a truthy counter, so 0 and 'absent' render identically. // NOTE: the nav-back`.
+    lv_text1 = lv_text1 && ` Button is icon-only in the original (IconPool.getIconURI('nav-back'), no text and no tooltip). The port gives it tooltip="Back" so it is reachable with a screen reader - the one accessibility` &&
+               ` addition in this port. // LIVE-TEST: not yet verified in a running system: the anchored popover with a MessageView inside it and the navigateBack frontend action on the popup view.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.MessageView`                     name = `MessageViewInsidePopover`                      class = `z2ui5_cl_smpc_app_563` path = `src/02/01/z2ui5_cl_smpc_app_563.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.46`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `one post-1.71 member is kept for the 1:1 port: Button.ariaHasPopup (since UI5 1.84) on the Messages button, which the sample's own view.xml carries.` ) ).
+
+    lv_text1 = `POST-1.71: one post-1.71 member is kept for the 1:1 port: Button.ariaHasPopup (since UI5 1.84) on the Messages button, which the sample's own view.xml carries. // NOTE: the sample's view.xml is only` &&
+               ` the Page with the Messages Button - everything else is built in onInit. The controller-built popover, its customHeader Bar with the nav-back Button and the Title, the MessageView with its MessageItem` &&
+               ` template and the item's Link, and the Close button are rebuilt 1:1 as a core:FragmentDefinition and shown with client->popover_display( by_id ), anchored to the pressed button exactly as` &&
+               ` handlePopoverPress's openBy(oEvent.getSource()) does (app 229 idiom). So the popover, Bar, Title, MessageView, MessageItem, Link and the two extra Buttons are extra against the original view.xml. //` &&
+               ` NOTE: the ResponsivePopover keeps the controller's geometry 1:1 - contentWidth 20%, contentHeight 40%, verticalScrolling false, modal true - and the Close button is the endButton aggregation (not a` &&
+               ` footer), with the sapUiTinyMarginEnd class the controller adds with addStyleClass. This is the only difference from the sibling sample MessageViewInsidePopover (app 563), apart from the button's`.
+    lv_text1 = lv_text1 && ` margin class. // NOTE: the two controller handlers that reach into controls become bound state, per the prefer-a-bindable-property rule: oBackButton.setVisible(...) is visible={/BACK_VISIBLE} and` &&
+               ` oPopoverTitle.setText(...) is text={/POPOVER_TITLE}. Only navigateBack has no bindable equivalent - it is the one frontend action (control_by_id, view = cs_view-popup, on the MessageView id` &&
+               ` messageView), the same path app 284 uses. handlePopoverPress's own navigateBack is not needed: popover_display rebuilds the fragment, so the MessageView always opens on its list page; only the header` &&
+               ` state is reset in ABAP. // NOTE: the back button's press also calls oPopover.focus() to keep keyboard focus inside the popover after navigating back. The port does not: the popover keeps focus` &&
+               ` because it is never re-anchored, and a set_focus on a popup that is already focused would be a no-op round trip. // NOTE: a flat ABAP row serializes every field, so the properties the mock omits` &&
+               ` carry their UI5 defaults: markupDescription is false on all five messages (the template binds it, the data never sets it), and the second message (Warning without description) has no subtitle and`.
+    lv_text1 = lv_text1 && ` counter 0 - ListItemBaseRenderer.renderCounter only renders a truthy counter, so 0 and 'absent' render identically. // NOTE: the nav-back Button is icon-only in the original` &&
+               ` (IconPool.getIconURI('nav-back'), no text and no tooltip). The port gives it tooltip="Back" so it is reachable with a screen reader - the one accessibility addition in this port. // LIVE-TEST: not` &&
+               ` yet verified in a running system: the anchored popover with a MessageView inside it and the navigateBack frontend action on the popup view.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.MessageView`                     name = `MessageViewInsideResponsivePopover`            class = `z2ui5_cl_smpc_app_564` path = `src/02/01/z2ui5_cl_smpc_app_564.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.46`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `one post-1.71 member is kept for the 1:1 port: Button.ariaHasPopup (since UI5 1.84) on the Messages button, which the sample's own view.xml carries.` ) ).
+
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MessageView`                     name = `MessageViewMessageManager`                     class = `z2ui5_cl_smpc_app_038` path = `src/01/01/z2ui5_cl_smpc_app_038.clas.abap`
         score = 2
@@ -4244,6 +4461,27 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = lv_text1
         post171 = `Link.ariaHasPopup (since 1.86) is kept 1:1 on the popover link; needs UI5 >= 1.86.` ) ).
 
+    lv_text1 = `POST-1.71: one post-1.71 member is kept for the 1:1 port: Button.ariaHasPopup (since UI5 1.84) on the Open Popover button, which the sample's own view.xml carries. // NOTE: Popover.fragment.xml is` &&
+               ` rebuilt as a core:FragmentDefinition and shown with client->popover_display( by_id ), anchored to the pressed button exactly as onOpenPopover's openBy(oButton) does (app 229 idiom) - so the Popover,` &&
+               ` its NavContainer, the two Pages, the List, the StandardListItem, the ObjectHeader with its two ObjectAttributes and the Text are extra against the archived PopoverNavCon.view.xml, which only holds` &&
+               ` the l:VerticalLayout and the Button. The original caches the fragment and re-opens the same instance; the port rebuilds it per press, which is why onNavToProduct's own re-anchoring is not needed. //` &&
+               ` NOTE: onNavToProduct does oNavCon.to(oDetailPage) plus oDetailPage.bindElement(ctx.getPath()). Navigation is the frontend action (control_by_id, view = cs_view-popup, 'to' on navCon; onNavBack is the` &&
+               ` matching 'back'), and the element binding is folded to root-seeded fields: the pressed row's ProductId travels with the press, the backend copies that row into the D_* fields and the detail page`.
+    lv_text1 = lv_text1 && ` binds them absolutely. The two ObjectAttribute texts keep their composite shape 1:1 ({WeightMeasure} {WeightUnit} and {Width} x {Depth} x {Height} {DimUnit}), only over the folded fields. // NOTE:` &&
+               ` both handlers end with byId('myPopover').focus() so keyboard focus stays inside the popover after a page change. The port does not re-issue it: the popover is never re-anchored across the navigation,` &&
+               ` so focus is not taken away, and a set_focus on an already-focused popup would be a no-op round trip. // NOTE: the popover keeps ariaLabelledBy="master-title" 1:1 even though no control with that id` &&
+               ` exists in the fragment - the same dangling reference the original ships. // NOTE: the full mock /ProductCollection is seeded with the fields the two pages bind (ProductId, Name, ProductPicUrl,` &&
+               ` WeightMeasure, WeightUnit, Width, Depth, Height, DimUnit, Description), all 123 rows. // LIVE-TEST: not yet verified in a running system: the anchored popover with a NavContainer inside it and the` &&
+               ` to/back frontend actions on the popup view.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Popover`                         name = `PopoverNavCon`                                 class = `z2ui5_cl_smpc_app_565` path = `src/02/01/z2ui5_cl_smpc_app_565.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `one post-1.71 member is kept for the 1:1 port: Button.ariaHasPopup (since UI5 1.84) on the Open Popover button, which the sample's own view.xml carries.` ) ).
+
     lv_text1 = `NOTE: the sample's point - Popup.setWithinArea(this.byId('withinArea')), which confines every popup to the grey VBox instead of the viewport - is reproduced through the CONTROL_GLOBAL target POPUP` &&
                ` with the method setWithinArea (added to abap2UI5 for this port; the pr/popup-within-area request is implemented). Two differences to the original wiring, both without visible effect here: it is set` &&
                ` ONCE together with the view instead of in each press handler, because a follow_up_action runs AFTER the popover of the same round-trip has already opened - and the Popover.afterClose handler of all` &&
@@ -5022,6 +5260,42 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.TabContainer`                    name = `TabContainerIcons`                             class = `z2ui5_cl_smpc_app_451` path = `src/01/01/z2ui5_cl_smpc_app_451.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.34`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: openSelectedItems builds the TabContainer in the controller (new TabContainer with an items binding filtered to the selected ProductIds and a TabContainerItem template holding the Display` &&
+               ` fragment) and inserts it into tabContainerPage. The port declares that TabContainer in the view instead and binds its items to T_TABS, the table of open tabs the backend maintains - so the control` &&
+               ` extra TabContainer / TabContainerItem against the archived TabContainer.view.xml is the controller-built subtree, not an addition. sap.m.TabContainer has no default aggregation, so the template sits` &&
+               ` in an explicit items element beside the items binding. // NOTE: each open tab carries a COPY of the product row (T_TABS), which is exactly what the original edits: handleTabContainerEditItem builds` &&
+               ` its edit JSONModel from deepExtend({}, bindingContext.getProperty(path)). Save copies the tab's fields back onto the product (handleTabContainerSaveItem's deepExtend into the model), Cancel throws` &&
+               ` the copy away and re-reads the product (handleTabContainerCancelUpdate). The per-tab modified flag is the TabContainerItem.modified property, bound two-way. // NOTE: the Display and Edit fragments`.
+    lv_text1 = lv_text1 && ` are not swapped in and out of the tab (removeAllContent/insertContent); both live in the TabContainerItem's content and take turns through visible="{= !${MODIFIED} }" / visible="{= ${MODIFIED} }" - a` &&
+               ` declarative expression instead of a controller-driven content swap, with the same rendered result. That is why the Edit fragment's f:SimpleForm, its four Labels, three Inputs and TextArea appear` &&
+               ` twice in the port: once inside the tab and once on the add-item page, where the original moves the SAME cached fragment instance between the two. // NOTE: the Edit fragment binds absolute paths` &&
+               ` (/Name, /SupplierName, /Price, /Description) because it is put over its own one-record JSONModel. In the tab it binds the tab row's own fields relative to the item context; on the add-item page it` &&
+               ` binds the four ADD_* fields the backend keeps for the new record. Only the add-item copy carries the fragment's id=myForm - the tab copy is a template inside a bound aggregation, where an id would be` &&
+               ` cloned. // NOTE: the table's selection is read with getSelectedContexts in the original and bound two-way here (ColumnListItem selected="{SELECTED}"), so the backend has it on every round trip;`.
+    lv_text1 = lv_text1 && ` onInit's attachSelectionChange becomes the Table's selectionChange attribute, which keeps idOpenSelected's visible flag in sync exactly as fnTableSelectionChange does. onInit also attaches` &&
+               ` navButtonPress on the two inner pages; the port wires navButtonPress declaratively on both. // IMPROVISED: _handleTabContainerItemClose calls oEvent.preventDefault() and removes the item itself once` &&
+               ` the user confirms. A thin frontend cannot cancel a UI5 event, so the port lets the control close the tab and sends the view again from the model: an unconfirmed close therefore comes back (the tab` &&
+               ` row is still in T_TABS), and a confirmed one removes the row for good. Same two outcomes, reached the other way round. // IMPROVISED: _handleTabContainerAddNewButtonPress ends with` &&
+               ` oTabContainer.setSelectedItem(<the new item>) so the fresh tab is the one on screen. TabContainer.selectedItem is an ASSOCIATION to a TabContainerItem instance, and the item ids of a bound` &&
+               ` aggregation are generated at runtime, so the port cannot name the item: the new tab is appended and starts modified (in edit mode), but selecting it is left to the control's own default. // NOTE: the`.
+    lv_text1 = lv_text1 && ` new ProductIds the original generates with Math.random() ('ProductId-' + Math.random(), and a bare Math.random() on the add-item page) become a backend counter, ProductId-1, ProductId-2, ... - a` &&
+               ` client-side random draw is not reproducible from a backend and carries no meaning in the sample. // NOTE: _showConfirmation's MessageBox.confirm with the custom actions ['Leave Page', CANCEL] /` &&
+               ` ['Close Tab', CANCEL], the Warning icon and initialFocus CANCEL is ported 1:1 through client->message_box_display( actions, initialfocus, onclose ); the chosen action comes back as the onclose` &&
+               ` event's argument, as in app 101. // NOTE: _resetUnsavedItems is kept: rows the add-new button created and nobody saved carry an UNSAVED flag and are dropped when the user leaves the page (all of` &&
+               ` them) or closes their tab (just that one), and a tab whose product is gone goes with it. The original's onExit teardown (detaching handlers, nulling members) has no counterpart - abap2UI5 rebuilds` &&
+               ` the view per round trip. // NOTE: onInit raises the model size limit to 200 and binds the full mock /ProductCollection; the port seeds all 123 rows verbatim (ProductId, Name, SupplierName,`.
+    lv_text1 = lv_text1 && ` Description, Price, CurrencyCode - the fields the two views bind). The ObjectHeader keeps the original sap.ui.model.type.Currency composite binding 1:1. // NOTE: the OverflowToolbarButton that opens` &&
+               ` the add-item page is icon-only in the original (icon=sap-icon://add, no text and no tooltip). The port gives it tooltip="Add" so it is reachable with a screen reader - the one accessibility addition` &&
+               ` in this port. // LIVE-TEST: not yet verified in a running system: the TabContainer built over a bound items aggregation, the visible-driven Display/Edit swap inside a tab, and the close-confirmation` &&
+               ` round trip that relies on the view being sent again.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.TabContainer`                    name = `TabContainerMHC`                               class = `z2ui5_cl_smpc_app_558` path = `src/01/01/z2ui5_cl_smpc_app_558.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
         since = `1.34`
         notes = lv_text1 ) ).
 

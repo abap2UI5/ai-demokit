@@ -111,12 +111,18 @@ const ADVISORY_BUDGET = {
   // raised 2026-08-22 (batch b44, app 541 PlanningCalendarWithLegend): one more
   // of the same shape - the icon-only legend ToggleButton in the calendar's
   // toolbar, tooltip-less in the demo kit sample itself; kept 1:1
+  // raised 2026-08-22 (batch b46, catching up on batch b45): three of the same
+  // shape that b45 landed without raising the budget, so the ratchet has been
+  // red since that commit - app 553's icon-only legend ToggleButton and app
+  // 554's legend ToggleButton plus its icon-only Button, all tooltip-less in
+  // the demo kit samples themselves; kept 1:1. Batch b46 (apps 556-565) adds
+  // none: every icon-only button it ports got a tooltip
   // ratcheted down 2026-08-14 with the linter bump to 51cce10: 6afb902
   // ("missing-accessibility: stop asking for an attribute UI5 ignores") drops
   // the findings on controls where the attribute is ignored anyway, so 26 of
   // the 55 were never real. The ones above stay — they are the alt/tooltip-less
   // originals, kept 1:1
-  'missing-accessibility': 34,
+  'missing-accessibility': 37,
   'event-without-handler': 4, // ratcheted down 2026-08-05: the four calendar ports wired their select handler
   // raised 2026-08-21 (app 298, sap.m.table.columnmenu.QuickSort): the same
   // shape as 268, and here the metadata is not merely incomplete but WRONG.
@@ -142,7 +148,13 @@ const ADVISORY_BUDGET = {
   // raised 2026-08-22 (batch b40, app 499 ListSelectionSearch): the sample's own
   // SearchField wires liveChange to the list filter, so the search IS the live
   // wire; a final-value event would change what the sample demonstrates
-  'live-event-roundtrip': 8,
+  // raised 2026-08-22 (batch b46, and catching up on batch b43): three of the
+  // same shape, two of which b43 landed without raising the budget, so the
+  // ratchet has been red since that commit - apps 533/535 and now 560, the
+  // wizard samples whose per-keystroke liveChange IS the step validation
+  // (validateStep/invalidateStep at three characters); a final-value event
+  // would gate the Next button one keystroke late
+  'live-event-roundtrip': 11,
   // apps 005/080/121/127/236 — a press/post wired next to a LITERAL
   // enabled="false". The rule doc grants this exact case ("a 1:1 port of a
   // sample demonstrating the disabled STATE legitimately carries the original's
