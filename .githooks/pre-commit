@@ -20,6 +20,7 @@ node "$DIR/scripts/generate-overview.mjs" >/dev/null
 node "$DIR/scripts/generate-coverage.mjs" >/dev/null
 node "$DIR/scripts/generate-status.mjs" >/dev/null
 node "$DIR/scripts/generate-samples-md.mjs" >/dev/null
+node "$DIR/scripts/generate-catalogue.mjs" >/dev/null
 
 git add -- \
   "$DIR/src/z2ui5_cl_smpc_app_000.clas.abap" \
@@ -27,4 +28,5 @@ git add -- \
   "$DIR/api.md" \
   "$DIR/README.md" \
   "$DIR/STATUS.md" \
-  "$DIR/SAMPLES.md"
+  "$DIR/SAMPLES.md" \
+  "$DIR/catalogue.json"

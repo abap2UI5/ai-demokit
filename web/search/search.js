@@ -27,6 +27,7 @@ const els = {
   release: $('release'),
   control: $('control'),
   library: $('library'),
+  status: $('status'),
   results: $('results'),
   count: $('count'),
   total: $('total'),
@@ -128,6 +129,16 @@ function buildFacets() {
 
   fillSelect(els.library, 'any library',
     tally((a) => a.library).map(([v, n]) => [v, `${v} — ${n}`]));
+
+  /* Status: the verification ladder, in ladder order rather than by count —
+   * `checked` (a human saw it run in a real system) down to `generated`
+   * (nobody has). The counts make the corpus' verification state visible
+   * before any filter is chosen. */
+  const statusCount = new Map(tally((a) => a.status));
+  fillSelect(els.status, 'any status',
+    ['checked', 'reviewed', 'generated', 'collection']
+      .filter((s) => statusCount.has(s))
+      .map((s) => [s, `${s} — ${STATUS[s] || ''} (${statusCount.get(s)})`]));
 }
 
 /** What the sidecar's `status` means to somebody who has not read AGENTS.md. */
@@ -155,6 +166,7 @@ function currentFilters() {
     release: els.release.value,
     control: els.control.value,
     library: els.library.value,
+    status: els.status.value,
   };
 }
 
@@ -166,6 +178,7 @@ function apply() {
     if (f.release && cmpVersion(app.minUi5, f.release) > 0) return false;
     if (f.control && !app.controlNames.includes(f.control)) return false;
     if (f.library && app.library !== f.library) return false;
+    if (f.status && app.status !== f.status) return false;
     return tokens.every((t) => app.hay.includes(t));
   });
 
@@ -187,7 +200,7 @@ function apply() {
     ? `${n} ports`
     : `${n} of ${DATA.apps.length} port${n === 1 ? '' : 's'}`;
 
-  const dirty = !!(f.q || f.release || f.control || f.library);
+  const dirty = !!(f.q || f.release || f.control || f.library || f.status);
   els.reset.hidden = !dirty;
   els.empty.hidden = n > 0;
 
@@ -242,11 +255,26 @@ function card(app, tokens) {
     ? `<a class="primary" href="${esc(play)}" target="_blank" rel="noopener">Run in the playground ↗</a>`
     : `<span class="disabled" title="${esc(why)}" aria-disabled="true">Run in the playground</span>`;
 
+  /* The thumbnail — the render gate's photograph of the port's first screen,
+   * written into thumbs/ by scripts/generate-screenshots.mjs on every deploy
+   * (never committed, like apps.json). Best effort by design: an <img> whose
+   * file the deploy could not photograph removes itself, so the card simply
+   * has no picture — the same fallback the samples overview page proved. */
+  const shot = `<img class="shot" loading="lazy" alt="" aria-hidden="true"
+      src="thumbs/${esc(app.class)}.png" onerror="this.remove()">`;
+
+  /* The .body wrapper exists for the float: the card itself is a flex
+   * column (it pins .actions to the bottom), and a float is inert inside a
+   * flex container — the image needs a block formatting context to wrap the
+   * text around it (flow-root in the CSS). */
   return `
     <article class="card">
-      <h2>${highlight(app.title || app.class, tokens)}</h2>
-      <p class="entity">${highlight(app.entity || app.class, tokens)}</p>
-      ${app.summary ? `<p class="blurb">${highlight(app.summary, tokens)}</p>` : ''}
+      <div class="body">
+        ${shot}
+        <h2>${highlight(app.title || app.class, tokens)}</h2>
+        <p class="entity">${highlight(app.entity || app.class, tokens)}</p>
+        ${app.summary ? `<p class="blurb">${highlight(app.summary, tokens)}</p>` : ''}
+      </div>
       <div class="badges">${badges.join('')}</div>
       ${needs}${controls}
       <div class="actions">
@@ -265,7 +293,7 @@ function draw(tokens) {
 
 /* -------------------------------------------------------------- url state */
 
-const PARAMS = ['q', 'release', 'control', 'library'];
+const PARAMS = ['q', 'release', 'control', 'library', 'status'];
 
 function writeUrl(f) {
   const p = new URLSearchParams();
@@ -279,7 +307,7 @@ function writeUrl(f) {
 function readUrl() {
   const p = new URLSearchParams(location.search);
   els.q.value = p.get('q') || '';
-  for (const key of ['release', 'control', 'library']) {
+  for (const key of ['release', 'control', 'library', 'status']) {
     const v = p.get(key);
     /* Only a value the current index still knows — a link from before a
      * control was renamed must not leave a dead filter selected. */
@@ -289,7 +317,7 @@ function readUrl() {
 
 function reset() {
   els.q.value = '';
-  for (const key of ['release', 'control', 'library']) els[key].value = '';
+  for (const key of ['release', 'control', 'library', 'status']) els[key].value = '';
   apply();
   els.q.focus();
 }
@@ -322,7 +350,7 @@ async function boot() {
   apply();
 
   els.q.addEventListener('input', apply);
-  for (const key of ['release', 'control', 'library']) els[key].addEventListener('change', apply);
+  for (const key of ['release', 'control', 'library', 'status']) els[key].addEventListener('change', apply);
   els.reset.addEventListener('click', reset);
   els.reset2.addEventListener('click', reset);
   els.loadmore.addEventListener('click', () => draw(els.q.value.trim().toLowerCase().split(/\s+/).filter(Boolean)));

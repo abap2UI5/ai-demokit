@@ -1,6 +1,10 @@
 {
   "global": {
-    "files": "/../../src/**/*.*"
+    "files": "/../../src/**/*.*",
+    // src/zz_dev is the gitignored dev sandbox the MCP server deploys into -
+    // excluded here exactly like in the root abaplint.jsonc, so a local run
+    // with a populated sandbox matches what CI lints from a clean checkout
+    "exclude": ["zz_dev"]
   },
   "dependencies": [
     {

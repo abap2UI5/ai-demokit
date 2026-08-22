@@ -11,6 +11,7 @@ web/search/search.css   light and dark off one set of custom properties
 web/search/search.js    filtering and drawing — plain ES2020, no dependencies
 web/search/favicon.ico  the abap2UI5 logo in the tab (see below)
 web/search/apps.json    generated, NOT committed (see below)
+web/search/thumbs/      generated, NOT committed — one PNG per port (see below)
 ```
 
 ## What it answers
@@ -105,6 +106,27 @@ on every deploy instead, so it is never staler than the site serving it.
 ```bash
 npm ci                                    # in the repository root
 node scripts/generate-search-index.mjs    # or: npm run search:index
+```
+
+## `thumbs/` is not committed either
+
+One PNG per port — the abap2UI5-linter's render harness photographing the view
+it reconstructs from each builder chain (`screenshotFiles`, the render gate
+kept standing long enough to take a picture), written by
+`scripts/generate-screenshots.mjs`. The pattern is ported from the
+[samples repository's overview page](https://github.com/abap2UI5/samples),
+which proved it; the same two deploy decisions apply. Never committed: 400+
+binaries that a deploy regenerates fresh would put a meaningless diff on every
+port PR. Best effort: a view the headless harness cannot render is skipped and
+its card shows no picture (`search.js` removes the `<img>` on error) — the
+src/03 collection is skipped up front, because its SAPUI5-only controls are
+not in the harness's OpenUI5 runtime at all. Measured 2026-08-21: the full
+416-port corpus photographs in ~4 minutes at ~0.55 s per port (dev container,
+chromium already installed); `deploy-web` budgets double that.
+
+```bash
+node scripts/generate-screenshots.mjs             # write web/search/thumbs/
+node scripts/generate-screenshots.mjs --limit 10  # a quick local smoke
 ```
 
 ## Running it locally

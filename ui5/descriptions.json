@@ -3184,10 +3184,12 @@
   },
   "written": {
     "sap.ui.layout.sample.Form480": {
+      "name": "Fullscreen – address form with edit switch",
       "description": "A fullscreen address form with Edit / Save / Cancel in the page header, switching between a display and a change fragment; ResponsiveGridLayout arranges the columns.",
       "why": "docuindex.json has no entry for this id: the demo kit lists only the three variants (Form480_12120, _12120Dual, _Trial) as samples. It is NOT the page they embed - each variant's manifest names its own Page.view.xml / Page.controller.js / Change.fragment.xml / Display.fragment.xml and nothing in the family references ../Form480/ (checked 2026-08-21; the fragments even carry their own ids, FormDisplay480_12120 vs FormDisplay480). The sample is real and self-contained, just undocumented upstream"
     },
     "sap.ui.layout.sample.SimpleForm480": {
+      "name": "Fullscreen – address form with edit switch",
       "description": "The same fullscreen address form built with SimpleForm: Edit / Save / Cancel in the page header switch it between display and change mode.",
       "why": "as Form480 - docuindex.json has no entry for this id, though the sample is real and self-contained. The earlier wording called it the shared page of the three SimpleForm480 variants, which the manifests disprove"
     },

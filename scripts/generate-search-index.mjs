@@ -50,6 +50,8 @@ import { fileURLToPath } from 'url';
 import { checkAbapSource } from '@abap2ui5/linter';
 import { readDescript } from './lib/descript.mjs';
 import { isSkippedDir } from './lib/src-tree.mjs';
+import { universe, libraryOf, descriptLibrary } from './lib/ui5-libs.mjs';
+import { sampleNames } from './lib/sample-names.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const argOut = process.argv.indexOf('--out');
@@ -95,47 +97,9 @@ const PLAYGROUND_LIBS = new Set([
 ]);
 const PLAYGROUND_UI5 = '1.151';
 
-/* Every UI5 library a control in this corpus can come from. A control name is
- * mapped to its library by LONGEST prefix, because the namespace is not the
- * library: sap.ui.layout.form.SimpleForm ships in sap.ui.layout, and
- * sap.ui.model.type.Date in sap.ui.core. The OpenUI5 ones are read from
- * ui5/universe.json so a new library in the snapshot needs no edit here; the
- * SAPUI5-only ones (src/03) are listed, because no snapshot in this
- * repository covers them. */
-const universe = JSON.parse(fs.readFileSync(path.join(ROOT, 'ui5', 'universe.json'), 'utf8'));
-const EXTRA_LIBS = [
-  /* SAPUI5-only — the src/03 collection */
-  'sap.ui.comp', 'sap.suite.ui.commons', 'sap.suite.ui.microchart',
-  'sap.ui.vk', 'sap.ui.vbm', 'sap.viz', 'sap.gantt', 'sap.ndc',
-  'sap.ushell', 'sap.collaboration', 'sap.ui.generic',
-  /* OpenUI5 libraries no sample in ui5/universe.json is filed under */
-  'sap.ui.webc.main', 'sap.ui.webc.fiori',
-];
-const KNOWN_LIBS = [...new Set([...universe.libs.map((l) => l.lib), ...EXTRA_LIBS])]
-  .sort((a, b) => b.length - a.length);
-
-/** The library a control ships in.
- *
- *  Longest known prefix wins, because the namespace is not the library. The
- *  fallback matters as much as the match: everything under `sap.ui.` that is
- *  not a library of its own SHIPS IN sap.ui.core — `sap.ui.model.type.Date`
- *  and `sap.ui.base.Object` have no library called `sap.ui.model` or
- *  `sap.ui.base` behind them, and offering one as a filter would invite a
- *  reader to look for a library that does not exist.
- */
-const libraryOf = (control) => KNOWN_LIBS.find((lib) => control === lib || control.startsWith(`${lib}.`))
-  || (control.startsWith('sap.ui.') ? 'sap.ui.core' : control.split('.').slice(0, -1).join('.'));
-
-/* The library facet for a class with no sidecar — the SAPUI5 collection under
- * src/03, whose controls no snapshot in this repository resolves. Its DESCRIPT
- * names the library itself ("sap.suite.ui.commons - Timeline"), which is the
- * answer; the fallback drops sap.ui.core and sap.m, because every view builds
- * something from both and neither is what the port is about. */
-function descriptLibrary(descript, libs) {
-  const head = descript.split(' - ')[0].trim();
-  if (KNOWN_LIBS.includes(head)) return head;
-  return libs.find((l) => l !== 'sap.ui.core' && l !== 'sap.m') || libs[0] || '';
-}
+/* Which UI5 library a control ships in — libraryOf/descriptLibrary and the
+ * committed universe snapshot live in scripts/lib/ui5-libs.mjs, shared with
+ * generate-catalogue.mjs so the two catalogues cannot disagree. */
 
 /** Compare two dotted UI5 versions numerically ("1.9" < "1.71" < "1.120"). */
 function cmpVersion(a, b) {
@@ -163,6 +127,8 @@ const walk = (dir, out = []) => {
 
 const descriptions = JSON.parse(fs.readFileSync(path.join(ROOT, 'ui5', 'descriptions.json'), 'utf8'));
 const demokit = descriptions.demokit || {};
+const written = descriptions.written || {};
+const nameOf = sampleNames(ROOT);
 
 /* ---------------------------------------------------------------- collect */
 
@@ -196,7 +162,10 @@ for (const file of files) {
   const meta = fs.existsSync(metaPath) ? JSON.parse(fs.readFileSync(metaPath, 'utf8')) : null;
 
   const descript = readDescript(file);
-  const docu = meta?.sample ? demokit[meta.sample] : null;
+  /* Both snapshot blocks: `demokit` is the docuindex snapshot, `written` the
+   * hand-kept entries for the samples upstream leaves undocumented — the two
+   * ports whose docu came back null here were exactly those. */
+  const docu = meta?.sample ? (demokit[meta.sample] || written[meta.sample]) : null;
 
   /* The linter pass. A class it cannot reconstruct is still catalogued — it
    * keeps its sidecar facts and loses only the derived ones, which is better
@@ -245,13 +214,12 @@ for (const file of files) {
   apps.push({
     class: cls,
     file: rel,
-    /* The demo kit's own name for the sample — "Action List Item". 18 ports
-     * have no demokit entry, and the SAPUI5 collection has no sidecar at all;
-     * those fall back to the WHOLE DESCRIPT rather than its first half,
-     * because the half before the dash is the entity ("sap.m.ActionListItem",
-     * "sap.suite.ui.microchart") and a card headed by a library name says
-     * nothing about which sample it is. */
-    title: docu?.name || descript,
+    /* The demo kit's own name for the sample — "Action List Item" — from
+     * either snapshot block, cleaned (scripts/lib/sample-names.mjs). Only the
+     * SAPUI5 collection has no sample to be named after; it falls back to the
+     * WHOLE DESCRIPT rather than its first half, because the half before the
+     * dash is a library name, which says nothing about which sample it is. */
+    title: (meta?.sample && nameOf(meta.sample)) || descript,
     summary: (source.match(/^" @summary (.+?)\r?$/m) || [, ''])[1].trim(),
     keywords: (source.match(/^" @keywords (.+?)\r?$/m) || [, ''])[1].trim(),
     /* The demo kit paragraph — the longest piece of real prose about the

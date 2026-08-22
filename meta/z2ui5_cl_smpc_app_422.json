@@ -1,0 +1,43 @@
+{
+  "class": "z2ui5_cl_smpc_app_422",
+  "sample": "sap.m.sample.SelectDialogLazyLoading",
+  "entity": "sap.m.SelectDialog",
+  "file": "src/02/01/z2ui5_cl_smpc_app_422.clas.abap",
+  "batch": "b31",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.SelectDialog.initialFocus (since 1.117.0, declared on SelectDialogBase) is kept 1:1; needs UI5 >= 1.117."
+    },
+    {
+      "type": "POST_171",
+      "what": "The SelectDialog updateStarted event (since 1.93, declared on SelectDialogBase) is kept 1:1 as the lazy-loading wire; needs UI5 >= 1.93."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.Button.ariaHasPopup (since 1.84) is kept 1:1 on the trigger button; needs UI5 >= 1.84."
+    },
+    {
+      "type": "NOTE",
+      "what": "The controller's lazy Fragment.load of Dialog.fragment.xml is replaced by declaring the SelectDialog in the Button's mvc:dependents and opening it roundtrip-free via follow_up_action( control_by_id, open ); the fragment's core:FragmentDefinition root has no counterpart."
+    },
+    {
+      "type": "NOTE",
+      "what": "onUpdateStarted's Growing append is a backend round-trip: the reason parameter is transported, and the server reproduces the original loop 1:1 - starting at length-1 and appending 30 rows capped at 1001, including the original's off-by-one re-append of the last two rows."
+    },
+    {
+      "type": "NOTE",
+      "what": "onSearch's Contains filter on the items binding runs client-side via the view-wired follow_up_action( binding_call, filter ) with ${$parameters>/value} - the model stays untouched."
+    },
+    {
+      "type": "NOTE",
+      "what": "The growing lazy-load round-trip (updateStarted firing while the dialog list grows, then view_model_update while the popup is open) is unverified in a running system. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_422.mjs)."
+    }
+  ]
+}

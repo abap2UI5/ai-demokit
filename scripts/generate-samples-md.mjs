@@ -20,13 +20,43 @@
  * The row shape is deliberately IDENTICAL to abap2UI5/samples and
  * abap2UI5/samples-stack:
  *
- *   | **<title>**                      | [`CLASS`](path) |
+ *   | **<title>** — <sub-title>        | [`CLASS`](path) |
  *     <br>the summary sentence
  *     <br><sub>the search terms</sub>
  *
  * One parser reads all three catalogues (mcp-server's `examples` tool), and a
  * reader who has seen one page can read the other two. A change to the shape
  * here is a change to a contract, not to a layout.
+ *
+ * WHAT THE TITLE IS. The bold half is the CONTROL — the sidecar's `entity`,
+ * the one thing an agent asks this catalogue for. It used to be the DESCRIPT's
+ * first half, and 241 of the 430 rows carried only their LIBRARY there
+ * ("sap.m"), because the scaffolder's DESCRIPT default is
+ * `<library> - <truncated demo kit sentence>` — a known gap recorded in
+ * abap2UI5/mcp-server's AGENTS.md, whose fix belongs exactly here. After the
+ * em dash comes the demo kit's own name for the sample
+ * (ui5/descriptions.json, via scripts/lib/sample-names.mjs) whenever it says
+ * more than the control already does: `**sap.ui.table.Table** — Basic`,
+ * `**sap.m.Wizard** — Wizard Branching`, but plain `**sap.m.Bar**` rather
+ * than `sap.m.Bar — Bar`. That is byte-for-byte the `title — sub` form the
+ * shared parser has always read on the sibling pages, and the same
+ * entity-leads composition mcp-server's catalogue.json adapter produces, so
+ * the two surfaces of this corpus finally answer with the same words. The
+ * src/03 collection has no sidecar and no demo kit sample; its DESCRIPT
+ * `<library> - <control tail>` IS the control name split at the library, so
+ * the two halves are joined back (`sap.viz.ui5.controls.VizFrame`) — the same
+ * full name each collection class states in its own `@summary`.
+ *
+ * The one addition this repository makes to that shape is a TRAILING block per
+ * row — `<br><sub>✓ checked · 2 deviations</sub>` — carrying the sidecar's
+ * verification status, which used to live only in meta/<class>.json and
+ * STATUS.md, invisible to anybody browsing the catalogue. It is safe against
+ * the shared parser BY ITS DESIGN, not by luck: mcp-server matches the blocks
+ * after a row title as one group and reads the FIRST `<sub>` that does not
+ * start `docs:` as the keywords, ignoring blocks it does not know — exactly so
+ * that a catalogue can grow a block without breaking the other two. The marker
+ * therefore comes AFTER the keywords block and is only emitted when a keywords
+ * block exists, or it would be mistaken for one.
  *
  *   node scripts/generate-samples-md.mjs          write it
  *   node scripts/generate-samples-md.mjs --check  fail if it is stale (CI)
@@ -36,10 +66,17 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { readDescript } from './lib/descript.mjs';
 import { isSkippedDir } from './lib/src-tree.mjs';
+import { sampleNames } from './lib/sample-names.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'SAMPLES.md');
 const CHECK = process.argv.includes('--check');
+const nameOf = sampleNames(ROOT);
+
+/* "Action List Item" says nothing that `sap.m.ActionListItem` does not — the
+ * demo kit name earns its place after the dash only when it differs from the
+ * control in more than spacing and case. */
+const token = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
 /* `|` ends a table cell, and `<` opens a tag: the DESCRIPT is read unescaped
  * now (scripts/lib/descript.mjs), so a description containing `<` would reach
@@ -75,11 +112,23 @@ function scan() {
     const metaPath = path.join(ROOT, 'meta', `${cls}.json`);
     const meta = fs.existsSync(metaPath) ? JSON.parse(fs.readFileSync(metaPath, 'utf8')) : null;
 
+    const header = cut === -1 ? descript : descript.slice(0, cut);
+    const tail = cut === -1 ? '' : descript.slice(cut + 3);
+    const collection = !meta && cls.includes('_sapui5_');
+    const name = meta?.sample ? nameOf(meta.sample) : '';
+
     out.push({
       cls,
       rel,
-      header: cut === -1 ? descript : descript.slice(0, cut),
-      sub: cut === -1 ? '' : descript.slice(cut + 3),
+      header,
+      sub: tail,
+      /* The row title — the header comment up top says what and why. */
+      title: meta?.entity
+        ? meta.entity
+        : (collection && tail ? `${header}.${tail}` : header),
+      variant: meta?.entity && name && token(name) !== token(meta.entity.split('.').pop())
+        ? name
+        : '',
       summary: (source.match(/^" @summary (.+?)\r?$/m) || [, ''])[1].trim(),
       keywords: (source.match(/^" @keywords (.+?)\r?$/m) || [, ''])[1].trim(),
       sample: meta?.sample || '',
@@ -89,9 +138,11 @@ function scan() {
       // DESCRIPT instead.
       lib: meta?.entity
         ? meta.entity.split('.').slice(0, -1).join('.')
-        : (cut === -1 ? descript : descript.slice(0, cut)),
-      sapui5: !meta && cls.includes('_sapui5_'),
+        : header,
+      sapui5: collection,
       overview: cls === 'z2ui5_cl_smpc_app_000',
+      status: meta?.status || '',
+      devCount: (meta?.deviations || []).length,
     });
   }
   return out;
@@ -107,12 +158,26 @@ const sapui5 = all.filter((s) => s.sapui5);
  * short text is the demo kit's sentence cut at 60 characters ("An
  * ActionListItem can be used like a"), and the untruncated sentence is the
  * `@summary` directly below it. Printing both would print the same words
- * twice, the first time broken off mid-word. */
+ * twice, the first time broken off mid-word. The dash half a row DOES render
+ * is the demo kit sample NAME from the snapshot, never the DESCRIPT tail. */
+/* The verification marker — the sidecar's status ladder, one symbol each,
+ * defined in the legend at the top of the page. The SAPUI5 collection carries
+ * none: those classes have no sidecar because they are not ports. */
+const MARK = { checked: '✓ checked', reviewed: '◐ reviewed', generated: '○ generated' };
+
 const row = (s) => {
-  const head = `**${cell(s.header)}**`;
+  /* `**<entity>** — <demo kit sample name>`, the shared `title — sub` row
+   * form; the dash half only where the name says more than the control (see
+   * the header comment). */
+  const head = `**${cell(s.title)}**${s.variant ? ` — ${cell(s.variant)}` : ''}`;
   const summary = s.summary ? `<br>${cell(s.summary)}` : `<br>${cell(s.sub)}`;
   const keywords = s.keywords ? `<br><sub>${cell(s.keywords)}</sub>` : '';
-  return `| ${head}${summary}${keywords} | [\`${s.cls.toUpperCase()}\`](${s.rel}) |`;
+  /* Only ever AFTER a keywords block — the shared parser reads the first
+   * <sub> block as the keywords (see the header comment). */
+  const mark = keywords && MARK[s.status]
+    ? `<br><sub>${MARK[s.status]}${s.devCount ? ` · ${s.devCount} deviation${s.devCount === 1 ? '' : 's'}` : ''}</sub>`
+    : '';
+  return `| ${head}${summary}${keywords}${mark} | [\`${s.cls.toUpperCase()}\`](${s.rel}) |`;
 };
 
 const table = (items) => [
@@ -165,6 +230,15 @@ this repository with [abapGit](https://abapgit.org), then open
 **To read one:** click the class. Every port is a single class, so the link is
 the whole sample.
 
+**How far each one is verified** — the small marker closing a row:
+✓ \`checked\`, a human watched this port run in a real system ·
+◐ \`reviewed\`, read against its original, not yet run ·
+○ \`generated\`, machine-written and not yet reviewed.
+\`· n deviations\` counts the declared, typed differences from the original —
+what each one is lives in the port's \`meta/<class>.json\`, and
+[STATUS.md](STATUS.md) carries the corpus-wide tallies. The SAPUI5 collection
+at the end carries no marker: those are hand-written samples, not ports.
+
 For what is NOT here — which demo kit samples are still unported and why — see
 [api.md](api.md), the coverage table.
 
@@ -189,9 +263,12 @@ ${table(sapui5)}
 
 ---
 
-_Generated from the classes themselves: the title is the abapGit short text, the
-sentence is \`" @summary\` and the small type is \`" @keywords\`. Change one of
-those and this page moves with it — \`npm run samples:md\`._
+_Generated from the classes and their sidecars: the bold title is the control
+(\`entity\` in \`meta/<class>.json\`), the name after the dash is the demo
+kit's own name for the sample (\`ui5/descriptions.json\`) where it says more
+than the control does, the sentence is \`" @summary\`, the small type is
+\`" @keywords\` and the verification marker is the sidecar's \`status\`.
+Change one of those and this page moves with it — \`npm run samples:md\`._
 `;
 
 if (CHECK) {

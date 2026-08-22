@@ -2409,6 +2409,23 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = lv_text1
         post171 = `Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it.` ) ).
 
+    lv_text1 = `POST-1.71: sap.m.MenuItemGroup (control since 1.127.0) and its itemSelectionMode property (since 1.127.0) are kept 1:1 for the three selectable groups; the app needs UI5 >= 1.127 to render them. //` &&
+               ` POST-1.71: sap.m.MenuItem.selected (since 1.127.0) is kept 1:1 on the pre-selected group items; needs UI5 >= 1.127. // POST-1.71: sap.m.MenuItem.endContent (aggregation since 1.131) is kept 1:1 for` &&
+               ` the transparent icon Buttons at the end of two items; needs UI5 >= 1.131. // POST-1.71: sap.m.Button.ariaHasPopup (since 1.84) is kept 1:1 on the trigger button; needs UI5 >= 1.84. // NOTE: The` &&
+               ` controller's lazy Fragment.load / isOpen / openBy / close toggle is reproduced roundtrip-free via follow_up_action( control_by_id, toggleBy ) anchored to the pressed button ($event.oSource.sId); the` &&
+               ` Menu from Menu.fragment.xml is declared in the Button's dependents with an added id 'selectableMenu' (the fragment declares none). The four icon-only endContent Buttons carry an added tooltip (Open` &&
+               ` Folder / Favorite) the original lacks, so they stay usable with a screen reader. // NOTE: The MenuItemGroup single/multi selection marks and the endContent buttons are client-side behaviour of the`.
+    lv_text1 = lv_text1 && ` 1.127+ menu; unverified in a running system. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_419.mjs).`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Menu`                            name = `MenuSelectable`                                class = `z2ui5_cl_smpc_app_419` path = `src/02/01/z2ui5_cl_smpc_app_419.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.m.MenuItemGroup (control since 1.127.0) and its itemSelectionMode property (since 1.127.0) are kept 1:1 for the three selectable groups; the app needs UI5 >= 1.127 to render them. //` &&
+                 ` sap.m.MenuItem.selected (since 1.127.0) is kept 1:1 on the pre-selected group items; needs UI5 >= 1.127. // sap.m.MenuItem.endContent (aggregation since 1.131) is kept 1:1 for the transparent icon` &&
+                 ` Buttons at the end of two items; needs UI5 >= 1.131. // sap.m.Button.ariaHasPopup (since 1.84) is kept 1:1 on the trigger button; needs UI5 >= 1.84.` ) ).
+
     lv_text1 = `POST-1.71: the MenuButton ``beforeMenuOpen`` event (since UI5 1.94) is kept 1:1 on the split-mode buttons that use it. menuPosition (1.56), buttonMode and useDefaultActionOnly are <= 1.71. // NOTE:` &&
                ` onMenuAction builds a breadcrumb path by walking the selected MenuItem's parent chain (e.g. 'basic > add'); the port toasts only the selected item's own text, transported via` &&
                ` ${$parameters>/item}.getText(). **Measured 2026-07-31 (browser probe + e2e against the transpiled backend, OpenUI5 1.152), closing pr/menu-item-selected-path as a capability boundary:** sap.m.Menu` &&
@@ -3297,6 +3314,27 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = lv_text1
         post171 = `sap.m.Avatar (control since 1.73) is kept 1:1 as the page icon via the QuickViewPage avatar aggregation, which itself is since UI5 1.92 - so the app needs UI5 >= 1.92 to render the avatar.` ) ).
 
+    lv_text1 = `POST-1.71: sap.m.Avatar (control since 1.73) is kept 1:1 as the page icon via the QuickViewPage avatar aggregation, which itself is since UI5 1.92 - so the app needs UI5 >= 1.92 to render the avatar.` &&
+               ` // NOTE: The view's core:Fragment include (fragmentName sap.m.sample.QuickViewCardScrollBar.QuickViewCardScrollBar) is inlined into the main view, so the port has no core:Fragment reference element;` &&
+               ` the fragment's core:FragmentDefinition root has no counterpart either. // NOTE: onButtonBackClick drives the card 1:1 via follow_up_action( control_by_id, navigateBack ), roundtrip-free; the Back` &&
+               ` button's enabled state is two-way bound and kept in sync by the afterNavigate isTopPage transport (sent as the string tokens top/sub - the transpiled e2e runtime hands a JSON boolean event arg` &&
+               ` through as 'false' where a real system normalizes it to abap_bool, and the token form reads the same on both) (the original seeds enabled='false' and resets it in onBeforeRendering). // NOTE:` &&
+               ` onScrollSwitchChange's setShowVerticalScrollBar becomes an added showVerticalScrollBar attribute two-way bound to the same flag as the Switch state; the Switch change wire only resets the Back button`.
+    lv_text1 = lv_text1 && ` server-side (the card re-renders to its first page). // NOTE: onAfterRendering's demo-harness DOM tweaks (the touchmove stopPropagation listener for iPhone scrolling and the jQuery maxWidth 320px on` &&
+               ` the container) are dropped - they have no view counterpart. // NOTE: Elements the mock leaves without an elementType (Address, Slogan) seed the QuickViewGroupElementType default 'text', target seeds` &&
+               ` the UI5 default '_blank', and page 2 seeds iconVisibility=true - a serialized empty string/false would override the control defaults where the original's undefined picks them. // NOTE: The` &&
+               ` HEADER_TOGGLE round-trip mutates page 1 in the model and re-renders the card to its first page (the behaviour the original expects after a header switch); unverified in a running system.` &&
+               ` **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_421.mjs).`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.QuickViewCard`                   name = `QuickViewCardScrollBar`                        class = `z2ui5_cl_smpc_app_421` path = `src/02/01/z2ui5_cl_smpc_app_421.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.28.11`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.m.Avatar (control since 1.73) is kept 1:1 as the page icon via the QuickViewPage avatar aggregation, which itself is since UI5 1.92 - so the app needs UI5 >= 1.92 to render the avatar.` ) ).
+
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.RadioButton`                     name = `RadioButton`                                   class = `z2ui5_cl_smpc_app_069` path = `src/02/01/z2ui5_cl_smpc_app_069.clas.abap`
         score = 2
@@ -3361,6 +3399,20 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = `NOTE: the Dialog (loaded from a fragment in the original) is built and shown via popup_display on the button press; its content is static text, so the bindElement /ProductCollection/0 is a no-op and` &&
                  ` dropped.` ) ).
 
+    lv_text1 = `NOTE: onSuggest is a backend round-trip: the SUGGEST event transports ${$parameters>/suggestValue}, the server applies the compound OR filter ([[PRODUCTID Contains v],[NAME Contains v]]) to the` &&
+               ` suggestionItems binding via follow_up_action( binding_call, filter ) and re-opens the popover via follow_up_action( control_by_id, suggest ) - the original's two custom Filter test functions` &&
+               ` (case-insensitive indexOf on ProductId and Name) map to the Contains operator, which client JSON models match case-insensitively; an empty value clears the filter like the original's empty aFilters.` &&
+               ` // NOTE: onSearch's MessageToast branches are composed on the client, roundtrip-free: a '{0}' template filled by the ternary ${$parameters>/suggestionItem} ? 'Search for: ' + getText() : 'Search is` &&
+               ` fired!'. // NOTE: Price is kept TYPE string: it is display-only inside the SuggestionItem description text template {path:'PRICE'} {path:'CURRENCYCODE'}, and a packed field with fixed DECIMALS would` &&
+               ` add trailing zeros to the mock's variable-decimal values. // NOTE: The per-keystroke suggest round-trip is serialized and lossy under fast typing (events fired while a trip is in flight are dropped;`.
+    lv_text1 = lv_text1 && ` it converges when typing pauses); the filter + suggest() follow-up pair is unverified in a running system. **e2e-verified 2026-08-21** (nightly e2e interaction,` &&
+               ` meta/interactions/z2ui5_cl_smpc_app_420.mjs).`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.SearchField`                     name = `SearchFieldSuggestions`                        class = `z2ui5_cl_smpc_app_420` path = `src/01/01/z2ui5_cl_smpc_app_420.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = lv_text1 ) ).
+
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.SegmentedButton`                 name = `SegmentedButton`                               class = `z2ui5_cl_smpc_app_047` path = `src/01/01/z2ui5_cl_smpc_app_047.clas.abap`
         score = 3
@@ -3417,6 +3469,24 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         is_post171 = abap_true
         notes = lv_text1
         post171 = `sap.m.SelectDialog.searchPlaceholder (since 1.110) is kept 1:1 on the value-help dialog; needs UI5 >= 1.110.` ) ).
+
+    lv_text1 = `POST-1.71: sap.m.SelectDialog.initialFocus (since 1.117.0, declared on SelectDialogBase) is kept 1:1; needs UI5 >= 1.117. // POST-1.71: The SelectDialog updateStarted event (since 1.93, declared on` &&
+               ` SelectDialogBase) is kept 1:1 as the lazy-loading wire; needs UI5 >= 1.93. // POST-1.71: sap.m.Button.ariaHasPopup (since 1.84) is kept 1:1 on the trigger button; needs UI5 >= 1.84. // NOTE: The` &&
+               ` controller's lazy Fragment.load of Dialog.fragment.xml is replaced by declaring the SelectDialog in the Button's mvc:dependents and opening it roundtrip-free via follow_up_action( control_by_id, open` &&
+               ` ); the fragment's core:FragmentDefinition root has no counterpart. // NOTE: onUpdateStarted's Growing append is a backend round-trip: the reason parameter is transported, and the server reproduces` &&
+               ` the original loop 1:1 - starting at length-1 and appending 30 rows capped at 1001, including the original's off-by-one re-append of the last two rows. // NOTE: onSearch's Contains filter on the items` &&
+               ` binding runs client-side via the view-wired follow_up_action( binding_call, filter ) with ${$parameters>/value} - the model stays untouched. // NOTE: The growing lazy-load round-trip (updateStarted`.
+    lv_text1 = lv_text1 && ` firing while the dialog list grows, then view_model_update while the popup is open) is unverified in a running system. **e2e-verified 2026-08-21** (nightly e2e interaction,` &&
+               ` meta/interactions/z2ui5_cl_smpc_app_422.mjs).`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.SelectDialog`                    name = `SelectDialogLazyLoading`                       class = `z2ui5_cl_smpc_app_422` path = `src/02/01/z2ui5_cl_smpc_app_422.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.m.SelectDialog.initialFocus (since 1.117.0, declared on SelectDialogBase) is kept 1:1; needs UI5 >= 1.117. // The SelectDialog updateStarted event (since 1.93, declared on SelectDialogBase) is` &&
+                 ` kept 1:1 as the lazy-loading wire; needs UI5 >= 1.93. // sap.m.Button.ariaHasPopup (since 1.84) is kept 1:1 on the trigger button; needs UI5 >= 1.84.` ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.SelectList`                      name = `SelectList`                                    class = `z2ui5_cl_smpc_app_075` path = `src/01/01/z2ui5_cl_smpc_app_075.clas.abap`
@@ -3875,6 +3945,18 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` 1.87 to render it. Aggregation-level, invisible to the attribute-scanning property gate.`
         post171 = `the Link nested inside the Title uses the Title content aggregation (since UI5 1.87) - newer than 1.71 but kept for the 1:1 port (the sample's whole point); the app needs a UI5 release >= 1.87 to` &&
                  ` render it. Aggregation-level, invisible to the attribute-scanning property gate.` ) ).
+
+    lv_text1 = `NOTE: The three controller handlers are replaced by bindings, roundtrip-free: onWrappingChange's Title.setWrapping toggle becomes the same two-way bound flag on Switch.state and Title.wrapping (the` &&
+               ` Switch change attribute is dropped on both Switches), onHyphenationChange becomes an added wrappingType expression binding following the second Switch, and onSliderMoved's setWidth(value+'%') becomes` &&
+               ` an expression binding on the Panel width fed by the two-way bound Slider value (the Slider liveChange attribute is dropped). // NOTE: The three roundtrip-free wires (wrapping toggle,` &&
+               ` Hyphenated/Normal wrappingType expression, Panel width percent expression) are client-side model propagation and are unverified in a running system. **e2e-verified 2026-08-21** (nightly e2e` &&
+               ` interaction, meta/interactions/z2ui5_cl_smpc_app_418.mjs).`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Title`                           name = `TitleWrapping`                                 class = `z2ui5_cl_smpc_app_418` path = `src/01/01/z2ui5_cl_smpc_app_418.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.27.0`
+        notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ToggleButton`                    name = `ToggleButton`                                  class = `z2ui5_cl_smpc_app_080` path = `src/01/01/z2ui5_cl_smpc_app_080.clas.abap`

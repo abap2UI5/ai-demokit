@@ -1,0 +1,39 @@
+{
+  "class": "z2ui5_cl_smpc_app_419",
+  "sample": "sap.m.sample.MenuSelectable",
+  "entity": "sap.m.Menu",
+  "file": "src/02/01/z2ui5_cl_smpc_app_419.clas.abap",
+  "batch": "b31",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.MenuItemGroup (control since 1.127.0) and its itemSelectionMode property (since 1.127.0) are kept 1:1 for the three selectable groups; the app needs UI5 >= 1.127 to render them."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.MenuItem.selected (since 1.127.0) is kept 1:1 on the pre-selected group items; needs UI5 >= 1.127."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.MenuItem.endContent (aggregation since 1.131) is kept 1:1 for the transparent icon Buttons at the end of two items; needs UI5 >= 1.131."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.Button.ariaHasPopup (since 1.84) is kept 1:1 on the trigger button; needs UI5 >= 1.84."
+    },
+    {
+      "type": "NOTE",
+      "what": "The controller's lazy Fragment.load / isOpen / openBy / close toggle is reproduced roundtrip-free via follow_up_action( control_by_id, toggleBy ) anchored to the pressed button ($event.oSource.sId); the Menu from Menu.fragment.xml is declared in the Button's dependents with an added id 'selectableMenu' (the fragment declares none). The four icon-only endContent Buttons carry an added tooltip (Open Folder / Favorite) the original lacks, so they stay usable with a screen reader."
+    },
+    {
+      "type": "NOTE",
+      "what": "The MenuItemGroup single/multi selection marks and the endContent buttons are client-side behaviour of the 1.127+ menu; unverified in a running system. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_419.mjs)."
+    }
+  ]
+}

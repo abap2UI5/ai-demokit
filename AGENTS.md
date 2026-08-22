@@ -162,7 +162,8 @@ plain JS/XML held for reference and to feed the generator. Everything else at
 the root is documentation or tooling, not a tree the pipeline reads: `meta/`
 (one sidecar per port, plus the e2e interaction modules), `scripts/` (the
 generators and gates), `web/` (the GitHub Pages site - `web/search/` IS the
-published catalogue, three static files plus a generated index; the transpiled
+published catalogue, three static files plus a generated index and
+deploy-generated thumbnails; the transpiled
 in-browser demo that used to live here was removed 2026-08-19, and `web/ci/`
 keeps the two patch scripts `scripts/e2e-build.mjs` and abap2UI5/mcp-server
 still execute) and `docs/` (the journal and the upstream-request record).
@@ -719,8 +720,8 @@ npm run gates        # full offline gate set, fail-fast; needs NO node_modules a
 ```
 It chains: chain-format → check-prose-names → pattern-lint → check-pins →
 validate-meta → structural-diff → data-fidelity → check-mcp-contract →
-regenerate overview/coverage/status/SAMPLES.md →
-`git diff --exit-code -- src README.md api.md STATUS.md SAMPLES.md`
+regenerate overview/coverage/status/SAMPLES.md/catalogue.json →
+`git diff --exit-code -- src README.md api.md STATUS.md SAMPLES.md catalogue.json`
 (regenerated artefacts must leave the tree clean, exactly as the `meta_valid`
 CI job checks). **Every step here has a CI job with the same name** — the
 chain and the workflows are one list, and a step that runs only locally is a
@@ -789,9 +790,9 @@ which `npm ci` / `npm install` runs automatically via the `prepare` script.
 
 ## 7. Coverage & overview — always (re)generated
 
-Five artefacts are generated, never hand-edited — edit the scripts instead:
+Six artefacts are generated, never hand-edited — edit the scripts instead:
 the `README.md` coverage block, the `STATUS.md` state block, `api.md`,
-`SAMPLES.md`, and the
+`SAMPLES.md`, `catalogue.json`, and the
 in-system overview app `src/z2ui5_cl_smpc_app_000.clas.*`. They regenerate
 as part of `npm run gates` (or via the individual `generate-*.mjs` scripts)
 and must leave `git diff` clean before every commit — the `meta_valid` CI job
@@ -807,7 +808,19 @@ not ported, keyed by control, built to show what is missing. `SAMPLES.md` is
 the CATALOGUE — one row per port with the sentence that says what it shows,
 grouped by UI5 library, for somebody asking "is there a port for X".
 
-A **sixth** artefact is generated and deliberately NOT committed:
+**`catalogue.json`** is the same catalogue for a MACHINE
+(`scripts/generate-catalogue.mjs`): one JSON entry per port — class, path,
+category, library, demo kit sample id, entity, status, deviation types,
+summary, keywords — joined from the sidecars and the class scan, plus a
+top-level block saying what this repository is and naming the
+`Z2UI5_CL_SMPC_*` vs `Z2UI5_CL_SMP_*` class-name trap for a tool that has
+seen abap2UI5/samples. Committed (unlike the Pages `apps.json` below) because
+it carries only committed facts — no linter pass, so it is offline,
+deterministic and gated by the same regenerate-and-diff as the other five;
+the derived view facts (controls built, minimum UI5 release) stay in
+`apps.json`, which serves them fresher than a commit could.
+
+One more artefact is generated and deliberately NOT committed:
 `web/search/apps.json`, the data behind the searchable catalogue on GitHub
 Pages (`scripts/generate-search-index.mjs`, spec in `web/README.md`). It is
 derived twice over — from the sidecars and from an `@abap2UI5/linter` run that
@@ -817,11 +830,20 @@ linter already says; `deploy-web` regenerates it on every deploy instead, so
 it cannot be staler than the site serving it. Do not add it to `npm run
 gates`, and do not commit it.
 
-`SAMPLES.md` is written from the classes (`DESCRIPT`, `" @summary`,
-`" @keywords`), and its **row shape is a contract, not a layout**:
+`SAMPLES.md` is written from the classes and their sidecars — the row title is
+`**<entity>** — <demo kit sample name>` (the sidecar's `entity`, then the name
+from `ui5/descriptions.json` where it says more than the control does; the
+DESCRIPT head is NOT the title, because the scaffolder default puts only the
+library there), the sentence is `" @summary`, the small type `" @keywords` —
+and its **row shape is a contract, not a layout**:
 `abap2UI5/samples` and `abap2UI5/samples-stack` render the identical shape and
 one parser reads all three (`abap2UI5/mcp-server`, the `examples` tool). Change it
-here and you change it for them.
+here and you change it for them. The one extension this repository makes is the
+trailing verification-marker block per row (`<br><sub>✓ checked · n
+deviations</sub>`, from the sidecar's `status`) — safe because that parser
+reads the blocks as a group, takes the FIRST `<sub>` as the keywords and
+ignores blocks it does not know; the marker therefore always sits AFTER the
+keywords block (the generator enforces that ordering — keep it).
 
 ---
 

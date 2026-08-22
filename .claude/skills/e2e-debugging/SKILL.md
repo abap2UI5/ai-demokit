@@ -33,7 +33,10 @@ verdicts below turned out to be harness effects.
   click or focus it** — the e2e harness serves the UI5 *sources*, not the
   themes, so `sapUiIcon` (an Input's value-help icon, app 268) and
   `sapMSliderHandle` (apps 270/271) measure 0×0 and every actionability check
-  fails with *"not visible"*, which reads like a broken port. Both have a real
+  fails with *"not visible"*, which reads like a broken port — so does a
+  growing list's **"More" trigger** (`[id$="-trigger"]`, a CustomListItem with
+  a null bounding box in the unthemed harness; `dispatchMouse` fires it,
+  app 422). Both have a real
   gesture that still goes through the control's own handling:
   `locator.dispatchEvent('click')` for an icon, and
   `page.evaluate(() => el.focus())` + a key press for anything else — **the
@@ -204,3 +207,19 @@ verdicts below turned out to be harness effects.
   check reports the pointer intercepted and `.click()` dies in a 30 s timeout.
   `dispatchMouse()` is the answer — the same one the zero-size-icon rule gives,
   for the opposite reason.
+- **A bound aggregation stops at 100 items — that is the JSONModel default
+  `sizeLimit`, not a broken binding.** The model holds all 123 mock rows while
+  `getSuggestionItems()`/`getItems()` answers 100, so an assertion on the full
+  mock row count fails against a perfectly faithful port (app 420). Assert the
+  cap (or `>= 100`), and remember the original sample is capped the same way.
+- **A BOOLEAN event arg reaches the transpiled backend as the string
+  `'false'`/`'true'`, not as abap_bool.** On a real system the framework's
+  ajson path normalizes a JSON boolean `t_arg` to `X`/space (the
+  `port-a-sample` rule), but in the e2e runtime the same arg lands verbatim —
+  so `get_event_arg( ) = abap_false` never matches, the flag never flips, and
+  the response carries no model delta: the wire reads as dead while the port
+  is correct (app 099 still carries the latent form; app 421 hit it live).
+  For a wire the smoke must drive, transport a string token instead
+  (`${$parameters>/isTopPage} ? 'top' : 'sub'`) — deterministic on both
+  runtimes. The divergence itself belongs upstream (open-abap/ajson boolean
+  node handling); file it in the abap2UI5 backlog when touching this next.
