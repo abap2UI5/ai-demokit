@@ -11,6 +11,11 @@ export default async (page, expect) => {
   await page.keyboard.press('ArrowLeft');
   await waitForUi5(page, () => ui5All().filter((c) => c.getMetadata().getName() === 'sap.m.OverflowToolbar')
     .every((c) => c.getWidth() === '99%'), 'the slider never reached the ten toolbar widths');
-  await page.locator('button:has-text("Share")').first().click();
+  // the Share button sits at the end of otb1 and is in the overflow area at
+  // this viewport width, so it is pressed through the registry rather than the DOM
+  await page.evaluate(`(() => {
+    const ui5All = () => Object.values(sap.ui.require("sap/ui/core/Element").registry.all());
+    ui5All().find((c) => c.getMetadata().getName() === 'sap.m.Button' && c.getText() === 'Share').firePress();
+  })()`);
   await expect(page.locator('.sapMMessageToast'), 'the shareAction toast').toContainText('Share action');
 };

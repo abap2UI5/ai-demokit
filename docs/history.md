@@ -7,6 +7,52 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-22 — batch b45 (sap.m): the calendar tail — three PlanningCalendars and seven SinglePlanningCalendars (apps 546–555)
+
+The rest of the PlanningCalendar family plus seven of the nine
+SinglePlanningCalendar samples, including the three heaviest ports the corpus
+has: two create/edit dialogs and a details popover apiece.
+
+| app | sample | what it adds |
+|---|---|---|
+| 546 | PlanningCalendarDnD | three roles gating drag / resize / create per row; the drop, resize and drag-create round-trips |
+| 547 | PlanningCalendarModifyAppointments | one dialog serving create, create-with-context and edit; the owner change and the interval-header route |
+| 548 | PlanningCalendarRecurringItem | `RecurringCalendarAppointment` @1.149 and `RecurringNonWorkingPeriod` @1.127 (POST_171, `src/02`) |
+| 549 | SinglePlanningCalendar | the flagship: details popover, modify dialog, legend popover, three drag actions, more-link |
+| 550 | SinglePlanningCalendarWeekNumbering | `calendarWeekNumbering` @1.110 on the single calendar (POST_171, `src/02`) |
+| 551 | SinglePlanningCalendarSnappingHeader | `firstDayOfWeek` @1.98 — an INT fed from a Select's string key (POST_171, `src/02`) |
+| 552 | SinglePlanningCalendarWithCustomViews | two custom view CLASSES, which a backend cannot define |
+| 553 | SinglePlanningCalendarWithLegend | the legend in a `DynamicSideContent` with seven coloured special dates (POST_171, `src/02`) |
+| 554 | SinglePlanningCalendarWithZoomInZoomOut | `scaleFactor` @1.99 stepped by two buttons (POST_171, `src/02`) |
+| 555 | SinglePlanningCalendarRecurringItem | the recurrence stack plus a fourteen-field create dialog (POST_171, `src/02`) |
+
+Four findings, two of them caught by the e2e harness rather than the gates:
+
+- **An enum-typed property bound to an EMPTY field takes the whole view down.**
+  App 531's QuickView seeded `backgroundColor` only on the page that has one;
+  the other page sent the empty string, and UI5 answered `"" is of type string,
+  expected sap.m.AvatarColor` — the app terminated. The static render gate never
+  saw it because it mocks the model. Seed the UI5 DEFAULT explicitly on every
+  row (`Accent6` here, `Circle` for app 532's `displayShape`), the way app 100
+  already does for `QuickViewGroupElement.target`.
+- **A view emitted from backend state has to be re-sent when that state
+  changes.** App 526's drop handler reordered its order table and nothing moved:
+  `view_display( )` only runs on init and navigate, so the client kept the old
+  child order. The e2e run caught it; app 436 had the answer since b34 — call
+  `view_display( )` again after the state change.
+- **`SinglePlanningCalendar.selectedView` is an association, like
+  `Wizard.currentStep`.** App 549's more-link should switch to the Day view; the
+  association neither binds nor has a whitelisted setter, so that half is
+  declared IMPROVISED while the date change survives. This is the same finding
+  b43 recorded for the Wizard — the association rule is not control-specific.
+- **The family's recurring theme: the property is bindable, so the handler is
+  not needed.** Across ten ports, `calendarWeekNumbering`, `firstDayOfWeek`,
+  `stickyMode`, `fullDay`, `scaleFactor`, `groupAppointmentsMode` and the three
+  `enableAppointments*` flags all replace a controller setter with a shared
+  field. Where the property is an INT and the Select's key is a string
+  (`firstDayOfWeek`), the expression multiplies by 1 — the `Number( )` the
+  original calls.
+
 ## 2026-08-22 — batch b44 (sap.m): the PlanningCalendar family, ten of thirteen (apps 536–545)
 
 The first FAMILY batch since the sap.m tail: ten of the thirteen unported

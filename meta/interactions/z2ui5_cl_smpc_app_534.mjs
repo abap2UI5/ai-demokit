@@ -11,5 +11,9 @@ export default async (page, expect) => {
   }, 'the showcase expression never reached the two wizards');
   await waitForUi5(page, () => ui5All().filter((c) => c.getMetadata().getName() === 'sap.m.WizardStep').length === 13,
     'the 4 linear + 9 branching steps never rendered');
-  await expect(page.locator('body'), 'the branching path radio buttons').toContainText('A->B1->C->D->E->F1->F2->G');
+  // the branching wizard is not VISIBLE at boot (the showcase starts linear),
+  // so its radio buttons are read off the registry rather than the rendered body
+  await waitForUi5(page, () => ui5All().filter((c) => c.getMetadata().getName() === 'sap.m.RadioButton')
+    .some((c) => c.getText() === 'A->B1->C->D->E->F1->F2->G'),
+    'the three branching path radio buttons never reached the branching wizard');
 };

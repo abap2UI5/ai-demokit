@@ -163,11 +163,14 @@ CLASS z2ui5_cl_smpc_app_531 IMPLEMENTATION.
     " target seeds the UI5 default '_blank' explicitly - a serialized empty
     " string would override the QuickViewGroupElement.target default
     t_pages = VALUE #(
-      ( pageid       = `companyPageId`
-        header       = `Company Info`
-        title        = `SAP SE`
-        titleurl     = `http://sap.com`
-        description  = `Founded in 1972`
+      ( pageid          = `companyPageId`
+        header          = `Company Info`
+        title           = `SAP SE`
+        titleurl        = `http://sap.com`
+        description     = `Founded in 1972`
+        " the sample gives this page no backgroundColor; an empty string would
+        " override the enum DEFAULT and reject the whole view, so it is seeded
+        backgroundcolor = `Accent6`
         icon         = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/QuickViewAvatarConfiguration/sap-logo.png`
         fallbackicon = `sap-icon://building`
         displayshape = `Square`

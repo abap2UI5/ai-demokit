@@ -1,0 +1,51 @@
+{
+  "class": "z2ui5_cl_smpc_app_549",
+  "sample": "sap.m.sample.SinglePlanningCalendar",
+  "entity": "sap.m.SinglePlanningCalendar",
+  "file": "src/02/01/z2ui5_cl_smpc_app_549.clas.abap",
+  "batch": "b45",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.Button ariaHasPopup is @since 1.84.0 and sap.ui.unified.CalendarAppointment ariaHasPopup @since 1.150.0 - both newer than the 1.71 floor. Both come straight from the sample, so they are kept and the port is filed under src/02."
+    },
+    {
+      "type": "NOTE",
+      "what": "The calendar date properties (the SinglePlanningCalendar startDate and every CalendarAppointment startDate and endDate) are typed \"object\" and demand a real JS Date. The model keeps ISO strings and Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The original keeps the toolbar switches in a settings> model and the all-day flag in an allDay> model. abap2UI5 keeps one default model, so all five are fields here; the three ToggleButtons and the calendar's three enable properties share them exactly as the named model made them share."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleAppointmentSelect opens the Details popover on the picked appointment and closes it when the appointment is deselected. The appointment's binding path and its selected state travel with the event, and ABAP fills the popover's fields from the row - including _typeFormatter, which maps the type key to its legend text over the same supported-items table, and the all-day flag the original computes by comparing the appointment's bounds with their midnight-trimmed copies."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleEditButton and _createInitialDialogValues open the SAME Modify dialog for an edit and for a create; the port keeps that, with the dialog title and the selected row index deciding which. handleDialogOkButton writes the fields back into the picked row or pushes a new one, and handlePopoverDeleteButton removes the row behind the popover - all three 1:1. The create seed is the sample's own default 9-10 hours of the picked day."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleAppointmentDrop copies or moves, handleAppointmentResize re-dates, handleAppointmentCreateDnD pushes a 'New Appointment' - each with the toast the original shows. The interval's LOCAL date parts and the appointment's binding path travel with every one of them."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "handleMoreLinkPress does two things: it switches the calendar to the Day view (setSelectedView) and it moves the start date to the clicked day. The port does the second; the first is lost, because SinglePlanningCalendar.selectedView is an ASSOCIATION - it neither binds (the XML parser reads the value as a control id) nor has a whitelisted setter."
+    },
+    {
+      "type": "NOTE",
+      "what": "The three fragments (Details popover, Modify dialog, Legend popover) are built in chains and shown with popover_display / popup_display. handleViewChange's toast is composed on the client; handleStartDateChange names the new date and keeps its round-trip. The three date-validation helpers (handleDateTimePickerChange, handleDatePickerChange, updateButtonEnabledState) guard the OK button against an empty or malformed picker value - the port relies on the pickers' own required flag instead and always accepts the dialog."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The details popover, the create/edit dialog, the delete, the legend, the three drag actions and the more-link are unverified in a running system."
+    }
+  ]
+}

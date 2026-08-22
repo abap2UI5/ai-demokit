@@ -297,6 +297,10 @@ CLASS z2ui5_cl_smpc_app_526 IMPLEMENTATION.
 
         INSERT key INTO t_order INDEX drop_index + 1.
 
+        " the ten children are emitted from t_order, so the reordered view has
+        " to be sent again - the model alone carries none of this (app 436 idiom)
+        view_display( ).
+
       ENDIF.
 
     ENDIF.

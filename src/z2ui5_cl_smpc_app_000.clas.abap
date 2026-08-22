@@ -3958,6 +3958,26 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         post171 = `sap.m.PlanningCalendar appointmentHeight and appointmentRoundWidth are @since 1.81.0 and sap.ui.unified.CalendarAppointment description @since 1.81.0 - all newer than the 1.71 floor. The two Selects` &&
                  ` that drive them ARE the sample, so all three are kept and the port is filed under src/02.` ) ).
 
+    lv_text1 = `NOTE: The calendar date properties (the PlanningCalendar startDate and every CalendarAppointment startDate and endDate) are typed "object" and demand a real JS Date. The model keeps ISO strings and` &&
+               ` Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74). // NOTE: canModifyAppointments( name ) is a formatter over the` &&
+               ` row's name and the picked role: a manager and an admin may modify every row, everyone else only their own. Both values are on the client, so the three enable flags share ONE expression binding` &&
+               ` instead of a formatter. getUserRole( ) maps the Select key through the roles table (donna -> 'Donna Moore'), which the change round-trip does in ABAP; handleRoleChange, which only refreshes the` &&
+               ` model, goes with it. // NOTE: handleAppointmentDrop moves - or, with the copy modifier, copies - the appointment to the dropped row and re-dates it, then toasts. The interval's LOCAL date parts, the` &&
+               ` appointment's and the row's binding paths and the copy flag travel with the event, and ABAP does the same splice; the paths carry the row and appointment INDEX, which is exactly what the original`.
+    lv_text1 = lv_text1 && ` reads off the binding contexts. handleAppointmentCreate pushes a 'New Appointment' into the row the same way. // NOTE: handleAppointmentResize re-dates the appointment unless isAppointmentOverlap` &&
+               ` says it would collide - a check the original only ever applies to the MANAGER role. The overlap test is the same three interval comparisons, done in ABAP over the row's own appointments, and both` &&
+               ` toasts are kept. // IMPROVISED: handleAppointmentDragEnter calls oEvent.preventDefault() to VETO a drag that would overlap, while the pointer is still moving. A veto has to be decided synchronously` &&
+               ` on the client and a backend round-trip cannot answer in time, so the appointmentDragEnter wire is dropped (structural-diff reports it as attr missing). The overlap rule itself survives on the resize` &&
+               ` path, which is not synchronous. // NOTE: The row images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org. // LIVE-TEST: The three roles and their per-row enable flags, the` &&
+               ` drag-and-drop move and copy, the resize with its overlap refusal and the drag-create are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.PlanningCalendar`                name = `PlanningCalendarDnD`                           class = `z2ui5_cl_smpc_app_546` path = `src/01/01/z2ui5_cl_smpc_app_546.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.34`
+        notes = lv_text1 ) ).
+
     lv_text1 = `NOTE: The calendar date properties (startDate, minDate, maxDate and the CalendarAppointment startDate/endDate) are typed "object" and demand a real JS Date. The model keeps ISO strings and` &&
                ` Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74). // NOTE: handleAppointmentSelect opens a MessageBox with the` &&
                ` appointment title, its new selected state and the number of selected appointments - or, when the interval selection hit no appointment, their count. Every value is client-readable, so it travels with` &&
@@ -3971,6 +3991,31 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` look.`
         since = `1.34`
         notes = lv_text1 ) ).
+
+    lv_text1 = `POST-1.71: sap.ui.unified.CalendarAppointment ariaHasPopup is @since 1.150.0 - newer than the 1.71 floor. It is kept 1:1 from the sample, so the port is filed under src/02. // NOTE: The calendar date` &&
+               ` properties (the PlanningCalendar startDate and every CalendarAppointment startDate and endDate) are typed "object" and demand a real JS Date. The model keeps ISO strings and` &&
+               ` Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74). // NOTE: handleAppointmentSelect splits two ways. On a single` &&
+               ` appointment it opens the Details popover: the binding path and the selected state travel with the event, ABAP fills the popover's fields from the row, and a deselect closes it. On a collapsed GROUP` &&
+               ` it reports how many appointments were selected and whether their types differ - both facts are client-readable, so they travel with the event and ABAP composes the same two sentences. // NOTE: The` &&
+               ` Create dialog serves all THREE of the sample's modes - create, create-with-context (pre-set to the clicked interval and row) and edit. The mode, the picked person, the interval-appointment flag and`.
+    lv_text1 = lv_text1 && ` the four inputs are bound fields here, so the controller's _setCreateAppointmentDialogContent / _setCreateWithContextAppointmentDialogContent / _setEditAppointmentDialogContent collapse into seeding` &&
+               ` those fields before the popup opens. // NOTE: handleDialogSaveButton keeps every branch: an edit rewrites the row in place and moves it to the picked owner when the Select changed` &&
+               ` (_appointmentOwnerChange), a create appends to that person's appointments, and the Interval-appointment checkbox routes the new row to their interval HEADERS instead (_convertToHeader).` &&
+               ` handleDeleteAppointment removes the appointment behind the popover. // NOTE: _validateDateTimePicker refuses an end date at or before the start and blocks the Save; the port binds the start picker's` &&
+               ` valueState and applies the same rule on the change round-trip, and the save is skipped while the state is Error. handleAppointmentTypeChange only re-reads the checkbox, which is bound two-way here,` &&
+               ` so its select wire is dropped. // IMPROVISED: _handleGroupAppointments opens a Popover ANCHORED on the group's DOM node (openBy( document.getElementById( domRefId ) )), built in the controller. A`.
+    lv_text1 = lv_text1 && ` backend cannot address a raw DOM node, so the port reports the same sentence as a toast instead of an anchored popover; the counting and the type comparison behind it are unchanged. // NOTE: The row` &&
+               ` images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org. // LIVE-TEST: The details popover, the three dialog modes, the owner change, the interval-header routing, the date` &&
+               ` validation and the group report are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.PlanningCalendar`                name = `PlanningCalendarModifyAppointments`            class = `z2ui5_cl_smpc_app_547` path = `src/02/01/z2ui5_cl_smpc_app_547.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.34`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.ui.unified.CalendarAppointment ariaHasPopup is @since 1.150.0 - newer than the 1.71 floor. It is kept 1:1 from the sample, so the port is filed under src/02.` ) ).
 
     lv_text1 = `POST-1.71: sap.ui.unified.CalendarAppointment ariaHasPopup is @since 1.150.0 - newer than the 1.71 floor. It is kept 1:1 from the sample, so the port is filed under src/02. // NOTE: The calendar date` &&
                ` properties (the PlanningCalendar startDate and every CalendarAppointment / DateTypeRange startDate and endDate) are typed "object" and demand a real JS Date. The model keeps ISO strings and` &&
@@ -4012,6 +4057,33 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = lv_text1
         post171 = `sap.m.PlanningCalendar appointmentHeight is @since 1.81.0 and multipleAppointmentsSelection @since 1.97, and sap-icon://select-appointments reached the icon font in 1.96 - all newer than the 1.71` &&
                  ` floor. The one-line appointment height and the multi-selection toggle are what this sample is about, so all three are kept and the port is filed under src/02.` ) ).
+
+    lv_text1 = `POST-1.71: The whole recurrence stack is newer than the 1.71 floor: sap.m.PlanningCalendar rowHeaderPress @since 1.119.0, sap.m.PlanningCalendarRow nonWorkingPeriods @since 1.128 (property and` &&
+               ` aggregation), sap.ui.unified.RecurringNonWorkingPeriod @since 1.127.0, sap.ui.unified.TimeRange @since 1.127, sap.ui.unified.RecurringCalendarAppointment @since 1.149 and` &&
+               ` sap.ui.unified.RecurrenceRule @since 1.149. Recurring appointments ARE the sample, so all of them are kept and the port is filed under src/02. // NOTE: The calendar date properties (the` &&
+               ` PlanningCalendar startDate, every appointment startDate / endDate and recurrenceEndDate and the non-working period's date) are typed "object" and demand a real JS Date. The model keeps ISO strings` &&
+               ` and Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74). The TimeRange start / end stay plain strings, which is what` &&
+               ` its valueFormat expects. // NOTE: The create dialog lives in its own fragment with its own named model (create>). abap2UI5 keeps one default model, so the dialog's fifteen fields are folded to flat`.
+    lv_text1 = lv_text1 && ` fields here and every visibility expression the fragment carries reads them directly. // NOTE: _openCreateDialog fills the person Select by ADDING an Item per row of the people table in the` &&
+               ` controller. The port binds a small key/text table built from the same rows instead, so the Select carries the same entries declaratively. // NOTE: onAppointmentCreate opens the create dialog pre-set` &&
+               ` to the row the drag started in and to the dragged interval; the row's binding path and the interval's LOCAL date parts travel with the event. onCreateDialogSave assembles the appointment and pushes` &&
+               ` it into the picked person's row, with the same recurrence branches the original applies. // NOTE: onAppointmentDrop shifts the appointment by the dragged DELTA and then copies it, moves it to another` &&
+               ` row, or just reschedules it in place - the three branches and their three toasts are kept. The new start and end already carry the delta, so the port re-dates the row from the two interval bounds the` &&
+               ` event hands it; the appointment's and the row's binding paths name the source and the target. // IMPROVISED: onCreateAppointment seeds the dialog with the CLIENT's next full hour`.
+    lv_text1 = lv_text1 && ` (UI5Date.getInstance() with minutes zeroed). A backend has no client clock, so the port seeds the SERVER's local date and next full hour instead. Same shape, a different clock - which matters only if` &&
+               ` the two are in different time zones. // NOTE: The row images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org. // LIVE-TEST: The recurring appointments and non-working` &&
+               ` periods, the create dialog with its recurrence branches, the drag-create and the drop's copy / move / reschedule branches are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.PlanningCalendar`                name = `PlanningCalendarRecurringItem`                 class = `z2ui5_cl_smpc_app_548` path = `src/02/01/z2ui5_cl_smpc_app_548.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.34`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `The whole recurrence stack is newer than the 1.71 floor: sap.m.PlanningCalendar rowHeaderPress @since 1.119.0, sap.m.PlanningCalendarRow nonWorkingPeriods @since 1.128 (property and aggregation),` &&
+                 ` sap.ui.unified.RecurringNonWorkingPeriod @since 1.127.0, sap.ui.unified.TimeRange @since 1.127, sap.ui.unified.RecurringCalendarAppointment @since 1.149 and sap.ui.unified.RecurrenceRule @since` &&
+                 ` 1.149. Recurring appointments ARE the sample, so all of them are kept and the port is filed under src/02.` ) ).
 
     lv_text1 = `POST-1.71: sap.m.PlanningCalendarView intervalSize and relative are both @since 1.93 - newer than the 1.71 floor. The two relative views ARE the sample, so both are kept and the port is filed under` &&
                ` src/02. // NOTE: The calendar date properties (the PlanningCalendar startDate and minDate and every CalendarAppointment startDate and endDate) are typed "object" and demand a real JS Date. The model` &&
@@ -4092,16 +4164,17 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = lv_text1
         post171 = `sap.m.PlanningCalendar calendarWeekNumbering is @since 1.110.0 - newer than the 1.71 floor. The four week-numbering schemes ARE the sample, so the property is kept and the port is filed under src/02.` ) ).
 
-    lv_text1 = `POST-1.71: sap.ui.unified.DateTypeRange secondaryType is @since 1.81.0 and color @since 1.76.0 - both newer than the 1.71 floor. The legend's coloured special dates and the row's secondary type are` &&
-               ` what this sample shows, so both are kept and the port is filed under src/02. // NOTE: The calendar date properties (the PlanningCalendar startDate and every CalendarAppointment / DateTypeRange` &&
-               ` startDate and endDate) are typed "object" and demand a real JS Date. The model keeps ISO strings and Formatter.DateCreateObject from the curated module converts them at the point of use, the same` &&
-               ` idiom app 108 uses (needs UI5 >= 1.74). // NOTE: The original keeps the legend-shown flag in a SECOND named model (stateModel>). abap2UI5 keeps one default model, so the flag is a field here and the` &&
-               ` DynamicSideContent and the ToggleButton share it - the same two-way link the named model gives them. // NOTE: onChange calls setFirstDayOfWeek( Number( key ) ). The property is bindable, so the` &&
-               ` Select shares its key with the calendar and the change handler is dropped; the key values ('-1' .. '6') are the sample's own. // NOTE: onBeforeRendering / handleViewChange /`.
-    lv_text1 = lv_text1 && ` changeStandardItemsPerView exist only to swap the legend's standardItems between [Today, Selected, NonWorkingDay] on the OneMonth view and [Today, WorkingDay, NonWorkingDay] everywhere else. viewKey` &&
-               ` and standardItems are both bindable, so the key is one shared field and the legend carries the switch as an expression binding over it - all three handlers are dropped. // NOTE: The row images are` &&
-               ` the demo kit's own test-resources files, re-hosted on sdk.openui5.org. // LIVE-TEST: The legend side content, the first-day-of-week Select and the view-dependent standard items are unverified in a` &&
-               ` running system.`.
+    lv_text1 = `POST-1.71: sap.ui.unified.DateTypeRange secondaryType is @since 1.81.0 and color @since 1.76.0, and sap.m.PlanningCalendar firstDayOfWeek is @since 1.94 - all newer than the 1.71 floor. The legend's` &&
+               ` coloured special dates and the row's secondary type are what this sample shows, so both are kept and the port is filed under src/02. // NOTE: The calendar date properties (the PlanningCalendar` &&
+               ` startDate and every CalendarAppointment / DateTypeRange startDate and endDate) are typed "object" and demand a real JS Date. The model keeps ISO strings and Formatter.DateCreateObject from the` &&
+               ` curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74). // NOTE: The original keeps the legend-shown flag in a SECOND named model (stateModel>). abap2UI5` &&
+               ` keeps one default model, so the flag is a field here and the DynamicSideContent and the ToggleButton share it - the same two-way link the named model gives them. // NOTE: onChange calls` &&
+               ` setFirstDayOfWeek( Number( key ) ). The property is bindable, so the Select shares its key with the calendar and the change handler is dropped; the key values ('-1' .. '6') are the sample's own.`.
+    lv_text1 = lv_text1 && ` firstDayOfWeek is an INT property while a Select key is a string, so the calendar binds an expression that multiplies by 1 - the Number( ) conversion the original does in the handler. // NOTE:` &&
+               ` onBeforeRendering / handleViewChange / changeStandardItemsPerView exist only to swap the legend's standardItems between [Today, Selected, NonWorkingDay] on the OneMonth view and [Today, WorkingDay,` &&
+               ` NonWorkingDay] everywhere else. viewKey and standardItems are both bindable, so the key is one shared field and the legend carries the switch as an expression binding over it - all three handlers are` &&
+               ` dropped. // NOTE: The row images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org. // LIVE-TEST: The legend side content, the first-day-of-week Select and the view-dependent` &&
+               ` standard items are unverified in a running system.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.PlanningCalendar`                name = `PlanningCalendarWithLegend`                    class = `z2ui5_cl_smpc_app_541` path = `src/02/01/z2ui5_cl_smpc_app_541.clas.abap`
         score = 4
@@ -4110,8 +4183,8 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.34`
         is_post171 = abap_true
         notes = lv_text1
-        post171 = `sap.ui.unified.DateTypeRange secondaryType is @since 1.81.0 and color @since 1.76.0 - both newer than the 1.71 floor. The legend's coloured special dates and the row's secondary type are what this` &&
-                 ` sample shows, so both are kept and the port is filed under src/02.` ) ).
+        post171 = `sap.ui.unified.DateTypeRange secondaryType is @since 1.81.0 and color @since 1.76.0, and sap.m.PlanningCalendar firstDayOfWeek is @since 1.94 - all newer than the 1.71 floor. The legend's coloured` &&
+                 ` special dates and the row's secondary type are what this sample shows, so both are kept and the port is filed under src/02.` ) ).
 
     lv_text1 = `NOTE: The calendar date properties (the PlanningCalendar startDate and every CalendarAppointment startDate and endDate) are typed "object" and demand a real JS Date. The model keeps ISO strings and` &&
                ` Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74). // NOTE: handleAppointmentSelect opens a MessageBox with the` &&
@@ -4597,6 +4670,33 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.30.0`
         notes = lv_text1 ) ).
 
+    lv_text1 = `POST-1.71: sap.m.Button ariaHasPopup is @since 1.84.0 and sap.ui.unified.CalendarAppointment ariaHasPopup @since 1.150.0 - both newer than the 1.71 floor. Both come straight from the sample, so they` &&
+               ` are kept and the port is filed under src/02. // NOTE: The calendar date properties (the SinglePlanningCalendar startDate and every CalendarAppointment startDate and endDate) are typed "object" and` &&
+               ` demand a real JS Date. The model keeps ISO strings and Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74). // NOTE:` &&
+               ` The original keeps the toolbar switches in a settings> model and the all-day flag in an allDay> model. abap2UI5 keeps one default model, so all five are fields here; the three ToggleButtons and the` &&
+               ` calendar's three enable properties share them exactly as the named model made them share. // NOTE: handleAppointmentSelect opens the Details popover on the picked appointment and closes it when the` &&
+               ` appointment is deselected. The appointment's binding path and its selected state travel with the event, and ABAP fills the popover's fields from the row - including _typeFormatter, which maps the`.
+    lv_text1 = lv_text1 && ` type key to its legend text over the same supported-items table, and the all-day flag the original computes by comparing the appointment's bounds with their midnight-trimmed copies. // NOTE:` &&
+               ` handleEditButton and _createInitialDialogValues open the SAME Modify dialog for an edit and for a create; the port keeps that, with the dialog title and the selected row index deciding which.` &&
+               ` handleDialogOkButton writes the fields back into the picked row or pushes a new one, and handlePopoverDeleteButton removes the row behind the popover - all three 1:1. The create seed is the sample's` &&
+               ` own default 9-10 hours of the picked day. // NOTE: handleAppointmentDrop copies or moves, handleAppointmentResize re-dates, handleAppointmentCreateDnD pushes a 'New Appointment' - each with the toast` &&
+               ` the original shows. The interval's LOCAL date parts and the appointment's binding path travel with every one of them. // IMPROVISED: handleMoreLinkPress does two things: it switches the calendar to` &&
+               ` the Day view (setSelectedView) and it moves the start date to the clicked day. The port does the second; the first is lost, because SinglePlanningCalendar.selectedView is an ASSOCIATION - it neither`.
+    lv_text1 = lv_text1 && ` binds (the XML parser reads the value as a control id) nor has a whitelisted setter. // NOTE: The three fragments (Details popover, Modify dialog, Legend popover) are built in chains and shown with` &&
+               ` popover_display / popup_display. handleViewChange's toast is composed on the client; handleStartDateChange names the new date and keeps its round-trip. The three date-validation helpers` &&
+               ` (handleDateTimePickerChange, handleDatePickerChange, updateButtonEnabledState) guard the OK button against an empty or malformed picker value - the port relies on the pickers' own required flag` &&
+               ` instead and always accepts the dialog. // LIVE-TEST: The details popover, the create/edit dialog, the delete, the legend, the three drag actions and the more-link are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.SinglePlanningCalendar`          name = `SinglePlanningCalendar`                        class = `z2ui5_cl_smpc_app_549` path = `src/02/01/z2ui5_cl_smpc_app_549.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.61`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.m.Button ariaHasPopup is @since 1.84.0 and sap.ui.unified.CalendarAppointment ariaHasPopup @since 1.150.0 - both newer than the 1.71 floor. Both come straight from the sample, so they are kept and` &&
+                 ` the port is filed under src/02.` ) ).
+
     lv_text1 = `NOTE: The object-typed date properties (SinglePlanningCalendar.startDate, CalendarAppointment.startDate/endDate) are fed from ISO strings and converted with Formatter.DateCreateObject (core:require).` &&
                ` The original UI5Date.getInstance values are normalized to ISO 1:1 (0-based months). The first appointment used UI5Date.getInstance() (the current time); it is pinned to the calendar's start date` &&
                ` (2018-07-09) so the port is deterministic. // IMPROVISED: The four calendar events fire backend round-trips that toast, as in the original. Two of them now carry their value: weekNumberPress` &&
@@ -4630,6 +4730,122 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         is_post171 = abap_true
         notes = lv_text1
         post171 = lv_text2 ) ).
+
+    lv_text1 = `POST-1.71: The whole recurrence stack is newer than the 1.71 floor: sap.m.SinglePlanningCalendar nonWorkingPeriods @since 1.128 (property and aggregation), sap.ui.unified.RecurringNonWorkingPeriod` &&
+               ` @since 1.127.0, sap.ui.unified.TimeRange @since 1.127, sap.ui.unified.RecurringCalendarAppointment @since 1.149 and sap.ui.unified.RecurrenceRule @since 1.149. Recurring appointments ARE the sample,` &&
+               ` so all of them are kept and the port is filed under src/02. // NOTE: The calendar date properties (the SinglePlanningCalendar startDate, every appointment startDate / endDate and the` &&
+               ` recurrenceEndDate and the non-working period's date) are typed "object" and demand a real JS Date. The model keeps ISO strings and Formatter.DateCreateObject from the curated module converts them at` &&
+               ` the point of use, the same idiom app 108 uses (needs UI5 >= 1.74). The TimeRange start / end stay plain strings, which is what its valueFormat expects. // NOTE: The create dialog lives in its own` &&
+               ` fragment with its own named model (create>). abap2UI5 keeps one default model, so the dialog's fourteen fields are folded to flat fields here and every visibility expression the fragment carries`.
+    lv_text1 = lv_text1 && ` reads them directly - the fragment's own expression bindings survive one-to-one. // NOTE: onCreateDialogSave assembles the new appointment from the dialog model, pushes it into the appointments` &&
+               ` array, closes the dialog and toasts. All four are reproduced on the round-trip, including the recurrence branches (the weekly day list only when Weekly, the rule fields only for Monthly / Yearly and` &&
+               ` the month only for Yearly) and the parseInt fallbacks the original applies. onRecurrenceTypeChange clears the parts the picked recurrence does not use, also 1:1. // IMPROVISED: onCreateAppointment` &&
+               ` seeds the dialog with the CLIENT's next full hour and the hour after it (UI5Date.getInstance() with minutes zeroed). A backend has no client clock, so the port seeds the SERVER's local date and next` &&
+               ` full hour instead. Same shape, a different clock - which matters only if the two are in different time zones. // NOTE: handleViewChange toasts a constant text; the toast is composed on the client, so` &&
+               ` the view change needs no round-trip. // LIVE-TEST: The nine recurring appointments with their rules, the eleven recurring non-working periods, and the create dialog with its recurrence branches are`.
+    lv_text1 = lv_text1 && ` unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.SinglePlanningCalendar`          name = `SinglePlanningCalendarRecurringItem`           class = `z2ui5_cl_smpc_app_555` path = `src/02/01/z2ui5_cl_smpc_app_555.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.61`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `The whole recurrence stack is newer than the 1.71 floor: sap.m.SinglePlanningCalendar nonWorkingPeriods @since 1.128 (property and aggregation), sap.ui.unified.RecurringNonWorkingPeriod @since` &&
+                 ` 1.127.0, sap.ui.unified.TimeRange @since 1.127, sap.ui.unified.RecurringCalendarAppointment @since 1.149 and sap.ui.unified.RecurrenceRule @since 1.149. Recurring appointments ARE the sample, so all` &&
+                 ` of them are kept and the port is filed under src/02.` ) ).
+
+    lv_text1 = `POST-1.71: sap.m.SinglePlanningCalendar firstDayOfWeek is @since 1.98 - newer than the 1.71 floor. The first-day-of-week Select IS the sample's second half, so the property is kept and the port is` &&
+               ` filed under src/02. // NOTE: The calendar date properties (the SinglePlanningCalendar startDate and every CalendarAppointment startDate and endDate) are typed "object" and demand a real JS Date. The` &&
+               ` model keeps ISO strings and Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74). // NOTE: The original keeps the` &&
+               ` sticky mode in a SECOND named model (settings>) and a third (allDay>) the view never reads. abap2UI5 keeps one default model, so the sticky mode is a field here and the Select and the calendar share` &&
+               ` it; the unused allDay model is dropped. // NOTE: onChange calls setFirstDayOfWeek( Number( key ) ). The property is bindable, so the Select shares its key with the calendar and the change handler is` &&
+               ` dropped. firstDayOfWeek is an INT property while a Select key is a string, so the calendar binds an expression that multiplies by 1 - the Number( ) conversion the original does in the handler. //`.
+    lv_text1 = lv_text1 && ` NOTE: Some appointment rows carry a tentative flag the view never binds; the port seeds it the same way and leaves it unbound, so the data stays 1:1 with the mock. // LIVE-TEST: The eight` &&
+               ` first-day-of-week keys, the three sticky modes and the four calendar views are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.SinglePlanningCalendar`          name = `SinglePlanningCalendarSnappingHeader`          class = `z2ui5_cl_smpc_app_551` path = `src/02/01/z2ui5_cl_smpc_app_551.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.61`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.m.SinglePlanningCalendar firstDayOfWeek is @since 1.98 - newer than the 1.71 floor. The first-day-of-week Select IS the sample's second half, so the property is kept and the port is filed under` &&
+                 ` src/02.` ) ).
+
+    lv_text1 = `POST-1.71: sap.m.SinglePlanningCalendar calendarWeekNumbering is @since 1.110.0 - newer than the 1.71 floor. The four week-numbering schemes ARE the sample, so the property is kept and the port is` &&
+               ` filed under src/02. // NOTE: The calendar date properties (the SinglePlanningCalendar startDate and every CalendarAppointment startDate and endDate) are typed "object" and demand a real JS Date. The` &&
+               ` model keeps ISO strings and Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74). // NOTE: The original keeps the` &&
+               ` sticky mode in a SECOND named model (settings>) and a third (allDay>) the view never reads. abap2UI5 keeps one default model, so the sticky mode is a field here and the Select and the calendar share` &&
+               ` it - the same two-way link the named model gives them; the unused allDay model is dropped. // NOTE: onChange calls setCalendarWeekNumbering. The property is bindable, so the Select shares its key` &&
+               ` with the calendar and the change handler is dropped. // NOTE: Some appointment rows carry a tentative flag the view never binds; the port seeds it the same way and leaves it unbound, so the data`.
+    lv_text1 = lv_text1 && ` stays 1:1 with the mock. // LIVE-TEST: The four week-numbering schemes, the three sticky modes and the four calendar views are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.SinglePlanningCalendar`          name = `SinglePlanningCalendarWeekNumbering`           class = `z2ui5_cl_smpc_app_550` path = `src/02/01/z2ui5_cl_smpc_app_550.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.61`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.m.SinglePlanningCalendar calendarWeekNumbering is @since 1.110.0 - newer than the 1.71 floor. The four week-numbering schemes ARE the sample, so the property is kept and the port is filed under` &&
+                 ` src/02.` ) ).
+
+    lv_text1 = `NOTE: The calendar date properties (the SinglePlanningCalendar startDate and every CalendarAppointment startDate and endDate) are typed "object" and demand a real JS Date. The model keeps ISO strings` &&
+               ` and Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74). // IMPROVISED: The sample's point is TWO CUSTOM VIEW` &&
+               ` CLASSES: CustomThreeDaysView and CustomTenDaysView, JS subclasses of sap.m.SinglePlanningCalendarView that override getEntityCount, getScrollEntityCount and calculateStartDate. A backend cannot` &&
+               ` define a control class, so the port declares only the three BUILT-IN views the controller also adds (Day, Work Week, Week) and the '3 Days' and '10 Days' entries are lost. The views aggregation` &&
+               ` itself is declarative here rather than five addView calls, which is why structural-diff reports SinglePlanningCalendarDayView, SinglePlanningCalendarWorkWeekView and SinglePlanningCalendarWeekView as` &&
+               ` control extra - the sample's view declares none of them. // NOTE: Some appointment rows carry a tentative flag the view never binds; the port seeds it the same way and leaves it unbound, so the data`.
+    lv_text1 = lv_text1 && ` stays 1:1 with the mock. // LIVE-TEST: The three built-in views and the bound appointments are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.SinglePlanningCalendar`          name = `SinglePlanningCalendarWithCustomViews`         class = `z2ui5_cl_smpc_app_552` path = `src/01/01/z2ui5_cl_smpc_app_552.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.61`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `POST-1.71: sap.ui.unified.DateTypeRange secondaryType is @since 1.81.0 and color @since 1.76.0 - both newer than the 1.71 floor. The coloured and secondary-typed special dates are what the legend` &&
+               ` explains, so both are kept and the port is filed under src/02. // NOTE: The calendar date properties (the SinglePlanningCalendar startDate and every CalendarAppointment / DateTypeRange startDate and` &&
+               ` endDate) are typed "object" and demand a real JS Date. The model keeps ISO strings and Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108` &&
+               ` uses (needs UI5 >= 1.74). // NOTE: The original keeps the legend-shown flag in a SECOND named model (stateModel>). abap2UI5 keeps one default model, so the flag is a field here and the` &&
+               ` DynamicSideContent and the ToggleButton share it. // NOTE: toggleFullDay flips setFullDay. The property is bindable, so the Full Day ToggleButton and the calendar share the flag and the press handler` &&
+               ` is dropped - which costs one added ToggleButton.pressed attribute the sample's view does not have. // NOTE: Some appointment rows carry a tentative flag the view never binds; the port seeds it the`.
+    lv_text1 = lv_text1 && ` same way and leaves it unbound, so the data stays 1:1 with the mock. // LIVE-TEST: The legend side content, the full-day toggle and the seven coloured special dates are unverified in a running` &&
+               ` system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.SinglePlanningCalendar`          name = `SinglePlanningCalendarWithLegend`              class = `z2ui5_cl_smpc_app_553` path = `src/02/01/z2ui5_cl_smpc_app_553.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.61`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.ui.unified.DateTypeRange secondaryType is @since 1.81.0 and color @since 1.76.0 - both newer than the 1.71 floor. The coloured and secondary-typed special dates are what the legend explains, so` &&
+                 ` both are kept and the port is filed under src/02.` ) ).
+
+    lv_text1 = `POST-1.71: sap.m.SinglePlanningCalendar scaleFactor is @since 1.99 and sap.ui.unified.DateTypeRange color @since 1.76.0 - both newer than the 1.71 floor. The zoom IS the sample, so both are kept and` &&
+               ` the port is filed under src/02. // NOTE: The calendar date properties (the SinglePlanningCalendar startDate and every CalendarAppointment / DateTypeRange startDate and endDate) are typed "object" and` &&
+               ` demand a real JS Date. The model keeps ISO strings and Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74). // NOTE:` &&
+               ` The original keeps the legend-shown flag in a SECOND named model (stateModel>). abap2UI5 keeps one default model, so the flag is a field here and the DynamicSideContent and the ToggleButton share it.` &&
+               ` // NOTE: toggleFullDay flips setFullDay. The property is bindable, so the Full Day ToggleButton and the calendar share the flag and the press handler is dropped - which costs one added` &&
+               ` ToggleButton.pressed attribute the sample's view does not have. // NOTE: zoomIn and zoomOut step setScaleFactor up and down. The property is bindable, so the two presses do the same increment in ABAP`.
+    lv_text1 = lv_text1 && ` and the calendar follows the bound field; scaleFactor is seeded at the control's own default of 1. // NOTE: The view binds specialDates to /specialDates, a path the sample's own model never fills` &&
+               ` (its types array is empty), so the port seeds an empty table there - the same nothing the original renders. // NOTE: Some appointment rows carry a tentative flag the view never binds; the port seeds` &&
+               ` it the same way and leaves it unbound, so the data stays 1:1 with the mock. // LIVE-TEST: The zoom in/out steps, the full-day toggle and the legend side content are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.SinglePlanningCalendar`          name = `SinglePlanningCalendarWithZoomInZoomOut`       class = `z2ui5_cl_smpc_app_554` path = `src/02/01/z2ui5_cl_smpc_app_554.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.61`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.m.SinglePlanningCalendar scaleFactor is @since 1.99 and sap.ui.unified.DateTypeRange color @since 1.76.0 - both newer than the 1.71 floor. The zoom IS the sample, so both are kept and the port is` &&
+                 ` filed under src/02.` ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Slider`                          name = `Slider`                                        class = `z2ui5_cl_smpc_app_068` path = `src/01/01/z2ui5_cl_smpc_app_068.clas.abap`

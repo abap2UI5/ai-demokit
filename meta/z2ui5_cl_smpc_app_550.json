@@ -1,0 +1,39 @@
+{
+  "class": "z2ui5_cl_smpc_app_550",
+  "sample": "sap.m.sample.SinglePlanningCalendarWeekNumbering",
+  "entity": "sap.m.SinglePlanningCalendar",
+  "file": "src/02/01/z2ui5_cl_smpc_app_550.clas.abap",
+  "batch": "b45",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.SinglePlanningCalendar calendarWeekNumbering is @since 1.110.0 - newer than the 1.71 floor. The four week-numbering schemes ARE the sample, so the property is kept and the port is filed under src/02."
+    },
+    {
+      "type": "NOTE",
+      "what": "The calendar date properties (the SinglePlanningCalendar startDate and every CalendarAppointment startDate and endDate) are typed \"object\" and demand a real JS Date. The model keeps ISO strings and Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The original keeps the sticky mode in a SECOND named model (settings>) and a third (allDay>) the view never reads. abap2UI5 keeps one default model, so the sticky mode is a field here and the Select and the calendar share it - the same two-way link the named model gives them; the unused allDay model is dropped."
+    },
+    {
+      "type": "NOTE",
+      "what": "onChange calls setCalendarWeekNumbering. The property is bindable, so the Select shares its key with the calendar and the change handler is dropped."
+    },
+    {
+      "type": "NOTE",
+      "what": "Some appointment rows carry a tentative flag the view never binds; the port seeds it the same way and leaves it unbound, so the data stays 1:1 with the mock."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The four week-numbering schemes, the three sticky modes and the four calendar views are unverified in a running system."
+    }
+  ]
+}

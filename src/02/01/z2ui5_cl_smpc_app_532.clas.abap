@@ -187,7 +187,9 @@ CLASS z2ui5_cl_smpc_app_532 IMPLEMENTATION.
               ( label = `Name` value = `James Bonus`    elementtype = `pageLink` pagelinkid = `contactPage` target = `_blank` )
               ( label = `Name` value = `Maria Leasing`  elementtype = `pageLink` pagelinkid = `contactPage` target = `_blank` )
               ( label = `Name` value = `Claudia Credit` elementtype = `pageLink` pagelinkid = `contactPage` target = `_blank` ) ) ) ) )
-      ( pageid = `contactPage` ) ).
+      " the sample's placeholder page carries no displayShape; an empty string
+      " would override the enum DEFAULT and reject the whole view
+      ( pageid = `contactPage` displayshape = `Circle` ) ).
 
     " EmployeeData.json, keyed by the employee name the link carries
     t_employees = VALUE #(

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "label": "check-abap2UI5",
-  "message": "1 error",
+  "message": "2 errors",
   "color": "e05d44",
   "labelColor": "555",
   "cacheSeconds": 3600

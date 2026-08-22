@@ -1,0 +1,39 @@
+{
+  "class": "z2ui5_cl_smpc_app_553",
+  "sample": "sap.m.sample.SinglePlanningCalendarWithLegend",
+  "entity": "sap.m.SinglePlanningCalendar",
+  "file": "src/02/01/z2ui5_cl_smpc_app_553.clas.abap",
+  "batch": "b45",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.ui.unified.DateTypeRange secondaryType is @since 1.81.0 and color @since 1.76.0 - both newer than the 1.71 floor. The coloured and secondary-typed special dates are what the legend explains, so both are kept and the port is filed under src/02."
+    },
+    {
+      "type": "NOTE",
+      "what": "The calendar date properties (the SinglePlanningCalendar startDate and every CalendarAppointment / DateTypeRange startDate and endDate) are typed \"object\" and demand a real JS Date. The model keeps ISO strings and Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The original keeps the legend-shown flag in a SECOND named model (stateModel>). abap2UI5 keeps one default model, so the flag is a field here and the DynamicSideContent and the ToggleButton share it."
+    },
+    {
+      "type": "NOTE",
+      "what": "toggleFullDay flips setFullDay. The property is bindable, so the Full Day ToggleButton and the calendar share the flag and the press handler is dropped - which costs one added ToggleButton.pressed attribute the sample's view does not have."
+    },
+    {
+      "type": "NOTE",
+      "what": "Some appointment rows carry a tentative flag the view never binds; the port seeds it the same way and leaves it unbound, so the data stays 1:1 with the mock."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The legend side content, the full-day toggle and the seven coloured special dates are unverified in a running system."
+    }
+  ]
+}

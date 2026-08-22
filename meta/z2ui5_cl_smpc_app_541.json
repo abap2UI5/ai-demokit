@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "POST_171",
-      "what": "sap.ui.unified.DateTypeRange secondaryType is @since 1.81.0 and color @since 1.76.0 - both newer than the 1.71 floor. The legend's coloured special dates and the row's secondary type are what this sample shows, so both are kept and the port is filed under src/02."
+      "what": "sap.ui.unified.DateTypeRange secondaryType is @since 1.81.0 and color @since 1.76.0, and sap.m.PlanningCalendar firstDayOfWeek is @since 1.94 - all newer than the 1.71 floor. The legend's coloured special dates and the row's secondary type are what this sample shows, so both are kept and the port is filed under src/02."
     },
     {
       "type": "NOTE",
@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "onChange calls setFirstDayOfWeek( Number( key ) ). The property is bindable, so the Select shares its key with the calendar and the change handler is dropped; the key values ('-1' .. '6') are the sample's own."
+      "what": "onChange calls setFirstDayOfWeek( Number( key ) ). The property is bindable, so the Select shares its key with the calendar and the change handler is dropped; the key values ('-1' .. '6') are the sample's own. firstDayOfWeek is an INT property while a Select key is a string, so the calendar binds an expression that multiplies by 1 - the Number( ) conversion the original does in the handler."
     },
     {
       "type": "NOTE",

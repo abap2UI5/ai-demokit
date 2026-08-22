@@ -151,6 +151,10 @@ CLASS z2ui5_cl_smpc_app_541 IMPLEMENTATION.
                     )->a( n = `rows`                      v = client->_bind( t_people )
                     )->a( n = `appointmentsVisualization` v = `Filled`
                     )->a( n = `showEmptyIntervalHeaders`  v = `false`
+                    " onChange calls setFirstDayOfWeek( Number( key ) ); the property is
+                    " an INT and the Select's key is a string, so the expression multiplies
+                    " by 1 - the Number( ) the original calls
+                    )->a( n = `firstDayOfWeek`            v = |\{= ${ client->_bind( first_day ) } * 1 \}|
                     " handleViewChange only recomputes the legend's standardItems;
                     " viewKey is bindable, so the key is the shared field and the
                     " legend reads it through an expression
