@@ -14,7 +14,12 @@ CLASS z2ui5_cl_smpc_app_508 DEFINITION PUBLIC.
 
     DATA t_products   TYPE ty_t_product.
     DATA t_sticky     TYPE string_table.
-    DATA info_visible TYPE abap_bool VALUE abap_true.
+    " the ToggleButton's own pressed state. The original view declares no
+    " pressed attribute, so the button starts UNpressed and the info toolbar
+    " starts visible - onToggleInfoToolbar sets visible = NOT pressed. The
+    " seed was abap_true, which came up with the toolbar already hidden
+    " (e2e-caught 2026-08-22), and the name said the opposite of what it held.
+    DATA toggle_pressed TYPE abap_bool.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -98,7 +103,7 @@ CLASS z2ui5_cl_smpc_app_508 IMPLEMENTATION.
                     )->tag( `ToggleButton`
                         )->a( n = `id`      v = `toggleInfoToolbar`
                         )->a( n = `text`    v = `Hide/Show InfoToolbar`
-                        )->a( n = `pressed` v = client->_bind( info_visible )
+                        )->a( n = `pressed` v = client->_bind( toggle_pressed )
                     )->tag( `Button`
                         )->a( n = `icon`  v = `sap-icon://settings`
                         )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
@@ -118,7 +123,7 @@ CLASS z2ui5_cl_smpc_app_508 IMPLEMENTATION.
             )->ele( `infoToolbar`
                 )->ele( `OverflowToolbar`
                     )->a( n = `active`  v = `true`
-                    )->a( n = `visible` v = |\{= !${ client->_bind( info_visible ) } \}|
+                    )->a( n = `visible` v = |\{= !${ client->_bind( toggle_pressed ) } \}|
                     )->a( n = `press`   v = client->follow_up_action( val   = client->cs_event-control_global
                                                                       t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `info toolbar pressed` ) ) )
 

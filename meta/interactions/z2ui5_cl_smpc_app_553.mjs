@@ -1,4 +1,9 @@
-// the SinglePlanningCalendar and its bound appointments
+// the SinglePlanningCalendar and its bound appointments//
+// NOTE: the calendar controls keep instances of their own next to the bound
+// ones (measured 2026-08-22: PlanningCalendar a fourth PlanningCalendarRow,
+// Calendar an eighth DateTypeRange), so a registry-wide count is one too many.
+// Ask the owning control for its aggregation — the same rule every sap.m.Input
+// building an internal suggestion-popup Table taught.
 import { waitForUi5, ui5All } from '../../scripts/lib-e2e.mjs';
 
 export default async (page, expect) => {
@@ -15,6 +20,8 @@ export default async (page, expect) => {
   // the legend flag is shared by the ToggleButton and the DynamicSideContent
   await waitForUi5(page, () => ui5All().some((c) => c.getMetadata().getName() === 'sap.ui.layout.DynamicSideContent'
     && c.getShowSideContent() === false), 'the legend flag never reached the side content');
-  await waitForUi5(page, () => ui5All().filter((c) => c.getMetadata().getName() === 'sap.ui.unified.DateTypeRange').length === 7,
-    'the seven special dates never reached the calendar');
+  await waitForUi5(page, () => {
+    const spc = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.SinglePlanningCalendar');
+    return spc && spc.getSpecialDates().length === 7;
+  }, 'the seven special dates never reached the calendar');
 };

@@ -152,8 +152,10 @@ CLASS z2ui5_cl_smpc_app_553 IMPLEMENTATION.
 
                 )->ele( `PlanningCalendarLegend`
                     )->a( n = `id`               v = `SinglePlanningCalendarLegend`
-                    )->a( n = `items`            v = `{path: 'T_LEGEND_ITEMS', templateShareable: true}`
-                    )->a( n = `appointmentItems` v = `{path: 'T_LEGEND_APPT_ITEMS', templateShareable: true}`
+                    " ROOT-level aggregations - see app 555: a bare 'T_' path is
+                    " RELATIVE and resolves against nothing outside a row context
+                    )->a( n = `items`            v = |\{ path: '{ client->_bind( val = t_legend_items path = abap_true ) }', templateShareable: true \}|
+                    )->a( n = `appointmentItems` v = |\{ path: '{ client->_bind( val = t_legend_appt_items path = abap_true ) }', templateShareable: true \}|
                     )->a( n = `class`            v = `sapUiSmallMarginTop`
 
                     )->ele( `items`
