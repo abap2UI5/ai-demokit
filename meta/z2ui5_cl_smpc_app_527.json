@@ -1,0 +1,35 @@
+{
+  "class": "z2ui5_cl_smpc_app_527",
+  "sample": "sap.f.sample.GridContainerDragAndDropFromList",
+  "entity": "sap.f.GridContainer",
+  "file": "src/01/04/z2ui5_cl_smpc_app_527.clas.abap",
+  "batch": "b43",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "attachDragAndDrop adds the DragInfo / DropInfo / GridDropInfo configurations in the controller. The port declares the same four configurations in the two dragDropConfig aggregations, which is why structural-diff reports dnd:DragInfo, dnd:DropInfo and dndgrid:GridDropInfo as control extra - the original's view declares none of them."
+    },
+    {
+      "type": "NOTE",
+      "what": "onDrop moves the row between the two JSON models and corrects the target index twice (once when source and target are the same model and the row moved forward, once for a drop After). The port sends the source container, the source index, the target container, the target index and the drop position with the event and does the identical splice in ABAP, so the reorder is a real round-trip rather than a client-side one."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "GridDropInfo.dropIndicatorSize is a JavaScript callback that sizes the drop indicator from the dragged row's rows/columns while a List row is dragged over the grid. abap2UI5 cannot register a callback, so the attribute is dropped and the indicator falls back to its default size; the drop itself, including the row's rows/columns, is unaffected."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "RevealGrid is a sample-local JS helper module that draws a DOM overlay outlining the grid cells. It has no declarative equivalent, so the ToggleButton is kept but its press wire is dropped (structural-diff reports ToggleButton.press as attr missing) - same treatment as app 168, which ships the same helper."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The drag and drop between the List and the GridContainer, in both directions and within each container, is unverified in a running system."
+    }
+  ]
+}

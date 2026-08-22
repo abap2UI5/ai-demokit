@@ -7,6 +7,54 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-22 — batch b43 (sap.f + sap.m): the covered-control(1) head of the backlog (apps 526–535)
+
+The first batch after the sap.m tail ran out. Every row is a
+`covered-control(1)` entry — the three GridContainer samples, the free-style
+SemanticPage, the GenericTag toolbar, the two QuickViews and the three
+Wizards — so this is depth on controls the corpus already covers once.
+
+| app | sample | what it adds |
+|---|---|---|
+| 526 | GridContainerDragAndDrop | a drop that reorders TEN STATIC grid children — the port emits them from an order table the round-trip rewrites |
+| 527 | GridContainerDragAndDropFromList | drag and drop BETWEEN a List and a GridContainer, both model-bound |
+| 528 | GridContainersNavigation | four grids, seven integration cards rebuilt declaratively, `borderReached` |
+| 529 | SemanticPageFreeStyle | the full semantic action bar plus the `device>` model driving the two full-screen actions |
+| 530 | OverflowToolbarSimple | ten OverflowToolbars resized by ONE expression binding; every `OverflowToolbarLayoutData` priority |
+| 531 | QuickViewAvatarConfiguration | `QuickViewPage.avatar` @1.92 with a badge icon resolved per row (POST_171, `src/02`) |
+| 532 | QuickViewNavOrigin | `navOrigin` — the clicked link's text travels and ABAP swaps page 2 (POST_171, `src/02`) |
+| 533 | WizardSingleStep | a Wizard in a Dialog, `renderMode="Page"` @1.84 and `navigationChange` @1.101 (POST_171, `src/02`) |
+| 534 | WizardCurrentStep | two nested XMLViews inlined into one view; linear and branching wizards side by side |
+| 535 | WizardBranching | `enableBranching` driven by `setNextStep` round-trips; the shopping-cart flow end to end |
+
+Four findings, three of them new to the corpus:
+
+- **`Wizard.currentStep` is an ASSOCIATION, so it cannot be bound.** The XML
+  parser takes the attribute's value as a control id and never as a binding, so
+  `currentStep="{/CURRENT_STEP}"` becomes an id nothing answers to. Backend-driven
+  wizard navigation goes through the framework's whitelisted `control_by_id`
+  calls instead — `goToStep`, `setNextStep`, `discardProgress` are all in
+  `CONTROL_METHODS` — which is what apps 533, 534 and 535 use.
+- **An expression binding needs `${…}`, and the ABAP form is `${ … }` inside a
+  string template.** `|\{= { client->_bind( x ) } … \}|` produces
+  `{= {/X} … }` — a binding inside an expression, which UI5 rejects with
+  "Unexpected === at position 4". The `$` has to be written literally before the
+  embed: `|\{= ${ client->_bind( x ) } … \}|`. Apps 530, 533 and 535 all had
+  it wrong first; app 124 has had it right since b12.
+- **A `sap.ui.integration.widgets.Card` manifest is an object or a URL, nothing
+  else.** Two of the three GridContainer samples keep several manifests in ONE
+  file under wrapper keys (`{manifests>/listContent/mediumList}`), which neither
+  form can address from a declarative view. Apps 526 and 528 rebuild each card
+  as a declarative `sap.f.Card` carrying the manifest's own `card:Header` and
+  its content — a List, a Table, a DisplayListItem list for the Object card, a
+  VBox for the AdaptiveCard. App 342's URL trick only works where the sample
+  ships one manifest per file.
+- **An aggregation tag carries the namespace of its CONTROL, not of the view.**
+  ``)->ele( `items` )`` under an `f:GridContainer` emits `<items>` in the
+  default `sap.m` namespace and UI5 goes looking for `sap/m/items.js`; it has to
+  be ``)->ele( n = `items` ns = `f` )``. The same slip is invisible under a
+  `sap.m` control, which is why it took app 527 to surface it.
+
 ## 2026-08-22 — batch b42 (sap.m): ten ports, five of them post-1.71 (apps 516–525)
 
 | app | sample | what it adds |

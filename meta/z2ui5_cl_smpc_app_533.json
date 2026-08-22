@@ -1,0 +1,47 @@
+{
+  "class": "z2ui5_cl_smpc_app_533",
+  "sample": "sap.m.sample.WizardSingleStep",
+  "entity": "sap.m.Wizard",
+  "file": "src/02/01/z2ui5_cl_smpc_app_533.clas.abap",
+  "batch": "b43",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.Wizard renderMode is @since 1.84 and navigationChange @since 1.101 - both newer than the 1.71 floor. renderMode=\"Page\" is what makes this a one-step-at-a-time wizard and navigationChange is what drives the footer, so both are kept and the port is filed under src/02."
+    },
+    {
+      "type": "NOTE",
+      "what": "Wizard.currentStep is an ASSOCIATION: the XML parser reads its value as a control id and never as a binding, so the port cannot bind it. The Next / Previous / Review buttons and the four Edit links therefore drive the wizard through the framework's whitelisted control_by_id goToStep( step, true ) call - the same goToStep the controller uses, and the same idiom app 101 already uses for its Edit links."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleButtonsVisibility switches the five footer buttons on the selected step index. The port keeps that index as one bound field, updated by navigationChange (which carries the step's TITLE, unique across the five steps) and by every goToStep, and each button carries the switch's own condition as an expression binding - so the visibility follows the wizard without a handler."
+    },
+    {
+      "type": "NOTE",
+      "what": "additionalInfoValidation reads the two Inputs imperatively, sets the two value states, validates or invalidates the step and enables the Next button. All five are bound fields here and the two liveChange wires recompute them in ABAP - same rule (a name of at least six characters, a numeric weight), same effect, one round-trip per keystroke as in the original."
+    },
+    {
+      "type": "NOTE",
+      "what": "_handleMessageBoxOpen asks YES/NO and, on YES, discards the wizard progress, closes the dialog and resets the model to the initial oData. The port raises the same MessageBox with the same two actions and does all three on the YES branch (discardProgress through control_by_id, model_init, popup_destroy)."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleOpenDialog loads the fragment and opens it; the port builds the same fragment in a chain and shows it with popup_display, which is why structural-diff reports nothing missing for the Dialog itself. optionalStepActivation's toast is kept 1:1. setProductTypeFromSegmented also calls validateStep on the first step, which is already validated=\"true\" in the view, so the port's selectionChange only keeps the two-way bound key."
+    },
+    {
+      "type": "NOTE",
+      "what": "The review step's Texts bind the same model fields as the original - productType, productName, productWeight, productManufacturer, productDescription, manufacturingDate, availabilityType, size, measurement, productPrice, discountGroup and productVAT - through client->_bind, which the static comparison cannot resolve to a path; the one LITERAL Text in the same step (the Lorem ipsum under '3. Optional Information', literal in the sample too) is what structural-diff is left holding, so it reports every one of those bindings against it."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The wizard navigation, the five footer buttons, the step-2 validation and the cancel/submit message boxes are unverified in a running system."
+    }
+  ]
+}

@@ -1012,6 +1012,62 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.65`
         notes = lv_text1 ) ).
 
+    lv_text1 = `IMPROVISED: The three sap.ui.integration.widgets.Card children take their content from cardManifests.json through manifest="{manifests>/listContent/...}". A Card manifest is either a JS OBJECT or a` &&
+               ` URL to a single manifest file (Card.createManifest), and the sample's three manifests live inside ONE file under a wrapper key, so neither form is reachable from a declarative view. Each w:Card is` &&
+               ` therefore rebuilt as a declarative sap.f.Card with the manifest's own card:Header (title, subtitle, icon, status) and a sap.m.List carrying the manifest's own rows, seeded in ABAP. Same three cards` &&
+               ` in the same three grid slots with the same content; structural-diff reports w:Card and Card.manifest as missing. The largeList manifest sets maxItems 7, so its eighth row is not seeded - the card` &&
+               ` would not show it either. // NOTE: onInit adds the DragInfo and the GridDropInfo in the controller; the port declares both in the grid's dragDropConfig aggregation. // NOTE: The drop handler reorders` &&
+               ` the grid's TEN STATIC children in place. Static children cannot be reordered from a backend, so the port keeps an order table of the ten item keys and emits the children in that order; the drop event`.
+    lv_text1 = lv_text1 && ` carries the two indices and the drop position, and ABAP applies the original's own index arithmetic (decrement when the item moved forward, increment for an After drop) to that table. Same reorder,` &&
+               ` one round-trip, and the children stay the heterogeneous mix the sample uses (GenericTiles, cards and a Text). // IMPROVISED: RevealGrid is a sample-local JS helper module that draws a DOM overlay` &&
+               ` outlining the grid cells. It has no declarative equivalent, so the ToggleButton is kept but its press wire is dropped (structural-diff reports ToggleButton.press as attr missing) - same treatment as` &&
+               ` app 168, which ships the same helper. // NOTE: attachLayoutChange swaps sapUiSmallMargin for sapUiTinyMargin on the XS and S layouts. The port keeps the sapUiSmallMargin the view declares; the` &&
+               ` layoutChange wire has no counterpart and the two GridContainerSettings the view declares (layout and layoutXS) already carry the responsive sizing. // LIVE-TEST: The drag-and-drop reorder of the ten` &&
+               ` grid items and the three rebuilt cards are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.f`              control = `sap.f.GridContainer`                   name = `GridContainerDragAndDrop`                      class = `z2ui5_cl_smpc_app_526` path = `src/01/04/z2ui5_cl_smpc_app_526.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.65`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: attachDragAndDrop adds the DragInfo / DropInfo / GridDropInfo configurations in the controller. The port declares the same four configurations in the two dragDropConfig aggregations, which is` &&
+               ` why structural-diff reports dnd:DragInfo, dnd:DropInfo and dndgrid:GridDropInfo as control extra - the original's view declares none of them. // NOTE: onDrop moves the row between the two JSON models` &&
+               ` and corrects the target index twice (once when source and target are the same model and the row moved forward, once for a drop After). The port sends the source container, the source index, the` &&
+               ` target container, the target index and the drop position with the event and does the identical splice in ABAP, so the reorder is a real round-trip rather than a client-side one. // IMPROVISED:` &&
+               ` GridDropInfo.dropIndicatorSize is a JavaScript callback that sizes the drop indicator from the dragged row's rows/columns while a List row is dragged over the grid. abap2UI5 cannot register a` &&
+               ` callback, so the attribute is dropped and the indicator falls back to its default size; the drop itself, including the row's rows/columns, is unaffected. // IMPROVISED: RevealGrid is a sample-local`.
+    lv_text1 = lv_text1 && ` JS helper module that draws a DOM overlay outlining the grid cells. It has no declarative equivalent, so the ToggleButton is kept but its press wire is dropped (structural-diff reports` &&
+               ` ToggleButton.press as attr missing) - same treatment as app 168, which ships the same helper. // LIVE-TEST: The drag and drop between the List and the GridContainer, in both directions and within` &&
+               ` each container, is unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.f`              control = `sap.f.GridContainer`                   name = `GridContainerDragAndDropFromList`              class = `z2ui5_cl_smpc_app_527` path = `src/01/04/z2ui5_cl_smpc_app_527.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.65`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `IMPROVISED: All SEVEN sap.ui.integration.widgets.Card children take their content from cardManifests.json through manifest="{manifests>/...}". A Card manifest is either a JS OBJECT or a URL to a` &&
+               ` single manifest file (Card.createManifest), and the sample's seven manifests live inside ONE file under wrapper keys, so neither form is reachable from a declarative view. Each w:Card is therefore` &&
+               ` rebuilt as a declarative sap.f.Card carrying the manifest's own card:Header and its content: a sap.m.List of StandardListItems for the four List cards (orders, tasks, contacts, withAction), a` &&
+               ` sap.m.Table with three Columns and a ColumnListItem row for the Table card (employees), a sap.m.List of DisplayListItems for the Object card (contact, whose three Navigation actions become the` &&
+               ` URLHELPER tel:/mailto: wires the manifest spells out) and a VBox with the text and the Go-to-page Link for the AdaptiveCard (summary). Same seven cards in the same seven grid slots with the same` &&
+               ` content; structural-diff reports w:Card and Card.manifest as missing and every rebuilt control as extra. The two CardBadgeCustomData badges on the orders card go with the w:Card - sap.f.Card has no`.
+    lv_text1 = lv_text1 && ` badge counterpart. // IMPROVISED: onBorderReached toasts '<panel header> border reached' and then hands the KEYBOARD FOCUS to the neighbouring grid, which it finds by comparing the four grids'` &&
+               ` bounding rectangles against the arrow key that was pressed. Geometry and focus are client facts a backend cannot reach, so the port keeps the toast - composed on the client, one per grid with that` &&
+               ` grid's own header text - and drops the focus hand-off. The four borderReached wires are therefore live but only announce the border. // IMPROVISED: RevealGrid is a sample-local JS helper module that` &&
+               ` draws a DOM overlay outlining all four grids. It has no declarative equivalent, so the ToggleButton is kept but its press wire is dropped (structural-diff reports ToggleButton.press as attr missing)` &&
+               ` - same treatment as app 168, which ships the same helper. // LIVE-TEST: The four grids, the seven rebuilt cards and the four border-reached toasts are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.f`              control = `sap.f.GridContainer`                   name = `GridContainersNavigation`                      class = `z2ui5_cl_smpc_app_528` path = `src/01/04/z2ui5_cl_smpc_app_528.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.65`
+        notes = lv_text1 ) ).
+
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListBasic`                                 class = `z2ui5_cl_smpc_app_111` path = `src/01/04/z2ui5_cl_smpc_app_111.clas.abap`
         score = 2
@@ -1138,6 +1194,24 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
       ( module = `sap.f`              control = `sap.f.semantic.SemanticPage`           name = `SemanticPage`                                  class = `z2ui5_cl_smpc_app_166` path = `src/01/04/z2ui5_cl_smpc_app_166.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.46.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: The original keeps the header data in nested paths on one JSON model (title, titleSnappedContent/text, objectDescription/category|center|email|status). abap2UI5 keeps one default model, so the` &&
+               ` nested paths are folded to flat fields with the identical last segment - the same fold app 166 makes for the sibling sample. titleSnappedContent/text carries literal braces ('Filtered by {Name,` &&
+               ` Price, Category}'); it is DATA, not a binding, so the port seeds it in model_init with the braces escaped. // NOTE: onMessagesButtonPress builds a MessagePopover over the message> model in the` &&
+               ` controller and toggles it at the button. The port declares the same MessagePopover in the MessagesIndicator's dependents and toggles it roundtrip-free through control_by_id, which is why` &&
+               ` structural-diff reports MessagePopover and MessageItem as control extra - the original's view declares neither. The Messaging registration of the single Error message is seeded as a message row` &&
+               ` instead. // NOTE: notMobile is Device.system.phone negated, set on the model in onInit. The device model carries the same fact to the client, so the two full-screen actions bind the expression {=`.
+    lv_text1 = lv_text1 && ` !${device>/system/phone} } rather than a backend field. // NOTE: showFooter is static true in the view and the ToggleFooter button flips it with setShowFooter in the controller. The port binds` &&
+               ` showFooter to a flag and the button's press flips that flag in ABAP - same toggle, one round-trip. The two footerCustomActions Buttons (Save, Cancel) are pressless in the view itself, so they stay` &&
+               ` pressless here. // NOTE: The titleContent KPI placeholder image is the sample's own test-resources file (sap/f/images/KPI.png), re-hosted on sdk.openui5.org. // LIVE-TEST: The footer toggle, the` &&
+               ` messages popover and the semantic action bar are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.f`              control = `sap.f.semantic.SemanticPage`           name = `SemanticPageFreeStyle`                         class = `z2ui5_cl_smpc_app_529` path = `src/01/04/z2ui5_cl_smpc_app_529.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
         since = `1.46.0`
         notes = lv_text1 ) ).
 
@@ -2100,6 +2174,19 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` Page.controller.js defines a press handler (MessageToast 'The GenericTag is pressed.') that is not referenced anywhere in Page.view.xml - no GenericTag carries a press attribute - so the port wires` &&
                  ` no event; the rendered view is a faithful 1:1 rebuild.`
         post171 = `ariaLabelledBy (since UI5 1.97) on the labeled GenericTag is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.97 to render it.` ) ).
+
+    lv_text1 = `NOTE: onSliderMoved calls setWidth( value + '%' ) on all TEN toolbars on every liveChange. The port reproduces it without a round-trip: the Slider value is two-way bound and every OverflowToolbar` &&
+               ` carries the expression binding width={= ${viewport} + '%' }, so the Slider.liveChange attribute is dropped and ten width attributes are added. // IMPROVISED: The view declares a core:CommandExecution` &&
+               ` in mvc:dependents and the Share button presses it with press="cmd:Share". abap2UI5 has no controller to hold a command, so the CommandExecution is dropped (structural-diff reports it missing) and the` &&
+               ` Share button's press carries the shareAction toast itself. The toast text is the sample's 'Share action' once instead of repeated 42 times. // LIVE-TEST: The slider-driven resize of the ten toolbars,` &&
+               ` the overflow priorities and the Share toast are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.GenericTag`                      name = `OverflowToolbarSimple`                         class = `z2ui5_cl_smpc_app_530` path = `src/01/01/z2ui5_cl_smpc_app_530.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.62.0`
+        notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: the sample's own style.css (one rule: .tileLayout floats left) is injected through an extra core:HTML style leaf (app 275 precedent) - one control the archived Page.view.xml does not have` &&
                ` (core:HTML 0 -> 1). The literal braces of the CSS rule are escaped in the ABAP literal because the XMLView parser reads an unescaped brace in an attribute value as a binding. // NOTE: the` &&
@@ -4001,6 +4088,44 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         post171 = `sap.m.Avatar (control since 1.73) is kept 1:1 as the page icon via the QuickViewPage avatar aggregation, which itself is since UI5 1.92 - so the app needs UI5 >= 1.92 to render the avatar. //` &&
                  ` sap.m.Button.ariaHasPopup (since 1.84) is kept 1:1 on the four trigger buttons; needs UI5 >= 1.84.` ) ).
 
+    lv_text1 = `POST-1.71: sap.m.Button ariaHasPopup is @since 1.84.0, the QuickViewPage avatar aggregation @since 1.92, sap.m.Avatar itself @since 1.73 and Avatar badgeIcon @since 1.77 - all newer than the 1.71` &&
+               ` floor. The sample exists to show the avatar configuration, so every one is kept and the port is filed under src/02. // NOTE: handleButtonPress loads the fragment and calls openBy( button ). The port` &&
+               ` builds the same fragment in a chain and opens it with popover_display anchored on the button id, so the QuickView is the sample's popover in the same position. // NOTE: formatBadgeIcon is a formatter` &&
+               ` that returns sap-icon://edit for the employee page and null for every other page. A formatter has no counterpart here, so the badge icon is resolved per row in model_init - the employee page carries` &&
+               ` it, the company page carries the empty string - and the Avatar binds the field. Same values, resolved in the backend. // NOTE: handleAvatarPress toasts a constant text; the toast is composed on the` &&
+               ` client so the avatar press needs no round-trip. // NOTE: The company page's tile image is the sample's own test-resources file (sap-logo.png), re-hosted on sdk.openui5.org; onAfterRendering's`.
+    lv_text1 = lv_text1 && ` imperative aria-haspopup attribute is the declarative Button.ariaHasPopup the view already sets. // NOTE: The fragment wires QuickView.navigate to .onNavigate, but the sample's controller declares no` &&
+               ` onNavigate method - the wire is dead in the original. The port drops it rather than inventing behaviour for it (structural-diff reports QuickView.navigate as attr missing). // LIVE-TEST: The` &&
+               ` QuickView popover, its page-link navigation and the avatar press are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.QuickView`                       name = `QuickViewAvatarConfiguration`                  class = `z2ui5_cl_smpc_app_531` path = `src/02/01/z2ui5_cl_smpc_app_531.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.28.11`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.m.Button ariaHasPopup is @since 1.84.0, the QuickViewPage avatar aggregation @since 1.92, sap.m.Avatar itself @since 1.73 and Avatar badgeIcon @since 1.77 - all newer than the 1.71 floor. The` &&
+                 ` sample exists to show the avatar configuration, so every one is kept and the port is filed under src/02.` ) ).
+
+    lv_text1 = `POST-1.71: sap.m.Button ariaHasPopup is @since 1.84.0, the QuickViewPage avatar aggregation @since 1.92 and sap.m.Avatar itself @since 1.73 - all newer than the 1.71 floor. All three come straight` &&
+               ` from the sample, so they are kept and the port is filed under src/02. // NOTE: The sample keeps TWO named models: CardModel holds the two QuickView pages, EmployeeModel holds the four employee` &&
+               ` records keyed by name. The port keeps the same split - t_pages is bound to the QuickView, t_employees stays in the backend - so the second model is never sent to the client. // NOTE: onNavigate reads` &&
+               ` the clicked link (navOrigin) and splices the matching employee record into page 2 of the card model. The port sends the link's text with the navigate event and does the same replacement in ABAP, so` &&
+               ` the second page is filled on the round-trip exactly as the original fills it in the controller. A back navigation has no navOrigin, which the ternary in the event argument reproduces as the empty` &&
+               ` string. // NOTE: handleQuickViewBtnPress loads the fragment and calls openBy( button ); the port builds the same fragment in a chain and opens it with popover_display anchored on the button id.`.
+    lv_text1 = lv_text1 && ` onAfterRendering's imperative aria-haspopup attribute is the declarative Button.ariaHasPopup the view already sets. // LIVE-TEST: The QuickView popover and the navOrigin page swap are unverified in a` &&
+               ` running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.QuickView`                       name = `QuickViewNavOrigin`                            class = `z2ui5_cl_smpc_app_532` path = `src/02/01/z2ui5_cl_smpc_app_532.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.28.11`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.m.Button ariaHasPopup is @since 1.84.0, the QuickViewPage avatar aggregation @since 1.92 and sap.m.Avatar itself @since 1.73 - all newer than the 1.71 floor. All three come straight from the` &&
+                 ` sample, so they are kept and the port is filed under src/02.` ) ).
+
     lv_text1 = `NOTE: The QuickViewCard fragment is inlined into the main view instead of a separate core:Fragment include, so the port has no core:Fragment control. The nested pages/groups/elements are a nested ABAP` &&
                ` table (t_pages) bound 1:1; relative child aggregations (groups, elements) keep the original binding-info form. // NOTE: The external Navigate-Back button drives the card 1:1 via follow_up_action(` &&
                ` cs_event-control_by_id, navigateBack ) — navigateBack was whitelisted in the paired abap2UI5 change. afterNavigate forwards the public isTopPage parameter and enables the button while the card is not` &&
@@ -5053,6 +5178,75 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30`
         notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: The original keeps the form data in nested paths on one JSON model (/CreditCard/Name, /CashOnDelivery/FirstName, /BillingAddress/Address ...). abap2UI5 keeps one default model, so the nested` &&
+               ` paths are folded to flat fields whose last segment is identical - the same fold app 166 makes. /CashOnDelivery/Phone Number, whose last segment carries a space, becomes phonenumber. // NOTE:` &&
+               ` goToPaymentStep and billingAddressComplete branch the wizard by calling setNextStep on the completed step. Both are reproduced 1:1 through the framework's whitelisted control_by_id setNextStep call,` &&
+               ` so enableBranching still drives the same three payment paths and the same two delivery paths. // NOTE: checkCreditCardStep / checkCashOnDeliveryStep / checkBillingStep call validateStep and` &&
+               ` invalidateStep imperatively. Each step's validated property is bound two-way here and the same liveChange wires recompute it in ABAP with the same rule (at least three characters), so the Next button` &&
+               ` gates exactly as in the original. // IMPROVISED: setDiscardableProperty only asks for confirmation while the wizard's PROGRESS STEP is past the step being discarded (getProgressStep() !==`.
+    lv_text1 = lv_text1 && ` discardStep). A backend cannot read getProgressStep(), so the port keeps two flags that stand in for the two comparisons: each is raised by the activate wire of the step that follows the compared` &&
+               ` one, and cleared again when the progress is discarded. This costs two added activate attributes (BankAccountStep, DeliveryAddressStep and DeliveryTypeStep, which the sample leaves unwired) and gets` &&
+               ` the question asked in the same situations. The YES branch discards the progress through control_by_id and remembers the new value; the NO branch restores the remembered one, both as in the original.` &&
+               ` // NOTE: handleDelete removes the row whose title the delete event carries and never removes the last one; the port sends the title with the event and does the same, then recomputes the total the way` &&
+               ` calcTotal does. attachRequestCompleted keeps the first FIVE rows of the mock product collection and seeds the payment and delivery defaults - the port seeds exactly those five rows. // NOTE:` &&
+               ` completedHandler, _navBackToStep and _handleMessageBoxOpen navigate the NavContainer and the wizard imperatively. All three go through control_by_id here ('to', 'goToStep', 'discardProgress' - all`.
+    lv_text1 = lv_text1 && ` whitelisted), the same idiom app 101 uses for the sibling sample. // NOTE: The five product images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org. // LIVE-TEST: The three` &&
+               ` payment branches, the delivery-address branch, the discard confirmations, the per-step validation and the review page's six Edit links are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Wizard`                          name = `WizardBranching`                               class = `z2ui5_cl_smpc_app_535` path = `src/01/01/z2ui5_cl_smpc_app_535.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.30`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `IMPROVISED: The sample is THREE views: a container view whose Page content holds two mvc:XMLViews (view.Linear and view.Branching), each with its own controller. abap2UI5 has no named XMLViews to` &&
+               ` instantiate, so both wizards are inlined directly into the Page's content, each keeping the visible expression its mvc:XMLView carries ({= ${/selectedShowCase} === 'linear'} / '=== branching').` &&
+               ` structural-diff reports mvc:XMLView as missing; every control inside the two views is present. The Branching controller's _findParentView walk exists only to reach across that view boundary and has` &&
+               ` nothing to do here. // NOTE: onCurrentStepChangeLinear and onCurrentStepChangeBranching call setCurrentStep on the respective wizard. Wizard.currentStep is an ASSOCIATION and cannot be bound, so both` &&
+               ` Selects drive the wizard through the framework's whitelisted control_by_id goToStep call. The branching one's try/catch (which toasts the error, resets the Select and re-applies the last path) has no` &&
+               ` counterpart: goToStep on an unreachable step is a no-op with a UI5 log rather than a thrown exception here. // NOTE: applyPath reads the picked radio button's TEXT and walks the arrow-separated path`.
+    lv_text1 = lv_text1 && ` calling setNextStep on each step, clearing the last one's. The port keeps the three paths as data and issues the same setNextStep calls through control_by_id (whitelisted), so enableBranching still` &&
+               ` follows the picked path. discardAndApplyPath's discardProgress and the Select reset are reproduced the same way. // NOTE: validateProdInfoStep reads the two Inputs imperatively and calls` &&
+               ` setValidated; the port binds ProductInfoStep.validated and the two value states and recomputes all three in ABAP on the same change wires. The Linear view declares no validated attribute at all, so` &&
+               ` the step starts VALIDATED here too - that is what lets currentStep="PricingStep" hold on startup. onActivate syncs the Select with the activated step, which the port does by sending each step's id` &&
+               ` with its activate wire (an added activate attribute on the steps the sample leaves unwired). // IMPROVISED: onBackgroundDesignChange sets backgroundDesign on both Wizards. sap.m.Wizard has no` &&
+               ` backgroundDesign property in the 1.71 metadata the gates check and no whitelisted setter, so the port keeps the Select and its two-way bound key but the design is not applied to the wizards. //`.
+    lv_text1 = lv_text1 && ` LIVE-TEST: The two showcases, the two current-step Selects, the three branching paths and the step-2 validation are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Wizard`                          name = `WizardCurrentStep`                             class = `z2ui5_cl_smpc_app_534` path = `src/01/01/z2ui5_cl_smpc_app_534.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.30`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `POST-1.71: sap.m.Wizard renderMode is @since 1.84 and navigationChange @since 1.101 - both newer than the 1.71 floor. renderMode="Page" is what makes this a one-step-at-a-time wizard and` &&
+               ` navigationChange is what drives the footer, so both are kept and the port is filed under src/02. // NOTE: Wizard.currentStep is an ASSOCIATION: the XML parser reads its value as a control id and` &&
+               ` never as a binding, so the port cannot bind it. The Next / Previous / Review buttons and the four Edit links therefore drive the wizard through the framework's whitelisted control_by_id goToStep(` &&
+               ` step, true ) call - the same goToStep the controller uses, and the same idiom app 101 already uses for its Edit links. // NOTE: handleButtonsVisibility switches the five footer buttons on the` &&
+               ` selected step index. The port keeps that index as one bound field, updated by navigationChange (which carries the step's TITLE, unique across the five steps) and by every goToStep, and each button` &&
+               ` carries the switch's own condition as an expression binding - so the visibility follows the wizard without a handler. // NOTE: additionalInfoValidation reads the two Inputs imperatively, sets the two`.
+    lv_text1 = lv_text1 && ` value states, validates or invalidates the step and enables the Next button. All five are bound fields here and the two liveChange wires recompute them in ABAP - same rule (a name of at least six` &&
+               ` characters, a numeric weight), same effect, one round-trip per keystroke as in the original. // NOTE: _handleMessageBoxOpen asks YES/NO and, on YES, discards the wizard progress, closes the dialog` &&
+               ` and resets the model to the initial oData. The port raises the same MessageBox with the same two actions and does all three on the YES branch (discardProgress through control_by_id, model_init,` &&
+               ` popup_destroy). // NOTE: handleOpenDialog loads the fragment and opens it; the port builds the same fragment in a chain and shows it with popup_display, which is why structural-diff reports nothing` &&
+               ` missing for the Dialog itself. optionalStepActivation's toast is kept 1:1. setProductTypeFromSegmented also calls validateStep on the first step, which is already validated="true" in the view, so the` &&
+               ` port's selectionChange only keeps the two-way bound key. // NOTE: The review step's Texts bind the same model fields as the original - productType, productName, productWeight, productManufacturer,`.
+    lv_text1 = lv_text1 && ` productDescription, manufacturingDate, availabilityType, size, measurement, productPrice, discountGroup and productVAT - through client->_bind, which the static comparison cannot resolve to a path;` &&
+               ` the one LITERAL Text in the same step (the Lorem ipsum under '3. Optional Information', literal in the sample too) is what structural-diff is left holding, so it reports every one of those bindings` &&
+               ` against it. // LIVE-TEST: The wizard navigation, the five footer buttons, the step-2 validation and the cancel/submit message boxes are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Wizard`                          name = `WizardSingleStep`                              class = `z2ui5_cl_smpc_app_533` path = `src/02/01/z2ui5_cl_smpc_app_533.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.30`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.m.Wizard renderMode is @since 1.84 and navigationChange @since 1.101 - both newer than the 1.71 floor. renderMode="Page" is what makes this a one-step-at-a-time wizard and navigationChange is what` &&
+                 ` drives the footer, so both are kept and the port is filed under src/02.` ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.ui.core.ContainerPadding`          name = `ContainerNoPadding`                            class = `z2ui5_cl_smpc_app_087` path = `src/01/01/z2ui5_cl_smpc_app_087.clas.abap`

@@ -1,0 +1,43 @@
+{
+  "class": "z2ui5_cl_smpc_app_531",
+  "sample": "sap.m.sample.QuickViewAvatarConfiguration",
+  "entity": "sap.m.QuickView",
+  "file": "src/02/01/z2ui5_cl_smpc_app_531.clas.abap",
+  "batch": "b43",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.Button ariaHasPopup is @since 1.84.0, the QuickViewPage avatar aggregation @since 1.92, sap.m.Avatar itself @since 1.73 and Avatar badgeIcon @since 1.77 - all newer than the 1.71 floor. The sample exists to show the avatar configuration, so every one is kept and the port is filed under src/02."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleButtonPress loads the fragment and calls openBy( button ). The port builds the same fragment in a chain and opens it with popover_display anchored on the button id, so the QuickView is the sample's popover in the same position."
+    },
+    {
+      "type": "NOTE",
+      "what": "formatBadgeIcon is a formatter that returns sap-icon://edit for the employee page and null for every other page. A formatter has no counterpart here, so the badge icon is resolved per row in model_init - the employee page carries it, the company page carries the empty string - and the Avatar binds the field. Same values, resolved in the backend."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleAvatarPress toasts a constant text; the toast is composed on the client so the avatar press needs no round-trip."
+    },
+    {
+      "type": "NOTE",
+      "what": "The company page's tile image is the sample's own test-resources file (sap-logo.png), re-hosted on sdk.openui5.org; onAfterRendering's imperative aria-haspopup attribute is the declarative Button.ariaHasPopup the view already sets."
+    },
+    {
+      "type": "NOTE",
+      "what": "The fragment wires QuickView.navigate to .onNavigate, but the sample's controller declares no onNavigate method - the wire is dead in the original. The port drops it rather than inventing behaviour for it (structural-diff reports QuickView.navigate as attr missing)."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The QuickView popover, its page-link navigation and the avatar press are unverified in a running system."
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "class": "z2ui5_cl_smpc_app_532",
+  "sample": "sap.m.sample.QuickViewNavOrigin",
+  "entity": "sap.m.QuickView",
+  "file": "src/02/01/z2ui5_cl_smpc_app_532.clas.abap",
+  "batch": "b43",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.Button ariaHasPopup is @since 1.84.0, the QuickViewPage avatar aggregation @since 1.92 and sap.m.Avatar itself @since 1.73 - all newer than the 1.71 floor. All three come straight from the sample, so they are kept and the port is filed under src/02."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample keeps TWO named models: CardModel holds the two QuickView pages, EmployeeModel holds the four employee records keyed by name. The port keeps the same split - t_pages is bound to the QuickView, t_employees stays in the backend - so the second model is never sent to the client."
+    },
+    {
+      "type": "NOTE",
+      "what": "onNavigate reads the clicked link (navOrigin) and splices the matching employee record into page 2 of the card model. The port sends the link's text with the navigate event and does the same replacement in ABAP, so the second page is filled on the round-trip exactly as the original fills it in the controller. A back navigation has no navOrigin, which the ternary in the event argument reproduces as the empty string."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleQuickViewBtnPress loads the fragment and calls openBy( button ); the port builds the same fragment in a chain and opens it with popover_display anchored on the button id. onAfterRendering's imperative aria-haspopup attribute is the declarative Button.ariaHasPopup the view already sets."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The QuickView popover and the navOrigin page swap are unverified in a running system."
+    }
+  ]
+}
