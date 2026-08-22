@@ -7,6 +7,46 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-22 — batch b35 (sap.m + sap.f): eight ports, three of them the awkward ones (apps 447–454)
+
+The batch where the cheap rows ran out. Four of the eight needed an idiom the
+corpus already had but had not combined this way.
+
+| app | sample | the idiom it adds |
+|---|---|---|
+| 447 | MessageBoxInfo | `message_box_display` with `details` in all three forms — plain text, markup, a JSON object — plus the async-details boundary |
+| 448 | SemanticPageDraftIndicator | the semantic FullscreenPage: `MessagesIndicator` + declared `MessagePopover`, the `z2ui5.cc.MessageManager` bridge, and `$event.oSource.getMetadata().getName()` as the toast's own subject |
+| 449 | FlexibleColumnLayoutLandmarkInfo | `landmarkInfo` @1.95 on the three-column layout, all three column views inlined (app 234's shape) |
+| 450 | FlexibleColumnLayoutLandmarkInfoArrow | the same with the four arrow labels — the pair that only differs in its accessibility attributes |
+| 451 | TabContainerIcons | app 093's prevented-default `itemClose` + confirm flow, now with icons, `additionalText` and a `f:Form` per tab |
+| 452 | CustomMessageStripDesign | `colorSet`/`colorScheme` @1.143 over ten strips driven by one expression binding |
+| 453 | ObjectHeaderResponsiveI | a `binding="{/ProductCollection/0}"` element binding folded to absolute root bindings, with the Currency `parts` binding kept |
+| 454 | TableSelectDialogGrowing | one fragment built with two property values (growing / initialFocus), `binding_call` search filter, the sample's OWN `weightState` rule computed in ABAP |
+
+Three findings worth keeping:
+
+- **A wired handler that does not exist.** App 454's fragment wires
+  `confirm=".handleClose"` and `cancel=".handleClose"`; the controller defines
+  no such method, so both resolve to nothing in the original. The port drops
+  both attributes and says so, rather than inventing the close behaviour the
+  names suggest.
+- **The sample's own formatter beats the shared one.** `Formatter.weightState`
+  here compares the RAW measure against 1000/2000 with no unit conversion —
+  the opposite of the shared demo kit formatter the porting guide warns about
+  (1 and 5 KG, grams divided first). Read the formatter that ships WITH the
+  sample.
+- **A handler whose first two calls can never be seen.** App 448's
+  `handleLiveChange` runs `showDraftSaving( )`, `showDraftSaved( )` and
+  `clearDraftState( )` in one tick, so only the clear ever paints. The port
+  makes that one call (client-side, so no per-keystroke round-trip) and
+  declares the two that have no visible effect as improvised rather than
+  pretending to reproduce them.
+
+Both FCL ports moved to `src/02/04`: `landmarkInfo` and
+`FlexibleColumnLayoutAccessibleLandmarkInfo` are @1.95, and on the 1.71 floor
+the unknown tag would take the whole view down — exactly the case the
+aggregation-too-new rule was made an error for.
+
 ## 2026-08-22 — batch b34 (sap.m): eight more, and the first e2e closures of the day (apps 439–446)
 
 The same picking rule as b33 — smallest `covered-control(2)` rows once the

@@ -1,0 +1,39 @@
+{
+  "class": "z2ui5_cl_smpc_app_454",
+  "sample": "sap.m.sample.TableSelectDialogGrowing",
+  "entity": "sap.m.TableSelectDialog",
+  "file": "src/01/01/z2ui5_cl_smpc_app_454.clas.abap",
+  "batch": "b35",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The fragment wires confirm=\".handleClose\" and cancel=\".handleClose\", but the controller defines no handleClose at all - both handlers resolve to nothing in the original, and the dialog closes itself either way. The port drops both attributes rather than inventing a behaviour (structural-diff reports attr missing TableSelectDialog.confirm and .cancel)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The fragment's core:require pulls the Currency type and the sample's Formatter module. The port writes the type's full name in the binding-info (sap.ui.model.type.Currency) and computes Formatter.weightState in ABAP, so the core:require attribute is dropped (structural-diff reports attr missing TableSelectDialog.core:require)."
+    },
+    {
+      "type": "NOTE",
+      "what": "Formatter.weightState of THIS sample compares the RAW measure (<0 None, <1000 Success, <2000 Warning, else Error - no unit conversion, unlike the shared demo kit formatter). It is business logic, so the state is computed per row in model_init and bound as a plain field."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleTableSelectDialogPress reads the growing flag off the pressed button's CustomData and sets growing plus initialFocus (SearchField when growing, List otherwise) before open( ). The port keeps the CustomData on the first button 1:1 but raises two events instead, and builds the same fragment with those two properties set - one popup, two values, everything else identical."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleSearch filters the dialog's items binding with a Contains filter on Name. Reproduced 1:1 through follow_up_action binding_call on the dialog's items aggregation, so the model stays untouched (app 022 precedent)."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Both dialog variants (growing on/off with their initialFocus) and the binding_call search filter are unverified in a running system."
+    }
+  ]
+}

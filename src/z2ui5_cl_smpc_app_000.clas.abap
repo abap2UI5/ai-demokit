@@ -930,6 +930,42 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.42`
         notes = lv_text1 ) ).
 
+    lv_text1 = `POST-1.71: The sap.f.FlexibleColumnLayout aggregation landmarkInfo and the control sap.f.FlexibleColumnLayoutAccessibleLandmarkInfo it holds are both @since 1.95 - they ARE this sample, so both are` &&
+               ` kept 1:1 and the port needs a UI5 runtime >= 1.95. On the 1.71 floor the unknown tag would take the whole view down, which is why the port is filed in src/02. // NOTE: The sample is not a routing` &&
+               ` showcase - it drives the columns through an EventBus and the FlexibleColumnLayout's own layout property (setLayout). The port expresses it as ONE view: the List, Detail and DetailDetail views are` &&
+               ` inlined into beginColumnPages / midColumnPages / endColumnPages, so the original's nested mvc:XMLView reference in beginColumnPages is dropped and the two lazily created views are declared up front` &&
+               ` (app 234 precedent). The EventBus publish/subscribe pairs become three events writing the bound layout field. // NOTE: FlexibleColumnLayout and its FlexibleColumnLayoutAccessibleLandmarkInfo carry` &&
+               ` the f: prefix here because the merged single view uses sap.m as its default xmlns for the pages, while the original root view declares sap.f as the default and writes both unprefixed. Same controls,`.
+    lv_text1 = lv_text1 && ` different namespace representation (app 234 precedent). // LIVE-TEST: The three layout transitions (OneColumn, TwoColumnsMidExpanded, ThreeColumnsEndExpanded) driven by the bound layout property are` &&
+               ` unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.f`              control = `sap.f.FlexibleColumnLayout`            name = `FlexibleColumnLayoutLandmarkInfo`              class = `z2ui5_cl_smpc_app_449` path = `src/02/04/z2ui5_cl_smpc_app_449.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.46`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `The sap.f.FlexibleColumnLayout aggregation landmarkInfo and the control sap.f.FlexibleColumnLayoutAccessibleLandmarkInfo it holds are both @since 1.95 - they ARE this sample, so both are kept 1:1 and` &&
+                 ` the port needs a UI5 runtime >= 1.95. On the 1.71 floor the unknown tag would take the whole view down, which is why the port is filed in src/02.` ) ).
+
+    lv_text1 = `POST-1.71: The sap.f.FlexibleColumnLayout aggregation landmarkInfo and the control sap.f.FlexibleColumnLayoutAccessibleLandmarkInfo it holds are both @since 1.95 - they ARE this sample, so both are` &&
+               ` kept 1:1 and the port needs a UI5 runtime >= 1.95. On the 1.71 floor the unknown tag would take the whole view down, which is why the port is filed in src/02. // NOTE: The sample is not a routing` &&
+               ` showcase - it drives the columns through an EventBus and the FlexibleColumnLayout's own layout property (setLayout). The port expresses it as ONE view: the List, Detail and DetailDetail views are` &&
+               ` inlined into beginColumnPages / midColumnPages / endColumnPages, so the original's nested mvc:XMLView reference in beginColumnPages is dropped and the two lazily created views are declared up front` &&
+               ` (app 234 precedent). The EventBus publish/subscribe pairs become three events writing the bound layout field. // NOTE: FlexibleColumnLayout and its FlexibleColumnLayoutAccessibleLandmarkInfo carry` &&
+               ` the f: prefix here because the merged single view uses sap.m as its default xmlns for the pages, while the original root view declares sap.f as the default and writes both unprefixed. Same controls,`.
+    lv_text1 = lv_text1 && ` different namespace representation (app 234 precedent). // LIVE-TEST: The three layout transitions (OneColumn, TwoColumnsMidExpanded, ThreeColumnsEndExpanded) driven by the bound layout property are` &&
+               ` unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.f`              control = `sap.f.FlexibleColumnLayout`            name = `FlexibleColumnLayoutLandmarkInfoArrow`         class = `z2ui5_cl_smpc_app_450` path = `src/02/04/z2ui5_cl_smpc_app_450.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.46`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `The sap.f.FlexibleColumnLayout aggregation landmarkInfo and the control sap.f.FlexibleColumnLayoutAccessibleLandmarkInfo it holds are both @since 1.95 - they ARE this sample, so both are kept 1:1 and` &&
+                 ` the port needs a UI5 runtime >= 1.95. On the 1.71 floor the unknown tag would take the whole view down, which is why the port is filed in src/02.` ) ).
+
     lv_text1 = `NOTE: the sample is NOT a pure-routing showcase - it uses an EventBus (no sap.ui.core.routing Router/Targets) and drives the column visibility purely through the FlexibleColumnLayout's own layout` &&
                ` property (setLayout). So it is expressed as ONE view: the three column views (List, Detail, DetailDetail) are inlined into the FlexibleColumnLayout's beginColumnPages/midColumnPages/endColumnPages` &&
                ` aggregations. Consequently the original's nested mvc:XMLView reference (in beginColumnPages) is dropped - its List page content is placed inline instead. // NOTE: FlexibleColumnLayout is emitted with` &&
@@ -1785,6 +1821,24 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         checked = `CHECKED (2026-07-20): verified in a running system - human pass 2026-07-20: app starts and renders like the original; no interaction paths were open for this port`
         notes = lv_text1 ) ).
 
+    lv_text1 = `NOTE: onMessagesButtonPress builds a MessagePopover in the controller and toggles it against the MessagesIndicator. The port declares the same MessagePopover with its MessageItem template over the` &&
+               ` message> model in the indicator's dependents and toggles it via follow_up_action control_by_id / toggleBy anchored to $event.oSource.sId (app 107 precedent); structural-diff reports both as control` &&
+               ` extra because the original builds them in JavaScript. // NOTE: onInit registers a ControlMessageProcessor and seeds one error message through the MessageManager. The port declares the` &&
+               ` z2ui5.cc.MessageManager bridge control with the same single message bound to it - an added control the original does not have (control extra z2ui5:MessageManager), which is how abap2UI5 feeds the` &&
+               ` message> model. // IMPROVISED: handleLiveChange calls showDraftSaving(), showDraftSaved() and clearDraftState() one after the other in the same tick, so the two intermediate states are never painted` &&
+               ` and only the clear survives. The port makes exactly that surviving call on every keystroke (control_by_id / clearDraftState, client-side, so no per-keystroke round-trip), which reproduces what the`.
+    lv_text1 = lv_text1 && ` sample shows but not the two calls that have no visible effect. // NOTE: onSemanticButtonPress toasts the source's class name with the LIBRARY prefix stripped (sap.m.semantic.AddAction ->` &&
+               ` semantic.AddAction). The class name is transported with $event.oSource.getMetadata().getName() and the strip happens in ABAP, so the toast text is the original's. onNavButtonPress is a constant toast` &&
+               ` and is composed on the client. // NOTE: The unused xmlns:ui="sap.ca.ui" namespace declaration of the original view is dropped - sap.ca.ui is not part of OpenUI5 and no control in the sample uses the` &&
+               ` prefix. // LIVE-TEST: The MessagePopover toggle over the bridged message, the three semantic action toasts, the nav-button toast and the clearDraftState wire are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.DraftIndicator`                  name = `SemanticPageDraftIndicator`                    class = `z2ui5_cl_smpc_app_448` path = `src/01/01/z2ui5_cl_smpc_app_448.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.32.0`
+        notes = lv_text1 ) ).
+
     lv_text1 = `NOTE: the bound lists="{/ProductCollectionStats/Filters}" collection is represented as two static FacetFilterLists (Category, SupplierName) - the original's stats model yields exactly these two lists,` &&
                ` so this is a faithful equivalent; the facet values inside each list stay bound to a FacetFilterItem template. A doubly-nested variant (bind the FacetFilter lists aggregation to a nested table,` &&
                ` FacetFilterList template with a relative items binding over each filter's values) is source-plausible now that nested binding is expressible, but no port proves that aggregation-of-aggregation` &&
@@ -2528,6 +2582,20 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         post171 = `the MessageBox emphasizedAction option (since UI5 1.75) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.75 to render it. // the MessageBox dependentOn option (since UI5` &&
                  ` 1.124) is restored via message_box_display's dependenton parameter, pointing at the view layout (id messageBoxHost) instead of the view object; the app needs a UI5 release >= 1.124 for it.` ) ).
 
+    lv_text1 = `NOTE: All four MessageBoxes are opened through client->message_box_display with the same title, type, details, contentWidth and styleClass the controller passes; the dependentOn: this.getView() option` &&
+               ` has no equivalent (abap2UI5 owns the view) and is dropped - it only decides which control the popup is a dependent of, not what it shows. The per-box ids (messageBoxId1..4) are dropped with it. //` &&
+               ` NOTE: onShowJSONInfo hands MessageBox a JavaScript object as details; the port passes the same object serialized as JSON ({"glossary":{"title":"example glossary"}}), which is what MessageBox renders` &&
+               ` for an object anyway. // IMPROVISED: onShowTextInfoAsync passes details as a function returning a Promise that resolves after 2 seconds, so the sample shows the details placeholder loading first. The` &&
+               ` backend has the text immediately and passes it as a plain string, so the loading state of the details link is not reproduced - only its resolved text. // LIVE-TEST: All four message_box_display calls` &&
+               ` (text, markup, JSON and the formerly async details) are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.MessageBox`                      name = `MessageBoxInfo`                                class = `z2ui5_cl_smpc_app_447` path = `src/01/01/z2ui5_cl_smpc_app_447.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.21.2`
+        notes = lv_text1 ) ).
+
     lv_text1 = `NOTE: the sample opens a sap.m.MessageBox from its controller; there is no such control in the view. It is driven by two buttons wired to events that call client->message_box_display - the documented` &&
                ` 1:1 path (CAPABILITIES.md marks sap.m.MessageBox as expressible with app 036 as its evidence port), not a workaround. // POST-1.71: ariaHasPopup="Dialog" on both buttons (since UI5 1.84) is newer` &&
                ` than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it. // POST-1.71: the MessageBox emphasizedAction option (since UI5 1.75) is newer than 1.71 but kept for the 1:1` &&
@@ -2629,6 +2697,18 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         checked = `CHECKED (2026-07-27): verified in a running system 2026-07-27 - MessageManager cc: add/remove app-authored messages reconciled, MessagePopover shows both sources`
         notes = lv_text1
         post171 = `two post-1.71 members are kept for the 1:1 port: Button.ariaHasPopup (since UI5 1.84) on the MessagePopover button, and MessagePopover.groupItems (since UI5 1.73).` ) ).
+
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.MessageStrip`                    name = `CustomMessageStripDesign`                      class = `z2ui5_cl_smpc_app_452` path = `src/02/01/z2ui5_cl_smpc_app_452.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.30`
+        is_post171 = abap_true
+        notes = `POST-1.71: sap.m.MessageStrip.colorSet and colorScheme are both @since 1.143.0 and are the whole subject of the sample, so all ten strips keep them 1:1 and the port needs a UI5 runtime >= 1.143. //` &&
+                 ` NOTE: onColorSetChange / _updateDesignForColorSet loop over the ten strips and set ColorSet1 or ColorSet2 on each. The port two-way binds the Select key and gives every strip the same colorSet` &&
+                 ` expression binding over that field, so the switch is roundtrip-free and the Select.change attribute is dropped (the original Select carries no selectedKey either; the port adds the bound one). //` &&
+                 ` LIVE-TEST: The colorSet expression on all ten strips (Select -> ColorSet1/ColorSet2) is unverified in a running system.`
+        post171 = `sap.m.MessageStrip.colorSet and colorScheme are both @since 1.143.0 and are the whole subject of the sample, so all ten strips keep them 1:1 and the port needs a UI5 runtime >= 1.143.` ) ).
 
     lv_text1 = `NOTE: the original's view.xml has no MessageStrip at all: showMsgStrip destroys the previous one and _generateMsgStrip creates a new sap.m.MessageStrip in the controller, adding it to the` &&
                ` VerticalLayout. The port declares that MessageStrip in the view (one control more than the original view.xml) and binds its four varying properties - text, type, showIcon, showCloseButton - plus` &&
@@ -2933,6 +3013,18 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` URLHelper.redirect maps to the URLHELPER REDIRECT frontend action (cs_event-urlhelper); handleFeedbacklinkPressed's Dialog (a RatingIndicator + TextArea with Submit/Cancel Button) is rebuilt via` &&
                  ` popup_display, the Submit button's 2s setBusy delay dropped. // POST-1.71: ObjectAttribute.ariaHasPopup (since UI5 1.97) is kept 1:1 on the feedback attribute; needs UI5 >= 1.97.`
         post171 = `ObjectAttribute.ariaHasPopup (since UI5 1.97) is kept 1:1 on the feedback attribute; needs UI5 >= 1.97.` ) ).
+
+    lv_text1 = `NOTE: The ObjectHeader binds the fixed record {/ProductCollection/0}. The port seeds exactly those row-0 fields at the default-model root and binds them absolutely (there is no element binding to` &&
+               ` resolve a relative {Field} against), so intro, number, numberUnit, the ObjectAttribute text, the tab count, the Image src and the dimension text all read the same mock values. // NOTE: The number` &&
+               ` binding keeps its parts/type/formatOptions structure 1:1 with the paths switched to the ABAP field names, and the dimensions Text keeps the original's '{Width} x {Depth} x {Height} {DimUnit}' shape` &&
+               ` as one composed template over the four bound fields. The picture URL is the mock's own, re-hosted on sdk.openui5.org. // LIVE-TEST: The Currency-typed number binding, the bound tab count and the` &&
+               ` Attachment link's MessageBox.alert are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.ObjectAttribute`                 name = `ObjectHeaderResponsiveI`                       class = `z2ui5_cl_smpc_app_453` path = `src/01/01/z2ui5_cl_smpc_app_453.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.12`
+        notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: the ObjectHeader keeps the original element binding and relative field bindings 1:1 (title, numberUnit, the ObjectAttribute composite texts and the sap.ui.model.type.Currency number binding);` &&
                ` only the binding context path changes - a one-record structure /S_PRODUCT in the default model instead of {/ProductCollection/0}, since the port does not carry the whole collection. // NOTE: the` &&
@@ -3869,6 +3961,20 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.34`
         notes = lv_text1 ) ).
 
+    lv_text1 = `NOTE: addNewButtonPressHandler creates a TabContainerItem in JavaScript and selects it. The port appends the same row to the bound table; the new tab is appended but not auto-selected, because` &&
+               ` TabContainer.selectedItem is an association a bound-row clone cannot address from the backend (app 093's residual difference, same here). // NOTE: itemCloseHandler calls oEvent.preventDefault()` &&
+               ` unconditionally and lets MessageBox.confirm decide. Reproduced 1:1: the itemClose wire carries check_prevent_default and transports ${$parameters>/item}.getName() plus the row index via indexOfItem,` &&
+               ` the backend raises the confirm with onclose CLOSE_DECIDE, and OK deletes the row and toasts 'Item closed: <name>' (duration 500) while Cancel toasts 'Item close canceled: <name>' (app 093 precedent).` &&
+               ` // NOTE: The first employee's icon is the sample's own test-resources image (Woman_04.png), re-hosted on sdk.openui5.org; the other three are icon-font URIs and stay verbatim. The salary values keep` &&
+               ` their two decimals (TYPE p DECIMALS 2), rendered as '{SALARY} EUR' exactly as the original Text does. // LIVE-TEST: The add wire, the prevented-default itemClose with its confirm round-trip and both`.
+    lv_text1 = lv_text1 && ` toast branches are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.TabContainer`                    name = `TabContainerIcons`                             class = `z2ui5_cl_smpc_app_451` path = `src/01/01/z2ui5_cl_smpc_app_451.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.34`
+        notes = lv_text1 ) ).
+
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Table`                           name = `TableAlternateRowColors`                       class = `z2ui5_cl_smpc_app_210` path = `src/01/01/z2ui5_cl_smpc_app_210.clas.abap`
         score = 2
@@ -4008,6 +4114,23 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         is_post171 = abap_true
         notes = lv_text1
         post171 = `sap.m.TableSelectDialog.searchPlaceholder (since 1.110) is kept 1:1 on the value-help dialog; needs UI5 >= 1.110.` ) ).
+
+    lv_text1 = `NOTE: The fragment wires confirm=".handleClose" and cancel=".handleClose", but the controller defines no handleClose at all - both handlers resolve to nothing in the original, and the dialog closes` &&
+               ` itself either way. The port drops both attributes rather than inventing a behaviour (structural-diff reports attr missing TableSelectDialog.confirm and .cancel). // NOTE: The fragment's core:require` &&
+               ` pulls the Currency type and the sample's Formatter module. The port writes the type's full name in the binding-info (sap.ui.model.type.Currency) and computes Formatter.weightState in ABAP, so the` &&
+               ` core:require attribute is dropped (structural-diff reports attr missing TableSelectDialog.core:require). // NOTE: Formatter.weightState of THIS sample compares the RAW measure (<0 None, <1000` &&
+               ` Success, <2000 Warning, else Error - no unit conversion, unlike the shared demo kit formatter). It is business logic, so the state is computed per row in model_init and bound as a plain field. //` &&
+               ` NOTE: handleTableSelectDialogPress reads the growing flag off the pressed button's CustomData and sets growing plus initialFocus (SearchField when growing, List otherwise) before open( ). The port`.
+    lv_text1 = lv_text1 && ` keeps the CustomData on the first button 1:1 but raises two events instead, and builds the same fragment with those two properties set - one popup, two values, everything else identical. // NOTE:` &&
+               ` handleSearch filters the dialog's items binding with a Contains filter on Name. Reproduced 1:1 through follow_up_action binding_call on the dialog's items aggregation, so the model stays untouched` &&
+               ` (app 022 precedent). // LIVE-TEST: Both dialog variants (growing on/off with their initialFocus) and the binding_call search filter are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.TableSelectDialog`               name = `TableSelectDialogGrowing`                      class = `z2ui5_cl_smpc_app_454` path = `src/01/01/z2ui5_cl_smpc_app_454.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16`
+        notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Text`                            name = `Text`                                          class = `z2ui5_cl_smpc_app_051` path = `src/01/01/z2ui5_cl_smpc_app_051.clas.abap`
