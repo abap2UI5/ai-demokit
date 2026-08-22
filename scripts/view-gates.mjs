@@ -108,12 +108,15 @@ const ADVISORY_BUDGET = {
   // raised 2026-08-22 (batch b42, app 522 ListLoading): one more of the same
   // shape - the icon-only refresh Button in the List's header OverflowToolbar,
   // tooltip-less in the demo kit sample itself; kept 1:1
+  // raised 2026-08-22 (batch b44, app 541 PlanningCalendarWithLegend): one more
+  // of the same shape - the icon-only legend ToggleButton in the calendar's
+  // toolbar, tooltip-less in the demo kit sample itself; kept 1:1
   // ratcheted down 2026-08-14 with the linter bump to 51cce10: 6afb902
   // ("missing-accessibility: stop asking for an attribute UI5 ignores") drops
   // the findings on controls where the attribute is ignored anyway, so 26 of
   // the 55 were never real. The ones above stay — they are the alt/tooltip-less
   // originals, kept 1:1
-  'missing-accessibility': 33,
+  'missing-accessibility': 34,
   'event-without-handler': 4, // ratcheted down 2026-08-05: the four calendar ports wired their select handler
   // raised 2026-08-21 (app 298, sap.m.table.columnmenu.QuickSort): the same
   // shape as 268, and here the metadata is not merely incomplete but WRONG.

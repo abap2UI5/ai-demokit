@@ -3,7 +3,7 @@
 
 # The sample catalogue
 
-Every port in this repository — 548 of them — with what it shows and a
+Every port in this repository — 558 of them — with what it shows and a
 link to its source. This is the [overview app](src/z2ui5_cl_smpc_app_000.clas.abap)
 as a page you can read here, before installing anything.
 
@@ -44,7 +44,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 
 ### sap.m
 
-315 port(s).
+325 port(s).
 
 | Sample | Class |
 |---|---|
@@ -260,6 +260,8 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.m.GenericTag** — Overflow Toolbar - layout<br>OverflowToolbarSimple | [`Z2UI5_CL_SMPC_APP_530`](src/01/01/z2ui5_cl_smpc_app_530.clas.abap) |
 | **sap.m.Wizard** — Wizard edit mode<br>WizardCurrentStep | [`Z2UI5_CL_SMPC_APP_534`](src/01/01/z2ui5_cl_smpc_app_534.clas.abap) |
 | **sap.m.Wizard** — Wizard branching use case<br>WizardBranching | [`Z2UI5_CL_SMPC_APP_535`](src/01/01/z2ui5_cl_smpc_app_535.clas.abap) |
+| **sap.m.PlanningCalendar** — Planning Calendar - with min. and max. date<br>PlanningCalendarMinMax | [`Z2UI5_CL_SMPC_APP_540`](src/01/01/z2ui5_cl_smpc_app_540.clas.abap) |
+| **sap.m.PlanningCalendar** — Planning Calendar - with header that remains visible (fixed on top) on scroll<br>PlanningCalendarWithStickyHeader | [`Z2UI5_CL_SMPC_APP_542`](src/01/01/z2ui5_cl_smpc_app_542.clas.abap) |
 | **sap.m.Carousel** — Carousel with Controls<br>With the Carousel a user can browse through multi-page content by swiping left or right.<br><sub>carousel sap.m user browse through title image text scrollcontainer list standardlistitem</sub><br><sub>✓ checked · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_006`](src/02/01/z2ui5_cl_smpc_app_006.clas.abap) |
 | **sap.m.DatePicker** — Date Picker - Open by Another Control<br>This example shows Date Picker which is opened by another control.<br><sub>datepicker date picker sap.m open another title vbox label button link</sub><br><sub>✓ checked · 5 deviations</sub> | [`Z2UI5_CL_SMPC_APP_016`](src/02/01/z2ui5_cl_smpc_app_016.clas.abap) |
 | **sap.m.DateRangeSelection**<br>The Date Range Selection is an extension of the Date Picker Control and enables the user to select range of dates.<br><sub>daterangeselection date range selection sap.m single-field input vbox label text</sub><br><sub>✓ checked · 8 deviations</sub> | [`Z2UI5_CL_SMPC_APP_017`](src/02/01/z2ui5_cl_smpc_app_017.clas.abap) |
@@ -363,6 +365,14 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.m.QuickView** — QuickView with Different Configurations of Avatar<br>QuickViewAvatarConfiguration | [`Z2UI5_CL_SMPC_APP_531`](src/02/01/z2ui5_cl_smpc_app_531.clas.abap) |
 | **sap.m.QuickView** — QuickView with Navigation and Data Binding<br>QuickViewNavOrigin | [`Z2UI5_CL_SMPC_APP_532`](src/02/01/z2ui5_cl_smpc_app_532.clas.abap) |
 | **sap.m.Wizard** — Wizard page mode<br>WizardSingleStep | [`Z2UI5_CL_SMPC_APP_533`](src/02/01/z2ui5_cl_smpc_app_533.clas.abap) |
+| **sap.m.PlanningCalendar** — simple Planning Calendar<br>PlanningCalendar | [`Z2UI5_CL_SMPC_APP_536`](src/02/01/z2ui5_cl_smpc_app_536.clas.abap) |
+| **sap.m.PlanningCalendar** — Planning Calendar - with custom views<br>PlanningCalendarViews | [`Z2UI5_CL_SMPC_APP_537`](src/02/01/z2ui5_cl_smpc_app_537.clas.abap) |
+| **sap.m.PlanningCalendar** — Planning Calendar - multiple selection<br>PlanningCalendarMulti | [`Z2UI5_CL_SMPC_APP_538`](src/02/01/z2ui5_cl_smpc_app_538.clas.abap) |
+| **sap.m.PlanningCalendar** — Planning Calendar - with one line appointments and multiple appointments selection option<br>PlanningCalendarOneLine | [`Z2UI5_CL_SMPC_APP_539`](src/02/01/z2ui5_cl_smpc_app_539.clas.abap) |
+| **sap.m.PlanningCalendar** — Planning Calendar - with legend and option to change the first day of week<br>PlanningCalendarWithLegend | [`Z2UI5_CL_SMPC_APP_541`](src/02/01/z2ui5_cl_smpc_app_541.clas.abap) |
+| **sap.m.PlanningCalendar** — Planning Calendar - with appointments in different sizes<br>PlanningCalendarAppointmentSizes | [`Z2UI5_CL_SMPC_APP_543`](src/02/01/z2ui5_cl_smpc_app_543.clas.abap) |
+| **sap.m.PlanningCalendar** — Planning Calendar - week numbering<br>PlanningCalendarWeekNumbering | [`Z2UI5_CL_SMPC_APP_544`](src/02/01/z2ui5_cl_smpc_app_544.clas.abap) |
+| **sap.m.PlanningCalendar** — Planning Calendar - with relative views<br>PlanningCalendarRelativeViews | [`Z2UI5_CL_SMPC_APP_545`](src/02/01/z2ui5_cl_smpc_app_545.clas.abap) |
 
 ### sap.uxap
 

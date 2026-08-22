@@ -7,6 +7,61 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-22 — batch b44 (sap.m): the PlanningCalendar family, ten of thirteen (apps 536–545)
+
+The first FAMILY batch since the sap.m tail: ten of the thirteen unported
+`sap.m.PlanningCalendar` samples, all `covered-control(1)` rows over the one
+port (app 108, PlanningCalendarSingle) that already covered the control.
+
+| app | sample | what it adds |
+|---|---|---|
+| 536 | PlanningCalendar | `primaryCalendarType` @1.108 / `secondaryCalendarType` @1.109 and `rowHeaderPress` @1.119 (POST_171, `src/02`) |
+| 537 | PlanningCalendarViews | four custom views, the non-working-day toggle over a bound `specialDates`, `groupAppointmentsMode` |
+| 538 | PlanningCalendarMulti | `singleSelection="false"` — the interval push reaches EVERY selected row |
+| 539 | PlanningCalendarOneLine | `appointmentHeight` @1.81 + `multipleAppointmentsSelection` @1.97 with a bound badge (POST_171, `src/02`) |
+| 540 | PlanningCalendarMinMax | `minDate` / `maxDate` through the same date formatter |
+| 541 | PlanningCalendarWithLegend | the legend in a `DynamicSideContent`, `DateTypeRange.color` @1.76 / `secondaryType` @1.81 (POST_171, `src/02`) |
+| 542 | PlanningCalendarWithStickyHeader | `stickyHeader` with `showWeekNumbers` and the built-in views box |
+| 543 | PlanningCalendarAppointmentSizes | `appointmentHeight` + `appointmentRoundWidth` @1.81 driven by two Selects (POST_171, `src/02`) |
+| 544 | PlanningCalendarWeekNumbering | `calendarWeekNumbering` @1.110 with its four schemes (POST_171, `src/02`) |
+| 545 | PlanningCalendarRelativeViews | `PlanningCalendarView.relative` + `intervalSize` @1.93 (POST_171, `src/02`) |
+
+The family's shape is the same everywhere: a `startDate` plus rows of
+appointments and interval headers, every date a JS `Date` the model cannot
+carry, so all ten use the `Formatter.DateCreateObject` idiom app 108
+established. What each sample adds on top is a handful of PlanningCalendar
+PROPERTIES the controller sets imperatively — `primaryCalendarType`,
+`groupAppointmentsMode`, `firstDayOfWeek`, `appointmentHeight`,
+`appointmentRoundWidth`, `calendarWeekNumbering`,
+`multipleAppointmentsSelection`, `builtInViews`, `standardItems` — and every
+one of them is BINDABLE. So the recurring port move in this batch is: bind the
+property, let the Select or ToggleButton share the same field, and drop the
+change handler entirely.
+
+Three findings:
+
+- **The data is mechanical, so the transcription should be too.** These
+  controllers inline hundreds of `UI5Date.getInstance(y, m, d, h, min)`
+  appointments, with month 0-based and some values deliberately out of range
+  (`"4", "33"` — JS normalises it to June 2). A converter that evaluates the
+  literal with a stubbed `UI5Date` and prints local ISO strings gets every row
+  right; hand-transcription would not. The data-fidelity gate compares what
+  ends up seeded, and all ten passed first time.
+- **A nested scalar table is not a scalar array to the static harness.** App
+  537 binds `PlanningCalendarRow.nonWorkingDays` (int[]) to a table nested
+  inside the bound row; the render harness mocks every nested table as an array
+  of ROW OBJECTS, so UI5 rejects it. A ROOT-level scalar table is mocked
+  correctly — app 490 binds one to `selectedKeys` and renders clean — so this is
+  the harness's nesting rule, and app 537 carries a declared `render_smoke.skip`
+  saying exactly that until the e2e harness confirms it against the real backend.
+- **A string[] property needs an ARRAY from an expression binding, not a
+  comma string.** App 541's `standardItems` first got
+  `{= … ? 'Today,Selected,NonWorkingDay' : … }` and UI5 answered "Invalid value
+  … must contain values from sap.ui.unified.StandardCalendarLegendItem": the
+  comma splitting is XML-attribute syntax, not expression semantics. An array
+  literal inside the expression (`['Today','Selected','NonWorkingDay']`) is what
+  the binding needs.
+
 ## 2026-08-22 — batch b43 (sap.f + sap.m): the covered-control(1) head of the backlog (apps 526–535)
 
 The first batch after the sap.m tail ran out. Every row is a

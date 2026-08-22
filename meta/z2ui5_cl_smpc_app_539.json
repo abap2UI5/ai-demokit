@@ -1,0 +1,47 @@
+{
+  "class": "z2ui5_cl_smpc_app_539",
+  "sample": "sap.m.sample.PlanningCalendarOneLine",
+  "entity": "sap.m.PlanningCalendar",
+  "file": "src/02/01/z2ui5_cl_smpc_app_539.clas.abap",
+  "batch": "b44",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.PlanningCalendar appointmentHeight is @since 1.81.0 and multipleAppointmentsSelection @since 1.97, and sap-icon://select-appointments reached the icon font in 1.96 - all newer than the 1.71 floor. The one-line appointment height and the multi-selection toggle are what this sample is about, so all three are kept and the port is filed under src/02."
+    },
+    {
+      "type": "NOTE",
+      "what": "The calendar date properties (the PlanningCalendar startDate and every CalendarAppointment / DateTypeRange startDate and endDate) are typed \"object\" and demand a real JS Date. The model keeps ISO strings and Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74)."
+    },
+    {
+      "type": "NOTE",
+      "what": "onPress flips setMultipleAppointmentsSelection and swaps the button's tooltip. The property is bindable, so the ToggleButton's pressed state and the calendar share one flag and the press needs no handler; the tooltip is a second bound field carrying the two texts the original sets."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleAppointmentSelect also writes the selected-appointment count into the ToggleButton's BadgeCustomData. The count already travels with the event for the MessageBox, so the same round-trip fills the bound badge value."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "handleSortChange hands the calendar a JavaScript comparator through setCustomAppointmentsSorterCallback (fnAlphabeticalOrder, a case-insensitive title compare). abap2UI5 cannot register a callback, so the port sorts the appointment rows THEMSELVES in ABAP with the same rule and re-seeds the original order for the default entry. Same visible order, different mechanism: the calendar keeps its default sorter and the model arrives pre-sorted, so an appointment ADDED after the switch is not re-sorted until the Select is used again."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleIntervalSelect pushes a 'new appointment' (Type09) into the row it hit, or into every selected row; the indices travel with the event and ABAP does the same push. The interval's start and end travel as their LOCAL parts; a UTC toISOString( ) would shift the day."
+    },
+    {
+      "type": "NOTE",
+      "what": "The row images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The multi-selection toggle with its badge, the alphabetical sort and the interval-select push are unverified in a running system."
+    }
+  ]
+}

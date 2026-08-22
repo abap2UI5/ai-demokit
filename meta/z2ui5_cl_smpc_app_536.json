@@ -1,0 +1,43 @@
+{
+  "class": "z2ui5_cl_smpc_app_536",
+  "sample": "sap.m.sample.PlanningCalendar",
+  "entity": "sap.m.PlanningCalendar",
+  "file": "src/02/01/z2ui5_cl_smpc_app_536.clas.abap",
+  "batch": "b44",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.PlanningCalendar rowHeaderPress is @since 1.119.0, primaryCalendarType @since 1.108.0 and secondaryCalendarType @since 1.109.0, and sap.ui.unified.CalendarAppointment ariaHasPopup is @since 1.150.0 - all newer than the 1.71 floor. The two calendar-type Selects are what this sample adds over the other PlanningCalendar samples, so every one is kept and the port is filed under src/02."
+    },
+    {
+      "type": "NOTE",
+      "what": "The calendar date properties (startDate, CalendarAppointment startDate/endDate) are typed \"object\" and demand a real JS Date. The model keeps ISO strings and Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74)."
+    },
+    {
+      "type": "NOTE",
+      "what": "onCalendarTypeSelect and onCalendarSecondaryTypeSelect call setPrimaryCalendarType / setSecondaryCalendarType. Both properties are bindable, so each Select shares its key with the calendar and neither handler needs a round-trip. The secondary Select's None entry means \"no secondary type\" - the original passes undefined, which an expression binding reproduces. onInit's read-back of getPrimaryCalendarType() is the Gregorian default, seeded here. Both Select.change attributes are therefore dropped (structural-diff reports Select.change as attr missing)."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleSelectionFinish hands the MultiComboBox's selected keys to setBuiltInViews. The picked keys travel as one comma-separated argument and ABAP fills the bound string table, so the calendar's built-in views really follow the box."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleAppointmentSelect and handleRowHeaderPress both open a MessageBox. Every value they read (the appointment title, its selected state, the selected count, the pressed row's id) is client-readable, so it travels with the event and ABAP composes the text - the box is modal anyway, so the round-trip costs nothing."
+    },
+    {
+      "type": "NOTE",
+      "what": "The two row images are the demo kit's own test-resources files (John_Miller.png, Donna_Moore.jpg), re-hosted on sdk.openui5.org."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The two calendar-type Selects, the built-in views box, the appointment select and the row header press are unverified in a running system."
+    }
+  ]
+}
