@@ -40,9 +40,14 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   unmirrored property there is not a version finding but a failed view
   CREATION — `Error found in View: <z2ui5:MultiInputExt … TokenKeyCell="0"/>`.
   Shipping it would need a `property_gate` plus a `render_smoke` skip for
-  something that is neither a version gap nor a typo, so it waits for
-  `linter-multiinputext-token-cells` (filed in abap2UI5's
-  [backlog](https://github.com/abap2UI5/abap2UI5/blob/main/backlog/ABAP2UI5-LINTER.md)).
+  something that is neither a version gap nor a typo. **The linter side is
+  done** (2026-08-22): the companion-control mirrors moved out of
+  `lib/render.mjs` into `lib/cc-controls.mjs`, the harness script is generated
+  from them and `check-upstream` compares each control against
+  `app/webapp/cc/<Name>.js`, so this cannot rot again. Verified against a
+  patched build — app 612 converted passes the render gate. What is left is a
+  RELEASE: `check-pins` holds this repository on the published
+  `@abap2ui5/linter`, so the conversion lands with the next version.
   **When the mirror lands:** bind `tokens` off both MultiInputs, drop the
   `suggestionItemSelected` wires and the `TOKEN_2`/`TOKEN_3` handler, add
   `xmlns:z2ui5="z2ui5.cc"` plus one `MultiInputExt` per input

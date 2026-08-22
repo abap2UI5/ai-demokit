@@ -7,6 +7,80 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-22 — the FIRST full e2e sweep: 22 ports that had never been run
+
+Every previous sweep was per batch. Running all 623 at once found **22
+failures, and every one of them was a port with status `generated` /
+`checked: null`** — never live-verified. Nothing the b51 batch shipped broke
+them; they had simply never been executed.
+
+**The finding that outlived the sweep: `b =` is not a binding.**
+`z2ui5_cl_ui5_view_builder->a( b = … )` renders the literal `true` or `false`
+into the attribute at RENDER time — a convenience for a static boolean. Five
+ports used it for a field their event handler CHANGES, and none of the five
+re-renders after an event, so the control could never move. The sweep reported
+**one** of them (app 505's `showOverlay`); the other four — 436, 492
+(`pressed`) and 444 (`visible`) — came out of asking what else had the shape.
+That is the difference between fixing a failure and fixing a defect: the gates
+cannot see it, because the ABAP is valid and the view is correct.
+
+Nine more real defects, each its own class:
+
+| app | what was wrong |
+|---|---|
+| 252 | named the RETIRED `z2ui5_if_types=>cs_device`; that interface ships only so downstream installs keep compiling, and its constants are **not materialised** in the transpiled build — `model_init` died on `Cannot read properties of undefined` |
+| 549 / 609 | a `COND` whose branches the transpiler HOISTS and evaluates BOTH, so `get_event_arg( 2 )` ran for the sibling event that carries no arguments; 609 was derived from 549 and inherited it |
+| 553 / 555 | bound ROOT aggregations with a bare relative path (`{path: 'T_APPOINTMENTS'}`) — right inside a row-bound aggregation (apps 536/545 do it), meaningless at the root: 555's calendar came up with ZERO appointments, 553's legend with none |
+| 499 | built the `binding_call` filter payload as an array of OBJECTS; the compound form is groups of `[path, operator, value1]` ROWS, and a group that is not an array is dropped — leaving an empty list, which CLEARS the filter |
+| 520 | sent a raw boolean as an event arg: ajson normalises it to `X`/space on a system, the transpiled backend gets `'false'` verbatim, and `'false'` is not `INITIAL` |
+| 565 | read `${$source>/PRODUCT_ID}` — `$source>` is UI5's CONTROL model and sees the pressed control's PROPERTIES, not the row's model fields. The only one of the corpus's thirteen `$source>` wires reading a model field |
+| 508 | seeded its toggle flag the wrong way round, so the info toolbar started hidden where the original starts shown |
+
+**The other thirteen were wrong assertions, in two families.** A BOUND
+aggregation keeps its template as a live Element in the registry, so a
+registry-wide count is always one too many (531/532's QuickViewPages, 520's
+NotificationListItems, 555's appointments, 506's tab items). And several
+controls keep instances of their OWN beside the bound ones —
+`sap.m.Breadcrumbs` an internal `sap.m.Link`, `sap.ui.unified.Calendar` an
+eighth `DateTypeRange`, `sap.m.PlanningCalendar` a fourth row. Ask the owning
+control for its aggregation; never count the registry.
+
+Three new harness rules came out of it, all measured:
+
+- **An open popover measures ZERO in the unthemed harness**, so `toContainText`
+  times out on a popover that is on screen and correct (app 486). Read it
+  through the control.
+- **`setValue` + `fireChange` does not write a TYPED binding's model** — that is
+  `InputBase.onChange` → `updateModelProperty`, which runs the type. Firing the
+  event directly leaves the control on the new value and the model on the old
+  one, so the round trip sends the old one (app 622).
+- **While a client-side constraint is violated, NO round trip goes out at all**
+  (measured: one POST for a whole sequence). The backend's own paths have to be
+  driven before the violation, not after.
+
+Two assertions had never run: `expect(x).toContain(…)` (a Playwright-test API
+this harness does not have) and `toBeVisible()` (a matcher it was missing).
+Adding the matcher made app 516's assertion execute for the first time — and it
+turned out to assert a `SegmentedButton` the sample has nowhere. It is the
+ViewSettingsDialog's own header, and only exists once the dialog is open.
+
+**The harness could not start at all at first.** The build finished, the server
+never listened: `RangeError: Maximum call stack size exceeded` inside
+`compileSourceTextModule`. The view builder's chain transpiles to ONE deeply
+nested expression — `view->ele( )->a( )->a( )` becomes
+`await (await (await (…).get().a(…)).get().a(…))`, one level per call — and the
+generated overview app's view is **177 calls** long. Node's default parser
+stack, already partly spent by the ESM loader walking 2,340 modules, overflows
+on it. It is a V8 parser limit, not an ABAP one — a real system never parses
+this — so the harness raises the stack rather than the corpus shortening its
+chains. A backend 500 also names its exception and frame now; "HTTP 500" alone
+diagnosed nothing.
+
+Final state: **623 / 623 pass.** The one straggler in the confirming run
+(app 233) was CPU contention — a `check:js` suite and a `frontend:build` were
+running beside the sweep and its 10-second assertion ran out. Green on re-run,
+and the lesson is the obvious one: nothing heavy beside a sweep.
+
 ## 2026-08-22 — batch b51 (sap.m): the backlog reaches zero (apps 612–623)
 
 The last twelve portable samples in the corpus. Every library is at 100 %, and
