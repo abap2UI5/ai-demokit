@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_425",
+  "sample": "sap.m.sample.ToolbarEnabled",
+  "entity": "sap.m.OverflowToolbar",
+  "file": "src/01/01/z2ui5_cl_smpc_app_425.clas.abap",
+  "batch": "b32",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onCheckBoxSelect calls toolbar.setEnabled(selected); the port two-way binds one flag on both CheckBox.selected and OverflowToolbar.enabled, so the toggle happens roundtrip-free in the model. The CheckBox.select attribute is therefore dropped (structural-diff reports attr missing CheckBox.select)."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The two-way bound enabled flag (outer CheckBox -> OverflowToolbar.enabled and with it every control inside the toolbar) is unverified in a running system."
+    }
+  ]
+}

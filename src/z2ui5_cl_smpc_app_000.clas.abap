@@ -1286,6 +1286,18 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         post171 = `ariaLabelledBy on sap.m.Carousel (since UI5 1.125, source-verified in Carousel.js) is newer than 1.71 but kept for the 1:1 port - it is what links the Carousel to the sample's Title. The app needs a` &&
                  ` UI5 release >= 1.125 for the association to take effect; the Carousel itself renders on 1.71.` ) ).
 
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Carousel`                        name = `CarouselEmptyMessages`                         class = `z2ui5_cl_smpc_app_427` path = `src/02/01/z2ui5_cl_smpc_app_427.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        is_post171 = abap_true
+        notes = `POST-1.71: sap.m.Carousel.ariaLabelledBy is @since 1.125; the original wires the Carousel to its Title through it, so the association is kept 1:1 and the port needs a UI5 runtime >= 1.125 for the` &&
+                 ` accessibility label. // NOTE: onResizeCarouselContainer sets carousel.setWidth(value + '%') on every Slider liveChange. The port reproduces it roundtrip-free: the Slider value is two-way bound and` &&
+                 ` the Carousel carries a width expression binding over the same field. The Slider.liveChange attribute is therefore dropped and Carousel.width is added (structural-diff reports attr missing` &&
+                 ` Slider.liveChange and attr extra Carousel.width). // LIVE-TEST: The Slider value -> Carousel width expression binding is client-side model propagation and is unverified in a running system.`
+        post171 = `sap.m.Carousel.ariaLabelledBy is @since 1.125; the original wires the Carousel to its Title through it, so the association is kept 1:1 and the port needs a UI5 runtime >= 1.125 for the accessibility` &&
+                 ` label.` ) ).
+
     lv_text1 = `NOTE: the three carousel images bind to a separate named model in the original (img>/products/pic1..3 from sap/ui/demo/mock/img.json); resolved here to static image URLs, as abap2UI5 serves a single` &&
                ` default model. // POST-1.71: ariaLabelledBy on the Carousel (since UI5 1.125) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.125 to render it. // NOTE: The sample's` &&
                ` asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at` &&
@@ -1899,6 +1911,11 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.FlexBox`                         name = `FlexBoxBasicAlignment`                         class = `z2ui5_cl_smpc_app_392` path = `src/01/01/z2ui5_cl_smpc_app_392.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+      ( module = `sap.m`              control = `sap.m.FlexBox`                         name = `FlexBoxCols`                                   class = `z2ui5_cl_smpc_app_426` path = `src/01/01/z2ui5_cl_smpc_app_426.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: The sample ships its own style.css (.equalColumns .columns min-height 200px and the .sapMFlexItem padding). abap2UI5 serves no per-sample stylesheet, so the two rules are injected verbatim` &&
+                 ` through an extra core:HTML <style> leaf at the top of the view - structural-diff reports control extra core:HTML. Nothing else changes: both classes stay on the same controls the original carries.` )
       ( module = `sap.m`              control = `sap.m.FlexBox`                         name = `FlexBoxDirectionOrder`                         class = `z2ui5_cl_smpc_app_393` path = `src/01/01/z2ui5_cl_smpc_app_393.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
@@ -2020,6 +2037,13 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.HeaderContainer`                 name = `HeaderContainerNoDividers`                     class = `z2ui5_cl_smpc_app_428` path = `src/01/01/z2ui5_cl_smpc_app_428.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.44.0`
+        notes = `NOTE: onInit loops over the eight core:InvisibleTexts and calls headerContainer.addAriaLabelledBy(text<i>). The association is static (the ids never change), so the port writes it as the` &&
+                 ` HeaderContainer.ariaLabelledBy attribute listing all eight ids instead of building it imperatively. // NOTE: press shows MessageToast.show('Fire press') - a constant text, so all eight NumericContent` &&
+                 ` presses are composed on the client via follow_up_action control_global MESSAGE_TOAST.show and need no round-trip.` )
       ( module = `sap.m`              control = `sap.m.HeaderContainer`                 name = `HeaderContainerVM`                             class = `z2ui5_cl_smpc_app_157` path = `src/01/01/z2ui5_cl_smpc_app_157.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2354,6 +2378,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.List`                            name = `ListNavType`                                   class = `z2ui5_cl_smpc_app_429` path = `src/01/01/z2ui5_cl_smpc_app_429.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
       ( module = `sap.m`              control = `sap.m.List`                            name = `ListNoData`                                    class = `z2ui5_cl_smpc_app_035` path = `src/01/01/z2ui5_cl_smpc_app_035.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
@@ -2999,6 +3026,14 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.28` )
+      ( module = `sap.m`              control = `sap.m.OverflowToolbar`                 name = `ToolbarActive`                                 class = `z2ui5_cl_smpc_app_424` path = `src/01/01/z2ui5_cl_smpc_app_424.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.28`
+        notes = `NOTE: onCheckBoxSelect calls toolbar.setActive(selected); the port two-way binds one flag on both CheckBox.selected and OverflowToolbar.active, so the toggle happens roundtrip-free in the model. The` &&
+                 ` CheckBox.select attribute is therefore dropped (structural-diff reports attr missing CheckBox.select). // NOTE: onToolbarPress shows MessageToast.show('OverflowToolbar is clicked') - a constant text,` &&
+                 ` so it is composed on the client via follow_up_action control_global MESSAGE_TOAST.show and needs no round-trip. // LIVE-TEST: Both wires are unverified in a running system: the two-way bound active` &&
+                 ` flag (CheckBox -> OverflowToolbar.active) and the client-composed toast on the OverflowToolbar press.` )
       ( module = `sap.m`              control = `sap.m.OverflowToolbar`                 name = `ToolbarAlignment`                              class = `z2ui5_cl_smpc_app_396` path = `src/01/01/z2ui5_cl_smpc_app_396.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -3009,6 +3044,15 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.28`
         notes = `NOTE: the Select ``change`` handlers onSelectDesign/onSelectStyle (setDesign/setStyle) become two-way bound design/style; bActionContext (design != Info) becomes an expression binding on the Buttons'` &&
                  ` visible.` ) ).
+
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.OverflowToolbar`                 name = `ToolbarEnabled`                                class = `z2ui5_cl_smpc_app_425` path = `src/01/01/z2ui5_cl_smpc_app_425.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.28`
+        notes = `NOTE: onCheckBoxSelect calls toolbar.setEnabled(selected); the port two-way binds one flag on both CheckBox.selected and OverflowToolbar.enabled, so the toggle happens roundtrip-free in the model. The` &&
+                 ` CheckBox.select attribute is therefore dropped (structural-diff reports attr missing CheckBox.select). // LIVE-TEST: The two-way bound enabled flag (outer CheckBox -> OverflowToolbar.enabled and with` &&
+                 ` it every control inside the toolbar) is unverified in a running system.` ) ).
 
     lv_text1 = `NOTE: Both halves of the controller are now reproduced instead of faked. (a) onPress toasts oEvent.getSource().getText(); the port transports that value - control_global MESSAGE_TOAST.show with the` &&
                ` template '{0}' filled by ${$source>/text} (the app-003 shape) - instead of hardcoding each button's caption, so the icon-only Print button toasts its (empty) text exactly as the original does. (b)` &&
@@ -3420,16 +3464,24 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`
         notes = `NOTE: the original reads the selected item via oEvent.getParameter("item").getText() / getSelectedItem(). Here the items get keys (one/two/three - an addition, SB1 has none in the sample) and` &&
                  ` selectedKey is two-way bound, so the selection arrives with the event and no private event path is needed - the documented 1:1 path for controller-read selection (CAPABILITIES.md), not a workaround.` )
+      ( module = `sap.m`              control = `sap.m.SegmentedButton`                 name = `SegmentedButtonContentModes`                   class = `z2ui5_cl_smpc_app_423` path = `src/02/01/z2ui5_cl_smpc_app_423.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        is_post171 = abap_true
+        notes = `POST-1.71: sap.m.SegmentedButton.contentMode is @since 1.142.0 and both SegmentedButtons of the sample are built around it (ContentFit vs EqualSized) - the property is kept 1:1, so the port needs a` &&
+                 ` UI5 runtime >= 1.142; on an older release both buttons render in the pre-1.142 default width behaviour.`
+        post171 = `sap.m.SegmentedButton.contentMode is @since 1.142.0 and both SegmentedButtons of the sample are built around it (ContentFit vs EqualSized) - the property is kept 1:1, so the port needs a UI5 runtime` &&
+                 ` >= 1.142; on an older release both buttons render in the pre-1.142 default width behaviour.` )
       ( module = `sap.m`              control = `sap.m.SegmentedButton`                 name = `SegmentedButtonLI`                             class = `z2ui5_cl_smpc_app_391` path = `src/01/01/z2ui5_cl_smpc_app_391.clas.abap`
         score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Select`                          name = `Select`                                        class = `z2ui5_cl_smpc_app_048` path = `src/01/01/z2ui5_cl_smpc_app_048.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: the original controller seeds three byte-identical product arrays (/ProductCollection, /ProductCollection2, /ProductCollection3) and binds one Select to each; the port folds them into the single` &&
-                 ` shared table /T_PRODUCTS feeding all three Selects - same rows, same sorter, each Select keeps its own two-way selectedKey, so rendering and behaviour are identical.` ) ).
-
-    result = VALUE #( BASE result
+                 ` shared table /T_PRODUCTS feeding all three Selects - same rows, same sorter, each Select keeps its own two-way selectedKey, so rendering and behaviour are identical.` )
       ( module = `sap.m`              control = `sap.m.Select`                          name = `SelectValueState`                              class = `z2ui5_cl_smpc_app_373` path = `src/01/01/z2ui5_cl_smpc_app_373.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -4136,6 +4188,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: the /ProductCollectionStats/Counts values are flattened to the default model fields /TOTAL, /OK, /HEAVY, /OVERWEIGHT (verbatim counts).` )
       ( module = `sap.m`              control = `sap.ui.core.StandardMargins`           name = `StandardMarginsAll`                            class = `z2ui5_cl_smpc_app_088` path = `src/01/01/z2ui5_cl_smpc_app_088.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+      ( module = `sap.m`              control = `sap.ui.core.StandardMargins`           name = `StandardMarginsSingleSided`                    class = `z2ui5_cl_smpc_app_430` path = `src/01/01/z2ui5_cl_smpc_app_430.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
       ( module = `sap.m`              control = `sap.ui.core.StandardMargins`           name = `StandardNegativeMarginsTwoSided`               class = `z2ui5_cl_smpc_app_403` path = `src/01/01/z2ui5_cl_smpc_app_403.clas.abap`

@@ -7,6 +7,35 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-22 — batch b32 (sap.m): eight depth ports (apps 423–430)
+
+The first slice of the "port the rest" mandate. `--backlog` has no
+`NEW-CONTROL` row left that is not a HOLDOUT, so every remaining sample is a
+depth port; this batch takes eight sap.m samples whose idiom is distinct from
+their control's existing ports, and none of them needed a capability the
+corpus did not already have.
+
+| app | sample | the idiom it adds |
+|---|---|---|
+| 423 | SegmentedButtonContentModes | `contentMode` @1.142 (POST_171, `src/02`) — ContentFit vs EqualSized on one item set, fully static |
+| 424 | ToolbarActive | one shared two-way flag drives `CheckBox.selected` and `OverflowToolbar.active`; the constant `press` toast is client-composed |
+| 425 | ToolbarEnabled | the same shared-flag shape on `enabled`, which disables every control inside the toolbar |
+| 426 | FlexBoxCols | the sample's `style.css` (equal-column min-height, flex-item padding) injected as a `core:HTML` `<style>` leaf |
+| 427 | CarouselEmptyMessages | Slider value → `Carousel.width` expression binding (app 418's shape on a new control); `ariaLabelledBy` @1.125 (POST_171, `src/02`) |
+| 428 | HeaderContainerNoDividers | `addAriaLabelledBy` over eight `core:InvisibleText`s written as the static association; eight constant client toasts |
+| 429 | ListNavType | the element-binding form kept 1:1 — `binding="{/T_PRODUCTS}"` on the List, `{0/…}`/`{1/…}`/`{2/…}` relative on the items |
+| 430 | StandardMarginsSingleSided | single-sided margin classes, fully static (the sample's model is never bound) |
+
+Two ports moved to `src/02/01` on their first `POST_171` (423, 427) — the
+`view_gates` property check named both members, which is the folder rule
+working as designed: neither was visible in the structural diff.
+
+**Every port has 0 undeclared structural differences**, and the three ports
+that ship a `LIVE_TEST` (424, 425, 427) ship their `meta/interactions/` module
+with it rather than adding to the interaction gap — the two shared-flag wires
+and the slider-driven width are exactly the classes the harness already covers
+(`sliderDrivenWidth`, the two-way-bound-property class).
+
 ## 2026-08-17 — the open requests leave `pr/`, and the ecosystem gets four backlogs
 
 `pr/` held five open requests aimed at **three different upstreams** —

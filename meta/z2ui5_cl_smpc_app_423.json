@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_smpc_app_423",
+  "sample": "sap.m.sample.SegmentedButtonContentModes",
+  "entity": "sap.m.SegmentedButton",
+  "file": "src/02/01/z2ui5_cl_smpc_app_423.clas.abap",
+  "batch": "b32",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.SegmentedButton.contentMode is @since 1.142.0 and both SegmentedButtons of the sample are built around it (ContentFit vs EqualSized) - the property is kept 1:1, so the port needs a UI5 runtime >= 1.142; on an older release both buttons render in the pre-1.142 default width behaviour."
+    }
+  ]
+}

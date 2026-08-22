@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_427",
+  "sample": "sap.m.sample.CarouselEmptyMessages",
+  "entity": "sap.m.Carousel",
+  "file": "src/02/01/z2ui5_cl_smpc_app_427.clas.abap",
+  "batch": "b32",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.Carousel.ariaLabelledBy is @since 1.125; the original wires the Carousel to its Title through it, so the association is kept 1:1 and the port needs a UI5 runtime >= 1.125 for the accessibility label."
+    },
+    {
+      "type": "NOTE",
+      "what": "onResizeCarouselContainer sets carousel.setWidth(value + '%') on every Slider liveChange. The port reproduces it roundtrip-free: the Slider value is two-way bound and the Carousel carries a width expression binding over the same field. The Slider.liveChange attribute is therefore dropped and Carousel.width is added (structural-diff reports attr missing Slider.liveChange and attr extra Carousel.width)."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The Slider value -> Carousel width expression binding is client-side model propagation and is unverified in a running system."
+    }
+  ]
+}

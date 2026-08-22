@@ -3,7 +3,7 @@
 
 # The sample catalogue
 
-Every port in this repository — 435 of them — with what it shows and a
+Every port in this repository — 443 of them — with what it shows and a
 link to its source. This is the [overview app](src/z2ui5_cl_smpc_app_000.clas.abap)
 as a page you can read here, before installing anything.
 
@@ -44,7 +44,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 
 ### sap.m
 
-217 port(s).
+224 port(s).
 
 | Sample | Class |
 |---|---|
@@ -190,6 +190,11 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.m.TimePicker** — Time Picker - Value States<br>This example shows different TimePicker value states.<br><sub>timepicker time picker sap.m timepickervaluestate flexbox vbox label</sub><br><sub>◐ reviewed</sub> | [`Z2UI5_CL_SMPC_APP_404`](src/01/01/z2ui5_cl_smpc_app_404.clas.abap) |
 | **sap.m.Title** — Title Properties<br>This sample shows the different behaviors of a title.<br><sub>title sap.m titlewrapping label switch slider panel messagestrip</sub><br><sub>○ generated · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_418`](src/01/01/z2ui5_cl_smpc_app_418.clas.abap) |
 | **sap.m.SearchField** — Search Field - Suggestions<br>Add suggestion capabilities to a basic Search Field.<br><sub>searchfield search field sap.m searchfieldsuggestions label suggestionitem</sub><br><sub>○ generated · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_420`](src/01/01/z2ui5_cl_smpc_app_420.clas.abap) |
+| **sap.m.OverflowToolbar** — OverflowToolbar - Active<br>Making an OverflowToolbar or a Toolbar active allows them to react to the click event.<br><sub>overflowtoolbar overflow toolbar sap.m toolbaractive checkbox text toolbarspacer</sub><br><sub>○ generated · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_424`](src/01/01/z2ui5_cl_smpc_app_424.clas.abap) |
+| **sap.m.OverflowToolbar** — OverflowToolbar - Enabled<br>The Enabled property can be used to enable or disable all the controls inside the OverflowToolbar/Toolbar.<br><sub>overflowtoolbar overflow toolbar sap.m toolbarenabled checkbox button toolbarspacer input radiobutton</sub><br><sub>○ generated · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_425`](src/01/01/z2ui5_cl_smpc_app_425.clas.abap) |
+| **sap.m.FlexBox** — Flex Box - Equal Height Cols<br>You can create balanced areas with Flex Box, such as these columns with equal height regardless of content.<br><sub>flexbox flex box sap.m flexboxcols text flexitemdata</sub><br><sub>○ generated · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_426`](src/01/01/z2ui5_cl_smpc_app_426.clas.abap) |
+| **sap.m.HeaderContainer** — Header Container Without Dividers<br>The Header Container without divider lines.<br><sub>headercontainer header container sap.m headercontainernodividers numericcontent</sub><br><sub>○ generated · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_428`](src/01/01/z2ui5_cl_smpc_app_428.clas.abap) |
+| **sap.m.List** — List - Navigation Indication<br>If only a subset of the list items are navigable you should indicate those by setting their 'type' to 'Navigation'. This displays an navigation arrow. Do not show arrows if all items are navigable.<br><sub>list sap.m listnavtype standardlistitem</sub><br><sub>○ generated</sub> | [`Z2UI5_CL_SMPC_APP_429`](src/01/01/z2ui5_cl_smpc_app_429.clas.abap) |
 | **sap.m.Carousel** — Carousel with Controls<br>With the Carousel a user can browse through multi-page content by swiping left or right.<br><sub>carousel sap.m user browse through title image text scrollcontainer list standardlistitem</sub><br><sub>✓ checked · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_006`](src/02/01/z2ui5_cl_smpc_app_006.clas.abap) |
 | **sap.m.DatePicker** — Date Picker - Open by Another Control<br>This example shows Date Picker which is opened by another control.<br><sub>datepicker date picker sap.m open another title vbox label button link</sub><br><sub>✓ checked · 5 deviations</sub> | [`Z2UI5_CL_SMPC_APP_016`](src/02/01/z2ui5_cl_smpc_app_016.clas.abap) |
 | **sap.m.DateRangeSelection**<br>The Date Range Selection is an extension of the Date Picker Control and enables the user to select range of dates.<br><sub>daterangeselection date range selection sap.m single-field input vbox label text</sub><br><sub>✓ checked · 8 deviations</sub> | [`Z2UI5_CL_SMPC_APP_017`](src/02/01/z2ui5_cl_smpc_app_017.clas.abap) |
@@ -265,6 +270,8 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.m.Menu** — Menu with Selectable Items<br>Some menu items can be added to groups to allow single or multiple item selection.<br><sub>menu sap.m menuselectable vbox button menuitem menuitemgroup</sub><br><sub>○ generated · 6 deviations</sub> | [`Z2UI5_CL_SMPC_APP_419`](src/02/01/z2ui5_cl_smpc_app_419.clas.abap) |
 | **sap.m.QuickViewCard** — QuickViewCard Scroll Example<br>QuickViewCard embedded in container with scroll bar<br><sub>quickviewcard quick card sap.m quickviewcardscrollbar button label switch panel quickviewpage avatar quickviewgroup</sub><br><sub>○ generated · 7 deviations</sub> | [`Z2UI5_CL_SMPC_APP_421`](src/02/01/z2ui5_cl_smpc_app_421.clas.abap) |
 | **sap.m.SelectDialog** — Select Dialog Lazy Loading<br>Select Dialog lazy loading example with JSON model.<br><sub>selectdialog select dialog sap.m selectdialoglazyloading button standardlistitem</sub><br><sub>○ generated · 7 deviations</sub> | [`Z2UI5_CL_SMPC_APP_422`](src/02/01/z2ui5_cl_smpc_app_422.clas.abap) |
+| **sap.m.SegmentedButton** — Segmented Button Content Modes<br>Segmented Button different Content Modes<br><sub>segmentedbutton segmented button sap.m segmentedbuttoncontentmodes segmentedbuttonitem</sub><br><sub>○ generated · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_423`](src/02/01/z2ui5_cl_smpc_app_423.clas.abap) |
+| **sap.m.Carousel** — Carousel Without Pages<br>When the carousel has no pages loaded or provided illustrated message will be shown.<br><sub>carousel sap.m carouselemptymessages hbox panel slider title</sub><br><sub>○ generated · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_427`](src/02/01/z2ui5_cl_smpc_app_427.clas.abap) |
 
 ### sap.uxap
 
@@ -477,13 +484,14 @@ For what is NOT here — which demo kit samples are still unported and why — s
 
 ### sap.ui.core
 
-12 port(s).
+13 port(s).
 
 | Sample | Class |
 |---|---|
 | **sap.ui.core.ContainerPadding** — No Container Content Padding<br>Many UI5 containers support the standard container content padding CSS classes. Apply the CSS class 'sapUiNoContentPadding' on a UI5 container control to remove the default padding around the container content area.<br><sub>containerpadding container padding sap.ui.core no content messagestrip icontabbar text icontabfilter icontabseparator</sub><br><sub>◐ reviewed · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_087`](src/01/01/z2ui5_cl_smpc_app_087.clas.abap) |
 | **sap.ui.core.StandardMargins** — Margins All Around<br>Use standard margin classes 'sapUiTinyMargin', 'sapUiSmallMargin', 'sapUiMediumMargin' or 'sapUiLargeMargin' to add a 8px (0.5rem), 16px (1rem), 32px (2rem) or 48px (3rem) margin to your control.<br><sub>standardmargins standard margins sap.ui.core margin classes text panel</sub><br><sub>◐ reviewed</sub> | [`Z2UI5_CL_SMPC_APP_088`](src/01/01/z2ui5_cl_smpc_app_088.clas.abap) |
 | **sap.ui.core.StandardMargins** — Negative Margins<br>Use standard negative margin classes 'sapUiTinyNegativeMarginBeginEnd', 'sapUiSmallNegativeMarginBeginEnd', 'sapUiMediumNegativeMarginBeginEnd' or 'sapUiLargeNegativeMarginBeginEnd' to remove 0.<br><sub>standardmargins standard margins sap.ui.core standardnegativemarginstwosided toolbar text panel</sub><br><sub>◐ reviewed</sub> | [`Z2UI5_CL_SMPC_APP_403`](src/01/01/z2ui5_cl_smpc_app_403.clas.abap) |
+| **sap.ui.core.StandardMargins** — Single-Sided Margins<br>Clear the space to the left, right, top or bottom of your control. Choose a size ('Tiny', 'Small', 'Medium' or 'Large', which stands for 8px (0.<br><sub>standardmargins standard margins sap.ui.core standardmarginssinglesided panel text</sub><br><sub>○ generated</sub> | [`Z2UI5_CL_SMPC_APP_430`](src/01/01/z2ui5_cl_smpc_app_430.clas.abap) |
 | **sap.ui.core.HTML**<br>With the HTML controls you can easily embed any kind of HTML content into your UI5 mobile application.<br><sub>html sap.ui.core raw injection</sub><br><sub>◐ reviewed · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_120`](src/01/02/z2ui5_cl_smpc_app_120.clas.abap) |
 | **sap.ui.core.Icon**<br>Built with an embedded font, icons scale well, and can be altered with CSS. They can also fire a press event. See the Icon Explorer for more icons.<br><sub>icon sap.ui.core font gallery hbox flexitemdata</sub><br><sub>◐ reviewed · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_122`](src/01/02/z2ui5_cl_smpc_app_122.clas.abap) |
 | **sap.ui.core.InvisibleText**<br>Many controls provide the associations ariaLabelledBy and ariaDescribedBy for accessibility purposes. The InvisibleText control can be used by application to provide hidden texts on the UI which can be referenced via these associations.<br><sub>invisibletext invisible text sap.ui.core aria descriptions toolbar button toolbarspacer title hbox flexitemdata</sub><br><sub>◐ reviewed · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_127`](src/01/02/z2ui5_cl_smpc_app_127.clas.abap) |
