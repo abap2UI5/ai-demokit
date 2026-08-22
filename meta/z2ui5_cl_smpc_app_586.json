@@ -1,0 +1,36 @@
+{
+  "class": "z2ui5_cl_smpc_app_586",
+  "sample": "sap.uxap.sample.AnchorBar",
+  "entity": "sap.uxap.ObjectPageLayout",
+  "file": "src/01/03/z2ui5_cl_smpc_app_586.clas.abap",
+  "batch": "b49",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false,
+    "note": "the sample has no controller at all - the port raises no event"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Block->content inlining (app 217/401/402/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'). All fifteen blocks aggregations hold one sample:mySimpleBlock each - a BlockBase wrapper whose only job is to lazy-load the static view/blocks/mySimpleBlock.view.xml. That view is a forms:SimpleForm (maxContainerCols 2, ResponsiveGridLayout, editable false) with a Label 'Content' and a Text 'some content goes here...', and it is inlined into each of the fifteen. That is the whole missing/extra pairing: forms:SimpleForm 2 vs 15, Label / Text 2 vs 0 against m:Label / m:Text 0 vs 15 - the block view defaults to xmlns=\"sap.m\" while the port's one view defaults to sap.uxap, so the same controls carry a prefix, and the archived-once template is emitted fifteen times."
+    },
+    {
+      "type": "NOTE",
+      "what": "view/blocks/myBlock.view.xml is DEAD in this sample: AnchorBar.view.xml references only sample:mySimpleBlock, never sample:myBlock. Its core:Title 'my Block' is the whole core:Title 1 vs 0 line, and its own Label / Text are one of the two counted pairs. Nothing was dropped from the rendered page."
+    },
+    {
+      "type": "NOTE",
+      "what": "mySimpleBlock.view.xml wraps its SimpleForm in an <html:div style=\"font-size: 0.875rem;\"> from the XHTML namespace. abap2UI5 serves sap.* controls, not raw XHTML, so the wrapper and its inline font-size go; the form itself renders identically. Each block view also carries width=\"100%\" on its own mvc:View root (the View.width line) - the port has one view, and its root carries the sample's height=\"100%\" instead."
+    },
+    {
+      "type": "NOTE",
+      "what": "the sample's subject is what the anchor bar does with FIFTEEN sections: section 2 has no subsection at all (an anchor without a target), sections 1 has two, and nine of the fifteen give their single subsection the title \" \" - a single space, which is what keeps the subsection title row empty while the anchor still reads 'Section n'. All of that is carried literally, trailing blanks included ('Subsection 1.1 ', 'Subsection 4.1 '), because it is the point. Only the first seven sections and their subsections carry ids in the original; so do they here."
+    },
+    {
+      "type": "NOTE",
+      "what": "the fifteen BlockBase ids (bbt1..bbt5, b1..b10) have no counterpart: they identify the wrapper control the port inlines away, and nothing in the sample addresses them."
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "class": "z2ui5_cl_smpc_app_599",
+  "sample": "sap.uxap.sample.ObjectPageSubSectionSized",
+  "entity": "sap.uxap.ObjectPageSubSection",
+  "file": "src/01/03/z2ui5_cl_smpc_app_599.clas.abap",
+  "batch": "b49",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false,
+    "note": "the two toggles write two bound properties - no frontend action, no event argument"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Block->content inlining (app 401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): all 359 blocks are the SAME BlockBase, sample:InfoButton, around view/blocks/InfoButton.view.xml - a single m:Button (width='100%', text='infoButton', type='Emphasized'). It is inlined into each of the 359 aggregations, which is the missing/extra pairing: sample:InfoButton 359 vs 0 and Button 1 vs 0 against m:Button 0 vs 359 (the block view defaults to xmlns=\"sap.m\" and is archived once; the port's one view defaults to sap.uxap, so each carries the m: prefix, 359 times). The block view's own mvc:View root with its width='100%' is the View.width line."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "this sample is ABOUT sap.uxap.BlockBase.columnLayout: the ten sections walk every arrangement of 'auto' and 1..4 across 2, 3, 4, 5 and 6 blocks, and the last five sections put one fixed width on all of them. columnLayout is a property of the BlockBase WRAPPER, read by ObjectPageSubSection when it lays its blocks out - and the wrapper is exactly what the inlining removes, so the property has nowhere to go: an m:Button in a blocks aggregation is laid out as 'auto'. What survives is the structure the sample walks - the ten sections, the 86 subsections, their titles ('a-1', '2 -a', '1-a-a-a-1' ... which spell out the very layouts) and the right number of buttons in each - so the page reads as the same matrix, with every row laid out automatically instead of as its title says. Each inlined button carries a comment naming the columnLayout it had."
+    },
+    {
+      "type": "NOTE",
+      "what": "the ConfigModel the controller seeds ({subSectionLayout: 'TitleOnTop', useTwoColumnsForLargeScreen: false}) folds onto two root fields (same-data prefix-drop). Both ObjectPageLayout properties ARE bindable and the sample already binds them, so the two ToggleButtons keep working exactly as upstream: toggleTitle flips subSectionLayout between TitleOnTop and TitleOnLeft, toggleUseTwoColumns flips useTwoColumnsForLargeScreen, and the port flips the same fields in on_event - a round trip where the original writes the model directly, but the same two properties and the same two values."
+    },
+    {
+      "type": "NOTE",
+      "what": "the ToggleButtons' pressed state is not bound in the sample either (the controller keeps isTitleOnTop / bUseTwoColumns of its own), so the port does not bind it: the button's own toggle and the backend flag start in step and stay in step, one press each."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: that the two toggles switch the subsection layout to TitleOnLeft and the page into two-column mode."
+    }
+  ]
+}

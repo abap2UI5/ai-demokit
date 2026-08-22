@@ -1,0 +1,40 @@
+{
+  "class": "z2ui5_cl_smpc_app_591",
+  "sample": "sap.uxap.sample.ObjectPageFormLayout",
+  "entity": "sap.uxap.ObjectPageLayout",
+  "file": "src/02/03/z2ui5_cl_smpc_app_591.clas.abap",
+  "batch": "b49",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "the two breadcrumb toasts are round-trip-free control_global actions; nothing comes back to the backend"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Block->content inlining (app 401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the two subsections hold ten BlockBase controls between them - personal:PersonalFormBlock (columnLayout='3'), employment:BlockJobInfo (columnLayout='3') and eight blockcolor:BlockBlue fillers. Each is only a lazy-loading wrapper around a static view, so every block view is inlined 1:1: PersonalFormBlock's forms:Form with its ColumnLayout, two FormContainers and seven FormElements, BlockJobInfo's forms:SimpleForm with core:Title 'General' and three Label / Input pairs. Absent as a result: the ten BlockBase controls with their ids and columnLayout properties, plus the block views' own mvc:View roots. The Label / Input / Text 3 / 3 / 7 vs 0 lines against m:Label / m:Input / m:Text are the same controls: the block views default to xmlns=\"sap.m\" while the port's one view defaults to sap.uxap, so each carries the m: prefix here."
+    },
+    {
+      "type": "NOTE",
+      "what": "the eight blockcolor:BlockBlue blocks are one view whose entire body is <html:div style=\"height:4em; background-color: #A9EAFF ; padding: 1rem\">Arbitrary block content...</html:div>. abap2UI5 serves sap.* controls, not raw XHTML, so the div and its inline style go and the sentence it shows is carried as an m:Text, eight times (app 590 carries the identical block six times). They are filler that makes the form share its subsection with something - what the sample is about is the two form layouts."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs a UI5 runtime >= 1.73."
+    },
+    {
+      "type": "NOTE",
+      "what": "the sample declares three namespace prefixes - personal:, employment: and blockcolor: - that all resolve to the SAME package, sap.uxap.sample.ObjectPageFormLayout.controller.blocks. They are naming, not structure; the port names each inlined block in a comment instead."
+    },
+    {
+      "type": "NOTE",
+      "what": "the two breadcrumb Links call handleLink1Press / handleLink2Press, both constant-text MessageToasts, so they are wired round-trip-free as follow_up_action( control_global, MESSAGE_TOAST show ) (app 005/401 idiom). The four header action buttons (Edit, Delete, Copy, Share) carry no handler in the sample either."
+    },
+    {
+      "type": "NOTE",
+      "what": "the four asset paths (the imageID_275314.png avatar twice, linkedin.png and Twitter.png) point at the sdk.openui5.org host per the offline asset-URL rule; the original writes them relative as './test-resources/sap/uxap/images/...'."
+    }
+  ]
+}

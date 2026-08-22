@@ -259,11 +259,31 @@ for (const r of results) {
 
   const violations = [];
   const advisory = [];
+  /* A sidecar may declare `property_gate: { skip: true, reason, types: [...] }`
+   * for the case the corpus keeps meeting: the UI5 metadata says one thing and
+   * the control's own code does another, so satisfying the rule would mean
+   * breaking the port. It is deliberately narrower than the render / data /
+   * structural skips - it must NAME the finding types it covers, and a named
+   * type that does not fire is stale and fails the port, exactly like a stale
+   * render skip. */
+  const gateSkip = meta.property_gate?.skip === true ? meta.property_gate : null;
+  const skipUsed = new Set();
   for (const f of r.findings) {
     if (ADVISORY_TYPES.has(f.type)) { advisory.push(f); continue; }
     if (VERSION_TYPES.has(f.type) && declares(meta, f)) continue;
+    if (gateSkip && gateSkip.types.includes(f.type)) { skipUsed.add(f.type); continue; }
     if (severityOf(f) === 'hint') { advisory.push(f); continue; }
     violations.push(f);
+  }
+  if (gateSkip) {
+    for (const t of gateSkip.types) {
+      if (!skipUsed.has(t)) {
+        violations.push({
+          type: 'stale-skip',
+          message: `declares property_gate for "${t}" but no such finding fires — remove it`,
+        });
+      }
+    }
   }
 
   /* The render skip is verified against the real render: honoured only while

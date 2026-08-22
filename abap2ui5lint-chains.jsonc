@@ -68,6 +68,18 @@
     "live-event-roundtrip": false,
     "unknown-event-parameter": false,
     "hardcoded-binding-path": false,
-    "commercial-ui5-host": false
+    "commercial-ui5-host": false,
+
+    // added 2026-08-22 (batch b49, app 592 ObjectPageLazyLoadingWithoutBlocks):
+    // the fourteenth of the same kind. It never fired before, so it was never
+    // listed - and the moment it did, it was on a port whose sidecar declares
+    // a `property_gate` skip for it (sap.uxap.ObjectPageSubSection.blocks is
+    // typed sap.ui.core.Control while ObjectPageSubSection.addAggregation
+    // explicitly handles the sap.ui.core.Element ObjectPageLazyLoader). That
+    // declaration lives in meta/ and is verified per run by view-gates, which
+    // fails the port if the finding stops firing; this file has no access to
+    // it, so leaving the rule on here would re-report a judged finding as a
+    // second, dumber opinion - exactly what the thirteen above are off for.
+    "invalid-aggregation-child": false
   }
 }

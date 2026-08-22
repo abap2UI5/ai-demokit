@@ -1,0 +1,35 @@
+{
+  "class": "z2ui5_cl_smpc_app_592",
+  "sample": "sap.uxap.sample.ObjectPageLazyLoadingWithoutBlocks",
+  "entity": "sap.uxap.ObjectPageLayout",
+  "file": "src/01/03/z2ui5_cl_smpc_app_592.clas.abap",
+  "batch": "b49",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false,
+    "note": "a pure layout sample - the port raises no event"
+  },
+  "status": "generated",
+  "checked": null,
+  "property_gate": {
+    "skip": true,
+    "types": [
+      "invalid-aggregation-child"
+    ],
+    "reason": "sap.uxap.ObjectPageSubSection declares blocks as sap.ui.core.Control and sap.uxap.ObjectPageLazyLoader extends sap.ui.core.Element, so by the metadata the sample's own view is invalid - and it is not: ObjectPageSubSection.addAggregation opens with `if (oObject instanceof ObjectPageLazyLoader)` and either stashes it or unwraps its content (ObjectPageSubSection.js:1337). The aggregation type is under-declared, exactly as sap.m.table.columnmenu.Menu.items was over-declared in batch b47. Since a stashed ObjectPageLazyLoader in blocks IS this sample, satisfying the rule would mean deleting the subject; the finding is skipped for this one type only, and view-gates fails the port if it stops firing."
+  },
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "twenty-one sections, all identical: one ObjectPageSubSection in Expanded mode holding one ObjectPageLazyLoader with stashed='true', around a VBox with the same Address SimpleForm (ResponsiveGridLayout, maxContainerCols 2, labelSpan 3, emptySpan 4, one column, the sapUxAPObjectPageSubSectionAlignContent class). All twenty-one are written out rather than looped, so the twenty-one stashed loaders the anchor bar and the lazy loading act on are really there. The sample's subject is that lazy loading needs NO custom BlockBase - the stashed loader alone defers the content - so nothing here is inlined away, which is what makes this port unusual among the uxap ones."
+    },
+    {
+      "type": "NOTE",
+      "what": "the controller does bindElement('/SupplierCollection/0') on the view, so every binding in the form is RELATIVE to that one supplier row. The port folds it to root fields (app 229 idiom): SUPPLIERNAME, STREET, HOUSENUMBER, ZIPCODE, CITY and COUNTRY, seeded from sap/ui/demo/mock/supplier.json row 0 (Red Point Stores, Main St 1618, 31415 Maintown, Germany). The two composite bindings the sample writes - '{Street} {HouseNumber}' and '{ZIPCode} {City}' - stay composite, over the folded names."
+    },
+    {
+      "type": "NOTE",
+      "what": "the mock carries eleven more fields on that row (Url, Twitter, Tel, Sms, Mobile, Pager, Fax, Email, Rating, Prime, Disposable) that this sample's form never binds, so they are not modelled."
+    }
+  ]
+}

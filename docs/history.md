@@ -7,6 +7,79 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-22 — batch b49 (sap.uxap): the ObjectPage tail, and a fourth escape hatch (apps 586–599)
+
+Every unported `sap.uxap` sample in one batch, which finishes the library at
+**45 / 45** and the second-to-last of the ten: twelve more `ObjectPageLayout`
+samples and the two remaining `ObjectPageSubSection` ones.
+
+| app | sample | what it adds |
+|---|---|---|
+| 586 | AnchorBar | fifteen sections, one of them with no subsection at all |
+| 587 | AnchorBarWithNumbers | section titles that carry their own counts, `subSectionLayout="TitleOnLeft"` (POST_171, `src/02`) |
+| 588 | ObjectPageBeforeNavigate | a `beforeNavigate` veto driven by an edit mode, and the confirm dialog behind it (POST_171, `src/02`) |
+| 589 | ObjectPageBlockViewTypes | the same block authored four ways — typed, JSON, HTML and XML |
+| 590 | ObjectPageFormFocusableInput | `ColumnElementData` cell spans and a Focus action onto the first editable input (POST_171, `src/02`) |
+| 591 | ObjectPageFormLayout | a `forms:Form` with two `FormContainer`s beside a `SimpleForm` (POST_171, `src/02`) |
+| 592 | ObjectPageLazyLoadingWithoutBlocks | twenty-one stashed `ObjectPageLazyLoader`s — lazy loading with no custom block |
+| 593 | ObjectPageOnJSONWithLazyLoading | the same heavy block eleven times (POST_171, `src/02`) |
+| 594 | ObjectPageSelectedSection | `selectedSection` set statically in the view (POST_171, `src/02`) |
+| 595 | ObjectPageState | `useIconTabBar` plus a `sap.ui.table.Table` with a 1.119 row mode (POST_171, `src/02`) |
+| 596 | ObjectPageTabNavigationMode | app 594's view minus the one attribute (POST_171, `src/02`) |
+| 597 | ObjectPageXML | section titles and subsection modes bound to a state model |
+| 598 | ObjectPageSubSectionMultiView | 1..6 unsized blocks per subsection, laid out automatically |
+| 599 | ObjectPageSubSectionSized | 359 blocks across 86 subsections, one `columnLayout` each |
+
+**The gate change.** App 592's whole subject is a stashed `ObjectPageLazyLoader`
+in a `blocks` aggregation — and the property gate rejects it, because
+`ObjectPageSubSection.blocks` is declared `sap.ui.core.Control` while
+`ObjectPageLazyLoader` extends `sap.ui.core.Element`. The declaration is simply
+under-tight: `ObjectPageSubSection.addAggregation` opens with
+``if (oObject instanceof ObjectPageLazyLoader)`` and either stashes it or
+unwraps its content (ObjectPageSubSection.js:1337). This is the same shape as
+batch b47's `columnmenu.Menu.items` — the metadata says one thing, the control
+does another — but that one had a workaround and this one does not: satisfying
+the rule would mean deleting the sample.
+
+So the sidecars grew a fourth escape hatch, `property_gate`, deliberately
+**narrower** than the three that already existed (`render_smoke`,
+`data_fidelity`, `structural_diff`). It must NAME the finding types it covers —
+`validate-meta` rejects a blanket skip — and a named type that does not fire is
+stale and fails the port, exactly like a stale render skip. One port uses it,
+for one type. The chain config gained the matching `invalid-aggregation-child:
+false`: the finding is judged in `meta/`, and this file has no access to that
+judgement.
+
+Three more findings:
+
+- **A sample can reference blocks the demo kit does not publish.** App 597's
+  view pulls `sap.uxap.testblocks.multiview`, `.objectpageblock` and
+  `.mixedblock`, plus a `sap.uxap.sample.Headers.block` — UI5 *test* resources
+  and an unpublished sample, referenced by this one view and shipped nowhere.
+  Three of the four are IMPROVISED and labelled as such in the view itself; the
+  fourth is not invented, because `sap.uxap.sample.ObjectPageSubSection` ships a
+  `MultiViewBlock` of its own (app 116 ports it) whose Collapsed view is the
+  honest content.
+- **Two attributes in that sample do not exist and never did.**
+  `ObjectPageSection.icon` and `ObjectPageSubSection.icon` are in neither the
+  1.71 metadata nor 1.151's; upstream XMLView drops them with a log line. They
+  are DROPPED, not reproduced — the first `DROPPED_171` in this corpus raised by
+  a property that was never there rather than one that arrived late.
+- **A static sorter is data-fidelity's problem, not the view's.** App 595 binds
+  its rows with `sorter: { path: 'Name' }`. The first draft seeded the 123 mock
+  rows already in Name order — and the gate compares them POSITIONALLY against
+  the mock, so all 123 failed. The fix is the app 298 idiom rather than a skip:
+  seed the mock's own order verbatim and `SORT` in `model_init`, which also
+  makes the sorter's field an honest fifth column of the ABAP table.
+
+What the batch mostly is, though, is the same fifteen `SharedBlocks` inlined
+over and over: apps 263, 588, 594, 595 and 596 carry byte-for-byte the same
+section tree, and 587 and 593 most of it. Where they differ is one attribute
+each — `selectedSection`, `beforeNavigate`, `subSectionLayout` — which is
+exactly what the demo kit is demonstrating, and exactly what makes the sidecars
+worth reading: the deviation lists are near-identical on purpose, and the one
+NOTE that differs is the sample.
+
 ## 2026-08-22 — batch b48 (sap.f): the nine that were left, and the library is done (apps 577–585)
 
 Every unported `sap.f` sample in one batch, which finishes the library at

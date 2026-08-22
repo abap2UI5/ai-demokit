@@ -1,0 +1,48 @@
+{
+  "class": "z2ui5_cl_smpc_app_597",
+  "sample": "sap.uxap.sample.ObjectPageXML",
+  "entity": "sap.uxap.ObjectPageLayout",
+  "file": "src/01/03/z2ui5_cl_smpc_app_597.clas.abap",
+  "batch": "b49",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "the two subsection action buttons toast round-trip-free; the two header buttons come back to the backend, which owns the state"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "four of this sample's five block types are NOT in the demo kit archive and their content therefore cannot be read: bl:GeneralInfo comes from sap.uxap.sample.Headers.block (a Headers sample the demo kit does not publish) and edit:SimpleEdit / mb:MixedBlock / sample:MultiViewBlock from sap.uxap.testblocks.objectpageblock / .mixedblock / .multiview - UI5 TEST resources, referenced by this one view and by sap/uxap/BlockBase.js's documentation, and shipped nowhere else. The port therefore improvises three of them, each labelled in the view and in a core:Title: GeneralInfo becomes a read-only Name / Job / Location form over the MyEmployee record its own ModelMapping names, SimpleEdit an editable Name / Job form, MixedBlock a form that mixes a read-only Text with an Input (which is what its name says). The fourth, sample:MultiViewBlock, is NOT invented: sap.uxap.sample.ObjectPageSubSection ships a block of the same name in its own folder (view/blocks/MultiViewBlockCollapsed.view.xml - app 116 ports it), so its Collapsed view, a Location form with Country France and Subsidiary SAP France, is inlined for all four occurrences. That is the missing/extra pairing: eight blocks out, eight forms:SimpleForm in, with the core:Title / m:Text / m:Input / m:Label they contain."
+    },
+    {
+      "type": "NOTE",
+      "what": "what this sample is actually about is not the blocks: it is an object page whose section TITLES and subsection MODES come from a bound state model rather than from literals ({ObjectPageState>/sections/0/title}, {ObjectPageState>/sections/0/subsections/0/mode} and so on). That is carried 1:1 through a named-model fold onto ten root fields - two section titles, four subsection titles and the four modes the controller seeds (three Collapsed, one Expanded) - so the same six titles and four modes drive the page from the model here as there."
+    },
+    {
+      "type": "DROPPED_171",
+      "what": "the view sets icon='sap-icon://employee' on the first ObjectPageSection and icon='sap-icon://employee-pane' on its first ObjectPageSubSection. NEITHER control has ever had an icon property (it is not in the 1.71 metadata and not in 1.151 either) - upstream those two attributes are silently ignored, and XMLView would log them as unknown settings. They are dropped rather than reproduced."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "showCurrentSection toasts 'you are currently scrolling ' + oObjectPage.getScrollingSectionId(). The sample's own comment calls scrollingSectionId 'the only property that is not really bindable', and it is read-only and computed from the scroll position, so a thin frontend never sees it. The button is kept and its toast reports the first section instead of the one under the scroll - the shape of the message survives, the live value does not. showObjectPageState, by contrast, ports honestly: it dumps the state model as pretty JSON, and the backend OWNS that model, so the toast is composed from the same ten fields; only the scrollingSectionId line inside it is the empty string the model is seeded with."
+    },
+    {
+      "type": "NOTE",
+      "what": "the two subsection action Buttons both call onActionPress, a constant-text MessageToast ('action pressed !'), so they are wired round-trip-free as follow_up_action( control_global, MESSAGE_TOAST show ) (app 005/401 idiom). They are tooltip-less in the sample, as are the two header buttons; all four get a tooltip here so they are reachable with a screen reader - the accessibility additions in this port."
+    },
+    {
+      "type": "NOTE",
+      "what": "the controller loads sap/uxap/sample/ObjectPageOnJSON/HRData.json and the two GeneralInfo blocks map ObjectPageModel>/MyEmployee onto their internal model 'Employee'. That file has no MyEmployee node (only Employees, counts and Employee), so upstream both blocks bind to nothing - the same shape of upstream slip app 263 records for its externalModelName='data'. The port seeds the first /Employee row the file does carry (Michael Adams, Scrum Master) so the improvised form shows the data the sample means."
+    },
+    {
+      "type": "NOTE",
+      "what": "the objectImageURI points at the sdk.openui5.org host per the offline asset-URL rule; the original writes it relative as './test-resources/sap/uxap/images/imageID_275314.png'."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: the two header buttons and their toasts, and that the four bound subsection modes open the page with three collapsed subsections and one expanded."
+    }
+  ]
+}

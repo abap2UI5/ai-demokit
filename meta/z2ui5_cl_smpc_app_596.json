@@ -1,0 +1,36 @@
+{
+  "class": "z2ui5_cl_smpc_app_596",
+  "sample": "sap.uxap.sample.ObjectPageTabNavigationMode",
+  "entity": "sap.uxap.ObjectPageLayout",
+  "file": "src/02/03/z2ui5_cl_smpc_app_596.clas.abap",
+  "batch": "b49",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false,
+    "note": "the controller only loads HRData.json - the port raises no event"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Block->content inlining (app 263/401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold fifteen SharedBlocks BlockBase controls - goals:GoalsBlock, personal:BlockPhoneNumber / BlockSocial / BlockAdresses / BlockMailing / PersonalBlockPart1 / PersonalBlockPart2, employment:BlockJobInfoPart1 / BlockJobInfoPart2 / BlockJobInfoPart3 / BlockEmpDetailPart1 / BlockEmpDetailPart2 / BlockEmpDetailPart3 / EmploymentBlockJob and connections:ConnectionsBlock. Each is only a lazy-loading wrapper around a static view, so every block view is inlined 1:1 into its aggregation (forms:SimpleForm with core:Title / m:Label / m:Text, the layout:VerticalLayout / layout:HorizontalLayout trees of the personal blocks, the layout:Grid / layout:GridData tree of EmploymentBlockJobCollapsed, and the six m:Panel / m:VBox / m:Image of ConnectionsBlock). Absent as a result: the fifteen BlockBase controls with their ids and their columnLayout / showSubSectionMore properties, plus the block views' own mvc:View roots. This sample's section tree is IDENTICAL to apps 263, 588 and 594 - same fifteen blocks, same section and subsection ids, same titles - so the four ports carry the same inlined content."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "Named-model fold (app 230/263 precedent): EmploymentBlockJob and ConnectionsBlock each carry six uxap:ModelMapping elements mapping ObjectPageModel>/Employee/0..5 onto the internal models emp1>..emp6>. abap2UI5 serves one default model, so the twelve ModelMapping config controls are gone (the ModelMapping 12 vs 0 line) and the six employee records are seeded as default-model root fields (emp1_name/_job/_picture .. emp6_*) bound via client->_bind. EmploymentBlockJob is additionally a two-view BlockBase (Collapsed / Expanded with showSubSectionMore='true'); only the Collapsed view (employees 1-2) is inlined - the Expanded view with employees 3-6 and the more/less toggle are lost."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs a UI5 runtime >= 1.73."
+    },
+    {
+      "type": "NOTE",
+      "what": "this sample and app 594 share one view: same fifteen blocks, same section and subsection ids, same titles, same header. The single difference is that app 594's ObjectPageLayout also sets selectedSection='personal' and this one does not - so this page opens on the FIRST tab and shows what useIconTabBar='true' alone does, which is the point of 'tab navigation mode'. Apps 263 and 588 carry the same section tree again."
+    },
+    {
+      "type": "NOTE",
+      "what": "the four asset paths (the imageID_275314.png avatar twice, linkedin.png, Twitter.png) and HRData.json's person.png point at the sdk.openui5.org host per the offline asset-URL rule, matching apps 263 and 588 which carry the same view; the original writes them relative."
+    }
+  ]
+}

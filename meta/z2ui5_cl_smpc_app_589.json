@@ -1,0 +1,52 @@
+{
+  "class": "z2ui5_cl_smpc_app_589",
+  "sample": "sap.uxap.sample.ObjectPageBlockViewTypes",
+  "entity": "sap.uxap.ObjectPageLayout",
+  "file": "src/02/03/z2ui5_cl_smpc_app_589.clas.abap",
+  "batch": "b49",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "the five constant-text toasts are round-trip-free control_global actions; only the footer toggle comes back to the backend"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the sample's subject is that ONE BlockBase can be authored as four different view types, and it shows the same goals block four times: goals:GoalsBlockJS (a TYPED view, GoalsBlockView.js, which builds its SimpleForm in createContent), goals:GoalsBlockJSON (GoalsBlock.view.json, a sap.ui.core.mvc.JSONView), goals:GoalsBlockHTML (GoalsBlock.view.html, an HTMLView with data-sap-ui-type divs) and goals:GoalsBlock (GoalsBlock.view.xml, a plain XMLView). abap2UI5 emits ONE XML view and has no notion of a view type at all, so the four TYPES collapse to one: what each block RENDERS is inlined into its section, and the four section titles ('Typed View', 'JSON View', 'HTML View', 'XML View') are all that is left of the distinction. That is the whole missing/extra pairing - four goals:* blocks out, two forms:SimpleForm plus the JSON view's Image / Button, the HTML view's Panel / Button and the typed view's Button in."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "GoalsBlock.view.html is not a control tree at all: it is an HTML <template> whose plain <div> carries the sentence 'This is the content of an HTML view', with a second <div data-sap-ui-type=\"sap.m.Panel\"> holding a data-sap-ui-type=\"sap.m.Button\". The two sap.m controls port 1:1 (m:Panel id='myPanel' with m:Button id='Button1'); the bare <div> has no counterpart, so its sentence is carried as an m:Text - the text the browser shows, without the raw element."
+    },
+    {
+      "type": "NOTE",
+      "what": "the typed view and the XML view render nearly the same three goals, and the difference between them is carried literally: GoalsBlockView.js sets width='100%' on its SimpleForm, adds a Button ('Hello from a typed view') and two spacer m:Texts of a single blank, and spells the first goal 'Evangelize the UI framework accross the company' - with the sample's own typo, where GoalsBlock.view.xml spells it 'across'. Both are kept as written."
+    },
+    {
+      "type": "NOTE",
+      "what": "all four blocks share GoalsBlockController, whose onBtnPress toasts 'Button was presed' (the sample's spelling). The three buttons that use it, and the two breadcrumb links, are constant-text toasts, so they are wired round-trip-free as follow_up_action( control_global, MESSAGE_TOAST show ) (app 005/401 idiom)."
+    },
+    {
+      "type": "NOTE",
+      "what": "GoalsBlock.view.json's Image points at http://www.sap.com/global/ui/images/global/sap-logo.png - a marketing asset on a non-UI5 host, over plain http, which the repo's asset rule does not allow a port to carry. It is replaced by `logo_ui5.png` on the sanctioned sdk.openui5.org host (/resources/sap/ui/documentation/sdk/images/logo_ui5.png), which is the only asset value in this port that the sample's own files do not carry; the sample's point (that a JSON view can declare an Image at all) is unaffected. The remaining three assets (imageID_275314.png, linkedin.png, Twitter.png) point at sdk.openui5.org per the offline asset-URL rule; the original writes them relative."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.uxap.ObjectPageAccessibleLandmarkInfo.headerContentLabel is @since 1.127.0 - newer than the 1.71 floor but kept for the 1:1 port, since the sample sets every one of the eleven landmark properties precisely to show what the aggregation does. The app needs a UI5 release >= 1.127 for that one label to be applied; the other ten work from 1.61."
+    },
+    {
+      "type": "NOTE",
+      "what": "toggleFooter does oObjectPageLayout.setShowFooter(!getShowFooter()) on the third ObjectPageHeaderActionButton. showFooter IS a bindable property, so the port binds it two-way and flips the ABAP flag in on_event rather than calling the setter through a frontend action - the bindable-property-beats-frontend-action rule (app 401 precedent). The showFooter attribute is therefore present where the original view does not write it, and the footer starts hidden as it does in the original."
+    },
+    {
+      "type": "NOTE",
+      "what": "showEditHeaderButton='true' is set but editHeaderButtonPress is NOT wired in this sample's view, even though the controller defines handleEditBtnPress - upstream the edit-header button therefore does nothing. The port carries the same: the property is set, no handler is attached."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: the four sections in the anchor bar, the three block buttons and the footer toggle."
+    }
+  ]
+}

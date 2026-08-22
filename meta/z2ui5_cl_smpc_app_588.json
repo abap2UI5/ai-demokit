@@ -1,0 +1,52 @@
+{
+  "class": "z2ui5_cl_smpc_app_588",
+  "sample": "sap.uxap.sample.ObjectPageBeforeNavigate",
+  "entity": "sap.uxap.ObjectPageLayout",
+  "file": "src/02/03/z2ui5_cl_smpc_app_588.clas.abap",
+  "batch": "b49",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "the section the user tried to reach travels with beforeNavigate; the confirmed navigation goes back through control_by_id / setSelectedSection"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Block->content inlining (app 263/401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold fifteen SharedBlocks BlockBase controls - goals:GoalsBlock, personal:BlockPhoneNumber / BlockSocial / BlockAdresses / BlockMailing / PersonalBlockPart1 / PersonalBlockPart2, employment:BlockJobInfoPart1 / BlockJobInfoPart2 / BlockJobInfoPart3 / BlockEmpDetailPart1 / BlockEmpDetailPart2 / BlockEmpDetailPart3 / EmploymentBlockJob and connections:ConnectionsBlock. Each is only a lazy-loading wrapper around a static view, so every block view is inlined 1:1 into its aggregation (forms:SimpleForm with core:Title / m:Label / m:Text, the layout:VerticalLayout / layout:HorizontalLayout trees of the personal blocks, the layout:Grid / layout:GridData tree of EmploymentBlockJobCollapsed, and the six m:Panel / m:VBox / m:Image of ConnectionsBlock). Absent as a result: the fifteen BlockBase controls with their ids and their columnLayout / showSubSectionMore properties, plus the block views' own mvc:View roots. This sample's section tree is IDENTICAL to app 263's - same fifteen blocks, same section and subsection ids, same titles - so the two ports carry the same inlined content."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "Named-model fold (app 230/263 precedent): EmploymentBlockJob and ConnectionsBlock each carry six uxap:ModelMapping elements mapping ObjectPageModel>/Employee/0..5 onto the internal models emp1>..emp6>. abap2UI5 serves one default model, so the twelve ModelMapping config controls are gone (the ModelMapping 12 vs 0 line) and the six employee records are seeded as default-model root fields (emp1_name/_job/_picture .. emp6_*) bound via client->_bind. EmploymentBlockJob is additionally a two-view BlockBase (Collapsed / Expanded with showSubSectionMore='true'); only the Collapsed view (employees 1-2) is inlined - the Expanded view with employees 3-6 and the more/less toggle are lost."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.uxap.ObjectPageLayout.beforeNavigate is @since 1.118 - newer than the 1.71 floor but kept for the 1:1 port, since the event IS this sample. The app needs a UI5 release >= 1.118 for the guard to fire at all; below it the anchor bar simply navigates."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs a UI5 runtime >= 1.73."
+    },
+    {
+      "type": "NOTE",
+      "what": "onBeforeNavigate calls oEvent.preventDefault() whenever the page is in edit mode. That veto is expressible: the wire carries s_ctrl-check_prevent_default (app 241 idiom), which is baked per WIRE at RENDER time - and here that is exactly right, because the flag it needs is bEditMode, which the backend owns. onEdit therefore redraws the view, so every fresh beforeNavigate wire carries the veto that matches the mode the toast just announced. The event is still sent when vetoed, so the backend stays in charge of what happens instead, which is the sample's whole point."
+    },
+    {
+      "type": "NOTE",
+      "what": "the controller keeps oSelectedSection / oPreviousSelectedSection as CONTROL references and compares them by identity; the port keeps the two section IDs instead and compares those - ${$parameters>/section}.getId() is what travels with the event. The OK button's oOPL.setSelectedSection(oSelectedSection) becomes follow_up_action( control_by_id, ObjectPageLayout / setSelectedSection / <section id> ), the controlIdOrNull argument kind resolving the id back to the control exactly like the original's reference (app 263 precedent). Cancel reverts the remembered id, as the original reverts the reference."
+    },
+    {
+      "type": "NOTE",
+      "what": "the confirm Dialog is built imperatively by the controller (new Dialog({title, content, beginButton, endButton}), added as a view dependent and reused on every later veto). The port expresses it as a core:FragmentDefinition shown through client->popup_display (app 300 idiom) and destroyed on either button. Its attachAfterClose handler - oSelectedSection.getDomRef().focus() - has no counterpart: it reaches into the section's DOM node, which a thin frontend never holds."
+    },
+    {
+      "type": "NOTE",
+      "what": "the four asset paths (the imageID_275314.png avatar twice, linkedin.png, Twitter.png) and HRData.json's person.png point at the sdk.openui5.org host per the offline asset-URL rule, matching app 263 which carries the same view; the original writes them relative as './test-resources/sap/uxap/images/...'."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: that Edit toasts the mode and re-bakes the veto, that an icon-tab press in edit mode is cancelled and raises the dialog, and that OK then navigates through setSelectedSection while Cancel leaves the page where it was."
+    }
+  ]
+}

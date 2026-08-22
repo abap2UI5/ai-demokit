@@ -1,0 +1,44 @@
+{
+  "class": "z2ui5_cl_smpc_app_590",
+  "sample": "sap.uxap.sample.ObjectPageFormFocusableInput",
+  "entity": "sap.uxap.ObjectPageLayout",
+  "file": "src/02/03/z2ui5_cl_smpc_app_590.clas.abap",
+  "batch": "b49",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "the Focus button is a round-trip-free control_by_id / focus action"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Block->content inlining (app 401/416 precedent): the six 'Personal n' sections each hold one blockcolor:BlockBlue, a BlockBase around blocks/BlockBlue.view.xml whose entire body is <html:div style=\"height:4em; background-color: #A9EAFF ; padding: 1rem\">Arbitrary block content...</html:div>. abap2UI5 serves sap.* controls, not raw XHTML, so the div and its inline style go and the sentence it shows is carried as an m:Text - the m:Text 2 vs 8 line, six sections' worth. The six blue boxes are only filler here; what the sample is about is the form in the seventh section."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "handleFocusBtnPress is pure DOM: it resolves the CURRENTLY SELECTED section (Element.getElementById(oObjectPageLayout.getSelectedSection())), hands its getDomRef() to sap/ui/dom/getFirstEditableInput and focuses whatever comes back. A thin frontend has neither the selected section nor a DOM walk. What survives is the outcome the sample demonstrates: 'focus' IS whitelisted in CONTROL_METHODS, so the button is a round-trip-free follow_up_action( control_by_id, nameInput / focus ) onto the Name field - the first editable input of the Employment section, and the only first-editable-input the original can ever produce, because the six Personal sections contain no input at all. Lost: pressing Focus while a Personal section is selected does nothing upstream, but jumps to the Employment field here."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs a UI5 runtime >= 1.73."
+    },
+    {
+      "type": "NOTE",
+      "what": "in the six Personal sections the ObjectPageSubSection is a DIRECT child of the section and the block a direct child of the subsection - subSections and blocks are the two default aggregations, so the two forms are identical. The port writes both aggregations explicitly, as the sample's own seventh section does."
+    },
+    {
+      "type": "NOTE",
+      "what": "the Employment form is carried 1:1, ColumnLayout with columnsM=2 / columnsL=3 / columnsXL=4, the two f:ColumnElementData layoutData (cellsSmall 2/cellsLarge 1 and cellsSmall 3/cellsLarge 2) that make the Street/No. and ZIP Code/City rows split, the three-item Country Select and the Url / Email / Tel input types. None of its Inputs is bound in the sample either - it is a layout demo, so the fields stay empty here too."
+    },
+    {
+      "type": "NOTE",
+      "what": "the four asset paths (the imageID_275314.png avatar twice, linkedin.png and Twitter.png) point at the sdk.openui5.org host per the offline asset-URL rule; the original writes them relative as './test-resources/sap/uxap/images/...'."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: that the Focus button moves the caret into the Employment form's Name field."
+    }
+  ]
+}
