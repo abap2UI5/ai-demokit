@@ -29,6 +29,26 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
 
 ## Open findings (backlog)
 
+- [ ] **Apps 612 and 613 still round-trip for a token the client can now
+  build.** `z2ui5.cc.MultiInputExt` gained `TokenKeyCell` / `TokenTextCells` on
+  2026-08-22 (see the Implemented table in
+  [docs/upstream-requests.md](docs/upstream-requests.md)), which is exactly the
+  `addValidator` branch both ports carry as an `IMPROVISED` deviation. The
+  conversion is written and reverted: `@abap2ui5/linter`'s render harness boots
+  a metadata-only MIRROR of the companion controls
+  (`lib/render.mjs`, `boot()`), the two properties are not in it, and an
+  unmirrored property there is not a version finding but a failed view
+  CREATION — `Error found in View: <z2ui5:MultiInputExt … TokenKeyCell="0"/>`.
+  Shipping it would need a `property_gate` plus a `render_smoke` skip for
+  something that is neither a version gap nor a typo, so it waits for
+  `linter-multiinputext-token-cells` (filed in abap2UI5's
+  [backlog](https://github.com/abap2UI5/abap2UI5/blob/main/backlog/ABAP2UI5-LINTER.md)).
+  **When the mirror lands:** bind `tokens` off both MultiInputs, drop the
+  `suggestionItemSelected` wires and the `TOKEN_2`/`TOKEN_3` handler, add
+  `xmlns:z2ui5="z2ui5.cc"` plus one `MultiInputExt` per input
+  (`TokenKeyCell="0"`, `TokenTextCells="3"`), and turn both `IMPROVISED`
+  deviations into NOTEs.
+
 - [ ] **Two ports gave up on a capability that already exists — found
   2026-08-22 while answering "what should we ask the framework for".** Neither
   is a framework gap; both sidecars reason from an older state of the framework

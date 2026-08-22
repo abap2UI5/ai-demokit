@@ -16,6 +16,11 @@ export default async (page, expect) => {
     // fetches the group's items, so it has to be fired too
     g.fireEvent('onCollapse', { collapsed: false });
   })()`);
-  await waitForUi5(page, () => ui5All().filter((c) => c.getMetadata().getName() === 'sap.m.NotificationListItem').length === 3,
-    'expanding the first group never filled it with its three notifications');
+  // through the group's own aggregation: each group's BOUND items binding
+  // keeps a live template in the registry, so a registry-wide count of
+  // NotificationListItem answers 5 for three real rows (measured 2026-08-22).
+  await waitForUi5(page, () => {
+    const g = ui5All().filter((c) => c.getMetadata().getName() === 'sap.m.NotificationListGroup');
+    return g.length === 2 && g[0].getItems().length === 3 && g[1].getItems().length === 0;
+  }, 'expanding the first group never filled it with its three notifications');
 };
