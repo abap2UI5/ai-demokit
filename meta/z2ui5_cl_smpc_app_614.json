@@ -1,0 +1,36 @@
+{
+  "class": "z2ui5_cl_smpc_app_614",
+  "sample": "sap.m.sample.ObjectHeaderResponsiveIII",
+  "entity": "sap.m.ObjectHeader",
+  "file": "src/01/01/z2ui5_cl_smpc_app_614.clas.abap",
+  "batch": "b51",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "titlePress is a roundtrip-free follow_up_action control_by_id openBy over $event.oSource.sId (the fragment popover, declared inline in dependents); no other wire in the port"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The ObjectHeader binds the fixed record {/ProductCollection/2} with the binding attribute. The port seeds exactly those row-2 fields at the default-model root and binds them absolutely, so icon, iconAlt, intro, title, number, numberUnit and all five ObjectAttribute texts read the same mock values - there is no element binding to resolve a relative {Field} against, so the binding attribute itself has no counterpart."
+    },
+    {
+      "type": "NOTE",
+      "what": "The number binding keeps its parts/type/formatOptions structure 1:1 with the paths switched to the ABAP field names; the Weight per unit and Dimension per unit attributes keep the original's shape as composed templates over the bound fields. The picture URL is the mock's own test-resources path, re-hosted on sdk.openui5.org."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleTitlePress loads Popover.fragment.xml lazily, adds it to the view's dependents and opens it by the pressed title's domRef. The port declares the same ResponsivePopover (id myPopover, title 'About', class sapUiContentPadding, one Text) inline in the ObjectHeader's dependents aggregation and wires titlePress to a roundtrip-free follow_up_action control_by_id openBy over $event.oSource.sId - the popover controls are therefore EXTRA vs the view.xml, where they live in the fragment file."
+    },
+    {
+      "type": "NOTE",
+      "what": "the IconTabBar in the headerContainer is carried 1:1: four IconTabFilters (info / attachments / notes / people) with their sap-icon:// icons, the counts 3 and 12 and a Text in each, under selectedKey='key3' and upperCase='true'. selectedKey names a key none of the four filters carries in the original either, so the bar opens on its first tab."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "the Currency-typed number binding, the title press opening the popover anchored to the title, and the fullScreenOptimized='true' layout are unverified in a running system."
+    }
+  ]
+}

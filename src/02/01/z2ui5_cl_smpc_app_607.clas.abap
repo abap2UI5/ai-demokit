@@ -146,7 +146,7 @@ CLASS z2ui5_cl_smpc_app_607 IMPLEMENTATION.
                 )->ele( `menu`
                     )->ele( `Menu`
                         )->a( n = `itemSelected` v = client->_event( val   = `MENU_ACTION`
-                                                                      t_arg = VALUE #( ( `\${\$parameters>/item}.getText()` ) ) )
+                                                                      t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ) )
                         )->tag( `MenuItem`
                             )->a( n = `text` v = `Export as PDF`
                             )->a( n = `icon` v = `sap-icon://pdf-attachment`

@@ -1,0 +1,44 @@
+{
+  "class": "z2ui5_cl_smpc_app_619",
+  "sample": "sap.m.sample.IconTabBarResponsivePadding",
+  "entity": "sap.m.IconTabBar",
+  "file": "src/01/01/z2ui5_cl_smpc_app_619.clas.abap",
+  "batch": "b51",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true,
+    "note": "the picked tab's key travels with select; nothing else comes back"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "this sample and apps 617 / 618 share one table and one filter idea; what it adds is the responsive padding - the bar carries class='sapUiResponsivePadding--header sapUiResponsivePadding--content' - over the same All-plus-three tab set app 617 shows. All of that is carried 1:1."
+    },
+    {
+      "type": "NOTE",
+      "what": "the four tab counts come from /ProductCollectionStats/Counts (123 total, 53 Ok, 51 Heavy, 19 Overweight) and are carried verbatim - they are the mock's own numbers and do NOT match what the filters actually select, which is true upstream too."
+    },
+    {
+      "type": "NOTE",
+      "what": "Thin frontend: onFilterSelect OR-s a KG filter with a G one, each AND-ed with its own bounds (1 / 5 kg against 1000 / 5000 g). Comparing in kilograms - grams divided by 1000 - is the same partition, and the port filters the ABAP table it sends (app 298 idiom). Note the sample's own Ok bound is LT, not LE."
+    },
+    {
+      "type": "NOTE",
+      "what": "the Weight cell's state is a formatter over the row's own measure and unit (Formatter.weightState: under 1 kg Success, under 5 kg Warning, else Error, and None for a non-numeric or negative measure, with grams divided by 1000). A thin frontend computes it in the backend, so weight_state is a field of the seeded row - and it is seeded on EVERY row, since an empty string in a ValueState terminates the app (the app 566 lesson)."
+    },
+    {
+      "type": "NOTE",
+      "what": "the Price cell is a composite currency binding in the sample (parts Price + CurrencyCode through sap.ui.model.type.Currency with showMeasure false). The port binds the two fields directly on the ObjectNumber's number and unit, which is what the formatter renders, since the mock's prices are plain numbers."
+    },
+    {
+      "type": "NOTE",
+      "what": "the items binding carries a sorter on Name; a thin frontend sorts the data it sends, so the 123 rows are seeded verbatim in the mock's order and SORTed by name in model_init - never through SORT BY (field), which the transpiled backend drops (the 2026-08-22 e2e finding)."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: that the All tab shows all 123 rows and that each of the three weight tabs filters the table to its range."
+    }
+  ]
+}

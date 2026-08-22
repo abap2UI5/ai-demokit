@@ -1,0 +1,32 @@
+{
+  "class": "z2ui5_cl_smpc_app_621",
+  "sample": "sap.m.sample.InputAssistedTabularSuggestions",
+  "entity": "sap.m.Input",
+  "file": "src/02/01/z2ui5_cl_smpc_app_621.clas.abap",
+  "batch": "b51",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false,
+    "note": "a pure suggestion demo - the port raises no event"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.Input.enableTableAutoPopinMode is @since 1.89 - newer than the 1.71 floor but kept for the 1:1 port, since the second of the three Inputs exists to show exactly that. The app needs a UI5 release >= 1.89 for that one to behave differently from the first."
+    },
+    {
+      "type": "NOTE",
+      "what": "the three Inputs are the sample: the same 123 suggestion rows and the same four columns, laid out three ways - default, enableTableAutoPopinMode, and a custom popin configuration (popinDisplay='Inline' with minScreenWidth='Large' and demandPopin on the last two columns). Every column property is carried 1:1, including the widths the second and third set."
+    },
+    {
+      "type": "NOTE",
+      "what": "the Price cell is a composite currency binding in the sample (parts Price + CurrencyCode through sap.ui.model.type.Currency with showMeasure TRUE, so the unit is part of the text). The port binds the two fields as one composite text ('{PRICE} {CURRENCYCODE}'), which is what that formatter renders, since the mock's prices are plain numbers."
+    },
+    {
+      "type": "NOTE",
+      "what": "the sample has no handler at all - its controller only loads the mock - so the port raises no event either. Typing filters the suggestions in the BROWSER, over the rows the backend already sent."
+    }
+  ]
+}

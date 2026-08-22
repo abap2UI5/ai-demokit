@@ -144,7 +144,7 @@ CLASS z2ui5_cl_smpc_app_606 IMPLEMENTATION.
             )->a( n = `state`        v = `{STATE}`
             )->a( n = `scope`        v = client->_bind( scope )
             )->a( n = `press`        v = client->_event( val   = `TILE_PRESS`
-                                                          t_arg = VALUE #( ( `\${\$source>/header}` ) ( `\${\$parameters>/action}` ) ) )
+                                                          t_arg = VALUE #( ( `${$source>/header}` ) ( `${$parameters>/action}` ) ) )
             )->a( n = `class`        v = `sapUiTinyMarginEnd`
             )->a( n = `sizeBehavior` v = client->_bind( size_behavior )
 
@@ -194,7 +194,7 @@ CLASS z2ui5_cl_smpc_app_606 IMPLEMENTATION.
         )->a( n = `scope`        v = |\{= ${ client->_bind( scope ) } === 'Actions' ? 'Actions' : 'Display' \}|
         )->a( n = `tooltip`      v = `SlideTile 1`
         )->a( n = `press`        v = client->_event( val   = `SLIDE_PRESS`
-                                                      t_arg = VALUE #( ( `SlideTile 1` ) ( `\${\$parameters>/action}` ) ) )
+                                                      t_arg = VALUE #( ( `SlideTile 1` ) ( `${$parameters>/action}` ) ) )
         )->a( n = `class`        v = `sapUiTinyMarginEnd`
         )->a( n = `sizeBehavior` v = client->_bind( size_behavior )
 
@@ -205,7 +205,7 @@ CLASS z2ui5_cl_smpc_app_606 IMPLEMENTATION.
             )->a( n = `tooltip`         v = `{TOOLTIP}`
             )->a( n = `frameType`       v = `TwoByOne`
             )->a( n = `press`           v = client->_event( val   = `TILE_PRESS`
-                                                             t_arg = VALUE #( ( `\${\$source>/tooltip}` ) ( `\${\$parameters>/action}` ) ) )
+                                                             t_arg = VALUE #( ( `${$source>/tooltip}` ) ( `${$parameters>/action}` ) ) )
             )->a( n = `sizeBehavior`    v = client->_bind( size_behavior )
 
             )->ele( `TileContent`
@@ -223,7 +223,7 @@ CLASS z2ui5_cl_smpc_app_606 IMPLEMENTATION.
         )->a( n = `scope`          v = |\{= ${ client->_bind( scope ) } === 'Actions' ? 'Actions' : 'Display' \}|
         )->a( n = `tooltip`        v = `SlideTile 2`
         )->a( n = `press`          v = client->_event( val   = `SLIDE_PRESS`
-                                                        t_arg = VALUE #( ( `SlideTile 2` ) ( `\${\$parameters>/action}` ) ) )
+                                                        t_arg = VALUE #( ( `SlideTile 2` ) ( `${$parameters>/action}` ) ) )
         )->a( n = `transitionTime` v = `250`
         )->a( n = `displayTime`    v = `2500`
         )->a( n = `sizeBehavior`   v = client->_bind( size_behavior )
@@ -235,7 +235,7 @@ CLASS z2ui5_cl_smpc_app_606 IMPLEMENTATION.
             )->a( n = `tooltip`         v = `{TOOLTIP}`
             )->a( n = `frameType`       v = `TwoByOne`
             )->a( n = `press`           v = client->_event( val   = `TILE_PRESS`
-                                                             t_arg = VALUE #( ( `\${\$source>/tooltip}` ) ( `\${\$parameters>/action}` ) ) )
+                                                             t_arg = VALUE #( ( `${$source>/tooltip}` ) ( `${$parameters>/action}` ) ) )
             )->a( n = `sizeBehavior`    v = client->_bind( size_behavior )
 
             )->ele( `TileContent`
@@ -261,7 +261,7 @@ CLASS z2ui5_cl_smpc_app_606 IMPLEMENTATION.
             )->a( n = `scope`        v = client->_bind( scope )
             )->a( n = `mode`         v = `LineMode`
             )->a( n = `press`        v = client->_event( val   = `TILE_PRESS`
-                                                          t_arg = VALUE #( ( `\${\$source>/header}` ) ( `\${\$parameters>/action}` ) ) )
+                                                          t_arg = VALUE #( ( `${$source>/header}` ) ( `${$parameters>/action}` ) ) )
             )->a( n = `sizeBehavior` v = client->_bind( size_behavior )
             )->a( n = `class`        v = `sapUiTinyMarginEnd sapUiTinyMarginBottom`
 

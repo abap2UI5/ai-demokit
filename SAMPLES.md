@@ -3,7 +3,7 @@
 
 # The sample catalogue
 
-Every port in this repository — 624 of them — with what it shows and a
+Every port in this repository — 636 of them — with what it shows and a
 link to its source. This is the [overview app](src/z2ui5_cl_smpc_app_000.clas.abap)
 as a page you can read here, before installing anything.
 
@@ -44,7 +44,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 
 ### sap.m
 
-365 port(s).
+377 port(s).
 
 | Sample | Class |
 |---|---|
@@ -279,6 +279,15 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.m.Tree** — Tree - InitialExpand & CollapseAll<br>TreeExpandTo<br><sub>tree sap.m treeexpandto expandtolevel collapseall select overflowtoolbar standardtreeitem</sub><br><sub>○ generated · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_602`](src/01/01/z2ui5_cl_smpc_app_602.clas.abap) |
 | **sap.m.Tree** — Tree - OData<br>TreeOData<br><sub>tree sap.m treeodata odatatreebinding hierarchy messagestrip standardtreeitem</sub><br><sub>○ generated · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_603`](src/01/01/z2ui5_cl_smpc_app_603.clas.abap) |
 | **sap.m.HeaderContainer** — Header Container - Lazy Loading<br>HeaderContainerLazyLoading<br><sub>headercontainer sap.m headercontainerlazyloading objectheader numericcontent objectmarker scroll lazy loading</sub><br><sub>○ generated · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_605`](src/01/01/z2ui5_cl_smpc_app_605.clas.abap) |
+| **sap.m.MultiInput** — MultiInput - Grouping of items<br>MultiInputGrouping<br><sub>multiinput sap.m multiinputgrouping suggestionitems suggestionrows suggestioncolumns sorter group token column columnlistitem</sub><br><sub>○ generated · 5 deviations</sub> | [`Z2UI5_CL_SMPC_APP_613`](src/01/01/z2ui5_cl_smpc_app_613.clas.abap) |
+| **sap.m.ObjectHeader** — Object Header Responsive III<br>This is a responsive Object Header in full screen mode (fullScreenOptimized = true) with an icon, five attributes, a status, two markers and an IconTabBar in its header container.<br><sub>objectheader object header sap.m objectheaderresponsiveiii objectattribute objectstatus objectmarker icontabbar icontabfilter text responsivepopover</sub><br><sub>○ generated · 5 deviations</sub> | [`Z2UI5_CL_SMPC_APP_614`](src/01/01/z2ui5_cl_smpc_app_614.clas.abap) |
+| **sap.m.ObjectHeader** — Object Header Responsive IV<br>This is a responsive Object Header in a Master/Detail mode (fullScreenOptimized = false) with a title selector, five attributes, a status, two markers and an eight-tab IconTabBar in its header container.<br><sub>objectheader object header sap.m objectheaderresponsiveiv objectattribute objectstatus objectmarker icontabbar icontabfilter text responsivepopover titleselector</sub><br><sub>○ generated · 6 deviations</sub> | [`Z2UI5_CL_SMPC_APP_615`](src/01/01/z2ui5_cl_smpc_app_615.clas.abap) |
+| **sap.m.IconTabBar** — Icon Tab Bar - Background Design<br>IconTabBarBackgroundDesign<br><sub>icontabbar sap.m icontabbarbackgrounddesign backgrounddesign headerbackgrounddesign icontabfilter icontabseparator radiobuttongroup table</sub><br><sub>○ generated · 8 deviations</sub> | [`Z2UI5_CL_SMPC_APP_617`](src/01/01/z2ui5_cl_smpc_app_617.clas.abap) |
+| **sap.m.IconTabBar** — Icon Tab Bar - Process<br>IconTabBarProcess<br><sub>icontabbar sap.m icontabbarprocess icontabfilter design horizontal icontabseparator count table filter</sub><br><sub>○ generated · 8 deviations</sub> | [`Z2UI5_CL_SMPC_APP_618`](src/01/01/z2ui5_cl_smpc_app_618.clas.abap) |
+| **sap.m.IconTabBar** — Icon Tab Bar - Responsive Padding<br>IconTabBarResponsivePadding<br><sub>icontabbar sap.m icontabbarresponsivepadding responsivepadding icontabfilter icontabseparator showall count table filter</sub><br><sub>○ generated · 7 deviations</sub> | [`Z2UI5_CL_SMPC_APP_619`](src/01/01/z2ui5_cl_smpc_app_619.clas.abap) |
+| **sap.m.IconTabBar** — Icon Tab Bar - Tab Density Mode<br>IconTabBarTabDensityMode<br><sub>icontabbar sap.m icontabbartabdensitymode tabdensitymode headermode inline icontabfilter icontabseparator radiobuttongroup reordering</sub><br><sub>○ generated · 6 deviations</sub> | [`Z2UI5_CL_SMPC_APP_620`](src/01/01/z2ui5_cl_smpc_app_620.clas.abap) |
+| **sap.m.Input** — Input - Checked<br>InputChecked<br><sub>input sap.m inputchecked validation valuestate valuestatetext constraints simpletype messagebox verticallayout</sub><br><sub>○ generated · 6 deviations</sub> | [`Z2UI5_CL_SMPC_APP_622`](src/01/01/z2ui5_cl_smpc_app_622.clas.abap) |
+| **sap.m.Input** — Input - States<br>InputStates<br><sub>input sap.m inputstates editable enabled showvaluehelp valuehelprequest selectdialog verticallayout label</sub><br><sub>○ generated · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_623`](src/01/01/z2ui5_cl_smpc_app_623.clas.abap) |
 | **sap.m.Carousel** — Carousel with Controls<br>With the Carousel a user can browse through multi-page content by swiping left or right.<br><sub>carousel sap.m user browse through title image text scrollcontainer list standardlistitem</sub><br><sub>✓ checked · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_006`](src/02/01/z2ui5_cl_smpc_app_006.clas.abap) |
 | **sap.m.DatePicker** — Date Picker - Open by Another Control<br>This example shows Date Picker which is opened by another control.<br><sub>datepicker date picker sap.m open another title vbox label button link</sub><br><sub>✓ checked · 5 deviations</sub> | [`Z2UI5_CL_SMPC_APP_016`](src/02/01/z2ui5_cl_smpc_app_016.clas.abap) |
 | **sap.m.DateRangeSelection**<br>The Date Range Selection is an extension of the Date Picker Control and enables the user to select range of dates.<br><sub>daterangeselection date range selection sap.m single-field input vbox label text</sub><br><sub>✓ checked · 8 deviations</sub> | [`Z2UI5_CL_SMPC_APP_017`](src/02/01/z2ui5_cl_smpc_app_017.clas.abap) |
@@ -413,6 +422,9 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.m.Select** — Select - Two columns layout<br>Select2Columns<br><sub>select sap.m select2columns columnratio showsecondaryvalues twocolumnseparator wrapitemstext listitem slider switch</sub><br><sub>○ generated · 5 deviations</sub> | [`Z2UI5_CL_SMPC_APP_608`](src/02/01/z2ui5_cl_smpc_app_608.clas.abap) |
 | **sap.m.SinglePlanningCalendar** — Single Planning Calendar - Create and Modify Appointments<br>SinglePlanningCalendarCreateApp | [`Z2UI5_CL_SMPC_APP_609`](src/02/01/z2ui5_cl_smpc_app_609.clas.abap) |
 | **sap.m.SinglePlanningCalendar** — Single Planning Calendar with Drag and Drop<br>SinglePlanningCalendarDND<br><sub>singleplanningcalendar sap.m singleplanningcalendardnd appointmentdrop appointmentresize appointmentcreate draganddrop calendarappointment switch</sub><br><sub>○ generated · 6 deviations</sub> | [`Z2UI5_CL_SMPC_APP_610`](src/02/01/z2ui5_cl_smpc_app_610.clas.abap) |
+| **sap.m.MultiInput** — MultiInput Filtering and Suggestions<br>MultiInputFilteringSuggestions<br><sub>multiinput sap.m multiinputfilteringsuggestions suggestionitems suggestionrows suggestioncolumns valuestate formattedvaluestatetext formattedtext link token column columnlistitem</sub><br><sub>○ generated · 6 deviations</sub> | [`Z2UI5_CL_SMPC_APP_612`](src/02/01/z2ui5_cl_smpc_app_612.clas.abap) |
+| **sap.m.ComboBox** — Combo box with value state<br>ComboBoxValueState<br><sub>combobox sap.m comboboxvaluestate valuestate valuestatetext formattedvaluestatetext formattedtext link listitem</sub><br><sub>○ generated · 5 deviations</sub> | [`Z2UI5_CL_SMPC_APP_616`](src/02/01/z2ui5_cl_smpc_app_616.clas.abap) |
+| **sap.m.Input** — Input - Assisted Tabular Suggestions<br>InputAssistedTabularSuggestions<br><sub>input sap.m inputassistedtabularsuggestions suggestionrows suggestioncolumns enabletableautopopinmode popindisplay columnlistitem</sub><br><sub>○ generated · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_621`](src/02/01/z2ui5_cl_smpc_app_621.clas.abap) |
 
 ### sap.uxap
 

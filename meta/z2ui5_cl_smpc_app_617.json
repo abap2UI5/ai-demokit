@@ -1,0 +1,48 @@
+{
+  "class": "z2ui5_cl_smpc_app_617",
+  "sample": "sap.m.sample.IconTabBarBackgroundDesign",
+  "entity": "sap.m.IconTabBar",
+  "file": "src/01/01/z2ui5_cl_smpc_app_617.clas.abap",
+  "batch": "b51",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true,
+    "note": "the picked tab's key travels with select; the two design groups only write bound fields"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onBackgroundDesignSelect and onHeaderBackgroundDesignSelect both read the picked RadioButton's TEXT and hand it to a setter. Both properties are bindable, and the three texts ARE the sap.m.BackgroundDesign members, so the port binds each group's selectedIndex two-way and one shared round trip (event DESIGNS) turns the two indices into the two enum values the IconTabBar binds - the same fold app 604 uses for its five option groups."
+    },
+    {
+      "type": "NOTE",
+      "what": "both bound enums carry the null fallback ({= ${X} || null }, apps 548/555 idiom): a flat ABAP row serializes every field, so an unset enum would arrive as an empty string and UI5 would reject the whole view. model_init also seeds both from the groups' own first button, which is what getSelectedButton() returns before any select."
+    },
+    {
+      "type": "NOTE",
+      "what": "Thin frontend: onFilterSelect builds a sap.ui.model.Filter (WeightUnit EQ KG AND-ed with the tab's measure range: LE 1 for Ok, BT 1..5 for Heavy, GT 5 for Overweight) and calls filter() on the items binding. The port filters the ABAP table it sends instead (app 298 idiom), over the same three ranges and the same unit guard; the All tab clears the filter."
+    },
+    {
+      "type": "NOTE",
+      "what": "the Weight cell's state is a formatter over the row's own measure and unit (Formatter.weightState: under 1 kg Success, under 5 kg Warning, else Error, and None for a non-numeric or negative measure, with grams divided by 1000). A thin frontend computes it in the backend, so weight_state is a field of the seeded row - and it is seeded on EVERY row, since an empty string in a ValueState terminates the app (the app 566 lesson)."
+    },
+    {
+      "type": "NOTE",
+      "what": "the Price cell is a composite currency binding in the sample (parts Price + CurrencyCode through sap.ui.model.type.Currency with showMeasure false). The port binds the two fields directly on the ObjectNumber's number and unit, which is what the formatter renders, since the mock's prices are plain numbers."
+    },
+    {
+      "type": "NOTE",
+      "what": "the four tab counts come from /ProductCollectionStats/Counts (123 total, 53 Ok, 51 Heavy, 19 Overweight) and are carried verbatim - they are the mock's own numbers and do NOT match what the filters actually select (the port's own weightState classification yields 57/45/21), which is true upstream too."
+    },
+    {
+      "type": "NOTE",
+      "what": "the items binding carries a sorter on Name; a thin frontend sorts the data it sends, so the 123 rows are seeded verbatim in the mock's order and SORTed by name in model_init - never through SORT BY (field), which the transpiled backend drops (the 2026-08-22 e2e finding)."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: that each of the four weight tabs filters the table to its range and that the two RadioButtonGroups repaint the bar's background and its header."
+    }
+  ]
+}

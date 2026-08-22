@@ -7,6 +7,59 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-22 — batch b51 (sap.m): the backlog reaches zero (apps 612–623)
+
+The last twelve portable samples in the corpus. Every library is at 100 %, and
+what is left unported is the twelve `HOLDOUT` rows and nothing else.
+
+| app | sample | what it adds |
+|---|---|---|
+| 612 | MultiInputFilteringSuggestions | a value state message that is a `FormattedText` with a `Link` in it (POST_171, `src/02`) |
+| 613 | MultiInputGrouping | a GROUPING sorter carried into two suggestion bindings |
+| 614 | ObjectHeaderResponsiveIII | the full-screen responsive header, five attributes and a header-container tab bar |
+| 615 | ObjectHeaderResponsiveIV | the same in master/detail, plus the title selector and eight tabs |
+| 616 | ComboBoxValueState | `formattedValueStateText` on a ComboBox (POST_171, `src/02`) |
+| 617 | IconTabBarBackgroundDesign | two `BackgroundDesign` enums written by two RadioButtonGroups |
+| 618 | IconTabBarProcess | the process look: `design="Horizontal"` filters with icon separators |
+| 619 | IconTabBarResponsivePadding | the same table under the two responsive padding classes |
+| 620 | IconTabBarTabDensityMode | nine bars, eight sharing ONE bound `tabDensityMode` |
+| 621 | InputAssistedTabularSuggestions | the same 123 rows in three column layouts (POST_171, `src/02`) |
+| 622 | InputChecked | a bound `sap.ui.model.type.String` constraint checked on both sides |
+| 623 | InputStates | the four input states and a value help dialog |
+
+Three findings, and the first is a defect the batch shipped and then took back
+out of three of its own ports.
+
+- **`DELETE ... INDEX sy-tabix` inside a `LOOP` over the same table is not a
+  filter idiom, it is a bug.** Apps 617, 618 and 619 all wrote their weight
+  filter that way. App 298 had already established what happens — the rows
+  shift under the loop's own cursor, so on a system it silently SKIPS the row
+  after each deletion and on the transpiled backend it raises
+  `TABLE_INVALID_INDEX` (2026-08-17) — and the note is in that port's source,
+  where a new port never reads it. All three collect into a local table now,
+  which is the shape app 298 landed on. **The lesson generalises past this
+  batch: a rule that lives only in the source of the port that learned it is a
+  rule the next port will break.**
+- **A JS validator is a round trip, not a lost feature.** `MultiInput.addValidator( )`
+  is a callback abap2UI5 cannot register, and apps 612 and 613 are both written
+  around one: picking a suggestion ROW has to become a Token whose key is the
+  row's first cell and whose text is `'key(price cell)'`. Wiring
+  `suggestionItemSelected` with `${$parameters>/selectedRow}.getCells()[0].getText()`
+  gets the same token built in ABAP over a bound `tokens` table — the apps 501 /
+  504 lesson applied to the tabular case rather than the typed-text one. The
+  bound `tokens` aggregation is the only thing EXTRA in the view.
+- **Nine bars, one field.** App 620's controller writes `setTabDensityMode` on
+  eight bars from one RadioButtonGroup and leaves the ninth alone. The property
+  is bindable, so the eight share ONE bound field and the handler disappears
+  entirely — the same fold apps 604 and 617 make, and the ninth bar binding
+  nothing is what proves the fold is real rather than a global.
+
+App 612 is also the batch's only POST_171 that is an AGGREGATION rather than a
+property: `formattedValueStateText` comes from `sap.m.InputBase` `@since 1.78`,
+so on a 1.71 floor UI5 would resolve the tag as a control class and the 404
+would take the whole view down — not just that part. That is why the version
+gate is a hard failure on an aggregation and an excusable one on a property.
+
 ## 2026-08-22 — the second e2e sweep: a silent no-op in every dynamic SORT
 
 The b47 ports were run against the e2e harness for the first time. Four

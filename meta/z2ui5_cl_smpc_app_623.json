@@ -1,0 +1,32 @@
+{
+  "class": "z2ui5_cl_smpc_app_623",
+  "sample": "sap.m.sample.InputStates",
+  "entity": "sap.m.Input",
+  "file": "src/01/01/z2ui5_cl_smpc_app_623.clas.abap",
+  "batch": "b51",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true,
+    "note": "the search query and the picked product's title travel with the dialog's events"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the four Inputs are the sample: not editable, not enabled, editable, and editable with a value help. All four carry their type, placeholder, enabled and editable flags 1:1; only the fourth has any behaviour."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleValueHelp loads Dialog.fragment.xml once (Fragment.load, kept as a view dependent) and opens it. The port expresses it as a core:FragmentDefinition shown through client->popup_display and served per request, which is what lets the backend filter its list. The controller also remembers which input asked (this.inputId) so _handleValueHelpClose can write back into it - here only one Input has a value help, so the picked title goes into its bound field directly."
+    },
+    {
+      "type": "NOTE",
+      "what": "Thin frontend: _handleValueHelpSearch builds a Name Contains filter and calls filter() on the dialog's items binding; the port filters the ABAP table it sends (app 298 idiom). Both close paths clear the filter for the next open, as the original does."
+    },
+    {
+      "type": "NOTE",
+      "what": "the StandardListItem's icon binds PICURL where the fragment writes {ProductPicUrl} - the same field under the ABAP component name, with the sanctioned host absolutization onto sdk.openui5.org. Its description binds {Productid} in the sample, a lower-case 'id' the mock does not carry (the field is ProductId), so upstream that line is empty; the port binds the field the mock really has."
+    }
+  ]
+}

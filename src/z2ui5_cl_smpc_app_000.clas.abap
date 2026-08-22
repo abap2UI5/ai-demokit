@@ -1985,7 +1985,30 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.22`
         notes = `NOTE: handleChange validates the entry (a typed value with no matching key is an error) and calls setValueState / setValueStateText. Validation is business logic, so the port keeps the change wire,` &&
                  ` binds selectedKey, value, valueState and valueStateText, and decides the state in ABAP - the same two branches with the same message. // NOTE: The change wire and the two bound value-state properties` &&
-                 ` are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_475.mjs).` )
+                 ` are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_475.mjs).` ) ).
+
+    lv_text1 = `POST-1.71: the formattedValueStateText aggregation of sap.m.ComboBox is @since 1.78 - newer than the 1.71 floor but kept for the 1:1 port, since two of the six ComboBoxes exist to show exactly that (a` &&
+               ` value-state message carrying one link, and one carrying two). The app needs a UI5 release >= 1.78; below it the lowercase tag resolves as a control class and the 404 takes the whole view down, which` &&
+               ` is why this is an error rather than a warning. // NOTE: every one of the six items bindings is declared ``suspended: true`` and resumed by handleLoadItems on the first open - a lazy-loading trick for` &&
+               ` a list the model already holds. abap2UI5 sends the rows with the view, so there is nothing to suspend and nothing to resume: the port binds the 70 countries outright and the loadItems wire is` &&
+               ` dropped. What the user sees is the same list. // NOTE: handleValueStateLinkPress toasts the constant 'Link in value state pressed', so all three links are wired round-trip-free as follow_up_action(` &&
+               ` control_global, MESSAGE_TOAST show ) (app 005/032 idiom). Their href="" is carried as the sample writes it. // NOTE: the bindings carry a sorter on text; a thin frontend sorts the data it sends, so`.
+    lv_text1 = lv_text1 && ` the 70 rows of countriesExtendedCollection.json are seeded verbatim in the mock's order and SORTed by text in model_init - never through SORT BY (field), which the transpiled backend drops (the` &&
+               ` 2026-08-22 e2e finding). // NOTE: the two ComboBoxes that carry a formattedValueStateText ALSO carry the plain valueStateText in the sample (the long 'Warning message. Extra long text ...' string) -` &&
+               ` UI5 shows the formatted one and ignores the plain one. Both are kept, since both are what the sample writes; app 032 carries the same pair for sap.m.Input.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxValueState`                            class = `z2ui5_cl_smpc_app_616` path = `src/02/01/z2ui5_cl_smpc_app_616.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.22`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `the formattedValueStateText aggregation of sap.m.ComboBox is @since 1.78 - newer than the 1.71 floor but kept for the 1:1 port, since two of the six ComboBoxes exist to show exactly that (a` &&
+                 ` value-state message carrying one link, and one carrying two). The app needs a UI5 release >= 1.78; below it the lowercase tag resolves as a control class and the 404 takes the whole view down, which` &&
+                 ` is why this is an error rather than a warning.` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxWrapping`                              class = `z2ui5_cl_smpc_app_384` path = `src/01/01/z2ui5_cl_smpc_app_384.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2830,6 +2853,27 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
+    lv_text1 = `NOTE: onBackgroundDesignSelect and onHeaderBackgroundDesignSelect both read the picked RadioButton's TEXT and hand it to a setter. Both properties are bindable, and the three texts ARE the` &&
+               ` sap.m.BackgroundDesign members, so the port binds each group's selectedIndex two-way and one shared round trip (event DESIGNS) turns the two indices into the two enum values the IconTabBar binds -` &&
+               ` the same fold app 604 uses for its five option groups. // NOTE: both bound enums carry the null fallback ({= ${X} || null }, apps 548/555 idiom): a flat ABAP row serializes every field, so an unset` &&
+               ` enum would arrive as an empty string and UI5 would reject the whole view. model_init also seeds both from the groups' own first button, which is what getSelectedButton() returns before any select. //` &&
+               ` NOTE: Thin frontend: onFilterSelect builds a sap.ui.model.Filter (WeightUnit EQ KG AND-ed with the tab's measure range: LE 1 for Ok, BT 1..5 for Heavy, GT 5 for Overweight) and calls filter() on the` &&
+               ` items binding. The port filters the ABAP table it sends instead (app 298 idiom), over the same three ranges and the same unit guard; the All tab clears the filter. // NOTE: the Weight cell's state is`.
+    lv_text1 = lv_text1 && ` a formatter over the row's own measure and unit (Formatter.weightState: under 1 kg Success, under 5 kg Warning, else Error, and None for a non-numeric or negative measure, with grams divided by` &&
+               ` 1000). A thin frontend computes it in the backend, so weight_state is a field of the seeded row - and it is seeded on EVERY row, since an empty string in a ValueState terminates the app (the app 566` &&
+               ` lesson). // NOTE: the Price cell is a composite currency binding in the sample (parts Price + CurrencyCode through sap.ui.model.type.Currency with showMeasure false). The port binds the two fields` &&
+               ` directly on the ObjectNumber's number and unit, which is what the formatter renders, since the mock's prices are plain numbers. // NOTE: the four tab counts come from /ProductCollectionStats/Counts` &&
+               ` (123 total, 53 Ok, 51 Heavy, 19 Overweight) and are carried verbatim - they are the mock's own numbers and do NOT match what the filters actually select (the port's own weightState classification` &&
+               ` yields 57/45/21), which is true upstream too. // NOTE: the items binding carries a sorter on Name; a thin frontend sorts the data it sends, so the 123 rows are seeded verbatim in the mock's order and`.
+    lv_text1 = lv_text1 && ` SORTed by name in model_init - never through SORT BY (field), which the transpiled backend drops (the 2026-08-22 e2e finding). // LIVE-TEST: not yet verified in a running system: that each of the` &&
+               ` four weight tabs filters the table to its range and that the two RadioButtonGroups repaint the bar's background and its header.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarBackgroundDesign`                    class = `z2ui5_cl_smpc_app_617` path = `src/01/01/z2ui5_cl_smpc_app_617.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        notes = lv_text1 ) ).
+
     lv_text1 = `POST-1.71: two members and one control newer than UI5 1.71 are kept 1:1 because they ARE the sample: sap.m.BadgeCustomData (control since 1.80, the badge marker in every customData aggregation -` &&
                ` declared by policy, the property gate does not resolve it) and sap.m.IconTabFilter.items (since 1.77, the nested sub-tabs of iconTabBar8). The app needs a UI5 release >= 1.80. // NOTE: onInit adds 30` &&
                ` IconTabFilters to iconTabBar0 imperatively (text 'Tab n', key n, a Text 'Content n', and a BadgeCustomData visible on the 19th). The port builds that as a bound aggregation over T_TABS with one` &&
@@ -2896,6 +2940,43 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` holding the same 30 rows (Tab 1..30 / Content 1..30) and declares one IconTabFilter template with its content Text - structural-diff reports both as control extra because the original's view carries` &&
                  ` only the empty IconTabBar.` ) ).
 
+    lv_text1 = `NOTE: this sample and apps 617 / 619 share one table and one filter idea; what it adds is the PROCESS look of the bar - three IconTabFilters with design='Horizontal', an icon-carrying IconTabSeparator` &&
+               ` between each pair (sap-icon://open-command-field) and no All tab. All of that is carried 1:1. // NOTE: the three counts are composed bindings in the sample - '{Ok} of {Total}' and so on - so the port` &&
+               ` composes the same three strings from /ProductCollectionStats/Counts (53 of 123, 51 of 123, 19 of 123) and binds one field per tab. // NOTE: Thin frontend: onFilterSelect OR-s a KG filter with a G` &&
+               ` one, each AND-ed with its own bounds (1 / 5 kg against 1000 / 5000 g). Comparing in kilograms - grams divided by 1000 - is the same partition, and the port filters the ABAP table it sends (app 298` &&
+               ` idiom). Note the sample's own Ok bound is LT, not LE. // NOTE: the Weight cell's state is a formatter over the row's own measure and unit (Formatter.weightState: under 1 kg Success, under 5 kg` &&
+               ` Warning, else Error, and None for a non-numeric or negative measure, with grams divided by 1000). A thin frontend computes it in the backend, so weight_state is a field of the seeded row - and it is`.
+    lv_text1 = lv_text1 && ` seeded on EVERY row, since an empty string in a ValueState terminates the app (the app 566 lesson). // NOTE: the Price cell is a composite currency binding in the sample (parts Price + CurrencyCode` &&
+               ` through sap.ui.model.type.Currency with showMeasure false). The port binds the two fields directly on the ObjectNumber's number and unit, which is what the formatter renders, since the mock's prices` &&
+               ` are plain numbers. // NOTE: the four tab counts come from /ProductCollectionStats/Counts (123 total, 53 Ok, 51 Heavy, 19 Overweight) and are carried verbatim - they are the mock's own numbers and do` &&
+               ` NOT match what the filters actually select (the port's own weightState classification yields 57/45/21), which is true upstream too. // NOTE: the items binding carries a sorter on Name; a thin` &&
+               ` frontend sorts the data it sends, so the 123 rows are seeded verbatim in the mock's order and SORTed by name in model_init - never through SORT BY (field), which the transpiled backend drops (the` &&
+               ` 2026-08-22 e2e finding). // LIVE-TEST: not yet verified in a running system: that each of the three process tabs filters the table to its weight range.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarProcess`                             class = `z2ui5_cl_smpc_app_618` path = `src/01/01/z2ui5_cl_smpc_app_618.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: this sample and apps 617 / 618 share one table and one filter idea; what it adds is the responsive padding - the bar carries class='sapUiResponsivePadding--header` &&
+               ` sapUiResponsivePadding--content' - over the same All-plus-three tab set app 617 shows. All of that is carried 1:1. // NOTE: the four tab counts come from /ProductCollectionStats/Counts (123 total, 53` &&
+               ` Ok, 51 Heavy, 19 Overweight) and are carried verbatim - they are the mock's own numbers and do NOT match what the filters actually select, which is true upstream too. // NOTE: Thin frontend:` &&
+               ` onFilterSelect OR-s a KG filter with a G one, each AND-ed with its own bounds (1 / 5 kg against 1000 / 5000 g). Comparing in kilograms - grams divided by 1000 - is the same partition, and the port` &&
+               ` filters the ABAP table it sends (app 298 idiom). Note the sample's own Ok bound is LT, not LE. // NOTE: the Weight cell's state is a formatter over the row's own measure and unit` &&
+               ` (Formatter.weightState: under 1 kg Success, under 5 kg Warning, else Error, and None for a non-numeric or negative measure, with grams divided by 1000). A thin frontend computes it in the backend, so`.
+    lv_text1 = lv_text1 && ` weight_state is a field of the seeded row - and it is seeded on EVERY row, since an empty string in a ValueState terminates the app (the app 566 lesson). // NOTE: the Price cell is a composite` &&
+               ` currency binding in the sample (parts Price + CurrencyCode through sap.ui.model.type.Currency with showMeasure false). The port binds the two fields directly on the ObjectNumber's number and unit,` &&
+               ` which is what the formatter renders, since the mock's prices are plain numbers. // NOTE: the items binding carries a sorter on Name; a thin frontend sorts the data it sends, so the 123 rows are` &&
+               ` seeded verbatim in the mock's order and SORTed by name in model_init - never through SORT BY (field), which the transpiled backend drops (the 2026-08-22 e2e finding). // LIVE-TEST: not yet verified` &&
+               ` in a running system: that the All tab shows all 123 rows and that each of the three weight tabs filters the table to its range.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarResponsivePadding`                   class = `z2ui5_cl_smpc_app_619` path = `src/01/01/z2ui5_cl_smpc_app_619.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        notes = lv_text1 ) ).
+
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarStartAndEndOverflow`                 class = `z2ui5_cl_smpc_app_466` path = `src/02/01/z2ui5_cl_smpc_app_466.clas.abap`
         score = 2
@@ -2920,7 +3001,27 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = `POST-1.71: the sap.m.IconTabFilter items aggregation (nested sub tabs) is @since 1.77, newer than the 1.71 floor, but it IS the sample - both IconTabBars exist to show sub tabs. Kept for the 1:1 port;` &&
                  ` the app needs a UI5 release >= 1.77.`
         post171 = `the sap.m.IconTabFilter items aggregation (nested sub tabs) is @since 1.77, newer than the 1.71 floor, but it IS the sample - both IconTabBars exist to show sub tabs. Kept for the 1:1 port; the app` &&
-                 ` needs a UI5 release >= 1.77.` )
+                 ` needs a UI5 release >= 1.77.` ) ).
+
+    lv_text1 = `NOTE: onTabDensityModeSelect reads the picked RadioButton's TEXT and calls setTabDensityMode on byId('idIconTabBar' + i) for i = 0..7 - eight of the nine bars. tabDensityMode is bindable, so the port` &&
+               ` binds the group's selectedIndex two-way and one round trip (event DENSITY) turns the index into the enum all eight bars bind, the same fold apps 604 and 617 use. The ninth bar, iconTabBarInlineIcons,` &&
+               ` is NOT in the sample's loop and is therefore left unbound here too. // NOTE: the bound enum carries the null fallback ({= ${X} || null }, apps 548/555 idiom) and is seeded 'Cozy' from the group's own` &&
+               ` first button, so no empty string ever reaches sap.m.IconTabDensityMode. // NOTE: onInit fills two of the nine bars in JavaScript: thirty IconTabFilters on idIconTabBar0 ('Tab n' with a 'Content n'` &&
+               ` Text) and twelve on iconTabBarInlineIcons. Both aggregations are bindable, so the port binds a table for each and builds the rows in model_init - which is why the port shows 29 IconTabFilters and 24` &&
+               ` Texts against the view's 27 and 22: the two bound TEMPLATES are counted once each on top of the seven bars written out literally. // IMPROVISED: the twelve inline tabs get their icon from`.
+    lv_text1 = lv_text1 && ` aIcons[Math.floor(Math.random() * 3)] - a fresh draw per tab on every load. A backend cannot draw the browser's numbers, and a random seed would make the port unrepeatable for the gates, so the three` &&
+               ` icons (history, home, employee) CYCLE instead. Every tab still carries one of the three, which is what the sample demonstrates; only the sequence is stable. // NOTE: the other seven bars are written` &&
+               ` out literally, with everything the sample sets on them: enableTabReordering on idIconTabBar0, headerMode='Inline' on idIconTabBar6, the four icon-only filters of idIconTabBar4, the four iconColor` &&
+               ` values and three icon-carrying IconTabSeparators of idIconTabBar1 (one of which carries icon="" - an empty icon the sample writes and the port keeps), the Horizontal process design of idIconTabBar2` &&
+               ` and the showAll tab of idIconTabBar5. // LIVE-TEST: not yet verified in a running system: that the three density buttons resize the eight bars and leave the ninth alone.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarTabDensityMode`                      class = `z2ui5_cl_smpc_app_620` path = `src/01/01/z2ui5_cl_smpc_app_620.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        notes = lv_text1 ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabSeparator`                              class = `z2ui5_cl_smpc_app_383` path = `src/01/01/z2ui5_cl_smpc_app_383.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
@@ -3046,10 +3147,45 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
+    lv_text1 = `POST-1.71: sap.m.Input.enableTableAutoPopinMode is @since 1.89 - newer than the 1.71 floor but kept for the 1:1 port, since the second of the three Inputs exists to show exactly that. The app needs a` &&
+               ` UI5 release >= 1.89 for that one to behave differently from the first. // NOTE: the three Inputs are the sample: the same 123 suggestion rows and the same four columns, laid out three ways - default,` &&
+               ` enableTableAutoPopinMode, and a custom popin configuration (popinDisplay='Inline' with minScreenWidth='Large' and demandPopin on the last two columns). Every column property is carried 1:1, including` &&
+               ` the widths the second and third set. // NOTE: the Price cell is a composite currency binding in the sample (parts Price + CurrencyCode through sap.ui.model.type.Currency with showMeasure TRUE, so the` &&
+               ` unit is part of the text). The port binds the two fields as one composite text ('{PRICE} {CURRENCYCODE}'), which is what that formatter renders, since the mock's prices are plain numbers. // NOTE:`.
+    lv_text1 = lv_text1 && ` the sample has no handler at all - its controller only loads the mock - so the port raises no event either. Typing filters the suggestions in the BROWSER, over the rows the backend already sent.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Input`                           name = `InputAssistedTabularSuggestions`               class = `z2ui5_cl_smpc_app_621` path = `src/02/01/z2ui5_cl_smpc_app_621.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.m.Input.enableTableAutoPopinMode is @since 1.89 - newer than the 1.71 floor but kept for the 1:1 port, since the second of the three Inputs exists to show exactly that. The app needs a UI5 release` &&
+                 ` >= 1.89 for that one to behave differently from the first.` ) ).
+
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Input`                           name = `InputAssistedTwoValues`                        class = `z2ui5_cl_smpc_app_456` path = `src/01/01/z2ui5_cl_smpc_app_456.clas.abap`
         score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
+
+    lv_text1 = `NOTE: the Name input's binding carries a sap.ui.model.type.String with minLength 1 / maxLength 10 constraints, and UI5 checks those in the BROWSER on every parse. The port keeps the binding exactly as` &&
+               ` written (path plus type plus constraints, the app 549 composite-binding idiom) so that half still works client-side, and the backend checks the same two bounds when it is asked to. // IMPROVISED: the` &&
+               ` E-mail input's binding names '.customEMailType', a sap.ui.model.SimpleType the CONTROLLER defines, whose validateValue throws a ValidateException unless the value matches` &&
+               ` /^\w+[\w-+\.]*\@\w+([-\.]\w+)*\.[a-zA-Z]{2,}$/. A model type is a JavaScript class - there is nothing to name from a backend - so the type reference is dropped and the same shape is checked in ABAP` &&
+               ` instead: exactly one @ with something before it, a dot in the domain with at least two characters after it, and no spaces. The sample's own comment calls its regex demonstration-only, so the two` &&
+               ` agree on every value it is meant to show. // NOTE: _validateInput reads the binding's type, calls validateValue and sets the input's valueState to Error or None. valueState IS a bindable property, so`.
+    lv_text1 = lv_text1 && ` the port binds one field per input and writes it from the same check. The two valueStateTexts are carried literally, as the sample writes them. // NOTE: onInit registers both inputs with` &&
+               ` sap.ui.core.Messaging (registerObject), which is what makes UI5 attach its own validation-error handling and paint the state on a failed parse. There is no counterpart for the registration itself;` &&
+               ` what it produces - the Error state on an invalid value - the port writes explicitly. // NOTE: onSubmit's two outcomes are carried 1:1: a MessageToast on success and MessageBox.alert on failure` &&
+               ` (message_box_display with the information type, which is what alert shows). // LIVE-TEST: not yet verified in a running system: that a name over ten characters paints the Error state and that Submit` &&
+               ` distinguishes the two outcomes.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Input`                           name = `InputChecked`                                  class = `z2ui5_cl_smpc_app_622` path = `src/01/01/z2ui5_cl_smpc_app_622.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        notes = lv_text1 ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Input`                           name = `InputCustomValueHelpIcon`                      class = `z2ui5_cl_smpc_app_510` path = `src/02/01/z2ui5_cl_smpc_app_510.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -3058,9 +3194,7 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` Dialog.fragment.xml and opens it; the port builds the same SelectDialog in its own chain and shows it with popup_display. The dialog gets an id so the search filter can address its items binding. //` &&
                  ` NOTE: _handleValueHelpSearch filters the dialog's items by Name, reproduced 1:1 with follow_up_action binding_call; _handleValueHelpClose writes the picked title into the Input (the title travels as` &&
                  ` an event arg) and closes the popup. // LIVE-TEST: The value-help dialog, its search filter and the value write-back are unverified in a running system.`
-        post171 = `sap.m.Input.valueHelpIconSrc is @since 1.84 - the custom value-help icon IS this sample, so it is kept 1:1 and the port needs a UI5 runtime >= 1.84.` ) ).
-
-    result = VALUE #( BASE result
+        post171 = `sap.m.Input.valueHelpIconSrc is @since 1.84 - the custom value-help icon IS this sample, so it is kept 1:1 and the port needs a UI5 runtime >= 1.84.` )
       ( module = `sap.m`              control = `sap.m.Input`                           name = `InputDescription`                              class = `z2ui5_cl_smpc_app_367` path = `src/02/01/z2ui5_cl_smpc_app_367.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -3068,7 +3202,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = `POST-1.71: showClearIcon (since UI5 1.94) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.94 to render it. // POST-1.71: ariaDescribedBy (since UI5 1.90 on sap.m.Input)` &&
                  ` is newer than 1.71 but kept for the 1:1 port - it carries the sample's whole point, the InvisibleText referenced by aria-describedby.`
         post171 = `showClearIcon (since UI5 1.94) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.94 to render it. // ariaDescribedBy (since UI5 1.90 on sap.m.Input) is newer than 1.71` &&
-                 ` but kept for the 1:1 port - it carries the sample's whole point, the InvisibleText referenced by aria-describedby.` )
+                 ` but kept for the 1:1 port - it carries the sample's whole point, the InvisibleText referenced by aria-describedby.` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Input`                           name = `InputGrouping`                                 class = `z2ui5_cl_smpc_app_507` path = `src/01/01/z2ui5_cl_smpc_app_507.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
@@ -3078,24 +3214,37 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = `NOTE: onValueHelpRequest loads ValueHelpDialog.fragment.xml, pre-filters it by the Input's value and opens it; the port builds the same SelectDialog with popup_display, applies the same pre-filter` &&
                  ` through binding_call and writes the picked title back into the two-way bound value. // NOTE: onSuggestionItemSelected reads the Input's selectedKey; the key travels straight from the selected` &&
                  ` suggestion item (${$parameters>/selectedItem}.getKey()) and is shown in the bound Text. // LIVE-TEST: The KeyValue suggestions, the value help and the selected-key readout are unverified in a running` &&
-                 ` system.` ) ).
-
-    result = VALUE #( BASE result
+                 ` system.` )
       ( module = `sap.m`              control = `sap.m.Input`                           name = `InputKeyValueTabularSuggestions`               class = `z2ui5_cl_smpc_app_503` path = `src/01/01/z2ui5_cl_smpc_app_503.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         notes = `IMPROVISED: onInit registers a JavaScript suggestionRowValidator that turns the selected row into an Item(key = second cell, text = first cell) - that is what fills the Input's selectedKey. abap2UI5` &&
                  ` cannot register such a callback, so the port takes the key straight from the selected row (${$parameters>/selectedRow}.getCells()[1].getText()) and shows it; the Input's own getSelectedKey( )` &&
-                 ` therefore stays empty, which is invisible in this sample but is the behaviour that is lost. // LIVE-TEST: The tabular suggestions and the selected-key readout are unverified in a running system.` )
-      ( module = `sap.m`              control = `sap.m.Input`                           name = `InputPassword`                                 class = `z2ui5_cl_smpc_app_368` path = `src/01/01/z2ui5_cl_smpc_app_368.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
-      ( module = `sap.m`              control = `sap.m.Input`                           name = `InputSuggestionsCustomFilter`                  class = `z2ui5_cl_smpc_app_460` path = `src/01/01/z2ui5_cl_smpc_app_460.clas.abap`
-        score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
+                 ` therefore stays empty, which is invisible in this sample but is the behaviour that is lost. // LIVE-TEST: The tabular suggestions and the selected-key readout are unverified in a running system.` ) ).
 
     result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Input`                           name = `InputPassword`                                 class = `z2ui5_cl_smpc_app_368` path = `src/01/01/z2ui5_cl_smpc_app_368.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
+
+    lv_text1 = `NOTE: the four Inputs are the sample: not editable, not enabled, editable, and editable with a value help. All four carry their type, placeholder, enabled and editable flags 1:1; only the fourth has` &&
+               ` any behaviour. // NOTE: handleValueHelp loads Dialog.fragment.xml once (Fragment.load, kept as a view dependent) and opens it. The port expresses it as a core:FragmentDefinition shown through` &&
+               ` client->popup_display and served per request, which is what lets the backend filter its list. The controller also remembers which input asked (this.inputId) so _handleValueHelpClose can write back` &&
+               ` into it - here only one Input has a value help, so the picked title goes into its bound field directly. // NOTE: Thin frontend: _handleValueHelpSearch builds a Name Contains filter and calls filter()` &&
+               ` on the dialog's items binding; the port filters the ABAP table it sends (app 298 idiom). Both close paths clear the filter for the next open, as the original does. // NOTE: the StandardListItem's` &&
+               ` icon binds PICURL where the fragment writes {ProductPicUrl} - the same field under the ABAP component name, with the sanctioned host absolutization onto sdk.openui5.org. Its description binds`.
+    lv_text1 = lv_text1 && ` {Productid} in the sample, a lower-case 'id' the mock does not carry (the field is ProductId), so upstream that line is empty; the port binds the field the mock really has.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Input`                           name = `InputStates`                                   class = `z2ui5_cl_smpc_app_623` path = `src/01/01/z2ui5_cl_smpc_app_623.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = lv_text1 ) ).
+
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Input`                           name = `InputSuggestionsCustomFilter`                  class = `z2ui5_cl_smpc_app_460` path = `src/01/01/z2ui5_cl_smpc_app_460.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
       ( module = `sap.m`              control = `sap.m.Input`                           name = `InputSuggestionsDynamic`                       class = `z2ui5_cl_smpc_app_473` path = `src/01/01/z2ui5_cl_smpc_app_473.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -3108,13 +3257,13 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: onSuggest asks an OpenSearchProvider that points at a local MockServer and replaces the Input's suggestion items with the answer. abap2UI5 has neither, so the same search runs in ABAP over the` &&
                  ` product names and fills the bound suggestionItems aggregation - which also means the port declares one core:Item template the original's view does not have (structural-diff reports control extra` &&
-                 ` core:Item). // LIVE-TEST: The suggest round-trip and the backend search are unverified in a running system.` )
+                 ` core:Item). // LIVE-TEST: The suggest round-trip and the backend search are unverified in a running system.` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Input`                           name = `InputTypes`                                    class = `z2ui5_cl_smpc_app_159` path = `src/01/01/z2ui5_cl_smpc_app_159.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        notes = `NOTE: Five Inputs demonstrating the input types Text / Email / Tel / Number / Url with labelFor Labels, reproduced 1:1.` ) ).
-
-    result = VALUE #( BASE result
+        notes = `NOTE: Five Inputs demonstrating the input types Text / Email / Tel / Number / Url with labelFor Labels, reproduced 1:1.` )
       ( module = `sap.m`              control = `sap.m.Input`                           name = `InputValueState`                               class = `z2ui5_cl_smpc_app_032` path = `src/02/01/z2ui5_cl_smpc_app_032.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -3844,7 +3993,48 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` equivalent (the app-authored-JS-function boundary), so both suggestion lists carry UI5's default filtering and the difference between the two MultiInputs the sample demonstrates is lost.` )
       ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputDatabinding`                         class = `z2ui5_cl_smpc_app_457` path = `src/01/01/z2ui5_cl_smpc_app_457.clas.abap`
         score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
+
+    lv_text1 = `POST-1.71: sap.m.MultiInput (through sap.m.InputBase) has the formattedValueStateText aggregation only @since 1.78 - newer than the 1.71 floor, but the third MultiInput exists to demonstrate exactly` &&
+               ` that value state message with a Link inside it, so it is kept 1:1. The app needs a UI5 release >= 1.78. // IMPROVISED: the controller registers a JS validator with MultiInput.addValidator( ) on` &&
+               ` multiInput2 and multiInput3: picking a suggestion row builds a Token whose key is the row's first cell (Name) and whose text is 'key(price cell)'. abap2UI5 cannot register such a callback, so each of` &&
+               ` the two MultiInputs binds a tokens table and wires suggestionItemSelected, transporting the first cell's text; the same token (key = Name, text = 'Name(Price Currency)') is appended in ABAP,` &&
+               ` duplicates skipped. The tokens attribute and the tokens aggregation are therefore EXTRA vs the original view.xml, where the tokens only ever exist client-side. multiInput4 has no validator in the` &&
+               ` sample either - a core:Item suggestion becomes a token by itself. // NOTE: the Price cell is a composite currency binding in the sample (parts Price + CurrencyCode through sap.ui.model.type.Currency`.
+    lv_text1 = lv_text1 && ` with showMeasure TRUE, so the unit is part of the text). The port binds the two fields as one composite text ('{PRICE} {CURRENCYCODE}'), which is what that formatter renders, since the mock's prices` &&
+               ` are plain numbers. // NOTE: handleFormattedTextLinkPress calls oEvent.preventDefault( ) and then MessageToast.show with my/at = Popup.Dock.CenterCenter. The veto rides along on the wire as` &&
+               ` s_ctrl-check_prevent_default (baked per wire at render time), the toast is composed on the way back through follow_up_action control_global MESSAGE_TOAST show. The CenterCenter placement is not` &&
+               ` reachable through that global target, so the toast keeps its default bottom placement. // NOTE: the first MultiInput's binding-info carries the sample's sorter { path: 'Name' } 1:1 as sorter { path:` &&
+               ` 'NAME' } over the backend table; the sorted 123 rows come from sap/ui/documentation/sdk/products.json /ProductCollection. // LIVE-TEST: the token creation on both tabular MultiInputs and the Link` &&
+               ` inside the value state message (preventDefault plus toast) are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputFilteringSuggestions`                class = `z2ui5_cl_smpc_app_612` path = `src/02/01/z2ui5_cl_smpc_app_612.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.m.MultiInput (through sap.m.InputBase) has the formattedValueStateText aggregation only @since 1.78 - newer than the 1.71 floor, but the third MultiInput exists to demonstrate exactly that value` &&
+                 ` state message with a Link inside it, so it is kept 1:1. The app needs a UI5 release >= 1.78.` ) ).
+
+    lv_text1 = `NOTE: the grouping is the sample: both MultiInputs bind their suggestions with sorter { path: 'SupplierName', group: true, ascending: false }, which the port carries over verbatim as sorter { path:` &&
+               ` 'SUPPLIERNAME', group: true, ascending: false } on the backend table, so UI5 builds the descending supplier group headers on the client exactly as before. // IMPROVISED: the controller registers a JS` &&
+               ` validator with MultiInput.addValidator( ) on productMIWithTable: picking a suggestion row builds a Token whose key is the row's first cell (Name) and whose text is 'key(price cell)'. abap2UI5 cannot` &&
+               ` register such a callback, so the MultiInput binds a tokens table and wires suggestionItemSelected, transporting the first cell's text; the same token (key = Name, text = 'Name(Price Currency)') is` &&
+               ` appended in ABAP, duplicates skipped. The tokens attribute and the tokens aggregation are therefore EXTRA vs the original view.xml, where the tokens only ever exist client-side. productMIWithList has` &&
+               ` no validator in the sample either - a core:Item suggestion becomes a token by itself. // NOTE: the Price cell is a composite currency binding in the sample (parts Price + CurrencyCode through`.
+    lv_text1 = lv_text1 && ` sap.ui.model.type.Currency with showMeasure TRUE, so the unit is part of the text). The port binds the two fields as one composite text ('{PRICE} {CURRENCYCODE}'), which is what that formatter` &&
+               ` renders, since the mock's prices are plain numbers. // NOTE: the controller's oModel.setSizeLimit(1000000) has no counterpart: the port ships all 123 rows of sap/ui/demo/mock/products.json` &&
+               ` /ProductCollection to the client in one model, so the 100-entry default limit the call works around never applies. // LIVE-TEST: the grouped suggestion popups of both MultiInputs and the token` &&
+               ` creation on the tabular one are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputGrouping`                            class = `z2ui5_cl_smpc_app_613` path = `src/01/01/z2ui5_cl_smpc_app_613.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        notes = lv_text1 ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputMaxTokens`                           class = `z2ui5_cl_smpc_app_461` path = `src/01/01/z2ui5_cl_smpc_app_461.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
@@ -4162,6 +4352,43 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.ObjectHeader`                    name = `ObjectHeaderResponsiveII`                      class = `z2ui5_cl_smpc_app_513` path = `src/01/01/z2ui5_cl_smpc_app_513.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.12`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: The ObjectHeader binds the fixed record {/ProductCollection/2} with the binding attribute. The port seeds exactly those row-2 fields at the default-model root and binds them absolutely, so icon,` &&
+               ` iconAlt, intro, title, number, numberUnit and all five ObjectAttribute texts read the same mock values - there is no element binding to resolve a relative {Field} against, so the binding attribute` &&
+               ` itself has no counterpart. // NOTE: The number binding keeps its parts/type/formatOptions structure 1:1 with the paths switched to the ABAP field names; the Weight per unit and Dimension per unit` &&
+               ` attributes keep the original's shape as composed templates over the bound fields. The picture URL is the mock's own test-resources path, re-hosted on sdk.openui5.org. // NOTE: handleTitlePress loads` &&
+               ` Popover.fragment.xml lazily, adds it to the view's dependents and opens it by the pressed title's domRef. The port declares the same ResponsivePopover (id myPopover, title 'About', class` &&
+               ` sapUiContentPadding, one Text) inline in the ObjectHeader's dependents aggregation and wires titlePress to a roundtrip-free follow_up_action control_by_id openBy over $event.oSource.sId - the popover`.
+    lv_text1 = lv_text1 && ` controls are therefore EXTRA vs the view.xml, where they live in the fragment file. // NOTE: the IconTabBar in the headerContainer is carried 1:1: four IconTabFilters (info / attachments / notes /` &&
+               ` people) with their sap-icon:// icons, the counts 3 and 12 and a Text in each, under selectedKey='key3' and upperCase='true'. selectedKey names a key none of the four filters carries in the original` &&
+               ` either, so the bar opens on its first tab. // LIVE-TEST: the Currency-typed number binding, the title press opening the popover anchored to the title, and the fullScreenOptimized='true' layout are` &&
+               ` unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.ObjectHeader`                    name = `ObjectHeaderResponsiveIII`                     class = `z2ui5_cl_smpc_app_614` path = `src/01/01/z2ui5_cl_smpc_app_614.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.12`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: The ObjectHeader binds the fixed record {/ProductCollection/3} with the binding attribute. The port seeds exactly those row-3 fields at the default-model root and binds them absolutely, so icon,` &&
+               ` iconAlt, intro, title, number, numberUnit and all five ObjectAttribute texts read the same mock values - there is no element binding to resolve a relative {Field} against, so the binding attribute` &&
+               ` itself has no counterpart. // NOTE: The number binding keeps its parts/type/formatOptions structure 1:1 with the paths switched to the ABAP field names; the Weight per unit and Dimension per unit` &&
+               ` attributes keep the original's shape as composed templates over the bound fields. The picture URL is the mock's own test-resources path, re-hosted on sdk.openui5.org. // NOTE: handleTitlePress loads` &&
+               ` Popover.fragment.xml lazily, adds it to the view's dependents and opens it by the pressed title's domRef. The port declares the same ResponsivePopover (id myPopover, title 'About', class` &&
+               ` sapUiContentPadding, one Text) inline in the ObjectHeader's dependents aggregation and wires titlePress to a roundtrip-free follow_up_action control_by_id openBy over $event.oSource.sId - the popover`.
+    lv_text1 = lv_text1 && ` controls are therefore EXTRA vs the view.xml, where they live in the fragment file. // NOTE: the IconTabBar in the headerContainer is carried 1:1: eight IconTabFilters (info / attachments / notes /` &&
+               ` people and their '2' twins) with their sap-icon:// icons, the counts 3 and 12 and a Text in each, under selectedKey='key3' and upperCase='true'. selectedKey names a key none of the eight filters` &&
+               ` carries in the original either, so the bar opens on its first tab. // NOTE: showTitleSelector='true' adds the down-arrow next to the title; its titleSelectorPress runs MessageBox.alert('Link was` &&
+               ` clicked!') in the controller, which the port raises as one round trip closing on client->message_box_display( type = 'alert' ) - the same box, the same text. // LIVE-TEST: the Currency-typed number` &&
+               ` binding, the title press opening the popover anchored to the title, and the title selector's MessageBox.alert are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.ObjectHeader`                    name = `ObjectHeaderResponsiveIV`                      class = `z2ui5_cl_smpc_app_615` path = `src/01/01/z2ui5_cl_smpc_app_615.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
         since = `1.12`
         notes = lv_text1 ) ).
 

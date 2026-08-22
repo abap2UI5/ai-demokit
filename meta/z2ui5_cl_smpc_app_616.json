@@ -1,0 +1,36 @@
+{
+  "class": "z2ui5_cl_smpc_app_616",
+  "sample": "sap.m.sample.ComboBoxValueState",
+  "entity": "sap.m.ComboBox",
+  "file": "src/02/01/z2ui5_cl_smpc_app_616.clas.abap",
+  "batch": "b51",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "the three value-state links toast round-trip-free; nothing comes back to the backend"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "the formattedValueStateText aggregation of sap.m.ComboBox is @since 1.78 - newer than the 1.71 floor but kept for the 1:1 port, since two of the six ComboBoxes exist to show exactly that (a value-state message carrying one link, and one carrying two). The app needs a UI5 release >= 1.78; below it the lowercase tag resolves as a control class and the 404 takes the whole view down, which is why this is an error rather than a warning."
+    },
+    {
+      "type": "NOTE",
+      "what": "every one of the six items bindings is declared `suspended: true` and resumed by handleLoadItems on the first open - a lazy-loading trick for a list the model already holds. abap2UI5 sends the rows with the view, so there is nothing to suspend and nothing to resume: the port binds the 70 countries outright and the loadItems wire is dropped. What the user sees is the same list."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleValueStateLinkPress toasts the constant 'Link in value state pressed', so all three links are wired round-trip-free as follow_up_action( control_global, MESSAGE_TOAST show ) (app 005/032 idiom). Their href=\"\" is carried as the sample writes it."
+    },
+    {
+      "type": "NOTE",
+      "what": "the bindings carry a sorter on text; a thin frontend sorts the data it sends, so the 70 rows of countriesExtendedCollection.json are seeded verbatim in the mock's order and SORTed by text in model_init - never through SORT BY (field), which the transpiled backend drops (the 2026-08-22 e2e finding)."
+    },
+    {
+      "type": "NOTE",
+      "what": "the two ComboBoxes that carry a formattedValueStateText ALSO carry the plain valueStateText in the sample (the long 'Warning message. Extra long text ...' string) - UI5 shows the formatted one and ignores the plain one. Both are kept, since both are what the sample writes; app 032 carries the same pair for sap.m.Input."
+    }
+  ]
+}

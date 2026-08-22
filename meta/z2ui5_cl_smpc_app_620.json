@@ -1,0 +1,40 @@
+{
+  "class": "z2ui5_cl_smpc_app_620",
+  "sample": "sap.m.sample.IconTabBarTabDensityMode",
+  "entity": "sap.m.IconTabBar",
+  "file": "src/01/01/z2ui5_cl_smpc_app_620.clas.abap",
+  "batch": "b51",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false,
+    "note": "the one round trip only turns the picked radio index into the density enum"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onTabDensityModeSelect reads the picked RadioButton's TEXT and calls setTabDensityMode on byId('idIconTabBar' + i) for i = 0..7 - eight of the nine bars. tabDensityMode is bindable, so the port binds the group's selectedIndex two-way and one round trip (event DENSITY) turns the index into the enum all eight bars bind, the same fold apps 604 and 617 use. The ninth bar, iconTabBarInlineIcons, is NOT in the sample's loop and is therefore left unbound here too."
+    },
+    {
+      "type": "NOTE",
+      "what": "the bound enum carries the null fallback ({= ${X} || null }, apps 548/555 idiom) and is seeded 'Cozy' from the group's own first button, so no empty string ever reaches sap.m.IconTabDensityMode."
+    },
+    {
+      "type": "NOTE",
+      "what": "onInit fills two of the nine bars in JavaScript: thirty IconTabFilters on idIconTabBar0 ('Tab n' with a 'Content n' Text) and twelve on iconTabBarInlineIcons. Both aggregations are bindable, so the port binds a table for each and builds the rows in model_init - which is why the port shows 29 IconTabFilters and 24 Texts against the view's 27 and 22: the two bound TEMPLATES are counted once each on top of the seven bars written out literally."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the twelve inline tabs get their icon from aIcons[Math.floor(Math.random() * 3)] - a fresh draw per tab on every load. A backend cannot draw the browser's numbers, and a random seed would make the port unrepeatable for the gates, so the three icons (history, home, employee) CYCLE instead. Every tab still carries one of the three, which is what the sample demonstrates; only the sequence is stable."
+    },
+    {
+      "type": "NOTE",
+      "what": "the other seven bars are written out literally, with everything the sample sets on them: enableTabReordering on idIconTabBar0, headerMode='Inline' on idIconTabBar6, the four icon-only filters of idIconTabBar4, the four iconColor values and three icon-carrying IconTabSeparators of idIconTabBar1 (one of which carries icon=\"\" - an empty icon the sample writes and the port keeps), the Horizontal process design of idIconTabBar2 and the showAll tab of idIconTabBar5."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: that the three density buttons resize the eight bars and leave the ninth alone."
+    }
+  ]
+}
