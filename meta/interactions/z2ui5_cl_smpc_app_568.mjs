@@ -8,7 +8,8 @@ export default async (page, expect) => {
   }, 'the table never rendered with its seeded contextual width and 22 rows');
   await page.evaluate(() => {
     const reg = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
-    reg.find((c) => c.getMetadata().getName() === 'sap.m.Button').firePress();
+    reg.find((c) => c.getMetadata().getName() === 'sap.m.Button'
+      && c.getText() === 'change contextualWidth to 100px').firePress();
   });
   await waitForUi5(page, () => {
     const t = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.Table');

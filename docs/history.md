@@ -7,6 +7,58 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-22 — the second e2e sweep: a silent no-op in every dynamic SORT
+
+The b47 ports were run against the e2e harness for the first time. Four
+failures, and only two of them were the ports.
+
+**The one that matters is a transpiler limitation nothing else could have
+found.** App 571's Sort Ascending fired, the round trip ran, the backend called
+its `table_sort` — and the table came back in the mock's original order. The
+transpiled backend shows why:
+
+    SORT t_products BY (field) ASCENDING.
+    -->  abap.statements.sort(this.t_products, {});
+
+The **dynamic** component form loses its `BY` clause entirely. Every sort
+written that way is a no-op in the browser, and passes every static gate: the
+ABAP is valid, abaplint is happy, and the view is correct. Three ports carried
+it — 298 (SortDialog / the column menu), 362 (`sap.ui.table` multi-key sorting)
+and 571 — and all three now name the component STATICALLY in a `CASE`. App 298
+had even been marked e2e-verified, on an interaction that never asserted the
+row ORDER.
+
+The second port defect is the b45 lesson again, one row further down: app 541
+still had ONE special-date row without its `secondarytype` seed (the NonWorking
+range on Sophie Miller), which sends `""` into the `CalendarDayType` enum and
+terminates the app. Fixing "the rows the first failure named" is not fixing the
+table. App 566 was the same shape on a different property: its supplier and
+category rows carry no weight at all, so they sent `""` into an ObjectNumber's
+`ValueState`. Both are seeded `None` now — app 566 through a `LOOP ... WHERE
+weight_state IS INITIAL` guard, so a later row cannot reintroduce it.
+
+And app 537 was a third variant: the sample's own data carries an upstream typo
+(`UI5Date.getInstance(201, 2, 4, 13, 30)` — year 201 where every neighbour says
+2017). In JavaScript that is a valid, absurd date; as the ISO string the port
+stores it became `201-03-04T13:30:00`, which `new Date()` cannot parse at all,
+so the appointment arrived as an Invalid Date and took the calendar down. The
+year is written `0201` now: the same absurd date the original produces, and one
+that parses.
+
+**One new harness rule, and it bit three interactions.** Every `sap.m.Input`
+builds an INTERNAL `sap.m.Table` for its suggestion popup
+(`__input0-popup-table`). A bare
+``ui5All().find((c) => c.getMetadata().getName() === 'sap.m.Table')`` therefore
+returns an input's popup table once an editable cell has been shown — which is
+exactly what happened in apps 567, 570 and 576, and made three correct ports
+look broken (570's "Cancel never returned" was a popup table with no items and
+no binding). Address the app's own table BY ITS ID. App 568's was simpler and
+the same kind: `find(sap.m.Button)` returned a framework button rather than the
+one with the text.
+
+The score after the fixes: 567, 568, 570, 571 (pending a rebuild), 572, 573,
+574, 575 and 576 all pass.
+
 ## 2026-08-22 — batch b50 (sap.m + sap.ui.unified): nine libraries at 100 % (apps 600–611)
 
 Twelve samples with almost nothing in common except that they were what stood

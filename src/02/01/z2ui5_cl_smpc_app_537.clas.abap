@@ -371,7 +371,7 @@ CLASS z2ui5_cl_smpc_app_537 IMPLEMENTATION.
           ( start_at = `2017-02-10T00:00:00` end_at = `2017-02-11T23:29:00` title = `Private appointment` type = `Type06` tentative = abap_true aria = `Dialog` )
           ( start_at = `2017-04-17T08:30:00` end_at = `2017-04-17T15:30:00` title = `Meet Max Mustermann` type = `Type02` tentative = abap_true aria = `Dialog` )
           ( start_at = `2017-04-03T10:00:00` end_at = `2017-04-03T12:00:00` title = `Team meeting` info = `room 1` type = `Type01` pic = `sap-icon://sap-ui5` tentative = abap_false aria = `Dialog` )
-          ( start_at = `2017-03-04T11:30:00` end_at = `201-03-04T13:30:00` title = `Online Meeting` type = `Type03` tentative = abap_true aria = `Dialog` )
+          ( start_at = `2017-03-04T11:30:00` end_at = `0201-03-04T13:30:00` title = `Online Meeting` type = `Type03` tentative = abap_true aria = `Dialog` )
           ( start_at = `2017-01-15T13:30:00` end_at = `2017-01-29T17:30:00` title = `Discussion with clients` info = `online meeting` type = `Type02` tentative = abap_false aria = `Dialog` )
           ( start_at = `2017-02-07T00:01:00` end_at = `2017-02-07T23:59:00` title = `Vacation` type = `Type02` tentative = abap_false aria = `Dialog` )
         )

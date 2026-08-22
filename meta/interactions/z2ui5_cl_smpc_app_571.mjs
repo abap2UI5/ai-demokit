@@ -3,7 +3,7 @@ import { waitForUi5, ui5All } from '../../scripts/lib-e2e.mjs';
 
 export default async (page, expect) => {
   await waitForUi5(page, () => {
-    const t = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.Table');
+    const t = ui5All().find((c) => c.getId().endsWith('productsTable'));
         // 100, not 123: a JSONModel's default sizeLimit is 100 and neither the
     // sample nor the port raises it, so the original renders 100 rows too
     return t && t.getItems().length === 100;
@@ -21,7 +21,7 @@ export default async (page, expect) => {
     reg.find((c) => c.getMetadata().getName() === 'sap.m.Button' && c.getText() === 'Sort Ascending').firePress();
   });
   await waitForUi5(page, () => {
-    const t = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.Table');
+    const t = ui5All().find((c) => c.getId().endsWith('productsTable'));
     const first = t.getItems()[0].getCells()[0];
     return first.getTitle() === 'Flyer';
   }, 'Sort Ascending never re-ordered the rows by price');

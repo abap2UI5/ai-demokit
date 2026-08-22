@@ -4716,7 +4716,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` aggregation and adds them back, by constructing PlanningCalendarView instances in the controller. The views aggregation is declared in the view here and a backend cannot add or remove aggregation` &&
                ` children of a rendered view, so the four views stay declared and the ToggleButton keeps its text but loses its press wire. // NOTE: The two row images are the demo kit's own test-resources files`.
     lv_text1 = lv_text1 && ` (John_Miller.png, Donna_Moore.jpg), re-hosted on sdk.openui5.org. // LIVE-TEST: The four views, the non-working day toggle, the interval-select appointment push, the built-in views box and the two` &&
-               ` nonWorkingDays / nonWorkingHours arrays are unverified in a running system.`.
+               ` nonWorkingDays / nonWorkingHours arrays are unverified in a running system. // NOTE: **e2e-caught 2026-08-22**: the sample's own data carries an upstream typo - UI5Date.getInstance(201, 2, 4, 13,` &&
+               ` 30), a year of 201 where every neighbouring row says 2017 (Page.controller.js:110). In JavaScript that is a VALID date (4 March 201 AD); as the ISO string the port stores it became` &&
+               ` '201-03-04T13:30:00', which new Date() cannot parse at all, so the appointment reached the calendar as an Invalid Date and CalendarUtils._checkJSDateObject took the whole app down. The year is now` &&
+               ` written '0201', which is the same absurd date the original produces and which parses. The typo itself is kept: it is the sample's data.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.PlanningCalendar`                name = `PlanningCalendarViews`                         class = `z2ui5_cl_smpc_app_537` path = `src/02/01/z2ui5_cl_smpc_app_537.clas.abap`
         score = 5
@@ -4756,11 +4759,13 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` onBeforeRendering / handleViewChange / changeStandardItemsPerView exist only to swap the legend's standardItems between [Today, Selected, NonWorkingDay] on the OneMonth view and [Today, WorkingDay,` &&
                ` NonWorkingDay] everywhere else. viewKey and standardItems are both bindable, so the key is one shared field and the legend carries the switch as an expression binding over it - all three handlers are` &&
                ` dropped. // NOTE: The row images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org. // LIVE-TEST: The legend side content, the first-day-of-week Select and the view-dependent` &&
-               ` standard items are unverified in a running system.`.
+               ` standard items are unverified in a running system. // NOTE: **e2e-caught 2026-08-22**: one special-date row was still missing its secondarytype seed after the b46 sweep fixed the others - the` &&
+               ` NonWorking range on Sophie Miller (2017-01-16 to 2017-01-18). A flat ABAP row serializes every field, so it sent an empty string into the CalendarDayType enum and UI5 terminated the app. It is seeded`.
+    lv_text1 = lv_text1 && ` 'None' like the rest. The lesson is the sweep's own: the fix has to cover EVERY row of the table, not the ones the first failure named.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.PlanningCalendar`                name = `PlanningCalendarWithLegend`                    class = `z2ui5_cl_smpc_app_541` path = `src/02/01/z2ui5_cl_smpc_app_541.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         since = `1.34`
         is_post171 = abap_true
@@ -5892,7 +5897,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` Grouping calls oBinding.sort with a Sorter carrying a group function. The declarative equivalent is the items binding with sorter: { path: 'SUPPLIERNAME', group: true }, so the port switches the`.
     lv_text1 = lv_text1 && ` binding string between the plain and the grouping form - which is what the toggle does. // NOTE: the full mock /ProductCollection is seeded with the fields the view binds (ProductId, Name,` &&
                ` SupplierName, Width, Depth, Height, DimUnit, WeightMeasure, WeightUnit, Price, CurrencyCode); the price column keeps the original sap.ui.model.type.Currency composite binding 1:1. // LIVE-TEST: not` &&
-               ` yet verified in a running system: the four column header menus, the grouping toggle and the two sort indicators.`.
+               ` yet verified in a running system: the four column header menus, the grouping toggle and the two sort indicators. // NOTE: **e2e-caught 2026-08-22**: the sort ran but the table came back in its` &&
+               ` original order. The cause is the transpiled backend: ``SORT <itab> BY (field)`` - the DYNAMIC component form - loses its BY clause entirely (the emitted JS is ``abap.statements.sort(t, {})``), so` &&
+               ` every sort was a no-op. The component is named statically per field now, in a CASE. Apps 298, 362 and 571 all carried the dynamic form and all three are fixed.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Table`                           name = `TableIColumnHeaderMenu`                        class = `z2ui5_cl_smpc_app_571` path = `src/02/01/z2ui5_cl_smpc_app_571.clas.abap`
         score = 5
@@ -6104,7 +6111,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` 'Column resized' toast the original does not have, behind a comment claiming onResize merely logs. // IMPROVISED: onBeforeColumnMenuOpen is dropped, and the Menu.beforeOpen attribute that wired it` &&
                ` with it. It does oQuickResize.setWidth( parseInt( getComputedStyle( oColumn.getDomRef( ) ).width ) ) - it reads the column's RENDERED width out of the DOM so the resize control opens showing the` &&
                ` current size. A rendered pixel width has no server-side equivalent, and the round-trip that used to be wired here did nothing at all with it, so the QuickResize opens at its own default instead. The` &&
-               ` port previously kept the wire as an empty RETURN branch, beside a comment saying the original 'only inspects the opener'.`.
+               ` port previously kept the wire as an empty RETURN branch, beside a comment saying the original 'only inspects the opener'. // NOTE: **e2e-caught 2026-08-22**: the sort ran but the table came back in` &&
+               ` its original order. The cause is the transpiled backend: ``SORT <itab> BY (field)`` - the DYNAMIC component form - loses its BY clause entirely (the emitted JS is ``abap.statements.sort(t, {})``), so`.
+    lv_text1 = lv_text1 && ` every sort was a no-op. The component is named statically per field now, in a CASE. Apps 298, 362 and 571 all carried the dynamic form and all three are fixed.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Table`                           name = `TableViewSettingsDialog`                       class = `z2ui5_cl_smpc_app_298` path = `src/02/01/z2ui5_cl_smpc_app_298.clas.abap`
         score = 5
@@ -8958,7 +8967,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` leaving the other columns' bound sortOrder indicators standing: the header claimed Name-ascending while the rows were Category-ascending, and the button's own tooltip - "Sort Categories in addition` &&
                ` to current sorting" - was kept while the behaviour was not. // NOTE: The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has` &&
                ` no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency: this rewrite is now`.
-    lv_text1 = lv_text1 && ` declared by all 77 ports that do it - before that day 64 declared it and thirteen did not, which left a real difference asserted nowhere and gave every review sweep the same thing to re-find.`.
+    lv_text1 = lv_text1 && ` declared by all 77 ports that do it - before that day 64 declared it and thirteen did not, which left a real difference asserted nowhere and gave every review sweep the same thing to re-find. //` &&
+               ` NOTE: **e2e-caught 2026-08-22**: the sort ran but the table came back in its original order. The cause is the transpiled backend: ``SORT <itab> BY (field)`` - the DYNAMIC component form - loses its` &&
+               ` BY clause entirely (the emitted JS is ``abap.statements.sort(t, {})``), so every sort was a no-op. The component is named statically per field now, in a CASE. Apps 298, 362 and 571 all carried the` &&
+               ` dynamic form and all three are fixed.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Sorting`                                       class = `z2ui5_cl_smpc_app_362` path = `src/01/02/z2ui5_cl_smpc_app_362.clas.abap`
         score = 5

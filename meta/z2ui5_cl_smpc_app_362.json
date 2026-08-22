@@ -42,6 +42,10 @@
     {
       "type": "NOTE",
       "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency: this rewrite is now declared by all 77 ports that do it - before that day 64 declared it and thirteen did not, which left a real difference asserted nowhere and gave every review sweep the same thing to re-find."
+    },
+    {
+      "type": "NOTE",
+      "what": "**e2e-caught 2026-08-22**: the sort ran but the table came back in its original order. The cause is the transpiled backend: `SORT <itab> BY (field)` - the DYNAMIC component form - loses its BY clause entirely (the emitted JS is `abap.statements.sort(t, {})`), so every sort was a no-op. The component is named statically per field now, in a CASE. Apps 298, 362 and 571 all carried the dynamic form and all three are fixed."
     }
   ]
 }

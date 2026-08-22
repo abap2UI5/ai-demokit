@@ -340,11 +340,24 @@ CLASS z2ui5_cl_smpc_app_362 IMPLEMENTATION.
     DATA(lv_index) = lines( t_sortkeys ).
     WHILE lv_index >= 1.
       DATA(ls_key) = t_sortkeys[ lv_index ].
-      IF ls_key-descending = abap_true.
-        SORT t_products STABLE BY (ls_key-field) DESCENDING.
-      ELSE.
-        SORT t_products STABLE BY (ls_key-field) ASCENDING.
-      ENDIF.
+      " the component is named STATICALLY per key rather than through
+      " SORT BY (ls_key-field): the transpiled backend drops the dynamic BY
+      " clause altogether (abap.statements.sort(t, {}) - **e2e-caught
+      " 2026-08-22** on app 571), so the table came back in its original order
+      CASE ls_key-field.
+        WHEN `CATEGORY`.
+          IF ls_key-descending = abap_true.
+            SORT t_products STABLE BY category AS TEXT DESCENDING.
+          ELSE.
+            SORT t_products STABLE BY category AS TEXT ASCENDING.
+          ENDIF.
+        WHEN OTHERS.
+          IF ls_key-descending = abap_true.
+            SORT t_products STABLE BY name AS TEXT DESCENDING.
+          ELSE.
+            SORT t_products STABLE BY name AS TEXT ASCENDING.
+          ENDIF.
+      ENDCASE.
       lv_index = lv_index - 1.
     ENDWHILE.
 

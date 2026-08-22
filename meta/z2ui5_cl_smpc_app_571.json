@@ -39,6 +39,10 @@
     {
       "type": "LIVE_TEST",
       "what": "not yet verified in a running system: the four column header menus, the grouping toggle and the two sort indicators."
+    },
+    {
+      "type": "NOTE",
+      "what": "**e2e-caught 2026-08-22**: the sort ran but the table came back in its original order. The cause is the transpiled backend: `SORT <itab> BY (field)` - the DYNAMIC component form - loses its BY clause entirely (the emitted JS is `abap.statements.sort(t, {})`), so every sort was a no-op. The component is named statically per field now, in a CASE. Apps 298, 362 and 571 all carried the dynamic form and all three are fixed."
     }
   ]
 }

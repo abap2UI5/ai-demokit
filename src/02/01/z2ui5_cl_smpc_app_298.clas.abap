@@ -496,13 +496,36 @@ CLASS z2ui5_cl_smpc_app_298 IMPLEMENTATION.
 
   METHOD table_sort.
 
-    IF descending = abap_true.
-      SORT t_products BY (field) DESCENDING.
-
-    ELSE.
-      SORT t_products BY (field) ASCENDING.
-    ENDIF.
-
+    " the component is named STATICALLY per field rather than through
+    " SORT BY (field): the transpiled backend drops the dynamic BY clause
+    " altogether (abap.statements.sort(t, {}) - **e2e-caught 2026-08-22** on
+    " app 571), so the table came back in its original order
+    CASE field.
+      WHEN `SUPPLIER_NAME`.
+        IF descending = abap_true.
+          SORT t_products BY supplier_name AS TEXT DESCENDING.
+        ELSE.
+          SORT t_products BY supplier_name AS TEXT ASCENDING.
+        ENDIF.
+      WHEN `WEIGHT_MEASURE`.
+        IF descending = abap_true.
+          SORT t_products BY weight_measure DESCENDING.
+        ELSE.
+          SORT t_products BY weight_measure ASCENDING.
+        ENDIF.
+      WHEN `PRICE`.
+        IF descending = abap_true.
+          SORT t_products BY price DESCENDING.
+        ELSE.
+          SORT t_products BY price ASCENDING.
+        ENDIF.
+      WHEN OTHERS.
+        IF descending = abap_true.
+          SORT t_products BY name AS TEXT DESCENDING.
+        ELSE.
+          SORT t_products BY name AS TEXT ASCENDING.
+        ENDIF.
+    ENDCASE.
 
   ENDMETHOD.
 

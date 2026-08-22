@@ -321,7 +321,7 @@ CLASS z2ui5_cl_smpc_app_541 IMPLEMENTATION.
         )  )
       ( pic = `sap-icon://employee` name = `Max Mustermann` role = `team member`
         t_specials = VALUE #(
-          ( start_at = `2017-01-16T00:00:00` end_at = `2017-01-18T00:00:00` type = `NonWorking` )
+          ( start_at = `2017-01-16T00:00:00` end_at = `2017-01-18T00:00:00` type = `NonWorking` secondarytype = `None` )
         )
         t_appointments = VALUE #(
           ( start_at = `2017-01-15T08:30:00` end_at = `2017-01-15T09:30:00` title = `Meet John Miller` type = `Type02` tentative = abap_false )

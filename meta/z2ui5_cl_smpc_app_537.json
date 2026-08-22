@@ -42,6 +42,10 @@
     {
       "type": "LIVE_TEST",
       "what": "The four views, the non-working day toggle, the interval-select appointment push, the built-in views box and the two nonWorkingDays / nonWorkingHours arrays are unverified in a running system."
+    },
+    {
+      "type": "NOTE",
+      "what": "**e2e-caught 2026-08-22**: the sample's own data carries an upstream typo - UI5Date.getInstance(201, 2, 4, 13, 30), a year of 201 where every neighbouring row says 2017 (Page.controller.js:110). In JavaScript that is a VALID date (4 March 201 AD); as the ISO string the port stores it became '201-03-04T13:30:00', which new Date() cannot parse at all, so the appointment reached the calendar as an Invalid Date and CalendarUtils._checkJSDateObject took the whole app down. The year is now written '0201', which is the same absurd date the original produces and which parses. The typo itself is kept: it is the sample's data."
     }
   ],
   "render_smoke": {

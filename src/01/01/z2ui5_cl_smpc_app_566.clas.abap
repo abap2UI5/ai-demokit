@@ -361,6 +361,15 @@ CLASS z2ui5_cl_smpc_app_566 IMPLEMENTATION.
         dimensions = `112 x 13 x 60 cm` weightmeasure = `2100` weightunit = `g` weight_state = `Error`
         price = `1239.00` currencycode = `EUR` row_type = `Inactive` ) ).
 
+    " a flat ABAP row serializes EVERY field, so the supplier and category rows -
+    " which carry no weight at all - would send an empty string into the
+    " ObjectNumber's ValueState and take the whole view down. None is the
+    " control's own default and is what the sample's formatter returns for a
+    " missing measure (**e2e-caught 2026-08-22**)
+    LOOP AT t_nodes ASSIGNING FIELD-SYMBOL(<node>) WHERE weight_state IS INITIAL.
+      <node>-weight_state = `None`.
+    ENDLOOP.
+
   ENDMETHOD.
 
 ENDCLASS.

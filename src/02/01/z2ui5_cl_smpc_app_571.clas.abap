@@ -254,12 +254,24 @@ CLASS z2ui5_cl_smpc_app_571 IMPLEMENTATION.
 
   METHOD table_sort.
 
-    " the sample sorts the items binding; a thin frontend sorts the data it sends
-    IF descending = abap_true.
-      SORT t_products BY (field) DESCENDING.
-    ELSE.
-      SORT t_products BY (field) ASCENDING.
-    ENDIF.
+    " the sample sorts the items binding; a thin frontend sorts the data it sends.
+    " The component is named STATICALLY per field rather than through SORT BY
+    " (field): the dynamic form is a no-op in the transpiled backend, so the
+    " table came back unsorted (**e2e-caught 2026-08-22**)
+    CASE field.
+      WHEN `PRICE`.
+        IF descending = abap_true.
+          SORT t_products BY price DESCENDING.
+        ELSE.
+          SORT t_products BY price ASCENDING.
+        ENDIF.
+      WHEN OTHERS.
+        IF descending = abap_true.
+          SORT t_products BY name AS TEXT DESCENDING.
+        ELSE.
+          SORT t_products BY name AS TEXT ASCENDING.
+        ENDIF.
+    ENDCASE.
 
   ENDMETHOD.
 
