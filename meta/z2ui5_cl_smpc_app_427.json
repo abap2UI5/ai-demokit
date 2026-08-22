@@ -20,8 +20,8 @@
       "what": "onResizeCarouselContainer sets carousel.setWidth(value + '%') on every Slider liveChange. The port reproduces it roundtrip-free: the Slider value is two-way bound and the Carousel carries a width expression binding over the same field. The Slider.liveChange attribute is therefore dropped and Carousel.width is added (structural-diff reports attr missing Slider.liveChange and attr extra Carousel.width)."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The Slider value -> Carousel width expression binding is client-side model propagation and is unverified in a running system."
+      "type": "NOTE",
+      "what": "The Slider value -> Carousel width expression binding is client-side model propagation and is unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_427.mjs)."
     }
   ]
 }

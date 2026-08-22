@@ -7,6 +7,35 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-22 — batch b34 (sap.m): eight more, and the first e2e closures of the day (apps 439–446)
+
+The same picking rule as b33 — smallest `covered-control(2)` rows once the
+cheap `(1)`s were gone — plus the first three LIVE_TESTs of this run closed the
+automated way.
+
+| app | sample | the idiom it adds |
+|---|---|---|
+| 439 | TextEmptyIndicator | `emptyIndicatorMode` On/Auto @1.87 (POST_171) and `toggleStyleClass` on a Panel via `control_by_id` |
+| 440 | MenuEndContent | the `endContent` @1.131 menu items, anchored via `toggleBy` from the Button's `dependents` |
+| 441 | BreadcrumbsWithoutCurrentPage | the `BreadcrumbsSeparatorStyle` list seeded in enum order; one two-way field on `Select.selectedKey` + `Breadcrumbs.separatorStyle`; six `${$source>/text}` toasts |
+| 442 | PDFViewerMultiple | two PDFViewers on one bound `source`, switched by two round-trips; both documents re-hosted on the demo kit host |
+| 443 | TextRenderWhitespace | `renderWhitespace` @1.89 over a text whose *content* is the demo: `&#xA;`/`&#x9;` runs written as `\n`/`\t` in a string template |
+| 444 | MaxNumberOfNotificationsReached | 400 notifications the controller builds with `Math.random`, rebuilt as a deterministic walk over the same three lists; per-item close deletes its row |
+| 445 | TextHyphenation | one `wrappingType` expression shared by five Texts in a `l:BlockLayout` |
+| 446 | LinkSubtle | a `sorter` binding-info on the Table plus `subtle` Links and `MessageBox.alert` through `message_box_display` |
+
+**The first automated LIVE_TEST closures of this run:** apps 424, 425 and 427
+(batch b32) ran green in the e2e harness with their interaction modules and
+`close-live-tests.mjs` converted their entries to `NOTE`s. Every port of b33 and
+b34 that carries a `LIVE_TEST` ships its module too, so the backlog only grows
+where the harness genuinely cannot reach.
+
+Two housekeeping raises, both deliberate and both the shape the file already
+documents: `missing-accessibility` 30 → 31 for app 440's tooltip-less
+`endContent` icon Buttons, and app 445 joins the `7bit_ascii` exclude list —
+its Bootstrap paragraph contains the sample's own en dash, which is data, not
+a typo to fix.
+
 ## 2026-08-22 — batch b33 (sap.m): the covered-control(1) tail keeps going, 8 ports (apps 431–438)
 
 Eight more depth ports, picked the way the planning rules say: the smallest

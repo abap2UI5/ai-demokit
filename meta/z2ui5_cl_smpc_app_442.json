@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_442",
+  "sample": "sap.m.sample.PDFViewerMultiple",
+  "entity": "sap.m.PDFViewer",
+  "file": "src/01/01/z2ui5_cl_smpc_app_442.clas.abap",
+  "batch": "b34",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The two documents the sample loads (sample.pdf and the deliberately missing sample_nonexisting.pdf) live next to the sample and are addressed with sap.ui.require.toUrl. abap2UI5 ships no such resource, so the port points both at the same two files on the demo kit host (sdk.openui5.org/test-resources/sap/m/demokit/sample/PDFViewerMultiple/...) - the same documents, re-hosted, and the missing one still 404s, which is what the second button demonstrates."
+    },
+    {
+      "type": "NOTE",
+      "what": "onCorrectPathClick / onIncorrectPathClick write /Source, which both PDFViewers bind. The port keeps the bound field and writes it in ABAP on the two press events (a round-trip; the value is backend state, not a client-side toggle)."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Both source-switch wires and the loading-error state of the second document are unverified in a running system."
+    }
+  ]
+}

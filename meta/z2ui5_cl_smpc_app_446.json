@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_smpc_app_446",
+  "sample": "sap.m.sample.LinkSubtle",
+  "entity": "sap.m.Link",
+  "file": "src/01/01/z2ui5_cl_smpc_app_446.clas.abap",
+  "batch": "b34",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": []
+}

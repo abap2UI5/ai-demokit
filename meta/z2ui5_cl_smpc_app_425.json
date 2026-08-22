@@ -16,8 +16,8 @@
       "what": "onCheckBoxSelect calls toolbar.setEnabled(selected); the port two-way binds one flag on both CheckBox.selected and OverflowToolbar.enabled, so the toggle happens roundtrip-free in the model. The CheckBox.select attribute is therefore dropped (structural-diff reports attr missing CheckBox.select)."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The two-way bound enabled flag (outer CheckBox -> OverflowToolbar.enabled and with it every control inside the toolbar) is unverified in a running system."
+      "type": "NOTE",
+      "what": "The two-way bound enabled flag (outer CheckBox -> OverflowToolbar.enabled and with it every control inside the toolbar) is unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_425.mjs)."
     }
   ]
 }

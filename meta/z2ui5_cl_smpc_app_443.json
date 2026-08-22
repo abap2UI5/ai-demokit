@@ -1,0 +1,35 @@
+{
+  "class": "z2ui5_cl_smpc_app_443",
+  "sample": "sap.m.sample.TextRenderWhitespace",
+  "entity": "sap.m.Text",
+  "file": "src/02/01/z2ui5_cl_smpc_app_443.clas.abap",
+  "batch": "b34",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.Text.renderWhitespace is @since 1.89 and is what the sample demonstrates, so it is kept 1:1 (bound here) and the port needs a UI5 runtime >= 1.89."
+    },
+    {
+      "type": "NOTE",
+      "what": "onWrappingChange and onRenderWhitespaceChange flip the Text property their Switch sits next to. Both are two-way bound on Switch.state and on the Text instead, so the toggles work roundtrip-free and both Switch.change attributes are dropped."
+    },
+    {
+      "type": "NOTE",
+      "what": "onSliderMoved sets containerLayout.setWidth(value + '%'); the Slider value is two-way bound and the Panel width follows it in an expression binding (Slider.liveChange dropped, app 418 precedent)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The demonstrated text carries the whitespace itself - the original writes it as &#xA; / &#x9; entities in the view attribute; the port writes the same characters as \\n and \\t in an ABAP string template, so the rendered string is byte-identical."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Both two-way bound Text properties and the slider-driven Panel width are unverified in a running system."
+    }
+  ]
+}

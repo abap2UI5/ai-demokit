@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_smpc_app_441",
+  "sample": "sap.m.sample.BreadcrumbsWithoutCurrentPage",
+  "entity": "sap.m.Breadcrumbs",
+  "file": "src/01/01/z2ui5_cl_smpc_app_441.clas.abap",
+  "batch": "b34",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onPress shows MessageToast.show(oEvent.getSource().getText() + ' has been clicked'). All six Links compose it on the client via follow_up_action control_global MESSAGE_TOAST.show with the template '{0} has been clicked' filled by ${$source>/text}, so the pressed link's own text is transported rather than faked and no press needs a round-trip."
+    },
+    {
+      "type": "NOTE",
+      "what": "onChange copies selectedItem.getKey() into /separatorStyle, which the Breadcrumbs binds. The port two-way binds one field on Select.selectedKey and Breadcrumbs.separatorStyle, so the switch happens roundtrip-free and the Select.change attribute is dropped."
+    },
+    {
+      "type": "NOTE",
+      "what": "The original leaves /separatorStyle unset until the first change, so the Breadcrumbs starts on the control default. An ABAP string field cannot be absent - it would serialize as \"\" and an enum-typed property rejects that - so the port seeds the control's own default value Slash (sap.m.Breadcrumbs.separatorStyle defaultValue), which renders identically and pre-selects the matching Select entry."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The client-composed link toasts and the two-way bound separatorStyle (Select -> Breadcrumbs) are unverified in a running system."
+    }
+  ]
+}

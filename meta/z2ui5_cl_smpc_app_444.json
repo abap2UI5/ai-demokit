@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_smpc_app_444",
+  "sample": "sap.m.sample.MaxNumberOfNotificationsReached",
+  "entity": "sap.m.NotificationListGroup",
+  "file": "src/01/01/z2ui5_cl_smpc_app_444.clas.abap",
+  "batch": "b34",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "_createNotification builds every NotificationListItem in JavaScript with Math.random over three lists (four titles, three datetimes, four Priority members). abap2UI5 has no client-side control factory and a backend cannot repeat a client-side random draw, so the port binds the items aggregation to a table it fills with the same three lists walked in order (title index MOD 4 plus the running number, datetime MOD 3, priority MOD 4). Same 400 rows, same value ranges, deterministic instead of random."
+    },
+    {
+      "type": "NOTE",
+      "what": "iMaxNotifications is 400 on a desktop and 100 otherwise. The row count is decided in the backend, which does not know the device at that point, so the port always loads 400 - the number the sample's own title (maximum number of notifications reached) is about."
+    },
+    {
+      "type": "NOTE",
+      "what": "Each created item closes itself with this.destroy(); the port's item close deletes the row it carries (the id travels as an event arg), which is the same disappearance on a bound aggregation. The group's own close (onItemClose: removeItem(group) plus the 'Item Closed: <title>' toast) becomes a bound visible flag plus message_toast_display, so the row set stays untouched."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The load wire (400 rows into the bound aggregation), the per-item close and the group close are unverified in a running system."
+    }
+  ]
+}

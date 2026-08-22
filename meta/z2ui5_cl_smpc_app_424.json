@@ -20,8 +20,8 @@
       "what": "onToolbarPress shows MessageToast.show('OverflowToolbar is clicked') - a constant text, so it is composed on the client via follow_up_action control_global MESSAGE_TOAST.show and needs no round-trip."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Both wires are unverified in a running system: the two-way bound active flag (CheckBox -> OverflowToolbar.active) and the client-composed toast on the OverflowToolbar press."
+      "type": "NOTE",
+      "what": "Both wires are unverified in a running system: the two-way bound active flag (CheckBox -> OverflowToolbar.active) and the client-composed toast on the OverflowToolbar press. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_424.mjs)."
     }
   ]
 }

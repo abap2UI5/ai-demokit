@@ -3,7 +3,7 @@
 
 # The sample catalogue
 
-Every port in this repository — 451 of them — with what it shows and a
+Every port in this repository — 459 of them — with what it shows and a
 link to its source. This is the [overview app](src/z2ui5_cl_smpc_app_000.clas.abap)
 as a page you can read here, before installing anything.
 
@@ -44,7 +44,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 
 ### sap.m
 
-229 port(s).
+237 port(s).
 
 | Sample | Class |
 |---|---|
@@ -198,6 +198,11 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.m.Tree** — Tree - Icon & Context Menu<br>Tree item with icon. This example also shows the context menu for the items in the Tree control.<br><sub>tree sap.m treeicon overflowtoolbar title toolbarspacer togglebutton menu menuitem</sub><br><sub>○ generated · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_436`](src/01/01/z2ui5_cl_smpc_app_436.clas.abap) |
 | **sap.m.Tree** — Tree - Selection<br>This example shows different selection modes of Tree.<br><sub>tree sap.m treeselection overflowtoolbar title toolbarspacer select standardtreeitem</sub><br><sub>○ generated · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_437`](src/01/01/z2ui5_cl_smpc_app_437.clas.abap) |
 | **sap.m.PullToRefresh** — Responsive Refresh<br>An 'Responsive Refresh' can be achieved by the combination of a Search Field's refresh button and a Pull To Refresh, both of which appear depending on whether the device is touch-enabled. A growing stream of backend data is simulated here.<br><sub>pulltorefresh pull refresh sap.m refreshresponsive bar searchfield list standardlistitem</sub><br><sub>○ generated · 5 deviations</sub> | [`Z2UI5_CL_SMPC_APP_438`](src/01/01/z2ui5_cl_smpc_app_438.clas.abap) |
+| **sap.m.Breadcrumbs** — Breadcrumbs sample without current page<br>The breadcrumb shows the position of the object page in the application hiearchy, without the current page. Use this breadcrumb for the object page only.<br><sub>breadcrumbs sap.m breadcrumbswithoutcurrentpage link hbox label select</sub><br><sub>○ generated · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_441`](src/01/01/z2ui5_cl_smpc_app_441.clas.abap) |
+| **sap.m.PDFViewer** — PDF Viewer - Two PDF Documents<br>Two PDF viewer frames displayed side by side. The second frame has the property isTrustedSource set to false which opens the PDF viewer with the displayType set to Link<br><sub>pdfviewer sap.m pdfviewermultiple scrollcontainer flexbox button flexitemdata</sub><br><sub>○ generated · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_442`](src/01/01/z2ui5_cl_smpc_app_442.clas.abap) |
+| **sap.m.NotificationListGroup** — Notification List Group with max number of notifications reached<br>Notification List Group with max number of notifications reached. The group will render the max amount of notificatons, depending on device type allowed and then show a warning messge.<br><sub>notificationlistgroup notification list group sap.m maxnumberofnotificationsreached vbox flexitemdata button notificationlistitem</sub><br><sub>○ generated · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_444`](src/01/01/z2ui5_cl_smpc_app_444.clas.abap) |
+| **sap.m.Text** — Text - Hyphenation<br>The Text control has a property allowing hyphenation.<br><sub>text sap.m texthyphenation label switch slider panel title</sub><br><sub>○ generated · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_445`](src/01/01/z2ui5_cl_smpc_app_445.clas.abap) |
+| **sap.m.Link** — Link - Subtle<br>Subtle links should be used to indicate less important links in tables with a large number of links. In this example all columns contain links, only the first column is non-subtle.<br><sub>link sap.m linksubtle table toolbar title column text columnlistitem objectidentifier</sub><br><sub>○ generated</sub> | [`Z2UI5_CL_SMPC_APP_446`](src/01/01/z2ui5_cl_smpc_app_446.clas.abap) |
 | **sap.m.Carousel** — Carousel with Controls<br>With the Carousel a user can browse through multi-page content by swiping left or right.<br><sub>carousel sap.m user browse through title image text scrollcontainer list standardlistitem</sub><br><sub>✓ checked · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_006`](src/02/01/z2ui5_cl_smpc_app_006.clas.abap) |
 | **sap.m.DatePicker** — Date Picker - Open by Another Control<br>This example shows Date Picker which is opened by another control.<br><sub>datepicker date picker sap.m open another title vbox label button link</sub><br><sub>✓ checked · 5 deviations</sub> | [`Z2UI5_CL_SMPC_APP_016`](src/02/01/z2ui5_cl_smpc_app_016.clas.abap) |
 | **sap.m.DateRangeSelection**<br>The Date Range Selection is an extension of the Date Picker Control and enables the user to select range of dates.<br><sub>daterangeselection date range selection sap.m single-field input vbox label text</sub><br><sub>✓ checked · 8 deviations</sub> | [`Z2UI5_CL_SMPC_APP_017`](src/02/01/z2ui5_cl_smpc_app_017.clas.abap) |
@@ -277,6 +282,9 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.m.Carousel** — Carousel Without Pages<br>When the carousel has no pages loaded or provided illustrated message will be shown.<br><sub>carousel sap.m carouselemptymessages hbox panel slider title</sub><br><sub>○ generated · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_427`](src/02/01/z2ui5_cl_smpc_app_427.clas.abap) |
 | **sap.m.Tokenizer** — Tokenizer Multi-line and Clear All<br>Tokenizer with Multi-line support and Clear All button<br><sub>tokenizer sap.m tokenizermultiline text token</sub><br><sub>○ generated · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_432`](src/02/01/z2ui5_cl_smpc_app_432.clas.abap) |
 | **sap.m.ProgressIndicator** — Progress Indicator With Announcement<br>Announce the progress of the ProgressIndicator.<br><sub>progressindicator progress indicator sap.m progressindicatorwithannouncement text flexbox button</sub><br><sub>○ generated · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_435`](src/02/01/z2ui5_cl_smpc_app_435.clas.abap) |
+| **sap.m.Text** — Text - Empty Indicator<br>The Text control has a property allowing an empty text indicator to be displayed.<br><sub>text sap.m textemptyindicator panel label switch</sub><br><sub>○ generated · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_439`](src/02/01/z2ui5_cl_smpc_app_439.clas.abap) |
+| **sap.m.Menu** — Menu with EndContent Items<br>EndContent (Button and/or Icon) can be added to some of the menu items.<br><sub>menu sap.m menuendcontent vbox button menuitem</sub><br><sub>○ generated · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_440`](src/02/01/z2ui5_cl_smpc_app_440.clas.abap) |
+| **sap.m.Text** — Text - Render Whitespace<br>The Text control has a property allowing browsers to render whitespace and tabs.<br><sub>text sap.m textrenderwhitespace label switch slider panel</sub><br><sub>○ generated · 5 deviations</sub> | [`Z2UI5_CL_SMPC_APP_443`](src/02/01/z2ui5_cl_smpc_app_443.clas.abap) |
 
 ### sap.uxap
 
