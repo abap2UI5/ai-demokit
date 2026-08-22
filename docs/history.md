@@ -7,6 +7,54 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-22 — batch b33 (sap.m): the covered-control(1) tail keeps going, 8 ports (apps 431–438)
+
+Eight more depth ports, picked the way the planning rules say: the smallest
+`covered-control(1)` rows first, so every one of them is the second port of its
+control rather than the sixth of another.
+
+| app | sample | the idiom it adds |
+|---|---|---|
+| 431 | ContainerResponsivePadding | `sapUiResponsiveContentPadding` on a Panel with a header Toolbar; the `img>` model folded to the mock's own value |
+| 432 | TokenizerMultiLine | `multiLine` + `showClearAll` over a bound Token template; `tokenDelete` @1.82 (POST_171) carrying key **and** count |
+| 433 | ContainerPaddingAndMargin | three device-dependent widths as `device>` expression bindings (app 031's shape, three of them) |
+| 434 | ContainerPadding | a `core:FragmentDefinition` Dialog via `popup_display`, closed roundtrip-free on both buttons; the `app:` CustomData namespace kept |
+| 435 | ProgressIndicatorWithAnnouncement | the id split (`…-button50` → indicator + value) transported via `$event.oSource.sId`, plus the `INVISIBLE_MESSAGE` announcement; `displayAnimation` @1.73 (POST_171) |
+| 436 | TreeIcon | a **conditional subtree**: the controller's `new Menu(…)` / `destroyContextMenu( )` becomes a `contextMenu` aggregation the backend emits or omits (app 273's split-chain shape) |
+| 437 | TreeSelection | one two-way field shared by `Select.selectedKey` and `Tree.mode` — all five selection modes without a round-trip |
+| 438 | RefreshResponsive | the grow-by-one refresh plus the search filter done in ABAP; `PullToRefresh.hide( )` via `control_by_id`; the sample's own touch model folded onto `device>/support/touch` |
+
+Two ports moved to `src/02/01` on a `POST_171` the property gate named
+(432 `tokenDelete`, 435 `displayAnimation`) — again nothing the structural diff
+could have seen, the same shape as 423/427 in the previous batch.
+
+**0 undeclared structural differences across all eight**, and all six ports
+that ship a `LIVE_TEST` ship their `meta/interactions/` module with it
+(`validate-meta` reports no interaction gap).
+
+Two things worth keeping:
+
+- **`DELETE itab WHERE key = key` silently compares a field with itself.** App
+  432's delete-by-key read the deleted key into a variable named like the
+  column; ABAP resolves both sides to the component, so every row matches.
+  Renaming the variable is the fix; no gate sees it, and the port would have
+  cleared the whole tokenizer on the first X.
+- **A conditional subtree is still counted by the structural diff.** App 436
+  emits its `contextMenu` only while the toggle is on, but `structural-diff`
+  reads the CHAIN, not a render, so Menu/MenuItem show up as `control extra` in
+  both states — the deviation says so rather than the gate being worked around.
+
+One more boundary the batch documented rather than improvised around: a UI5
+expression argument cannot map an array of controls to their keys (the grammar
+has no function literal), so app 432's `tokenDelete` transports the first key
+plus the deleted COUNT — enough to tell Clear All from a single X, not enough
+for a multi-select delete of a strict subset, which the sidecar declares
+`IMPROVISED`.
+
+The `missing-accessibility` advisory budget rose 29 → 30 for app 431's two
+icon-only header Buttons, which the demo kit sample itself ships without a
+tooltip — the same shape as every earlier raise.
+
 ## 2026-08-22 — batch b32 (sap.m): eight depth ports (apps 423–430)
 
 The first slice of the "port the rest" mandate. `--backlog` has no

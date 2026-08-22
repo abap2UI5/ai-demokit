@@ -3301,6 +3301,24 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` >= 1.73.`
         post171 = `ProgressIndicator.displayAnimation (since UI5 1.73) is kept 1:1 on the no-animation ProgressIndicator; needs UI5 >= 1.73.` ) ).
 
+    lv_text1 = `POST-1.71: sap.m.ProgressIndicator.displayAnimation is @since 1.73; the second indicator of the sample exists precisely to show it switched off, so the property is kept 1:1 and the port needs a UI5` &&
+               ` runtime >= 1.73. // NOTE: onPIChangeValueButtonPressed sets displayValue and percentValue imperatively on the ProgressIndicator it derives from the pressed button's id. The port binds both properties` &&
+               ` per indicator and writes them in ABAP; the id split (everything before '-button' is the indicator, everything after is the value) is transported 1:1 via $event.oSource.sId, so the wire reads the real` &&
+               ` source id instead of a fixed value. percentValue is added to both ProgressIndicators, which the original only ever sets from code. // NOTE: InvisibleMessage.getInstance().announce(...) is reproduced` &&
+               ` through the global INVISIBLE_MESSAGE target (the singleton has no control id) with the same 'Previous value was X. New value is Y%.' text, composed in ABAP because the previous value is backend` &&
+               ` state. The original defers the announcement with setTimeout to let the value change land first; the port announces it in the same round-trip that writes the new value, and passes no mode (the`.
+    lv_text1 = lv_text1 && ` original passes none either, so it stays Polite). // LIVE-TEST: The six button wires (id split -> bound displayValue/percentValue) and the screen-reader announcement are unverified in a running` &&
+               ` system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.ProgressIndicator`               name = `ProgressIndicatorWithAnnouncement`             class = `z2ui5_cl_smpc_app_435` path = `src/02/01/z2ui5_cl_smpc_app_435.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.13.1`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.m.ProgressIndicator.displayAnimation is @since 1.73; the second indicator of the sample exists precisely to show it switched off, so the property is kept 1:1 and the port needs a UI5 runtime >=` &&
+                 ` 1.73.` ) ).
+
     lv_text1 = `NOTE: the incremental backend load is reproduced 1:1: the model starts with the first product and each pull-to-refresh (REFRESH) appends the next until the full /ProductCollection is shown (fill_all +` &&
                ` shown counter). // NOTE: handleRefresh's this.byId('pullToRefresh').hide( ) is reproduced since 2026-08-21 through follow_up_action( cs_event-control_by_id, hide ) - an allowed unlisted control` &&
                ` method. It was dropped and undeclared before, which the review sweep caught: PullToRefresh.onclick puts the control into its busy state (spinner + 'Loading') and ONLY hide( ) resets it to 'Refresh',` &&
@@ -3312,6 +3330,22 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.PullToRefresh`                   name = `PullToRefresh`                                 class = `z2ui5_cl_smpc_app_081` path = `src/01/01/z2ui5_cl_smpc_app_081.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.9.2`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: The sample builds its own named device model with isNoTouch/isTouch from Device.support.touch. abap2UI5 serves the raw sap.ui.Device under device>, so SearchField.showRefreshButton binds {=` &&
+               ` !${device>/support/touch} } and PullToRefresh.visible binds {= ${device>/support/touch} } - the same two flags, read from the same Device facts. // NOTE: _pushNewProduct hands out one more record of` &&
+               ` products.json per refresh and handleRefresh filters the list binding by the SearchField value with a sap.ui.model.Filter. Both are done in the backend on the one table the List binds: the port keeps` &&
+               ` a counter, rebuilds the bound table from the full mock up to that counter and applies the Contains filter on Name in ABAP (thin frontend - no binding_call needed, the refresh is a round-trip anyway).` &&
+               ` The SearchField value is two-way bound so it survives the view rebuild. // NOTE: handleRefresh wraps its work in a 1-second setTimeout to simulate a slow backend; the port answers the round-trip` &&
+               ` immediately. The PullToRefresh spinner is stopped exactly as the original does it, with hide( ) via control_by_id. // IMPROVISED: onInit moves the search Bar below the PullToRefresh on touch devices`.
+    lv_text1 = lv_text1 && ` (page.insertAggregation('content', bar, 1)). The port has no client-side reordering and keeps the desktop order (Bar in subHeader) on every device - the only leg of the sample the port does not` &&
+               ` reproduce. // LIVE-TEST: The refresh wire (grow-by-one plus the search filter), the PullToRefresh hide( ) follow-up and both device> expressions are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.PullToRefresh`                   name = `RefreshResponsive`                             class = `z2ui5_cl_smpc_app_438` path = `src/01/01/z2ui5_cl_smpc_app_438.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
         since = `1.9.2`
         notes = lv_text1 ) ).
 
@@ -4031,21 +4065,54 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` $event.getParameter('tokens')[0].getKey(); the delete toast shows the token text looked up by that key, like the original's oToken.getText()); the second, disabled Tokenizer keeps its 3 static` &&
                  ` tokens, so the port shows one bound Token template + 3 static Token vs the original's 3+3. // NOTE: the CheckBox select handler becomes a live two-way selected/editable bind on the first Tokenizer.` &&
                  ` // POST-1.71: tokenDelete (since UI5 1.82) on the first Tokenizer is newer than 1.71 but kept for the 1:1 port (the original wires the same event) - the app needs a UI5 release >= 1.82 to render it.`
-        post171 = `tokenDelete (since UI5 1.82) on the first Tokenizer is newer than 1.71 but kept for the 1:1 port (the original wires the same event) - the app needs a UI5 release >= 1.82 to render it.` )
+        post171 = `tokenDelete (since UI5 1.82) on the first Tokenizer is newer than 1.71 but kept for the 1:1 port (the original wires the same event) - the app needs a UI5 release >= 1.82 to render it.` ) ).
+
+    lv_text1 = `POST-1.71: sap.m.Tokenizer.tokenDelete is @since 1.82; the original wires it, so the port keeps it 1:1 and needs a UI5 release >= 1.82 for the delete to fire. // NOTE: The 19 Tokens the original` &&
+               ` declares statically become one bound Token template over a 19-row table (structural-diff reports control missing Token: original 19 vs port 1). Same 19 texts and keys, and the model binding is what` &&
+               ` makes onTokenDelete's removeToken( ) expressible in the backend (app 085 precedent). // IMPROVISED: onTokenDelete loops over EVERY token the event carries. A UI5 expression argument cannot map an` &&
+               ` array of controls to their keys (the grammar has no function literal), so the wire transports the FIRST deleted key plus the number of deleted tokens: Clear All (count = all rows) clears the table` &&
+               ` and the per-token X (count 1) deletes that key. A multi-select delete of a strict SUBSET therefore removes only the first of the selected tokens - the one leg of the original that is not reproduced.` &&
+               ` // LIVE-TEST: Both delete paths (the per-token X and the Clear All button) are unverified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Tokenizer`                       name = `TokenizerMultiLine`                            class = `z2ui5_cl_smpc_app_432` path = `src/02/01/z2ui5_cl_smpc_app_432.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.22`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.m.Tokenizer.tokenDelete is @since 1.82; the original wires it, so the port keeps it 1:1 and needs a UI5 release >= 1.82 for the delete to fire.` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Toolbar`                         name = `ToolbarShrinkable`                             class = `z2ui5_cl_smpc_app_053` path = `src/01/01/z2ui5_cl_smpc_app_053.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16`
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`
         notes = `NOTE: the sample's controller onSliderLiveChange resizes the toolbars in JS; there is no width in the source XML (the port adds the width attribute, the original wires liveChange instead). Rebuilt as` &&
-                 ` a client-side expression binding {= slider + '%' } on each Toolbar width - no event round-trip, resizes instantly like the original; the documented preferred path (CAPABILITIES.md), not a workaround.` ) ).
-
-    result = VALUE #( BASE result
+                 ` a client-side expression binding {= slider + '%' } on each Toolbar width - no event round-trip, resizes instantly like the original; the documented preferred path (CAPABILITIES.md), not a workaround.` )
       ( module = `sap.m`              control = `sap.m.Tree`                            name = `Tree`                                          class = `z2ui5_cl_smpc_app_054` path = `src/01/01/z2ui5_cl_smpc_app_054.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.42`
         checked = `CHECKED (2026-07-19): verified in a running system - human visual pass 2026-07-19 over all apps: the nested-table hierarchy renders as an expandable Tree like the original.` ) ).
+
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Tree`                            name = `TreeIcon`                                      class = `z2ui5_cl_smpc_app_436` path = `src/01/01/z2ui5_cl_smpc_app_436.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.42`
+        notes = `NOTE: onToggleContextMenu creates a sap.m.Menu with one MenuItem in JavaScript on press and destroys it again when the button is un-pressed. abap2UI5 has no client-side control factory, so the same` &&
+                 ` Menu/MenuItem is declared in the view's contextMenu aggregation and the view is rebuilt on the toggle: the pressed state arrives via ${$parameters>/pressed} and the backend emits the subtree only` &&
+                 ` while it is on. structural-diff therefore reports control extra Menu and control extra MenuItem - the original's are built in the controller, not in the view. // LIVE-TEST: The context-menu toggle` &&
+                 ` (pressed -> rebuilt view with/without the contextMenu subtree) and the MenuItem's {TEXT} binding against the pressed node are unverified in a running system.` )
+      ( module = `sap.m`              control = `sap.m.Tree`                            name = `TreeSelection`                                 class = `z2ui5_cl_smpc_app_437` path = `src/01/01/z2ui5_cl_smpc_app_437.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.42`
+        notes = `NOTE: handleSelectChange calls tree.setMode(selectedItem.getKey()). The port two-way binds one field on Select.selectedKey and Tree.mode, so the mode switch happens roundtrip-free in the model and the` &&
+                 ` Select.change attribute is dropped (structural-diff reports attr missing Select.change). // LIVE-TEST: The shared two-way bound mode field (Select -> Tree.mode across all five selection modes) is` &&
+                 ` unverified in a running system.` ) ).
 
     lv_text1 = `NOTE: **Rebuilt on 2026-08-05** - it was a breadth probe with THREE INVENTED rows (Screenshot.png / Notes.txt / Report.doc) and a reduced toolbar. Both rows of the sample's own items.json are there` &&
                ` verbatim now (Business Plan Agenda.doc with its five ObjectMarkers and four ObjectStatuses, Picture of a woman.png with its two), the item template carries the markers/statuses aggregations and` &&
@@ -4187,6 +4254,27 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: the /ProductCollectionStats/Counts values are flattened to the default model fields /TOTAL, /OK, /HEAVY, /OVERWEIGHT (verbatim counts).` )
+      ( module = `sap.m`              control = `sap.ui.core.ContainerPadding`          name = `ContainerPadding`                              class = `z2ui5_cl_smpc_app_434` path = `src/01/01/z2ui5_cl_smpc_app_434.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: The controller loads Dialog.fragment.xml lazily and calls syncStyleClass('sapUiSizeCompact', view, dialog) before open(). The port builds the same fragment in its own chain and shows it with` &&
+                 ` popup_display; the compact-density sync has no equivalent (abap2UI5 sets the density on the shell, not per popup) and is dropped - it changes control sizing only, not structure. // NOTE:` &&
+                 ` onDialogCloseButton on both buttons is reproduced by the client-side follow_up_action popup_close, so closing the dialog needs no round-trip. // LIVE-TEST: The popup_display of the fragment and both` &&
+                 ` popup_close wires are unverified in a running system.` )
+      ( module = `sap.m`              control = `sap.ui.core.ContainerPadding`          name = `ContainerPaddingAndMargin`                     class = `z2ui5_cl_smpc_app_433` path = `src/01/01/z2ui5_cl_smpc_app_433.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: The three Image srcs read {img>/products/pic1} from the named img model (ui5/mock/img.json); the single value is folded into the view - the mock's own HT-7777-large.jpg, re-hosted on` &&
+                 ` sdk.openui5.org, so the Images render identically. // NOTE: onInit seeds /widthS /widthM /widthL from Device.system.phone (2em/4em/6em on a phone, 5em/10em/15em otherwise) and the view binds them.` &&
+                 ` The port expresses the same branch over the framework's device> model in an expression binding on each Image width, so the widths stay device-dependent instead of being resolved once on the server` &&
+                 ` (app 031 precedent).` ) ).
+
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.ui.core.ContainerPadding`          name = `ContainerResponsivePadding`                    class = `z2ui5_cl_smpc_app_431` path = `src/01/01/z2ui5_cl_smpc_app_431.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: The Image src reads {img>/products/pic1} from the named img model (ui5/mock/img.json). abap2UI5 serves one default model, so the single value is folded into the view literal - the mock's own` &&
+                 ` HT-7777-large.jpg, re-hosted on sdk.openui5.org, so the Image renders identically. The products.json model the controller also sets is never bound by this view and is therefore not seeded.` )
       ( module = `sap.m`              control = `sap.ui.core.StandardMargins`           name = `StandardMarginsAll`                            class = `z2ui5_cl_smpc_app_088` path = `src/01/01/z2ui5_cl_smpc_app_088.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )

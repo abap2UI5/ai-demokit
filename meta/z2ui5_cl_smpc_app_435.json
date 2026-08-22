@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_smpc_app_435",
+  "sample": "sap.m.sample.ProgressIndicatorWithAnnouncement",
+  "entity": "sap.m.ProgressIndicator",
+  "file": "src/02/01/z2ui5_cl_smpc_app_435.clas.abap",
+  "batch": "b33",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.ProgressIndicator.displayAnimation is @since 1.73; the second indicator of the sample exists precisely to show it switched off, so the property is kept 1:1 and the port needs a UI5 runtime >= 1.73."
+    },
+    {
+      "type": "NOTE",
+      "what": "onPIChangeValueButtonPressed sets displayValue and percentValue imperatively on the ProgressIndicator it derives from the pressed button's id. The port binds both properties per indicator and writes them in ABAP; the id split (everything before '-button' is the indicator, everything after is the value) is transported 1:1 via $event.oSource.sId, so the wire reads the real source id instead of a fixed value. percentValue is added to both ProgressIndicators, which the original only ever sets from code."
+    },
+    {
+      "type": "NOTE",
+      "what": "InvisibleMessage.getInstance().announce(...) is reproduced through the global INVISIBLE_MESSAGE target (the singleton has no control id) with the same 'Previous value was X. New value is Y%.' text, composed in ABAP because the previous value is backend state. The original defers the announcement with setTimeout to let the value change land first; the port announces it in the same round-trip that writes the new value, and passes no mode (the original passes none either, so it stays Polite)."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The six button wires (id split -> bound displayValue/percentValue) and the screen-reader announcement are unverified in a running system."
+    }
+  ]
+}

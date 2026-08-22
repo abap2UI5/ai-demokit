@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_437",
+  "sample": "sap.m.sample.TreeSelection",
+  "entity": "sap.m.Tree",
+  "file": "src/01/01/z2ui5_cl_smpc_app_437.clas.abap",
+  "batch": "b33",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "handleSelectChange calls tree.setMode(selectedItem.getKey()). The port two-way binds one field on Select.selectedKey and Tree.mode, so the mode switch happens roundtrip-free in the model and the Select.change attribute is dropped (structural-diff reports attr missing Select.change)."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The shared two-way bound mode field (Select -> Tree.mode across all five selection modes) is unverified in a running system."
+    }
+  ]
+}

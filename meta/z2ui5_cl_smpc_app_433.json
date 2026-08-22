@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_433",
+  "sample": "sap.m.sample.ContainerPaddingAndMargin",
+  "entity": "sap.ui.core.ContainerPadding",
+  "file": "src/01/01/z2ui5_cl_smpc_app_433.clas.abap",
+  "batch": "b33",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The three Image srcs read {img>/products/pic1} from the named img model (ui5/mock/img.json); the single value is folded into the view - the mock's own HT-7777-large.jpg, re-hosted on sdk.openui5.org, so the Images render identically."
+    },
+    {
+      "type": "NOTE",
+      "what": "onInit seeds /widthS /widthM /widthL from Device.system.phone (2em/4em/6em on a phone, 5em/10em/15em otherwise) and the view binds them. The port expresses the same branch over the framework's device> model in an expression binding on each Image width, so the widths stay device-dependent instead of being resolved once on the server (app 031 precedent)."
+    }
+  ]
+}

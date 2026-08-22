@@ -96,12 +96,15 @@ const ADVISORY_BUDGET = {
   // same shape — the alt-less social-icon / profile sap.m.Images the
   // ObjectPageHeader samples ship without alt; kept 1:1, an alt would be
   // invented text
+  // raised 2026-08-22 (batch b33, app 431 ContainerResponsivePadding): one more
+  // of the same shape - the icon-only settings / drop-down-list Buttons the
+  // sample puts in the Panel's header Toolbar without a tooltip; kept 1:1
   // ratcheted down 2026-08-14 with the linter bump to 51cce10: 6afb902
   // ("missing-accessibility: stop asking for an attribute UI5 ignores") drops
   // the findings on controls where the attribute is ignored anyway, so 26 of
   // the 55 were never real. The ones above stay — they are the alt/tooltip-less
   // originals, kept 1:1
-  'missing-accessibility': 29,
+  'missing-accessibility': 30,
   'event-without-handler': 4, // ratcheted down 2026-08-05: the four calendar ports wired their select handler
   // raised 2026-08-21 (app 298, sap.m.table.columnmenu.QuickSort): the same
   // shape as 268, and here the metadata is not merely incomplete but WRONG.
