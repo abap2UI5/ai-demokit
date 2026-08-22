@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_smpc_app_471",
+  "sample": "sap.m.sample.ComboBoxFilteringStartsWith",
+  "entity": "sap.m.ComboBox",
+  "file": "src/01/01/z2ui5_cl_smpc_app_471.clas.abap",
+  "batch": "b37",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "onInit calls combobox1.setFilterFunction( ) with a JavaScript callback matching the term case-insensitively at the START of the item text OR of its key. UI5's default filtering already covers the starts-with-on-text half; the key half has no bindable or backend equivalent (app-authored JS functions are the documented boundary) and is lost."
+    }
+  ]
+}

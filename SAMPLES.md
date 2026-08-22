@@ -3,7 +3,7 @@
 
 # The sample catalogue
 
-Every port in this repository — 477 of them — with what it shows and a
+Every port in this repository — 487 of them — with what it shows and a
 link to its source. This is the [overview app](src/z2ui5_cl_smpc_app_000.clas.abap)
 as a page you can read here, before installing anything.
 
@@ -44,7 +44,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 
 ### sap.m
 
-252 port(s).
+260 port(s).
 
 | Sample | Class |
 |---|---|
@@ -216,6 +216,13 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.m.MultiInput** — MultiInput with Max Tokens<br>Number of Tokens in MultiInput cannot exceed the maxToken number.<br><sub>multiinput multi input sap.m multiinputmaxtokens label</sub><br><sub>○ generated</sub> | [`Z2UI5_CL_SMPC_APP_461`](src/01/01/z2ui5_cl_smpc_app_461.clas.abap) |
 | **sap.m.Input** — Input - Value Update<br>Since 1.24 the value property of sap.m.Input is not updated on every keystroke, but first when the user presses Enter or leaves the input. The change was necessary to fully support the standard UI5 data binding with formatters and types.<br><sub>input sap.m inputvalueupdate label switch text</sub><br><sub>○ generated · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_462`](src/01/01/z2ui5_cl_smpc_app_462.clas.abap) |
 | **sap.m.ComboBox** — Combo box - Default Filtering<br>The default filtering is 'starts with per term', which filters by the beginning of every word in every column. Autocomplete (type-ahead) works only for the first column, the leading value.<br><sub>combobox combo box sap.m comboboxdefaultfiltering vbox label</sub><br><sub>○ generated</sub> | [`Z2UI5_CL_SMPC_APP_463`](src/01/01/z2ui5_cl_smpc_app_463.clas.abap) |
+| **sap.m.IconTabBar** — Icon Tab Bar - Overflow Behavior<br>In this example when there is not enough space for all tab items to fit on the screen, the rest are displayed in an overflow select list for easier selection.<br><sub>icontabbar icon tab bar sap.m icontabbaroverflowselectlist icontabfilter text</sub><br><sub>○ generated · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_465`](src/01/01/z2ui5_cl_smpc_app_465.clas.abap) |
+| **sap.m.IconTabBar** — Icon Tab Bar - Inline mode tab icons<br>This sample illustrates tab icons for inline mode.<br><sub>icontabbar icon tab bar sap.m icontabbarinlineicons icontabfilter text</sub><br><sub>○ generated · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_467`](src/01/01/z2ui5_cl_smpc_app_467.clas.abap) |
+| **sap.m.StandardListItem** — Standard List Item - Icon<br>This list item offers a standardized user interface for list content with title, description and icon.<br><sub>standardlistitem standard list item sap.m standardlistitemicon</sub><br><sub>○ generated</sub> | [`Z2UI5_CL_SMPC_APP_468`](src/01/01/z2ui5_cl_smpc_app_468.clas.abap) |
+| **sap.m.ComboBox** — Combo box - Custom filtering "Contains"<br>You can override the default filtering "Starts with per term" with your own filter function using the setFilterFunction method. The "Contains" approach searches everywhere in the entries.<br><sub>combobox combo box sap.m comboboxfilteringcontains vbox label</sub><br><sub>○ generated · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_470`](src/01/01/z2ui5_cl_smpc_app_470.clas.abap) |
+| **sap.m.ComboBox** — Combo box - Custom filtering "Starts with"<br>You can override the default filtering "Starts with per term" with your own filter function using the setFilterFunction method. The "Starts with" approach searches only in the beginning of the entries in both columns.<br><sub>combobox combo box sap.m comboboxfilteringstartswith vbox label</sub><br><sub>○ generated · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_471`](src/01/01/z2ui5_cl_smpc_app_471.clas.abap) |
+| **sap.m.Input** — Input - Suggestions - Dynamic<br>With the Input control's suggest event, you can handle the suggestionItems yourself dynamically.<br><sub>input sap.m inputsuggestionsdynamic label</sub><br><sub>○ generated · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_473`](src/01/01/z2ui5_cl_smpc_app_473.clas.abap) |
+| **sap.m.FlexBox** — Flex Box - Navigation Examples<br>Here is an example of how you can use navigation items as unordered list items in a Flex Box.<br><sub>flexbox flex box sap.m flexboxnav vbox panel flexitemdata</sub><br><sub>○ generated · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_474`](src/01/01/z2ui5_cl_smpc_app_474.clas.abap) |
 | **sap.m.Carousel** — Carousel with Controls<br>With the Carousel a user can browse through multi-page content by swiping left or right.<br><sub>carousel sap.m user browse through title image text scrollcontainer list standardlistitem</sub><br><sub>✓ checked · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_006`](src/02/01/z2ui5_cl_smpc_app_006.clas.abap) |
 | **sap.m.DatePicker** — Date Picker - Open by Another Control<br>This example shows Date Picker which is opened by another control.<br><sub>datepicker date picker sap.m open another title vbox label button link</sub><br><sub>✓ checked · 5 deviations</sub> | [`Z2UI5_CL_SMPC_APP_016`](src/02/01/z2ui5_cl_smpc_app_016.clas.abap) |
 | **sap.m.DateRangeSelection**<br>The Date Range Selection is an extension of the Date Picker Control and enables the user to select range of dates.<br><sub>daterangeselection date range selection sap.m single-field input vbox label text</sub><br><sub>✓ checked · 8 deviations</sub> | [`Z2UI5_CL_SMPC_APP_017`](src/02/01/z2ui5_cl_smpc_app_017.clas.abap) |
@@ -300,6 +307,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.m.Text** — Text - Render Whitespace<br>The Text control has a property allowing browsers to render whitespace and tabs.<br><sub>text sap.m textrenderwhitespace label switch slider panel</sub><br><sub>○ generated · 5 deviations</sub> | [`Z2UI5_CL_SMPC_APP_443`](src/02/01/z2ui5_cl_smpc_app_443.clas.abap) |
 | **sap.m.MessageStrip** — Custom Message Strip Design<br>Demonstrates MessageStrips with different colorSet and colorScheme properties.<br><sub>messagestrip message strip sap.m custommessagestripdesign panel label select</sub><br><sub>○ generated · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_452`](src/02/01/z2ui5_cl_smpc_app_452.clas.abap) |
 | **sap.m.ComboBox** — ComboBox - Clear Icon<br>The combo box control can show 'clear' icon, which when pressed will remove the user's input and selected key.<br><sub>combobox combo box sap.m comboboxclearicon</sub><br><sub>○ generated · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_455`](src/02/01/z2ui5_cl_smpc_app_455.clas.abap) |
+| **sap.m.IconTabBar** — Icon Tab Bar - Start and End Overflow<br>This sample illustrates the start and end overflow mode of the Icon Tab Bar.<br><sub>icontabbar icon tab bar sap.m icontabbarstartandendoverflow icontabfilter text</sub><br><sub>○ generated · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_466`](src/02/01/z2ui5_cl_smpc_app_466.clas.abap) |
 
 ### sap.uxap
 
@@ -491,7 +499,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 
 ### sap.ui.core
 
-17 port(s).
+19 port(s).
 
 | Sample | Class |
 |---|---|
@@ -503,6 +511,8 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.ui.core.ContainerPadding** — Container Content Padding and Margins<br>By combining the margin and padding concepts you can flexibly design your application layout without having to write any custom CSS.<br><sub>containerpadding container padding sap.ui.core containerpaddingandmargin messagestrip scrollcontainer image flexitemdata</sub><br><sub>○ generated · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_433`](src/01/01/z2ui5_cl_smpc_app_433.clas.abap) |
 | **sap.ui.core.ContainerPadding** — Container Content Padding<br>Apply the CSS class 'sapUiContentPadding' on a UI5 container control to add a default padding of 1rem (16px) around the container content area.<br><sub>containerpadding container padding sap.ui.core messagestrip button dialog text</sub><br><sub>○ generated · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_434`](src/01/01/z2ui5_cl_smpc_app_434.clas.abap) |
 | **sap.ui.core.StandardMargins** — Two-Sided Margins<br>Clear the space to the left and right, top and bottom of your control. Choose a size ('Tiny', 'Small', 'Medium' or 'Large', which stands for 8px (0.<br><sub>standardmargins standard margins sap.ui.core standardmarginstwosided text panel</sub><br><sub>○ generated</sub> | [`Z2UI5_CL_SMPC_APP_464`](src/01/01/z2ui5_cl_smpc_app_464.clas.abap) |
+| **sap.ui.core.StandardMargins** — Collapsing Margins<br>See how adjacent margins collapse to a single margin.<br><sub>standardmargins standard margins sap.ui.core standardmarginscollapse panel text</sub><br><sub>○ generated</sub> | [`Z2UI5_CL_SMPC_APP_469`](src/01/01/z2ui5_cl_smpc_app_469.clas.abap) |
+| **sap.ui.core.StandardMargins** — Responsive Margins<br>Clear the space around your control, where the margin depends on the device your are using.<br><sub>standardmargins standard margins sap.ui.core standardmarginsresponsive panel text</sub><br><sub>○ generated</sub> | [`Z2UI5_CL_SMPC_APP_472`](src/01/01/z2ui5_cl_smpc_app_472.clas.abap) |
 | **sap.ui.core.HTML**<br>With the HTML controls you can easily embed any kind of HTML content into your UI5 mobile application.<br><sub>html sap.ui.core raw injection</sub><br><sub>◐ reviewed · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_120`](src/01/02/z2ui5_cl_smpc_app_120.clas.abap) |
 | **sap.ui.core.Icon**<br>Built with an embedded font, icons scale well, and can be altered with CSS. They can also fire a press event. See the Icon Explorer for more icons.<br><sub>icon sap.ui.core font gallery hbox flexitemdata</sub><br><sub>◐ reviewed · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_122`](src/01/02/z2ui5_cl_smpc_app_122.clas.abap) |
 | **sap.ui.core.InvisibleText**<br>Many controls provide the associations ariaLabelledBy and ariaDescribedBy for accessibility purposes. The InvisibleText control can be used by application to provide hidden texts on the UI which can be referenced via these associations.<br><sub>invisibletext invisible text sap.ui.core aria descriptions toolbar button toolbarspacer title hbox flexitemdata</sub><br><sub>◐ reviewed · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_127`](src/01/02/z2ui5_cl_smpc_app_127.clas.abap) |

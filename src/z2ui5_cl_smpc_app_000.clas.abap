@@ -1506,13 +1506,26 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxDefaultFiltering`                      class = `z2ui5_cl_smpc_app_463` path = `src/01/01/z2ui5_cl_smpc_app_463.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        since = `1.22` )
-      ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxGrouping`                              class = `z2ui5_cl_smpc_app_199` path = `src/01/01/z2ui5_cl_smpc_app_199.clas.abap`
-        score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22` ) ).
 
     result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxFilteringContains`                     class = `z2ui5_cl_smpc_app_470` path = `src/01/01/z2ui5_cl_smpc_app_470.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22`
+        notes = `IMPROVISED: onInit calls combobox1.setFilterFunction( ) with a JavaScript callback that matches the search term case-insensitively ANYWHERE in the item text OR in its key. A JS filter callback has no` &&
+                 ` bindable or backend equivalent (app-authored JS functions are the documented boundary), so the port ships the ComboBox with UI5's DEFAULT filtering - starts-with on the text - and the` &&
+                 ` contains-and-key behaviour the sample demonstrates is lost.` )
+      ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxFilteringStartsWith`                   class = `z2ui5_cl_smpc_app_471` path = `src/01/01/z2ui5_cl_smpc_app_471.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22`
+        notes = `IMPROVISED: onInit calls combobox1.setFilterFunction( ) with a JavaScript callback matching the term case-insensitively at the START of the item text OR of its key. UI5's default filtering already` &&
+                 ` covers the starts-with-on-text half; the key half has no bindable or backend equivalent (app-authored JS functions are the documented boundary) and is lost.` )
+      ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxGrouping`                              class = `z2ui5_cl_smpc_app_199` path = `src/01/01/z2ui5_cl_smpc_app_199.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22` )
       ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxWrapping`                              class = `z2ui5_cl_smpc_app_384` path = `src/01/01/z2ui5_cl_smpc_app_384.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2011,6 +2024,12 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` >= 1.134 to render the gaps.` ) ).
 
     result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.FlexBox`                         name = `FlexBoxNav`                                    class = `z2ui5_cl_smpc_app_474` path = `src/01/01/z2ui5_cl_smpc_app_474.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: The sample ships its own style.css - the list styling both FlexBoxes rely on (paddings, the 25% items, the hover transition). abap2UI5 serves no per-sample stylesheet, so the rules are injected` &&
+                 ` verbatim through one extra core:HTML <style> leaf at the top of the view (structural-diff reports control extra core:HTML: 6 vs 7 - the six anchor leaves are the original's own). Nothing else` &&
+                 ` changes.` )
       ( module = `sap.m`              control = `sap.m.FlexBox`                         name = `FlexBoxNested`                                 class = `z2ui5_cl_smpc_app_026` path = `src/01/01/z2ui5_cl_smpc_app_026.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2023,14 +2042,14 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
       ( module = `sap.m`              control = `sap.m.FlexBox`                         name = `FlexBoxRenderType`                             class = `z2ui5_cl_smpc_app_190` path = `src/01/01/z2ui5_cl_smpc_app_190.clas.abap`
         score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.FormattedText`                   name = `FormattedText`                                 class = `z2ui5_cl_smpc_app_154` path = `src/01/01/z2ui5_cl_smpc_app_154.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.38.0`
-        notes = `NOTE: FormattedText.htmlText bound to a model field holding the original controller's demo HTML string (headings, link, list, pre, code, cite, dl) 1:1.` ) ).
-
-    result = VALUE #( BASE result
+        notes = `NOTE: FormattedText.htmlText bound to a model field holding the original controller's demo HTML string (headings, link, list, pre, code, cite, dl) 1:1.` )
       ( module = `sap.m`              control = `sap.m.GenericTag`                      name = `GenericTag`                                    class = `z2ui5_cl_smpc_app_027` path = `src/02/01/z2ui5_cl_smpc_app_027.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2173,29 +2192,54 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: the original binds expanded="{device>/isNoPhone}" (a demo-kit helper model that abap2UI5 does not carry); expressed over the framework own device> model as the expression {=` &&
                  ` !${device>/system/phone} } - same truth value, different binding text (app 030 precedent, live-verified there on desktop and phone emulation).` )
-      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarInlineMode`                          class = `z2ui5_cl_smpc_app_379` path = `src/01/01/z2ui5_cl_smpc_app_379.clas.abap`
+      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarInlineIcons`                         class = `z2ui5_cl_smpc_app_467` path = `src/01/01/z2ui5_cl_smpc_app_467.clas.abap`
         score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        notes = `NOTE: the original binds expanded="{device>/isNoPhone}" (a demo-kit helper model that abap2UI5 does not carry); expressed over the framework own device> model as the expression {=` &&
-                 ` !${device>/system/phone} } - same truth value, different binding text (app 030 precedent, live-verified there on desktop and phone emulation).` )
-      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarMulti`                               class = `z2ui5_cl_smpc_app_380` path = `src/01/01/z2ui5_cl_smpc_app_380.clas.abap`
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: The controller builds the IconTabFilters (and their content Texts) in a loop with addItem( ). abap2UI5 has no client-side control factory, so the port binds the items aggregation to a table` &&
+                 ` holding the same 12 rows (Tab 1..12 / Content 1..12) and declares one IconTabFilter template with its content Text - structural-diff reports both as control extra because the original's view carries` &&
+                 ` only the empty IconTabBar. // NOTE: onInit gives every tab a RANDOM icon out of three (history, home, employee) with Math.random. A backend cannot repeat a client-side random draw, so the port walks` &&
+                 ` the same three icons in order (index MOD 3) - same three icons over the same twelve tabs, deterministic instead of random.` )
+      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarInlineMode`                          class = `z2ui5_cl_smpc_app_379` path = `src/01/01/z2ui5_cl_smpc_app_379.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: the original binds expanded="{device>/isNoPhone}" (a demo-kit helper model that abap2UI5 does not carry); expressed over the framework own device> model as the expression {=` &&
                  ` !${device>/system/phone} } - same truth value, different binding text (app 030 precedent, live-verified there on desktop and phone emulation).` ) ).
 
     result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarMulti`                               class = `z2ui5_cl_smpc_app_380` path = `src/01/01/z2ui5_cl_smpc_app_380.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: the original binds expanded="{device>/isNoPhone}" (a demo-kit helper model that abap2UI5 does not carry); expressed over the framework own device> model as the expression {=` &&
+                 ` !${device>/system/phone} } - same truth value, different binding text (app 030 precedent, live-verified there on desktop and phone emulation).` )
       ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarNoIcons`                             class = `z2ui5_cl_smpc_app_381` path = `src/01/01/z2ui5_cl_smpc_app_381.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: the original binds expanded="{device>/isNoPhone}" (a demo-kit helper model that abap2UI5 does not carry); expressed over the framework own device> model as the expression {=` &&
                  ` !${device>/system/phone} } - same truth value, different binding text (app 030 precedent, live-verified there on desktop and phone emulation).` )
+      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarOverflowSelectList`                  class = `z2ui5_cl_smpc_app_465` path = `src/01/01/z2ui5_cl_smpc_app_465.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: The controller builds the IconTabFilters (and their content Texts) in a loop with addItem( ). abap2UI5 has no client-side control factory, so the port binds the items aggregation to a table` &&
+                 ` holding the same 30 rows (Tab 1..30 / Content 1..30) and declares one IconTabFilter template with its content Text - structural-diff reports both as control extra because the original's view carries` &&
+                 ` only the empty IconTabBar.` ) ).
+
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarStartAndEndOverflow`                 class = `z2ui5_cl_smpc_app_466` path = `src/02/01/z2ui5_cl_smpc_app_466.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        is_post171 = abap_true
+        notes = `POST-1.71: sap.m.IconTabBar.tabsOverflowMode is @since 1.90 and is the subject of this sample (StartAndEnd), so it is kept 1:1 and the port needs a UI5 runtime >= 1.90. // NOTE: The controller builds` &&
+                 ` the IconTabFilters (and their content Texts) in a loop with addItem( ). abap2UI5 has no client-side control factory, so the port binds the items aggregation to a table holding the same 50 rows (Tab` &&
+                 ` 1..50 / Content 1..50) and declares one IconTabFilter template with its content Text - structural-diff reports both as control extra because the original's view carries only the empty IconTabBar.`
+        post171 = `sap.m.IconTabBar.tabsOverflowMode is @since 1.90 and is the subject of this sample (StartAndEnd), so it is kept 1:1 and the port needs a UI5 runtime >= 1.90.` )
       ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarStretchContent`                      class = `z2ui5_cl_smpc_app_030` path = `src/01/01/z2ui5_cl_smpc_app_030.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed); incl. the phone-emulation device> check`
         notes = `NOTE: the original binds expanded="{device>/isNoPhone}" (a demo-kit helper model); expressed over the framework's device> model as the expression {= !${device>/system/phone} } - same truth value,` &&
-                 ` different binding text. Confirmed on desktop and phone emulation in the 2026-07-20 live check.` )
+                 ` different binding text. Confirmed on desktop and phone emulation in the 2026-07-20 live check.` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarSubTabs`                             class = `z2ui5_cl_smpc_app_382` path = `src/02/01/z2ui5_cl_smpc_app_382.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2203,9 +2247,7 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = `POST-1.71: the sap.m.IconTabFilter items aggregation (nested sub tabs) is @since 1.77, newer than the 1.71 floor, but it IS the sample - both IconTabBars exist to show sub tabs. Kept for the 1:1 port;` &&
                  ` the app needs a UI5 release >= 1.77.`
         post171 = `the sap.m.IconTabFilter items aggregation (nested sub tabs) is @since 1.77, newer than the 1.71 floor, but it IS the sample - both IconTabBars exist to show sub tabs. Kept for the 1:1 port; the app` &&
-                 ` needs a UI5 release >= 1.77.` ) ).
-
-    result = VALUE #( BASE result
+                 ` needs a UI5 release >= 1.77.` )
       ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabSeparator`                              class = `z2ui5_cl_smpc_app_383` path = `src/01/01/z2ui5_cl_smpc_app_383.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
@@ -2340,10 +2382,18 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
 
     result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Input`                           name = `InputSuggestionsDynamic`                       class = `z2ui5_cl_smpc_app_473` path = `src/01/01/z2ui5_cl_smpc_app_473.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: onSuggest builds a StartsWith filter on Name from the typed term (or an empty filter list) and applies it to the suggestionItems BINDING. Reproduced 1:1 through follow_up_action binding_call on` &&
+                 ` that aggregation, so the model stays untouched (app 022 precedent). The suggest event round-trips per keystroke, which is what the sample is about; abap2UI5 serializes round-trips, so an event fired` &&
+                 ` while one is in flight is dropped and the list catches up when typing pauses. // LIVE-TEST: The suggest wire and its binding_call filter are unverified in a running system.` )
       ( module = `sap.m`              control = `sap.m.Input`                           name = `InputTypes`                                    class = `z2ui5_cl_smpc_app_159` path = `src/01/01/z2ui5_cl_smpc_app_159.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        notes = `NOTE: Five Inputs demonstrating the input types Text / Email / Tel / Number / Url with labelFor Labels, reproduced 1:1.` )
+        notes = `NOTE: Five Inputs demonstrating the input types Text / Email / Tel / Number / Url with labelFor Labels, reproduced 1:1.` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Input`                           name = `InputValueState`                               class = `z2ui5_cl_smpc_app_032` path = `src/02/01/z2ui5_cl_smpc_app_032.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -3935,6 +3985,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.StandardListItem`                name = `StandardListItemDescription`                   class = `z2ui5_cl_smpc_app_202` path = `src/01/01/z2ui5_cl_smpc_app_202.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+      ( module = `sap.m`              control = `sap.m.StandardListItem`                name = `StandardListItemIcon`                          class = `z2ui5_cl_smpc_app_468` path = `src/01/01/z2ui5_cl_smpc_app_468.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
       ( module = `sap.m`              control = `sap.m.StandardListItem`                name = `StandardListItemInfo`                          class = `z2ui5_cl_smpc_app_208` path = `src/01/01/z2ui5_cl_smpc_app_208.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -4542,9 +4595,17 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.ui.core.StandardMargins`           name = `StandardMarginsAll`                            class = `z2ui5_cl_smpc_app_088` path = `src/01/01/z2ui5_cl_smpc_app_088.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
-      ( module = `sap.m`              control = `sap.ui.core.StandardMargins`           name = `StandardMarginsSingleSided`                    class = `z2ui5_cl_smpc_app_430` path = `src/01/01/z2ui5_cl_smpc_app_430.clas.abap`
+      ( module = `sap.m`              control = `sap.ui.core.StandardMargins`           name = `StandardMarginsCollapse`                       class = `z2ui5_cl_smpc_app_469` path = `src/01/01/z2ui5_cl_smpc_app_469.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+      ( module = `sap.m`              control = `sap.ui.core.StandardMargins`           name = `StandardMarginsResponsive`                     class = `z2ui5_cl_smpc_app_472` path = `src/01/01/z2ui5_cl_smpc_app_472.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+      ( module = `sap.m`              control = `sap.ui.core.StandardMargins`           name = `StandardMarginsSingleSided`                    class = `z2ui5_cl_smpc_app_430` path = `src/01/01/z2ui5_cl_smpc_app_430.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.ui.core.StandardMargins`           name = `StandardMarginsTwoSided`                       class = `z2ui5_cl_smpc_app_464` path = `src/01/01/z2ui5_cl_smpc_app_464.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )

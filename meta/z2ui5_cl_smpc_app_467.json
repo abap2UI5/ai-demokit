@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_467",
+  "sample": "sap.m.sample.IconTabBarInlineIcons",
+  "entity": "sap.m.IconTabBar",
+  "file": "src/01/01/z2ui5_cl_smpc_app_467.clas.abap",
+  "batch": "b37",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The controller builds the IconTabFilters (and their content Texts) in a loop with addItem( ). abap2UI5 has no client-side control factory, so the port binds the items aggregation to a table holding the same 12 rows (Tab 1..12 / Content 1..12) and declares one IconTabFilter template with its content Text - structural-diff reports both as control extra because the original's view carries only the empty IconTabBar."
+    },
+    {
+      "type": "NOTE",
+      "what": "onInit gives every tab a RANDOM icon out of three (history, home, employee) with Math.random. A backend cannot repeat a client-side random draw, so the port walks the same three icons in order (index MOD 3) - same three icons over the same twelve tabs, deterministic instead of random."
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_smpc_app_470",
+  "sample": "sap.m.sample.ComboBoxFilteringContains",
+  "entity": "sap.m.ComboBox",
+  "file": "src/01/01/z2ui5_cl_smpc_app_470.clas.abap",
+  "batch": "b37",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "onInit calls combobox1.setFilterFunction( ) with a JavaScript callback that matches the search term case-insensitively ANYWHERE in the item text OR in its key. A JS filter callback has no bindable or backend equivalent (app-authored JS functions are the documented boundary), so the port ships the ComboBox with UI5's DEFAULT filtering - starts-with on the text - and the contains-and-key behaviour the sample demonstrates is lost."
+    }
+  ]
+}

@@ -7,6 +7,45 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-22 — batch b37 (sap.m): the IconTabBar/margins tail, 10 ports (apps 465–474)
+
+Ten more, and the batch that produced the most reusable finding of the day.
+
+| app | sample | what it adds |
+|---|---|---|
+| 465 | IconTabBarOverflowSelectList | 30 tabs the controller builds in a loop → a bound `items` template |
+| 466 | IconTabBarStartAndEndOverflow | 50 tabs plus `tabsOverflowMode` @1.90 (POST_171, `src/02`) |
+| 467 | IconTabBarInlineIcons | 12 tabs, `headerMode` Inline, the random icon walk made deterministic |
+| 468 | StandardListItemIcon | list with sorter and the mock's picture icons |
+| 469 | StandardMarginsCollapse | collapsing margins, static |
+| 470 | ComboBoxFilteringContains | the custom `setFilterFunction` boundary (IMPROVISED) |
+| 471 | ComboBoxFilteringStartsWith | the same boundary, where only the key half is lost |
+| 472 | StandardMarginsResponsive | `sapUiResponsiveMargin`, static |
+| 473 | InputSuggestionsDynamic | `suggest` → `binding_call` filter on `suggestionItems` |
+| 474 | FlexBoxNav | `core:HTML` anchors as flex items plus the sample's `style.css` |
+
+**A bound aggregation needs its aggregation TAG when the control has no default
+aggregation.** All three IconTabBar ports rendered as an empty bar with
+`Cannot add direct child without default aggregation defined for control
+sap.m.IconTabBar` — the template has to sit inside `)->ele( \`items\` )`, exactly
+as app 087 writes it for the static case. The render gate is what caught it;
+`structural-diff` was 0 for all three, because the template control IS there,
+just parented wrongly. Worth knowing before the next bound-aggregation port:
+Tokenizer (`tokens`) and Select (`items`) have a default aggregation and work
+without the tag, IconTabBar does not.
+
+**A JS `setFilterFunction` is a real boundary, not a NOTE.** Apps 470/471 call
+it in `onInit` with a callback that matches the term case-insensitively
+anywhere in the text OR in the key. There is no bindable or backend equivalent
+(the app-authored-JS-function class), so both ports carry UI5's default
+filtering and declare what is lost — `IMPROVISED`, not a note about a fold.
+
+Two smaller lessons: a CSS literal glued from one rule per line still needs
+splitting at 255 characters (app 474's `.ne-flexbox2 li` rule is 316 on its
+own), and the random-icon loop of app 467 is the second "Math.random in a
+sample" case of the day — same treatment as app 444, a deterministic walk over
+the same list with the deviation saying so.
+
 ## 2026-08-22 — batch b36 (sap.m): the ComboBox/Input family, 10 ports (apps 455–464)
 
 Ten small samples in one batch — the ComboBox, MultiComboBox, Input and

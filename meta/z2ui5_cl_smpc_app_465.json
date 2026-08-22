@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_smpc_app_465",
+  "sample": "sap.m.sample.IconTabBarOverflowSelectList",
+  "entity": "sap.m.IconTabBar",
+  "file": "src/01/01/z2ui5_cl_smpc_app_465.clas.abap",
+  "batch": "b37",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The controller builds the IconTabFilters (and their content Texts) in a loop with addItem( ). abap2UI5 has no client-side control factory, so the port binds the items aggregation to a table holding the same 30 rows (Tab 1..30 / Content 1..30) and declares one IconTabFilter template with its content Text - structural-diff reports both as control extra because the original's view carries only the empty IconTabBar."
+    }
+  ]
+}
