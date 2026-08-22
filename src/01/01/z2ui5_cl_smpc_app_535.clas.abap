@@ -826,9 +826,15 @@ CLASS z2ui5_cl_smpc_app_535 IMPLEMENTATION.
 
   METHOD total_calc.
 
-    productstotalprice = REDUCE #( INIT s = CONV p( 0 )
-                                   FOR row IN productcollection
-                                   NEXT s = s + row-price ).
+    " a plain LOOP, not REDUCE: the downport rule only rewrites a REDUCE whose
+    " result type is named (REDUCE i( ... ) elsewhere in the corpus downports
+    " fine); a REDUCE #( ) is left standing and reaches the v702 gate as a
+    " parser_error. p LENGTH 8 DECIMALS 2 cannot be named inline, so the sum
+    " is accumulated here instead
+    CLEAR productstotalprice.
+    LOOP AT productcollection INTO DATA(row).
+      productstotalprice = productstotalprice + row-price.
+    ENDLOOP.
 
   ENDMETHOD.
 
