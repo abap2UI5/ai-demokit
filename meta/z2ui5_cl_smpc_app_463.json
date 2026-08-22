@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_smpc_app_463",
+  "sample": "sap.m.sample.ComboBoxDefaultFiltering",
+  "entity": "sap.m.ComboBox",
+  "file": "src/01/01/z2ui5_cl_smpc_app_463.clas.abap",
+  "batch": "b36",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": []
+}

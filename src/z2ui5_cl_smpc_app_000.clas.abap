@@ -1496,10 +1496,23 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22` )
-      ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxGrouping`                              class = `z2ui5_cl_smpc_app_199` path = `src/01/01/z2ui5_cl_smpc_app_199.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxClearIcon`                             class = `z2ui5_cl_smpc_app_455` path = `src/02/01/z2ui5_cl_smpc_app_455.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22`
+        is_post171 = abap_true
+        notes = `POST-1.71: sap.m.ComboBox inherits showClearIcon from sap.m.ComboBoxBase, where it is @since 1.96 - it is the subject of this sample, so it is kept 1:1 and the port needs a UI5 runtime >= 1.96.`
+        post171 = `sap.m.ComboBox inherits showClearIcon from sap.m.ComboBoxBase, where it is @since 1.96 - it is the subject of this sample, so it is kept 1:1 and the port needs a UI5 runtime >= 1.96.` )
+      ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxDefaultFiltering`                      class = `z2ui5_cl_smpc_app_463` path = `src/01/01/z2ui5_cl_smpc_app_463.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22` )
+      ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxGrouping`                              class = `z2ui5_cl_smpc_app_199` path = `src/01/01/z2ui5_cl_smpc_app_199.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxWrapping`                              class = `z2ui5_cl_smpc_app_384` path = `src/01/01/z2ui5_cl_smpc_app_384.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2308,6 +2321,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` (autocomplete='false'); the app needs a UI5 release >= 1.108 to render it. Not tracked by property-check (declared by policy).` ) ).
 
     result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Input`                           name = `InputAssistedTwoValues`                        class = `z2ui5_cl_smpc_app_456` path = `src/01/01/z2ui5_cl_smpc_app_456.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
       ( module = `sap.m`              control = `sap.m.Input`                           name = `InputDescription`                              class = `z2ui5_cl_smpc_app_367` path = `src/02/01/z2ui5_cl_smpc_app_367.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2319,12 +2335,15 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.Input`                           name = `InputPassword`                                 class = `z2ui5_cl_smpc_app_368` path = `src/01/01/z2ui5_cl_smpc_app_368.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+      ( module = `sap.m`              control = `sap.m.Input`                           name = `InputSuggestionsCustomFilter`                  class = `z2ui5_cl_smpc_app_460` path = `src/01/01/z2ui5_cl_smpc_app_460.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Input`                           name = `InputTypes`                                    class = `z2ui5_cl_smpc_app_159` path = `src/01/01/z2ui5_cl_smpc_app_159.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        notes = `NOTE: Five Inputs demonstrating the input types Text / Email / Tel / Number / Url with labelFor Labels, reproduced 1:1.` ) ).
-
-    result = VALUE #( BASE result
+        notes = `NOTE: Five Inputs demonstrating the input types Text / Email / Tel / Number / Url with labelFor Labels, reproduced 1:1.` )
       ( module = `sap.m`              control = `sap.m.Input`                           name = `InputValueState`                               class = `z2ui5_cl_smpc_app_032` path = `src/02/01/z2ui5_cl_smpc_app_032.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2335,7 +2354,21 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` (the client method exposes the MessageToast options object - source-verified in Messages.js). The original's preventDefault is not needed: the Links carry no href, so there is no default navigation` &&
                  ` to suppress.`
         post171 = `showClearIcon (since UI5 1.94) on three inputs is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.94 to render it. // the two formattedValueStateText aggregations (a` &&
-                 ` FormattedText carrying Links, since UI5 1.78) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.78 to render them.` )
+                 ` FormattedText carrying Links, since UI5 1.78) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.78 to render them.` ) ).
+
+    lv_text1 = `NOTE: onLiveChange calls this.byId('getValue').setText(newValue) on every keystroke. That is the one leg of this sample that cannot become a binding: the Text has to show what oInput.getValue()` &&
+               ` returns even while valueLiveUpdate is off and the model value lags behind, which is exactly what the sample compares. The port therefore keeps a real round-trip per keystroke (the value travels as` &&
+               ` ${$parameters>/value}), and abap2UI5 serializes round-trips: while one is in flight the next liveChange is DROPPED, so under fast typing the Text shows the last completed trip and catches up as soon` &&
+               ` as typing pauses. // NOTE: /ValueLiveUpdate and /InputValue are plain model fields in the original too; the port binds the same three fields two-way (Switch state, Input value/valueLiveUpdate, the` &&
+               ` second Text), so only the getValue Text needs the wire. // LIVE-TEST: The per-keystroke liveChange round-trip and the valueLiveUpdate switch driving when the model value follows are unverified in a` &&
+               ` running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Input`                           name = `InputValueUpdate`                              class = `z2ui5_cl_smpc_app_462` path = `src/01/01/z2ui5_cl_smpc_app_462.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = lv_text1 ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Input`                           name = `InputWrapping`                                 class = `z2ui5_cl_smpc_app_369` path = `src/01/01/z2ui5_cl_smpc_app_369.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
@@ -2799,6 +2832,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.MultiComboBox`                   name = `MultiComboBoxDefaultFiltering`                 class = `z2ui5_cl_smpc_app_459` path = `src/01/01/z2ui5_cl_smpc_app_459.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22.0` )
       ( module = `sap.m`              control = `sap.m.MultiComboBox`                   name = `MultiComboBoxGrouping`                         class = `z2ui5_cl_smpc_app_039` path = `src/01/01/z2ui5_cl_smpc_app_039.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2826,6 +2863,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         post171 = `showSelectAll (since UI5 1.111) is the sample's whole point and kept 1:1 - the app needs a UI5 release >= 1.111 for the select-all checkbox in the picker.` ) ).
 
     result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.MultiComboBox`                   name = `MultiComboBoxTwoColumnsLayout`                 class = `z2ui5_cl_smpc_app_458` path = `src/01/01/z2ui5_cl_smpc_app_458.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22.0` )
       ( module = `sap.m`              control = `sap.m.MultiComboBox`                   name = `MultiComboBoxWrapping`                         class = `z2ui5_cl_smpc_app_385` path = `src/01/01/z2ui5_cl_smpc_app_385.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2847,6 +2888,14 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` (MultiInputExt), bound aggregation, tokens, sorter binding-info`
         notes = lv_text1
         post171 = `showClearIcon (since UI5 1.94) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.94 to render it.` ) ).
+
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputDatabinding`                         class = `z2ui5_cl_smpc_app_457` path = `src/01/01/z2ui5_cl_smpc_app_457.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+      ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputMaxTokens`                           class = `z2ui5_cl_smpc_app_461` path = `src/01/01/z2ui5_cl_smpc_app_461.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
 
     lv_text1 = `NOTE: handleValueHelp is reproduced 1:1 through two follow-up actions in the order the controller has them: cs_event-binding_call filters the dialog's items binding by NAME Contains the typed value` &&
                ` (the model stays untouched, exactly like oValueHelpDialog.getBinding('items').filter([...])), then cs_event-control_by_id open( value ) opens it with that same value in its search field -` &&
@@ -4494,6 +4543,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
       ( module = `sap.m`              control = `sap.ui.core.StandardMargins`           name = `StandardMarginsSingleSided`                    class = `z2ui5_cl_smpc_app_430` path = `src/01/01/z2ui5_cl_smpc_app_430.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+      ( module = `sap.m`              control = `sap.ui.core.StandardMargins`           name = `StandardMarginsTwoSided`                       class = `z2ui5_cl_smpc_app_464` path = `src/01/01/z2ui5_cl_smpc_app_464.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
       ( module = `sap.m`              control = `sap.ui.core.StandardMargins`           name = `StandardNegativeMarginsTwoSided`               class = `z2ui5_cl_smpc_app_403` path = `src/01/01/z2ui5_cl_smpc_app_403.clas.abap`

@@ -126,7 +126,11 @@ const ADVISORY_BUDGET = {
   // Slider/ColorPicker/SearchField readout), so the original's live handler is
   // what a 1:1 port carries; the final-value event the rule prefers would be a
   // fidelity deviation, not a fix
-  'live-event-roundtrip': 6,
+  // raised 2026-08-22 (batch b36, app 462 InputValueUpdate): the same shape -
+  // the sample exists to COMPARE oInput.getValue() with the model property, so
+  // the getValue Text has to follow every keystroke; a final-value event would
+  // erase the difference the sample demonstrates
+  'live-event-roundtrip': 7,
   // apps 005/080/121/127/236 — a press/post wired next to a LITERAL
   // enabled="false". The rule doc grants this exact case ("a 1:1 port of a
   // sample demonstrating the disabled STATE legitimately carries the original's

@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_smpc_app_455",
+  "sample": "sap.m.sample.ComboBoxClearIcon",
+  "entity": "sap.m.ComboBox",
+  "file": "src/02/01/z2ui5_cl_smpc_app_455.clas.abap",
+  "batch": "b36",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.ComboBox inherits showClearIcon from sap.m.ComboBoxBase, where it is @since 1.96 - it is the subject of this sample, so it is kept 1:1 and the port needs a UI5 runtime >= 1.96."
+    }
+  ]
+}

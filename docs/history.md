@@ -7,6 +7,41 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-22 — batch b36 (sap.m): the ComboBox/Input family, 10 ports (apps 455–464)
+
+Ten small samples in one batch — the ComboBox, MultiComboBox, Input and
+MultiInput filtering/suggestion family plus one margins page. They share the
+same two mocks, so the batch is mostly the same shape ten times, which is
+exactly what makes it cheap: nine of the ten are pure view + data with no wire
+at all.
+
+| app | sample | what it adds |
+|---|---|---|
+| 455 | ComboBoxClearIcon | `showClearIcon` @1.96 (POST_171, `src/02`) |
+| 456 | InputAssistedTwoValues | `core:ListItem` suggestions with `additionalText` |
+| 457 | MultiInputDatabinding | a bound `tokens` aggregation with a sorter |
+| 458 | MultiComboBoxTwoColumnsLayout | `showSecondaryValues` over `core:ListItem` |
+| 459 | MultiComboBoxDefaultFiltering | the sorter binding-info on `items` |
+| 460 | InputSuggestionsCustomFilter | plain `core:Item` suggestions (the custom filter function stays a JS-only detail) |
+| 461 | MultiInputMaxTokens | `maxTokens` with suggestion items |
+| 462 | InputValueUpdate | the one wire of the batch: a real per-keystroke round-trip |
+| 463 | ComboBoxDefaultFiltering | the 70-row countries mock, `additionalText` = key |
+| 464 | StandardMarginsTwoSided | two-sided margin classes, fully static |
+
+**App 462 is the interesting one, and it is deliberately a round-trip.** The
+sample exists to COMPARE `oInput.getValue()` with the model property while
+`valueLiveUpdate` is off — so the "getValue" Text must follow every keystroke,
+and a binding cannot express a value the model does not have yet. The port
+carries the live wire and the sidecar says what that costs: abap2UI5 serializes
+round-trips, so an event fired while one is in flight is dropped and the Text
+catches up when typing pauses. The `live-event-roundtrip` advisory budget rose
+6 → 7 for it, with the same rationale the six existing entries carry.
+
+A generator bug worth remembering: padding a field name to a fixed width and
+then appending `TYPE` produced `suppliernameTYPE string` in four ports —
+abaplint caught it as a parser error, but only because the corpus is linted;
+the emitted ABAP looked plausible in a diff.
+
 ## 2026-08-22 — batch b35 (sap.m + sap.f): eight ports, three of them the awkward ones (apps 447–454)
 
 The batch where the cheap rows ran out. Four of the eight needed an idiom the

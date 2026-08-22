@@ -15,11 +15,11 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 
 | Aspect | State |
 |---|---|
-| Ports | **453** sidecars in `meta/` (src/01 OpenUI5 <= 1.71: 311 · src/02 OpenUI5 > 1.71: 142) |
-| Per library | sap.f: 21 · sap.m: 254 · sap.tnt: 17 · sap.ui: 130 · sap.uxap: 31 |
-| Status ladder | 37 `generated` · 355 `reviewed` · 61 `checked` (live-verified) |
-| Deviations | 5 DROPPED_171 · 70 IMPROVISED · 27 LIVE_TEST · 1094 NOTE · 210 POST_171 |
-| Open LIVE_TESTs | **27 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
+| Ports | **463** sidecars in `meta/` (src/01 OpenUI5 <= 1.71: 320 · src/02 OpenUI5 > 1.71: 143) |
+| Per library | sap.f: 21 · sap.m: 264 · sap.tnt: 17 · sap.ui: 130 · sap.uxap: 31 |
+| Status ladder | 47 `generated` · 355 `reviewed` · 61 `checked` (live-verified) |
+| Deviations | 5 DROPPED_171 · 70 IMPROVISED · 28 LIVE_TEST · 1096 NOTE · 211 POST_171 |
+| Open LIVE_TESTs | **28 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 2 structural-diff · 4 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_smpc_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_smpc_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_smpc_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_smpc_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_smpc_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
 
