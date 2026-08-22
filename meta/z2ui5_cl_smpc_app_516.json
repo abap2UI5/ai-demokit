@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_516",
+  "sample": "sap.m.sample.SegmentedButtonVSD",
+  "entity": "sap.m.SegmentedButton",
+  "file": "src/01/01/z2ui5_cl_smpc_app_516.clas.abap",
+  "batch": "b42",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "handleOpenDialog loads Dialog.fragment.xml lazily and opens it; the port builds the same ViewSettingsDialog in its own chain and shows it with popup_display. handleConfirm toasts the dialog's filterString, which travels as an event arg, so the toast text is the dialog's own."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The ViewSettingsDialog and the filterString toast are unverified in a running system."
+    }
+  ]
+}

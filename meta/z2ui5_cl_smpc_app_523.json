@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_smpc_app_523",
+  "sample": "sap.m.sample.TableSelectCopy",
+  "entity": "sap.m.Table",
+  "file": "src/02/01/z2ui5_cl_smpc_app_523.clas.abap",
+  "batch": "b42",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.plugins.CellSelector is @since 1.119 and sap.m.plugins.CopyProvider is @since 1.110 (its visible property @since 1.114) - all newer than the 1.71 floor. The CellSelector is kept, so the port is filed under src/02."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The CopyProvider is DROPPED. Its extractData is a JavaScript callback that reads each column's app:bindings CustomData and formats it with app:template, and the control REFUSES to be created without one ('extractData property must be defined for Element sap.m.plugins.CopyProvider') - so it is not a matter of copying in a default format, the plugin takes the whole view down. abap2UI5 cannot register such a callback, so the dependents aggregation keeps only the CellSelector and the cell copy is lost (structural-diff reports the CopyProvider element and its extractData as missing). The app: CustomData attributes stay on the four columns 1:1, so nothing about the sample's data description is lost."
+    },
+    {
+      "type": "NOTE",
+      "what": "onVisibleChange / onEnabledChange / onSparseChange call three setters on the CopyProvider. The three CheckBoxes are two-way bound to three flags here instead, so the three CheckBox.select attributes are dropped; with the plugin gone the flags drive nothing, but the toolbar the sample shows is unchanged. The copy BUTTON the controller takes from the plugin and adds to the toolbar goes with it."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The CellSelector and the three CheckBoxes are unverified in a running system."
+    }
+  ]
+}

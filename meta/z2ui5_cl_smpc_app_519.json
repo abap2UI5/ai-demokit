@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_519",
+  "sample": "sap.m.sample.MultiComboBoxSuggestionsAndValueState",
+  "entity": "sap.m.MultiComboBox",
+  "file": "src/02/01/z2ui5_cl_smpc_app_519.clas.abap",
+  "batch": "b42",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "handleValueStateLinkPress only logs in the original; the two FormattedText value-state links raise a constant client-composed toast here so the wire is not dead."
+    },
+    {
+      "type": "POST_171",
+      "what": "MultiComboBox has no formattedValueStateText aggregation before 1.78 - newer than the 1.71 floor. The two FormattedText value states with their links are the point of the sample, so the aggregation is kept and the port is filed under src/02."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The six value states and the two FormattedText value-state texts with their links are unverified in a running system."
+    }
+  ]
+}

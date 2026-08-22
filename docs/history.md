@@ -7,6 +7,46 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-22 — batch b42 (sap.m): ten ports, five of them post-1.71 (apps 516–525)
+
+| app | sample | what it adds |
+|---|---|---|
+| 516 | SegmentedButtonVSD | a SegmentedButton opening a ViewSettingsDialog; `confirm` carries the dialog's `filterString` |
+| 517 | GenericTileAsLaunchTile | eleven launch tiles — `frameType` OneByHalf/TwoByHalf @1.83, `url` @1.76, `appShortcut`/`systemInfo` @1.92 (POST_171, `src/02`) |
+| 518 | ObjectHeaderActiveAttributes | the feedback Dialog built in a chain, plus `ariaHasPopup` @1.97 (POST_171, `src/02`) |
+| 519 | MultiComboBoxSuggestionsAndValueState | six value states and the `formattedValueStateText` aggregation @1.78 (POST_171, `src/02`) |
+| 520 | NotificationListGroupLazyLoading | `sap.m.NotificationList` @1.90 (POST_171, `src/02`); the lazy fill on expand kept as a round-trip |
+| 521 | InputKeyValue | `textFormatMode="KeyValue"` with a value help pre-filtered by the Input's value |
+| 522 | ListLoading | `enableBusyIndicator` + a refresh press that re-reads the bound rows |
+| 523 | TableSelectCopy | the CellSelector @1.119 (POST_171, `src/02`); the CopyProvider **dropped** — see below |
+| 524 | ListDeletion | `mode="Delete"`; the row's description travels and the row leaves the bound table |
+| 525 | ListGrowingUpwards | `growingDirection="Upwards"` over the full mock collection |
+
+Three findings, one of them a correction to an earlier port:
+
+- **A control can refuse to be created without a JS callback.** App 523's
+  `sap.m.plugins.CopyProvider` was first ported with the plugin kept and only
+  `extractData` declared IMPROVISED, on the reading that it would then copy in
+  some default format. It does not: UI5 throws `extractData property must be
+  defined for Element sap.m.plugins.CopyProvider` at CREATE time and the WHOLE
+  view goes down with it. The plugin is therefore dropped, not improvised-
+  around, and the sidecar says so. When a JS callback cannot be registered, ask
+  whether the control tolerates its absence before declaring it improvised.
+- **`URLHELPER` is its own event target, not a `control_global` object.** App
+  518 first wired `URLHelper.redirect` as
+  `cs_event-control_global` + ``( `URLHELPER` ) ( `redirect` )``, which the
+  frontend rejects silently (the accepted globals are MESSAGE_TOAST,
+  MESSAGE_BOX, VIEW_SLOTS, ROUTER, BUSY_INDICATOR, THEMING, POPUP,
+  INVISIBLE_MESSAGE, FORMATTING). The redirect goes through
+  `cs_event-urlhelper` with ``( `REDIRECT` ) ( `{ URL: '…', NEW_WINDOW: true }` )``,
+  as apps 073 and 084 already did.
+- **`DELETE itab WHERE col = col.` compares the column with itself** — the
+  b37 finding, found twice more here (apps 520 and 524) and once in an older
+  port (app 085, fixed in this batch). The right-hand name inside WHERE always
+  resolves to the COLUMN, never to the like-named local, so the statement
+  empties the table. Name the event-arg variable `del_<col>`. The whole corpus
+  was swept for the shape; those three were all of it.
+
 ## 2026-08-22 — batch b41 (sap.m): ten ports, four of them post-1.71 members (apps 506–515)
 
 | app | sample | what it adds |
@@ -59,13 +99,13 @@ Two findings, both already in the corpus and both re-learned the hard way:
   aggregation is something else.** `sap.m.MultiInput`'s default aggregation is
   `suggestionItems`, so a `Token` template directly under it is rejected —
   apps 501 and 504 rendered `Missing template or factory function for
-  aggregation tokens` until the template moved inside `)->ele( \`tokens\` )`.
+  aggregation tokens` until the template moved inside ``)->ele( `tokens` )``.
   App 085 got away without it because its control is a `Tokenizer`, whose
   default aggregation IS `tokens`. Same lesson as b37's IconTabBar, different
   control.
-- **`IF client->get_event( ) <> \`X\`. RETURN.` reads as a dead wire.** The
+- **``IF client->get_event( ) <> `X`. RETURN.`` reads as a dead wire.** The
   linter's `event-without-handler` check looks for the event name in an
-  affirmative dispatcher (`= \`X\`` or `WHEN \`X\``); the negated guard app 496
+  affirmative dispatcher (``= `X` `` or ``WHEN `X` ``); the negated guard app 496
   first used matched nothing, so a fully handled event was reported as raised
   and never handled. Write the dispatcher the way the recipe prescribes.
 
@@ -157,7 +197,7 @@ Ten more, and the batch that produced the most reusable finding of the day.
 **A bound aggregation needs its aggregation TAG when the control has no default
 aggregation.** All three IconTabBar ports rendered as an empty bar with
 `Cannot add direct child without default aggregation defined for control
-sap.m.IconTabBar` — the template has to sit inside `)->ele( \`items\` )`, exactly
+sap.m.IconTabBar` — the template has to sit inside ``)->ele( `items` )``, exactly
 as app 087 writes it for the static case. The render gate is what caught it;
 `structural-diff` was 0 for all three, because the template control IS there,
 just parented wrongly. Worth knowing before the next bound-aggregation port:

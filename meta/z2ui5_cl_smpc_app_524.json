@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_524",
+  "sample": "sap.m.sample.ListDeletion",
+  "entity": "sap.m.List",
+  "file": "src/01/01/z2ui5_cl_smpc_app_524.clas.abap",
+  "batch": "b42",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "handleDelete sends an OData remove for the row's binding path. The port deletes the row from the bound table (the ProductId travels as an event arg), which is the same disappearance; the focus handling the original attaches to updateFinished has no equivalent and is dropped."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The delete wire is unverified in a running system."
+    }
+  ]
+}

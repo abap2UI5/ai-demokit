@@ -3,7 +3,7 @@
 
 # The sample catalogue
 
-Every port in this repository — 528 of them — with what it shows and a
+Every port in this repository — 538 of them — with what it shows and a
 link to its source. This is the [overview app](src/z2ui5_cl_smpc_app_000.clas.abap)
 as a page you can read here, before installing anything.
 
@@ -44,7 +44,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 
 ### sap.m
 
-299 port(s).
+309 port(s).
 
 | Sample | Class |
 |---|---|
@@ -252,6 +252,11 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.m.ObjectHeader** — Object Header Responsive II<br>This is a responsive Object Header with a Title, 2 Statuses/Attributes rendered below the title in a Master/Detail mode (fullScreenOptimized = false).<br><sub>objectheader object header sap.m objectheaderresponsiveii objectattribute objectstatus objectmarker icontabbar icontabfilter image text</sub><br><sub>○ generated · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_513`](src/01/01/z2ui5_cl_smpc_app_513.clas.abap) |
 | **sap.m.FlexBox** — Flex Box - Size Adjustments<br>Automatic size adjustments can be achieved for Flex Items with the use of Flex Item Data settings on the contained controls.<br><sub>flexbox flex box sap.m flexboxsizeadjustments vbox panel button flexitemdata</sub><br><sub>○ generated · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_514`](src/01/01/z2ui5_cl_smpc_app_514.clas.abap) |
 | **sap.m.Input** — Input - Assisted<br>Assisted input is available via suggestions - shown as you type - and a value help dialog.<br><sub>input sap.m inputassisted label selectdialog standardlistitem</sub><br><sub>○ generated · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_515`](src/01/01/z2ui5_cl_smpc_app_515.clas.abap) |
+| **sap.m.SegmentedButton** — Segmented Button in View Settings Dialog<br>SegmentedButtonVSD<br><sub>segmentedbutton segmented button sap.m segmentedbuttonvsd viewsettingsdialog viewsettingsitem viewsettingsfilteritem</sub><br><sub>○ generated · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_516`](src/01/01/z2ui5_cl_smpc_app_516.clas.abap) |
+| **sap.m.Input** — Input - Key and Value<br>Assisted input is available via suggestions - shown as you type - and a value help dialog.<br><sub>input sap.m inputkeyvalue label text selectdialog standardlistitem</sub><br><sub>○ generated · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_521`](src/01/01/z2ui5_cl_smpc_app_521.clas.abap) |
+| **sap.m.List** — List - Loading Indication<br>ListLoading<br><sub>list sap.m listloading overflowtoolbar title toolbarspacer button standardlistitem</sub><br><sub>○ generated · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_522`](src/01/01/z2ui5_cl_smpc_app_522.clas.abap) |
+| **sap.m.List** — List - Deletion<br>ListDeletion<br><sub>list sap.m listdeletion standardlistitem</sub><br><sub>○ generated · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_524`](src/01/01/z2ui5_cl_smpc_app_524.clas.abap) |
+| **sap.m.List** — List - Growing Upwards<br>ListGrowingUpwards<br><sub>list sap.m listgrowingupwards standardlistitem</sub><br><sub>○ generated · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_525`](src/01/01/z2ui5_cl_smpc_app_525.clas.abap) |
 | **sap.m.Carousel** — Carousel with Controls<br>With the Carousel a user can browse through multi-page content by swiping left or right.<br><sub>carousel sap.m user browse through title image text scrollcontainer list standardlistitem</sub><br><sub>✓ checked · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_006`](src/02/01/z2ui5_cl_smpc_app_006.clas.abap) |
 | **sap.m.DatePicker** — Date Picker - Open by Another Control<br>This example shows Date Picker which is opened by another control.<br><sub>datepicker date picker sap.m open another title vbox label button link</sub><br><sub>✓ checked · 5 deviations</sub> | [`Z2UI5_CL_SMPC_APP_016`](src/02/01/z2ui5_cl_smpc_app_016.clas.abap) |
 | **sap.m.DateRangeSelection**<br>The Date Range Selection is an extension of the Date Picker Control and enables the user to select range of dates.<br><sub>daterangeselection date range selection sap.m single-field input vbox label text</sub><br><sub>✓ checked · 8 deviations</sub> | [`Z2UI5_CL_SMPC_APP_017`](src/02/01/z2ui5_cl_smpc_app_017.clas.abap) |
@@ -347,6 +352,11 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.m.IconTabBar** — Icon Tab Bar - Tabs drag and drop<br>This example shows how the tab filters can be reordered and nested with drag and drop. Works only on desktop devices.<br><sub>icontabbar icon tab bar sap.m icontabbardragdrop label stepinput icontabfilter text</sub><br><sub>○ generated · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_506`](src/02/01/z2ui5_cl_smpc_app_506.clas.abap) |
 | **sap.m.Input** — Input - Custom Value Help Icon<br>This example shows the usage of a custom value help icon instead of the default one.<br><sub>input sap.m inputcustomvaluehelpicon label selectdialog standardlistitem</sub><br><sub>○ generated · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_510`](src/02/01/z2ui5_cl_smpc_app_510.clas.abap) |
 | **sap.m.Select** — Select - Change Events<br>Demonstrates the use of 'change' and 'liveChange' events.<br><sub>select sap.m selectchangeevents</sub><br><sub>○ generated · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_511`](src/02/01/z2ui5_cl_smpc_app_511.clas.abap) |
+| **sap.m.GenericTile** — Launch Tile<br>GenericTileAsLaunchTile<br><sub>generictile generic tile sap.m generictileaslaunchtile label input button tilecontent imagecontent</sub><br><sub>○ generated · 5 deviations</sub> | [`Z2UI5_CL_SMPC_APP_517`](src/02/01/z2ui5_cl_smpc_app_517.clas.abap) |
+| **sap.m.ObjectAttribute** — Object Header – Active Attributes<br>ObjectHeaderActiveAttributes<br><sub>objectattribute object attribute sap.m objectheaderactiveattributes objectheader objectstatus dialog ratingindicator textarea button</sub><br><sub>○ generated · 5 deviations</sub> | [`Z2UI5_CL_SMPC_APP_518`](src/02/01/z2ui5_cl_smpc_app_518.clas.abap) |
+| **sap.m.MultiComboBox** — MultiComboBox - Suggestions with Value State<br>MultiComboBoxSuggestionsAndValueState<br><sub>multicombobox multi combo box sap.m multicomboboxsuggestionsandvaluestate label formattedtext link</sub><br><sub>○ generated · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_519`](src/02/01/z2ui5_cl_smpc_app_519.clas.abap) |
+| **sap.m.NotificationListGroup** — Notification List Group with lazy loading of the notifications<br>NotificationListGroupLazyLoading<br><sub>notificationlistgroup notification list group sap.m notificationlistgrouplazyloading vbox notificationlist flexitemdata button notificationlistitem</sub><br><sub>○ generated · 5 deviations</sub> | [`Z2UI5_CL_SMPC_APP_520`](src/02/01/z2ui5_cl_smpc_app_520.clas.abap) |
+| **sap.m.Table** — Table - CellSelector, CopyProvider<br>TableSelectCopy<br><sub>table sap.m tableselectcopy overflowtoolbar title toolbarspacer checkbox column text columnlistitem objectidentifier objectnumber</sub><br><sub>○ generated · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_523`](src/02/01/z2ui5_cl_smpc_app_523.clas.abap) |
 
 ### sap.uxap
 
