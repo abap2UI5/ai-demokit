@@ -7,6 +7,73 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-22 — batch b48 (sap.f): the nine that were left, and the library is done (apps 577–585)
+
+Every unported `sap.f` sample in one batch, which finishes the library at
+**34 / 34**: four more `FlexibleColumnLayout` router apps, the two `GridList`
+design samples and the three `ShellBar` ones.
+
+| app | sample | what it adds |
+|---|---|---|
+| 577 | FlexibleColumnLayoutColumnResize | `autoFocus` / `restoreFocusOnBackNavigation` and a two-column resize (POST_171, `src/02`) |
+| 578 | FlexibleColumnLayoutWithFullscreenPage | the full-screen column and the way back out of it |
+| 579 | FlexibleColumnLayoutWithOneColumnStart | the reference three-column port: twelve bound `columnsDistribution` sizes, six navigation actions, sort / search / add |
+| 580 | FlexibleColumnLayoutWithTwoColumnStart | the same app that STARTS on two columns — the mid column is bound before the first render |
+| 581 | GridListBoxContainerReal | three `GridBoxLayout` box widths and a static gallery of recommended box content |
+| 582 | GridListKeyboardArrowsNavigation | `borderReached`, four `GridItemLayoutData` span pairs, a slider that drives the container width |
+| 583 | ShellBarProductSwitch | `sap.f.ProductSwitch` in a popover anchored on the button the event ships (POST_171, `src/02`) |
+| 584 | ShellBarWithFlexibleColumnLayout | a `ShellBar` as the `customHeader` over the whole FCL |
+| 585 | ShellBarWithSplitApp | a `ToolPage` with a bound `sideExpanded` and a `NavigationList` side navigation |
+
+Four findings, and one repeat of a trap that has now cost three batches:
+
+- **The five-view router app folds to one view, and the structural diff's whole
+  missing/extra pairing is a PREFIX shift.** Apps 578–580 and 584 each archive
+  five `view.xml` files with three different default namespaces (`sap.f` in
+  FlexibleColumnLayout.view.xml and DetailDetail.view.xml, `sap.m` in
+  List.view.xml and AboutPage.view.xml, `sap.uxap` in Detail.view.xml). One
+  abap2UI5 view has ONE default namespace, so every control that was defaulted
+  in its own file now carries a prefix — `ObjectPageLayout` becomes `uxap:`,
+  `DynamicPage` becomes `f:`, `Avatar` and `ColumnListItem` lose their `m:`.
+  Nothing is added or dropped; the counts just move between prefixes. Each of
+  the four sidecars says so in one deviation rather than one per control.
+- **`FlexibleColumnLayoutSemanticHelper` is JavaScript, so the six navigation
+  buttons derive their visibility from the layout itself.** The samples bind
+  `visible="{= ${/actionButtonsInfo/midColumn/fullScreen} !== null }"`, which
+  is a model the helper writes. The ports read the same three states off the
+  `layout` property directly: full-screen while that column is not full screen,
+  exit-full-screen while it is, close while it is open.
+- **Seed the control's documented default for every field the sample leaves
+  absent** — the same defect class the e2e sweep found the day before, met
+  here BEFORE it could bite. App 579's `columnsDistribution` model has twelve
+  sizes and the sample seeds three; a flat ABAP row would send nine empty
+  strings into `sap.f.FlexibleColumnLayoutData`. All twelve are seeded now, the
+  nine with the value the control would have used anyway.
+- **A sample's own private helper is a DROPPED_171, not an IMPROVISED.** Both
+  GridList samples ship `RevealGrid/RevealGrid.js` — a debugging aid that reads
+  the computed grid template off the rendered DOM and lays an overlay div over
+  each cell. There is no control behind it and no server-side state to toggle,
+  so the `Reveal Grid` ToggleButton keeps its label and loses its `press` in
+  apps 581 and 582 alike.
+
+Two smaller ones from app 582. `onSliderMoved` does
+`byId("container").setWidth(value + "%")` on every `liveChange`; the port makes
+the slider's `value` two-way bound and the `CSSGrid` width an expression over
+it (``{= ${...} + '%' }``), so the width follows the slider in the BROWSER —
+faster than a round trip per keystroke and, unlike one, lossless. And the
+sample's actual subject, the keyboard hand-off BETWEEN the four grids, is an
+IMPROVISED: `onBorderReached` compares `getBoundingClientRect()` geometry
+across all four lists and calls `focusItemByDirection(direction, row, column)`
+on the winner. Neither half travels. The port keeps the toast the sample also
+shows, so arrow keys still navigate within a grid and still report when they
+run out of it.
+
+The repeat: **the right-hand name of a `WHERE` resolves to the COLUMN**, so a
+local variable must not share it (`WHERE category = category` matches every
+row). App 578 hit it after apps 520 and 524 did. It stays cheap to make and
+invisible until the data is wrong, which is why every occurrence gets a comment
+naming the two earlier ones.
+
 ## 2026-08-22 — the first full e2e sweep of the calendar batches: five port defects and a harness rule
 
 The e2e harness was rebuilt after batch b46 and every port of b44, b45 and b46

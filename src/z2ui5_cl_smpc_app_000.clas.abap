@@ -985,6 +985,33 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.42`
         notes = lv_text1 ) ).
 
+    lv_text1 = `POST-1.71: two post-1.71 members are kept for the 1:1 port: sap.f.FlexibleColumnLayout.autoFocus (since UI5 1.76) and restoreFocusOnBackNavigation (since 1.77), both set by the sample's own FCL view.` &&
+               ` // NOTE: the sample is a Component with a ROUTER and three views (FlexibleColumnLayout, List, Detail). abap2UI5 serves one view, so the three become one: the FCL declares its begin and mid column` &&
+               ` pages inline and the routing collapses to the FCL's own layout property - toDetail opens the mid column (TwoColumnsMidExpanded) and handleClose closes it (OneColumn), which is what navTo(layout)` &&
+               ` does. The URL the router also writes has no counterpart, and neither has the sample's own actionButtonsInfo helper state - the close button is the only navigation action and it is always the right` &&
+               ` one to show while the mid column is open. Same fold as app 575. // NOTE: the three archived views declare different default namespaces - FlexibleColumnLayout.view.xml has xmlns="sap.f", List.view.xml` &&
+               ` xmlns="sap.uxap" with m: for sap.m, and Detail.view.xml xmlns="sap.m" with f: for sap.f. One abap2UI5 view can only have one default namespace (sap.m here), so every control of the list page carries`.
+    lv_text1 = lv_text1 && ` a different PREFIX than in its original file even though it is the same control: ObjectPageLayout, ObjectPageDynamicHeaderTitle, ObjectPageSection and ObjectPageSubSection become uxap:-prefixed;` &&
+               ` Title, Button, Label, Text and form:SimpleForm lose their m: prefix; and the FlexibleColumnLayout gains an f: one. The whole missing/extra pairing of this port's structural diff is that shift - no` &&
+               ` control is actually added or dropped, and the doubled Title and Button counts are the two pages' own, counted together in one view. // IMPROVISED: the sample exists to show that a column RESIZE keeps` &&
+               ` the object page's scroll position: List.controller attaches columnResize on the FCL and calls setSelectedSection( sections[iSectionIndex] ) when the begin column goes back to one column, with the` &&
+               ` index kept in the URL by _updateUrlOnNavigate. ObjectPageLayout.selectedSection is an ASSOCIATION (it takes a section instance or its id) and the ids of a bound sections aggregation are generated at` &&
+               ` runtime, so a backend cannot name one; there is no URL to keep the index in either. The port therefore keeps the two columns and the layout switch and lets the object page hold its own scroll`.
+    lv_text1 = lv_text1 && ` position, which is what it does anyway when nothing re-selects a section. // NOTE: webapp/data/sections.json is seeded verbatim - all twelve sections with their sectionName; tableName, which no` &&
+               ` control of this view binds, is carried along as the mock has it. // NOTE: the close Button in the detail page's navigationActions is icon-only in the sample. The port gives it tooltip="Close column"` &&
+               ` so it is reachable with a screen reader - the one accessibility addition in this port. // LIVE-TEST: not yet verified in a running system: the two-column open and close and the bound sections` &&
+               ` aggregation. // NOTE: mvc:View displayBlock="true" has no counterpart: it is a Component-app setting that makes the view fill the page when it is the root of a Component, and abap2UI5 owns the view` &&
+               ` container itself.`.
+    result = VALUE #( BASE result
+      ( module = `sap.f`              control = `sap.f.FlexibleColumnLayout`            name = `FlexibleColumnLayoutColumnResize`              class = `z2ui5_cl_smpc_app_577` path = `src/02/04/z2ui5_cl_smpc_app_577.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.46`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `two post-1.71 members are kept for the 1:1 port: sap.f.FlexibleColumnLayout.autoFocus (since UI5 1.76) and restoreFocusOnBackNavigation (since 1.77), both set by the sample's own FCL view.` ) ).
+
     lv_text1 = `POST-1.71: The sap.f.FlexibleColumnLayout aggregation landmarkInfo and the control sap.f.FlexibleColumnLayoutAccessibleLandmarkInfo it holds are both @since 1.95 - they ARE this sample, so both are` &&
                ` kept 1:1 and the port needs a UI5 runtime >= 1.95. On the 1.71 floor the unknown tag would take the whole view down, which is why the port is filed in src/02. // NOTE: The sample is not a routing` &&
                ` showcase - it drives the columns through an EventBus and the FlexibleColumnLayout's own layout property (setLayout). The port expresses it as ONE view: the List, Detail and DetailDetail views are` &&
@@ -1039,6 +1066,167 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.46`
         notes = lv_text1 ) ).
+
+    lv_text1 = `POST-1.71: one post-1.71 control is kept for the 1:1 port: sap.m.Avatar (since UI5 1.73) on the product page. Unlike its sibling app 579, this sample's FlexibleColumnLayout sets neither autoFocus nor` &&
+               ` restoreFocusOnBackNavigation and carries no column-distribution layoutData. // NOTE: the sample is a Component with a ROUTER and five views (FlexibleColumnLayout, List, Detail, DetailDetail,` &&
+               ` AboutPage). abap2UI5 serves one view, so the five become one: the FCL declares its begin, mid and end column pages inline and the routing collapses to the FCL's own layout property. onListItemPress` &&
+               ` opens the mid column (the helper's level-1 state, TwoColumnsMidExpanded), handleItemPress opens the end column (level 2, ThreeColumnsMidExpanded), handleAboutPress shows the about page (level 3,` &&
+               ` which the manifest pins to EndColumnFullScreen), and the three close / full-screen handlers of each column set the layout the helper would hand them. The URL the router also writes has no` &&
+               ` counterpart. Same fold as apps 575, 577, 579, 580 and 584. // NOTE: this sample's hierarchy is one level deeper than its siblings': the begin column starts on a CATEGORIES page (List.view.xml, the`.
+    lv_text1 = lv_text1 && ` sample's full-screen start page), pressing a category replaces it with the products page (Detail.view.xml) and opens the product's ObjectPage (DetailDetail.view.xml) in the mid column, and a supplier` &&
+               ` opens the supplier-information page (DetailDetailDetail.view.xml) in the end column. The router does the begin-column swap by targeting a different view; the port declares both pages in` &&
+               ` beginColumnPages and swaps them with the one frontend action - control_by_id 'to' on the FCL, which navigates whichever column holds the page. // NOTE: List.controller's onListItemPress looks up the` &&
+               ` FIRST product of the pressed category and opens it, which is what the port does; its phone branch (navTo('detail') with OneColumn) has no counterpart, since a backend cannot read Device.system.phone.` &&
+               ` The products table has no sorter in this sample, and its title is the plain 'Products'. // NOTE: the five archived views declare different default namespaces - FlexibleColumnLayout.view.xml and` &&
+               ` DetailDetail.view.xml have xmlns="sap.f", List.view.xml and AboutPage.view.xml xmlns="sap.m" with f: for sap.f, and Detail.view.xml xmlns="sap.uxap" with m: for sap.m. One abap2UI5 view can only have`.
+    lv_text1 = lv_text1 && ` one default namespace (sap.m here), so every control carries a different PREFIX than in its original file even though it is the same control: ObjectPageLayout, ObjectPageDynamicHeaderTitle,` &&
+               ` ObjectPageSection and ObjectPageSubSection become uxap:-prefixed; DynamicPage and DynamicPageTitle become f:-prefixed (which is why the f:DynamicPage and f:DynamicPageTitle counts read 3 vs 2 - the` &&
+               ` sap.f-defaulted DetailDetail page joins the two the other files already prefix); and FlexBox, VBox, Label, Text, Title, Avatar, ObjectNumber, ObjectIdentifier, ColumnListItem, Link, Button,` &&
+               ` OverflowToolbarButton and form:SimpleForm lose their m: prefix. The whole missing/extra pairing of this port's structural diff is that shift - no control is actually added or dropped. The` &&
+               ` OverflowToolbarButton count (9 vs 3+6) is the same nine buttons counted once instead of split across two prefixes. // NOTE: the six navigation-action buttons are shown by the sample through the FCL` &&
+               ` helper's actionButtonsInfo (visible="{= ${/actionButtonsInfo/midColumn/fullScreen} !== null }" and so on). The helper is a JavaScript utility, so the port derives the same visibilities from the`.
+    lv_text1 = lv_text1 && ` layout itself: full-screen while that column is not full screen, exit-full-screen while it is, and close while the column is open. // NOTE: Detail.controller binds the mid column with` &&
+               ` bindElement('/ProductCollection/<n>') and DetailDetail binds the supplier row, so all their bindings are relative. The port folds them to root-seeded D_* / DD_TEXT fields (app 229 idiom): the pressed` &&
+               ` row's ProductId and the pressed supplier's text travel with the press. The detail Price is pre-composed as '<CurrencyCode> <Price>', which is the composite text the original's ObjectNumber binds. //` &&
+               ` NOTE: onSort flips a Sorter on the items binding; a thin frontend sorts the data it sends, so the ABAP table is re-ordered (app 298 idiom). onSearch filters on Name into a second table so the search` &&
+               ` can widen again. onAdd's MessageBox.show with the Information icon and the 'Aw, Snap!' title is ported 1:1 through client->message_box_display. // NOTE: the full mock /ProductCollection is seeded` &&
+               ` with the fields the three pages bind, plus the twelve supplier names of /ProductCollectionStats/Filters/1/values that the detail page's Suppliers table lists. The master title's count comes from`.
+    lv_text1 = lv_text1 && ` ProductCollectionStats/Counts/Total (123). // NOTE: the two Avatar src values are '../../../../../../../{products>ProductPicUrl}' in the sample - a relative path out of the demo kit's own frame. The` &&
+               ` port binds the mock's ProductPicUrl as it stands, without the traversal prefix, which is what the corpus does everywhere for these images. // NOTE: the icon-only share Button in the detail page's` &&
+               ` actions is tooltip-less in the sample, and so are the add and sort buttons of the list toolbar. The port gives all three a tooltip so they are reachable with a screen reader - the accessibility` &&
+               ` additions in this port. // LIVE-TEST: not yet verified in a running system: the three-column navigation, the six full-screen / close actions and the bound column-distribution sizes. // NOTE: mvc:View` &&
+               ` displayBlock="true" has no counterpart: it is a Component-app setting that makes the view fill the page when it is the root of a Component, and abap2UI5 owns the view container itself.` &&
+               ` FlexibleColumnLayout stateChange is wired in the sample only to rewrite the URL through the router after a navigation arrow was used; there is no URL to rewrite here, so the port drops it.`.
+    result = VALUE #( BASE result
+      ( module = `sap.f`              control = `sap.f.FlexibleColumnLayout`            name = `FlexibleColumnLayoutWithFullscreenPage`        class = `z2ui5_cl_smpc_app_578` path = `src/02/04/z2ui5_cl_smpc_app_578.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.46`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `one post-1.71 control is kept for the 1:1 port: sap.m.Avatar (since UI5 1.73) on the product page. Unlike its sibling app 579, this sample's FlexibleColumnLayout sets neither autoFocus nor` &&
+                 ` restoreFocusOnBackNavigation and carries no column-distribution layoutData.` ) ).
+
+    lv_text1 = `POST-1.71: six post-1.71 members are kept for the 1:1 port: sap.f.FlexibleColumnLayout.autoFocus (since UI5 1.76) and restoreFocusOnBackNavigation (since 1.77), the three column-distribution controls` &&
+               ` sap.f.FlexibleColumnLayoutData, FlexibleColumnLayoutDataForDesktop and FlexibleColumnLayoutDataForTablet (all since 1.128), which is what the sample's layoutData block is about, and sap.m.Avatar` &&
+               ` (since 1.73) on the detail page. // NOTE: the sample is a Component with a ROUTER and five views (FlexibleColumnLayout, List, Detail, DetailDetail, AboutPage). abap2UI5 serves one view, so the five` &&
+               ` become one: the FCL declares its begin, mid and end column pages inline and the routing collapses to the FCL's own layout property. onListItemPress opens the mid column (the helper's level-1 state,` &&
+               ` TwoColumnsMidExpanded), handleItemPress opens the end column (level 2, ThreeColumnsMidExpanded), handleAboutPress shows the about page (level 3, which the manifest pins to EndColumnFullScreen), and` &&
+               ` the three close / full-screen handlers of each column set the layout the helper would hand them. The URL the router also writes has no counterpart. Same fold as apps 575 and 577. // NOTE: the five`.
+    lv_text1 = lv_text1 && ` archived views declare different default namespaces - FlexibleColumnLayout.view.xml and DetailDetail.view.xml have xmlns="sap.f", List.view.xml and AboutPage.view.xml xmlns="sap.m" with f: for sap.f,` &&
+               ` and Detail.view.xml xmlns="sap.uxap" with m: for sap.m. One abap2UI5 view can only have one default namespace (sap.m here), so every control carries a different PREFIX than in its original file even` &&
+               ` though it is the same control: ObjectPageLayout, ObjectPageDynamicHeaderTitle, ObjectPageSection and ObjectPageSubSection become uxap:-prefixed; DynamicPage and DynamicPageTitle become f:-prefixed` &&
+               ` (which is why the f:DynamicPage and f:DynamicPageTitle counts read 3 vs 2 - the sap.f-defaulted DetailDetail page joins the two the other files already prefix); and FlexBox, VBox, Label, Text, Title,` &&
+               ` Avatar, ObjectNumber, ObjectIdentifier, ColumnListItem, Link, Button, OverflowToolbarButton and form:SimpleForm lose their m: prefix. The whole missing/extra pairing of this port's structural diff is` &&
+               ` that shift - no control is actually added or dropped. The OverflowToolbarButton count (9 vs 3+6) is the same nine buttons counted once instead of split across two prefixes. // NOTE: the six`.
+    lv_text1 = lv_text1 && ` navigation-action buttons are shown by the sample through the FCL helper's actionButtonsInfo (visible="{= ${/actionButtonsInfo/midColumn/fullScreen} !== null }" and so on). The helper is a JavaScript` &&
+               ` utility, so the port derives the same visibilities from the layout itself: full-screen while that column is not full screen, exit-full-screen while it is, and close while the column is open. // NOTE:` &&
+               ` the columnsDistribution model the sample keeps (and its onColumnsDistributionChange handler, which writes the user's drag back into it) becomes twelve bound fields, one per size. The sample seeds` &&
+               ` only three of them (desktop TwoColumnsMidExpanded 25/75/0, tablet TwoColumnsMidExpanded 40/60/0 and tablet ThreeColumnsMidExpanded 20/60/20) and leaves the rest to the controls' own defaults; a flat` &&
+               ` ABAP row would send empty strings for those, so each is seeded with the control's documented default. columnsDistributionChange itself is not wired: a thin frontend cannot store a drag the control`.
+    lv_text1 = lv_text1 && ` already applied, and the next round trip would push the seeded value back over it. // NOTE: Detail.controller binds the mid column with bindElement('/ProductCollection/<n>') and DetailDetail binds` &&
+               ` the supplier row, so all their bindings are relative. The port folds them to root-seeded D_* / DD_TEXT fields (app 229 idiom): the pressed row's ProductId and the pressed supplier's text travel with` &&
+               ` the press. The detail Price is pre-composed as '<CurrencyCode> <Price>', which is the composite text the original's ObjectNumber binds. // NOTE: onSort flips a Sorter on the items binding; a thin` &&
+               ` frontend sorts the data it sends, so the ABAP table is re-ordered (app 298 idiom). onSearch filters on Name into a second table so the search can widen again. onAdd's MessageBox.show with the` &&
+               ` Information icon and the 'Aw, Snap!' title is ported 1:1 through client->message_box_display. // NOTE: the full mock /ProductCollection is seeded with the fields the three pages bind, plus the twelve` &&
+               ` supplier names of /ProductCollectionStats/Filters/1/values that the detail page's Suppliers table lists. The master title's count comes from ProductCollectionStats/Counts/Total (123). // NOTE: the`.
+    lv_text1 = lv_text1 && ` two Avatar src values are '../../../../../../../{products>ProductPicUrl}' in the sample - a relative path out of the demo kit's own frame. The port binds the mock's ProductPicUrl as it stands,` &&
+               ` without the traversal prefix, which is what the corpus does everywhere for these images. // NOTE: the icon-only share Button in the detail page's actions is tooltip-less in the sample, and so are the` &&
+               ` add and sort buttons of the list toolbar. The port gives all three a tooltip so they are reachable with a screen reader - the accessibility additions in this port. // LIVE-TEST: not yet verified in a` &&
+               ` running system: the three-column navigation, the six full-screen / close actions and the bound column-distribution sizes. // NOTE: mvc:View displayBlock="true" has no counterpart: it is a` &&
+               ` Component-app setting that makes the view fill the page when it is the root of a Component, and abap2UI5 owns the view container itself. FlexibleColumnLayout stateChange is wired in the sample only` &&
+               ` to rewrite the URL through the router after a navigation arrow was used; there is no URL to rewrite here, so the port drops it.`.
+    result = VALUE #( BASE result
+      ( module = `sap.f`              control = `sap.f.FlexibleColumnLayout`            name = `FlexibleColumnLayoutWithOneColumnStart`        class = `z2ui5_cl_smpc_app_579` path = `src/02/04/z2ui5_cl_smpc_app_579.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.46`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `six post-1.71 members are kept for the 1:1 port: sap.f.FlexibleColumnLayout.autoFocus (since UI5 1.76) and restoreFocusOnBackNavigation (since 1.77), the three column-distribution controls` &&
+                 ` sap.f.FlexibleColumnLayoutData, FlexibleColumnLayoutDataForDesktop and FlexibleColumnLayoutDataForTablet (all since 1.128), which is what the sample's layoutData block is about, and sap.m.Avatar` &&
+                 ` (since 1.73) on the detail page.` ) ).
+
+    lv_text1 = `POST-1.71: one post-1.71 control is kept for the 1:1 port: sap.m.Avatar (since UI5 1.73) on the detail page. Unlike its sibling app 579, this sample's FlexibleColumnLayout sets neither autoFocus nor` &&
+               ` restoreFocusOnBackNavigation and carries no column-distribution layoutData at all. // NOTE: the sample is a Component with a ROUTER and five views (FlexibleColumnLayout, List, Detail, DetailDetail,` &&
+               ` AboutPage). abap2UI5 serves one view, so the five become one: the FCL declares its begin, mid and end column pages inline and the routing collapses to the FCL's own layout property. onListItemPress` &&
+               ` opens the mid column (the helper's level-1 state, TwoColumnsMidExpanded), handleItemPress opens the end column (level 2, ThreeColumnsMidExpanded), handleAboutPress shows the about page (level 3,` &&
+               ` which the manifest pins to EndColumnFullScreen), and the three close / full-screen handlers of each column set the layout the helper would hand them. The URL the router also writes has no` &&
+               ` counterpart. Same fold as apps 575, 577 and 579. // NOTE: this sample starts on TWO columns: its list route targets both the list and the detail view, and Detail.controller's _onProductMatched`.
+    lv_text1 = lv_text1 && ` defaults to product 0. The port seeds the layout TwoColumnsMidExpanded and binds the first product before the first render, so the mid column is filled from the start - which is the whole difference` &&
+               ` from the sibling sample FlexibleColumnLayoutWithOneColumnStart (app 579). List.controller's own _onProductMatched, which selects the matching row in the table, has no counterpart: it reads the` &&
+               ` router's product argument, and there is no URL here. // NOTE: the five archived views declare different default namespaces - FlexibleColumnLayout.view.xml and DetailDetail.view.xml have` &&
+               ` xmlns="sap.f", List.view.xml and AboutPage.view.xml xmlns="sap.m" with f: for sap.f, and Detail.view.xml xmlns="sap.uxap" with m: for sap.m. One abap2UI5 view can only have one default namespace` &&
+               ` (sap.m here), so every control carries a different PREFIX than in its original file even though it is the same control: ObjectPageLayout, ObjectPageDynamicHeaderTitle, ObjectPageSection and` &&
+               ` ObjectPageSubSection become uxap:-prefixed; DynamicPage and DynamicPageTitle become f:-prefixed (which is why the f:DynamicPage and f:DynamicPageTitle counts read 3 vs 2 - the sap.f-defaulted`.
+    lv_text1 = lv_text1 && ` DetailDetail page joins the two the other files already prefix); and FlexBox, VBox, Label, Text, Title, Avatar, ObjectNumber, ObjectIdentifier, ColumnListItem, Link, Button, OverflowToolbarButton and` &&
+               ` form:SimpleForm lose their m: prefix. The whole missing/extra pairing of this port's structural diff is that shift - no control is actually added or dropped. The OverflowToolbarButton count (9 vs` &&
+               ` 3+6) is the same nine buttons counted once instead of split across two prefixes. // NOTE: the six navigation-action buttons are shown by the sample through the FCL helper's actionButtonsInfo` &&
+               ` (visible="{= ${/actionButtonsInfo/midColumn/fullScreen} !== null }" and so on). The helper is a JavaScript utility, so the port derives the same visibilities from the layout itself: full-screen while` &&
+               ` that column is not full screen, exit-full-screen while it is, and close while the column is open. // NOTE: Detail.controller binds the mid column with bindElement('/ProductCollection/<n>') and` &&
+               ` DetailDetail binds the supplier row, so all their bindings are relative. The port folds them to root-seeded D_* / DD_TEXT fields (app 229 idiom): the pressed row's ProductId and the pressed`.
+    lv_text1 = lv_text1 && ` supplier's text travel with the press. The detail Price is pre-composed as '<CurrencyCode> <Price>', which is the composite text the original's ObjectNumber binds. // NOTE: onSort flips a Sorter on` &&
+               ` the items binding; a thin frontend sorts the data it sends, so the ABAP table is re-ordered (app 298 idiom). onSearch filters on Name into a second table so the search can widen again. onAdd's` &&
+               ` MessageBox.show with the Information icon and the 'Aw, Snap!' title is ported 1:1 through client->message_box_display. // NOTE: the full mock /ProductCollection is seeded with the fields the three` &&
+               ` pages bind, plus the twelve supplier names of /ProductCollectionStats/Filters/1/values that the detail page's Suppliers table lists. The master title's count comes from` &&
+               ` ProductCollectionStats/Counts/Total (123). // NOTE: the two Avatar src values are '../../../../../../../{products>ProductPicUrl}' in the sample - a relative path out of the demo kit's own frame. The` &&
+               ` port binds the mock's ProductPicUrl as it stands, without the traversal prefix, which is what the corpus does everywhere for these images. // NOTE: the icon-only share Button in the detail page's`.
+    lv_text1 = lv_text1 && ` actions is tooltip-less in the sample, and so are the add and sort buttons of the list toolbar. The port gives all three a tooltip so they are reachable with a screen reader - the accessibility` &&
+               ` additions in this port. // LIVE-TEST: not yet verified in a running system: the three-column navigation, the six full-screen / close actions and the bound column-distribution sizes. // NOTE: mvc:View` &&
+               ` displayBlock="true" has no counterpart: it is a Component-app setting that makes the view fill the page when it is the root of a Component, and abap2UI5 owns the view container itself.` &&
+               ` FlexibleColumnLayout stateChange is wired in the sample only to rewrite the URL through the router after a navigation arrow was used; there is no URL to rewrite here, so the port drops it.`.
+    result = VALUE #( BASE result
+      ( module = `sap.f`              control = `sap.f.FlexibleColumnLayout`            name = `FlexibleColumnLayoutWithTwoColumnStart`        class = `z2ui5_cl_smpc_app_580` path = `src/02/04/z2ui5_cl_smpc_app_580.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.46`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `one post-1.71 control is kept for the 1:1 port: sap.m.Avatar (since UI5 1.73) on the detail page. Unlike its sibling app 579, this sample's FlexibleColumnLayout sets neither autoFocus nor` &&
+                 ` restoreFocusOnBackNavigation and carries no column-distribution layoutData at all.` ) ).
+
+    lv_text1 = `POST-1.71: one post-1.71 control is kept for the 1:1 port: sap.m.Avatar (since UI5 1.73), which this sample uses twice on the detail page and once in the ShellBar's profile. Unlike its sibling app` &&
+               ` 579, this sample's FlexibleColumnLayout sets neither autoFocus nor restoreFocusOnBackNavigation and carries no column-distribution layoutData. // NOTE: the sample is a Component with a ROUTER and` &&
+               ` five views (FlexibleColumnLayout, List, Detail, DetailDetail, AboutPage). abap2UI5 serves one view, so the five become one: the FCL declares its begin, mid and end column pages inline and the routing` &&
+               ` collapses to the FCL's own layout property. onListItemPress opens the mid column (the helper's level-1 state, TwoColumnsMidExpanded), handleItemPress opens the end column (level 2,` &&
+               ` ThreeColumnsMidExpanded), handleAboutPress shows the about page (level 3, which the manifest pins to EndColumnFullScreen), and the three close / full-screen handlers of each column set the layout the` &&
+               ` helper would hand them. The URL the router also writes has no counterpart. Same fold as apps 575, 577, 579 and 580. // NOTE: this sample wraps the FlexibleColumnLayout in a sap.m.Page whose`.
+    lv_text1 = lv_text1 && ` customHeader is a ShellBar - that is what it demonstrates. The ShellBar's showNavButton is bound to an expression over the layout ({= ${/layout} === 'EndColumnFullScreen'}), exactly as the sample` &&
+               ` writes it, and handleBackButtonPressed leaves the full-screen about page. The about page itself has no close action here (its sibling app 579 puts one in navigationActions); the ShellBar's back` &&
+               ` button is the way out. // NOTE: the detail page's snappedHeading differs from the sibling sample's: an HBox holding the Avatar and a VBox with the product name and its id, instead of two nested` &&
+               ` FlexBoxes with the name alone. Ported as written. // NOTE: the five archived views declare different default namespaces - FlexibleColumnLayout.view.xml and DetailDetail.view.xml have xmlns="sap.f",` &&
+               ` List.view.xml and AboutPage.view.xml xmlns="sap.m" with f: for sap.f, and Detail.view.xml xmlns="sap.uxap" with m: for sap.m. One abap2UI5 view can only have one default namespace (sap.m here), so` &&
+               ` every control carries a different PREFIX than in its original file even though it is the same control: ObjectPageLayout, ObjectPageDynamicHeaderTitle, ObjectPageSection and ObjectPageSubSection`.
+    lv_text1 = lv_text1 && ` become uxap:-prefixed; DynamicPage and DynamicPageTitle become f:-prefixed (which is why the f:DynamicPage and f:DynamicPageTitle counts read 3 vs 2 - the sap.f-defaulted DetailDetail page joins the` &&
+               ` two the other files already prefix); and FlexBox, VBox, Label, Text, Title, Avatar, ObjectNumber, ObjectIdentifier, ColumnListItem, Link, Button, OverflowToolbarButton form:SimpleForm, and the` &&
+               ` ShellBar's own Menu and its two MenuItems lose their m: prefix. The whole missing/extra pairing of this port's structural diff is that shift - no control is actually added or dropped. The` &&
+               ` OverflowToolbarButton count (9 vs 3+6) is the same nine buttons counted once instead of split across two prefixes. // NOTE: the six navigation-action buttons are shown by the sample through the FCL` &&
+               ` helper's actionButtonsInfo (visible="{= ${/actionButtonsInfo/midColumn/fullScreen} !== null }" and so on). The helper is a JavaScript utility, so the port derives the same visibilities from the` &&
+               ` layout itself: full-screen while that column is not full screen, exit-full-screen while it is, and close while the column is open. // NOTE: Detail.controller binds the mid column with`.
+    lv_text1 = lv_text1 && ` bindElement('/ProductCollection/<n>') and DetailDetail binds the supplier row, so all their bindings are relative. The port folds them to root-seeded D_* / DD_TEXT fields (app 229 idiom): the pressed` &&
+               ` row's ProductId and the pressed supplier's text travel with the press. The detail Price is pre-composed as '<CurrencyCode> <Price>', which is the composite text the original's ObjectNumber binds. //` &&
+               ` NOTE: onSort flips a Sorter on the items binding; a thin frontend sorts the data it sends, so the ABAP table is re-ordered (app 298 idiom). onSearch filters on Name into a second table so the search` &&
+               ` can widen again. onAdd's MessageBox.show with the Information icon and the 'Aw, Snap!' title is ported 1:1 through client->message_box_display. // NOTE: the full mock /ProductCollection is seeded` &&
+               ` with the fields the three pages bind, plus the twelve supplier names of /ProductCollectionStats/Filters/1/values that the detail page's Suppliers table lists. The master title's count comes from` &&
+               ` ProductCollectionStats/Counts/Total (123). // NOTE: the two Avatar src values are '../../../../../../../{products>ProductPicUrl}' in the sample - a relative path out of the demo kit's own frame. The`.
+    lv_text1 = lv_text1 && ` port binds the mock's ProductPicUrl as it stands, without the traversal prefix, which is what the corpus does everywhere for these images. // NOTE: the icon-only share Button in the detail page's` &&
+               ` actions is tooltip-less in the sample, and so are the add and sort buttons of the list toolbar. The port gives all three a tooltip so they are reachable with a screen reader - the accessibility` &&
+               ` additions in this port. // LIVE-TEST: not yet verified in a running system: the three-column navigation, the six full-screen / close actions and the bound column-distribution sizes. // NOTE: mvc:View` &&
+               ` displayBlock="true" has no counterpart: it is a Component-app setting that makes the view fill the page when it is the root of a Component, and abap2UI5 owns the view container itself.` &&
+               ` FlexibleColumnLayout stateChange is wired in the sample only to rewrite the URL through the router after a navigation arrow was used; there is no URL to rewrite here, so the port drops it.`.
+    result = VALUE #( BASE result
+      ( module = `sap.f`              control = `sap.f.FlexibleColumnLayout`            name = `ShellBarWithFlexibleColumnLayout`              class = `z2ui5_cl_smpc_app_584` path = `src/02/04/z2ui5_cl_smpc_app_584.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.46`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `one post-1.71 control is kept for the 1:1 port: sap.m.Avatar (since UI5 1.73), which this sample uses twice on the detail page and once in the ShellBar's profile. Unlike its sibling app 579, this` &&
+                 ` sample's FlexibleColumnLayout sets neither autoFocus nor restoreFocusOnBackNavigation and carries no column-distribution layoutData.` ) ).
 
     lv_text1 = `NOTE: The original binds two named models inside the cards (cities> for the ComboBoxes, products> for the revenue List); abap2UI5 keeps one default model, so those bind directly ({cities>/cities} ->` &&
                ` {/CITIES}, {products>/productItems} -> {/PRODUCTITEMS}, prefix dropped, last segment identical). **Sidecar corrected 2026-08-05**: the rest of the text still described the port before its rework and` &&
@@ -1151,6 +1339,22 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.60`
         notes = lv_text1 ) ).
 
+    lv_text1 = `1.71: the Reveal Grid ToggleButton keeps its label and stays in the view, but its press is not wired. RevealGrid.toggle is the sample's OWN JavaScript utility` &&
+               ` (sample/GridListBoxContainerReal/RevealGrid/RevealGrid.js plus RevealGrid.css): it reads the computed grid template off each GridList's DOM node and injects an absolutely positioned overlay div per` &&
+               ` cell, to visualise the box mesh. It is a debugging aid over the rendered DOM with no control-side counterpart and no server-side state - nothing a backend can turn on. onExit's RevealGrid.destroy` &&
+               ` goes with it. Same fold as app 582, which ships the same helper. // NOTE: there is no model: C.controller.js declares only onRevealGrid and onExit, and every box in the three GridLists is written out` &&
+               ` literally in V.view.xml (seven f:GridListItems with hard-coded titles, subtitles and descriptions). The port is a static view for the same reason - it is a design gallery of recommended box CONTENT,` &&
+               ` not a data-bound list, so nothing is bound and no round trip exists. // NOTE: the three boxWidths (15rem toolbar designs, 22.5rem with icons, 17.5rem with ObjectStatus / InfoLabel) are the point of`.
+    lv_text1 = lv_text1 && ` the sample and are carried 1:1 on the grid:GridBoxLayouts, as are the per-box FlexItemData growFactor=1 / shrinkFactor=0 that keep a box from shrinking below its minimum, and the three` &&
+               ` OverflowToolbar designs the first list contrasts (Solid with sapContrast, plain Solid, Transparent). // NOTE: the twelve icon-only Buttons of the first and third list are tooltip-less in the sample` &&
+               ` (Sort, Group, Edit, Delete and Information). The port gives each a tooltip so they are reachable with a screen reader - the accessibility additions in this port.`.
+    result = VALUE #( BASE result
+      ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListBoxContainerReal`                      class = `z2ui5_cl_smpc_app_581` path = `src/01/04/z2ui5_cl_smpc_app_581.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.60`
+        notes = lv_text1 ) ).
+
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListBreakPoints`                           class = `z2ui5_cl_smpc_app_213` path = `src/01/04/z2ui5_cl_smpc_app_213.clas.abap`
         score = 3
@@ -1173,6 +1377,30 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
       ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListDragAndDrop`                           class = `z2ui5_cl_smpc_app_148` path = `src/01/04/z2ui5_cl_smpc_app_148.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.60`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `IMPROVISED: the sample's whole point is the KEYBOARD hand-off between the four grids: onBorderReached reads the arrow key's keyCode plus the row/column the focus left from, walks all four f:GridLists` &&
+               ` comparing getBoundingClientRect() geometry to find the one that lies in that direction, and calls focusItemByDirection on it. None of that can travel - it is a DOM-geometry search in the controller` &&
+               ` and a control method that takes three runtime parameters the backend never sees. The port keeps the half that can: each grid's borderReached fires the MessageToast the sample also shows, naming that` &&
+               ` grid. Arrow keys therefore still navigate WITHIN each grid (that is the control's own two-dimensional navigation, not the sample's code) and still report when they run out of it, but the focus does` &&
+               ` not jump into the neighbouring grid. // NOTE: MessageToast.show("Reached border of " + oEvent.getSource().getHeaderText()) composes the text from the event source at runtime. The port wires` &&
+               ` borderReached per grid, so each of the four carries its own finished text ("Reached border of GridList 1" .. "4") - the same four strings the sample can produce. // NOTE: onSliderMoved does`.
+    lv_text1 = lv_text1 && ` this.byId("container").setWidth(oEvent.getParameter("value") + "%") on every liveChange. The port makes the slider's value a two-way bound property and the CSSGrid's width an expression over it ({=` &&
+               ` ${...} + '%' }), so the width follows the slider in the browser with no round trip at all. The liveChange wire itself is therefore dropped: a round trip per keystroke would be slower AND lossy` &&
+               ` (events behind one in flight are discarded). // 1.71: the Reveal Grids ToggleButton keeps its label and stays in the view, but its press is not wired. RevealGrid.toggle is the sample's OWN JavaScript` &&
+               ` utility (sample/GridListKeyboardArrowsNavigation/RevealGrid/RevealGrid.js plus RevealGrid.css): it injects an absolutely positioned overlay div per grid cell, reading the computed grid template off` &&
+               ` each GridList's DOM node, to visualise the grid mesh. It is a debugging aid with no control-side counterpart and no server-side state - nothing a backend can turn on. onExit's RevealGrid.destroy goes` &&
+               ` with it. // NOTE: model/data.json carries title, subtitle, counter and type per item, but the GridListItem template binds only {title} - its second line is a Label with the LITERAL text "Subtitle".`.
+    lv_text1 = lv_text1 && ` So the port models the title alone (4/4/5/5 items across the four lists, as in the mock) and keeps the literal label. // NOTE: the four GridLists differ only in their GridItemLayoutData spans (2x2,` &&
+               ` 3x1, 3x2, 2x3), which is what makes the items different sizes and the two-dimensional navigation interesting; those are carried 1:1. The shared cssgrid:GridBasicLayout (5rem auto-rows,` &&
+               ` repeat(auto-fill, minmax(5rem, 1fr)), 0.5rem gap) and the outer GridResponsiveLayout (two columns, one below S) are carried 1:1 as well. // LIVE-TEST: not yet verified in a running system: that arrow` &&
+               ` keys inside a grid reach its border and raise the toast, and that dragging the slider narrows the container without a round trip.`.
+    result = VALUE #( BASE result
+      ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListKeyboardArrowsNavigation`              class = `z2ui5_cl_smpc_app_582` path = `src/01/04/z2ui5_cl_smpc_app_582.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
         since = `1.60`
         notes = lv_text1 ) ).
 
@@ -1283,6 +1511,24 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         post171 = `sap.m.Avatar (control @since 1.73) is used 1:1 as the profile avatar (m:Avatar initials='UI'). Newer than UI5 1.71; declared per the property-171 policy (app 152 precedent, same ShellBar profile` &&
                  ` Avatar), so the app needs UI5 >= 1.73 to render the avatar. Added at the 2026-07-27 review sweep - the control-level @since is invisible to the member-level property gate.` ) ).
 
+    lv_text1 = `POST-1.71: three post-1.71 controls are kept for the 1:1 port: sap.f.ProductSwitch and sap.f.ProductSwitchItem (both since UI5 1.72), which are what this sample shows, and sap.m.Avatar (since 1.73) in` &&
+               ` the ShellBar's profile aggregation. App 245 (ProductSwitchNavigation) carries the same pair as a documented scope exception. // NOTE: ProductSwitchPopover.fragment.xml is rebuilt as a` &&
+               ` core:FragmentDefinition and shown with client->popover_display( by_id ), anchored on the product-switcher button the productSwitcherPressed event ships - which is exactly what fnOpen does with` &&
+               ` oEvent.getParameter('button'). fnClose has no counterpart: the popover closes itself on an outside click, and the original only wires a Close button on PHONES (Device.system.phone), which is` &&
+               ` device-conditional chrome rather than sample behaviour. // NOTE: fnChange composes its MessageToast from the pressed item's id, targetSrc and target. All three resolve on the client, so the toast` &&
+               ` stays there as a roundtrip-free control_global MESSAGE_TOAST show with three placeholders. // NOTE: model/data.json is seeded verbatim - all fourteen entries with their src and title, and the`.
+    lv_text1 = lv_text1 && ` subtitle on the seven rows that carry one. The fragment also binds targetSrc and target, which the mock never sets: they are undefined there and empty here, which renders the same. // LIVE-TEST: not` &&
+               ` yet verified in a running system: the product-switch popover anchored on the ShellBar's switcher button and the change toast.`.
+    result = VALUE #( BASE result
+      ( module = `sap.f`              control = `sap.f.ShellBar`                        name = `ShellBarProductSwitch`                         class = `z2ui5_cl_smpc_app_583` path = `src/02/04/z2ui5_cl_smpc_app_583.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.63`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `three post-1.71 controls are kept for the 1:1 port: sap.f.ProductSwitch and sap.f.ProductSwitchItem (both since UI5 1.72), which are what this sample shows, and sap.m.Avatar (since 1.73) in the` &&
+                 ` ShellBar's profile aggregation. App 245 (ProductSwitchNavigation) carries the same pair as a documented scope exception.` ) ).
+
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.ShellBar`                        name = `ShellBarWithMenuButton`                        class = `z2ui5_cl_smpc_app_152` path = `src/02/04/z2ui5_cl_smpc_app_152.clas.abap`
         score = 2
@@ -1320,6 +1566,27 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = lv_text1
         post171 = `the sap.m.Avatar control (since UI5 1.73) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.73 to render it. @since verified in sap/m/Avatar.js:99 (control-level, which` &&
                  ` the member-level property gate never saw).` ) ).
+
+    lv_text1 = `POST-1.71: two post-1.71 members are kept for the 1:1 port: sap.m.Avatar (since UI5 1.73) in the ShellBar's profile aggregation, and sap.tnt.NavigationListItem.expanded (since 1.121), which the` &&
+               ` sample's own NavigationList fragment binds - app 407 declares the same property with the note that it predates 1.71 on the control and only reads as 1.121 because it moved to a newer base class. //` &&
+               ` NOTE: the sample's two fragments (SideNavigation and the NavigationList item template it uses twice) are built inline; the item template is emitted by one parameterised method, so the reconstructed` &&
+               ` view shows one NavigationList where the original has two - a helper's chain is emitted once however often it is called. // NOTE: onMenuButtonPress calls toolPage.setSideExpanded(!getSideExpanded()).` &&
+               ` sideExpanded is a bindable property, so the port binds a flag and the handler flips it. onItemSelect's pageContainer.to(key) is the one frontend action (control_by_id 'to'), with the pressed item's` &&
+               ` key travelling on the event; the SideNavigation's selectedKey is bound to the same field, which is what keeps the highlight in step. // NOTE: model.json is seeded verbatim - the four navigation roots`.
+    lv_text1 = lv_text1 && ` with their icons, keys and children and the three fixed items. The item template also binds enabled, which the mock never sets: it is seeded true, the NavigationListItem default, because a flat ABAP` &&
+               ` row would otherwise send abap_false and disable every item. // NOTE: the second page's Text carries the sample's own multi-paragraph lorem ipsum. An XML attribute value normalizes its line breaks and` &&
+               ` indentation to single spaces before the control ever sees it, so the port stores that normalized string - the same text the browser renders. // LIVE-TEST: not yet verified in a running system: the` &&
+               ` side navigation with its nested items, the menu-button toggle and the page switch.`.
+    result = VALUE #( BASE result
+      ( module = `sap.f`              control = `sap.f.ShellBar`                        name = `ShellBarWithSplitApp`                          class = `z2ui5_cl_smpc_app_585` path = `src/02/04/z2ui5_cl_smpc_app_585.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.63`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `two post-1.71 members are kept for the 1:1 port: sap.m.Avatar (since UI5 1.73) in the ShellBar's profile aggregation, and sap.tnt.NavigationListItem.expanded (since 1.121), which the sample's own` &&
+                 ` NavigationList fragment binds - app 407 declares the same property with the note that it predates 1.71 on the control and only reads as 1.121 because it moved to a newer base class.` ) ).
 
     lv_text1 = `NOTE: onToggle vetoes the NEXT toggle when the matching switch is on (event.preventDefault) and resets that switch. **Reproduced 2026-08-05**: the framework's veto flag (s_ctrl-check_prevent_default,` &&
                ` merged 2026-07-30 - AFTER this port was written, which is why the sidecar said 'an event veto is not expressible') is baked into the wire at RENDER time, and that is enough here because the DIRECTION` &&
