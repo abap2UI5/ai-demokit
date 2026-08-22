@@ -1,4 +1,5 @@
-" @keywords messageview message sap.m messageviewinsideresponsivepopover page button responsivepopover bar title messageitem link
+" @keywords messageview message sap.m messageviewinsideresponsivepopover button responsivepopover bar title messageitem link
+" @summary A sample with Message View inside a ResponsivePopover.
 CLASS z2ui5_cl_smpc_app_564 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

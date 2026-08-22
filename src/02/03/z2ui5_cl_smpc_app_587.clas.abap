@@ -1,4 +1,5 @@
-" @keywords objectpagelayout anchorbar anchorbarwithnumbers sap.uxap objectpagesection objectpagesubsection objectpagedynamicheadertitle simpleform
+" @keywords objectpagelayout object layout sap.uxap anchorbarwithnumbers objectpagedynamicheadertitle objectpagesection objectpagesubsection
+" @summary This example shows how to visualize numbers in parenthesis after the corresponding section titles in the AnchorBar
 CLASS z2ui5_cl_smpc_app_587 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

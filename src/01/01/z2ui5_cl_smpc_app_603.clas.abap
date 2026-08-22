@@ -1,4 +1,5 @@
-" @keywords tree sap.m treeodata odatatreebinding hierarchy messagestrip standardtreeitem
+" @keywords tree sap.m treeodata standardtreeitem
+" @summary This example shows Tree with OData service.
 CLASS z2ui5_cl_smpc_app_603 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

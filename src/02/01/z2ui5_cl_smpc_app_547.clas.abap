@@ -1,3 +1,5 @@
+" @keywords planningcalendar planning calendar sap.m planningcalendarmodifyappointments vbox title button planningcalendarrow responsivepopover label text
+" @summary PlanningCalendar containing sap.m.Popover with information for the appointments and sap.m.Dialog for creating a new appointment. Note: Illustrates how the PlanningCalendar can be used in combination with the sap.m.Popover and sap.m.
 CLASS z2ui5_cl_smpc_app_547 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,4 +1,5 @@
 " @keywords list sap.m listloading overflowtoolbar title toolbarspacer button standardlistitem
+" @summary You can use enableBusyIndicator property to display loading animation while the data is being loaded from server. By default, this property is true and busy indicator will be shown after 1000ms.
 CLASS z2ui5_cl_smpc_app_522 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,4 +1,5 @@
-" @keywords icontabbar sap.m icontabbarbackgrounddesign backgrounddesign headerbackgrounddesign icontabfilter icontabseparator radiobuttongroup table
+" @keywords icontabbar icon tab bar sap.m icontabbarbackgrounddesign panel label radiobuttongroup radiobutton icontabfilter icontabseparator
+" @summary In this example the backgroundDesign and headerBackgroundDesign properties are demonstrated.
 CLASS z2ui5_cl_smpc_app_617 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

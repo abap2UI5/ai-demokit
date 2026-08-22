@@ -1,4 +1,5 @@
-" @keywords objectpagelayout blockviewtypes sap.uxap objectpageheader objectpageheaderactionbutton landmarkinfo simpleform
+" @keywords objectpagelayout object layout sap.uxap objectpageblockviewtypes objectpageaccessiblelandmarkinfo objectpageheader objectpageheaderactionbutton objectpagesection objectpagesubsection
+" @summary ObjectPage sample with blocks that use different view types
 CLASS z2ui5_cl_smpc_app_589 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

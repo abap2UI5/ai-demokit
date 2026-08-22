@@ -1,3 +1,5 @@
+" @keywords semanticpage semantic sap.f.semantic semanticpagefreestyle title breadcrumbs link image text objectattribute objectstatus table
+" @summary This sample demonstrates a SemanticPage with all semantic-specific actions both in the title and in the footer areas.
 CLASS z2ui5_cl_smpc_app_529 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

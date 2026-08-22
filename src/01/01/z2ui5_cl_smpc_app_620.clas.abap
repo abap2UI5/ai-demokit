@@ -1,4 +1,5 @@
-" @keywords icontabbar sap.m icontabbartabdensitymode tabdensitymode headermode inline icontabfilter icontabseparator radiobuttongroup reordering
+" @keywords icontabbar icon tab bar sap.m icontabbartabdensitymode panel label radiobuttongroup radiobutton icontabfilter text
+" @summary In this example, the Icon Tab Bar is used in different tab density modes.
 CLASS z2ui5_cl_smpc_app_620 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

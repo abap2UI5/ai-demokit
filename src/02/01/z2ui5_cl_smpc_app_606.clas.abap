@@ -1,4 +1,5 @@
-" @keywords generictile sap.m generictilelinemode linemode slidetile tilecontent numericcontent newscontent linktilecontent sizebehavior scope
+" @keywords generictile generic tile sap.m generictilelinemode overflowtoolbar toolbarspacer label switch combobox tilecontent numericcontent
+" @summary Shows Generic Tile regular and in line mode, and you can switch between the display scope and actions scope for Generic Tiles on a web page.
 CLASS z2ui5_cl_smpc_app_606 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

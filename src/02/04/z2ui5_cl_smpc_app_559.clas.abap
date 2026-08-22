@@ -1,4 +1,5 @@
-" @keywords dynamicpage sap.f dynamicpageanalyticaltable dynamicpagetitle dynamicpageheader table column generictag card numericheader popover
+" @keywords dynamicpage dynamic sap.f dynamicpageanalyticaltable title label overflowtoolbar generictag objectnumber toolbarspacer button flexbox
+" @summary Dynamic Page containing an Analytical Table in the content area aligned with the SAP Fiori List Report floorplan.
 CLASS z2ui5_cl_smpc_app_559 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

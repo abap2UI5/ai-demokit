@@ -1,3 +1,5 @@
+" @keywords planningcalendar planning calendar sap.m planningcalendarweeknumbering vbox title select planningcalendarrow label multicombobox
+" @summary Demonstrates PlanningCalendar with different week numbering (only Date Picker, 1 Week and 1 Month views are affected).
 CLASS z2ui5_cl_smpc_app_544 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

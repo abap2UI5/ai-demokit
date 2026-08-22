@@ -1,4 +1,5 @@
 " @keywords objectattribute object attribute sap.m objectheaderactiveattributes objectheader objectstatus dialog ratingindicator textarea button
+" @summary Active Object Attributes can trigger actions, such as navigating to related content inside or outside of the current application, or displaying additional information in a popover.
 CLASS z2ui5_cl_smpc_app_518 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

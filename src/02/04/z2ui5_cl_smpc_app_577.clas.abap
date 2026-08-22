@@ -1,4 +1,5 @@
-" @keywords flexiblecolumnlayout sap.f flexiblecolumnlayoutcolumnresize objectpagelayout dynamicpage objectpagesection scrolltoindexedsection
+" @keywords flexiblecolumnlayout flexible column layout sap.f flexiblecolumnlayoutcolumnresize title button label text objectattribute objectstatus
+" @summary FlexibleColumnLayout where the app programmatically scrolls to some item within the newly navigated column, once the column is fully resized
 CLASS z2ui5_cl_smpc_app_577 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,4 +1,5 @@
-" @keywords objectpagelayout lazyloading sap.uxap objectpagesection objectpagesubsection modelmapping blockbase employmentblockjob
+" @keywords objectpagelayout object layout sap.uxap objectpageonjsonwithlazyloading objectpagedynamicheadertitle objectpagesection objectpagesubsection
+" @summary Object Page with LazyLoading
 CLASS z2ui5_cl_smpc_app_593 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

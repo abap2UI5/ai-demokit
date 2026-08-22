@@ -1,3 +1,5 @@
+" @keywords dynamicpage dynamic sap.f dynamicpagewithwizard navcontainer title wizard wizardstep objectheader objectattribute list standardlistitem
+" @summary Dynamic Page containing a sap.m.Wizard and WizardProgressNavigator in the content area.
 CLASS z2ui5_cl_smpc_app_560 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

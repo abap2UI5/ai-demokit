@@ -1,4 +1,5 @@
-" @keywords objectpagelayout beforenavigate sap.uxap objectpagesection objectpagesubsection preventdefault useicontabbar dialog
+" @keywords objectpagelayout object layout sap.uxap objectpagebeforenavigate objectpagedynamicheadertitle objectpagesection objectpagesubsection dialog text button
+" @summary Object Page demonstrating how beforeNavigate event can be used to prevent default navigation behaviour
 CLASS z2ui5_cl_smpc_app_588 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

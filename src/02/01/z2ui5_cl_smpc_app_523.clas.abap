@@ -1,4 +1,5 @@
 " @keywords table sap.m tableselectcopy overflowtoolbar title toolbarspacer checkbox column text columnlistitem objectidentifier objectnumber
+" @summary This example demonstrates how the Table data can be copied to the clipboard via CopyProvider plugin.
 CLASS z2ui5_cl_smpc_app_523 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

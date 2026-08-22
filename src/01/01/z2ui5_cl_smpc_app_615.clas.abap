@@ -1,5 +1,5 @@
-" @keywords objectheader object header sap.m objectheaderresponsiveiv objectattribute objectstatus objectmarker icontabbar icontabfilter text responsivepopover titleselector
-" @summary This is a responsive Object Header in a Master/Detail mode (fullScreenOptimized = false) with a title selector, five attributes, a status, two markers and an eight-tab IconTabBar in its header container.
+" @keywords objectheader object header sap.m objectheaderresponsiveiv objectattribute objectstatus objectmarker icontabbar icontabfilter text responsivepopover
+" @summary This is a responsive Object Header with a Title, number, 6 Statuses/Attributes rendered in 3 columns in a Master/Detail mode (fullScreenOptimized = false).
 CLASS z2ui5_cl_smpc_app_615 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,4 +1,5 @@
-" @keywords objectpagelayout selectedsection sap.uxap useicontabbar objectpagesection objectpagesubsection modelmapping blockbase
+" @keywords objectpagelayout object layout sap.uxap objectpageselectedsection objectpagedynamicheadertitle objectpagesection objectpagesubsection
+" @summary Object Page sample showing a layout where the selected section is defined by the user.
 CLASS z2ui5_cl_smpc_app_594 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

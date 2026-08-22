@@ -1,4 +1,5 @@
-" @keywords table sap.m tablecontextualwidthstatic messagestrip overflowtoolbar button column label columnlistitem popin
+" @keywords table sap.m tablecontextualwidthstatic messagestrip overflowtoolbar button column label columnlistitem
+" @summary This example shows the container-based pop-in behavior. The container has static width.
 CLASS z2ui5_cl_smpc_app_568 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

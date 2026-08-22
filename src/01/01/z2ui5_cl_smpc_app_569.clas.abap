@@ -1,4 +1,5 @@
-" @keywords table sap.m tabledvd draganddrop dnd draginfo dropinfo dragdropinfo column columnlistitem contextmenu ranking
+" @keywords table sap.m tablednd hbox button overflowtoolbar title menu menuitem column text columnlistitem
+" @summary Shows the different kinds of drag-and-drop capabilities across view boundaries along with custom context menu alternatives to perform these action.
 CLASS z2ui5_cl_smpc_app_569 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

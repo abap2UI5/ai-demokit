@@ -1,3 +1,5 @@
+" @keywords wizard sap.m wizardsinglestep button dialog title wizardstep messagestrip text hbox segmentedbutton segmentedbuttonitem
+" @summary Demonstrates the usage of the renderMode property. The Wizard is displayed inside a Dialog to allow blocking of the interface without using page context. The dynamic page is used to provide a consistent and standards-compliant look.
 CLASS z2ui5_cl_smpc_app_533 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

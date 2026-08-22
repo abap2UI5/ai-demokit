@@ -1,4 +1,5 @@
-" @keywords singleplanningcalendar sap.m singleplanningcalendardnd appointmentdrop appointmentresize appointmentcreate draganddrop calendarappointment switch
+" @keywords singleplanningcalendar single planning calendar sap.m singleplanningcalendardnd vbox hbox label switch singleplanningcalendardayview singleplanningcalendarworkweekview
+" @summary SinglePlanningCalendar with enabled drag and drop functionality, allowing to create appointments with dragging and dropping, to change the start and end date of appointments by selecting and dragging their top or bottom end, and to copy and...
 CLASS z2ui5_cl_smpc_app_610 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,4 +1,5 @@
 " @keywords generictile generic tile sap.m generictileaslaunchtile label input button tilecontent imagecontent
+" @summary Shows Launch Tile samples that can contain header, subheader, image content, unit, and a footer.
 CLASS z2ui5_cl_smpc_app_517 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

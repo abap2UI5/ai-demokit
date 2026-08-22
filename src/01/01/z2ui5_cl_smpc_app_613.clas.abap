@@ -1,4 +1,5 @@
-" @keywords multiinput sap.m multiinputgrouping suggestionitems suggestionrows suggestioncolumns sorter group token column columnlistitem
+" @keywords multiinput multi input sap.m multiinputgrouping token column label columnlistitem
+" @summary Items in the MultiInput could be grouped by a property
 CLASS z2ui5_cl_smpc_app_613 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

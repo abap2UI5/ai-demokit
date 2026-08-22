@@ -1,3 +1,5 @@
+" @keywords planningcalendar planning calendar sap.m vbox title select planningcalendarrow label multicombobox
+" @summary PlanningCalendar with single row selection that illustrates the built-in views.
 CLASS z2ui5_cl_smpc_app_536 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

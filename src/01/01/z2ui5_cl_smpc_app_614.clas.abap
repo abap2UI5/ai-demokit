@@ -1,5 +1,5 @@
 " @keywords objectheader object header sap.m objectheaderresponsiveiii objectattribute objectstatus objectmarker icontabbar icontabfilter text responsivepopover
-" @summary This is a responsive Object Header in full screen mode (fullScreenOptimized = true) with an icon, five attributes, a status, two markers and an IconTabBar in its header container.
+" @summary This is a responsive Object Header with a Title, number, 6 Statuses/Attributes rendered in 4 columns in a fullScreenOptimized mode (fullScreenOptimized = true).
 CLASS z2ui5_cl_smpc_app_614 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

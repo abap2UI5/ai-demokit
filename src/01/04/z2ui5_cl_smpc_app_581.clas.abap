@@ -1,4 +1,5 @@
-" @keywords gridlist sap.f gridlistboxcontainerreal cssgrid gridboxlayout gridlistitem flexitemdata infolabel objectstatus overflowtoolbar
+" @keywords gridlist grid list sap.f gridlistboxcontainerreal toolbar title vbox flexitemdata label text overflowtoolbar
+" @summary This is a sample for GridList item templates representing a typical tools page dashboard style.
 CLASS z2ui5_cl_smpc_app_581 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

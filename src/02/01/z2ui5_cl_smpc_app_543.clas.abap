@@ -1,3 +1,5 @@
+" @keywords planningcalendar planning calendar sap.m planningcalendarappointmentsizes vbox hbox label select planningcalendarrow
+" @summary PlanningCalendar showing normal, half-sized and large appointments.
 CLASS z2ui5_cl_smpc_app_543 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

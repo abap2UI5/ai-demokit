@@ -1,4 +1,5 @@
-" @keywords facetfilter facet filter sap.m facetfiltercustomfilters vbox facetfilterlist facetfilteritem table objectidentifier
+" @keywords facetfilter facet filter sap.m facetfiltercustomfilters vbox facetfilterlist facetfilteritem table overflowtoolbar title toolbarspacer
+" @summary With the FacetFilter you can define custom filtering criteria to be applied when searching in the FacetFilterList instead of the default filtering criteria of the control in order to assist the user in narrowing down the data in, say, a table.
 CLASS z2ui5_cl_smpc_app_557 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,4 +1,5 @@
-" @keywords objectpagelayout formfocusableinput sap.uxap simpleform columnlayout columnelementdata focus objectpagesection
+" @keywords objectpagelayout object layout sap.uxap objectpageformfocusableinput objectpagedynamicheadertitle objectpagesection objectpagesubsection
+" @summary Object Page that focuses its first editable input in the currently selected section.
 CLASS z2ui5_cl_smpc_app_590 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

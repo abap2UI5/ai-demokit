@@ -1,4 +1,5 @@
-" @keywords objectpagelayout objectpagexml sap.uxap objectpageheader objectpagesection objectpagesubsection mode collapsed expanded modelmapping
+" @keywords objectpagelayout object layout sap.uxap objectpagexml objectpageheader objectpagesection objectpagesubsection
+" @summary An ObjectPageLayout declared in one XML view - header title, header content and five sections whose blocks come from four different block namespaces - rather than assembled in a controller.
 CLASS z2ui5_cl_smpc_app_597 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

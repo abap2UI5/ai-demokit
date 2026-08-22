@@ -1,3 +1,5 @@
+" @keywords gridcontainer grid container sap.f gridcontainerdraganddropfromlist scrollcontainer togglebutton hbox list standardlistitem
+" @summary This sample represents how items from a control which is not GridContainer can be dragged and dropped over a GridContainer.
 CLASS z2ui5_cl_smpc_app_527 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

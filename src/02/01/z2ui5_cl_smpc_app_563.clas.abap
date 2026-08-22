@@ -1,4 +1,5 @@
-" @keywords messageview message sap.m messageviewinsidepopover page button popover bar title messageitem link
+" @keywords messageview message sap.m messageviewinsidepopover button popover bar title messageitem link
+" @summary A sample with Message View inside a Popover.
 CLASS z2ui5_cl_smpc_app_563 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

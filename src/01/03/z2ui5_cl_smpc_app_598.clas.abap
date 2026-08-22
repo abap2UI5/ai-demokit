@@ -1,4 +1,5 @@
-" @keywords objectpagelayout subsection multiview sap.uxap objectpagesubsection blockbase simpleform automatic layout
+" @keywords objectpagesubsection object sub section sap.uxap objectpagesubsectionmultiview objectpagelayout objectpageheader objectpagesection
+" @summary This example shows how blocks can be laid out automatically by the Object Page when their size is not specified.
 CLASS z2ui5_cl_smpc_app_598 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,4 +1,5 @@
-" @keywords table sap.m tablemergecells mergeduplicates mergefunctionname column columnlistitem objectidentifier objectnumber text
+" @keywords table sap.m tablemergecells column text columnlistitem objectidentifier objectnumber
+" @summary With column duplicate merging, you can improve the display of repeated data. See the effect of mergeDuplicates on the Supplier column, space permitting. Note: This feature is ignored if a column is shown in the pop-in.
 CLASS z2ui5_cl_smpc_app_573 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

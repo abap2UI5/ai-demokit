@@ -1,4 +1,5 @@
-" @keywords multiinput sap.m multiinputfilteringsuggestions suggestionitems suggestionrows suggestioncolumns valuestate formattedvaluestatetext formattedtext link token column columnlistitem
+" @keywords multiinput multi input sap.m multiinputfilteringsuggestions vbox token column label columnlistitem formattedtext link
+" @summary The default filtering is 'starts with per term', which filters by the beginning of every word in every column.
 CLASS z2ui5_cl_smpc_app_612 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

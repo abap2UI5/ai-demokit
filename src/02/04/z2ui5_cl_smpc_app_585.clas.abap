@@ -1,4 +1,5 @@
-" @keywords shellbar sap.f shellbarwithsplitapp toolpage sidenavigation navigationlist navcontainer scrollcontainer menu avatar
+" @keywords shellbar shell bar sap.f shellbarwithsplitapp menu menuitem avatar navcontainer text scrollcontainer
+" @summary Example of Shell Bar in combination with Split App.
 CLASS z2ui5_cl_smpc_app_585 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

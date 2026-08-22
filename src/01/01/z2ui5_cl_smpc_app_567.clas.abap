@@ -1,4 +1,5 @@
-" @keywords table sap.m tablecolumnwidth messagestrip toolbar title checkbox column input columnlistitem fixedlayout
+" @keywords table sap.m tablecolumnwidth messagestrip toolbar title toolbarspacer checkbox column input columnlistitem text
+" @summary While defining the column width you can use percent values but you should be careful with them. Click to see some traps and tipps.
 CLASS z2ui5_cl_smpc_app_567 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

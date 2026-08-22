@@ -1,4 +1,5 @@
-" @keywords table sap.m tableeditable page overflowtoolbar button column columnlistitem objectidentifier objectnumber input paste
+" @keywords table sap.m tableeditable overflowtoolbar toolbarspacer button overflowtoolbarlayoutdata title column text columnlistitem input
+" @summary Table with edit/display togglable scenario.
 CLASS z2ui5_cl_smpc_app_570 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

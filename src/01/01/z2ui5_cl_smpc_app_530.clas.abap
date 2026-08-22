@@ -1,3 +1,5 @@
+" @keywords generictag generic tag sap.m overflowtoolbarsimple messagestrip slider overflowtoolbar label toolbarspacer button overflowtoolbarlayoutdata
+" @summary Overflow Toolbar can contain the same controls as Toolbar with the added benefit that buttons that do not fit are moved to an overflow area when overflow occurs.
 CLASS z2ui5_cl_smpc_app_530 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

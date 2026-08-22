@@ -1,4 +1,5 @@
-" @keywords objectpagelayout lazyloading objectpagelazyloader stashed sap.uxap simpleform responsivegridlayout objectpagesection
+" @keywords objectpagelayout object layout sap.uxap objectpagelazyloadingwithoutblocks objectpagedynamicheadertitle objectpagesection objectpagesubsection objectpagelazyloader
+" @summary This sample showcases the lazy loading using the stashed property of the ObjectPageLazyLoader. It enables usage of lazy loading without the need to have Blocks
 CLASS z2ui5_cl_smpc_app_592 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

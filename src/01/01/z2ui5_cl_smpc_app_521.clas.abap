@@ -1,5 +1,5 @@
 " @keywords input sap.m inputkeyvalue label text selectdialog standardlistitem
-" @summary Assisted input is available via suggestions - shown as you type - and a value help dialog.
+" @summary This sample illustrates how the Input works with key and value values, when the data is available via list of suggestions.
 CLASS z2ui5_cl_smpc_app_521 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

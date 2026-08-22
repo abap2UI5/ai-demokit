@@ -1,4 +1,5 @@
-" @keywords objectpagelayout tabnavigationmode sap.uxap useicontabbar objectpagesection objectpagesubsection modelmapping blockbase
+" @keywords objectpagelayout object layout sap.uxap objectpagetabnavigationmode objectpagedynamicheadertitle objectpagesection objectpagesubsection
+" @summary Object Page sample showing a layout where the navigation is Tab based (one Tab per section) rather than having all of the sections visible at the same time.
 CLASS z2ui5_cl_smpc_app_596 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

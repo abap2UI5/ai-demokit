@@ -1,4 +1,5 @@
-" @keywords table sap.m tableverticalalignment overflowtoolbar title column columnlistitem objectidentifier input objectnumber valign
+" @keywords table sap.m tableverticalalignment overflowtoolbar title column text columnlistitem objectidentifier input objectnumber
+" @summary This is a good example of how to vertically align different elements within a Table's ColumnListItem row template.
 CLASS z2ui5_cl_smpc_app_576 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

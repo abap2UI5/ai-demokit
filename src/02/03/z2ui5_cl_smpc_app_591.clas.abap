@@ -1,4 +1,5 @@
-" @keywords objectpagelayout formlayout sap.uxap form columnlayout formcontainer formelement simpleform objectpagesection
+" @keywords objectpagelayout object layout sap.uxap objectpageformlayout objectpagedynamicheadertitle objectpagesection objectpagesubsection
+" @summary Object Page automatically adjusts form layout to match block column layout
 CLASS z2ui5_cl_smpc_app_591 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

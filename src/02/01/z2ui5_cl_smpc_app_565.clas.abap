@@ -1,4 +1,5 @@
-" @keywords popover navcontainer sap.m popovernavcon verticallayout button page list standardlistitem objectheader objectattribute text
+" @keywords popover sap.m popovernavcon button navcontainer list standardlistitem objectheader objectattribute text
+" @summary You can nest NavContainers in Popovers (and Dialogs) to navigate to further details in place.
 CLASS z2ui5_cl_smpc_app_565 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

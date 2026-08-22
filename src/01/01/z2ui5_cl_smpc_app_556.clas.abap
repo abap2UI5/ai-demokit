@@ -1,3 +1,5 @@
+" @keywords datepicker date picker sap.m datepickermassedit vbox table toolbar title toolbarspacer button column
+" @summary Using calendar in a dialog for changing dates in mass editing scenario.
 CLASS z2ui5_cl_smpc_app_556 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

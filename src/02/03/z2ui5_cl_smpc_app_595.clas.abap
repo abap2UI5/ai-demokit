@@ -1,4 +1,5 @@
-" @keywords objectpagelayout objectpagestate sap.uxap useicontabbar selectedsection sapuitable rowmodes auto subsectionvisibilitychange
+" @keywords objectpagelayout object layout sap.uxap objectpagestate objectpagedynamicheadertitle objectpagesection objectpagesubsection
+" @summary This example shows how the page can be accessed directly to a specific vertical position, with "See More" enabled
 CLASS z2ui5_cl_smpc_app_595 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

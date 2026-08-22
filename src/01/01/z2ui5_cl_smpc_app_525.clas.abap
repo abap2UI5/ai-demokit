@@ -1,4 +1,5 @@
 " @keywords list sap.m listgrowingupwards standardlistitem
+" @summary The Upwards Growing
 CLASS z2ui5_cl_smpc_app_525 DEFINITION PUBLIC.
 
   PUBLIC SECTION.
