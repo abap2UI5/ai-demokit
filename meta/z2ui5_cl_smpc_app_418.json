@@ -16,8 +16,8 @@
       "what": "The three controller handlers are replaced by bindings, roundtrip-free: onWrappingChange's Title.setWrapping toggle becomes the same two-way bound flag on Switch.state and Title.wrapping (the Switch change attribute is dropped on both Switches), onHyphenationChange becomes an added wrappingType expression binding following the second Switch, and onSliderMoved's setWidth(value+'%') becomes an expression binding on the Panel width fed by the two-way bound Slider value (the Slider liveChange attribute is dropped)."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The three roundtrip-free wires (wrapping toggle, Hyphenated/Normal wrappingType expression, Panel width percent expression) are client-side model propagation and are unverified in a running system."
+      "type": "NOTE",
+      "what": "The three roundtrip-free wires (wrapping toggle, Hyphenated/Normal wrappingType expression, Panel width percent expression) are client-side model propagation and are unverified in a running system. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_418.mjs)."
     }
   ]
 }

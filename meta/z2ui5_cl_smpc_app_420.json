@@ -24,8 +24,8 @@
       "what": "Price is kept TYPE string: it is display-only inside the SuggestionItem description text template {path:'PRICE'} {path:'CURRENCYCODE'}, and a packed field with fixed DECIMALS would add trailing zeros to the mock's variable-decimal values."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The per-keystroke suggest round-trip is serialized and lossy under fast typing (events fired while a trip is in flight are dropped; it converges when typing pauses); the filter + suggest() follow-up pair is unverified in a running system."
+      "type": "NOTE",
+      "what": "The per-keystroke suggest round-trip is serialized and lossy under fast typing (events fired while a trip is in flight are dropped; it converges when typing pauses); the filter + suggest() follow-up pair is unverified in a running system. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_420.mjs)."
     }
   ]
 }

@@ -7,12 +7,15 @@ import { waitForUi5, ui5All } from '../../scripts/lib-e2e.mjs';
 export default async (page, expect) => {
   const input = page.locator('.sapMSFI').first();
   await expect(input, 'the SearchField input').toBeVisibleEnabled();
-  // all 123 products before any suggest
+  // the model holds all 123 products, but the instantiated aggregation is
+  // capped at the JSONModel default sizeLimit (100) - assert the cap, not the mock
   await waitForUi5(page, () => ui5All().some((c) => c.getMetadata().getName() === 'sap.m.SearchField'
-    && c.getSuggestionItems().length === 123),
-  'the unfiltered suggestionItems never reached 123 rows');
+    && c.getSuggestionItems().length === 100),
+  'the unfiltered suggestionItems never reached the 100-row sizeLimit cap');
   await input.click();
-  await input.pressSequentially('mouse', { delay: 700 });
+  // 1200ms between keys: each SUGGEST trip must COMPLETE before the next key,
+  // or the serialized wire drops the later event and converges on a prefix
+  await input.pressSequentially('mouse', { delay: 1200 });
   // the compound filter narrows the aggregation to the OR-Contains matches
   await waitForUi5(page, () => ui5All().some((c) => c.getMetadata().getName() === 'sap.m.SearchField'
     && c.getSuggestionItems().length > 0 && c.getSuggestionItems().length < 20

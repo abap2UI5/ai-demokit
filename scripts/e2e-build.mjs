@@ -58,9 +58,16 @@ function main() {
   fs.mkdirSync(downport, { recursive: true });
 
   // 1. framework src (modern copy) + the express shim handler + transpile setup
-  //    src/99 is historical only (see the framework's AGENTS.md) - nothing in
-  //    the served backend uses it, so it is dropped from the copy
+  //    src/99 is historical only (see the framework's AGENTS.md) - so it is
+  //    dropped from the copy, EXCEPT what the served backend still references:
+  //    the exit-interface rename (abap2UI5#2647) kept the superseded
+  //    z2ui5_if_exit alive as a compatibility member of z2ui5_cl_ui5_user_exit
+  //    (and its test double), so dropping it fails the transpile validate for
+  //    every port ("Implemented interface Z2UI5_IF_EXIT not found")
   sh(`cp -r src/. ${downport}/`);
+  for (const keep of fs.readdirSync(path.join(A2, 'src/99'))) {
+    if (/^z2ui5_if_exit\.intf\./.test(keep)) fs.copyFileSync(path.join(A2, 'src/99', keep), path.join(downport, keep));
+  }
   sh(`rm -rf ${downport}/99`);
   sh(`cp node/srv/*.abap ${downport}/`);
 

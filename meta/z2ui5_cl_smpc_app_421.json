@@ -21,7 +21,7 @@
     },
     {
       "type": "NOTE",
-      "what": "onButtonBackClick drives the card 1:1 via follow_up_action( control_by_id, navigateBack ), roundtrip-free; the Back button's enabled state is two-way bound and kept in sync by the afterNavigate isTopPage transport (the original seeds enabled='false' and resets it in onBeforeRendering)."
+      "what": "onButtonBackClick drives the card 1:1 via follow_up_action( control_by_id, navigateBack ), roundtrip-free; the Back button's enabled state is two-way bound and kept in sync by the afterNavigate isTopPage transport (sent as the string tokens top/sub - the transpiled e2e runtime hands a JSON boolean event arg through as 'false' where a real system normalizes it to abap_bool, and the token form reads the same on both) (the original seeds enabled='false' and resets it in onBeforeRendering)."
     },
     {
       "type": "NOTE",
@@ -36,8 +36,8 @@
       "what": "Elements the mock leaves without an elementType (Address, Slogan) seed the QuickViewGroupElementType default 'text', target seeds the UI5 default '_blank', and page 2 seeds iconVisibility=true - a serialized empty string/false would override the control defaults where the original's undefined picks them."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The HEADER_TOGGLE round-trip mutates page 1 in the model and re-renders the card to its first page (the behaviour the original expects after a header switch); unverified in a running system."
+      "type": "NOTE",
+      "what": "The HEADER_TOGGLE round-trip mutates page 1 in the model and re-renders the card to its first page (the behaviour the original expects after a header switch); unverified in a running system. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_421.mjs)."
     }
   ]
 }

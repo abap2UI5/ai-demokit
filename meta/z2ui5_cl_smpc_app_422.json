@@ -36,8 +36,8 @@
       "what": "onSearch's Contains filter on the items binding runs client-side via the view-wired follow_up_action( binding_call, filter ) with ${$parameters>/value} - the model stays untouched."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The growing lazy-load round-trip (updateStarted firing while the dialog list grows, then view_model_update while the popup is open) is unverified in a running system."
+      "type": "NOTE",
+      "what": "The growing lazy-load round-trip (updateStarted firing while the dialog list grows, then view_model_update while the popup is open) is unverified in a running system. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_422.mjs)."
     }
   ]
 }

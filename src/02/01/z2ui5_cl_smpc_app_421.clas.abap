@@ -156,8 +156,12 @@ CLASS z2ui5_cl_smpc_app_421 IMPLEMENTATION.
                     )->a( n = `id`                    v = `quickViewCard`
                     )->a( n = `pages`                 v = |\{ path: '{ client->_bind( val = t_pages path = abap_true ) }', templateShareable: true \}|
                     )->a( n = `showVerticalScrollBar` v = client->_bind( show_scroll )
+                    " isTopPage travels as the string tokens top/sub: the transpiled
+                    " runtime hands a JSON boolean arg through as 'false' where a real
+                    " system normalizes it to abap_bool, so a token is the one form
+                    " both runtimes read the same
                     )->a( n = `afterNavigate`         v = client->_event( val   = `AFTER_NAV`
-                                                                          t_arg = VALUE #( ( `${$parameters>/isTopPage}` ) ) )
+                                                                          t_arg = VALUE #( ( `${$parameters>/isTopPage} ? 'top' : 'sub'` ) ) )
 
                     )->ele( `QuickViewPage`
                         )->a( n = `pageId`      v = `{PAGEID}`
@@ -220,7 +224,7 @@ CLASS z2ui5_cl_smpc_app_421 IMPLEMENTATION.
 
       WHEN `AFTER_NAV`.
         " enable the back button while the card is not on its top page (original afterNavigate isTopPage)
-        back_enabled = xsdbool( client->get_event_arg( ) = abap_false ).
+        back_enabled = xsdbool( client->get_event_arg( ) = `sub` ).
 
     ENDCASE.
 

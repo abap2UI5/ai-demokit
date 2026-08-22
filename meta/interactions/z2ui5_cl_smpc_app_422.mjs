@@ -1,7 +1,7 @@
 // the growing lazy-load round-trip: the More trigger fires updateStarted
 // (reason Growing), the server appends the next 30 rows 1:1 with the original
 // loop, and the open dialog list grows past the seeded 31
-import { waitForUi5, ui5All } from '../../scripts/lib-e2e.mjs';
+import { dispatchMouse, waitForUi5, ui5All } from '../../scripts/lib-e2e.mjs';
 
 export default async (page, expect) => {
   const btn = page.getByRole('button', { name: 'Show Select Dialog', exact: true }).first();
@@ -9,10 +9,11 @@ export default async (page, expect) => {
   await btn.click();
   await expect(page.locator('.sapMDialog'), 'the SelectDialog').toContainText('Select Product');
   await expect(page.getByText('Name 1', { exact: true }).first(), 'the first seeded row').toBeVisibleEnabled();
-  // the growing trigger ("More") requests the next slice and fires updateStarted
-  const more = page.locator('.sapMDialog').getByText('More', { exact: false }).first();
-  await expect(more, 'the growing More trigger').toBeVisibleEnabled();
-  await more.click();
+  // the growing trigger ("More") is a zero-box unthemed CustomListItem below the
+  // scroll fold - a real click never passes actionability, dispatchMouse does
+  const more = page.locator('[id$="-trigger"]').first();
+  if (!(await more.count())) throw new Error('the growing More trigger rendered no node');
+  await dispatchMouse(more);
   // the Growing round-trip appended rows 30..59 - the model grows to 61
   await waitForUi5(page, () => ui5All().some((c) => c.getMetadata().getName() === 'sap.m.SelectDialog'
     && c.getItems().length > 31),
