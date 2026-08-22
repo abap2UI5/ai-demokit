@@ -91,7 +91,6 @@ CLASS z2ui5_cl_smpc_app_501 IMPLEMENTATION.
                                     )->a( n = `text` v = `{TEXT}`
 
                             )->end(
-
                         )->end(
 
                         )->tag( `CheckBox`

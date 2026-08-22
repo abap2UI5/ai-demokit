@@ -7,6 +7,33 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-22 — batch b41 (sap.m): ten ports, four of them post-1.71 members (apps 506–515)
+
+| app | sample | what it adds |
+|---|---|---|
+| 506 | IconTabBarDragDrop | `enableTabReordering` with `maxNestingLevel` @1.79 driven by a StepInput (POST_171, `src/02`) |
+| 507 | InputGrouping | a **grouping** sorter on both a plain and a tabular suggestion binding |
+| 508 | ListToolbar | `sticky` bound to the MultiComboBox selection; the info toolbar hidden by an expression over the toggle |
+| 509 | InputSuggestionsOpenSearch | the OpenSearchProvider + MockServer replaced by a backend search filling the bound items |
+| 510 | InputCustomValueHelpIcon | `valueHelpIconSrc` @1.84 (POST_171) plus the SelectDialog value help |
+| 511 | SelectChangeEvents | `Select.liveChange` @1.100 and the change event's `previousSelectedItem` @1.95 (POST_171) |
+| 512 | MultiInputModelUpdate | one table serving tokens, suggestions AND the model list the sample watches |
+| 513 | ObjectHeaderResponsiveII | the `fullScreenOptimized="false"` sibling of app 453 |
+| 514 | FlexBoxSizeAdjustments | five FlexBox panels plus the sample's own `style.css` |
+| 515 | InputAssisted | a value help pre-filtered by the Input's current value, shared by two Inputs |
+
+The recurring shape of this batch is the **JS callback that owns a control's
+data**: an OpenSearchProvider (509), a validator (512), a value-help dialog
+that filters its own binding (510/515). All four resolve the same way — the
+data moves to the backend and the wire that fed it becomes a round-trip or a
+`binding_call` — and the sidecars say which half of the original's behaviour
+that costs.
+
+App 512 is the one worth remembering: the sample keeps THREE things in sync
+(the tokens, the suggestion items and a List showing the model), and the port
+binds all three to ONE table. That is not a shortcut — it is what the sample is
+demonstrating, and the port makes it structural rather than a handler.
+
 ## 2026-08-22 — batch b40 (sap.m): ten ports and the JS-callback tail (apps 496–505)
 
 The batch where the remaining sap.m samples stop being view-only. Six of the

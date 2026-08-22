@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_smpc_app_514",
+  "sample": "sap.m.sample.FlexBoxSizeAdjustments",
+  "entity": "sap.m.FlexBox",
+  "file": "src/01/01/z2ui5_cl_smpc_app_514.clas.abap",
+  "batch": "b41",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The sample ships its own style.css - the dashed frame around every flex item and the zero-width variant two of the five panels use. abap2UI5 serves no per-sample stylesheet, so both rules are injected verbatim through one extra core:HTML <style> leaf (structural-diff reports control extra core:HTML). Nothing else changes."
+    }
+  ]
+}

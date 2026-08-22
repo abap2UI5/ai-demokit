@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_smpc_app_506",
+  "sample": "sap.m.sample.IconTabBarDragDrop",
+  "entity": "sap.m.IconTabBar",
+  "file": "src/02/01/z2ui5_cl_smpc_app_506.clas.abap",
+  "batch": "b41",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.IconTabBar.maxNestingLevel is @since 1.79 - the StepInput of this sample exists to change it, so the property is kept 1:1 and the port needs a UI5 runtime >= 1.79."
+    },
+    {
+      "type": "NOTE",
+      "what": "onInit adds the 30 IconTabFilters (with their content Texts) in a loop with addItem( ). abap2UI5 has no client-side control factory, so the port binds the items aggregation to a table with the same 30 rows and declares one IconTabFilter template - structural-diff reports both as control extra because the original's view carries only the empty IconTabBar (apps 465-467 precedent)."
+    },
+    {
+      "type": "NOTE",
+      "what": "onMaxNestingLevelChange calls iconTabBar.setMaxNestingLevel(value). The StepInput value and the IconTabBar's maxNestingLevel are the same two-way bound field here, so the StepInput.change attribute is dropped and the property follows without a round-trip."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The shared nesting-level field and the reordering-enabled tab bar are unverified in a running system."
+    }
+  ]
+}

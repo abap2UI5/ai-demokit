@@ -3,7 +3,7 @@
 
 # The sample catalogue
 
-Every port in this repository — 518 of them — with what it shows and a
+Every port in this repository — 528 of them — with what it shows and a
 link to its source. This is the [overview app](src/z2ui5_cl_smpc_app_000.clas.abap)
 as a page you can read here, before installing anything.
 
@@ -44,7 +44,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 
 ### sap.m
 
-289 port(s).
+299 port(s).
 
 | Sample | Class |
 |---|---|
@@ -245,6 +245,13 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.m.Input** — Input - Key and Value Tabular Suggestions<br>This sample illustrates how the Input works with key and value values, when the data is provided with table-like suggestions.<br><sub>input sap.m inputkeyvaluetabularsuggestions label column columnlistitem text</sub><br><sub>○ generated · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_503`](src/01/01/z2ui5_cl_smpc_app_503.clas.abap) |
 | **sap.m.MultiInput** — MultiInput tokenUpdate event example<br>MultiInput fires several tokenUpdate events depending on when the tokens were validated.<br><sub>multiinput multi input sap.m multiinputtokenupdate vbox text token</sub><br><sub>○ generated · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_504`](src/01/01/z2ui5_cl_smpc_app_504.clas.abap) |
 | **sap.m.Table** — Table - Outdated Data<br>You can use the 'showOverlay' property to indicate that the table data is no longer up to date. When the user modifies the filter values of the table, this results in displaying an overlay, which disables operations on the table.<br><sub>table sap.m tableoutdated overflowtoolbar combobox button toolbarspacer segmentedbutton segmentedbuttonitem column text columnlistitem</sub><br><sub>○ generated · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_505`](src/01/01/z2ui5_cl_smpc_app_505.clas.abap) |
+| **sap.m.Input** — Input - Grouping of items<br>Items in the Input could be grouped by a property<br><sub>input sap.m inputgrouping label column columnlistitem</sub><br><sub>○ generated</sub> | [`Z2UI5_CL_SMPC_APP_507`](src/01/01/z2ui5_cl_smpc_app_507.clas.abap) |
+| **sap.m.List** — List - Header & Info Toolbar<br>The 'headerText' property is an easy but limited way of setting the list header. If you need more flexibility you should assemble your own header or info toolbar that can also contain buttons.<br><sub>list sap.m listtoolbar standardlistitem overflowtoolbar title toolbarspacer multicombobox togglebutton button label</sub><br><sub>○ generated · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_508`](src/01/01/z2ui5_cl_smpc_app_508.clas.abap) |
+| **sap.m.Input** — Input - Suggestions - OSP<br>If you need to use an Open Search Provider (OSP) to supply possible values, you can do this with the Input control's suggest event, and build the suggestionItems dynamically according to the results of the Open Search call.<br><sub>input sap.m inputsuggestionsopensearch label</sub><br><sub>○ generated · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_509`](src/01/01/z2ui5_cl_smpc_app_509.clas.abap) |
+| **sap.m.MultiInput** — MultiInput - Model update<br>This sample illustrates how the model bound to the MultiInput can be updated upon token creation or deletion.<br><sub>multiinput multi input sap.m multiinputmodelupdate label token list standardlistitem</sub><br><sub>○ generated · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_512`](src/01/01/z2ui5_cl_smpc_app_512.clas.abap) |
+| **sap.m.ObjectHeader** — Object Header Responsive II<br>This is a responsive Object Header with a Title, 2 Statuses/Attributes rendered below the title in a Master/Detail mode (fullScreenOptimized = false).<br><sub>objectheader object header sap.m objectheaderresponsiveii objectattribute objectstatus objectmarker icontabbar icontabfilter image text</sub><br><sub>○ generated · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_513`](src/01/01/z2ui5_cl_smpc_app_513.clas.abap) |
+| **sap.m.FlexBox** — Flex Box - Size Adjustments<br>Automatic size adjustments can be achieved for Flex Items with the use of Flex Item Data settings on the contained controls.<br><sub>flexbox flex box sap.m flexboxsizeadjustments vbox panel button flexitemdata</sub><br><sub>○ generated · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_514`](src/01/01/z2ui5_cl_smpc_app_514.clas.abap) |
+| **sap.m.Input** — Input - Assisted<br>Assisted input is available via suggestions - shown as you type - and a value help dialog.<br><sub>input sap.m inputassisted label selectdialog standardlistitem</sub><br><sub>○ generated · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_515`](src/01/01/z2ui5_cl_smpc_app_515.clas.abap) |
 | **sap.m.Carousel** — Carousel with Controls<br>With the Carousel a user can browse through multi-page content by swiping left or right.<br><sub>carousel sap.m user browse through title image text scrollcontainer list standardlistitem</sub><br><sub>✓ checked · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_006`](src/02/01/z2ui5_cl_smpc_app_006.clas.abap) |
 | **sap.m.DatePicker** — Date Picker - Open by Another Control<br>This example shows Date Picker which is opened by another control.<br><sub>datepicker date picker sap.m open another title vbox label button link</sub><br><sub>✓ checked · 5 deviations</sub> | [`Z2UI5_CL_SMPC_APP_016`](src/02/01/z2ui5_cl_smpc_app_016.clas.abap) |
 | **sap.m.DateRangeSelection**<br>The Date Range Selection is an extension of the Date Picker Control and enables the user to select range of dates.<br><sub>daterangeselection date range selection sap.m single-field input vbox label text</sub><br><sub>✓ checked · 8 deviations</sub> | [`Z2UI5_CL_SMPC_APP_017`](src/02/01/z2ui5_cl_smpc_app_017.clas.abap) |
@@ -337,6 +344,9 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.m.ComboBox** — ComboBox - maxPickerHeight<br>Limit the picker popup height using maxPickerHeight property<br><sub>combobox combo box sap.m comboboxmaxpickerheight label</sub><br><sub>○ generated · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_494`](src/02/01/z2ui5_cl_smpc_app_494.clas.abap) |
 | **sap.m.MultiComboBox** — MultiComboBox - maxPickerHeight<br>Limit the picker popup height using maxPickerHeight property<br><sub>multicombobox multi combo box sap.m multicomboboxmaxpickerheight label</sub><br><sub>○ generated · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_495`](src/02/01/z2ui5_cl_smpc_app_495.clas.abap) |
 | **sap.m.List** — List - Custom Actions<br>This example demonstrates how to add custom actions to list items. Dedicated 'Delete' and 'Edit' types can be used to add predefined actions to the list items. The 'Custom' type can be used to add custom actions to the list items.<br><sub>list sap.m listactions overflowtoolbar title toolbarspacer text slider standardlistitem listitemaction</sub><br><sub>○ generated · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_498`](src/02/01/z2ui5_cl_smpc_app_498.clas.abap) |
+| **sap.m.IconTabBar** — Icon Tab Bar - Tabs drag and drop<br>This example shows how the tab filters can be reordered and nested with drag and drop. Works only on desktop devices.<br><sub>icontabbar icon tab bar sap.m icontabbardragdrop label stepinput icontabfilter text</sub><br><sub>○ generated · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_506`](src/02/01/z2ui5_cl_smpc_app_506.clas.abap) |
+| **sap.m.Input** — Input - Custom Value Help Icon<br>This example shows the usage of a custom value help icon instead of the default one.<br><sub>input sap.m inputcustomvaluehelpicon label selectdialog standardlistitem</sub><br><sub>○ generated · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_510`](src/02/01/z2ui5_cl_smpc_app_510.clas.abap) |
+| **sap.m.Select** — Select - Change Events<br>Demonstrates the use of 'change' and 'liveChange' events.<br><sub>select sap.m selectchangeevents</sub><br><sub>○ generated · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_511`](src/02/01/z2ui5_cl_smpc_app_511.clas.abap) |
 
 ### sap.uxap
 

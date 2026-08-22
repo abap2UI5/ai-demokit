@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_511",
+  "sample": "sap.m.sample.SelectChangeEvents",
+  "entity": "sap.m.Select",
+  "file": "src/02/01/z2ui5_cl_smpc_app_511.clas.abap",
+  "batch": "b41",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.Select.liveChange is @since 1.100 and its change event's previousSelectedItem parameter is @since 1.95 - both are what this sample demonstrates, so they are kept 1:1 and the port needs a UI5 runtime >= 1.100."
+    },
+    {
+      "type": "NOTE",
+      "what": "onChange and onLiveChange only toast the ids of the involved items. Both are composed on the client from ${$parameters>/selectedItem}.getId() and ${$parameters>/previousSelectedItem}.getId(), so neither needs a round-trip and the texts stay the original's."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Both client-composed toasts are unverified in a running system."
+    }
+  ]
+}

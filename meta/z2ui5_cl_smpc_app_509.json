@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_509",
+  "sample": "sap.m.sample.InputSuggestionsOpenSearch",
+  "entity": "sap.m.Input",
+  "file": "src/01/01/z2ui5_cl_smpc_app_509.clas.abap",
+  "batch": "b41",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onSuggest asks an OpenSearchProvider that points at a local MockServer and replaces the Input's suggestion items with the answer. abap2UI5 has neither, so the same search runs in ABAP over the product names and fills the bound suggestionItems aggregation - which also means the port declares one core:Item template the original's view does not have (structural-diff reports control extra core:Item)."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The suggest round-trip and the backend search are unverified in a running system."
+    }
+  ]
+}
