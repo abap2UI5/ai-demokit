@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_smpc_app_476",
+  "sample": "sap.m.sample.ObjectHeaderResponsiveVI",
+  "entity": "sap.m.ObjectHeader",
+  "file": "src/01/01/z2ui5_cl_smpc_app_476.clas.abap",
+  "batch": "b38",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The ObjectHeader binds the fixed record {/ProductCollection/0}. The port seeds the three fields it actually reads (Price, CurrencyCode, SupplierName) at the default-model root and binds them absolutely, so the attr ObjectHeader.binding is dropped. Everything else in this sample is a literal in the view."
+    }
+  ]
+}

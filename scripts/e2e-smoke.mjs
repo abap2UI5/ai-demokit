@@ -114,7 +114,18 @@ import { benign } from './lib-smoke.mjs';
 
 function startBackend() {
   return new Promise((resolve, reject) => {
-    const srv = spawn('node', [path.join(A2, 'node/srv/express.mjs')], { env: { ...process.env, PORT: '3000' } });
+    // --stack-size: the view builder's chain transpiles to ONE deeply nested
+    // expression - `view->ele( )->a( )->a( )->end( )` becomes
+    // `await (await (await (…).get().a(…)).get().a(…))`, one level per call -
+    // and the generated overview app's view is 177 calls long. Node's default
+    // parser stack, already partly spent by the ESM loader walking the 2,340
+    // transpiled modules, overflows on it: `RangeError: Maximum call stack
+    // size exceeded` inside compileSourceTextModule, before the server ever
+    // listens (2026-08-22, at 623 ports). It is a V8 parser limit, not an ABAP
+    // one - a real system never parses this - so the harness raises the stack
+    // rather than the corpus shortening its chains. --stack-size is a V8
+    // option and NODE_OPTIONS rejects it, so it has to be passed on argv.
+    const srv = spawn('node', ['--stack-size=10000', path.join(A2, 'node/srv/express.mjs')], { env: { ...process.env, PORT: '3000' } });
     let out = '';
     const onData = (d) => { out += d; if (/Listening on/.test(out)) { srv.stdout.off('data', onData); resolve(srv); } };
     srv.stdout.on('data', onData);
@@ -142,6 +153,10 @@ function makeExpect(errs) {
     async toBeVisibleEnabled() {
       await locator.waitFor({ state: 'visible', timeout: 10000 }).catch(() => { throw new Error(`${label}: not visible`); });
       if (!(await locator.isEnabled())) throw new Error(`${label}: not enabled`);
+    },
+    async toBeVisible() {
+      await locator.first().waitFor({ state: 'visible', timeout: 10000 })
+        .catch(() => { throw new Error(`${label}: not visible`); });
     },
     async toContainText(txt) {
       await locator.filter({ hasText: txt }).first().waitFor({ state: 'visible', timeout: 10000 })
@@ -182,7 +197,18 @@ async function checkPort(browser, cls) {
   page.on('response', (r) => {
     const u = new URL(r.url());
     if (u.hostname === 'localhost' && u.port === '3000' && r.status() >= 400) {
-      errs.push(`backend HTTP ${r.status()} for ${u.pathname}${u.search.slice(0, 40)}`);
+      // carry the body along: a bare "backend HTTP 500" says nothing, and the
+      // ABAP exception the backend answers with is the whole diagnosis
+      // (2026-08-22 — three b50 ports 500'd and the message named no cause)
+      r.text().then((b) => {
+        // the ABAP side answers an HTML error page; what matters is the
+        // exception name and the first transpiled frame under it
+        const err = b.match(/Error:\s*([^\n<]{1,80})/);
+        const frame = b.match(/at\s+([A-Za-z0-9_$.]+)\s*\((?:file:\/\/)?[^)]*?([A-Za-z0-9_.]+\.mjs:\d+)/);
+        const why = err ? err[1].trim() + (frame ? ` @ ${frame[1]} (${frame[2]})` : '') : b.replace(/\s+/g, ' ').slice(0, 160);
+        errs.push(`backend HTTP ${r.status()} for ${u.pathname}${u.search.slice(0, 40)} — ${why}`);
+      }).catch(() => errs.push(`backend HTTP ${r.status()} for ${u.pathname}${u.search.slice(0, 40)}`));
+      return;
     }
   });
   await page.route('**://sdk.openui5.org/**', (route) => {

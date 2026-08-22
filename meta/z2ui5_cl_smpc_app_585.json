@@ -1,0 +1,40 @@
+{
+  "class": "z2ui5_cl_smpc_app_585",
+  "sample": "sap.f.sample.ShellBarWithSplitApp",
+  "entity": "sap.f.ShellBar",
+  "file": "src/02/04/z2ui5_cl_smpc_app_585.clas.abap",
+  "batch": "b48",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "control_by_id 'to' on the NavContainer; the selected item's key travels with itemSelect"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "two post-1.71 members are kept for the 1:1 port: sap.m.Avatar (since UI5 1.73) in the ShellBar's profile aggregation, and sap.tnt.NavigationListItem.expanded (since 1.121), which the sample's own NavigationList fragment binds - app 407 declares the same property with the note that it predates 1.71 on the control and only reads as 1.121 because it moved to a newer base class."
+    },
+    {
+      "type": "NOTE",
+      "what": "the sample's two fragments (SideNavigation and the NavigationList item template it uses twice) are built inline; the item template is emitted by one parameterised method, so the reconstructed view shows one NavigationList where the original has two - a helper's chain is emitted once however often it is called."
+    },
+    {
+      "type": "NOTE",
+      "what": "onMenuButtonPress calls toolPage.setSideExpanded(!getSideExpanded()). sideExpanded is a bindable property, so the port binds a flag and the handler flips it. onItemSelect's pageContainer.to(key) is the one frontend action (control_by_id 'to'), with the pressed item's key travelling on the event; the SideNavigation's selectedKey is bound to the same field, which is what keeps the highlight in step."
+    },
+    {
+      "type": "NOTE",
+      "what": "model.json is seeded verbatim - the four navigation roots with their icons, keys and children and the three fixed items. The item template also binds enabled, which the mock never sets: it is seeded true, the NavigationListItem default, because a flat ABAP row would otherwise send abap_false and disable every item."
+    },
+    {
+      "type": "NOTE",
+      "what": "the second page's Text carries the sample's own multi-paragraph lorem ipsum. An XML attribute value normalizes its line breaks and indentation to single spaces before the control ever sees it, so the port stores that normalized string - the same text the browser renders."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: the side navigation with its nested items, the menu-button toggle and the page switch."
+    }
+  ]
+}

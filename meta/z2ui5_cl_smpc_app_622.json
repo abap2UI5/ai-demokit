@@ -1,0 +1,40 @@
+{
+  "class": "z2ui5_cl_smpc_app_622",
+  "sample": "sap.m.sample.InputChecked",
+  "entity": "sap.m.Input",
+  "file": "src/01/01/z2ui5_cl_smpc_app_622.clas.abap",
+  "batch": "b51",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false,
+    "note": "both validations run in the backend over the two bound fields"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the Name input's binding carries a sap.ui.model.type.String with minLength 1 / maxLength 10 constraints, and UI5 checks those in the BROWSER on every parse. The port keeps the binding exactly as written (path plus type plus constraints, the app 549 composite-binding idiom) so that half still works client-side, and the backend checks the same two bounds when it is asked to."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the E-mail input's binding names '.customEMailType', a sap.ui.model.SimpleType the CONTROLLER defines, whose validateValue throws a ValidateException unless the value matches /^\\w+[\\w-+\\.]*\\@\\w+([-\\.]\\w+)*\\.[a-zA-Z]{2,}$/. A model type is a JavaScript class - there is nothing to name from a backend - so the type reference is dropped and the same shape is checked in ABAP instead: exactly one @ with something before it, a dot in the domain with at least two characters after it, and no spaces. The sample's own comment calls its regex demonstration-only, so the two agree on every value it is meant to show."
+    },
+    {
+      "type": "NOTE",
+      "what": "_validateInput reads the binding's type, calls validateValue and sets the input's valueState to Error or None. valueState IS a bindable property, so the port binds one field per input and writes it from the same check. The two valueStateTexts are carried literally, as the sample writes them."
+    },
+    {
+      "type": "NOTE",
+      "what": "onInit registers both inputs with sap.ui.core.Messaging (registerObject), which is what makes UI5 attach its own validation-error handling and paint the state on a failed parse. There is no counterpart for the registration itself; what it produces - the Error state on an invalid value - the port writes explicitly."
+    },
+    {
+      "type": "NOTE",
+      "what": "onSubmit's two outcomes are carried 1:1: a MessageToast on success and MessageBox.alert on failure (message_box_display with the information type, which is what alert shows)."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: that a name over ten characters paints the Error state and that Submit distinguishes the two outcomes."
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+
+<mvc:View
+	controllerName="sap.m.sample.SinglePlanningCalendarRecurringItem.Page"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:unified="sap.ui.unified"
+	xmlns="sap.m">
+	<VBox class="sapUiSmallMargin">
+			<OverflowToolbar height="100%" width="100%">
+				<Button text="Create Appointment" icon="sap-icon://add-activity" press=".onCreateAppointment" type="Emphasized" />
+				<ToolbarSeparator/>
+			</OverflowToolbar>
+		<SinglePlanningCalendar
+			id="SPC1"
+			class="sapUiSmallMarginTop"
+			title= "My Calendar"
+			viewChange=".handleViewChange"
+			startDate="{path: '/startDate'}"
+			nonWorkingPeriods="{path: '/nonWorkingPeriods', templateShareable: false}"
+			appointments="{path: '/appointments', templateShareable: false}">
+			<nonWorkingPeriods>
+				<unified:RecurringNonWorkingPeriod
+					date="{date}"
+					recurrenceType="{recurrenceType}"
+					recurrencePattern="{recurrencePattern}"
+					recurrenceEndDate="{recurrenceEndDate}">
+					<unified:timeRange>
+						<unified:TimeRange
+							start="{start}"
+							end="{end}"
+							valueFormat="{valueFormat}" />
+					</unified:timeRange>
+					<unified:recurrenceRule>
+						<unified:RecurrenceRule days="{recurrenceDay}" />
+					</unified:recurrenceRule>
+				</unified:RecurringNonWorkingPeriod>
+			</nonWorkingPeriods>
+			<appointments>
+				<unified:RecurringCalendarAppointment
+					startDate="{start}"
+					endDate="{end}"
+					title="{title}"
+					text="{text}"
+					type="{type}"
+					recurrenceType="{recurrenceType}"
+					recurrencePattern="{recurrencePattern}"
+					recurrenceEndDate="{recurrenceEndDate}">
+					<unified:recurrenceRule>
+						<unified:RecurrenceRule
+							days="{recurrenceDay}"
+							type="{ruleType}"
+							dayOfMonth="{ruleDayOfMonth}"
+							weekOfMonth="{ruleWeekOfMonth}"
+							dayOfWeek="{ruleDayOfWeek}"
+							month="{ruleMonth}" />
+					</unified:recurrenceRule>
+				</unified:RecurringCalendarAppointment>
+			</appointments>
+			<views>
+				<SinglePlanningCalendarDayView key="DayView" title="Day" />
+				<SinglePlanningCalendarWorkWeekView key="WorkWeekView" title="Work Week" />
+				<SinglePlanningCalendarWeekView key="WeekView" title="Week" />
+				<SinglePlanningCalendarMonthView key="MonthView" title="Month" />
+			</views>
+		</SinglePlanningCalendar>
+	</VBox>
+</mvc:View>

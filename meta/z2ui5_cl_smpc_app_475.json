@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_475",
+  "sample": "sap.m.sample.ComboBoxValidation",
+  "entity": "sap.m.ComboBox",
+  "file": "src/01/01/z2ui5_cl_smpc_app_475.clas.abap",
+  "batch": "b38",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "handleChange validates the entry (a typed value with no matching key is an error) and calls setValueState / setValueStateText. Validation is business logic, so the port keeps the change wire, binds selectedKey, value, valueState and valueStateText, and decides the state in ABAP - the same two branches with the same message."
+    },
+    {
+      "type": "NOTE",
+      "what": "The change wire and the two bound value-state properties are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_475.mjs)."
+    }
+  ]
+}

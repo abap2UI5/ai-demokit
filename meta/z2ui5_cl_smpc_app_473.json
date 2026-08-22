@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_473",
+  "sample": "sap.m.sample.InputSuggestionsDynamic",
+  "entity": "sap.m.Input",
+  "file": "src/01/01/z2ui5_cl_smpc_app_473.clas.abap",
+  "batch": "b37",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onSuggest builds a StartsWith filter on Name from the typed term (or an empty filter list) and applies it to the suggestionItems BINDING. Reproduced 1:1 through follow_up_action binding_call on that aggregation, so the model stays untouched (app 022 precedent). The suggest event round-trips per keystroke, which is what the sample is about; abap2UI5 serializes round-trips, so an event fired while one is in flight is dropped and the list catches up when typing pauses."
+    },
+    {
+      "type": "NOTE",
+      "what": "The suggest wire and its binding_call filter are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_473.mjs)."
+    }
+  ]
+}

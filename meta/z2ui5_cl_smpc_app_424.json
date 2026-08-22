@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_424",
+  "sample": "sap.m.sample.ToolbarActive",
+  "entity": "sap.m.OverflowToolbar",
+  "file": "src/01/01/z2ui5_cl_smpc_app_424.clas.abap",
+  "batch": "b32",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onCheckBoxSelect calls toolbar.setActive(selected); the port two-way binds one flag on both CheckBox.selected and OverflowToolbar.active, so the toggle happens roundtrip-free in the model. The CheckBox.select attribute is therefore dropped (structural-diff reports attr missing CheckBox.select)."
+    },
+    {
+      "type": "NOTE",
+      "what": "onToolbarPress shows MessageToast.show('OverflowToolbar is clicked') - a constant text, so it is composed on the client via follow_up_action control_global MESSAGE_TOAST.show and needs no round-trip."
+    },
+    {
+      "type": "NOTE",
+      "what": "Both wires are unverified in a running system: the two-way bound active flag (CheckBox -> OverflowToolbar.active) and the client-composed toast on the OverflowToolbar press. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_424.mjs)."
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "class": "z2ui5_cl_smpc_app_448",
+  "sample": "sap.m.sample.SemanticPageDraftIndicator",
+  "entity": "sap.m.DraftIndicator",
+  "file": "src/01/01/z2ui5_cl_smpc_app_448.clas.abap",
+  "batch": "b35",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onMessagesButtonPress builds a MessagePopover in the controller and toggles it against the MessagesIndicator. The port declares the same MessagePopover with its MessageItem template over the message> model in the indicator's dependents and toggles it via follow_up_action control_by_id / toggleBy anchored to $event.oSource.sId (app 107 precedent); structural-diff reports both as control extra because the original builds them in JavaScript."
+    },
+    {
+      "type": "NOTE",
+      "what": "onInit registers a ControlMessageProcessor and seeds one error message through the MessageManager. The port declares the z2ui5.cc.MessageManager bridge control with the same single message bound to it - an added control the original does not have (control extra z2ui5:MessageManager), which is how abap2UI5 feeds the message> model."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "handleLiveChange calls showDraftSaving(), showDraftSaved() and clearDraftState() one after the other in the same tick, so the two intermediate states are never painted and only the clear survives. The port makes exactly that surviving call on every keystroke (control_by_id / clearDraftState, client-side, so no per-keystroke round-trip), which reproduces what the sample shows but not the two calls that have no visible effect."
+    },
+    {
+      "type": "NOTE",
+      "what": "onSemanticButtonPress toasts the source's class name with the LIBRARY prefix stripped (sap.m.semantic.AddAction -> semantic.AddAction). The class name is transported with $event.oSource.getMetadata().getName() and the strip happens in ABAP, so the toast text is the original's. onNavButtonPress is a constant toast and is composed on the client."
+    },
+    {
+      "type": "NOTE",
+      "what": "The unused xmlns:ui=\"sap.ca.ui\" namespace declaration of the original view is dropped - sap.ca.ui is not part of OpenUI5 and no control in the sample uses the prefix."
+    },
+    {
+      "type": "NOTE",
+      "what": "The MessagePopover toggle over the bridged message, the three semantic action toasts, the nav-button toast and the clearDraftState wire are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_448.mjs)."
+    }
+  ]
+}

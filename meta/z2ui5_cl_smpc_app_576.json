@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_smpc_app_576",
+  "sample": "sap.m.sample.TableVerticalAlignment",
+  "entity": "sap.m.Table",
+  "file": "src/01/01/z2ui5_cl_smpc_app_576.clas.abap",
+  "batch": "b47",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the sample writes type=\"{Text}\" and fieldWidth=\"{60%}\" on the Quantity Input. Both are PATH bindings, not literals: no such property exists in its model, so both resolve to undefined and the Input renders with its defaults (type Text, fieldWidth 50%). Carrying them over would mean binding to a field the rows do not have - which the property gate rejects, and rightly so - and would change nothing on screen, so the two attributes are dropped (attr missing Input.type, Input.fieldWidth)."
+    },
+    {
+      "type": "NOTE",
+      "what": "the original derives the ObjectNumber weight state in its frontend Formatter.js (weightState: <0 None, <1000 Success, <2000 Warning, else Error - note this sample compares the RAW WeightMeasure, without the KG conversion its siblings do). That is business logic, so - abap2UI5 being a thin frontend - it is computed in ABAP model_init into a WEIGHT_STATE field and bound state=\"{WEIGHT_STATE}\"."
+    },
+    {
+      "type": "NOTE",
+      "what": "the items binding keeps its sorter on Name 1:1 (raw binding-info string over the bound table), so the rows are seeded in the mock's own order and the frontend sorts them. The full mock /ProductCollection is seeded with the fields this view binds (ProductId, Name, Quantity, UoM, WeightMeasure, WeightUnit, Price, CurrencyCode); the price column keeps the original sap.ui.model.type.Currency composite binding."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: the vAlign=\"Middle\" row alignment with the Input in a cell."
+    }
+  ]
+}

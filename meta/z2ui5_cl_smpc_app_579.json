@@ -1,0 +1,64 @@
+{
+  "class": "z2ui5_cl_smpc_app_579",
+  "sample": "sap.f.sample.FlexibleColumnLayoutWithOneColumnStart",
+  "entity": "sap.f.FlexibleColumnLayout",
+  "file": "src/02/04/z2ui5_cl_smpc_app_579.clas.abap",
+  "batch": "b48",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true,
+    "note": "the pressed product / supplier and the search query travel with the events"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "six post-1.71 members are kept for the 1:1 port: sap.f.FlexibleColumnLayout.autoFocus (since UI5 1.76) and restoreFocusOnBackNavigation (since 1.77), the three column-distribution controls sap.f.FlexibleColumnLayoutData, FlexibleColumnLayoutDataForDesktop and FlexibleColumnLayoutDataForTablet (all since 1.128), which is what the sample's layoutData block is about, and sap.m.Avatar (since 1.73) on the detail page."
+    },
+    {
+      "type": "NOTE",
+      "what": "the sample is a Component with a ROUTER and five views (FlexibleColumnLayout, List, Detail, DetailDetail, AboutPage). abap2UI5 serves one view, so the five become one: the FCL declares its begin, mid and end column pages inline and the routing collapses to the FCL's own layout property. onListItemPress opens the mid column (the helper's level-1 state, TwoColumnsMidExpanded), handleItemPress opens the end column (level 2, ThreeColumnsMidExpanded), handleAboutPress shows the about page (level 3, which the manifest pins to EndColumnFullScreen), and the three close / full-screen handlers of each column set the layout the helper would hand them. The URL the router also writes has no counterpart. Same fold as apps 575 and 577."
+    },
+    {
+      "type": "NOTE",
+      "what": "the five archived views declare different default namespaces - FlexibleColumnLayout.view.xml and DetailDetail.view.xml have xmlns=\"sap.f\", List.view.xml and AboutPage.view.xml xmlns=\"sap.m\" with f: for sap.f, and Detail.view.xml xmlns=\"sap.uxap\" with m: for sap.m. One abap2UI5 view can only have one default namespace (sap.m here), so every control carries a different PREFIX than in its original file even though it is the same control: ObjectPageLayout, ObjectPageDynamicHeaderTitle, ObjectPageSection and ObjectPageSubSection become uxap:-prefixed; DynamicPage and DynamicPageTitle become f:-prefixed (which is why the f:DynamicPage and f:DynamicPageTitle counts read 3 vs 2 - the sap.f-defaulted DetailDetail page joins the two the other files already prefix); and FlexBox, VBox, Label, Text, Title, Avatar, ObjectNumber, ObjectIdentifier, ColumnListItem, Link, Button, OverflowToolbarButton and form:SimpleForm lose their m: prefix. The whole missing/extra pairing of this port's structural diff is that shift - no control is actually added or dropped. The OverflowToolbarButton count (9 vs 3+6) is the same nine buttons counted once instead of split across two prefixes."
+    },
+    {
+      "type": "NOTE",
+      "what": "the six navigation-action buttons are shown by the sample through the FCL helper's actionButtonsInfo (visible=\"{= ${/actionButtonsInfo/midColumn/fullScreen} !== null }\" and so on). The helper is a JavaScript utility, so the port derives the same visibilities from the layout itself: full-screen while that column is not full screen, exit-full-screen while it is, and close while the column is open."
+    },
+    {
+      "type": "NOTE",
+      "what": "the columnsDistribution model the sample keeps (and its onColumnsDistributionChange handler, which writes the user's drag back into it) becomes twelve bound fields, one per size. The sample seeds only three of them (desktop TwoColumnsMidExpanded 25/75/0, tablet TwoColumnsMidExpanded 40/60/0 and tablet ThreeColumnsMidExpanded 20/60/20) and leaves the rest to the controls' own defaults; a flat ABAP row would send empty strings for those, so each is seeded with the control's documented default. columnsDistributionChange itself is not wired: a thin frontend cannot store a drag the control already applied, and the next round trip would push the seeded value back over it."
+    },
+    {
+      "type": "NOTE",
+      "what": "Detail.controller binds the mid column with bindElement('/ProductCollection/<n>') and DetailDetail binds the supplier row, so all their bindings are relative. The port folds them to root-seeded D_* / DD_TEXT fields (app 229 idiom): the pressed row's ProductId and the pressed supplier's text travel with the press. The detail Price is pre-composed as '<CurrencyCode> <Price>', which is the composite text the original's ObjectNumber binds."
+    },
+    {
+      "type": "NOTE",
+      "what": "onSort flips a Sorter on the items binding; a thin frontend sorts the data it sends, so the ABAP table is re-ordered (app 298 idiom). onSearch filters on Name into a second table so the search can widen again. onAdd's MessageBox.show with the Information icon and the 'Aw, Snap!' title is ported 1:1 through client->message_box_display."
+    },
+    {
+      "type": "NOTE",
+      "what": "the full mock /ProductCollection is seeded with the fields the three pages bind, plus the twelve supplier names of /ProductCollectionStats/Filters/1/values that the detail page's Suppliers table lists. The master title's count comes from ProductCollectionStats/Counts/Total (123)."
+    },
+    {
+      "type": "NOTE",
+      "what": "the two Avatar src values are '../../../../../../../{products>ProductPicUrl}' in the sample - a relative path out of the demo kit's own frame. The port binds the mock's ProductPicUrl as it stands, without the traversal prefix, which is what the corpus does everywhere for these images."
+    },
+    {
+      "type": "NOTE",
+      "what": "the icon-only share Button in the detail page's actions is tooltip-less in the sample, and so are the add and sort buttons of the list toolbar. The port gives all three a tooltip so they are reachable with a screen reader - the accessibility additions in this port."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: the three-column navigation, the six full-screen / close actions and the bound column-distribution sizes."
+    },
+    {
+      "type": "NOTE",
+      "what": "mvc:View displayBlock=\"true\" has no counterpart: it is a Component-app setting that makes the view fill the page when it is the root of a Component, and abap2UI5 owns the view container itself. FlexibleColumnLayout stateChange is wired in the sample only to rewrite the URL through the router after a navigation arrow was used; there is no URL to rewrite here, so the port drops it."
+    }
+  ]
+}

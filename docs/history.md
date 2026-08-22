@@ -7,6 +7,1082 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-22 — the FIRST full e2e sweep: 22 ports that had never been run
+
+Every previous sweep was per batch. Running all 623 at once found **22
+failures, and every one of them was a port with status `generated` /
+`checked: null`** — never live-verified. Nothing the b51 batch shipped broke
+them; they had simply never been executed.
+
+**The finding that outlived the sweep: `b =` is not a binding.**
+`z2ui5_cl_ui5_view_builder->a( b = … )` renders the literal `true` or `false`
+into the attribute at RENDER time — a convenience for a static boolean. Five
+ports used it for a field their event handler CHANGES, and none of the five
+re-renders after an event, so the control could never move. The sweep reported
+**one** of them (app 505's `showOverlay`); the other four — 436, 492
+(`pressed`) and 444 (`visible`) — came out of asking what else had the shape.
+That is the difference between fixing a failure and fixing a defect: the gates
+cannot see it, because the ABAP is valid and the view is correct.
+
+Nine more real defects, each its own class:
+
+| app | what was wrong |
+|---|---|
+| 252 | named the RETIRED `z2ui5_if_types=>cs_device`; that interface ships only so downstream installs keep compiling, and its constants are **not materialised** in the transpiled build — `model_init` died on `Cannot read properties of undefined` |
+| 549 / 609 | a `COND` whose branches the transpiler HOISTS and evaluates BOTH, so `get_event_arg( 2 )` ran for the sibling event that carries no arguments; 609 was derived from 549 and inherited it |
+| 553 / 555 | bound ROOT aggregations with a bare relative path (`{path: 'T_APPOINTMENTS'}`) — right inside a row-bound aggregation (apps 536/545 do it), meaningless at the root: 555's calendar came up with ZERO appointments, 553's legend with none |
+| 499 | built the `binding_call` filter payload as an array of OBJECTS; the compound form is groups of `[path, operator, value1]` ROWS, and a group that is not an array is dropped — leaving an empty list, which CLEARS the filter |
+| 520 | sent a raw boolean as an event arg: ajson normalises it to `X`/space on a system, the transpiled backend gets `'false'` verbatim, and `'false'` is not `INITIAL` |
+| 565 | read `${$source>/PRODUCT_ID}` — `$source>` is UI5's CONTROL model and sees the pressed control's PROPERTIES, not the row's model fields. The only one of the corpus's thirteen `$source>` wires reading a model field |
+| 508 | seeded its toggle flag the wrong way round, so the info toolbar started hidden where the original starts shown |
+
+**The other thirteen were wrong assertions, in two families.** A BOUND
+aggregation keeps its template as a live Element in the registry, so a
+registry-wide count is always one too many (531/532's QuickViewPages, 520's
+NotificationListItems, 555's appointments, 506's tab items). And several
+controls keep instances of their OWN beside the bound ones —
+`sap.m.Breadcrumbs` an internal `sap.m.Link`, `sap.ui.unified.Calendar` an
+eighth `DateTypeRange`, `sap.m.PlanningCalendar` a fourth row. Ask the owning
+control for its aggregation; never count the registry.
+
+Three new harness rules came out of it, all measured:
+
+- **An open popover measures ZERO in the unthemed harness**, so `toContainText`
+  times out on a popover that is on screen and correct (app 486). Read it
+  through the control.
+- **`setValue` + `fireChange` does not write a TYPED binding's model** — that is
+  `InputBase.onChange` → `updateModelProperty`, which runs the type. Firing the
+  event directly leaves the control on the new value and the model on the old
+  one, so the round trip sends the old one (app 622).
+- **While a client-side constraint is violated, NO round trip goes out at all**
+  (measured: one POST for a whole sequence). The backend's own paths have to be
+  driven before the violation, not after.
+
+Two assertions had never run: `expect(x).toContain(…)` (a Playwright-test API
+this harness does not have) and `toBeVisible()` (a matcher it was missing).
+Adding the matcher made app 516's assertion execute for the first time — and it
+turned out to assert a `SegmentedButton` the sample has nowhere. It is the
+ViewSettingsDialog's own header, and only exists once the dialog is open.
+
+**The harness could not start at all at first.** The build finished, the server
+never listened: `RangeError: Maximum call stack size exceeded` inside
+`compileSourceTextModule`. The view builder's chain transpiles to ONE deeply
+nested expression — `view->ele( )->a( )->a( )` becomes
+`await (await (await (…).get().a(…)).get().a(…))`, one level per call — and the
+generated overview app's view is **177 calls** long. Node's default parser
+stack, already partly spent by the ESM loader walking 2,340 modules, overflows
+on it. It is a V8 parser limit, not an ABAP one — a real system never parses
+this — so the harness raises the stack rather than the corpus shortening its
+chains. A backend 500 also names its exception and frame now; "HTTP 500" alone
+diagnosed nothing.
+
+Final state: **623 / 623 pass.** The one straggler in the confirming run
+(app 233) was CPU contention — a `check:js` suite and a `frontend:build` were
+running beside the sweep and its 10-second assertion ran out. Green on re-run,
+and the lesson is the obvious one: nothing heavy beside a sweep.
+
+## 2026-08-22 — batch b51 (sap.m): the backlog reaches zero (apps 612–623)
+
+The last twelve portable samples in the corpus. Every library is at 100 %, and
+what is left unported is the twelve `HOLDOUT` rows and nothing else.
+
+| app | sample | what it adds |
+|---|---|---|
+| 612 | MultiInputFilteringSuggestions | a value state message that is a `FormattedText` with a `Link` in it (POST_171, `src/02`) |
+| 613 | MultiInputGrouping | a GROUPING sorter carried into two suggestion bindings |
+| 614 | ObjectHeaderResponsiveIII | the full-screen responsive header, five attributes and a header-container tab bar |
+| 615 | ObjectHeaderResponsiveIV | the same in master/detail, plus the title selector and eight tabs |
+| 616 | ComboBoxValueState | `formattedValueStateText` on a ComboBox (POST_171, `src/02`) |
+| 617 | IconTabBarBackgroundDesign | two `BackgroundDesign` enums written by two RadioButtonGroups |
+| 618 | IconTabBarProcess | the process look: `design="Horizontal"` filters with icon separators |
+| 619 | IconTabBarResponsivePadding | the same table under the two responsive padding classes |
+| 620 | IconTabBarTabDensityMode | nine bars, eight sharing ONE bound `tabDensityMode` |
+| 621 | InputAssistedTabularSuggestions | the same 123 rows in three column layouts (POST_171, `src/02`) |
+| 622 | InputChecked | a bound `sap.ui.model.type.String` constraint checked on both sides |
+| 623 | InputStates | the four input states and a value help dialog |
+
+Three findings, and the first is a defect the batch shipped and then took back
+out of three of its own ports.
+
+- **`DELETE ... INDEX sy-tabix` inside a `LOOP` over the same table is not a
+  filter idiom, it is a bug.** Apps 617, 618 and 619 all wrote their weight
+  filter that way. App 298 had already established what happens — the rows
+  shift under the loop's own cursor, so on a system it silently SKIPS the row
+  after each deletion and on the transpiled backend it raises
+  `TABLE_INVALID_INDEX` (2026-08-17) — and the note is in that port's source,
+  where a new port never reads it. All three collect into a local table now,
+  which is the shape app 298 landed on. **The lesson generalises past this
+  batch: a rule that lives only in the source of the port that learned it is a
+  rule the next port will break.**
+- **A JS validator is a round trip, not a lost feature.** `MultiInput.addValidator( )`
+  is a callback abap2UI5 cannot register, and apps 612 and 613 are both written
+  around one: picking a suggestion ROW has to become a Token whose key is the
+  row's first cell and whose text is `'key(price cell)'`. Wiring
+  `suggestionItemSelected` with `${$parameters>/selectedRow}.getCells()[0].getText()`
+  gets the same token built in ABAP over a bound `tokens` table — the apps 501 /
+  504 lesson applied to the tabular case rather than the typed-text one. The
+  bound `tokens` aggregation is the only thing EXTRA in the view.
+- **Nine bars, one field.** App 620's controller writes `setTabDensityMode` on
+  eight bars from one RadioButtonGroup and leaves the ninth alone. The property
+  is bindable, so the eight share ONE bound field and the handler disappears
+  entirely — the same fold apps 604 and 617 make, and the ninth bar binding
+  nothing is what proves the fold is real rather than a global.
+
+App 612 is also the batch's only POST_171 that is an AGGREGATION rather than a
+property: `formattedValueStateText` comes from `sap.m.InputBase` `@since 1.78`,
+so on a 1.71 floor UI5 would resolve the tag as a control class and the 404
+would take the whole view down — not just that part. That is why the version
+gate is a hard failure on an aggregation and an excusable one on a property.
+
+## 2026-08-22 — the second e2e sweep: a silent no-op in every dynamic SORT
+
+The b47 ports were run against the e2e harness for the first time. Four
+failures, and only two of them were the ports.
+
+**The one that matters is a transpiler limitation nothing else could have
+found.** App 571's Sort Ascending fired, the round trip ran, the backend called
+its `table_sort` — and the table came back in the mock's original order. The
+transpiled backend shows why:
+
+    SORT t_products BY (field) ASCENDING.
+    -->  abap.statements.sort(this.t_products, {});
+
+The **dynamic** component form loses its `BY` clause entirely. Every sort
+written that way is a no-op in the browser, and passes every static gate: the
+ABAP is valid, abaplint is happy, and the view is correct. Three ports carried
+it — 298 (SortDialog / the column menu), 362 (`sap.ui.table` multi-key sorting)
+and 571 — and all three now name the component STATICALLY in a `CASE`. App 298
+had even been marked e2e-verified, on an interaction that never asserted the
+row ORDER.
+
+The second port defect is the b45 lesson again, one row further down: app 541
+still had ONE special-date row without its `secondarytype` seed (the NonWorking
+range on Sophie Miller), which sends `""` into the `CalendarDayType` enum and
+terminates the app. Fixing "the rows the first failure named" is not fixing the
+table. App 566 was the same shape on a different property: its supplier and
+category rows carry no weight at all, so they sent `""` into an ObjectNumber's
+`ValueState`. Both are seeded `None` now — app 566 through a `LOOP ... WHERE
+weight_state IS INITIAL` guard, so a later row cannot reintroduce it.
+
+And app 537 was a third variant: the sample's own data carries an upstream typo
+(`UI5Date.getInstance(201, 2, 4, 13, 30)` — year 201 where every neighbour says
+2017). In JavaScript that is a valid, absurd date; as the ISO string the port
+stores it became `201-03-04T13:30:00`, which `new Date()` cannot parse at all,
+so the appointment arrived as an Invalid Date and took the calendar down. The
+year is written `0201` now: the same absurd date the original produces, and one
+that parses.
+
+**One new harness rule, and it bit three interactions.** Every `sap.m.Input`
+builds an INTERNAL `sap.m.Table` for its suggestion popup
+(`__input0-popup-table`). A bare
+``ui5All().find((c) => c.getMetadata().getName() === 'sap.m.Table')`` therefore
+returns an input's popup table once an editable cell has been shown — which is
+exactly what happened in apps 567, 570 and 576, and made three correct ports
+look broken (570's "Cancel never returned" was a popup table with no items and
+no binding). Address the app's own table BY ITS ID. App 568's was simpler and
+the same kind: `find(sap.m.Button)` returned a framework button rather than the
+one with the text.
+
+The score after the fixes: 567, 568, 570, 571 (pending a rebuild), 572, 573,
+574, 575 and 576 all pass.
+
+## 2026-08-22 — batch b50 (sap.m + sap.ui.unified): nine libraries at 100 % (apps 600–611)
+
+Twelve samples with almost nothing in common except that they were what stood
+between the corpus and a clean sweep: the four remaining `sap.m.Tree` samples,
+the last `sap.ui.unified` one, and seven scattered `sap.m` singles. It leaves
+**sap.m alone** below 100 % — every other library is complete.
+
+| app | sample | what it adds |
+|---|---|---|
+| 600 | TreeDnD | a drop that REPARENTS a node; the model is kept flat and the nested table rebuilt |
+| 601 | TreeExpandMulti | `expand` / `collapse` over the selected indices, a shared sticky table, an info toolbar |
+| 602 | TreeExpandTo | `expandToLevel` from a Select, `collapseAll` from a button |
+| 603 | TreeOData | an ODataTreeBinding's hierarchy annotations folded into a nested table |
+| 604 | CarouselWithDisplayOptions | eleven bound Carousel / CarouselLayout options and no frontend action at all (POST_171, `src/02`) |
+| 605 | HeaderContainerLazyLoading | `scroll` appends three more tiles, indefinitely |
+| 606 | GenericTileLineMode | the same tiles in both modes, two SlideTiles and a `LinkTileContent` (POST_171, `src/02`) |
+| 607 | OverflowToolbarFooter | four content types in a header and a footer toolbar, both shrunk by one slider (POST_171, `src/02`) |
+| 608 | Select2Columns | `columnRatio` and `twoColumnSeparator`, both written by bound controls (POST_171, `src/02`) |
+| 609 | SinglePlanningCalendarCreateApp | app 549's calendar with the toolbar off — the create-and-edit half (POST_171, `src/02`) |
+| 610 | SinglePlanningCalendarDND | drag, resize and drag-to-create over the bound appointment table (POST_171, `src/02`) |
+| 611 | CalendarAriaHasPopup | `DateTypeRange.ariaHasPopup` — a property NEWER than the corpus's own metadata pin |
+
+**The pin caught up with a sample.** App 611's whole subject,
+`sap.ui.unified.DateTypeRange.ariaHasPopup`, is `@since 1.152.0`, and the
+linter's control metadata is pinned at **1.151.0** — so the member does not
+exist in the snapshot at all and the property gate reads it as a typo, which no
+`POST_171` deviation can excuse (only version findings are excusable that way).
+The render harness runs the same 1.151 runtime and rejects the attribute
+outright. The port therefore carries three declarations for one attribute: the
+`POST_171` for the fact, batch b49's new `property_gate` skip for the
+`unknown-property` finding, and a `render_smoke` skip for the runtime. All three
+are re-verified per run, so the day the pin reaches 1.152 every one of them
+fails as stale and gets removed. That is the design working, not a workaround.
+
+Three findings:
+
+- **A whitelist is not the whole boundary.** `expand` and `collapse` are NOT in
+  the framework's `CONTROL_METHODS`, and app 601 needs both. They work anyway:
+  a resolved argument reaches an unlisted PUBLIC method through `castArgAuto`
+  untouched, which app 248 established and e2e-verified. Worth writing down,
+  because reading the whitelist alone says the sample cannot be ported.
+- **A settings model is usually two names for one field.** Apps 601, 606 and
+  610 each keep a `settings>` model whose only readers are the control that
+  writes it and the control it configures — a Switch and `enableAppointmentsDragAndDrop`,
+  a ComboBox and every `scope` binding. Folding the prefix away leaves the two
+  sharing one bound field and the handler disappears: app 604 ends up with
+  ELEVEN bound options and not a single frontend action.
+- **Two mock arrays of the same shape confuse data-fidelity.** `tiles.json`
+  carries `slideTile1` and `slideTile2` with identical fields and identical
+  lengths, so the gate compares both ABAP blocks against the first and reports
+  every row of the second as changed. The data is verbatim; the sidecar says so
+  and names the fields, which is what the gate's field-level declaration is for.
+
+App 600 is the one real improvisation. Its `onDrop` reparents by pushing the
+dragged context's data into the target's `categories` array and setting the
+source path to `undefined` — and `Tree.json` nests its children under `nodes`,
+so upstream a dropped node lands in an array the tree never reads and vanishes.
+The port keeps the model FLAT (text, ref, parent) and rebuilds the five-level
+nested table after every drop, which is the only way a reparenting is
+expressible at all when the type of a node depends on its depth. It reparents
+under `nodes`, i.e. it does what the sample's own comment says it is doing.
+
+## 2026-08-22 — batch b49 (sap.uxap): the ObjectPage tail, and a fourth escape hatch (apps 586–599)
+
+Every unported `sap.uxap` sample in one batch, which finishes the library at
+**45 / 45** and the second-to-last of the ten: twelve more `ObjectPageLayout`
+samples and the two remaining `ObjectPageSubSection` ones.
+
+| app | sample | what it adds |
+|---|---|---|
+| 586 | AnchorBar | fifteen sections, one of them with no subsection at all |
+| 587 | AnchorBarWithNumbers | section titles that carry their own counts, `subSectionLayout="TitleOnLeft"` (POST_171, `src/02`) |
+| 588 | ObjectPageBeforeNavigate | a `beforeNavigate` veto driven by an edit mode, and the confirm dialog behind it (POST_171, `src/02`) |
+| 589 | ObjectPageBlockViewTypes | the same block authored four ways — typed, JSON, HTML and XML |
+| 590 | ObjectPageFormFocusableInput | `ColumnElementData` cell spans and a Focus action onto the first editable input (POST_171, `src/02`) |
+| 591 | ObjectPageFormLayout | a `forms:Form` with two `FormContainer`s beside a `SimpleForm` (POST_171, `src/02`) |
+| 592 | ObjectPageLazyLoadingWithoutBlocks | twenty-one stashed `ObjectPageLazyLoader`s — lazy loading with no custom block |
+| 593 | ObjectPageOnJSONWithLazyLoading | the same heavy block eleven times (POST_171, `src/02`) |
+| 594 | ObjectPageSelectedSection | `selectedSection` set statically in the view (POST_171, `src/02`) |
+| 595 | ObjectPageState | `useIconTabBar` plus a `sap.ui.table.Table` with a 1.119 row mode (POST_171, `src/02`) |
+| 596 | ObjectPageTabNavigationMode | app 594's view minus the one attribute (POST_171, `src/02`) |
+| 597 | ObjectPageXML | section titles and subsection modes bound to a state model |
+| 598 | ObjectPageSubSectionMultiView | 1..6 unsized blocks per subsection, laid out automatically |
+| 599 | ObjectPageSubSectionSized | 359 blocks across 86 subsections, one `columnLayout` each |
+
+**The gate change.** App 592's whole subject is a stashed `ObjectPageLazyLoader`
+in a `blocks` aggregation — and the property gate rejects it, because
+`ObjectPageSubSection.blocks` is declared `sap.ui.core.Control` while
+`ObjectPageLazyLoader` extends `sap.ui.core.Element`. The declaration is simply
+under-tight: `ObjectPageSubSection.addAggregation` opens with
+``if (oObject instanceof ObjectPageLazyLoader)`` and either stashes it or
+unwraps its content (ObjectPageSubSection.js:1337). This is the same shape as
+batch b47's `columnmenu.Menu.items` — the metadata says one thing, the control
+does another — but that one had a workaround and this one does not: satisfying
+the rule would mean deleting the sample.
+
+So the sidecars grew a fourth escape hatch, `property_gate`, deliberately
+**narrower** than the three that already existed (`render_smoke`,
+`data_fidelity`, `structural_diff`). It must NAME the finding types it covers —
+`validate-meta` rejects a blanket skip — and a named type that does not fire is
+stale and fails the port, exactly like a stale render skip. One port uses it,
+for one type. The chain config gained the matching `invalid-aggregation-child:
+false`: the finding is judged in `meta/`, and this file has no access to that
+judgement.
+
+Three more findings:
+
+- **A sample can reference blocks the demo kit does not publish.** App 597's
+  view pulls `sap.uxap.testblocks.multiview`, `.objectpageblock` and
+  `.mixedblock`, plus a `sap.uxap.sample.Headers.block` — UI5 *test* resources
+  and an unpublished sample, referenced by this one view and shipped nowhere.
+  Three of the four are IMPROVISED and labelled as such in the view itself; the
+  fourth is not invented, because `sap.uxap.sample.ObjectPageSubSection` ships a
+  `MultiViewBlock` of its own (app 116 ports it) whose Collapsed view is the
+  honest content.
+- **Two attributes in that sample do not exist and never did.**
+  `ObjectPageSection.icon` and `ObjectPageSubSection.icon` are in neither the
+  1.71 metadata nor 1.151's; upstream XMLView drops them with a log line. They
+  are DROPPED, not reproduced — the first `DROPPED_171` in this corpus raised by
+  a property that was never there rather than one that arrived late.
+- **A static sorter is data-fidelity's problem, not the view's.** App 595 binds
+  its rows with `sorter: { path: 'Name' }`. The first draft seeded the 123 mock
+  rows already in Name order — and the gate compares them POSITIONALLY against
+  the mock, so all 123 failed. The fix is the app 298 idiom rather than a skip:
+  seed the mock's own order verbatim and `SORT` in `model_init`, which also
+  makes the sorter's field an honest fifth column of the ABAP table.
+
+What the batch mostly is, though, is the same fifteen `SharedBlocks` inlined
+over and over: apps 263, 588, 594, 595 and 596 carry byte-for-byte the same
+section tree, and 587 and 593 most of it. Where they differ is one attribute
+each — `selectedSection`, `beforeNavigate`, `subSectionLayout` — which is
+exactly what the demo kit is demonstrating, and exactly what makes the sidecars
+worth reading: the deviation lists are near-identical on purpose, and the one
+NOTE that differs is the sample.
+
+## 2026-08-22 — batch b48 (sap.f): the nine that were left, and the library is done (apps 577–585)
+
+Every unported `sap.f` sample in one batch, which finishes the library at
+**34 / 34**: four more `FlexibleColumnLayout` router apps, the two `GridList`
+design samples and the three `ShellBar` ones.
+
+| app | sample | what it adds |
+|---|---|---|
+| 577 | FlexibleColumnLayoutColumnResize | `autoFocus` / `restoreFocusOnBackNavigation` and a two-column resize (POST_171, `src/02`) |
+| 578 | FlexibleColumnLayoutWithFullscreenPage | the full-screen column and the way back out of it |
+| 579 | FlexibleColumnLayoutWithOneColumnStart | the reference three-column port: twelve bound `columnsDistribution` sizes, six navigation actions, sort / search / add |
+| 580 | FlexibleColumnLayoutWithTwoColumnStart | the same app that STARTS on two columns — the mid column is bound before the first render |
+| 581 | GridListBoxContainerReal | three `GridBoxLayout` box widths and a static gallery of recommended box content |
+| 582 | GridListKeyboardArrowsNavigation | `borderReached`, four `GridItemLayoutData` span pairs, a slider that drives the container width |
+| 583 | ShellBarProductSwitch | `sap.f.ProductSwitch` in a popover anchored on the button the event ships (POST_171, `src/02`) |
+| 584 | ShellBarWithFlexibleColumnLayout | a `ShellBar` as the `customHeader` over the whole FCL |
+| 585 | ShellBarWithSplitApp | a `ToolPage` with a bound `sideExpanded` and a `NavigationList` side navigation |
+
+Four findings, and one repeat of a trap that has now cost three batches:
+
+- **The five-view router app folds to one view, and the structural diff's whole
+  missing/extra pairing is a PREFIX shift.** Apps 578–580 and 584 each archive
+  five `view.xml` files with three different default namespaces (`sap.f` in
+  FlexibleColumnLayout.view.xml and DetailDetail.view.xml, `sap.m` in
+  List.view.xml and AboutPage.view.xml, `sap.uxap` in Detail.view.xml). One
+  abap2UI5 view has ONE default namespace, so every control that was defaulted
+  in its own file now carries a prefix — `ObjectPageLayout` becomes `uxap:`,
+  `DynamicPage` becomes `f:`, `Avatar` and `ColumnListItem` lose their `m:`.
+  Nothing is added or dropped; the counts just move between prefixes. Each of
+  the four sidecars says so in one deviation rather than one per control.
+- **`FlexibleColumnLayoutSemanticHelper` is JavaScript, so the six navigation
+  buttons derive their visibility from the layout itself.** The samples bind
+  `visible="{= ${/actionButtonsInfo/midColumn/fullScreen} !== null }"`, which
+  is a model the helper writes. The ports read the same three states off the
+  `layout` property directly: full-screen while that column is not full screen,
+  exit-full-screen while it is, close while it is open.
+- **Seed the control's documented default for every field the sample leaves
+  absent** — the same defect class the e2e sweep found the day before, met
+  here BEFORE it could bite. App 579's `columnsDistribution` model has twelve
+  sizes and the sample seeds three; a flat ABAP row would send nine empty
+  strings into `sap.f.FlexibleColumnLayoutData`. All twelve are seeded now, the
+  nine with the value the control would have used anyway.
+- **A sample's own private helper is a DROPPED_171, not an IMPROVISED.** Both
+  GridList samples ship `RevealGrid/RevealGrid.js` — a debugging aid that reads
+  the computed grid template off the rendered DOM and lays an overlay div over
+  each cell. There is no control behind it and no server-side state to toggle,
+  so the `Reveal Grid` ToggleButton keeps its label and loses its `press` in
+  apps 581 and 582 alike.
+
+Two smaller ones from app 582. `onSliderMoved` does
+`byId("container").setWidth(value + "%")` on every `liveChange`; the port makes
+the slider's `value` two-way bound and the `CSSGrid` width an expression over
+it (``{= ${...} + '%' }``), so the width follows the slider in the BROWSER —
+faster than a round trip per keystroke and, unlike one, lossless. And the
+sample's actual subject, the keyboard hand-off BETWEEN the four grids, is an
+IMPROVISED: `onBorderReached` compares `getBoundingClientRect()` geometry
+across all four lists and calls `focusItemByDirection(direction, row, column)`
+on the winner. Neither half travels. The port keeps the toast the sample also
+shows, so arrow keys still navigate within a grid and still report when they
+run out of it.
+
+The repeat: **the right-hand name of a `WHERE` resolves to the COLUMN**, so a
+local variable must not share it (`WHERE category = category` matches every
+row). App 578 hit it after apps 520 and 524 did. It stays cheap to make and
+invisible until the data is wrong, which is why every occurrence gets a comment
+naming the two earlier ones.
+
+## 2026-08-22 — the first full e2e sweep of the calendar batches: five port defects and a harness rule
+
+The e2e harness was rebuilt after batch b46 and every port of b44, b45 and b46
+was run against it for the first time. Nine of the thirty failed. Five were
+real port defects, four were wrong assertions in the interaction modules —
+and the four teach the same three things about reading a running abap2UI5 app.
+
+**The port defects.** All five are the same shape: *a flat ABAP row serializes
+EVERY field, so a property the sample leaves ABSENT arrives as an empty string
+or a string where a number belongs, and UI5 rejects the value and terminates
+the app.* The static render gate cannot see it because it mocks the model.
+
+- `secondaryType` on a `DateTypeRange` (apps 541, 553) and `type` on a
+  `RecurrenceRule` (apps 548, 555): empty string against an enum. Where the
+  enum has a neutral value the port now seeds it (`None`); where it has none
+  (`RecurrenceType` is Daily/Weekly/Monthly/Yearly, `RecurrenceRuleType` is
+  DayOfMonth/DayOfWeek) the binding became ``{= ${X} || null }`` — UI5's
+  `validateProperty` maps `null` to the property's default, which is exactly
+  what "the field is absent" means in the sample's own JSON.
+- `nonWorkingDays` / `nonWorkingHours` / `RecurrenceRule.days` (apps 537, 548,
+  555): an `int[]` bound to a table of STRINGS serializes to `['5','6']`, and
+  UI5 answers `"5,6" is of type object, expected int[]`. The tables are integer
+  tables now. This also closes app 537's `render_smoke.skip` reasoning: the
+  nesting was never the whole story.
+
+**The harness rules.** Three of them, all about counting controls:
+
+- **A bound aggregation's TEMPLATE is a live Element.** `Element.registry`
+  always holds one row, one list, one item more than the model has, so an exact
+  count from the registry is off by one and an `.every()` over it fails on the
+  template (which has no binding context). Count through the aggregation —
+  `pc.getRows()`, `ff.getLists()`, `list.getItems()`.
+- **A JSONModel's default `sizeLimit` is 100.** A table bound to the 123-row
+  product mock renders 100 rows — in the ORIGINAL too. Only app 567's sample
+  sets a limit of its own (3) and app 558's raises it to 200.
+- **A button in an `OverflowToolbar` may not be in the DOM at all**, so a
+  text or title locator times out; fire it through the registry by id.
+
+And one timing rule: a press fired while a round trip is still in flight is
+dropped. Two selections in a row need the first to come back before the second
+is sent (app 558).
+
+## 2026-08-22 — batch b47 (sap.m): the Table family, all eleven that were left (apps 566–576)
+
+Every unported `sap.m.Table` sample in one batch, which finishes the control:
+the drill-down, the two column-width tables, the drag-and-drop pair, the
+editable one, the column header menus, the merged cells and the master/detail
+app that only pretends to be a table sample.
+
+| app | sample | what it adds |
+|---|---|---|
+| 566 | TableBreadcrumb | a three-level hierarchy drill-down with a bound `Breadcrumbs.links` |
+| 567 | TableColumnWidth | two tables whose `columns` aggregation is BOUND to a column array |
+| 568 | TableContextualWidthStatic | `contextualWidth` as a bound property |
+| 569 | TableDnD | rank-based drag and drop between two tables, both bound to one collection |
+| 570 | TableEditable | a read-only and an editable row template, swapped by an `IF` |
+| 571 | TableIColumnHeaderMenu | four column header menus; the sample's own `MenuBase` subclass cannot be defined from ABAP |
+| 572 | TableLayout | `fixedLayout` per table, page and dialog |
+| 573 | TableMergeCells | `mergeDuplicates` + `mergeFunctionName`, made to merge by the supplier sorter |
+| 574 | TableMultiSelectMode | `itemActionCount` / `ListItemAction` / `sap.m.table.Title` (POST_171, `src/02`) |
+| 575 | TableScrollToIndex | the corpus's first `sap.f.FlexibleColumnLayout` — a master/detail app (POST_171, `src/02`) |
+| 576 | TableVerticalAlignment | `vAlign` rows with an Input in a cell |
+
+Five findings, three of them about the view-builder reconstruction rather than
+the ports:
+
+- **A secondary chain must be BALANCED or no gate ever sees it.** App 570's
+  footer hung off a captured `page` node and ended inside two open elements;
+  the reconstructed view came back with no `<footer>` at all — the render gate,
+  the property gate and the structural diff all judged a view that was missing
+  it. A root chain may end unbalanced; a `node->…` statement may not. Close it
+  with ``)->end(`` down to the node you started from.
+- **An attribute whose value is a METHOD PARAMETER is invisible the same way.**
+  Also app 570: an Edit form built by a helper that took the four binding
+  strings reconstructed as `<Input type="Text"/>` with no `value` at all. The
+  linter resolves literals and ``client->_bind( <attribute> )``, not
+  parameters. Inline the attributes, or the gates check a different view than
+  the one that ships.
+- **Two branches of an `IF` are BOTH emitted into the reconstruction.** App 570
+  shows eight cells in a four-column row, app 569 shows one table where the
+  sample has two (a helper called twice is emitted once). Neither is wrong at
+  runtime — but the same merge makes a conditional `items` attribute an
+  *error*: "items is set twice on the same control". Hoist the value into a
+  `COND` and set the attribute once (app 569).
+- **`sap.m.table.columnmenu.Menu.items` is metadata-single.** The UI5 source
+  omits `multiple: true` and relies on `ManagedObject`'s default of true, but
+  the metadata snapshot records what the source says, so a Menu with two
+  `ActionItem`s is rejected. `QuickAction.content` does carry the flag — which
+  is where app 571's two sort buttons and three align buttons went, and it is
+  the better fit anyway.
+- **`t_products[ rank = 0 selected = abap_true ]` reads as a table INDEX to
+  abaplint** (`invalid_table_index`, "Table index starts from 1"). Putting a
+  non-numeric key first — `[ selected = abap_true rank = 0 ]` — parses fine.
+  Same table expression, same semantics.
+
+Three upstream slips are recorded in the sidecars rather than reproduced: app
+574's `oTable.setMultiSelectionMode(...)` (the property is `multiSelectMode`,
+so that setter does not exist) and its `itemActionPress="onItemActionPress"`
+without the leading dot, and app 576's `type="{Text}"` / `fieldWidth="{60%}"`,
+which are path bindings to fields that do not exist.
+
+## 2026-08-22 — batch b46 (sap.m + sap.f): the popup-and-page tail (apps 556–565)
+
+Ten samples with nothing in common but their shape: each one builds most of its
+UI in a controller and shows it in a popup or a second page, so the port is
+mostly a matter of rebuilding what the demo kit's `view.xml` does not contain.
+
+| app | sample | what it adds |
+|---|---|---|
+| 556 | DatePickerMassEdit | a selection-gated Edit button and the mass-edit dialog behind it |
+| 557 | FacetFilterCustomFilters | `lists="{…/Filters}"` kept BOUND, with the group's own values nested one level down |
+| 558 | TabContainerMHC | the corpus's first `sap.m.TabContainer`, built over a bound items aggregation |
+| 559 | DynamicPageAnalyticalTable | a `sap.ui.table.Table` in a `f:DynamicPage`, plus a numeric card in a popover |
+| 560 | DynamicPageWithWizard | app 535's branching wizard, this time inside a `f:DynamicPage` |
+| 561 | DialogWithinArea | three dialogs from one parameterised builder; `Popup.setWithinArea` has no declarative form |
+| 562 | DialogWithMessagePopover | app 065's message handling, moved into a Dialog, with the severity formatters RESTORED |
+| 563 | MessageViewInsidePopover | app 284's MessageView, anchored in a `Popover` instead of a Dialog |
+| 564 | MessageViewInsideResponsivePopover | the same, in a `ResponsivePopover` with an `endButton` |
+| 565 | PopoverNavCon | a `NavContainer` inside a popover; `bindElement` folded to root-seeded fields |
+
+Five findings:
+
+- **`sap.m.TabContainer` has no default aggregation.** App 558's item template
+  as a direct child produced `Cannot add direct child without default
+  aggregation` and the view never rendered. The template has to sit in an
+  explicit ``)->ele( `items` )`` next to the `items` binding — the render gate
+  caught it, the static gates did not.
+- **A view-builder attribute whose value is a METHOD PARAMETER is invisible to
+  every gate.** App 558 first built its Edit form in a helper taking the four
+  binding strings; the reconstructed view came out with `<Input type="Text"/>`
+  and no `value` at all, because the linter resolves literals and
+  `client->_bind( <attribute> )`, not parameters. Nothing failed — the form was
+  simply absent from the property gate, the render gate and the structural diff.
+  Inline the attributes, or the gates are checking a different view than the one
+  that ships.
+- **The demo kit's shared `forms.json` has no `recipient` node**, so app 562's
+  fragment title `Hello {/recipient/name}` renders a bare `Hello ` in the
+  ORIGINAL. Confirmed against the upstream file rather than guessed; the port
+  keeps the binding shape over an empty field so it renders identically. The
+  rest of that mock is byte-equivalent to the snapshot the sibling sample
+  (app 065) already carries.
+- **The severity formatters app 065 dropped are portable after all.** App 562's
+  `buttonIconFormatter` / `buttonTypeFormatter` / `highestSeverityMessages` scan
+  the message list for the highest severity — a domain computation, so it runs
+  in ABAP and feeds the button's bound `icon`, `type` and `text`. `btn_type` is
+  seeded `Default`: an empty string would override the `sap.m.ButtonType` enum
+  default and reject the whole view, the same trap b45 hit with `AvatarColor`.
+- **Two advisory ratchets had been red since earlier batches.** `b43` landed
+  apps 533/535's per-keystroke `liveChange` wires and `b45` landed apps 553/554's
+  tooltip-less legend buttons, neither with a budget raise — so `view-gates
+  --strict` has been failing on the committed tree for three batches. Both
+  budgets are raised here with dated comments naming every port, rather than
+  quietly re-baselined. b46 itself adds one `live-event-roundtrip` (app 560,
+  inherited from app 535) and no accessibility debt: every icon-only button it
+  ports got a tooltip.
+
+## 2026-08-22 — batch b45 (sap.m): the calendar tail — three PlanningCalendars and seven SinglePlanningCalendars (apps 546–555)
+
+The rest of the PlanningCalendar family plus seven of the nine
+SinglePlanningCalendar samples, including the three heaviest ports the corpus
+has: two create/edit dialogs and a details popover apiece.
+
+| app | sample | what it adds |
+|---|---|---|
+| 546 | PlanningCalendarDnD | three roles gating drag / resize / create per row; the drop, resize and drag-create round-trips |
+| 547 | PlanningCalendarModifyAppointments | one dialog serving create, create-with-context and edit; the owner change and the interval-header route |
+| 548 | PlanningCalendarRecurringItem | `RecurringCalendarAppointment` @1.149 and `RecurringNonWorkingPeriod` @1.127 (POST_171, `src/02`) |
+| 549 | SinglePlanningCalendar | the flagship: details popover, modify dialog, legend popover, three drag actions, more-link |
+| 550 | SinglePlanningCalendarWeekNumbering | `calendarWeekNumbering` @1.110 on the single calendar (POST_171, `src/02`) |
+| 551 | SinglePlanningCalendarSnappingHeader | `firstDayOfWeek` @1.98 — an INT fed from a Select's string key (POST_171, `src/02`) |
+| 552 | SinglePlanningCalendarWithCustomViews | two custom view CLASSES, which a backend cannot define |
+| 553 | SinglePlanningCalendarWithLegend | the legend in a `DynamicSideContent` with seven coloured special dates (POST_171, `src/02`) |
+| 554 | SinglePlanningCalendarWithZoomInZoomOut | `scaleFactor` @1.99 stepped by two buttons (POST_171, `src/02`) |
+| 555 | SinglePlanningCalendarRecurringItem | the recurrence stack plus a fourteen-field create dialog (POST_171, `src/02`) |
+
+Four findings, two of them caught by the e2e harness rather than the gates:
+
+- **An enum-typed property bound to an EMPTY field takes the whole view down.**
+  App 531's QuickView seeded `backgroundColor` only on the page that has one;
+  the other page sent the empty string, and UI5 answered `"" is of type string,
+  expected sap.m.AvatarColor` — the app terminated. The static render gate never
+  saw it because it mocks the model. Seed the UI5 DEFAULT explicitly on every
+  row (`Accent6` here, `Circle` for app 532's `displayShape`), the way app 100
+  already does for `QuickViewGroupElement.target`.
+- **A view emitted from backend state has to be re-sent when that state
+  changes.** App 526's drop handler reordered its order table and nothing moved:
+  `view_display( )` only runs on init and navigate, so the client kept the old
+  child order. The e2e run caught it; app 436 had the answer since b34 — call
+  `view_display( )` again after the state change.
+- **`SinglePlanningCalendar.selectedView` is an association, like
+  `Wizard.currentStep`.** App 549's more-link should switch to the Day view; the
+  association neither binds nor has a whitelisted setter, so that half is
+  declared IMPROVISED while the date change survives. This is the same finding
+  b43 recorded for the Wizard — the association rule is not control-specific.
+- **The family's recurring theme: the property is bindable, so the handler is
+  not needed.** Across ten ports, `calendarWeekNumbering`, `firstDayOfWeek`,
+  `stickyMode`, `fullDay`, `scaleFactor`, `groupAppointmentsMode` and the three
+  `enableAppointments*` flags all replace a controller setter with a shared
+  field. Where the property is an INT and the Select's key is a string
+  (`firstDayOfWeek`), the expression multiplies by 1 — the `Number( )` the
+  original calls.
+
+## 2026-08-22 — batch b44 (sap.m): the PlanningCalendar family, ten of thirteen (apps 536–545)
+
+The first FAMILY batch since the sap.m tail: ten of the thirteen unported
+`sap.m.PlanningCalendar` samples, all `covered-control(1)` rows over the one
+port (app 108, PlanningCalendarSingle) that already covered the control.
+
+| app | sample | what it adds |
+|---|---|---|
+| 536 | PlanningCalendar | `primaryCalendarType` @1.108 / `secondaryCalendarType` @1.109 and `rowHeaderPress` @1.119 (POST_171, `src/02`) |
+| 537 | PlanningCalendarViews | four custom views, the non-working-day toggle over a bound `specialDates`, `groupAppointmentsMode` |
+| 538 | PlanningCalendarMulti | `singleSelection="false"` — the interval push reaches EVERY selected row |
+| 539 | PlanningCalendarOneLine | `appointmentHeight` @1.81 + `multipleAppointmentsSelection` @1.97 with a bound badge (POST_171, `src/02`) |
+| 540 | PlanningCalendarMinMax | `minDate` / `maxDate` through the same date formatter |
+| 541 | PlanningCalendarWithLegend | the legend in a `DynamicSideContent`, `DateTypeRange.color` @1.76 / `secondaryType` @1.81 (POST_171, `src/02`) |
+| 542 | PlanningCalendarWithStickyHeader | `stickyHeader` with `showWeekNumbers` and the built-in views box |
+| 543 | PlanningCalendarAppointmentSizes | `appointmentHeight` + `appointmentRoundWidth` @1.81 driven by two Selects (POST_171, `src/02`) |
+| 544 | PlanningCalendarWeekNumbering | `calendarWeekNumbering` @1.110 with its four schemes (POST_171, `src/02`) |
+| 545 | PlanningCalendarRelativeViews | `PlanningCalendarView.relative` + `intervalSize` @1.93 (POST_171, `src/02`) |
+
+The family's shape is the same everywhere: a `startDate` plus rows of
+appointments and interval headers, every date a JS `Date` the model cannot
+carry, so all ten use the `Formatter.DateCreateObject` idiom app 108
+established. What each sample adds on top is a handful of PlanningCalendar
+PROPERTIES the controller sets imperatively — `primaryCalendarType`,
+`groupAppointmentsMode`, `firstDayOfWeek`, `appointmentHeight`,
+`appointmentRoundWidth`, `calendarWeekNumbering`,
+`multipleAppointmentsSelection`, `builtInViews`, `standardItems` — and every
+one of them is BINDABLE. So the recurring port move in this batch is: bind the
+property, let the Select or ToggleButton share the same field, and drop the
+change handler entirely.
+
+Three findings:
+
+- **The data is mechanical, so the transcription should be too.** These
+  controllers inline hundreds of `UI5Date.getInstance(y, m, d, h, min)`
+  appointments, with month 0-based and some values deliberately out of range
+  (`"4", "33"` — JS normalises it to June 2). A converter that evaluates the
+  literal with a stubbed `UI5Date` and prints local ISO strings gets every row
+  right; hand-transcription would not. The data-fidelity gate compares what
+  ends up seeded, and all ten passed first time.
+- **A nested scalar table is not a scalar array to the static harness.** App
+  537 binds `PlanningCalendarRow.nonWorkingDays` (int[]) to a table nested
+  inside the bound row; the render harness mocks every nested table as an array
+  of ROW OBJECTS, so UI5 rejects it. A ROOT-level scalar table is mocked
+  correctly — app 490 binds one to `selectedKeys` and renders clean — so this is
+  the harness's nesting rule, and app 537 carries a declared `render_smoke.skip`
+  saying exactly that until the e2e harness confirms it against the real backend.
+- **A string[] property needs an ARRAY from an expression binding, not a
+  comma string.** App 541's `standardItems` first got
+  `{= … ? 'Today,Selected,NonWorkingDay' : … }` and UI5 answered "Invalid value
+  … must contain values from sap.ui.unified.StandardCalendarLegendItem": the
+  comma splitting is XML-attribute syntax, not expression semantics. An array
+  literal inside the expression (`['Today','Selected','NonWorkingDay']`) is what
+  the binding needs.
+
+## 2026-08-22 — batch b43 (sap.f + sap.m): the covered-control(1) head of the backlog (apps 526–535)
+
+The first batch after the sap.m tail ran out. Every row is a
+`covered-control(1)` entry — the three GridContainer samples, the free-style
+SemanticPage, the GenericTag toolbar, the two QuickViews and the three
+Wizards — so this is depth on controls the corpus already covers once.
+
+| app | sample | what it adds |
+|---|---|---|
+| 526 | GridContainerDragAndDrop | a drop that reorders TEN STATIC grid children — the port emits them from an order table the round-trip rewrites |
+| 527 | GridContainerDragAndDropFromList | drag and drop BETWEEN a List and a GridContainer, both model-bound |
+| 528 | GridContainersNavigation | four grids, seven integration cards rebuilt declaratively, `borderReached` |
+| 529 | SemanticPageFreeStyle | the full semantic action bar plus the `device>` model driving the two full-screen actions |
+| 530 | OverflowToolbarSimple | ten OverflowToolbars resized by ONE expression binding; every `OverflowToolbarLayoutData` priority |
+| 531 | QuickViewAvatarConfiguration | `QuickViewPage.avatar` @1.92 with a badge icon resolved per row (POST_171, `src/02`) |
+| 532 | QuickViewNavOrigin | `navOrigin` — the clicked link's text travels and ABAP swaps page 2 (POST_171, `src/02`) |
+| 533 | WizardSingleStep | a Wizard in a Dialog, `renderMode="Page"` @1.84 and `navigationChange` @1.101 (POST_171, `src/02`) |
+| 534 | WizardCurrentStep | two nested XMLViews inlined into one view; linear and branching wizards side by side |
+| 535 | WizardBranching | `enableBranching` driven by `setNextStep` round-trips; the shopping-cart flow end to end |
+
+Four findings, three of them new to the corpus:
+
+- **`Wizard.currentStep` is an ASSOCIATION, so it cannot be bound.** The XML
+  parser takes the attribute's value as a control id and never as a binding, so
+  `currentStep="{/CURRENT_STEP}"` becomes an id nothing answers to. Backend-driven
+  wizard navigation goes through the framework's whitelisted `control_by_id`
+  calls instead — `goToStep`, `setNextStep`, `discardProgress` are all in
+  `CONTROL_METHODS` — which is what apps 533, 534 and 535 use.
+- **An expression binding needs `${…}`, and the ABAP form is `${ … }` inside a
+  string template.** `|\{= { client->_bind( x ) } … \}|` produces
+  `{= {/X} … }` — a binding inside an expression, which UI5 rejects with
+  "Unexpected === at position 4". The `$` has to be written literally before the
+  embed: `|\{= ${ client->_bind( x ) } … \}|`. Apps 530, 533 and 535 all had
+  it wrong first; app 124 has had it right since b12.
+- **A `sap.ui.integration.widgets.Card` manifest is an object or a URL, nothing
+  else.** Two of the three GridContainer samples keep several manifests in ONE
+  file under wrapper keys (`{manifests>/listContent/mediumList}`), which neither
+  form can address from a declarative view. Apps 526 and 528 rebuild each card
+  as a declarative `sap.f.Card` carrying the manifest's own `card:Header` and
+  its content — a List, a Table, a DisplayListItem list for the Object card, a
+  VBox for the AdaptiveCard. App 342's URL trick only works where the sample
+  ships one manifest per file.
+- **An aggregation tag carries the namespace of its CONTROL, not of the view.**
+  ``)->ele( `items` )`` under an `f:GridContainer` emits `<items>` in the
+  default `sap.m` namespace and UI5 goes looking for `sap/m/items.js`; it has to
+  be ``)->ele( n = `items` ns = `f` )``. The same slip is invisible under a
+  `sap.m` control, which is why it took app 527 to surface it.
+
+## 2026-08-22 — batch b42 (sap.m): ten ports, five of them post-1.71 (apps 516–525)
+
+| app | sample | what it adds |
+|---|---|---|
+| 516 | SegmentedButtonVSD | a SegmentedButton opening a ViewSettingsDialog; `confirm` carries the dialog's `filterString` |
+| 517 | GenericTileAsLaunchTile | eleven launch tiles — `frameType` OneByHalf/TwoByHalf @1.83, `url` @1.76, `appShortcut`/`systemInfo` @1.92 (POST_171, `src/02`) |
+| 518 | ObjectHeaderActiveAttributes | the feedback Dialog built in a chain, plus `ariaHasPopup` @1.97 (POST_171, `src/02`) |
+| 519 | MultiComboBoxSuggestionsAndValueState | six value states and the `formattedValueStateText` aggregation @1.78 (POST_171, `src/02`) |
+| 520 | NotificationListGroupLazyLoading | `sap.m.NotificationList` @1.90 (POST_171, `src/02`); the lazy fill on expand kept as a round-trip |
+| 521 | InputKeyValue | `textFormatMode="KeyValue"` with a value help pre-filtered by the Input's value |
+| 522 | ListLoading | `enableBusyIndicator` + a refresh press that re-reads the bound rows |
+| 523 | TableSelectCopy | the CellSelector @1.119 (POST_171, `src/02`); the CopyProvider **dropped** — see below |
+| 524 | ListDeletion | `mode="Delete"`; the row's description travels and the row leaves the bound table |
+| 525 | ListGrowingUpwards | `growingDirection="Upwards"` over the full mock collection |
+
+Three findings, one of them a correction to an earlier port:
+
+- **A control can refuse to be created without a JS callback.** App 523's
+  `sap.m.plugins.CopyProvider` was first ported with the plugin kept and only
+  `extractData` declared IMPROVISED, on the reading that it would then copy in
+  some default format. It does not: UI5 throws `extractData property must be
+  defined for Element sap.m.plugins.CopyProvider` at CREATE time and the WHOLE
+  view goes down with it. The plugin is therefore dropped, not improvised-
+  around, and the sidecar says so. When a JS callback cannot be registered, ask
+  whether the control tolerates its absence before declaring it improvised.
+- **`URLHELPER` is its own event target, not a `control_global` object.** App
+  518 first wired `URLHelper.redirect` as
+  `cs_event-control_global` + ``( `URLHELPER` ) ( `redirect` )``, which the
+  frontend rejects silently (the accepted globals are MESSAGE_TOAST,
+  MESSAGE_BOX, VIEW_SLOTS, ROUTER, BUSY_INDICATOR, THEMING, POPUP,
+  INVISIBLE_MESSAGE, FORMATTING). The redirect goes through
+  `cs_event-urlhelper` with ``( `REDIRECT` ) ( `{ URL: '…', NEW_WINDOW: true }` )``,
+  as apps 073 and 084 already did.
+- **`DELETE itab WHERE col = col.` compares the column with itself** — the
+  b37 finding, found twice more here (apps 520 and 524) and once in an older
+  port (app 085, fixed in this batch). The right-hand name inside WHERE always
+  resolves to the COLUMN, never to the like-named local, so the statement
+  empties the table. Name the event-arg variable `del_<col>`. The whole corpus
+  was swept for the shape; those three were all of it.
+
+## 2026-08-22 — batch b41 (sap.m): ten ports, four of them post-1.71 members (apps 506–515)
+
+| app | sample | what it adds |
+|---|---|---|
+| 506 | IconTabBarDragDrop | `enableTabReordering` with `maxNestingLevel` @1.79 driven by a StepInput (POST_171, `src/02`) |
+| 507 | InputGrouping | a **grouping** sorter on both a plain and a tabular suggestion binding |
+| 508 | ListToolbar | `sticky` bound to the MultiComboBox selection; the info toolbar hidden by an expression over the toggle |
+| 509 | InputSuggestionsOpenSearch | the OpenSearchProvider + MockServer replaced by a backend search filling the bound items |
+| 510 | InputCustomValueHelpIcon | `valueHelpIconSrc` @1.84 (POST_171) plus the SelectDialog value help |
+| 511 | SelectChangeEvents | `Select.liveChange` @1.100 and the change event's `previousSelectedItem` @1.95 (POST_171) |
+| 512 | MultiInputModelUpdate | one table serving tokens, suggestions AND the model list the sample watches |
+| 513 | ObjectHeaderResponsiveII | the `fullScreenOptimized="false"` sibling of app 453 |
+| 514 | FlexBoxSizeAdjustments | five FlexBox panels plus the sample's own `style.css` |
+| 515 | InputAssisted | a value help pre-filtered by the Input's current value, shared by two Inputs |
+
+The recurring shape of this batch is the **JS callback that owns a control's
+data**: an OpenSearchProvider (509), a validator (512), a value-help dialog
+that filters its own binding (510/515). All four resolve the same way — the
+data moves to the backend and the wire that fed it becomes a round-trip or a
+`binding_call` — and the sidecars say which half of the original's behaviour
+that costs.
+
+App 512 is the one worth remembering: the sample keeps THREE things in sync
+(the tokens, the suggestion items and a List showing the model), and the port
+binds all three to ONE table. That is not a shortcut — it is what the sample is
+demonstrating, and the port makes it structural rather than a handler.
+
+## 2026-08-22 — batch b40 (sap.m): ten ports and the JS-callback tail (apps 496–505)
+
+The batch where the remaining sap.m samples stop being view-only. Six of the
+ten reproduce a JavaScript callback the framework cannot register, and each one
+says in its sidecar exactly which half of the behaviour survives.
+
+| app | sample | what it adds |
+|---|---|---|
+| 496 | TreeJSONLazyLoading | lazy tree loading: the item context PATH travels, ABAP parses it and appends the level below |
+| 497 | ListSwipe | the swipe direction rewrites the bound swipe button; the swiped row is removed by index |
+| 498 | ListActions | `itemActionCount` + `ListItemAction` @1.137, the Slider and the count sharing one field |
+| 499 | ListSelectionSearch | `binding_call` search filter plus a selection count over a bound row flag |
+| 500 | StandardNoMargins | two element-bound ObjectHeaders folded to root fields |
+| 501 | MultiInputValidators | three `addValidator` callbacks re-expressed as backend `change` handling, including the confirm round-trip |
+| 502 | ObjectHeaderTitleSel | the popover list moving the header's binding CONTEXT — folded to a copied root record |
+| 503 | InputKeyValueTabularSuggestions | tabular suggestions; the row validator's key taken straight off the selected row |
+| 504 | MultiInputTokenUpdate | the validator switch with `START_TIMER` standing in for its three `setTimeout`s |
+| 505 | TableOutdated | a reused COMPONENT (`sap.m.sample.Table`) inlined, with `showOverlay` bound |
+
+Two findings, both already in the corpus and both re-learned the hard way:
+
+- **A bound aggregation needs its aggregation tag when the control's default
+  aggregation is something else.** `sap.m.MultiInput`'s default aggregation is
+  `suggestionItems`, so a `Token` template directly under it is rejected —
+  apps 501 and 504 rendered `Missing template or factory function for
+  aggregation tokens` until the template moved inside ``)->ele( `tokens` )``.
+  App 085 got away without it because its control is a `Tokenizer`, whose
+  default aggregation IS `tokens`. Same lesson as b37's IconTabBar, different
+  control.
+- **``IF client->get_event( ) <> `X`. RETURN.`` reads as a dead wire.** The
+  linter's `event-without-handler` check looks for the event name in an
+  affirmative dispatcher (``= `X` `` or ``WHEN `X` ``); the negated guard app 496
+  first used matched nothing, so a fully handled event was reported as raised
+  and never handled. Write the dispatcher the way the recipe prescribes.
+
+`START_TIMER` earned its second use: app 504's asynchronous validator adds its
+token after 3 seconds and its second one after 10, and the framework's timer
+reproduces both without a client-side callback. What stays lost there is the
+PASTE path the sample is written around — one `tokenUpdate` for three tokens at
+once, where the port sees one `change` per value.
+
+## 2026-08-22 — batch b39 (sap.m): ten ports, three of them post-1.71 picker properties (apps 486–495)
+
+| app | sample | what it adds |
+|---|---|---|
+| 486 | ObjectHeaderTitleActive | the fragment popover anchored to the active title via `openBy` + `$event.oSource.sId` |
+| 487 | PanelSticky | `stickyHeader` @1.117 over two 20-paragraph panels (POST_171, `src/02`) |
+| 488 | TableNavigated | `ColumnListItem.navigated` @1.72, decided in ABAP per press |
+| 489 | SegmentedButtonDialog | a `SegmentedButton` inside a `popup_display` dialog |
+| 490 | MultiComboBox | the selection pair: a client-composed `selectionChange` toast and a `selectionFinish` list built in ABAP over bound `selectedKeys` |
+| 491 | MultiComboBoxClearIcon | the same with `showClearIcon` @1.96 |
+| 492 | ListGrouping | the grouping sorter kept, `groupHeaderFactory` declared as the control-factory boundary |
+| 493 | ComboBoxLazyLoading | the suspended-OData lazy load expressed as a `loadItems` round-trip that fills the empty table |
+| 494 | ComboBoxMaxPickerHeight | `maxPickerHeight` @1.150 in three variants over 100 items |
+| 495 | MultiComboBoxMaxPickerHeight | the same on MultiComboBox |
+
+**The `selectionFinish` shape is worth remembering.** The original lists the
+TEXTS of every selected item, and a UI5 expression argument cannot map an array
+of controls — the grammar has no loop, the same wall app 432's `tokenDelete`
+hit. The way through is not a bigger expression but a bound PROPERTY: 
+`selectedKeys` is two-way bound, so the round-trip already carries the whole
+selection and ABAP composes the line. Reach for a bindable property before
+trying to transport a collection through an event argument.
+
+`groupHeaderFactory` joins `setFilterFunction` as a documented control-factory
+boundary: the port keeps the sorter (so the grouping is real) and lets UI5
+render its default group header, with the deviation saying which control the
+sample builds that the port does not.
+
+## 2026-08-22 — batch b38 (sap.m): eleven ports, and the JS-callback boundary twice more (apps 475–485)
+
+| app | sample | what it adds |
+|---|---|---|
+| 475 | ComboBoxValidation | validation stays in ABAP: bound `valueState` + `valueStateText` written on the change wire |
+| 476 | ObjectHeaderResponsiveVI | active intro/title links, the row-0 element binding folded to root fields |
+| 477 | HeaderContainerOH | an ObjectHeader with a HeaderContainer of eight NumericContents raising one alert |
+| 478 | MultiInputCustomFiltering | two MultiInputs whose only difference is a JS filter callback (IMPROVISED) |
+| 479 | ComboBoxSearchBoth | `filterSecondaryValues` plus a formatter recomposed in ABAP on a change wire |
+| 480 | ListUnread | `showUnread` with the random unread flag made deterministic |
+| 481 | MultiComboBoxCustomFiltering | the same JS-callback boundary on two MultiComboBoxes |
+| 482 | StandardListItemNavigated | `navigated` @1.72 (POST_171, `src/02`), one row at a time, decided in ABAP |
+| 483 | StandardListItemTitle | `bindElement('/ProductCollection')` kept, `{0/…}`..`{3/…}` items with the empty and the missing description reproduced |
+| 484 | StandardMarginsEnforceWidthAuto | `sapUiForceWidthAuto` and the device branch on `expanded` |
+| 485 | TextAreaMaxLength | `showExceededText` with the ORIGINAL's own valueState expression kept |
+
+Three things this batch settled:
+
+- **A formatter is business logic even when it only joins two strings.** Apps
+  479 and 482 both compute in ABAP what the sample computes in a `.formatter`,
+  and both needed a wire the original does not have (a `change` on the ComboBox,
+  a `press` carrying `${PRODUCTID}`) because a backend-composed value has to be
+  told when to recompute. That added attribute is the honest cost and is
+  declared.
+- **`setFilterFunction` is the second reliable IMPROVISED of the corpus.** Four
+  ports now carry it (470/471/478/481): a JS filter callback has no bindable or
+  backend equivalent, so the ports ship UI5's default filtering and say which
+  half of the sample's point is lost.
+- **A sample can exist without a demo kit sentence.** `ObjectHeaderResponsiveVI`
+  ships a complete manifest/view/controller and the coverage scanner offers it,
+  but `docuindex.json` lists the family only up to V — so its summary is a
+  `written` entry in `ui5/descriptions.json` with the reason, the fourth in the
+  corpus.
+
+## 2026-08-22 — batch b37 (sap.m): the IconTabBar/margins tail, 10 ports (apps 465–474)
+
+Ten more, and the batch that produced the most reusable finding of the day.
+
+| app | sample | what it adds |
+|---|---|---|
+| 465 | IconTabBarOverflowSelectList | 30 tabs the controller builds in a loop → a bound `items` template |
+| 466 | IconTabBarStartAndEndOverflow | 50 tabs plus `tabsOverflowMode` @1.90 (POST_171, `src/02`) |
+| 467 | IconTabBarInlineIcons | 12 tabs, `headerMode` Inline, the random icon walk made deterministic |
+| 468 | StandardListItemIcon | list with sorter and the mock's picture icons |
+| 469 | StandardMarginsCollapse | collapsing margins, static |
+| 470 | ComboBoxFilteringContains | the custom `setFilterFunction` boundary (IMPROVISED) |
+| 471 | ComboBoxFilteringStartsWith | the same boundary, where only the key half is lost |
+| 472 | StandardMarginsResponsive | `sapUiResponsiveMargin`, static |
+| 473 | InputSuggestionsDynamic | `suggest` → `binding_call` filter on `suggestionItems` |
+| 474 | FlexBoxNav | `core:HTML` anchors as flex items plus the sample's `style.css` |
+
+**A bound aggregation needs its aggregation TAG when the control has no default
+aggregation.** All three IconTabBar ports rendered as an empty bar with
+`Cannot add direct child without default aggregation defined for control
+sap.m.IconTabBar` — the template has to sit inside ``)->ele( `items` )``, exactly
+as app 087 writes it for the static case. The render gate is what caught it;
+`structural-diff` was 0 for all three, because the template control IS there,
+just parented wrongly. Worth knowing before the next bound-aggregation port:
+Tokenizer (`tokens`) and Select (`items`) have a default aggregation and work
+without the tag, IconTabBar does not.
+
+**A JS `setFilterFunction` is a real boundary, not a NOTE.** Apps 470/471 call
+it in `onInit` with a callback that matches the term case-insensitively
+anywhere in the text OR in the key. There is no bindable or backend equivalent
+(the app-authored-JS-function class), so both ports carry UI5's default
+filtering and declare what is lost — `IMPROVISED`, not a note about a fold.
+
+Two smaller lessons: a CSS literal glued from one rule per line still needs
+splitting at 255 characters (app 474's `.ne-flexbox2 li` rule is 316 on its
+own), and the random-icon loop of app 467 is the second "Math.random in a
+sample" case of the day — same treatment as app 444, a deterministic walk over
+the same list with the deviation saying so.
+
+## 2026-08-22 — batch b36 (sap.m): the ComboBox/Input family, 10 ports (apps 455–464)
+
+Ten small samples in one batch — the ComboBox, MultiComboBox, Input and
+MultiInput filtering/suggestion family plus one margins page. They share the
+same two mocks, so the batch is mostly the same shape ten times, which is
+exactly what makes it cheap: nine of the ten are pure view + data with no wire
+at all.
+
+| app | sample | what it adds |
+|---|---|---|
+| 455 | ComboBoxClearIcon | `showClearIcon` @1.96 (POST_171, `src/02`) |
+| 456 | InputAssistedTwoValues | `core:ListItem` suggestions with `additionalText` |
+| 457 | MultiInputDatabinding | a bound `tokens` aggregation with a sorter |
+| 458 | MultiComboBoxTwoColumnsLayout | `showSecondaryValues` over `core:ListItem` |
+| 459 | MultiComboBoxDefaultFiltering | the sorter binding-info on `items` |
+| 460 | InputSuggestionsCustomFilter | plain `core:Item` suggestions (the custom filter function stays a JS-only detail) |
+| 461 | MultiInputMaxTokens | `maxTokens` with suggestion items |
+| 462 | InputValueUpdate | the one wire of the batch: a real per-keystroke round-trip |
+| 463 | ComboBoxDefaultFiltering | the 70-row countries mock, `additionalText` = key |
+| 464 | StandardMarginsTwoSided | two-sided margin classes, fully static |
+
+**App 462 is the interesting one, and it is deliberately a round-trip.** The
+sample exists to COMPARE `oInput.getValue()` with the model property while
+`valueLiveUpdate` is off — so the "getValue" Text must follow every keystroke,
+and a binding cannot express a value the model does not have yet. The port
+carries the live wire and the sidecar says what that costs: abap2UI5 serializes
+round-trips, so an event fired while one is in flight is dropped and the Text
+catches up when typing pauses. The `live-event-roundtrip` advisory budget rose
+6 → 7 for it, with the same rationale the six existing entries carry.
+
+A generator bug worth remembering: padding a field name to a fixed width and
+then appending `TYPE` produced `suppliernameTYPE string` in four ports —
+abaplint caught it as a parser error, but only because the corpus is linted;
+the emitted ABAP looked plausible in a diff.
+
+## 2026-08-22 — batch b35 (sap.m + sap.f): eight ports, three of them the awkward ones (apps 447–454)
+
+The batch where the cheap rows ran out. Four of the eight needed an idiom the
+corpus already had but had not combined this way.
+
+| app | sample | the idiom it adds |
+|---|---|---|
+| 447 | MessageBoxInfo | `message_box_display` with `details` in all three forms — plain text, markup, a JSON object — plus the async-details boundary |
+| 448 | SemanticPageDraftIndicator | the semantic FullscreenPage: `MessagesIndicator` + declared `MessagePopover`, the `z2ui5.cc.MessageManager` bridge, and `$event.oSource.getMetadata().getName()` as the toast's own subject |
+| 449 | FlexibleColumnLayoutLandmarkInfo | `landmarkInfo` @1.95 on the three-column layout, all three column views inlined (app 234's shape) |
+| 450 | FlexibleColumnLayoutLandmarkInfoArrow | the same with the four arrow labels — the pair that only differs in its accessibility attributes |
+| 451 | TabContainerIcons | app 093's prevented-default `itemClose` + confirm flow, now with icons, `additionalText` and a `f:Form` per tab |
+| 452 | CustomMessageStripDesign | `colorSet`/`colorScheme` @1.143 over ten strips driven by one expression binding |
+| 453 | ObjectHeaderResponsiveI | a `binding="{/ProductCollection/0}"` element binding folded to absolute root bindings, with the Currency `parts` binding kept |
+| 454 | TableSelectDialogGrowing | one fragment built with two property values (growing / initialFocus), `binding_call` search filter, the sample's OWN `weightState` rule computed in ABAP |
+
+Three findings worth keeping:
+
+- **A wired handler that does not exist.** App 454's fragment wires
+  `confirm=".handleClose"` and `cancel=".handleClose"`; the controller defines
+  no such method, so both resolve to nothing in the original. The port drops
+  both attributes and says so, rather than inventing the close behaviour the
+  names suggest.
+- **The sample's own formatter beats the shared one.** `Formatter.weightState`
+  here compares the RAW measure against 1000/2000 with no unit conversion —
+  the opposite of the shared demo kit formatter the porting guide warns about
+  (1 and 5 KG, grams divided first). Read the formatter that ships WITH the
+  sample.
+- **A handler whose first two calls can never be seen.** App 448's
+  `handleLiveChange` runs `showDraftSaving( )`, `showDraftSaved( )` and
+  `clearDraftState( )` in one tick, so only the clear ever paints. The port
+  makes that one call (client-side, so no per-keystroke round-trip) and
+  declares the two that have no visible effect as improvised rather than
+  pretending to reproduce them.
+
+Both FCL ports moved to `src/02/04`: `landmarkInfo` and
+`FlexibleColumnLayoutAccessibleLandmarkInfo` are @1.95, and on the 1.71 floor
+the unknown tag would take the whole view down — exactly the case the
+aggregation-too-new rule was made an error for.
+
+## 2026-08-22 — batch b34 (sap.m): eight more, and the first e2e closures of the day (apps 439–446)
+
+The same picking rule as b33 — smallest `covered-control(2)` rows once the
+cheap `(1)`s were gone — plus the first three LIVE_TESTs of this run closed the
+automated way.
+
+| app | sample | the idiom it adds |
+|---|---|---|
+| 439 | TextEmptyIndicator | `emptyIndicatorMode` On/Auto @1.87 (POST_171) and `toggleStyleClass` on a Panel via `control_by_id` |
+| 440 | MenuEndContent | the `endContent` @1.131 menu items, anchored via `toggleBy` from the Button's `dependents` |
+| 441 | BreadcrumbsWithoutCurrentPage | the `BreadcrumbsSeparatorStyle` list seeded in enum order; one two-way field on `Select.selectedKey` + `Breadcrumbs.separatorStyle`; six `${$source>/text}` toasts |
+| 442 | PDFViewerMultiple | two PDFViewers on one bound `source`, switched by two round-trips; both documents re-hosted on the demo kit host |
+| 443 | TextRenderWhitespace | `renderWhitespace` @1.89 over a text whose *content* is the demo: `&#xA;`/`&#x9;` runs written as `\n`/`\t` in a string template |
+| 444 | MaxNumberOfNotificationsReached | 400 notifications the controller builds with `Math.random`, rebuilt as a deterministic walk over the same three lists; per-item close deletes its row |
+| 445 | TextHyphenation | one `wrappingType` expression shared by five Texts in a `l:BlockLayout` |
+| 446 | LinkSubtle | a `sorter` binding-info on the Table plus `subtle` Links and `MessageBox.alert` through `message_box_display` |
+
+**The first automated LIVE_TEST closures of this run:** apps 424, 425 and 427
+(batch b32) ran green in the e2e harness with their interaction modules and
+`close-live-tests.mjs` converted their entries to `NOTE`s. Every port of b33 and
+b34 that carries a `LIVE_TEST` ships its module too, so the backlog only grows
+where the harness genuinely cannot reach.
+
+Two housekeeping raises, both deliberate and both the shape the file already
+documents: `missing-accessibility` 30 → 31 for app 440's tooltip-less
+`endContent` icon Buttons, and app 445 joins the `7bit_ascii` exclude list —
+its Bootstrap paragraph contains the sample's own en dash, which is data, not
+a typo to fix.
+
+## 2026-08-22 — batch b33 (sap.m): the covered-control(1) tail keeps going, 8 ports (apps 431–438)
+
+Eight more depth ports, picked the way the planning rules say: the smallest
+`covered-control(1)` rows first, so every one of them is the second port of its
+control rather than the sixth of another.
+
+| app | sample | the idiom it adds |
+|---|---|---|
+| 431 | ContainerResponsivePadding | `sapUiResponsiveContentPadding` on a Panel with a header Toolbar; the `img>` model folded to the mock's own value |
+| 432 | TokenizerMultiLine | `multiLine` + `showClearAll` over a bound Token template; `tokenDelete` @1.82 (POST_171) carrying key **and** count |
+| 433 | ContainerPaddingAndMargin | three device-dependent widths as `device>` expression bindings (app 031's shape, three of them) |
+| 434 | ContainerPadding | a `core:FragmentDefinition` Dialog via `popup_display`, closed roundtrip-free on both buttons; the `app:` CustomData namespace kept |
+| 435 | ProgressIndicatorWithAnnouncement | the id split (`…-button50` → indicator + value) transported via `$event.oSource.sId`, plus the `INVISIBLE_MESSAGE` announcement; `displayAnimation` @1.73 (POST_171) |
+| 436 | TreeIcon | a **conditional subtree**: the controller's `new Menu(…)` / `destroyContextMenu( )` becomes a `contextMenu` aggregation the backend emits or omits (app 273's split-chain shape) |
+| 437 | TreeSelection | one two-way field shared by `Select.selectedKey` and `Tree.mode` — all five selection modes without a round-trip |
+| 438 | RefreshResponsive | the grow-by-one refresh plus the search filter done in ABAP; `PullToRefresh.hide( )` via `control_by_id`; the sample's own touch model folded onto `device>/support/touch` |
+
+Two ports moved to `src/02/01` on a `POST_171` the property gate named
+(432 `tokenDelete`, 435 `displayAnimation`) — again nothing the structural diff
+could have seen, the same shape as 423/427 in the previous batch.
+
+**0 undeclared structural differences across all eight**, and all six ports
+that ship a `LIVE_TEST` ship their `meta/interactions/` module with it
+(`validate-meta` reports no interaction gap).
+
+Two things worth keeping:
+
+- **`DELETE itab WHERE key = key` silently compares a field with itself.** App
+  432's delete-by-key read the deleted key into a variable named like the
+  column; ABAP resolves both sides to the component, so every row matches.
+  Renaming the variable is the fix; no gate sees it, and the port would have
+  cleared the whole tokenizer on the first X.
+- **A conditional subtree is still counted by the structural diff.** App 436
+  emits its `contextMenu` only while the toggle is on, but `structural-diff`
+  reads the CHAIN, not a render, so Menu/MenuItem show up as `control extra` in
+  both states — the deviation says so rather than the gate being worked around.
+
+One more boundary the batch documented rather than improvised around: a UI5
+expression argument cannot map an array of controls to their keys (the grammar
+has no function literal), so app 432's `tokenDelete` transports the first key
+plus the deleted COUNT — enough to tell Clear All from a single X, not enough
+for a multi-select delete of a strict subset, which the sidecar declares
+`IMPROVISED`.
+
+The `missing-accessibility` advisory budget rose 29 → 30 for app 431's two
+icon-only header Buttons, which the demo kit sample itself ships without a
+tooltip — the same shape as every earlier raise.
+
+## 2026-08-22 — batch b32 (sap.m): eight depth ports (apps 423–430)
+
+The first slice of the "port the rest" mandate. `--backlog` has no
+`NEW-CONTROL` row left that is not a HOLDOUT, so every remaining sample is a
+depth port; this batch takes eight sap.m samples whose idiom is distinct from
+their control's existing ports, and none of them needed a capability the
+corpus did not already have.
+
+| app | sample | the idiom it adds |
+|---|---|---|
+| 423 | SegmentedButtonContentModes | `contentMode` @1.142 (POST_171, `src/02`) — ContentFit vs EqualSized on one item set, fully static |
+| 424 | ToolbarActive | one shared two-way flag drives `CheckBox.selected` and `OverflowToolbar.active`; the constant `press` toast is client-composed |
+| 425 | ToolbarEnabled | the same shared-flag shape on `enabled`, which disables every control inside the toolbar |
+| 426 | FlexBoxCols | the sample's `style.css` (equal-column min-height, flex-item padding) injected as a `core:HTML` `<style>` leaf |
+| 427 | CarouselEmptyMessages | Slider value → `Carousel.width` expression binding (app 418's shape on a new control); `ariaLabelledBy` @1.125 (POST_171, `src/02`) |
+| 428 | HeaderContainerNoDividers | `addAriaLabelledBy` over eight `core:InvisibleText`s written as the static association; eight constant client toasts |
+| 429 | ListNavType | the element-binding form kept 1:1 — `binding="{/T_PRODUCTS}"` on the List, `{0/…}`/`{1/…}`/`{2/…}` relative on the items |
+| 430 | StandardMarginsSingleSided | single-sided margin classes, fully static (the sample's model is never bound) |
+
+Two ports moved to `src/02/01` on their first `POST_171` (423, 427) — the
+`view_gates` property check named both members, which is the folder rule
+working as designed: neither was visible in the structural diff.
+
+**Every port has 0 undeclared structural differences**, and the three ports
+that ship a `LIVE_TEST` (424, 425, 427) ship their `meta/interactions/` module
+with it rather than adding to the interaction gap — the two shared-flag wires
+and the slider-driven width are exactly the classes the harness already covers
+(`sliderDrivenWidth`, the two-way-bound-property class).
+
 ## 2026-08-17 — the open requests leave `pr/`, and the ecosystem gets four backlogs
 
 `pr/` held five open requests aimed at **three different upstreams** —

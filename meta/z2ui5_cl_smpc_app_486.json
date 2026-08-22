@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_486",
+  "sample": "sap.m.sample.ObjectHeaderTitleActive",
+  "entity": "sap.m.ObjectHeader",
+  "file": "src/01/01/z2ui5_cl_smpc_app_486.clas.abap",
+  "batch": "b39",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The ObjectHeader binds the fixed record {/ProductCollection/0}. The port seeds the bound fields at the default-model root and binds them absolutely, so the attr ObjectHeader.binding is dropped; the two ObjectAttribute texts keep the original's composed shape ({WeightMeasure} {WeightUnit} and the dimensions line)."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleTitlePress loads Popover.fragment.xml and opens it by the title's domRef. The port declares the same ResponsivePopover in the ObjectHeader's dependents and opens it anchored to the pressed control through follow_up_action control_by_id / openBy with $event.oSource.sId - roundtrip-free, and the separate core:FragmentDefinition is dropped."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The anchored popover open on the active title is unverified in a running system."
+    }
+  ]
+}

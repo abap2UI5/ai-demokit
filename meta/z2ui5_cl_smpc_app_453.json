@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_453",
+  "sample": "sap.m.sample.ObjectHeaderResponsiveI",
+  "entity": "sap.m.ObjectAttribute",
+  "file": "src/01/01/z2ui5_cl_smpc_app_453.clas.abap",
+  "batch": "b35",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The ObjectHeader binds the fixed record {/ProductCollection/0}. The port seeds exactly those row-0 fields at the default-model root and binds them absolutely (there is no element binding to resolve a relative {Field} against), so intro, number, numberUnit, the ObjectAttribute text, the tab count, the Image src and the dimension text all read the same mock values."
+    },
+    {
+      "type": "NOTE",
+      "what": "The number binding keeps its parts/type/formatOptions structure 1:1 with the paths switched to the ABAP field names, and the dimensions Text keeps the original's '{Width} x {Depth} x {Height} {DimUnit}' shape as one composed template over the four bound fields. The picture URL is the mock's own, re-hosted on sdk.openui5.org."
+    },
+    {
+      "type": "NOTE",
+      "what": "The Currency-typed number binding, the bound tab count and the Attachment link's MessageBox.alert are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_453.mjs)."
+    }
+  ]
+}

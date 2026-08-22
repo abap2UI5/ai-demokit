@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_smpc_app_480",
+  "sample": "sap.m.sample.ListUnread",
+  "entity": "sap.m.List",
+  "file": "src/01/01/z2ui5_cl_smpc_app_480.clas.abap",
+  "batch": "b38",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Formatter.randomBoolean decides the unread flag per row with Math.random. A backend cannot repeat a client-side random draw, so unread is a plain model field seeded alternately (every second row unread) - same two states over the same 123 rows, deterministic instead of random."
+    }
+  ]
+}

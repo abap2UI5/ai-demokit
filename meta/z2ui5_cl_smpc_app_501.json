@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_501",
+  "sample": "sap.m.sample.MultiInputValidators",
+  "entity": "sap.m.MultiInput",
+  "file": "src/01/01/z2ui5_cl_smpc_app_501.clas.abap",
+  "batch": "b40",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "All three MultiInputs get their behaviour from MultiInput.addValidator( ) - a JavaScript callback that turns the typed text into a Token. abap2UI5 has no way to register such a callback, so each MultiInput binds its tokens and its value instead and the port creates the token in ABAP on the change event: the first one only while the CheckBox is selected and with the second validator's '#: ' prefix already applied, the second one after the MessageBox.confirm answers OK (the same question and title, answered over a round-trip instead of an asyncCallback), the third one immediately - the original's 500ms setTimeout has nothing to reproduce it. The visible outcome per field is the same; what is lost is the validator chain itself (a rejected validator returning undefined keeps the text in the field, here the field is cleared either way)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The three MultiInputs get a bound tokens aggregation with a Token template each (structural-diff reports control extra Token: 0 vs 3) - the original creates its Tokens in JavaScript, so its view declares none."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "All three token-creation paths, including the confirm round-trip of the second field, are unverified in a running system."
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "class": "z2ui5_cl_smpc_app_611",
+  "sample": "sap.ui.unified.sample.CalendarAriaHasPopup",
+  "entity": "sap.ui.unified.Calendar",
+  "file": "src/02/02/z2ui5_cl_smpc_app_611.clas.abap",
+  "batch": "b50",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true,
+    "note": "the selected day travels with the calendar's select; the popover is served by popover_display"
+  },
+  "status": "generated",
+  "checked": null,
+  "property_gate": {
+    "skip": true,
+    "types": [
+      "unknown-property"
+    ],
+    "reason": "sap.ui.unified.DateTypeRange.ariaHasPopup is @since 1.152.0 (DateTypeRange.js:74) and the linter's pinned control metadata is 1.151.0, so the property does not exist in the snapshot at all and the gate reads it as a typo rather than as a version finding - a POST_171 deviation cannot excuse it, because only VERSION_TYPES are excusable that way. The property IS this sample: it is what puts aria-haspopup on the day cell, and the sample exists for nothing else. The skip covers that one finding type and view-gates fails the port if it stops firing - which is exactly what a metadata bump to 1.152 would do."
+  },
+  "render_smoke": {
+    "skip": true,
+    "reason": "same cause as property_gate: the render harness runs the pinned 1.151 runtime, which rejects the unknown ariaHasPopup attribute and takes the whole view down. The skip is verified against the real render on every run, so it disappears by itself once the pin reaches 1.152."
+  },
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.ui.unified.DateTypeRange.ariaHasPopup is @since 1.152.0 - newer than the 1.71 floor AND newer than the corpus's pinned 1.151.0 control metadata, but kept for the 1:1 port because it is the entire subject of the sample. The app needs a UI5 release >= 1.152; below it the attribute is an unknown setting."
+    },
+    {
+      "type": "NOTE",
+      "what": "onInit adds the three DateTypeRanges in JavaScript (day 5 Type01, days 10-12 Type02, day 20 None - all three with ariaHasPopup Dialog, all on the CURRENT month). specialDates IS a bindable aggregation, so the port binds the same three rows and computes the current month's prefix from sy-datum, which is how app 240 keeps its special dates on today's month. startDate and endDate are ABAP DATS strings read through Formatter.DateAbapDateToDateObject, which builds a LOCAL-midnight Date - the same fix apps 017/220/240 carry, without which every marked day lands one day early west of Greenwich."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "onDateSelect anchors the popover on the day CELL: it builds a yyyymmdd string, queries the calendar's DOM for [data-sap-day=\"...\"] and calls openBy on that node. A thin frontend has no DOM query, so the popover is anchored on the calendar itself (popover_display by_id). The popover is also declared in the view's dependents upstream and built once; here it is served per selection, which is what lets the backend fill its two texts. Everything else survives: the selected day travels as epoch milliseconds, the backend finds the range that contains it among those carrying an ariaHasPopup, and composes the same two lines - the date label (a range shows 'start – end') and 'Day type: <type>'."
+    },
+    {
+      "type": "NOTE",
+      "what": "the date label the popover shows is formatted by sap.ui.core.format.DateFormat with style 'long' ('November 5, 2026'). A backend has no access to the browser's locale, so the port composes the label from the same two dates in the ABAP model's own yyyymmdd form; the range case keeps the sample's en dash separator."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: that selecting day 5, one of days 10-12 or day 20 opens the popover with the matching type, and that a plain day opens nothing."
+    }
+  ]
+}

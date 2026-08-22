@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_452",
+  "sample": "sap.m.sample.CustomMessageStripDesign",
+  "entity": "sap.m.MessageStrip",
+  "file": "src/02/01/z2ui5_cl_smpc_app_452.clas.abap",
+  "batch": "b35",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.MessageStrip.colorSet and colorScheme are both @since 1.143.0 and are the whole subject of the sample, so all ten strips keep them 1:1 and the port needs a UI5 runtime >= 1.143."
+    },
+    {
+      "type": "NOTE",
+      "what": "onColorSetChange / _updateDesignForColorSet loop over the ten strips and set ColorSet1 or ColorSet2 on each. The port two-way binds the Select key and gives every strip the same colorSet expression binding over that field, so the switch is roundtrip-free and the Select.change attribute is dropped (the original Select carries no selectedKey either; the port adds the bound one)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The colorSet expression on all ten strips (Select -> ColorSet1/ColorSet2) is unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_452.mjs)."
+    }
+  ]
+}

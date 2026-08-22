@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_smpc_app_429",
+  "sample": "sap.m.sample.ListNavType",
+  "entity": "sap.m.List",
+  "file": "src/01/01/z2ui5_cl_smpc_app_429.clas.abap",
+  "batch": "b32",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": []
+}

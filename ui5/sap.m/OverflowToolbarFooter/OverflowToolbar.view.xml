@@ -1,0 +1,95 @@
+<mvc:View
+	height="100%"
+	controllerName="sap.m.sample.OverflowToolbarFooter.OverflowToolbar"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m">
+
+	<core:InvisibleText id="text1" text="Label text"/>
+
+	<Page
+		showHeader="false"
+		enableScrolling="true"
+		class="sapUiContentPadding"
+		showNavButton="false" >
+
+		<content>
+			<VBox>
+				<MessageStrip
+					text="Use this slider to shrink the toolbars and observe their behavior. Note: the icon buttons display text only when in the overflow area."
+					type="Information"
+					showIcon="true">
+				</MessageStrip>
+
+				<Slider value="100" liveChange=".onSliderMoved"/>
+			</VBox>
+
+			<Label/>
+
+			<Table
+				id="idProductsTable"
+				items="{/ProductCollection}">
+				<headerToolbar>
+					<OverflowToolbar id="otbSubheader">
+						<ToolbarSpacer/>
+						<SearchField ariaLabelledBy="text1" id="maxPrice" liveChange=".onFilter">
+							<layoutData><OverflowToolbarLayoutData maxWidth="300px" shrinkable="true" priority="NeverOverflow"/></layoutData>
+						</SearchField>
+						<Button text="Reset" type="Transparent" press=".onReset"/>
+						<OverflowToolbarButton tooltip="Sort" type="Transparent" text="Sort" icon="sap-icon://sort" press=".onSort"/>
+						<OverflowToolbarButton tooltip="Group" type="Transparent" text="Group" icon="sap-icon://group-2" press=".onGroup"/>
+						<OverflowToolbarMenuButton tooltip="Export" type="Transparent" text="Export" buttonMode="Split" icon="sap-icon://share" defaultAction=".onDefaultActionAccept" beforeMenuOpen=".onBeforeMenuOpen" useDefaultActionOnly="true">
+							<menu>
+								<Menu itemSelected=".onMenuAction">
+									<MenuItem text="Export as PDF" icon="sap-icon://pdf-attachment" />
+									<MenuItem text="Export to Excel" icon="sap-icon://excel-attachment" />
+								</Menu>
+							</menu>
+						</OverflowToolbarMenuButton>
+					</OverflowToolbar>
+				</headerToolbar>
+				<columns>
+					<Column width="12em"><Text text="Product" /></Column>
+					<Column minScreenWidth="Tablet" demandPopin="true"><Text text="Supplier" /></Column>
+					<Column minScreenWidth="Tablet" demandPopin="true" hAlign="End"><Text text="Dimensions" /></Column>
+					<Column hAlign="End"><Text text="Price" /></Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<ObjectIdentifier title="{Name}" text="{ProductId}" />
+							<Text text="{SupplierName}" />
+							<Text text="{Width} x {Depth} x {Height} {DimUnit}" />
+							<ObjectNumber
+									number="{
+										parts:[{path:'Price'},{path:'CurrencyCode'}],
+										type: 'sap.ui.model.type.Currency',
+										formatOptions: {showMeasure: false}
+									}"
+									unit="{CurrencyCode}" />
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</content>
+		<footer>
+			<OverflowToolbar id="otbFooter">
+				<ToolbarSpacer/>
+				<Button type="Accept" text="Accept">
+					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow" /></layoutData>
+				</Button>
+				<Button type="Reject" text="Reject">
+					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow" /></layoutData>
+				</Button>
+				<OverflowToolbarButton tooltip="Delete" text="Delete" icon="sap-icon://delete"/>
+				<OverflowToolbarButton tooltip="Edit" text="Edit" icon="sap-icon://edit"/>
+				<OverflowToolbarButton tooltip="Add" text="Add" icon="sap-icon://add"/>
+				<OverflowToolbarButton tooltip="Favorite" text="Favorite" icon="sap-icon://favorite"/>
+				<OverflowToolbarButton tooltip="Flag" text="Flag" icon="sap-icon://flag"/>
+				<OverflowToolbarToggleButton tooltip="Toggle" text="Toggle" icon="sap-icon://touch" press=".onTogglePress"/>
+
+			</OverflowToolbar>
+		</footer>
+
+	</Page>
+</mvc:View>

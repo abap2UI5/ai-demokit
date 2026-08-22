@@ -1,0 +1,48 @@
+{
+  "class": "z2ui5_cl_smpc_app_604",
+  "sample": "sap.m.sample.CarouselWithDisplayOptions",
+  "entity": "sap.m.Carousel",
+  "file": "src/02/01/z2ui5_cl_smpc_app_604.clas.abap",
+  "batch": "b50",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false,
+    "note": "no frontend action at all - every option is a bound property; two events only recompute enum names and the page table"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "five post-1.71 members are kept for the 1:1 port, and they are what the sample is FOR: sap.m.Carousel.backgroundDesign (@since 1.110), pageIndicatorBackgroundDesign and pageIndicatorBorderDesign (both @since 1.115), ariaLabelledBy (@since 1.125) and sap.m.CarouselLayout.scrollMode (@since 1.121). The app needs a UI5 release >= 1.125 for every option it offers to have an effect."
+    },
+    {
+      "type": "NOTE",
+      "what": "every one of the controller's eleven handlers is a SETTER on a bindable property - setArrowsPlacement, setPageIndicatorPlacement, setBackgroundDesign, setPageIndicatorBackgroundDesign, setPageIndicatorBorderDesign, setShowPageIndicator, setVisiblePagesCount, setScrollMode, setResponsive, setMinPageWidth and the container's setWidth / setHeight. The port binds each option control and the Carousel (or its CarouselLayout, or the Panel) to the SAME field, so the bindable-property-beats-frontend-action rule applies throughout and there is not a single frontend action in this port. The Switches for showPageIndicator and responsive, and the Inputs for the visible page count and minPageWidth, therefore need no handler at all."
+    },
+    {
+      "type": "NOTE",
+      "what": "the five enum options are picked by RadioButtonGroups, whose bindable property is selectedIndex - an integer - while the handlers read getSelectedButton().getText() and pass that string to the setter. The port binds selectedIndex two-way and adds ONE round trip (event OPTIONS, shared by the four groups and the scroll-mode Switch) that turns the five indices into the five enum names the Carousel binds. The alternative, a ternary chain in an expression binding, was written first and dropped: it pushed two attribute lines past the 255-character abapGit limit."
+    },
+    {
+      "type": "NOTE",
+      "what": "each of the six bound enum values carries the null fallback ({= ${X} || null }, apps 548/555 idiom): a flat ABAP row serializes every field, so before the first OPTIONS round trip an unset enum would arrive as an empty string and UI5 would reject the whole view. null maps to the property's default, which is what 'not set' means. model_init also seeds all six from the sample's own initial selections (Translucent background, page indicator on, Solid indicator background and border)."
+    },
+    {
+      "type": "NOTE",
+      "what": "onResizeCarouselContainer sets the Panel's width to <value>% and its height to Math.floor(650 * value / 100) + 'px' on every liveChange. Both are expression bindings over the two-way bound Slider value here, so the container follows the slider in the browser with no round trip - and the liveChange wire is dropped, since a round trip per keystroke would be slower AND lossy (app 582 carries the same fold)."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "_setNumberOfImagesInCarousel destroys the pages aggregation and adds N new sap.m.Image controls, each bound to img>/images/<i>. An aggregation cannot be rebuilt control-by-control from a backend, so pages is BOUND to a table and the Number input's change (not liveChange - the final value, per the prefer-a-bindable-property rule) rebuilds it from the nine mock images, keeping the sample's own 1..9 guard. The nine Images carry the alt text addPage composes ('Example picture <n>') and the same densityAware / decorative flags."
+    },
+    {
+      "type": "NOTE",
+      "what": "the nine image paths come from sap/ui/demo/mock/img.json /images and point at the sdk.openui5.org host per the offline asset-URL rule; the mock writes them relative as 'test-resources/sap/ui/documentation/sdk/images/...'."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: that each of the five radio groups repaints the carousel, that the slider resizes its container and that the image-count input rebuilds the pages."
+    }
+  ]
+}

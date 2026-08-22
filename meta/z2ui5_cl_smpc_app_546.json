@@ -1,0 +1,43 @@
+{
+  "class": "z2ui5_cl_smpc_app_546",
+  "sample": "sap.m.sample.PlanningCalendarDnD",
+  "entity": "sap.m.PlanningCalendar",
+  "file": "src/01/01/z2ui5_cl_smpc_app_546.clas.abap",
+  "batch": "b45",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The calendar date properties (the PlanningCalendar startDate and every CalendarAppointment startDate and endDate) are typed \"object\" and demand a real JS Date. The model keeps ISO strings and Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74)."
+    },
+    {
+      "type": "NOTE",
+      "what": "canModifyAppointments( name ) is a formatter over the row's name and the picked role: a manager and an admin may modify every row, everyone else only their own. Both values are on the client, so the three enable flags share ONE expression binding instead of a formatter. getUserRole( ) maps the Select key through the roles table (donna -> 'Donna Moore'), which the change round-trip does in ABAP; handleRoleChange, which only refreshes the model, goes with it."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleAppointmentDrop moves - or, with the copy modifier, copies - the appointment to the dropped row and re-dates it, then toasts. The interval's LOCAL date parts, the appointment's and the row's binding paths and the copy flag travel with the event, and ABAP does the same splice; the paths carry the row and appointment INDEX, which is exactly what the original reads off the binding contexts. handleAppointmentCreate pushes a 'New Appointment' into the row the same way."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleAppointmentResize re-dates the appointment unless isAppointmentOverlap says it would collide - a check the original only ever applies to the MANAGER role. The overlap test is the same three interval comparisons, done in ABAP over the row's own appointments, and both toasts are kept."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "handleAppointmentDragEnter calls oEvent.preventDefault() to VETO a drag that would overlap, while the pointer is still moving. A veto has to be decided synchronously on the client and a backend round-trip cannot answer in time, so the appointmentDragEnter wire is dropped (structural-diff reports it as attr missing). The overlap rule itself survives on the resize path, which is not synchronous."
+    },
+    {
+      "type": "NOTE",
+      "what": "The row images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The three roles and their per-row enable flags, the drag-and-drop move and copy, the resize with its overlap refusal and the drag-create are unverified in a running system."
+    }
+  ]
+}

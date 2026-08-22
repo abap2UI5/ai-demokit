@@ -1,0 +1,39 @@
+{
+  "class": "z2ui5_cl_smpc_app_543",
+  "sample": "sap.m.sample.PlanningCalendarAppointmentSizes",
+  "entity": "sap.m.PlanningCalendar",
+  "file": "src/02/01/z2ui5_cl_smpc_app_543.clas.abap",
+  "batch": "b44",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.PlanningCalendar appointmentHeight and appointmentRoundWidth are @since 1.81.0 and sap.ui.unified.CalendarAppointment description @since 1.81.0 - all newer than the 1.71 floor. The two Selects that drive them ARE the sample, so all three are kept and the port is filed under src/02."
+    },
+    {
+      "type": "NOTE",
+      "what": "The calendar date properties (the PlanningCalendar startDate and every CalendarAppointment startDate and endDate) are typed \"object\" and demand a real JS Date. The model keeps ISO strings and Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74)."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleAppointmentHeightChange and handleAppointmentRoundingChange call setAppointmentHeight / setAppointmentRoundWidth. Both properties are bindable, so each Select shares its key with the calendar and neither change handler is needed."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "handleSortChange hands the calendar a JavaScript comparator through setCustomAppointmentsSorterCallback (fnAlphabeticalOrder, a case-insensitive title compare). abap2UI5 cannot register a callback, so the port sorts the appointment rows THEMSELVES in ABAP with the same rule and re-seeds the original order for the default entry. Same visible order, different mechanism."
+    },
+    {
+      "type": "NOTE",
+      "what": "The row images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The four appointment sizes, the two rounding widths and the alphabetical sort are unverified in a running system."
+    }
+  ]
+}

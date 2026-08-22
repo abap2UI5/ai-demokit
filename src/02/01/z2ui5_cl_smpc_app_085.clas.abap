@@ -128,9 +128,9 @@ CLASS z2ui5_cl_smpc_app_085 IMPLEMENTATION.
         input_value = ``.
       WHEN `DELETE`.
         " onTokenDelete: remove the deleted token(s) by key from the bound model; the toast carries the text like the original's oToken.getText()
-        DATA(key) = client->get_event_arg( ).
-        DATA(deleted_text) = VALUE #( t_tokens[ key = key ]-text OPTIONAL ).
-        DELETE t_tokens WHERE key = key.
+        DATA(del_key) = client->get_event_arg( ).
+        DATA(deleted_text) = VALUE #( t_tokens[ key = del_key ]-text OPTIONAL ).
+        DELETE t_tokens WHERE key = del_key.
         client->message_toast_display( |Token deleted: { deleted_text }| ).
     ENDCASE.
 

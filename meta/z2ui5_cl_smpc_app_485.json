@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_485",
+  "sample": "sap.m.sample.TextAreaMaxLength",
+  "entity": "sap.m.TextArea",
+  "file": "src/01/01/z2ui5_cl_smpc_app_485.clas.abap",
+  "batch": "b38",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "handleLiveChange sets the TextArea valueState from the current length. The first TextArea's valueState is already an expression binding over the same bound value in the ORIGINAL view, so the port keeps that expression and drops the liveChange attribute - the state follows the value without a round-trip. The second TextArea keeps its static Warning state as the sample sets it."
+    },
+    {
+      "type": "NOTE",
+      "what": "The second and third TextAreas carry their value as a literal in the view, exactly as the original does (only the first one is model-bound); structural-diff reports the literal against the first TextArea's {/value} because it compares the attribute across all three."
+    }
+  ]
+}

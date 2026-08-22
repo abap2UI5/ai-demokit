@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_530",
+  "sample": "sap.m.sample.OverflowToolbarSimple",
+  "entity": "sap.m.GenericTag",
+  "file": "src/01/01/z2ui5_cl_smpc_app_530.clas.abap",
+  "batch": "b43",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onSliderMoved calls setWidth( value + '%' ) on all TEN toolbars on every liveChange. The port reproduces it without a round-trip: the Slider value is two-way bound and every OverflowToolbar carries the expression binding width={= ${viewport} + '%' }, so the Slider.liveChange attribute is dropped and ten width attributes are added."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The view declares a core:CommandExecution in mvc:dependents and the Share button presses it with press=\"cmd:Share\". abap2UI5 has no controller to hold a command, so the CommandExecution is dropped (structural-diff reports it missing) and the Share button's press carries the shareAction toast itself. The toast text is the sample's 'Share action' once instead of repeated 42 times."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The slider-driven resize of the ten toolbars, the overflow priorities and the Share toast are unverified in a running system."
+    }
+  ]
+}

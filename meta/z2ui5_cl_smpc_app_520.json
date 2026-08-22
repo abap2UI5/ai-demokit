@@ -1,0 +1,35 @@
+{
+  "class": "z2ui5_cl_smpc_app_520",
+  "sample": "sap.m.sample.NotificationListGroupLazyLoading",
+  "entity": "sap.m.NotificationListGroup",
+  "file": "src/02/01/z2ui5_cl_smpc_app_520.clas.abap",
+  "batch": "b42",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onToggleCollapse fills a group with three NotificationListItems the first time it is expanded - the port keeps that laziness: each group binds its own table and the onCollapse wire fills it in ABAP when the group is expanded and still empty."
+    },
+    {
+      "type": "NOTE",
+      "what": "_addItemsToGroup picks title, datetime and priority at RANDOM from three lists. A backend cannot repeat a client-side random draw, so the port walks the same three lists in order - same values, deterministic instead of random (apps 444/467 precedent)."
+    },
+    {
+      "type": "NOTE",
+      "what": "onItemClose removes the item and toasts; onGetItemsCount toasts the group's item count - both are round-trips over the bound tables. Accept All and Reject All toast constant texts and are composed on the client. The group's own close empties its table, which is the closest equivalent of removing the group from a static list."
+    },
+    {
+      "type": "POST_171",
+      "what": "The sap.m.NotificationList container is @since 1.90 - newer than the 1.71 floor. The sample's two groups live in it, so it is kept and the port is filed under src/02."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The lazy fill on expand, the per-item close, the count toast and the group close are unverified in a running system."
+    }
+  ]
+}

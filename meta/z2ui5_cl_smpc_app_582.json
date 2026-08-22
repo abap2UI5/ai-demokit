@@ -1,0 +1,44 @@
+{
+  "class": "z2ui5_cl_smpc_app_582",
+  "sample": "sap.f.sample.GridListKeyboardArrowsNavigation",
+  "entity": "sap.f.GridList",
+  "file": "src/01/04/z2ui5_cl_smpc_app_582.clas.abap",
+  "batch": "b48",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "borderReached toasts through the global MESSAGE_TOAST action; the toast text is the argument"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the sample's whole point is the KEYBOARD hand-off between the four grids: onBorderReached reads the arrow key's keyCode plus the row/column the focus left from, walks all four f:GridLists comparing getBoundingClientRect() geometry to find the one that lies in that direction, and calls focusItemByDirection on it. None of that can travel - it is a DOM-geometry search in the controller and a control method that takes three runtime parameters the backend never sees. The port keeps the half that can: each grid's borderReached fires the MessageToast the sample also shows, naming that grid. Arrow keys therefore still navigate WITHIN each grid (that is the control's own two-dimensional navigation, not the sample's code) and still report when they run out of it, but the focus does not jump into the neighbouring grid."
+    },
+    {
+      "type": "NOTE",
+      "what": "MessageToast.show(\"Reached border of \" + oEvent.getSource().getHeaderText()) composes the text from the event source at runtime. The port wires borderReached per grid, so each of the four carries its own finished text (\"Reached border of GridList 1\" .. \"4\") - the same four strings the sample can produce."
+    },
+    {
+      "type": "NOTE",
+      "what": "onSliderMoved does this.byId(\"container\").setWidth(oEvent.getParameter(\"value\") + \"%\") on every liveChange. The port makes the slider's value a two-way bound property and the CSSGrid's width an expression over it ({= ${...} + '%' }), so the width follows the slider in the browser with no round trip at all. The liveChange wire itself is therefore dropped: a round trip per keystroke would be slower AND lossy (events behind one in flight are discarded)."
+    },
+    {
+      "type": "DROPPED_171",
+      "what": "the Reveal Grids ToggleButton keeps its label and stays in the view, but its press is not wired. RevealGrid.toggle is the sample's OWN JavaScript utility (sample/GridListKeyboardArrowsNavigation/RevealGrid/RevealGrid.js plus RevealGrid.css): it injects an absolutely positioned overlay div per grid cell, reading the computed grid template off each GridList's DOM node, to visualise the grid mesh. It is a debugging aid with no control-side counterpart and no server-side state - nothing a backend can turn on. onExit's RevealGrid.destroy goes with it."
+    },
+    {
+      "type": "NOTE",
+      "what": "model/data.json carries title, subtitle, counter and type per item, but the GridListItem template binds only {title} - its second line is a Label with the LITERAL text \"Subtitle\". So the port models the title alone (4/4/5/5 items across the four lists, as in the mock) and keeps the literal label."
+    },
+    {
+      "type": "NOTE",
+      "what": "the four GridLists differ only in their GridItemLayoutData spans (2x2, 3x1, 3x2, 2x3), which is what makes the items different sizes and the two-dimensional navigation interesting; those are carried 1:1. The shared cssgrid:GridBasicLayout (5rem auto-rows, repeat(auto-fill, minmax(5rem, 1fr)), 0.5rem gap) and the outer GridResponsiveLayout (two columns, one below S) are carried 1:1 as well."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: that arrow keys inside a grid reach its border and raise the toast, and that dragging the slider narrows the container without a round trip."
+    }
+  ]
+}

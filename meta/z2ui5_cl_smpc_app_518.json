@@ -1,0 +1,35 @@
+{
+  "class": "z2ui5_cl_smpc_app_518",
+  "sample": "sap.m.sample.ObjectHeaderActiveAttributes",
+  "entity": "sap.m.ObjectAttribute",
+  "file": "src/02/01/z2ui5_cl_smpc_app_518.clas.abap",
+  "batch": "b42",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The ObjectHeader binds the fixed record {/ProductCollection/0}; the port seeds those fields at the default-model root and binds them absolutely, so the ObjectHeader.binding attribute is dropped."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleFeedbacklinkPressed builds a feedback Dialog (RatingIndicator + TextArea + Submit/Cancel) in the controller. The port builds the same dialog in a chain and shows it with popup_display, which is why structural-diff reports Dialog, RatingIndicator, TextArea and two Buttons as control extra - the original's view declares none of them. The Submit button's busy-then-toast choreography (setBusy, a 2-second MessageToast anchored on the dialog, then close) is reduced to the toast and the close."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleSAPLinkPressed calls URLHelper.redirect('http://www.sap.com', true) - reproduced 1:1 through the global URLHELPER target."
+    },
+    {
+      "type": "POST_171",
+      "what": "ObjectAttribute ariaHasPopup is @since 1.97.0 - newer than the 1.71 floor. It is kept 1:1 from the sample (the feedback attribute announces its dialog), so the port is filed under src/02."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The feedback dialog, its submit path and the URL redirect are unverified in a running system."
+    }
+  ]
+}

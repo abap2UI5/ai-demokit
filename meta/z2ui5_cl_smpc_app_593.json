@@ -1,0 +1,32 @@
+{
+  "class": "z2ui5_cl_smpc_app_593",
+  "sample": "sap.uxap.sample.ObjectPageOnJSONWithLazyLoading",
+  "entity": "sap.uxap.ObjectPageLayout",
+  "file": "src/02/03/z2ui5_cl_smpc_app_593.clas.abap",
+  "batch": "b49",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false,
+    "note": "the controller only loads HRData.json - the port raises no event"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Block->content inlining (app 401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): all eleven sections hold the SAME employment:EmploymentBlockJob, a lazy-loading BlockBase wrapper around a static view, so that view is inlined into each of the eleven (the layout:Grid / layout:VerticalLayout / layout:HorizontalLayout tree with its layout:GridData layoutData and the four m:Label the two employee cards show). Absent as a result: the eleven BlockBase controls with their ids, and the block view's own mvc:View root. Eleven copies of one heavy block is the sample: a page long enough that enableLazyLoading is worth watching."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "Named-model fold (app 230/401 precedent): each of the eleven blocks carries six uxap:ModelMapping elements mapping ObjectPageModel>/Employee/0..5 onto the internal models emp1>..emp6> - sixty-six config controls in all, none of which has a counterpart, because abap2UI5 serves one default model. EmploymentBlockJob is also a two-view BlockBase (Collapsed / Expanded): the Collapsed view is the initial one and the only one inlined, so employees 1 and 2 are seeded as default-model root fields bound via client->_bind and employees 3-6, together with the more/less toggle, are lost."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.uxap.ObjectPageLayout.headerContentPinned is @since 1.93 - newer than the 1.71 floor but kept for the 1:1 port; the sample opens with a pinned header content. The app needs a UI5 release >= 1.93 for it to take effect."
+    },
+    {
+      "type": "NOTE",
+      "what": "the ids the sample gives its eleven blocks run employmentblockjob1, 2, 4, 5, 6, 7, 8, 9, 10, 11 and then 3 - the numbering skips 3 in place and picks it up at the end, an upstream slip with no effect. The port inlines the blocks away, so no id travels."
+    }
+  ]
+}

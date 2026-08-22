@@ -1,0 +1,48 @@
+{
+  "class": "z2ui5_cl_smpc_app_607",
+  "sample": "sap.m.sample.OverflowToolbarFooter",
+  "entity": "sap.m.OverflowToolbar",
+  "file": "src/02/01/z2ui5_cl_smpc_app_607.clas.abap",
+  "batch": "b50",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "the two Export toasts are round-trip-free control_global actions; the picked menu item's text travels with itemSelected"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "two post-1.71 members are kept for the 1:1 port: the control sap.m.OverflowToolbarMenuButton (@since 1.109.0) and its beforeMenuOpen event (@since 1.94.0). The split Export button is one of the four toolbar-content types this sample lines up, so it cannot be dropped; the app needs a UI5 release >= 1.109."
+    },
+    {
+      "type": "NOTE",
+      "what": "onSliderMoved sets byId('otbSubheader').setWidth(value + '%') and the same for the footer toolbar, on every liveChange. width IS a bindable property, so both toolbars take an expression over the two-way bound Slider value and follow it in the browser - the liveChange wire is dropped, since a round trip per keystroke would be slower AND lossy (apps 582/604 carry the same fold)."
+    },
+    {
+      "type": "NOTE",
+      "what": "Thin frontend: fnApplyFiltersAndOrdering builds a sap.ui.model.Filter (Name Contains <query>) and one sap.ui.model.Sorter and calls filter()/sort() on the items binding. The port filters and sorts the ABAP table it sends instead (app 298 idiom): onSort flips the sorter's descending flag, onGroup switches the sort key between SupplierName and Name, onReset clears the query and both flags."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "grouping loses its group headers. onGroup's Sorter carries a _fnGroup that returns a {key, text} per row, which is what makes UI5 draw a grey SupplierName header above each block. abap2UI5 has no client-side grouping function, so the port sorts by SupplierName instead: the rows end up in the same order, without the headers. App 298 records the same loss for the same reason."
+    },
+    {
+      "type": "NOTE",
+      "what": "onFilter runs on the SearchField's liveChange. The port binds value two-way and filters on search instead - the final-value event - which is the prefer-a-bindable-property rule: a round trip per keystroke drops the events behind one already in flight. onReset's byId('maxPrice').setValue('') becomes a CLEAR on the same bound field."
+    },
+    {
+      "type": "NOTE",
+      "what": "onDefaultActionAccept and onBeforeMenuOpen toast constants, so both are wired round-trip-free as follow_up_action( control_global, MESSAGE_TOAST show ). onMenuAction walks the MenuItem's parent chain to build a ' > ' path; this menu is one level deep, so the path IS the item's text and the wire carries ${$parameters>/item}.getText(). onTogglePress toasts the button's generated id plus Pressed / Unpressed - the port gives the button the explicit id 'toggleButton' and binds its pressed state, so the backend can name and read it."
+    },
+    {
+      "type": "NOTE",
+      "what": "the Price cell is a composite currency binding in the sample (parts Price + CurrencyCode through sap.ui.model.type.Currency with showMeasure false). The port binds the two fields directly on the ObjectNumber's number and unit, which is what the formatter renders, since the mock's prices are plain integers."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: that the slider shrinks both toolbars into their overflow areas, and that Sort / Group / Reset and the Export menu behave as upstream."
+    }
+  ]
+}

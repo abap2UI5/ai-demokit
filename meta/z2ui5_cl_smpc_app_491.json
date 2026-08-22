@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_smpc_app_491",
+  "sample": "sap.m.sample.MultiComboBoxClearIcon",
+  "entity": "sap.m.MultiComboBox",
+  "file": "src/02/01/z2ui5_cl_smpc_app_491.clas.abap",
+  "batch": "b39",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.MultiComboBox inherits showClearIcon from sap.m.ComboBoxBase, where it is @since 1.96 - it is the subject of this sample, so it is kept 1:1 and the port needs a UI5 runtime >= 1.96."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleSelectionChange toasts the changed item and whether it was selected - composed on the client from the two event parameters, so it needs no round-trip."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleSelectionFinish lists the TEXTS of every selected item. A UI5 expression argument cannot map an array of controls, so the port binds selectedKeys two-way and composes the same line in ABAP on a round-trip."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Both wires and the clear icon are unverified in a running system."
+    }
+  ]
+}

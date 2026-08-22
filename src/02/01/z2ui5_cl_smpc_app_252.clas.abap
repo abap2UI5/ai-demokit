@@ -224,8 +224,8 @@ CLASS z2ui5_cl_smpc_app_252 IMPLEMENTATION.
     " precedent): desktop 4 / tablet 2 / else 1, exactly as the original seeds
     " it once in onInit
     pages_count    = COND #(
-        WHEN client->get( )-s_device-system = z2ui5_if_types=>cs_device-system-desktop THEN 4
-        WHEN client->get( )-s_device-system = z2ui5_if_types=>cs_device-system-tablet  THEN 2
+        WHEN client->get( )-s_device-system = z2ui5_if_client=>cs_device-system-desktop THEN 4
+        WHEN client->get( )-s_device-system = z2ui5_if_client=>cs_device-system-tablet  THEN 2
         ELSE 1 ).
     scroll_visible = abap_false.
 

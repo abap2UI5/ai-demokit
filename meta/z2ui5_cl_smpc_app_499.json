@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_499",
+  "sample": "sap.m.sample.ListSelectionSearch",
+  "entity": "sap.m.List",
+  "file": "src/01/01/z2ui5_cl_smpc_app_499.clas.abap",
+  "batch": "b40",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onSearch filters the list binding by Name with a Contains filter, reproduced 1:1 through follow_up_action binding_call on the items aggregation (the model stays untouched, app 022 precedent). The search wire round-trips per keystroke, which is what liveChange asks for."
+    },
+    {
+      "type": "NOTE",
+      "what": "onSelectionChange counts oList.getSelectedContexts(true) and drives the info toolbar's visibility and label. The port binds the selection per row (StandardListItem.selected), counts the flagged rows in ABAP and writes the two bound properties - the same count across the current filter, since the flag lives on the row rather than on the rendered item."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The search filter and the selection counter are unverified in a running system."
+    }
+  ]
+}

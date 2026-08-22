@@ -1,0 +1,28 @@
+{
+  "class": "z2ui5_cl_smpc_app_598",
+  "sample": "sap.uxap.sample.ObjectPageSubSectionMultiView",
+  "entity": "sap.uxap.ObjectPageSubSection",
+  "file": "src/01/03/z2ui5_cl_smpc_app_598.clas.abap",
+  "batch": "b49",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false,
+    "note": "the controller has only an onAfterRendering demokit tweak - the port raises no event"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Block->content inlining (app 401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): all twenty-one blocks are the SAME BlockBase, sample:BlockEmpty, whose Collapsed and Expanded views are both view/blocks/BlockEmpty.view.xml - a forms:SimpleForm with maxContainerCols='2', title=' ' (one blank), editable='false', ResponsiveGridLayout and NO content at all. It is inlined into each of the twenty-one aggregations, which is the whole missing/extra pairing: sample:BlockEmpty 21 vs 0 against forms:SimpleForm 1 vs 21 (the block view is archived once, the port emits it twenty-one times). Absent as a result: the twenty-one BlockBase controls with their ids, and the block view's own mvc:View root."
+    },
+    {
+      "type": "NOTE",
+      "what": "the six subsections hold 1, 2, 3, 4, 5 and 6 empty blocks - which is the sample: it shows how the ObjectPageSubSection lays blocks out by itself when none of them declares a size. Its own subsection titles say so ('1 block', '2 blocks' ... '6 blocks'), and the section that holds them sets showTitle='false' so only the subsection titles show. All carried 1:1. The sample's own id numbering skips a step (multiview11, 21/22, 41..43, 51..54, 61..65, 71..76 - there is no multiview3x), an upstream slip with no effect; the port inlines the blocks away, so no id travels."
+    },
+    {
+      "type": "DROPPED_171",
+      "what": "the controller's only method is onAfterRendering, which does $('.sapUiSimpleForm').css('backgroundColor', 'green') - a jQuery reach into the rendered DOM, marked '//demokit specific' in the sample itself. It paints the empty forms green so their layout is visible in the demo kit. There is no control behind it (no SimpleForm property carries a background colour), so it is dropped: the port's forms are laid out identically and simply not tinted."
+    }
+  ]
+}

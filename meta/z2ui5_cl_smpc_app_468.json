@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_smpc_app_468",
+  "sample": "sap.m.sample.StandardListItemIcon",
+  "entity": "sap.m.StandardListItem",
+  "file": "src/01/01/z2ui5_cl_smpc_app_468.clas.abap",
+  "batch": "b37",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": []
+}

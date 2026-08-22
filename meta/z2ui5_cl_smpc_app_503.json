@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_503",
+  "sample": "sap.m.sample.InputKeyValueTabularSuggestions",
+  "entity": "sap.m.Input",
+  "file": "src/01/01/z2ui5_cl_smpc_app_503.clas.abap",
+  "batch": "b40",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "onInit registers a JavaScript suggestionRowValidator that turns the selected row into an Item(key = second cell, text = first cell) - that is what fills the Input's selectedKey. abap2UI5 cannot register such a callback, so the port takes the key straight from the selected row (${$parameters>/selectedRow}.getCells()[1].getText()) and shows it; the Input's own getSelectedKey( ) therefore stays empty, which is invisible in this sample but is the behaviour that is lost."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The tabular suggestions and the selected-key readout are unverified in a running system."
+    }
+  ]
+}

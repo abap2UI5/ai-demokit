@@ -96,12 +96,33 @@ const ADVISORY_BUDGET = {
   // same shape — the alt-less social-icon / profile sap.m.Images the
   // ObjectPageHeader samples ship without alt; kept 1:1, an alt would be
   // invented text
+  // raised 2026-08-22 (batch b33, app 431 ContainerResponsivePadding): one more
+  // of the same shape - the icon-only settings / drop-down-list Buttons the
+  // sample puts in the Panel's header Toolbar without a tooltip; kept 1:1
+  // raised 2026-08-22 (batch b34, app 440 MenuEndContent): one more of the same
+  // shape - the transparent icon-only Buttons the sample puts in its MenuItem
+  // endContent, tooltip-less in the demo kit fragment itself; kept 1:1
+  // raised 2026-08-22 (batch b41, app 508 ListToolbar): one more of the same
+  // shape - the three icon-only Buttons in the List's header OverflowToolbar,
+  // tooltip-less in the demo kit sample itself; kept 1:1
+  // raised 2026-08-22 (batch b42, app 522 ListLoading): one more of the same
+  // shape - the icon-only refresh Button in the List's header OverflowToolbar,
+  // tooltip-less in the demo kit sample itself; kept 1:1
+  // raised 2026-08-22 (batch b44, app 541 PlanningCalendarWithLegend): one more
+  // of the same shape - the icon-only legend ToggleButton in the calendar's
+  // toolbar, tooltip-less in the demo kit sample itself; kept 1:1
+  // raised 2026-08-22 (batch b46, catching up on batch b45): three of the same
+  // shape that b45 landed without raising the budget, so the ratchet has been
+  // red since that commit - app 553's icon-only legend ToggleButton and app
+  // 554's legend ToggleButton plus its icon-only Button, all tooltip-less in
+  // the demo kit samples themselves; kept 1:1. Batch b46 (apps 556-565) adds
+  // none: every icon-only button it ports got a tooltip
   // ratcheted down 2026-08-14 with the linter bump to 51cce10: 6afb902
   // ("missing-accessibility: stop asking for an attribute UI5 ignores") drops
   // the findings on controls where the attribute is ignored anyway, so 26 of
   // the 55 were never real. The ones above stay — they are the alt/tooltip-less
   // originals, kept 1:1
-  'missing-accessibility': 29,
+  'missing-accessibility': 37,
   'event-without-handler': 4, // ratcheted down 2026-08-05: the four calendar ports wired their select handler
   // raised 2026-08-21 (app 298, sap.m.table.columnmenu.QuickSort): the same
   // shape as 268, and here the metadata is not merely incomplete but WRONG.
@@ -112,7 +133,11 @@ const ADVISORY_BUDGET = {
   // delivers two empty strings at runtime, so the port reads `item`, like the
   // sample's own onSortChange does. Satisfying this rule here would mean
   // breaking the port.
-  'unknown-event-parameter': 2, // app 268: ColorPickerPopover forwards colorString undeclared — works live
+  // raised 2026-08-22 (batch b47, app 571 TableIColumnHeaderMenu): the SAME
+  // QuickSort.change metadata gap app 298 documents above - the event declares
+  // key and sortOrder and fires neither, so this port reads the `item` the
+  // control really passes, exactly as the sample's own handler does
+  'unknown-event-parameter': 3, // app 268: ColorPickerPopover forwards colorString undeclared — works live
   // both entries below are new rules from the 2026-08-12 linter bump (363c6e9),
   // budgeted here because the bump PR is where the debt decision belongs:
   // apps 101/102/144/268/280/407 — a liveChange/live wire that round-trips per
@@ -120,7 +145,20 @@ const ADVISORY_BUDGET = {
   // Slider/ColorPicker/SearchField readout), so the original's live handler is
   // what a 1:1 port carries; the final-value event the rule prefers would be a
   // fidelity deviation, not a fix
-  'live-event-roundtrip': 6,
+  // raised 2026-08-22 (batch b36, app 462 InputValueUpdate): the same shape -
+  // the sample exists to COMPARE oInput.getValue() with the model property, so
+  // the getValue Text has to follow every keystroke; a final-value event would
+  // erase the difference the sample demonstrates
+  // raised 2026-08-22 (batch b40, app 499 ListSelectionSearch): the sample's own
+  // SearchField wires liveChange to the list filter, so the search IS the live
+  // wire; a final-value event would change what the sample demonstrates
+  // raised 2026-08-22 (batch b46, and catching up on batch b43): three of the
+  // same shape, two of which b43 landed without raising the budget, so the
+  // ratchet has been red since that commit - apps 533/535 and now 560, the
+  // wizard samples whose per-keystroke liveChange IS the step validation
+  // (validateStep/invalidateStep at three characters); a final-value event
+  // would gate the Next button one keystroke late
+  'live-event-roundtrip': 11,
   // apps 005/080/121/127/236 — a press/post wired next to a LITERAL
   // enabled="false". The rule doc grants this exact case ("a 1:1 port of a
   // sample demonstrating the disabled STATE legitimately carries the original's
@@ -221,11 +259,31 @@ for (const r of results) {
 
   const violations = [];
   const advisory = [];
+  /* A sidecar may declare `property_gate: { skip: true, reason, types: [...] }`
+   * for the case the corpus keeps meeting: the UI5 metadata says one thing and
+   * the control's own code does another, so satisfying the rule would mean
+   * breaking the port. It is deliberately narrower than the render / data /
+   * structural skips - it must NAME the finding types it covers, and a named
+   * type that does not fire is stale and fails the port, exactly like a stale
+   * render skip. */
+  const gateSkip = meta.property_gate?.skip === true ? meta.property_gate : null;
+  const skipUsed = new Set();
   for (const f of r.findings) {
     if (ADVISORY_TYPES.has(f.type)) { advisory.push(f); continue; }
     if (VERSION_TYPES.has(f.type) && declares(meta, f)) continue;
+    if (gateSkip && gateSkip.types.includes(f.type)) { skipUsed.add(f.type); continue; }
     if (severityOf(f) === 'hint') { advisory.push(f); continue; }
     violations.push(f);
+  }
+  if (gateSkip) {
+    for (const t of gateSkip.types) {
+      if (!skipUsed.has(t)) {
+        violations.push({
+          type: 'stale-skip',
+          message: `declares property_gate for "${t}" but no such finding fires — remove it`,
+        });
+      }
+    }
   }
 
   /* The render skip is verified against the real render: honoured only while

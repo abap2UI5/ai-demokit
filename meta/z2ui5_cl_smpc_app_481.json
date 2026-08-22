@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_smpc_app_481",
+  "sample": "sap.m.sample.MultiComboBoxCustomFiltering",
+  "entity": "sap.m.MultiComboBox",
+  "file": "src/01/01/z2ui5_cl_smpc_app_481.clas.abap",
+  "batch": "b38",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "onInit gives both MultiComboBoxes a JavaScript setFilterFunction - a case-insensitive starts-with on the first, a contains on the second. A JS filter callback has no bindable or backend equivalent (the app-authored-JS-function boundary), so both carry UI5's default filtering and the contrast the sample demonstrates is lost."
+    }
+  ]
+}

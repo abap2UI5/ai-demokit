@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_smpc_app_449",
+  "sample": "sap.f.sample.FlexibleColumnLayoutLandmarkInfo",
+  "entity": "sap.f.FlexibleColumnLayout",
+  "file": "src/02/04/z2ui5_cl_smpc_app_449.clas.abap",
+  "batch": "b35",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "The sap.f.FlexibleColumnLayout aggregation landmarkInfo and the control sap.f.FlexibleColumnLayoutAccessibleLandmarkInfo it holds are both @since 1.95 - they ARE this sample, so both are kept 1:1 and the port needs a UI5 runtime >= 1.95. On the 1.71 floor the unknown tag would take the whole view down, which is why the port is filed in src/02."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample is not a routing showcase - it drives the columns through an EventBus and the FlexibleColumnLayout's own layout property (setLayout). The port expresses it as ONE view: the List, Detail and DetailDetail views are inlined into beginColumnPages / midColumnPages / endColumnPages, so the original's nested mvc:XMLView reference in beginColumnPages is dropped and the two lazily created views are declared up front (app 234 precedent). The EventBus publish/subscribe pairs become three events writing the bound layout field."
+    },
+    {
+      "type": "NOTE",
+      "what": "FlexibleColumnLayout and its FlexibleColumnLayoutAccessibleLandmarkInfo carry the f: prefix here because the merged single view uses sap.m as its default xmlns for the pages, while the original root view declares sap.f as the default and writes both unprefixed. Same controls, different namespace representation (app 234 precedent)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The three layout transitions (OneColumn, TwoColumnsMidExpanded, ThreeColumnsEndExpanded) driven by the bound layout property are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_449.mjs)."
+    }
+  ]
+}

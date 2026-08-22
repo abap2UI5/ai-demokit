@@ -1,0 +1,48 @@
+{
+  "class": "z2ui5_cl_smpc_app_571",
+  "sample": "sap.m.sample.TableIColumnHeaderMenu",
+  "entity": "sap.m.Table",
+  "file": "src/02/01/z2ui5_cl_smpc_app_571.clas.abap",
+  "batch": "b47",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true,
+    "note": "the QuickSort item's sort order and the alignment travel with the events"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "six post-1.71 members are kept for the 1:1 port, all of them what the sample is about: the column header menu itself - sap.m.table.columnmenu.Menu, QuickSort, QuickSortItem, ActionItem and QuickAction (all since UI5 1.110) - and the sap.m.Column headerMenu association (since UI5 1.98). App 298 carries the same stack."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the sample DEFINES a control class in JavaScript (CustomMenuAdapter, a sap.m.table.columnmenu.MenuBase subclass that wraps a plain sap.m.Menu and implements IColumnHeaderMenu) and hangs it on three of the five columns. A backend cannot define a control class - the same wall app 552 hits with its two custom calendar views - so those three menus are expressed with the framework's OWN column menu instead: the Supplier column gets a Menu with the Toggle Grouping ActionItem, and the Price and Dimensions columns get a Menu whose QuickAction holds the sample's two sort Buttons / three align Buttons, each with the icon and text the original MenuItems carry. Same entries, same actions, no custom class. (A second reason forces the QuickAction shape for those two: the linter's metadata snapshot records Menu.items without multiple, so it treats the aggregation as single - the snapshot follows the UI5 source, which omits the flag and relies on ManagedObject's default of true. QuickAction.content does carry multiple, so it takes the two and three buttons.)"
+    },
+    {
+      "type": "NOTE",
+      "what": "the Product column keeps the built-in QuickSort 1:1. Its change event declares key and sortOrder and fires NEITHER - onChange does fireChange({item: oItem}) and nothing else - so the port reads the item the control really passes and asks it for its sort order, exactly as app 298 does and as the sample's own handler does. That is what the advisory unknown-event-parameter finding on this port is."
+    },
+    {
+      "type": "NOTE",
+      "what": "the four setter calls the menus make are all bindable properties, so they become bound fields instead: setSortIndicator on the Product and Price columns, and setHAlign on the Dimensions column. Sorting itself is done where the data is - the ABAP table is re-ordered (app 298 idiom) instead of sorting the items binding."
+    },
+    {
+      "type": "NOTE",
+      "what": "Toggle Grouping calls oBinding.sort with a Sorter carrying a group function. The declarative equivalent is the items binding with sorter: { path: 'SUPPLIERNAME', group: true }, so the port switches the binding string between the plain and the grouping form - which is what the toggle does."
+    },
+    {
+      "type": "NOTE",
+      "what": "the full mock /ProductCollection is seeded with the fields the view binds (ProductId, Name, SupplierName, Width, Depth, Height, DimUnit, WeightMeasure, WeightUnit, Price, CurrencyCode); the price column keeps the original sap.ui.model.type.Currency composite binding 1:1."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: the four column header menus, the grouping toggle and the two sort indicators."
+    },
+    {
+      "type": "NOTE",
+      "what": "**e2e-caught 2026-08-22**: the sort ran but the table came back in its original order. The cause is the transpiled backend: `SORT <itab> BY (field)` - the DYNAMIC component form - loses its BY clause entirely (the emitted JS is `abap.statements.sort(t, {})`), so every sort was a no-op. The component is named statically per field now, in a CASE. Apps 298, 362 and 571 all carried the dynamic form and all three are fixed."
+    }
+  ]
+}

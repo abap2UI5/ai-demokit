@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_439",
+  "sample": "sap.m.sample.TextEmptyIndicator",
+  "entity": "sap.m.Text",
+  "file": "src/02/01/z2ui5_cl_smpc_app_439.clas.abap",
+  "batch": "b34",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.Text.emptyIndicatorMode is @since 1.87 and is the whole point of the sample (On vs Auto), so both Texts keep it 1:1 and the port needs a UI5 runtime >= 1.87."
+    },
+    {
+      "type": "NOTE",
+      "what": "onCssClassChange calls containerAuto.toggleStyleClass('sapMShowEmpty-CTX'). The port makes the same call on the same control id through follow_up_action control_by_id, so the Switch needs no round-trip (toggleStyleClass is a public control method the frontend action dispatches)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The Switch -> toggleStyleClass wire and with it the Auto indicator appearing inside the sapMShowEmpty-CTX Panel are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_439.mjs)."
+    }
+  ]
+}

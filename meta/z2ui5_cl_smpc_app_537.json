@@ -1,0 +1,55 @@
+{
+  "class": "z2ui5_cl_smpc_app_537",
+  "sample": "sap.m.sample.PlanningCalendarViews",
+  "entity": "sap.m.PlanningCalendar",
+  "file": "src/02/01/z2ui5_cl_smpc_app_537.clas.abap",
+  "batch": "b44",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.ui.unified.CalendarAppointment ariaHasPopup is @since 1.150.0 - newer than the 1.71 floor. It is kept 1:1 from the sample, so the port is filed under src/02."
+    },
+    {
+      "type": "NOTE",
+      "what": "The calendar date properties (the PlanningCalendar startDate and every CalendarAppointment / DateTypeRange startDate and endDate) are typed \"object\" and demand a real JS Date. The model keeps ISO strings and Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74)."
+    },
+    {
+      "type": "NOTE",
+      "what": "determineControlsVisibility shows the Label only in the nonWorking view and the Select only in the months view on a desktop. viewKey is bindable, so the key is one shared field and both controls carry the switch as an expression binding - the Label over the key alone, the Select over the key AND the device model's system/desktop flag. handleViewChange, which exists only to re-run that method, is dropped with them."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleGroupModeChange calls setGroupAppointmentsMode; the property is bindable, so the Select shares its key with the calendar and the change handler is dropped. handleSelectionFinish's setBuiltInViews keeps its wire: the picked keys travel as one comma-separated argument and ABAP fills the bound string table."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleIntervalSelect has two branches. In the nonWorking view handleNonWorkingSpecialDates toggles a NonWorking DateTypeRange on the selected date - the specialDates aggregation is bound to a table here and the round-trip adds or removes the row, which is the same toggle. Otherwise the handler pushes a 'new appointment' (Type09) into the row it hit, or into every selected row; the row index and the selected-row indices travel with the event and ABAP does the same push. The interval's start and end travel as their LOCAL parts - a UTC toISOString( ) would shift the day."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "onPress on the 'Toggle custom views' ToggleButton removes the four PlanningCalendarViews from the aggregation and adds them back, by constructing PlanningCalendarView instances in the controller. The views aggregation is declared in the view here and a backend cannot add or remove aggregation children of a rendered view, so the four views stay declared and the ToggleButton keeps its text but loses its press wire."
+    },
+    {
+      "type": "NOTE",
+      "what": "The two row images are the demo kit's own test-resources files (John_Miller.png, Donna_Moore.jpg), re-hosted on sdk.openui5.org."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The four views, the non-working day toggle, the interval-select appointment push, the built-in views box and the two nonWorkingDays / nonWorkingHours arrays are unverified in a running system."
+    },
+    {
+      "type": "NOTE",
+      "what": "**e2e-caught 2026-08-22**: the sample's own data carries an upstream typo - UI5Date.getInstance(201, 2, 4, 13, 30), a year of 201 where every neighbouring row says 2017 (Page.controller.js:110). In JavaScript that is a VALID date (4 March 201 AD); as the ISO string the port stores it became '201-03-04T13:30:00', which new Date() cannot parse at all, so the appointment reached the calendar as an Invalid Date and CalendarUtils._checkJSDateObject took the whole app down. The year is now written '0201', which is the same absurd date the original produces and which parses. The typo itself is kept: it is the sample's data."
+    }
+  ],
+  "render_smoke": {
+    "skip": true,
+    "reason": "PlanningCalendarRow.nonWorkingDays / nonWorkingHours are int[] properties bound to two tables NESTED INSIDE the bound row. The static harness mocks every nested table as an array of ROW OBJECTS, so the row template gets '[object Object],[object Object]' where UI5 wants int[] and CREATE fails - a root-level scalar table is mocked correctly (app 490 binds one to selectedKeys and renders clean), so this is the harness's nesting rule, not the binding. Verified against the render each run: the skip is honoured only while it still errors. Corrected 2026-08-22: the first e2e run of this port showed the REAL app failing too, with '\"5,6\" is of type object, expected int[]' - the two tables were tables of STRINGS, which serialize to ['5','6']. They are integer tables now and the real app renders; the static skip stands only for the mocking rule described above."
+  }
+}

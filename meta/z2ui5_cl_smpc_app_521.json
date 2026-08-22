@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_521",
+  "sample": "sap.m.sample.InputKeyValue",
+  "entity": "sap.m.Input",
+  "file": "src/01/01/z2ui5_cl_smpc_app_521.clas.abap",
+  "batch": "b42",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onValueHelpRequest loads ValueHelpDialog.fragment.xml, pre-filters it by the Input's value and opens it; the port builds the same SelectDialog with popup_display, applies the same pre-filter through binding_call and writes the picked title back into the two-way bound value."
+    },
+    {
+      "type": "NOTE",
+      "what": "onSuggestionItemSelected reads the Input's selectedKey; the key travels straight from the selected suggestion item (${$parameters>/selectedItem}.getKey()) and is shown in the bound Text."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The KeyValue suggestions, the value help and the selected-key readout are unverified in a running system."
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_522",
+  "sample": "sap.m.sample.ListLoading",
+  "entity": "sap.m.List",
+  "file": "src/01/01/z2ui5_cl_smpc_app_522.clas.abap",
+  "batch": "b42",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The sample runs a MockServer with a 3-second delay behind an ODataModel; abap2UI5 binds the ABAP table directly, so the rows are there at once. The growing, busy-indicator and noDataText settings are kept 1:1 - what is not reproduced is the artificial delay the sample uses to show the busy state, and refreshDataFromBackend re-reads the same rows from the backend on a round-trip."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The refresh wire is unverified in a running system."
+    }
+  ]
+}

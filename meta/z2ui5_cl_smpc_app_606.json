@@ -1,0 +1,48 @@
+{
+  "class": "z2ui5_cl_smpc_app_606",
+  "sample": "sap.m.sample.GenericTileLineMode",
+  "entity": "sap.m.GenericTile",
+  "file": "src/02/01/z2ui5_cl_smpc_app_606.clas.abap",
+  "batch": "b50",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "the pressed tile's header or tooltip and the press action travel with every tile press"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "three post-1.71 members are kept for the 1:1 port: sap.m.GenericTile.linkTileContents (the property and the aggregation, both @since 1.120) and the control sap.m.LinkTileContent it holds (@since 1.120). The app needs a UI5 release >= 1.120; below it the lowercase linkTileContents tag resolves as a control class and the 404 takes the whole view down, which is why this is an error rather than a warning."
+    },
+    {
+      "type": "NOTE",
+      "what": "changeEnforceSmall does model.setProperty('/sizeBehavior', state ? 'Small' : 'Responsive'). Both halves are bindable, so the Switch's state and the seven sizeBehavior bindings share one round trip that writes one field - the same two values the original writes. The ComboBox's selectedKey and every scope binding likewise share the /scope field the sample already binds, so switching the tile actions needs no handler at all: that is what the sample's own {/scope} binding does."
+    },
+    {
+      "type": "NOTE",
+      "what": "press and pressSlideTile compose their toast from the pressed tile (getHeader() || getTooltip()) and from the press action, and say 'Remove action of ...' when the action is Remove. Both travel: the wire carries ${$source>/header} (or ${$source>/tooltip} for the news tiles) and ${$parameters>/action}, and the backend composes the same two sentences. The two SlideTiles pass their own tooltip literally, since that is what the handler reads for them."
+    },
+    {
+      "type": "NOTE",
+      "what": "onLinkPress toasts the constant 'Pressed on Link', so it is wired round-trip-free as follow_up_action( control_global, MESSAGE_TOAST show ) (app 005 idiom)."
+    },
+    {
+      "type": "NOTE",
+      "what": "the tiles' state binding is {= ${state} || 'Loaded' } in the sample - the mock leaves state absent on two of the five tiles and empty on the news tiles. A flat ABAP row would send an empty string into the LoadState enum, so the fallback is applied at SEED time instead: the absent and empty states are seeded 'Loaded', which is the value the expression produces. The three the mock does set (Loading, Failed, Disabled) are carried verbatim - they are what the sample shows."
+    },
+    {
+      "type": "NOTE",
+      "what": "tiles.json carries slideTile1 and slideTile2 as two arrays of the SAME shape and the same length, so the data-fidelity gate cannot tell which ABAP block belongs to which and compares both against slideTile1. The seeds are verbatim: t_slide1 is slideTile1 (NewsImage2 / 'August 22, 2016' / the NFL.com headline first) and t_slide2 is slideTile2 (NewsImage1 / 'August 21, 2016' / the Wind Map headline first), each with its own TOOLTIP ('NewsTile n of SlideTile 1' vs '... SlideTile 2'), BACKGROUNDIMAGE, FOOTER, CONTENTTEXT, SUBTITLE and STATE. Nothing here is changed from the mock beyond the two folds this sidecar already records - the host absolutization on BACKGROUNDIMAGE and the 'Loaded' seed for an empty STATE."
+    },
+    {
+      "type": "NOTE",
+      "what": "the four background images come from the sample's own images folder and point at the sdk.openui5.org host per the offline asset-URL rule; the mock writes them relative as 'test-resources/sap/m/demokit/sample/GenericTileLineMode/images/...'. The LinkTileContent hrefs stay the sample's own http://www.sap.com."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: the LineMode row of tiles, the two auto-advancing SlideTiles, the scope switch and the Remove-action toast."
+    }
+  ]
+}

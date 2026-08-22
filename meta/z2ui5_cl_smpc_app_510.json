@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_smpc_app_510",
+  "sample": "sap.m.sample.InputCustomValueHelpIcon",
+  "entity": "sap.m.Input",
+  "file": "src/02/01/z2ui5_cl_smpc_app_510.clas.abap",
+  "batch": "b41",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.Input.valueHelpIconSrc is @since 1.84 - the custom value-help icon IS this sample, so it is kept 1:1 and the port needs a UI5 runtime >= 1.84."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleValueHelp loads Dialog.fragment.xml and opens it; the port builds the same SelectDialog in its own chain and shows it with popup_display. The dialog gets an id so the search filter can address its items binding."
+    },
+    {
+      "type": "NOTE",
+      "what": "_handleValueHelpSearch filters the dialog's items by Name, reproduced 1:1 with follow_up_action binding_call; _handleValueHelpClose writes the picked title into the Input (the title travels as an event arg) and closes the popup."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The value-help dialog, its search filter and the value write-back are unverified in a running system."
+    }
+  ]
+}

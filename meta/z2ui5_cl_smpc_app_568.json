@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_568",
+  "sample": "sap.m.sample.TableContextualWidthStatic",
+  "entity": "sap.m.Table",
+  "file": "src/01/01/z2ui5_cl_smpc_app_568.clas.abap",
+  "batch": "b47",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onPress calls oTable.setContextualWidth('100px'). Table.contextualWidth is a bindable property, so - per the prefer-a-bindable-property rule - it is bound to a field seeded with the view's own initial value ('500px') and the button writes '100px' into it. The rendered result is identical and no frontend action is needed."
+    },
+    {
+      "type": "NOTE",
+      "what": "the controller's oData array is seeded verbatim: all 22 people with their firstName / lastName / birthDate / gender. birthDate is carried as the ISO string the sample stores, which is what its Label binding renders."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: the contextualWidth switch and the popin layout it drives."
+    }
+  ]
+}

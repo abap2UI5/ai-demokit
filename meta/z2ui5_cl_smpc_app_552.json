@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_smpc_app_552",
+  "sample": "sap.m.sample.SinglePlanningCalendarWithCustomViews",
+  "entity": "sap.m.SinglePlanningCalendar",
+  "file": "src/01/01/z2ui5_cl_smpc_app_552.clas.abap",
+  "batch": "b45",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The calendar date properties (the SinglePlanningCalendar startDate and every CalendarAppointment startDate and endDate) are typed \"object\" and demand a real JS Date. The model keeps ISO strings and Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74)."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The sample's point is TWO CUSTOM VIEW CLASSES: CustomThreeDaysView and CustomTenDaysView, JS subclasses of sap.m.SinglePlanningCalendarView that override getEntityCount, getScrollEntityCount and calculateStartDate. A backend cannot define a control class, so the port declares only the three BUILT-IN views the controller also adds (Day, Work Week, Week) and the '3 Days' and '10 Days' entries are lost. The views aggregation itself is declarative here rather than five addView calls, which is why structural-diff reports SinglePlanningCalendarDayView, SinglePlanningCalendarWorkWeekView and SinglePlanningCalendarWeekView as control extra - the sample's view declares none of them."
+    },
+    {
+      "type": "NOTE",
+      "what": "Some appointment rows carry a tentative flag the view never binds; the port seeds it the same way and leaves it unbound, so the data stays 1:1 with the mock."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The three built-in views and the bound appointments are unverified in a running system."
+    }
+  ]
+}

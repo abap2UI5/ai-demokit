@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_smpc_app_474",
+  "sample": "sap.m.sample.FlexBoxNav",
+  "entity": "sap.m.FlexBox",
+  "file": "src/01/01/z2ui5_cl_smpc_app_474.clas.abap",
+  "batch": "b37",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The sample ships its own style.css - the list styling both FlexBoxes rely on (paddings, the 25% items, the hover transition). abap2UI5 serves no per-sample stylesheet, so the rules are injected verbatim through one extra core:HTML <style> leaf at the top of the view (structural-diff reports control extra core:HTML: 6 vs 7 - the six anchor leaves are the original's own). Nothing else changes."
+    }
+  ]
+}

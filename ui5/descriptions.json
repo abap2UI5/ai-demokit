@@ -3196,6 +3196,21 @@
     "sap.f.sample.GridListBasic": {
       "description": "A GridList with the default grid layout, resized live with a slider to show how the grid reflows.",
       "why": "docuindex.json lists the sample (name 'Grid List - Basic examples') with an EMPTY description upstream"
+    },
+    "sap.m.sample.ObjectHeaderResponsiveVI": {
+      "name": "Object Header Responsive VI",
+      "description": "A responsive Object Header whose intro and title are active links to sap.com, with a Currency-typed number, one attribute, a status and two markers.",
+      "why": "docuindex.json lists the family only up to ObjectHeaderResponsiveV (checked 2026-08-22 against the OpenUI5 checkout): the VI folder ships a complete manifest, view and controller and the coverage scanner offers it, but the demo kit index carries no entry for the id, so there is no upstream sentence to snapshot."
+    },
+    "sap.uxap.sample.ObjectPageXML": {
+      "name": "Object Page built entirely in XML",
+      "description": "An ObjectPageLayout declared in one XML view - header title, header content and five sections whose blocks come from four different block namespaces - rather than assembled in a controller.",
+      "why": "docuindex.json has no entry for this id (checked 2026-08-22 against the sap.uxap demokit index in an OpenUI5 checkout: 'ObjectPageXML' does not appear at all). The sample IS shipped - Component.js, manifest.json, controller/ and view/ are all there - but four of its five block types live in sap.uxap.testblocks.* and sap.uxap.sample.Headers.block, packages the demo kit does not publish as samples either, so the whole family is undocumented rather than this page alone"
+    },
+    "sap.ui.unified.sample.CalendarAriaHasPopup": {
+      "name": "Calendar - aria-haspopup on special dates",
+      "description": "A Calendar whose three special dates carry ariaHasPopup='dialog': day 5 with a Type01 colour bar, days 10-12 as a Type02 range, and day 20 with type='None' so the attribute reaches the DOM with no visual marking at all; selecting a marked day opens a Popover naming the day and its type.",
+      "why": "docuindex.json has no entry for this id (checked 2026-08-22 against the sap.ui.unified demokit index in an OpenUI5 checkout: no CalendarAriaHasPopup entry). The sample exists for one member, sap.ui.unified.DateTypeRange.ariaHasPopup, which is @since 1.152.0 - newer than the snapshot's own OpenUI5 version, which is why the demo kit index this repository mirrors does not carry it yet"
     }
   }
 }

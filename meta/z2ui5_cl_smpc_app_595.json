@@ -1,0 +1,52 @@
+{
+  "class": "z2ui5_cl_smpc_app_595",
+  "sample": "sap.uxap.sample.ObjectPageState",
+  "entity": "sap.uxap.ObjectPageLayout",
+  "file": "src/02/03/z2ui5_cl_smpc_app_595.clas.abap",
+  "batch": "b49",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false,
+    "note": "the controller only loads two JSON models and attaches one visibility handler - the port raises no event"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Block->content inlining (app 263/401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the first three sections hold fourteen SharedBlocks BlockBase controls - goals:GoalsBlock, personal:BlockPhoneNumber / BlockSocial / BlockAdresses / BlockMailing / PersonalBlockPart1 / PersonalBlockPart2 and employment:BlockJobInfoPart1 / BlockJobInfoPart2 / BlockJobInfoPart3 / BlockEmpDetailPart1 / BlockEmpDetailPart2 / BlockEmpDetailPart3 / EmploymentBlockJob. Each is only a lazy-loading wrapper around a static view, so every block view is inlined 1:1 into its aggregation (forms:SimpleForm with core:Title / m:Label / m:Text, the layout:VerticalLayout / layout:HorizontalLayout trees of the personal blocks and the layout:Grid / layout:GridData tree of EmploymentBlockJobCollapsed). Absent as a result: the fourteen BlockBase controls with their ids and their columnLayout / showSubSectionMore properties, plus the block views' own mvc:View roots. Apps 263, 588 and 594 carry the same blocks."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "Named-model fold (app 230/263 precedent): EmploymentBlockJob and ConnectionsBlock each carry six uxap:ModelMapping elements mapping ObjectPageModel>/Employee/0..5 onto the internal models emp1>..emp6>. abap2UI5 serves one default model, so the twelve ModelMapping config controls are gone (the ModelMapping 12 vs 0 line) and the six employee records are seeded as default-model root fields (emp1_name/_job/_picture .. emp6_*) bound via client->_bind. EmploymentBlockJob is additionally a two-view BlockBase (Collapsed / Expanded with showSubSectionMore='true'); only the Collapsed view (employees 1-2) is inlined - the Expanded view with employees 3-6 and the more/less toggle are lost."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs a UI5 runtime >= 1.73."
+    },
+    {
+      "type": "POST_171",
+      "what": "the rowMode aggregation of sap.ui.table.Table and the control sap.ui.table.rowmodes.Auto in it are both @since 1.119 - newer than the 1.71 floor but kept for the 1:1 port, since the sample writes exactly <ui:rowMode><uirm:Auto minRowCount=\"2\"/></ui:rowMode>. The app needs a UI5 release >= 1.119: below it the lowercase rowMode tag resolves as a control class and the 404 takes the whole view down, which is why this is an error rather than a warning."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "onSectionVisibilityChanged is attached in JS (attachEvent('subSectionVisibilityChange')) rather than in the view, and it reads the event's visibleSubSections MAP: when exactly one subsection is visible it adds sapUxAPObjectPageSubSectionFitContainer to it, otherwise it removes the class from all of them. Neither half travels - the parameter is a map of live control instances keyed by id, and the decision is per render, not per round trip. addStyleClass IS whitelisted in CONTROL_METHODS, but there is nothing to key it on without the map, so the wire is dropped: the page renders identically, only the fit-container class never toggles as the user scrolls."
+    },
+    {
+      "type": "NOTE",
+      "what": "selectedSection='paymentSubSection' names a SUBSECTION id, not a section id, and is carried as written - the association resolves it to the owning section, which is how the sample opens on Personal with the Payment information subsection expanded (mode='Expanded' on that subsection is the second half of it). This is the port's whole subject and needs no round trip: the association is set statically in the view."
+    },
+    {
+      "type": "NOTE",
+      "what": "the ui:Table's rows binding carries a sorter on 'Name'. A thin frontend sorts the data it sends (app 298 idiom), so the 123 rows of sap/ui/demo/mock/products.json are seeded verbatim in the file's own order, SORTed BY name in model_init and the sorter itself is gone. Name is carried as a fifth field for exactly that reason, although no column shows it; the four the sample does show are ProductId, SupplierName, Category and Price. The TableModel> prefix folds onto the default model (same-data prefix-drop)."
+    },
+    {
+      "type": "NOTE",
+      "what": "this sample has no Connections section, where apps 263, 588 and 594 do; its fourth section is the ui:Table one instead. Its sections and subsections carry no ids either, apart from the paymentSubSection the selectedSection association needs."
+    },
+    {
+      "type": "NOTE",
+      "what": "the four asset paths (the imageID_275314.png avatar twice, linkedin.png, Twitter.png) and HRData.json's person.png point at the sdk.openui5.org host per the offline asset-URL rule; the original writes them relative."
+    }
+  ]
+}

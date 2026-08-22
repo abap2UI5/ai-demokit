@@ -1,0 +1,43 @@
+{
+  "class": "z2ui5_cl_smpc_app_555",
+  "sample": "sap.m.sample.SinglePlanningCalendarRecurringItem",
+  "entity": "sap.m.SinglePlanningCalendar",
+  "file": "src/02/01/z2ui5_cl_smpc_app_555.clas.abap",
+  "batch": "b45",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "The whole recurrence stack is newer than the 1.71 floor: sap.m.SinglePlanningCalendar nonWorkingPeriods @since 1.128 (property and aggregation), sap.ui.unified.RecurringNonWorkingPeriod @since 1.127.0, sap.ui.unified.TimeRange @since 1.127, sap.ui.unified.RecurringCalendarAppointment @since 1.149 and sap.ui.unified.RecurrenceRule @since 1.149. Recurring appointments ARE the sample, so all of them are kept and the port is filed under src/02."
+    },
+    {
+      "type": "NOTE",
+      "what": "The calendar date properties (the SinglePlanningCalendar startDate, every appointment startDate / endDate and the recurrenceEndDate and the non-working period's date) are typed \"object\" and demand a real JS Date. The model keeps ISO strings and Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74). The TimeRange start / end stay plain strings, which is what its valueFormat expects."
+    },
+    {
+      "type": "NOTE",
+      "what": "The create dialog lives in its own fragment with its own named model (create>). abap2UI5 keeps one default model, so the dialog's fourteen fields are folded to flat fields here and every visibility expression the fragment carries reads them directly - the fragment's own expression bindings survive one-to-one."
+    },
+    {
+      "type": "NOTE",
+      "what": "onCreateDialogSave assembles the new appointment from the dialog model, pushes it into the appointments array, closes the dialog and toasts. All four are reproduced on the round-trip, including the recurrence branches (the weekly day list only when Weekly, the rule fields only for Monthly / Yearly and the month only for Yearly) and the parseInt fallbacks the original applies. onRecurrenceTypeChange clears the parts the picked recurrence does not use, also 1:1."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "onCreateAppointment seeds the dialog with the CLIENT's next full hour and the hour after it (UI5Date.getInstance() with minutes zeroed). A backend has no client clock, so the port seeds the SERVER's local date and next full hour instead. Same shape, a different clock - which matters only if the two are in different time zones."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleViewChange toasts a constant text; the toast is composed on the client, so the view change needs no round-trip."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The nine recurring appointments with their rules, the eleven recurring non-working periods, and the create dialog with its recurrence branches are unverified in a running system."
+    }
+  ]
+}

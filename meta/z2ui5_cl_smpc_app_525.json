@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_525",
+  "sample": "sap.m.sample.ListGrowingUpwards",
+  "entity": "sap.m.List",
+  "file": "src/01/01/z2ui5_cl_smpc_app_525.clas.abap",
+  "batch": "b42",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "groupFunction returns the first letter of Name as the group key. A grouping callback has no backend equivalent, so the letter is computed per row in model_init and the binding groups by that field and then sorts by Name inside the group - same groups, same order."
+    },
+    {
+      "type": "NOTE",
+      "what": "The MockServer's 2-second delay is not reproduced (the rows are bound directly); growingDirection, the growing trigger text and the busy settings are kept 1:1."
+    }
+  ]
+}

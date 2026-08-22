@@ -58,6 +58,10 @@
     {
       "type": "IMPROVISED",
       "what": "onBeforeColumnMenuOpen is dropped, and the Menu.beforeOpen attribute that wired it with it. It does oQuickResize.setWidth( parseInt( getComputedStyle( oColumn.getDomRef( ) ).width ) ) - it reads the column's RENDERED width out of the DOM so the resize control opens showing the current size. A rendered pixel width has no server-side equivalent, and the round-trip that used to be wired here did nothing at all with it, so the QuickResize opens at its own default instead. The port previously kept the wire as an empty RETURN branch, beside a comment saying the original 'only inspects the opener'."
+    },
+    {
+      "type": "NOTE",
+      "what": "**e2e-caught 2026-08-22**: the sort ran but the table came back in its original order. The cause is the transpiled backend: `SORT <itab> BY (field)` - the DYNAMIC component form - loses its BY clause entirely (the emitted JS is `abap.statements.sort(t, {})`), so every sort was a no-op. The component is named statically per field now, in a CASE. Apps 298, 362 and 571 all carried the dynamic form and all three are fixed."
     }
   ]
 }

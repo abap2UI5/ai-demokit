@@ -1,0 +1,39 @@
+{
+  "class": "z2ui5_cl_smpc_app_526",
+  "sample": "sap.f.sample.GridContainerDragAndDrop",
+  "entity": "sap.f.GridContainer",
+  "file": "src/01/04/z2ui5_cl_smpc_app_526.clas.abap",
+  "batch": "b43",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "The three sap.ui.integration.widgets.Card children take their content from cardManifests.json through manifest=\"{manifests>/listContent/...}\". A Card manifest is either a JS OBJECT or a URL to a single manifest file (Card.createManifest), and the sample's three manifests live inside ONE file under a wrapper key, so neither form is reachable from a declarative view. Each w:Card is therefore rebuilt as a declarative sap.f.Card with the manifest's own card:Header (title, subtitle, icon, status) and a sap.m.List carrying the manifest's own rows, seeded in ABAP. Same three cards in the same three grid slots with the same content; structural-diff reports w:Card and Card.manifest as missing. The largeList manifest sets maxItems 7, so its eighth row is not seeded - the card would not show it either."
+    },
+    {
+      "type": "NOTE",
+      "what": "onInit adds the DragInfo and the GridDropInfo in the controller; the port declares both in the grid's dragDropConfig aggregation."
+    },
+    {
+      "type": "NOTE",
+      "what": "The drop handler reorders the grid's TEN STATIC children in place. Static children cannot be reordered from a backend, so the port keeps an order table of the ten item keys and emits the children in that order; the drop event carries the two indices and the drop position, and ABAP applies the original's own index arithmetic (decrement when the item moved forward, increment for an After drop) to that table. Same reorder, one round-trip, and the children stay the heterogeneous mix the sample uses (GenericTiles, cards and a Text)."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "RevealGrid is a sample-local JS helper module that draws a DOM overlay outlining the grid cells. It has no declarative equivalent, so the ToggleButton is kept but its press wire is dropped (structural-diff reports ToggleButton.press as attr missing) - same treatment as app 168, which ships the same helper."
+    },
+    {
+      "type": "NOTE",
+      "what": "attachLayoutChange swaps sapUiSmallMargin for sapUiTinyMargin on the XS and S layouts. The port keeps the sapUiSmallMargin the view declares; the layoutChange wire has no counterpart and the two GridContainerSettings the view declares (layout and layoutXS) already carry the responsive sizing."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The drag-and-drop reorder of the ten grid items and the three rebuilt cards are unverified in a running system."
+    }
+  ]
+}

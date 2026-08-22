@@ -1,0 +1,36 @@
+{
+  "class": "z2ui5_cl_smpc_app_613",
+  "sample": "sap.m.sample.MultiInputGrouping",
+  "entity": "sap.m.MultiInput",
+  "file": "src/01/01/z2ui5_cl_smpc_app_613.clas.abap",
+  "batch": "b51",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true,
+    "note": "suggestionItemSelected on the tabular MultiInput transports ${$parameters>/selectedRow}.getCells()[0].getText() so the addValidator( ) token can be built in ABAP; the port raises no frontend action"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the grouping is the sample: both MultiInputs bind their suggestions with sorter { path: 'SupplierName', group: true, ascending: false }, which the port carries over verbatim as sorter { path: 'SUPPLIERNAME', group: true, ascending: false } on the backend table, so UI5 builds the descending supplier group headers on the client exactly as before."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the controller registers a JS validator with MultiInput.addValidator( ) on productMIWithTable: picking a suggestion row builds a Token whose key is the row's first cell (Name) and whose text is 'key(price cell)'. abap2UI5 cannot register such a callback, so the MultiInput binds a tokens table and wires suggestionItemSelected, transporting the first cell's text; the same token (key = Name, text = 'Name(Price Currency)') is appended in ABAP, duplicates skipped. The tokens attribute and the tokens aggregation are therefore EXTRA vs the original view.xml, where the tokens only ever exist client-side. productMIWithList has no validator in the sample either - a core:Item suggestion becomes a token by itself."
+    },
+    {
+      "type": "NOTE",
+      "what": "the Price cell is a composite currency binding in the sample (parts Price + CurrencyCode through sap.ui.model.type.Currency with showMeasure TRUE, so the unit is part of the text). The port binds the two fields as one composite text ('{PRICE} {CURRENCYCODE}'), which is what that formatter renders, since the mock's prices are plain numbers."
+    },
+    {
+      "type": "NOTE",
+      "what": "the controller's oModel.setSizeLimit(1000000) has no counterpart: the port ships all 123 rows of sap/ui/demo/mock/products.json /ProductCollection to the client in one model, so the 100-entry default limit the call works around never applies."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "the grouped suggestion popups of both MultiInputs and the token creation on the tabular one are unverified in a running system."
+    }
+  ]
+}

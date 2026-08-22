@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_smpc_app_447",
+  "sample": "sap.m.sample.MessageBoxInfo",
+  "entity": "sap.m.MessageBox",
+  "file": "src/01/01/z2ui5_cl_smpc_app_447.clas.abap",
+  "batch": "b35",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "All four MessageBoxes are opened through client->message_box_display with the same title, type, details, contentWidth and styleClass the controller passes; the dependentOn: this.getView() option has no equivalent (abap2UI5 owns the view) and is dropped - it only decides which control the popup is a dependent of, not what it shows. The per-box ids (messageBoxId1..4) are dropped with it."
+    },
+    {
+      "type": "NOTE",
+      "what": "onShowJSONInfo hands MessageBox a JavaScript object as details; the port passes the same object serialized as JSON ({\"glossary\":{\"title\":\"example glossary\"}}), which is what MessageBox renders for an object anyway."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "onShowTextInfoAsync passes details as a function returning a Promise that resolves after 2 seconds, so the sample shows the details placeholder loading first. The backend has the text immediately and passes it as a plain string, so the loading state of the details link is not reproduced - only its resolved text."
+    },
+    {
+      "type": "NOTE",
+      "what": "All four message_box_display calls (text, markup, JSON and the formerly async details) are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_447.mjs)."
+    }
+  ]
+}

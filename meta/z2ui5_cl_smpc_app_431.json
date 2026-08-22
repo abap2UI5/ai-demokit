@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_smpc_app_431",
+  "sample": "sap.m.sample.ContainerResponsivePadding",
+  "entity": "sap.ui.core.ContainerPadding",
+  "file": "src/01/01/z2ui5_cl_smpc_app_431.clas.abap",
+  "batch": "b33",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The Image src reads {img>/products/pic1} from the named img model (ui5/mock/img.json). abap2UI5 serves one default model, so the single value is folded into the view literal - the mock's own HT-7777-large.jpg, re-hosted on sdk.openui5.org, so the Image renders identically. The products.json model the controller also sets is never bound by this view and is therefore not seeded."
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_445",
+  "sample": "sap.m.sample.TextHyphenation",
+  "entity": "sap.m.Text",
+  "file": "src/01/01/z2ui5_cl_smpc_app_445.clas.abap",
+  "batch": "b34",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onHyphenationChange loops over the five Texts and sets wrappingType to Hyphenated or Normal. The port two-way binds the Switch state and gives every Text the same wrappingType expression binding over that flag, so the switch works roundtrip-free and the Switch.change attribute is dropped."
+    },
+    {
+      "type": "NOTE",
+      "what": "onSliderMoved sets containerLayout.setWidth(value + '%'). The Slider value is two-way bound and the Panel width follows it in an expression binding; the Slider.liveChange attribute is dropped (app 418 precedent)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The hyphenation expression on all five Texts and the slider-driven Panel width are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_445.mjs)."
+    }
+  ]
+}

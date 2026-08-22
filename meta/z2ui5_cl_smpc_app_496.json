@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_smpc_app_496",
+  "sample": "sap.m.sample.TreeJSONLazyLoading",
+  "entity": "sap.m.Tree",
+  "file": "src/01/01/z2ui5_cl_smpc_app_496.clas.abap",
+  "batch": "b40",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "loadData pretends to fetch from a backend with a 2-second setTimeout and replaces the expanded node's dummy child with the next two nodes. In the port the fetch is real: toggleOpenState transports itemIndex, the item context PATH (${$parameters>/itemContext}.getPath()) and the expanded flag, and ABAP appends the two nodes under the addressed node. The artificial delay and the accompanying Tree.setBusy(true/false) are dropped - the round-trip is the wait."
+    },
+    {
+      "type": "NOTE",
+      "what": "The node names follow the original's Array(level+3).join('-1') exactly (repeat( val = '-1' occ = level + 2 )), and the dummy child that makes a node expandable is kept as a real model field, so the tree still stops at 'Last node' on level 5."
+    },
+    {
+      "type": "NOTE",
+      "what": "An ABAP nested table needs a type per level, so the port declares six of them and walks the parsed path with a CASE over its depth - the JSON model of the original has no such limit, but the sample never goes deeper than six levels."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The toggle wire (path parsing, the appended nodes and the three-value toast) is unverified in a running system."
+    }
+  ]
+}

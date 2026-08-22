@@ -1,0 +1,39 @@
+{
+  "class": "z2ui5_cl_smpc_app_529",
+  "sample": "sap.f.sample.SemanticPageFreeStyle",
+  "entity": "sap.f.semantic.SemanticPage",
+  "file": "src/01/04/z2ui5_cl_smpc_app_529.clas.abap",
+  "batch": "b43",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The original keeps the header data in nested paths on one JSON model (title, titleSnappedContent/text, objectDescription/category|center|email|status). abap2UI5 keeps one default model, so the nested paths are folded to flat fields with the identical last segment - the same fold app 166 makes for the sibling sample. titleSnappedContent/text carries literal braces ('Filtered by {Name, Price, Category}'); it is DATA, not a binding, so the port seeds it in model_init with the braces escaped."
+    },
+    {
+      "type": "NOTE",
+      "what": "onMessagesButtonPress builds a MessagePopover over the message> model in the controller and toggles it at the button. The port declares the same MessagePopover in the MessagesIndicator's dependents and toggles it roundtrip-free through control_by_id, which is why structural-diff reports MessagePopover and MessageItem as control extra - the original's view declares neither. The Messaging registration of the single Error message is seeded as a message row instead."
+    },
+    {
+      "type": "NOTE",
+      "what": "notMobile is Device.system.phone negated, set on the model in onInit. The device model carries the same fact to the client, so the two full-screen actions bind the expression {= !${device>/system/phone} } rather than a backend field."
+    },
+    {
+      "type": "NOTE",
+      "what": "showFooter is static true in the view and the ToggleFooter button flips it with setShowFooter in the controller. The port binds showFooter to a flag and the button's press flips that flag in ABAP - same toggle, one round-trip. The two footerCustomActions Buttons (Save, Cancel) are pressless in the view itself, so they stay pressless here."
+    },
+    {
+      "type": "NOTE",
+      "what": "The titleContent KPI placeholder image is the sample's own test-resources file (sap/f/images/KPI.png), re-hosted on sdk.openui5.org."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The footer toggle, the messages popover and the semantic action bar are unverified in a running system."
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "class": "z2ui5_cl_smpc_app_563",
+  "sample": "sap.m.sample.MessageViewInsidePopover",
+  "entity": "sap.m.MessageView",
+  "file": "src/02/01/z2ui5_cl_smpc_app_563.clas.abap",
+  "batch": "b46",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "control_by_id navigateBack on the popup's MessageView; the anchor id travels on the button press"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "one post-1.71 member is kept for the 1:1 port: Button.ariaHasPopup (since UI5 1.84) on the Messages button, which the sample's own view.xml carries."
+    },
+    {
+      "type": "NOTE",
+      "what": "the sample's view.xml is only the Page with the Messages Button - everything else is built in onInit. The controller-built popover, its customHeader Bar with the nav-back Button and the Title, the MessageView with its MessageItem template and the item's Link, and the Close button are rebuilt 1:1 as a core:FragmentDefinition and shown with client->popover_display( by_id ), anchored to the pressed button exactly as handlePopoverPress's openBy(oEvent.getSource()) does (app 229 idiom). So the popover, Bar, Title, MessageView, MessageItem, Link and the two extra Buttons are extra against the original view.xml."
+    },
+    {
+      "type": "NOTE",
+      "what": "the Popover keeps the controller's geometry 1:1 - contentWidth/contentHeight 440px, verticalScrolling false, modal true - and the Close button sits in a footer Bar's contentRight, with the sapUiTinyMarginEnd class the controller adds with addStyleClass."
+    },
+    {
+      "type": "NOTE",
+      "what": "the two controller handlers that reach into controls become bound state, per the prefer-a-bindable-property rule: oBackButton.setVisible(...) is visible={/BACK_VISIBLE} and oPopoverTitle.setText(...) is text={/POPOVER_TITLE}. Only navigateBack has no bindable equivalent - it is the one frontend action (control_by_id, view = cs_view-popup, on the MessageView id messageView), the same path app 284 uses. handlePopoverPress's own navigateBack is not needed: popover_display rebuilds the fragment, so the MessageView always opens on its list page; only the header state is reset in ABAP."
+    },
+    {
+      "type": "NOTE",
+      "what": "the back button's press also calls oPopover.focus() to keep keyboard focus inside the popover after navigating back. The port does not: the popover keeps focus because it is never re-anchored, and a set_focus on a popup that is already focused would be a no-op round trip."
+    },
+    {
+      "type": "NOTE",
+      "what": "a flat ABAP row serializes every field, so the properties the mock omits carry their UI5 defaults: markupDescription is false on all five messages (the template binds it, the data never sets it), and the second message (Warning without description) has no subtitle and counter 0 - ListItemBaseRenderer.renderCounter only renders a truthy counter, so 0 and 'absent' render identically."
+    },
+    {
+      "type": "NOTE",
+      "what": "the nav-back Button is icon-only in the original (IconPool.getIconURI('nav-back'), no text and no tooltip). The port gives it tooltip=\"Back\" so it is reachable with a screen reader - the one accessibility addition in this port."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: the anchored popover with a MessageView inside it and the navigateBack frontend action on the popup view."
+    }
+  ]
+}

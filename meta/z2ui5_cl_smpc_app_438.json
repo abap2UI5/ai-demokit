@@ -1,0 +1,35 @@
+{
+  "class": "z2ui5_cl_smpc_app_438",
+  "sample": "sap.m.sample.RefreshResponsive",
+  "entity": "sap.m.PullToRefresh",
+  "file": "src/01/01/z2ui5_cl_smpc_app_438.clas.abap",
+  "batch": "b33",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The sample builds its own named device model with isNoTouch/isTouch from Device.support.touch. abap2UI5 serves the raw sap.ui.Device under device>, so SearchField.showRefreshButton binds {= !${device>/support/touch} } and PullToRefresh.visible binds {= ${device>/support/touch} } - the same two flags, read from the same Device facts."
+    },
+    {
+      "type": "NOTE",
+      "what": "_pushNewProduct hands out one more record of products.json per refresh and handleRefresh filters the list binding by the SearchField value with a sap.ui.model.Filter. Both are done in the backend on the one table the List binds: the port keeps a counter, rebuilds the bound table from the full mock up to that counter and applies the Contains filter on Name in ABAP (thin frontend - no binding_call needed, the refresh is a round-trip anyway). The SearchField value is two-way bound so it survives the view rebuild."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleRefresh wraps its work in a 1-second setTimeout to simulate a slow backend; the port answers the round-trip immediately. The PullToRefresh spinner is stopped exactly as the original does it, with hide( ) via control_by_id."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "onInit moves the search Bar below the PullToRefresh on touch devices (page.insertAggregation('content', bar, 1)). The port has no client-side reordering and keeps the desktop order (Bar in subHeader) on every device - the only leg of the sample the port does not reproduce."
+    },
+    {
+      "type": "NOTE",
+      "what": "The refresh wire (grow-by-one plus the search filter), the PullToRefresh hide( ) follow-up and both device> expressions are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_438.mjs)."
+    }
+  ]
+}

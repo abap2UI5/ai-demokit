@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_smpc_app_478",
+  "sample": "sap.m.sample.MultiInputCustomFiltering",
+  "entity": "sap.m.MultiInput",
+  "file": "src/01/01/z2ui5_cl_smpc_app_478.clas.abap",
+  "batch": "b38",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "onInit gives both MultiInputs a JavaScript setFilterFunction - a case-insensitive starts-with on the first, a contains on the second. A JS filter callback has no bindable or backend equivalent (the app-authored-JS-function boundary), so both suggestion lists carry UI5's default filtering and the difference between the two MultiInputs the sample demonstrates is lost."
+    }
+  ]
+}

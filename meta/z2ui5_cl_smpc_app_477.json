@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_477",
+  "sample": "sap.m.sample.HeaderContainerOH",
+  "entity": "sap.m.HeaderContainer",
+  "file": "src/01/01/z2ui5_cl_smpc_app_477.clas.abap",
+  "batch": "b38",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The ObjectHeader binds the fixed record {/ProductCollection/0}. The port seeds the five bound fields (Description, Name, Price, CurrencyCode, SupplierName) at the default-model root and binds them absolutely, so the attr ObjectHeader.binding is dropped."
+    },
+    {
+      "type": "NOTE",
+      "what": "press shows MessageBox.alert('Link was clicked!') for all eight NumericContents - one round-trip event raising message_box_display with the same text and type."
+    },
+    {
+      "type": "NOTE",
+      "what": "The eight NumericContent presses raising the alert are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_477.mjs)."
+    }
+  ]
+}

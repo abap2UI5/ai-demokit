@@ -1,0 +1,68 @@
+{
+  "class": "z2ui5_cl_smpc_app_558",
+  "sample": "sap.m.sample.TabContainerMHC",
+  "entity": "sap.m.TabContainer",
+  "file": "src/01/01/z2ui5_cl_smpc_app_558.clas.abap",
+  "batch": "b46",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "follow_up_action cs_event-control_by_id: navCon to/back; the tab key travels on itemClose/itemSelect"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "openSelectedItems builds the TabContainer in the controller (new TabContainer with an items binding filtered to the selected ProductIds and a TabContainerItem template holding the Display fragment) and inserts it into tabContainerPage. The port declares that TabContainer in the view instead and binds its items to T_TABS, the table of open tabs the backend maintains - so the control extra TabContainer / TabContainerItem against the archived TabContainer.view.xml is the controller-built subtree, not an addition. sap.m.TabContainer has no default aggregation, so the template sits in an explicit items element beside the items binding."
+    },
+    {
+      "type": "NOTE",
+      "what": "each open tab carries a COPY of the product row (T_TABS), which is exactly what the original edits: handleTabContainerEditItem builds its edit JSONModel from deepExtend({}, bindingContext.getProperty(path)). Save copies the tab's fields back onto the product (handleTabContainerSaveItem's deepExtend into the model), Cancel throws the copy away and re-reads the product (handleTabContainerCancelUpdate). The per-tab modified flag is the TabContainerItem.modified property, bound two-way."
+    },
+    {
+      "type": "NOTE",
+      "what": "the Display and Edit fragments are not swapped in and out of the tab (removeAllContent/insertContent); both live in the TabContainerItem's content and take turns through visible=\"{= !${MODIFIED} }\" / visible=\"{= ${MODIFIED} }\" - a declarative expression instead of a controller-driven content swap, with the same rendered result. That is why the Edit fragment's f:SimpleForm, its four Labels, three Inputs and TextArea appear twice in the port: once inside the tab and once on the add-item page, where the original moves the SAME cached fragment instance between the two."
+    },
+    {
+      "type": "NOTE",
+      "what": "the Edit fragment binds absolute paths (/Name, /SupplierName, /Price, /Description) because it is put over its own one-record JSONModel. In the tab it binds the tab row's own fields relative to the item context; on the add-item page it binds the four ADD_* fields the backend keeps for the new record. Only the add-item copy carries the fragment's id=myForm - the tab copy is a template inside a bound aggregation, where an id would be cloned."
+    },
+    {
+      "type": "NOTE",
+      "what": "the table's selection is read with getSelectedContexts in the original and bound two-way here (ColumnListItem selected=\"{SELECTED}\"), so the backend has it on every round trip; onInit's attachSelectionChange becomes the Table's selectionChange attribute, which keeps idOpenSelected's visible flag in sync exactly as fnTableSelectionChange does. onInit also attaches navButtonPress on the two inner pages; the port wires navButtonPress declaratively on both."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "_handleTabContainerItemClose calls oEvent.preventDefault() and removes the item itself once the user confirms. A thin frontend cannot cancel a UI5 event, so the port lets the control close the tab and sends the view again from the model: an unconfirmed close therefore comes back (the tab row is still in T_TABS), and a confirmed one removes the row for good. Same two outcomes, reached the other way round."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "_handleTabContainerAddNewButtonPress ends with oTabContainer.setSelectedItem(<the new item>) so the fresh tab is the one on screen. TabContainer.selectedItem is an ASSOCIATION to a TabContainerItem instance, and the item ids of a bound aggregation are generated at runtime, so the port cannot name the item: the new tab is appended and starts modified (in edit mode), but selecting it is left to the control's own default."
+    },
+    {
+      "type": "NOTE",
+      "what": "the new ProductIds the original generates with Math.random() ('ProductId-' + Math.random(), and a bare Math.random() on the add-item page) become a backend counter, ProductId-1, ProductId-2, ... - a client-side random draw is not reproducible from a backend and carries no meaning in the sample."
+    },
+    {
+      "type": "NOTE",
+      "what": "_showConfirmation's MessageBox.confirm with the custom actions ['Leave Page', CANCEL] / ['Close Tab', CANCEL], the Warning icon and initialFocus CANCEL is ported 1:1 through client->message_box_display( actions, initialfocus, onclose ); the chosen action comes back as the onclose event's argument, as in app 101."
+    },
+    {
+      "type": "NOTE",
+      "what": "_resetUnsavedItems is kept: rows the add-new button created and nobody saved carry an UNSAVED flag and are dropped when the user leaves the page (all of them) or closes their tab (just that one), and a tab whose product is gone goes with it. The original's onExit teardown (detaching handlers, nulling members) has no counterpart - abap2UI5 rebuilds the view per round trip."
+    },
+    {
+      "type": "NOTE",
+      "what": "onInit raises the model size limit to 200 and binds the full mock /ProductCollection; the port seeds all 123 rows verbatim (ProductId, Name, SupplierName, Description, Price, CurrencyCode - the fields the two views bind). The ObjectHeader keeps the original sap.ui.model.type.Currency composite binding 1:1."
+    },
+    {
+      "type": "NOTE",
+      "what": "the OverflowToolbarButton that opens the add-item page is icon-only in the original (icon=sap-icon://add, no text and no tooltip). The port gives it tooltip=\"Add\" so it is reachable with a screen reader - the one accessibility addition in this port."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: the TabContainer built over a bound items aggregation, the visible-driven Display/Edit swap inside a tab, and the close-confirmation round trip that relies on the view being sent again."
+    }
+  ]
+}

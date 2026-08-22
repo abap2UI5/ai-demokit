@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_500",
+  "sample": "sap.m.sample.StandardNoMargins",
+  "entity": "sap.ui.core.StandardMargins",
+  "file": "src/01/01/z2ui5_cl_smpc_app_500.clas.abap",
+  "batch": "b40",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The two ObjectHeaders bind the fixed records {/ProductCollection/0} and {/ProductCollection/1}. The port seeds both records' bound fields at the default-model root under a per-header prefix and binds them absolutely, so both ObjectHeader.binding attributes are dropped and the composed attribute texts read the same values."
+    },
+    {
+      "type": "NOTE",
+      "what": "The last ObjectAttribute of each header is the literal 'www.sap.com' with active=\"true\", which structural-diff reports against the {Description} attribute of the same control because it compares the attribute across all four - both texts are present, in the original's order."
+    }
+  ]
+}

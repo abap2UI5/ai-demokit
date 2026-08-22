@@ -1,0 +1,47 @@
+{
+  "class": "z2ui5_cl_smpc_app_535",
+  "sample": "sap.m.sample.WizardBranching",
+  "entity": "sap.m.Wizard",
+  "file": "src/01/01/z2ui5_cl_smpc_app_535.clas.abap",
+  "batch": "b43",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The original keeps the form data in nested paths on one JSON model (/CreditCard/Name, /CashOnDelivery/FirstName, /BillingAddress/Address ...). abap2UI5 keeps one default model, so the nested paths are folded to flat fields whose last segment is identical - the same fold app 166 makes. /CashOnDelivery/Phone Number, whose last segment carries a space, becomes phonenumber."
+    },
+    {
+      "type": "NOTE",
+      "what": "goToPaymentStep and billingAddressComplete branch the wizard by calling setNextStep on the completed step. Both are reproduced 1:1 through the framework's whitelisted control_by_id setNextStep call, so enableBranching still drives the same three payment paths and the same two delivery paths."
+    },
+    {
+      "type": "NOTE",
+      "what": "checkCreditCardStep / checkCashOnDeliveryStep / checkBillingStep call validateStep and invalidateStep imperatively. Each step's validated property is bound two-way here and the same liveChange wires recompute it in ABAP with the same rule (at least three characters), so the Next button gates exactly as in the original."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "setDiscardableProperty only asks for confirmation while the wizard's PROGRESS STEP is past the step being discarded (getProgressStep() !== discardStep). A backend cannot read getProgressStep(), so the port keeps two flags that stand in for the two comparisons: each is raised by the activate wire of the step that follows the compared one, and cleared again when the progress is discarded. This costs two added activate attributes (BankAccountStep, DeliveryAddressStep and DeliveryTypeStep, which the sample leaves unwired) and gets the question asked in the same situations. The YES branch discards the progress through control_by_id and remembers the new value; the NO branch restores the remembered one, both as in the original."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleDelete removes the row whose title the delete event carries and never removes the last one; the port sends the title with the event and does the same, then recomputes the total the way calcTotal does. attachRequestCompleted keeps the first FIVE rows of the mock product collection and seeds the payment and delivery defaults - the port seeds exactly those five rows."
+    },
+    {
+      "type": "NOTE",
+      "what": "completedHandler, _navBackToStep and _handleMessageBoxOpen navigate the NavContainer and the wizard imperatively. All three go through control_by_id here ('to', 'goToStep', 'discardProgress' - all whitelisted), the same idiom app 101 uses for the sibling sample."
+    },
+    {
+      "type": "NOTE",
+      "what": "The five product images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The three payment branches, the delivery-address branch, the discard confirmations, the per-step validation and the review page's six Edit links are unverified in a running system."
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "class": "z2ui5_cl_smpc_app_583",
+  "sample": "sap.f.sample.ShellBarProductSwitch",
+  "entity": "sap.f.ShellBar",
+  "file": "src/02/04/z2ui5_cl_smpc_app_583.clas.abap",
+  "batch": "b48",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "control_global MESSAGE_TOAST composed from the pressed ProductSwitchItem; the switcher button id anchors the popover"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "three post-1.71 controls are kept for the 1:1 port: sap.f.ProductSwitch and sap.f.ProductSwitchItem (both since UI5 1.72), which are what this sample shows, and sap.m.Avatar (since 1.73) in the ShellBar's profile aggregation. App 245 (ProductSwitchNavigation) carries the same pair as a documented scope exception."
+    },
+    {
+      "type": "NOTE",
+      "what": "ProductSwitchPopover.fragment.xml is rebuilt as a core:FragmentDefinition and shown with client->popover_display( by_id ), anchored on the product-switcher button the productSwitcherPressed event ships - which is exactly what fnOpen does with oEvent.getParameter('button'). fnClose has no counterpart: the popover closes itself on an outside click, and the original only wires a Close button on PHONES (Device.system.phone), which is device-conditional chrome rather than sample behaviour."
+    },
+    {
+      "type": "NOTE",
+      "what": "fnChange composes its MessageToast from the pressed item's id, targetSrc and target. All three resolve on the client, so the toast stays there as a roundtrip-free control_global MESSAGE_TOAST show with three placeholders."
+    },
+    {
+      "type": "NOTE",
+      "what": "model/data.json is seeded verbatim - all fourteen entries with their src and title, and the subtitle on the seven rows that carry one. The fragment also binds targetSrc and target, which the mock never sets: they are undefined there and empty here, which renders the same."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: the product-switch popover anchored on the ShellBar's switcher button and the change toast."
+    }
+  ]
+}

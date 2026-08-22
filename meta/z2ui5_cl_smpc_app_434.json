@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_434",
+  "sample": "sap.m.sample.ContainerPadding",
+  "entity": "sap.ui.core.ContainerPadding",
+  "file": "src/01/01/z2ui5_cl_smpc_app_434.clas.abap",
+  "batch": "b33",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The controller loads Dialog.fragment.xml lazily and calls syncStyleClass('sapUiSizeCompact', view, dialog) before open(). The port builds the same fragment in its own chain and shows it with popup_display; the compact-density sync has no equivalent (abap2UI5 sets the density on the shell, not per popup) and is dropped - it changes control sizing only, not structure."
+    },
+    {
+      "type": "NOTE",
+      "what": "onDialogCloseButton on both buttons is reproduced by the client-side follow_up_action popup_close, so closing the dialog needs no round-trip."
+    },
+    {
+      "type": "NOTE",
+      "what": "The popup_display of the fragment and both popup_close wires are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_434.mjs)."
+    }
+  ]
+}

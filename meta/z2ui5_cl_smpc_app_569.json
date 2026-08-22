@@ -1,0 +1,44 @@
+{
+  "class": "z2ui5_cl_smpc_app_569",
+  "sample": "sap.m.sample.TableDnD",
+  "entity": "sap.m.Table",
+  "file": "src/01/01/z2ui5_cl_smpc_app_569.clas.abap",
+  "batch": "b47",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true,
+    "note": "the dragged and dropped rows and the drop position travel with the drop events"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the sample is one container view plus two nearly identical sub-views (mvc:XMLView availableProducts / selectedProducts) with a controller each. abap2UI5 serves one view, so both tables are built here by one parameterised method - which is why the reconstructed view shows ONE of each control where the archived originals have two (the linter emits a helper's chain once, however often it is called): Table, Menu, OverflowToolbar, Title, ColumnListItem all count 1 vs 2, Column 3 vs 6 and Text 6 vs 12. The two mvc:XMLView wrappers have no counterpart at all."
+    },
+    {
+      "type": "NOTE",
+      "what": "both tables bind the SAME collection and differ only in their filter, exactly as the original does: Rank EQ 0 for Available, Rank GT 0 plus a descending Rank sorter for Selected. The whole Utils.ranking arithmetic is kept - Initial 0, Default 1024, Before(r) = r + 1024, After(r) = r / 2, Between(a,b) = (a + b) / 2 - only in ABAP, and on an integer rank (the sample's own comment caps the scheme at 53 rows, which integer halving matches)."
+    },
+    {
+      "type": "NOTE",
+      "what": "the sample reads the selection with getSelectedItems() and toasts 'Please select a row!' when there is none; the row flag is bound two-way here and the backend does the same check. moveSelectedItem's rank swap between a row and its neighbour is done on the same descending order the Selected table renders."
+    },
+    {
+      "type": "NOTE",
+      "what": "the drag and drop configuration is kept 1:1 (the two groupNames, sourceAggregation/targetAggregation, dropPosition Between, and the DragDropInfo that lets the Selected table re-order itself). The drop handlers need the dragged row, the row it was dropped on and the drop position; all three travel with the event as UI5 expressions over draggedControl / droppedControl / dropPosition, and the backend then computes the new rank the way onDropSelectedProductsTable does."
+    },
+    {
+      "type": "DROPPED_171",
+      "what": "the plugins:ContextMenuSetting scope=\"Selection\" plugin (sap.m.plugins, since UI5 1.121) is dropped from both tables together with the beforeOpenContextMenu handler that pairs with it: the plugin class does not exist on a 1.71 runtime, so keeping it would crash view creation there. Its only effect is that right-clicking a row also selects it before the context menu opens; the context menus themselves are kept 1:1 and act on the selected row."
+    },
+    {
+      "type": "NOTE",
+      "what": "the full mock /ProductCollection is seeded with the three fields the tables bind (Name, Category, Quantity) and the Rank the controller adds to every row (Initial = 0), so every product starts in the Available table."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: the drag and drop across the two tables, the re-ordering inside the Selected one, and the four move buttons."
+    }
+  ]
+}

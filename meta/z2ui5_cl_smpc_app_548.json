@@ -1,0 +1,51 @@
+{
+  "class": "z2ui5_cl_smpc_app_548",
+  "sample": "sap.m.sample.PlanningCalendarRecurringItem",
+  "entity": "sap.m.PlanningCalendar",
+  "file": "src/02/01/z2ui5_cl_smpc_app_548.clas.abap",
+  "batch": "b45",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "The whole recurrence stack is newer than the 1.71 floor: sap.m.PlanningCalendar rowHeaderPress @since 1.119.0, sap.m.PlanningCalendarRow nonWorkingPeriods @since 1.128 (property and aggregation), sap.ui.unified.RecurringNonWorkingPeriod @since 1.127.0, sap.ui.unified.TimeRange @since 1.127, sap.ui.unified.RecurringCalendarAppointment @since 1.149 and sap.ui.unified.RecurrenceRule @since 1.149. Recurring appointments ARE the sample, so all of them are kept and the port is filed under src/02."
+    },
+    {
+      "type": "NOTE",
+      "what": "The calendar date properties (the PlanningCalendar startDate, every appointment startDate / endDate and recurrenceEndDate and the non-working period's date) are typed \"object\" and demand a real JS Date. The model keeps ISO strings and Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74). The TimeRange start / end stay plain strings, which is what its valueFormat expects."
+    },
+    {
+      "type": "NOTE",
+      "what": "The create dialog lives in its own fragment with its own named model (create>). abap2UI5 keeps one default model, so the dialog's fifteen fields are folded to flat fields here and every visibility expression the fragment carries reads them directly."
+    },
+    {
+      "type": "NOTE",
+      "what": "_openCreateDialog fills the person Select by ADDING an Item per row of the people table in the controller. The port binds a small key/text table built from the same rows instead, so the Select carries the same entries declaratively."
+    },
+    {
+      "type": "NOTE",
+      "what": "onAppointmentCreate opens the create dialog pre-set to the row the drag started in and to the dragged interval; the row's binding path and the interval's LOCAL date parts travel with the event. onCreateDialogSave assembles the appointment and pushes it into the picked person's row, with the same recurrence branches the original applies."
+    },
+    {
+      "type": "NOTE",
+      "what": "onAppointmentDrop shifts the appointment by the dragged DELTA and then copies it, moves it to another row, or just reschedules it in place - the three branches and their three toasts are kept. The new start and end already carry the delta, so the port re-dates the row from the two interval bounds the event hands it; the appointment's and the row's binding paths name the source and the target."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "onCreateAppointment seeds the dialog with the CLIENT's next full hour (UI5Date.getInstance() with minutes zeroed). A backend has no client clock, so the port seeds the SERVER's local date and next full hour instead. Same shape, a different clock - which matters only if the two are in different time zones."
+    },
+    {
+      "type": "NOTE",
+      "what": "The row images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The recurring appointments and non-working periods, the create dialog with its recurrence branches, the drag-create and the drop's copy / move / reschedule branches are unverified in a running system."
+    }
+  ]
+}

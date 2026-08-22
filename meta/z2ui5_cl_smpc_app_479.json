@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_479",
+  "sample": "sap.m.sample.ComboBoxSearchBoth",
+  "entity": "sap.m.ComboBox",
+  "file": "src/01/01/z2ui5_cl_smpc_app_479.clas.abap",
+  "batch": "b38",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "fnFormatter joins the ComboBox value and key into 'text (key)' (or whichever one is set). A formatter is business logic, so the text is composed in ABAP and bound; the port adds a change wire on the ComboBox to tell the backend when to recompute it, which the original does not need because its formatter re-evaluates on every model change."
+    },
+    {
+      "type": "NOTE",
+      "what": "The change wire and the composed text are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_479.mjs)."
+    }
+  ]
+}

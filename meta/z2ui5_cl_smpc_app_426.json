@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_smpc_app_426",
+  "sample": "sap.m.sample.FlexBoxCols",
+  "entity": "sap.m.FlexBox",
+  "file": "src/01/01/z2ui5_cl_smpc_app_426.clas.abap",
+  "batch": "b32",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The sample ships its own style.css (.equalColumns .columns min-height 200px and the .sapMFlexItem padding). abap2UI5 serves no per-sample stylesheet, so the two rules are injected verbatim through an extra core:HTML <style> leaf at the top of the view - structural-diff reports control extra core:HTML. Nothing else changes: both classes stay on the same controls the original carries."
+    }
+  ]
+}

@@ -35,6 +35,7 @@ const DEV_TYPES = ['IMPROVISED', 'POST_171', 'DROPPED_171', 'LIVE_TEST', 'SUBSET
 const KNOWN_KEYS = new Set([
   'class', 'sample', 'entity', 'file', 'batch', 'audit', 'status', 'checked',
   'deviations', 'render_smoke', 'data_fidelity', 'structural_diff',
+  'property_gate',
 ]);
 
 /* Hold-out samples (TRAINING.md): regenerated from scratch to measure the
@@ -172,6 +173,31 @@ for (const sf of sidecars.sort()) {
       if (!sd.reason || typeof sd.reason !== 'string') err(`${sf}: structural_diff.reason must be a non-empty string`);
       for (const k of Object.keys(sd)) {
         if (!['skip', 'reason'].includes(k)) err(`${sf}: unknown structural_diff field "${k}"`);
+      }
+    }
+  }
+
+  /* optional property_gate escape hatch - NARROWER than the three above,
+   * because the property gate is the correctness one: it must name the finding
+   * TYPES it covers, and view-gates fails the port if a named type does not
+   * actually fire (the same stale-skip discipline). It exists for the case the
+   * corpus keeps meeting - the UI5 metadata says one thing and the control's
+   * own code does another (batch b47's columnmenu.Menu.items, batch b49's
+   * ObjectPageLazyLoader in a blocks aggregation) - where satisfying the rule
+   * would mean breaking the port. */
+  if (m.property_gate !== undefined) {
+    const pg = m.property_gate;
+    if (typeof pg !== 'object' || pg === null || Array.isArray(pg)) {
+      err(`${sf}: property_gate must be an object { skip: true, reason, types: [...] }`);
+    } else {
+      if (pg.skip !== true) err(`${sf}: property_gate.skip must be true when present (drop the field otherwise)`);
+      if (!pg.reason || typeof pg.reason !== 'string') err(`${sf}: property_gate.reason must be a non-empty string`);
+      if (!Array.isArray(pg.types) || !pg.types.length
+          || pg.types.some((t) => typeof t !== 'string' || !t)) {
+        err(`${sf}: property_gate.types must be a non-empty array of finding types - a blanket skip of the property gate is never allowed`);
+      }
+      for (const k of Object.keys(pg)) {
+        if (!['skip', 'reason', 'types'].includes(k)) err(`${sf}: unknown property_gate field "${k}"`);
       }
     }
   }

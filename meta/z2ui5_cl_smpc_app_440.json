@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_smpc_app_440",
+  "sample": "sap.m.sample.MenuEndContent",
+  "entity": "sap.m.Menu",
+  "file": "src/02/01/z2ui5_cl_smpc_app_440.clas.abap",
+  "batch": "b34",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.MenuItem.endContent (aggregation since 1.131) is the sample's subject and is kept 1:1 on the two items that carry transparent icon Buttons; the app needs UI5 >= 1.131 to render them."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.Button.ariaHasPopup (since 1.84) is kept 1:1 on the trigger button; needs UI5 >= 1.84."
+    },
+    {
+      "type": "NOTE",
+      "what": "The controller loads Menu.fragment.xml lazily and toggles it (isOpen -> close, otherwise openBy(button)). The port declares the same Menu in the Button's dependents aggregation and toggles it roundtrip-free through follow_up_action control_by_id / toggleBy anchored to $event.oSource.sId, so the separate core:FragmentDefinition is dropped (app 419 precedent)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The anchored toggleBy of the menu and the endContent buttons inside its items are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_440.mjs)."
+    }
+  ]
+}

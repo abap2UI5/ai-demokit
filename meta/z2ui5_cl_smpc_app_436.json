@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_436",
+  "sample": "sap.m.sample.TreeIcon",
+  "entity": "sap.m.Tree",
+  "file": "src/01/01/z2ui5_cl_smpc_app_436.clas.abap",
+  "batch": "b33",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onToggleContextMenu creates a sap.m.Menu with one MenuItem in JavaScript on press and destroys it again when the button is un-pressed. abap2UI5 has no client-side control factory, so the same Menu/MenuItem is declared in the view's contextMenu aggregation and the view is rebuilt on the toggle: the pressed state arrives via ${$parameters>/pressed} and the backend emits the subtree only while it is on. structural-diff therefore reports control extra Menu and control extra MenuItem - the original's are built in the controller, not in the view."
+    },
+    {
+      "type": "NOTE",
+      "what": "The context-menu toggle (pressed -> rebuilt view with/without the contextMenu subtree) and the MenuItem's {TEXT} binding against the pressed node are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_436.mjs)."
+    }
+  ]
+}

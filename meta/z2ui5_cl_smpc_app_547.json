@@ -1,0 +1,51 @@
+{
+  "class": "z2ui5_cl_smpc_app_547",
+  "sample": "sap.m.sample.PlanningCalendarModifyAppointments",
+  "entity": "sap.m.PlanningCalendar",
+  "file": "src/02/01/z2ui5_cl_smpc_app_547.clas.abap",
+  "batch": "b45",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.ui.unified.CalendarAppointment ariaHasPopup is @since 1.150.0 - newer than the 1.71 floor. It is kept 1:1 from the sample, so the port is filed under src/02."
+    },
+    {
+      "type": "NOTE",
+      "what": "The calendar date properties (the PlanningCalendar startDate and every CalendarAppointment startDate and endDate) are typed \"object\" and demand a real JS Date. The model keeps ISO strings and Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74)."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleAppointmentSelect splits two ways. On a single appointment it opens the Details popover: the binding path and the selected state travel with the event, ABAP fills the popover's fields from the row, and a deselect closes it. On a collapsed GROUP it reports how many appointments were selected and whether their types differ - both facts are client-readable, so they travel with the event and ABAP composes the same two sentences."
+    },
+    {
+      "type": "NOTE",
+      "what": "The Create dialog serves all THREE of the sample's modes - create, create-with-context (pre-set to the clicked interval and row) and edit. The mode, the picked person, the interval-appointment flag and the four inputs are bound fields here, so the controller's _setCreateAppointmentDialogContent / _setCreateWithContextAppointmentDialogContent / _setEditAppointmentDialogContent collapse into seeding those fields before the popup opens."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleDialogSaveButton keeps every branch: an edit rewrites the row in place and moves it to the picked owner when the Select changed (_appointmentOwnerChange), a create appends to that person's appointments, and the Interval-appointment checkbox routes the new row to their interval HEADERS instead (_convertToHeader). handleDeleteAppointment removes the appointment behind the popover."
+    },
+    {
+      "type": "NOTE",
+      "what": "_validateDateTimePicker refuses an end date at or before the start and blocks the Save; the port binds the start picker's valueState and applies the same rule on the change round-trip, and the save is skipped while the state is Error. handleAppointmentTypeChange only re-reads the checkbox, which is bound two-way here, so its select wire is dropped."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "_handleGroupAppointments opens a Popover ANCHORED on the group's DOM node (openBy( document.getElementById( domRefId ) )), built in the controller. A backend cannot address a raw DOM node, so the port reports the same sentence as a toast instead of an anchored popover; the counting and the type comparison behind it are unchanged."
+    },
+    {
+      "type": "NOTE",
+      "what": "The row images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The details popover, the three dialog modes, the owner change, the interval-header routing, the date validation and the group report are unverified in a running system."
+    }
+  ]
+}

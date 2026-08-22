@@ -1,0 +1,52 @@
+{
+  "class": "z2ui5_cl_smpc_app_609",
+  "sample": "sap.m.sample.SinglePlanningCalendarCreateApp",
+  "entity": "sap.m.SinglePlanningCalendar",
+  "file": "src/02/01/z2ui5_cl_smpc_app_609.clas.abap",
+  "batch": "b50",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true,
+    "note": "the selected appointment's binding path and the picked date's local parts travel with the events"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.ui.unified.CalendarAppointment.ariaHasPopup is @since 1.150.0 - newer than the 1.71 floor but written by the sample on every appointment, so it is kept and the port is filed under src/02. App 549 carries the same property for the same reason."
+    },
+    {
+      "type": "NOTE",
+      "what": "the calendar date properties (the SinglePlanningCalendar startDate and every CalendarAppointment startDate and endDate) are typed \"object\" and demand a real JS Date. The model keeps ISO strings and Formatter.DateCreateObject converts them at the point of use, which is why those binding values read differently from the sample's plain {startDate} / {endDate} - same field, one formatter (app 549/553 idiom)."
+    },
+    {
+      "type": "NOTE",
+      "what": "this sample is app 549's with the toolbar taken off: no sticky-mode Select, no drag-and-drop / resize / create toggles and no legend, no viewChange or moreLinkPress wire and no Month view. What is left is the create-and-edit app - the Create action, the details popover and the modify dialog - which is what its name says. The two ports therefore share their whole shape; only this one's appointment list, its Details fragment ids and its type Select differ."
+    },
+    {
+      "type": "NOTE",
+      "what": "the Details fragment differs from app 549's in four places, all carried: the labelFor targets and the ids read moreInfoText / startDateText / endDateText / allDayCheckBox, the all-day CheckBox is editable=\"false\" rather than enabled=\"false\", and the type Text binds {type} directly instead of running app 549's _typeFormatter - there is no legend here to name the types, so the raw key is what shows."
+    },
+    {
+      "type": "NOTE",
+      "what": "the Modify dialog's type Select binds /types, an array the controller builds by walking the CalendarDayType enum, and shows the KEY as the text ({type} twice). The port seeds the same twenty-one members in the enum's own order. Its two Inputs also carry no maxLength here, where app 549's sample sets 255."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleAppointmentSelect reads the clicked appointment's binding context; the wire carries its path plus its selected flag, and an empty path means the user clicked empty space, which is what opens the create dialog. handleHeaderDateSelect and the Create button share that dialog. handleStartDateChange toasts the new start date, which the wire carries as the Date's own toString()."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the details popover is anchored on the appointment's DOM node upstream (oEvent.getParameter('appointment')); a thin frontend has no such node, so it is anchored on the calendar by id. Everything the popover shows - title, additional info, the two formatted dates, the all-day flag and the type - is composed by the backend from the row the path names."
+    },
+    {
+      "type": "NOTE",
+      "what": "the 35 appointments and the 2018-07-09 start date are seeded verbatim from onInit. Several carry an out-of-range minute (hour 7 minute 9, hour 9 minute 9, hour 13 minute 9) that JavaScript normalizes; the port stores the same values as ISO strings."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: that Create opens the modify dialog, that an appointment click opens the details popover with its type, and that saving writes the row back into the calendar."
+    }
+  ]
+}

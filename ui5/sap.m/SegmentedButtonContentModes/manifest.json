@@ -1,0 +1,30 @@
+{
+	"sap.app": {
+		"id": "sap.m.sample.SegmentedButtonContentModes",
+		"applicationVersion": {
+			"version": "1.0.0"
+		}
+	},
+	"sap.ui5": {
+		"rootView": {
+			"viewName": "sap.m.sample.SegmentedButtonContentModes.Page",
+			"type": "XML",
+			"async": true
+		},
+		"dependencies": {
+			"libs": {
+				"sap.m": {},
+				"sap.ui.core": {}
+			}
+		},
+		"config": {
+			"sample": {
+				"stretch": true,
+				"files": [
+					"Page.view.xml",
+					"manifest.json"
+				]
+			}
+		}
+	}
+}

@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_smpc_app_561",
+  "sample": "sap.m.sample.DialogWithinArea",
+  "entity": "sap.m.Dialog",
+  "file": "src/02/01/z2ui5_cl_smpc_app_561.clas.abap",
+  "batch": "b46",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.Button ariaHasPopup is @since 1.84.0 - newer than the 1.71 floor. All three buttons carry it in the sample, so it is kept and the port is filed under src/02."
+    },
+    {
+      "type": "NOTE",
+      "what": "The three dialogs, their List and their Buttons are built in the CONTROLLER (new Dialog({ ... })). The port builds the same dialog in a chain and shows it with popup_display, so structural-diff reports Dialog, List, StandardListItem and the extra Buttons as control extra - the sample's view declares none of them. The three presses differ only in the flags they set (contentWidth/contentHeight, resizable, draggable) and in whether an OK button is there, which the port passes as parameters."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "Popup.setWithinArea( withinArea ) is the POINT of the sample: it confines every popup - dialogs included - to the bordered HBox on the right. It is a static call on sap.ui.core.Popup with no declarative counterpart and no whitelisted frontend action, so the port keeps the within-area box (and its layout data) but the dialogs open unconfined, in the middle of the page. onExit's reset goes with it."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The three dialogs and their resizable / draggable flags are unverified in a running system."
+    }
+  ]
+}

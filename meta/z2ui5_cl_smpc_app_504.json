@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_504",
+  "sample": "sap.m.sample.MultiInputTokenUpdate",
+  "entity": "sap.m.MultiInput",
+  "file": "src/01/01/z2ui5_cl_smpc_app_504.clas.abap",
+  "batch": "b40",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The bound tokens aggregation adds a Token template the original's view does not declare (it builds its Tokens in JavaScript), which structural-diff reports as control extra Token."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The sample's behaviour comes from a JS validator with three setTimeout callbacks. abap2UI5 cannot register a validator, so the same switch runs in ABAP on the change event: c and d become themselves, e becomes 'f', a is added after 3 seconds and f after 10 through the framework's START_TIMER, and b is rejected after 5 seconds (nothing added). What cannot be reproduced is the PASTE path the sample is written around - a multi-line paste raises one tokenUpdate with several tokens in the original, while the port only sees the change event of the field, so the three instant tokens are created one by one rather than in a single batch."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The validator switch, both timers and the tokenUpdate toast are unverified in a running system."
+    }
+  ]
+}

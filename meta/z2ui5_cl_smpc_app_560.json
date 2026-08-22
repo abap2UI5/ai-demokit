@@ -1,0 +1,55 @@
+{
+  "class": "z2ui5_cl_smpc_app_560",
+  "sample": "sap.f.sample.DynamicPageWithWizard",
+  "entity": "sap.f.DynamicPage",
+  "file": "src/01/04/z2ui5_cl_smpc_app_560.clas.abap",
+  "batch": "b46",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "this sample is sap.m.sample.WizardBranching (app 535) with its wizard page replaced by an f:DynamicPage, and the port follows that: the same eight-step branching wizard and the same review page, wrapped in a DynamicPage (id dynamicPage, class sapUiNoContentPadding, showFooter, stickySubheaderProvider=ShoppingCartWizard) whose f:title carries the 'Header Title' Title and whose f:footer carries the Accept/Reject OverflowToolbar. The other differences from the sibling are kept 1:1 as well: the wizard gains height=\"auto\", its four step forms use ColumnLayout instead of ResponsiveGridLayout, the review page's product List drops mode/enableBusyIndicator, and the wizard page's footer buttons are the handler-less Accept/Reject pair (Submit/Cancel live on the review page, as in the sibling)."
+    },
+    {
+      "type": "NOTE",
+      "what": "toggleHeaderOnTitleClick=\"{/titleClickable}\" is kept as a bound field. The controller never writes /titleClickable, so the binding resolves to undefined in the original and the property falls back to its default; the port binds an abap_bool that stays false, which is what undefined evaluates to."
+    },
+    {
+      "type": "NOTE",
+      "what": "The original keeps the form data in nested paths on one JSON model (/CreditCard/Name, /CashOnDelivery/FirstName, /BillingAddress/Address ...). abap2UI5 keeps one default model, so the nested paths are folded to flat fields whose last segment is identical - the same fold app 166 makes. /CashOnDelivery/Phone Number, whose last segment carries a space, becomes phonenumber."
+    },
+    {
+      "type": "NOTE",
+      "what": "goToPaymentStep and billingAddressComplete branch the wizard by calling setNextStep on the completed step. Both are reproduced 1:1 through the framework's whitelisted control_by_id setNextStep call, so enableBranching still drives the same three payment paths and the same two delivery paths."
+    },
+    {
+      "type": "NOTE",
+      "what": "checkCreditCardStep / checkCashOnDeliveryStep / checkBillingStep call validateStep and invalidateStep imperatively. Each step's validated property is bound two-way here and the same liveChange wires recompute it in ABAP with the same rule (at least three characters), so the Next button gates exactly as in the original."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "setDiscardableProperty only asks for confirmation while the wizard's PROGRESS STEP is past the step being discarded (getProgressStep() !== discardStep). A backend cannot read getProgressStep(), so the port keeps two flags that stand in for the two comparisons: each is raised by the activate wire of the step that follows the compared one, and cleared again when the progress is discarded. This costs two added activate attributes (BankAccountStep, DeliveryAddressStep and DeliveryTypeStep, which the sample leaves unwired) and gets the question asked in the same situations. The YES branch discards the progress through control_by_id and remembers the new value; the NO branch restores the remembered one, both as in the original."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleDelete removes the row whose title the delete event carries and never removes the last one; the port sends the title with the event and does the same, then recomputes the total the way calcTotal does. attachRequestCompleted keeps the first FIVE rows of the mock product collection and seeds the payment and delivery defaults - the port seeds exactly those five rows."
+    },
+    {
+      "type": "NOTE",
+      "what": "completedHandler, _navBackToStep and _handleMessageBoxOpen navigate the NavContainer and the wizard imperatively. All three go through control_by_id here ('to', 'goToStep', 'discardProgress' - all whitelisted), the same idiom app 101 uses for the sibling sample. _navBackToStep's backToPage/attachAfterNavigate pair collapses to one 'to' on the DynamicPage followed by 'goToStep' - abap2UI5 schedules the two frontend actions in order, so the after-navigate callback the original needs has no counterpart."
+    },
+    {
+      "type": "NOTE",
+      "what": "The five product images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The three payment branches, the delivery-address branch, the discard confirmations, the per-step validation, the review page's six Edit links and the DynamicPage's sticky subheader over the wizard are unverified in a running system."
+    }
+  ]
+}

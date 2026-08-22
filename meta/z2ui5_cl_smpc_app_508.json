@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_smpc_app_508",
+  "sample": "sap.m.sample.ListToolbar",
+  "entity": "sap.m.List",
+  "file": "src/01/01/z2ui5_cl_smpc_app_508.clas.abap",
+  "batch": "b41",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onSelectionFinish maps the picked MultiComboBox keys onto list.setSticky( ). Both are the same two-way bound table here (selectedKeys and sticky), so the sticky options follow the selection without a round-trip and the MultiComboBox.selectionFinish attribute is dropped."
+    },
+    {
+      "type": "NOTE",
+      "what": "onToggleInfoToolbar hides the info toolbar while the button is pressed. The ToggleButton's pressed state is two-way bound and the info toolbar's visible is an expression binding over the same field, so the ToggleButton.press attribute is dropped."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleButtonPress and handleInfobarPress toast constant texts, composed on the client via control_global MESSAGE_TOAST - no press needs a round-trip."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The sticky selection, the info-toolbar toggle and the four constant toasts are unverified in a running system."
+    }
+  ]
+}

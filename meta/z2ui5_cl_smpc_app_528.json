@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_smpc_app_528",
+  "sample": "sap.f.sample.GridContainersNavigation",
+  "entity": "sap.f.GridContainer",
+  "file": "src/01/04/z2ui5_cl_smpc_app_528.clas.abap",
+  "batch": "b43",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "All SEVEN sap.ui.integration.widgets.Card children take their content from cardManifests.json through manifest=\"{manifests>/...}\". A Card manifest is either a JS OBJECT or a URL to a single manifest file (Card.createManifest), and the sample's seven manifests live inside ONE file under wrapper keys, so neither form is reachable from a declarative view. Each w:Card is therefore rebuilt as a declarative sap.f.Card carrying the manifest's own card:Header and its content: a sap.m.List of StandardListItems for the four List cards (orders, tasks, contacts, withAction), a sap.m.Table with three Columns and a ColumnListItem row for the Table card (employees), a sap.m.List of DisplayListItems for the Object card (contact, whose three Navigation actions become the URLHELPER tel:/mailto: wires the manifest spells out) and a VBox with the text and the Go-to-page Link for the AdaptiveCard (summary). Same seven cards in the same seven grid slots with the same content; structural-diff reports w:Card and Card.manifest as missing and every rebuilt control as extra. The two CardBadgeCustomData badges on the orders card go with the w:Card - sap.f.Card has no badge counterpart."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "onBorderReached toasts '<panel header> border reached' and then hands the KEYBOARD FOCUS to the neighbouring grid, which it finds by comparing the four grids' bounding rectangles against the arrow key that was pressed. Geometry and focus are client facts a backend cannot reach, so the port keeps the toast - composed on the client, one per grid with that grid's own header text - and drops the focus hand-off. The four borderReached wires are therefore live but only announce the border."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "RevealGrid is a sample-local JS helper module that draws a DOM overlay outlining all four grids. It has no declarative equivalent, so the ToggleButton is kept but its press wire is dropped (structural-diff reports ToggleButton.press as attr missing) - same treatment as app 168, which ships the same helper."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The four grids, the seven rebuilt cards and the four border-reached toasts are unverified in a running system."
+    }
+  ]
+}

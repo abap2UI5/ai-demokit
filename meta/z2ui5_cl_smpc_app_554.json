@@ -1,0 +1,47 @@
+{
+  "class": "z2ui5_cl_smpc_app_554",
+  "sample": "sap.m.sample.SinglePlanningCalendarWithZoomInZoomOut",
+  "entity": "sap.m.SinglePlanningCalendar",
+  "file": "src/02/01/z2ui5_cl_smpc_app_554.clas.abap",
+  "batch": "b45",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.SinglePlanningCalendar scaleFactor is @since 1.99 and sap.ui.unified.DateTypeRange color @since 1.76.0 - both newer than the 1.71 floor. The zoom IS the sample, so both are kept and the port is filed under src/02."
+    },
+    {
+      "type": "NOTE",
+      "what": "The calendar date properties (the SinglePlanningCalendar startDate and every CalendarAppointment / DateTypeRange startDate and endDate) are typed \"object\" and demand a real JS Date. The model keeps ISO strings and Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The original keeps the legend-shown flag in a SECOND named model (stateModel>). abap2UI5 keeps one default model, so the flag is a field here and the DynamicSideContent and the ToggleButton share it."
+    },
+    {
+      "type": "NOTE",
+      "what": "toggleFullDay flips setFullDay. The property is bindable, so the Full Day ToggleButton and the calendar share the flag and the press handler is dropped - which costs one added ToggleButton.pressed attribute the sample's view does not have."
+    },
+    {
+      "type": "NOTE",
+      "what": "zoomIn and zoomOut step setScaleFactor up and down. The property is bindable, so the two presses do the same increment in ABAP and the calendar follows the bound field; scaleFactor is seeded at the control's own default of 1."
+    },
+    {
+      "type": "NOTE",
+      "what": "The view binds specialDates to /specialDates, a path the sample's own model never fills (its types array is empty), so the port seeds an empty table there - the same nothing the original renders."
+    },
+    {
+      "type": "NOTE",
+      "what": "Some appointment rows carry a tentative flag the view never binds; the port seeds it the same way and leaves it unbound, so the data stays 1:1 with the mock."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The zoom in/out steps, the full-day toggle and the legend side content are unverified in a running system."
+    }
+  ]
+}

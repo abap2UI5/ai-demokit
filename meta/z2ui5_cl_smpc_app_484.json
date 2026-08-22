@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_smpc_app_484",
+  "sample": "sap.m.sample.StandardMarginsEnforceWidthAuto",
+  "entity": "sap.ui.core.StandardMargins",
+  "file": "src/01/01/z2ui5_cl_smpc_app_484.clas.abap",
+  "batch": "b38",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The IconTabBar binds expanded to the demo kit's own device model flag {device>/isNoPhone}. abap2UI5 serves the raw sap.ui.Device under device>, so the port expresses the same branch as {= !${device>/system/phone} } (apps 030/089 precedent) - same value on the same devices."
+    }
+  ]
+}

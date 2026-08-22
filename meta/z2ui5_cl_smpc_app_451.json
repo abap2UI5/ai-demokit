@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_smpc_app_451",
+  "sample": "sap.m.sample.TabContainerIcons",
+  "entity": "sap.m.TabContainer",
+  "file": "src/01/01/z2ui5_cl_smpc_app_451.clas.abap",
+  "batch": "b35",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "addNewButtonPressHandler creates a TabContainerItem in JavaScript and selects it. The port appends the same row to the bound table; the new tab is appended but not auto-selected, because TabContainer.selectedItem is an association a bound-row clone cannot address from the backend (app 093's residual difference, same here)."
+    },
+    {
+      "type": "NOTE",
+      "what": "itemCloseHandler calls oEvent.preventDefault() unconditionally and lets MessageBox.confirm decide. Reproduced 1:1: the itemClose wire carries check_prevent_default and transports ${$parameters>/item}.getName() plus the row index via indexOfItem, the backend raises the confirm with onclose CLOSE_DECIDE, and OK deletes the row and toasts 'Item closed: <name>' (duration 500) while Cancel toasts 'Item close canceled: <name>' (app 093 precedent)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The first employee's icon is the sample's own test-resources image (Woman_04.png), re-hosted on sdk.openui5.org; the other three are icon-font URIs and stay verbatim. The salary values keep their two decimals (TYPE p DECIMALS 2), rendered as '{SALARY} EUR' exactly as the original Text does."
+    },
+    {
+      "type": "NOTE",
+      "what": "The add wire, the prevented-default itemClose with its confirm round-trip and both toast branches are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_451.mjs)."
+    }
+  ]
+}

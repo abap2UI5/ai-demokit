@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_428",
+  "sample": "sap.m.sample.HeaderContainerNoDividers",
+  "entity": "sap.m.HeaderContainer",
+  "file": "src/01/01/z2ui5_cl_smpc_app_428.clas.abap",
+  "batch": "b32",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onInit loops over the eight core:InvisibleTexts and calls headerContainer.addAriaLabelledBy(text<i>). The association is static (the ids never change), so the port writes it as the HeaderContainer.ariaLabelledBy attribute listing all eight ids instead of building it imperatively."
+    },
+    {
+      "type": "NOTE",
+      "what": "press shows MessageToast.show('Fire press') - a constant text, so all eight NumericContent presses are composed on the client via follow_up_action control_global MESSAGE_TOAST.show and need no round-trip."
+    }
+  ]
+}

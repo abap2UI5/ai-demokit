@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_488",
+  "sample": "sap.m.sample.TableNavigated",
+  "entity": "sap.m.Table",
+  "file": "src/02/01/z2ui5_cl_smpc_app_488.clas.abap",
+  "batch": "b39",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.ColumnListItem.navigated is @since 1.72 and is the subject of this sample, so it is kept 1:1 and the port needs a UI5 runtime >= 1.72."
+    },
+    {
+      "type": "NOTE",
+      "what": "The navigated flag comes from the .isNavigated formatter comparing the settings model's navigatedItem with each row's ProductId. A formatter is business logic, so the port binds a plain navigated field per row and the press wire (carrying ${PRODUCTID}) sets it in ABAP - exactly one row navigated at a time, like the original (app 482 precedent)."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The press wire setting the navigated row is unverified in a running system."
+    }
+  ]
+}
