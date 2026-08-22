@@ -29,6 +29,39 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
 
 ## Open findings (backlog)
 
+- [ ] **Two ports gave up on a capability that already exists — found
+  2026-08-22 while answering "what should we ask the framework for".** Neither
+  is a framework gap; both sidecars reason from an older state of the framework
+  than the one they were written against, and the fix is in this repository.
+  - **App 607 (`OverflowToolbarFooter`) — grouping is not lost.** Its
+    `IMPROVISED` says "abap2UI5 has no client-side grouping function, so the
+    port sorts by SupplierName instead" and the grey `SupplierName` group
+    headers go with it. But `BINDING_CALL`'s `sort` takes THREE parameters —
+    `sort(binding, [path, descending, group])` builds
+    `new Sorter(path, castArg("bool", descending), castArg("bool", group))`
+    (`app/webapp/core/actions/ControlCall.js`) — and the sample's own
+    `_fnGroup` returns `{ key: SupplierName, text: SupplierName }`, which is
+    exactly what UI5's DEFAULT group function produces for
+    `Sorter(path, descending, true)`. So the headers are reachable as they
+    stand, either through `binding_call` or by rebuilding the binding-info
+    sorter per round trip the way apps 176 / 613 write theirs. Rework, then the
+    deviation becomes a NOTE.
+  - **App 600 (`TreeDnD`) — the drag veto is expressible.** Its `DROPPED_171`
+    reads "the veto itself is expressible (`s_ctrl-check_prevent_default`) but
+    its condition is not: the flag is baked per wire at RENDER time". That was
+    true until 2026-08-05, when `pr/conditional-prevent-default` landed
+    `s_ctrl-prevent_default_expr` — the same veto decided per FIRING, a client
+    expression evaluated when the event fires, and it wins over the flag when
+    both are set. The sample's condition is
+    `aSelectedItems.length > 0 && aSelectedIndices.indexOf(iDraggedItemIndex) === -1`,
+    and a `$`-prefixed argument is a full UI5 expression with method calls
+    (app 093 already writes
+    `${$parameters>/item/oParent}.indexOfItem(${$parameters>/item})`), so the
+    dragged item's parent tree can be asked for its selection inline. Worth a
+    live check before the sidecar changes — the veto is the half of `onDragStart`
+    that is testable; stashing the dragged contexts in the drag session stays
+    dropped either way.
+
 - [ ] **The per-port review sweep — every port that was `generated` has now
   been read.** Each port is read against its ARCHIVED ORIGINAL
   (view, controller, mock, stylesheet) and, where a claim rests on UI5's own
