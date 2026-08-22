@@ -38,6 +38,13 @@ CLASS z2ui5_cl_smpc_app_617 DEFINITION PUBLIC.
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
+    " PROTECTED, not PRIVATE: the app's state is serialized into the draft with
+    " CALL TRANSFORMATION id, and the transpiled runtime's re-implementation of
+    " it walks the attributes with a dynamic ASSIGN obj->(name), which cannot
+    " reach a PRIVATE one - it asserts, and every roundtrip 500s with
+    " ASSERTION_FAILED (e2e-caught 2026-08-22)
+    DATA t_all TYPE ty_t_product.
+
     METHODS view_display.
     METHODS on_event.
     METHODS filter_apply.
@@ -45,7 +52,6 @@ CLASS z2ui5_cl_smpc_app_617 DEFINITION PUBLIC.
     METHODS model_init.
 
   PRIVATE SECTION.
-    DATA t_all TYPE ty_t_product.
 ENDCLASS.
 
 

@@ -45,10 +45,6 @@ export default async (page, expect) => {
       .find((c) => c.getHeaderText() === 'GridList 1');
     g1.fireEvent('borderReached', { direction: 'Right', row: 0, column: 1 });
   });
-  await page.waitForFunction(
-    () => !!document.querySelector('.sapMMessageToast'),
-    null, { timeout: 15000 },
-  );
-  const toast = await page.evaluate(() => document.querySelector('.sapMMessageToast').textContent);
-  expect(toast).toContain('Reached border of GridList 1');
+  await expect(page.locator('.sapMMessageToast'), 'the borderReached toast')
+    .toContainText('Reached border of GridList 1');
 };

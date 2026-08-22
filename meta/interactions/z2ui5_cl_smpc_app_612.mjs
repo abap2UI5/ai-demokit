@@ -1,5 +1,8 @@
 // the three MultiInputs, their bound suggestions, and the Link that lives
 // inside the third one's formattedValueStateText
+// NOTE: a JSONModel's default sizeLimit is 100 and neither the sample nor the
+// port raises it, so a 123-row suggestion aggregation instantiates 100 —
+// the original is capped the same way.
 import { waitForUi5, ui5All } from '../../scripts/lib-e2e.mjs';
 
 export default async (page, expect) => {
@@ -10,12 +13,12 @@ export default async (page, expect) => {
   // multiInput4 takes core:Item suggestions, the other two suggestion rows
   await waitForUi5(page, () => {
     const mi4 = ui5All().find((c) => c.getId().endsWith('multiInput4'));
-    return mi4 && mi4.getSuggestionItems().length === 123;
+    return mi4 && mi4.getSuggestionItems().length === 100;
   }, 'the sorted core:Item suggestions never reached multiInput4');
   await waitForUi5(page, () => ['multiInput2', 'multiInput3'].every((id) => {
     const mi = ui5All().find((c) => c.getId().endsWith(id));
-    return mi && mi.getSuggestionRows().length === 123 && mi.getSuggestionColumns().length === 4;
-  }), 'the 123 suggestion rows and four columns never reached the tabular MultiInputs');
+    return mi && mi.getSuggestionRows().length === 100 && mi.getSuggestionColumns().length === 4;
+  }), 'the suggestion rows and four columns never reached the tabular MultiInputs');
   // the Information value state and its long text ride along on both
   await waitForUi5(page, () => ['multiInput2', 'multiInput3'].every((id) => {
     const mi = ui5All().find((c) => c.getId().endsWith(id));

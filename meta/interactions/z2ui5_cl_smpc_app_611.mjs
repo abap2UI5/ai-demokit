@@ -1,9 +1,18 @@
 // the three special dates and the popover a marked day opens
+//
+// NOTE: sap.ui.unified.Calendar keeps a DateTypeRange of its OWN (measured:
+// four in the registry for three in the view), so a registry-wide filter for
+// the type counts one too many. Ask the Calendar for its `specialDates`
+// aggregation instead — same family as every sap.m.Input building an internal
+// suggestion-popup Table and sap.m.Breadcrumbs building an internal Link.
+// The harness serves UI5 1.151.0, the corpus' own pin.
 import { waitForUi5, ui5All } from '../../scripts/lib-e2e.mjs';
 
 export default async (page, expect) => {
   await waitForUi5(page, () => {
-    const r = ui5All().filter((c) => c.getMetadata().getName() === 'sap.ui.unified.DateTypeRange');
+    const cal = ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.unified.Calendar');
+    if (!cal) return false;
+    const r = cal.getSpecialDates();
     return r.length === 3 && r.map((x) => x.getType()).join(',') === 'Type01,Type02,None';
   }, 'the three special dates never rendered with their types');
 

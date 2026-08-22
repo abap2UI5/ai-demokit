@@ -319,6 +319,8 @@ CLASS z2ui5_cl_smpc_app_609 IMPLEMENTATION.
 
   METHOD on_event.
 
+    DATA day TYPE string.
+
     CASE client->get_event( ).
       WHEN `APPT_SELECT`.
         " handleAppointmentSelect opens the details popover on the picked
@@ -357,11 +359,18 @@ CLASS z2ui5_cl_smpc_app_609 IMPLEMENTATION.
       WHEN `APPT_CREATE` OR `HEADER_DATE`.
         " _createInitialDialogValues seeds the dialog at the default 9 - 10 hours
         " of the picked day (or of the calendar's own start date)
-        DATA(day) = COND string( WHEN client->get_event( ) = `HEADER_DATE`
-                                 THEN |{ client->get_event_arg( ) }| &&
-                                      |-{ CONV i( client->get_event_arg( 2 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
-                                      |-{ CONV i( client->get_event_arg( 3 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }|
-                                 ELSE substring( val = start_date len = 10 ) ).
+        " Written as IF/ELSE rather than COND: the transpiled backend HOISTS the
+        " branch expressions out of a COND and evaluates them BOTH, so the two
+        " get_event_arg( ) reads below ran for APPT_CREATE too - a wire that
+        " carries no arguments at all - and the missing row asserted instead of
+        " returning initial, so every Create press 500'd (e2e-caught 2026-08-22)
+        IF client->get_event( ) = `HEADER_DATE`.
+          day = |{ client->get_event_arg( ) }| &&
+                |-{ CONV i( client->get_event_arg( 2 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
+                |-{ CONV i( client->get_event_arg( 3 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }|.
+        ELSE.
+          day = substring( val = start_date len = 10 ).
+        ENDIF.
         sel_index    = -1.
         sel_title    = ``.
         sel_text     = ``.

@@ -29,6 +29,60 @@ verdicts below turned out to be harness effects.
   names `e2e-build.mjs` kills your own shell (exit 144, no output). Grep the
   build log for `e2e-build: done`; kill by a PID noted in a SEPARATE, earlier
   command.
+- **A PRIVATE instance attribute 500s every roundtrip.** The app's state is
+  persisted with `CALL TRANSFORMATION id`, and the transpiled runtime's
+  re-implementation walks the class's attributes with a dynamic
+  `ASSIGN obj->(name)` — which reaches a PROTECTED attribute and **not** a
+  PRIVATE one. `sy-subrc` is then 4, the serializer asserts, and every
+  roundtrip answers `ASSERTION_FAILED` from `lcl_heap.add_object`
+  (`kernel_call_transformation`) — with nothing in the message naming the
+  attribute. Six ports carried it (604, 607, 617, 618, 619, 623, all a private
+  `t_all`/`t_images` master copy) while the 53 ports with a PROTECTED one were
+  fine, which is what isolated it (2026-08-22). **Declare app state PUBLIC and
+  helpers PROTECTED; never PRIVATE.** To find the attribute when it happens
+  again, log `ls_attribute-name` in front of that assert in
+  `node/output/kernel_call_transformation.clas.locals.mjs`.
+- **The transpiler HOISTS both branches of a `COND` / `SWITCH` and evaluates
+  them unconditionally.** `COND string( WHEN … THEN f( x ) ELSE g( ) )` becomes
+  `temp1.set(await f(x)); temp2.set(await g()); if (…)` — so a call that ABAP
+  would never make on the taken branch runs anyway. App 609 read
+  `get_event_arg( 2 )` in the THEN branch of a `COND` shared by two events, and
+  the event that carries no arguments at all asserted on the missing row: every
+  Create press 500'd while the ABAP was correct (2026-08-22). Write the branch
+  as `IF`/`ELSE` whenever either side has a side effect or can fail.
+- **The overview app's view chain overflows V8's parser stack.** A view-builder
+  chain transpiles to ONE nested expression — `view->ele( )->a( )->end( )`
+  becomes `await (await (await (…).get().a(…)).get().a(…))`, one level per
+  call — and `z2ui5_cl_smpc_app_000` is 177 calls long in a 5 MB module. Node's
+  default stack, already partly spent by the ESM loader walking the 2,340
+  transpiled modules, dies inside `compileSourceTextModule` and the backend
+  never listens: the smoke reports `backend exited (1) before listening`. The
+  harness passes `--stack-size=10000` on argv (NODE_OPTIONS rejects V8 options).
+  A real system never parses this, so it is a harness limit, not a corpus one.
+- **An internal control of the same type is the most common wrong-assertion
+  bug.** Every `sap.m.Input` builds a suggestion-popup `sap.m.Table`, every
+  `sap.m.Breadcrumbs` an empty `sap.m.Link`, every `sap.ui.unified.Calendar` a
+  `DateTypeRange` of its own — so a registry-wide `filter(byType)` counts one
+  too many and a bare `find(byType)` can answer with the wrong control. Ask the
+  OWNING control for its aggregation (`getLinks()`, `getSpecialDates()`,
+  `getSuggestionItems()`) or address by id. Three ports read as broken on this
+  in one sweep (2026-08-22).
+- **A matcher this harness does not have fails as `… is not a function`, and
+  the assertion never ran.** `expect(locator, label)` offers exactly
+  `toBeVisible`, `toBeVisibleEnabled`, `toContainText`, `notToContainText` and
+  `toHaveCountBelow` — not Playwright's full set. App 582 called `toContain`
+  and app 516 `toBeVisible` (which did not exist until 2026-08-22); both threw
+  before proving anything, and 516's assertion turned out to be for a control
+  the sample never had. When adding a matcher, re-run every module that used it.
+- **A typed binding is not written by `setValue` + `fireChange`.** The model is
+  updated by `InputBase.onChange` → `updateModelProperty`, which runs the type
+  and its constraints; firing the event directly leaves the CONTROL on the new
+  value and the MODEL on the old one, so the roundtrip sends the old value
+  (app 622, 2026-08-22). Type into `[id$="<id>-inner"]` and press Enter. And
+  while a client-side constraint (`sap.ui.model.type.String` with
+  `minLength`/`maxLength`) is violated the framework sends **no roundtrip at
+  all** — measured one POST for a whole sequence, none for the Submit press —
+  so drive the backend's own paths BEFORE putting a field into that state.
 - **A control with no theme CSS has a zero-size box, and playwright will not
   click or focus it** — the e2e harness serves the UI5 *sources*, not the
   themes, so `sapUiIcon` (an Input's value-help icon, app 268) and
