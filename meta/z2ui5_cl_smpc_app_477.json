@@ -20,8 +20,8 @@
       "what": "press shows MessageBox.alert('Link was clicked!') for all eight NumericContents - one round-trip event raising message_box_display with the same text and type."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The eight NumericContent presses raising the alert are unverified in a running system."
+      "type": "NOTE",
+      "what": "The eight NumericContent presses raising the alert are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_477.mjs)."
     }
   ]
 }

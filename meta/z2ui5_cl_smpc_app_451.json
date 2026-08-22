@@ -24,8 +24,8 @@
       "what": "The first employee's icon is the sample's own test-resources image (Woman_04.png), re-hosted on sdk.openui5.org; the other three are icon-font URIs and stay verbatim. The salary values keep their two decimals (TYPE p DECIMALS 2), rendered as '{SALARY} EUR' exactly as the original Text does."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The add wire, the prevented-default itemClose with its confirm round-trip and both toast branches are unverified in a running system."
+      "type": "NOTE",
+      "what": "The add wire, the prevented-default itemClose with its confirm round-trip and both toast branches are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_451.mjs)."
     }
   ]
 }

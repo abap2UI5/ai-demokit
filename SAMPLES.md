@@ -3,7 +3,7 @@
 
 # The sample catalogue
 
-Every port in this repository — 498 of them — with what it shows and a
+Every port in this repository — 508 of them — with what it shows and a
 link to its source. This is the [overview app](src/z2ui5_cl_smpc_app_000.clas.abap)
 as a page you can read here, before installing anything.
 
@@ -44,7 +44,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 
 ### sap.m
 
-270 port(s).
+280 port(s).
 
 | Sample | Class |
 |---|---|
@@ -232,6 +232,16 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.m.MultiComboBox** — MultiComboBox - Custom Filtering and Suggestions<br>The default filtering for the suggestionsItems aggregation uses a 'starts with per term' style operator. You can override this with your own custom filter function using the setFilterFunction method.<br><sub>multicombobox multi combo box sap.m multicomboboxcustomfiltering label</sub><br><sub>○ generated · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_481`](src/01/01/z2ui5_cl_smpc_app_481.clas.abap) |
 | **sap.m.StandardListItem** — Standard List Item - Adapt Title<br>By default the title size adapts to the available space and gets bigger if the description is empty. List items with and without descriptions results in titles with different sizes. In this cases it is better to switch the size adaption off.<br><sub>standardlistitem standard list item sap.m standardlistitemtitle</sub><br><sub>○ generated · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_483`](src/01/01/z2ui5_cl_smpc_app_483.clas.abap) |
 | **sap.m.TextArea** — TextArea with MaxLength = true<br>Shows the behavior of the control with the new showExceededText property (since 1.48) and maxLength = true<br><sub>textarea text area sap.m textareamaxlength</sub><br><sub>○ generated · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_485`](src/01/01/z2ui5_cl_smpc_app_485.clas.abap) |
+| **sap.m.ObjectHeader** — Object Header - Active Title<br>ObjectHeaderTitleActive | [`Z2UI5_CL_SMPC_APP_486`](src/01/01/z2ui5_cl_smpc_app_486.clas.abap) |
+| **sap.m.Panel** — Panel - Sticky header<br>PanelSticky | [`Z2UI5_CL_SMPC_APP_487`](src/01/01/z2ui5_cl_smpc_app_487.clas.abap) |
+| **sap.m.Table** — Table - Item Navigated<br>TableNavigated | [`Z2UI5_CL_SMPC_APP_488`](src/01/01/z2ui5_cl_smpc_app_488.clas.abap) |
+| **sap.m.SegmentedButton** — Segmented Button in Dialog<br>SegmentedButtonDialog | [`Z2UI5_CL_SMPC_APP_489`](src/01/01/z2ui5_cl_smpc_app_489.clas.abap) |
+| **sap.m.MultiComboBox**<br>MultiComboBox | [`Z2UI5_CL_SMPC_APP_490`](src/01/01/z2ui5_cl_smpc_app_490.clas.abap) |
+| **sap.m.MultiComboBox** — MultiComboBox - Clear Icon<br>MultiComboBoxClearIcon | [`Z2UI5_CL_SMPC_APP_491`](src/01/01/z2ui5_cl_smpc_app_491.clas.abap) |
+| **sap.m.List** — List - Grouping & Context Menu<br>ListGrouping | [`Z2UI5_CL_SMPC_APP_492`](src/01/01/z2ui5_cl_smpc_app_492.clas.abap) |
+| **sap.m.ComboBox** — Combo box - Deferred loading of the items<br>ComboBoxLazyLoading | [`Z2UI5_CL_SMPC_APP_493`](src/01/01/z2ui5_cl_smpc_app_493.clas.abap) |
+| **sap.m.ComboBox** — ComboBox - maxPickerHeight<br>ComboBoxMaxPickerHeight | [`Z2UI5_CL_SMPC_APP_494`](src/01/01/z2ui5_cl_smpc_app_494.clas.abap) |
+| **sap.m.MultiComboBox** — MultiComboBox - maxPickerHeight<br>MultiComboBoxMaxPickerHeight | [`Z2UI5_CL_SMPC_APP_495`](src/01/01/z2ui5_cl_smpc_app_495.clas.abap) |
 | **sap.m.Carousel** — Carousel with Controls<br>With the Carousel a user can browse through multi-page content by swiping left or right.<br><sub>carousel sap.m user browse through title image text scrollcontainer list standardlistitem</sub><br><sub>✓ checked · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_006`](src/02/01/z2ui5_cl_smpc_app_006.clas.abap) |
 | **sap.m.DatePicker** — Date Picker - Open by Another Control<br>This example shows Date Picker which is opened by another control.<br><sub>datepicker date picker sap.m open another title vbox label button link</sub><br><sub>✓ checked · 5 deviations</sub> | [`Z2UI5_CL_SMPC_APP_016`](src/02/01/z2ui5_cl_smpc_app_016.clas.abap) |
 | **sap.m.DateRangeSelection**<br>The Date Range Selection is an extension of the Date Picker Control and enables the user to select range of dates.<br><sub>daterangeselection date range selection sap.m single-field input vbox label text</sub><br><sub>✓ checked · 8 deviations</sub> | [`Z2UI5_CL_SMPC_APP_017`](src/02/01/z2ui5_cl_smpc_app_017.clas.abap) |

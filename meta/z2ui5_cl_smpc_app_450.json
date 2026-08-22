@@ -24,8 +24,8 @@
       "what": "FlexibleColumnLayout and its FlexibleColumnLayoutAccessibleLandmarkInfo carry the f: prefix here because the merged single view uses sap.m as its default xmlns for the pages, while the original root view declares sap.f as the default and writes both unprefixed. Same controls, different namespace representation (app 234 precedent)."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The three layout transitions (OneColumn, TwoColumnsMidExpanded, ThreeColumnsEndExpanded) driven by the bound layout property are unverified in a running system."
+      "type": "NOTE",
+      "what": "The three layout transitions (OneColumn, TwoColumnsMidExpanded, ThreeColumnsEndExpanded) driven by the bound layout property are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_450.mjs)."
     }
   ]
 }

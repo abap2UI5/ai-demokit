@@ -1,0 +1,32 @@
+{
+	"sap.app": {
+		"id": "sap.m.sample.ComboBoxMaxPickerHeight",
+		"applicationVersion": {
+			"version": "1.0.0"
+		}
+	},
+	"sap.ui5": {
+		"rootView": {
+			"viewName": "sap.m.sample.ComboBoxMaxPickerHeight.view.ComboBoxMaxPickerHeight",
+			"type": "XML",
+			"async": true
+		},
+		"dependencies": {
+			"libs": {
+				"sap.m": {},
+				"sap.ui.core": {},
+				"sap.ui.layout": {}
+			}
+		},
+		"config": {
+			"sample": {
+				"stretch": true,
+				"files": [
+					"view/ComboBoxMaxPickerHeight.view.xml",
+					"controller/ComboBoxMaxPickerHeight.controller.js",
+					"manifest.json"
+				]
+			}
+		}
+	}
+}

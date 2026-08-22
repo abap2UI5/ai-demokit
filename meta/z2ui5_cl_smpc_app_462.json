@@ -20,8 +20,8 @@
       "what": "/ValueLiveUpdate and /InputValue are plain model fields in the original too; the port binds the same three fields two-way (Switch state, Input value/valueLiveUpdate, the second Text), so only the getValue Text needs the wire."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The per-keystroke liveChange round-trip and the valueLiveUpdate switch driving when the model value follows are unverified in a running system."
+      "type": "NOTE",
+      "what": "The per-keystroke liveChange round-trip and the valueLiveUpdate switch driving when the model value follows are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_462.mjs)."
     }
   ]
 }

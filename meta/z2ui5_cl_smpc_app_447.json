@@ -24,8 +24,8 @@
       "what": "onShowTextInfoAsync passes details as a function returning a Promise that resolves after 2 seconds, so the sample shows the details placeholder loading first. The backend has the text immediately and passes it as a plain string, so the loading state of the details link is not reproduced - only its resolved text."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "All four message_box_display calls (text, markup, JSON and the formerly async details) are unverified in a running system."
+      "type": "NOTE",
+      "what": "All four message_box_display calls (text, markup, JSON and the formerly async details) are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_447.mjs)."
     }
   ]
 }

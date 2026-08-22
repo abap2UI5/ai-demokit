@@ -32,8 +32,8 @@
       "what": "handleSearch filters the dialog's items binding with a Contains filter on Name. Reproduced 1:1 through follow_up_action binding_call on the dialog's items aggregation, so the model stays untouched (app 022 precedent)."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Both dialog variants (growing on/off with their initialFocus) and the binding_call search filter are unverified in a running system."
+      "type": "NOTE",
+      "what": "Both dialog variants (growing on/off with their initialFocus) and the binding_call search filter are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_454.mjs)."
     }
   ]
 }

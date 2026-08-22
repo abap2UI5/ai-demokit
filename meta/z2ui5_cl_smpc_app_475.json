@@ -16,8 +16,8 @@
       "what": "handleChange validates the entry (a typed value with no matching key is an error) and calls setValueState / setValueStateText. Validation is business logic, so the port keeps the change wire, binds selectedKey, value, valueState and valueStateText, and decides the state in ABAP - the same two branches with the same message."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The change wire and the two bound value-state properties are unverified in a running system."
+      "type": "NOTE",
+      "what": "The change wire and the two bound value-state properties are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_475.mjs)."
     }
   ]
 }

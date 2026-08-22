@@ -32,8 +32,8 @@
       "what": "The unused xmlns:ui=\"sap.ca.ui\" namespace declaration of the original view is dropped - sap.ca.ui is not part of OpenUI5 and no control in the sample uses the prefix."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The MessagePopover toggle over the bridged message, the three semantic action toasts, the nav-button toast and the clearDraftState wire are unverified in a running system."
+      "type": "NOTE",
+      "what": "The MessagePopover toggle over the bridged message, the three semantic action toasts, the nav-button toast and the clearDraftState wire are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_448.mjs)."
     }
   ]
 }
