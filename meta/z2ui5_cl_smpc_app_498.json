@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_smpc_app_498",
+  "sample": "sap.m.sample.ListActions",
+  "entity": "sap.m.List",
+  "file": "src/02/01/z2ui5_cl_smpc_app_498.clas.abap",
+  "batch": "b40",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.List.itemActionCount and the sap.m.ListItemAction control are both @since 1.137 - they are the subject of this sample, so they are kept 1:1 and the port needs a UI5 runtime >= 1.137."
+    },
+    {
+      "type": "NOTE",
+      "what": "onSliderChange calls list.setItemActionCount(value). The Slider value and the List's itemActionCount are the same two-way bound field here, so the Slider.change attribute is dropped and the count follows without a round-trip."
+    },
+    {
+      "type": "NOTE",
+      "what": "onItemActionPress toasts '<action> action is pressed for the Product <name>' where the action is its text or, for the typed actions, its type. Both values travel with the event (getText() || getType() and the item's title) and ABAP composes the same line."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The slider-driven action count and the item-action toast are unverified in a running system."
+    }
+  ]
+}

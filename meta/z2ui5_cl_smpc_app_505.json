@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_smpc_app_505",
+  "sample": "sap.m.sample.TableOutdated",
+  "entity": "sap.m.Table",
+  "file": "src/01/01/z2ui5_cl_smpc_app_505.clas.abap",
+  "batch": "b40",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onInit creates the sap.m.sample.Table COMPONENT, hides its header toolbar and inserts its Table into the empty l:VerticalLayout of this view. abap2UI5 has no component reuse, so the same table is declared inline in that layout - without the header toolbar the original hides anyway. structural-diff therefore reports the whole table as control extra (Table, 5 Columns, ColumnListItem, ObjectIdentifier, 2 ObjectNumbers and the column header Texts): the original's view carries only the empty layout."
+    },
+    {
+      "type": "NOTE",
+      "what": "onChange switches the table's showOverlay on (the 'outdated' state the sample is named after), onSearch filters by the selected supplier and takes it off, onReset clears filter, overlay and selection. The overlay is a bound property here and the filter is applied on the bound table in ABAP (thin frontend - the press is a round-trip anyway); the ComboBox gets a bound selectedKey the original does not have, because the port needs the value on the server. The original wires BOTH change and selectionChange on the ComboBox to the same handler; the port keeps change only, so structural-diff reports attr missing ComboBox.selectionChange - a selection is a change here too."
+    },
+    {
+      "type": "NOTE",
+      "what": "The weight ObjectNumber's state comes from the demo kit's shared weightState formatter, computed per row in model_init (business logic belongs in the backend)."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The three toolbar wires (change -> overlay, Filter, Reset) are unverified in a running system."
+    }
+  ]
+}

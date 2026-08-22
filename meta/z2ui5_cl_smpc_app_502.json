@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_502",
+  "sample": "sap.m.sample.ObjectHeaderTitleSel",
+  "entity": "sap.m.ObjectHeader",
+  "file": "src/01/01/z2ui5_cl_smpc_app_502.clas.abap",
+  "batch": "b40",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The ObjectHeader binds {/ProductCollection/0} and handleItemSelect moves its binding CONTEXT to the picked row. abap2UI5 has no per-control binding context to move, so the port seeds the shown record at the model root and copies the picked row into it on the round-trip - the header then shows exactly what the original shows, and the ObjectHeader.binding attribute is dropped."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleTitleSelectorPress loads Popover.fragment.xml and opens it by the selector's domRef; the port declares the same ResponsivePopover with its List in the header's dependents and opens it anchored to the pressed control (control_by_id / openBy). The close( ) the select handler performs is a control_by_id follow-up in the same round-trip."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The anchored popover, the row selection moving the header and the close follow-up are unverified in a running system."
+    }
+  ]
+}

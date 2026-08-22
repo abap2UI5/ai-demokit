@@ -130,7 +130,10 @@ const ADVISORY_BUDGET = {
   // the sample exists to COMPARE oInput.getValue() with the model property, so
   // the getValue Text has to follow every keystroke; a final-value event would
   // erase the difference the sample demonstrates
-  'live-event-roundtrip': 7,
+  // raised 2026-08-22 (batch b40, app 499 ListSelectionSearch): the sample's own
+  // SearchField wires liveChange to the list filter, so the search IS the live
+  // wire; a final-value event would change what the sample demonstrates
+  'live-event-roundtrip': 8,
   // apps 005/080/121/127/236 — a press/post wired next to a LITERAL
   // enabled="false". The rule doc grants this exact case ("a 1:1 port of a
   // sample demonstrating the disabled STATE legitimately carries the original's

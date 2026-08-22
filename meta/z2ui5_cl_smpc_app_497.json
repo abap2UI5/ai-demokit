@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_497",
+  "sample": "sap.m.sample.ListSwipe",
+  "entity": "sap.m.List",
+  "file": "src/01/01/z2ui5_cl_smpc_app_497.clas.abap",
+  "batch": "b40",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "handleSwipe rewrites the swipe button's text and type from the swipe direction and toasts the direction; the port transports ${$parameters>/swipeDirection} and writes the two bound Button properties in ABAP, with the same two texts."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleReject removes the swiped item from the aggregation and calls swipeOut( ). The port deletes the row the swipe is on - the index travels through indexOfItem(getSwipedItem()) on the List - so the bound aggregation loses the same entry; the explicit swipeOut( ) is implicit here, the re-rendered list closes the swipe."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The swipe wire (both directions) and the row removal are unverified in a running system - a swipe gesture is also outside what the e2e harness can drive."
+    }
+  ]
+}

@@ -7,6 +7,47 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-22 — batch b40 (sap.m): ten ports and the JS-callback tail (apps 496–505)
+
+The batch where the remaining sap.m samples stop being view-only. Six of the
+ten reproduce a JavaScript callback the framework cannot register, and each one
+says in its sidecar exactly which half of the behaviour survives.
+
+| app | sample | what it adds |
+|---|---|---|
+| 496 | TreeJSONLazyLoading | lazy tree loading: the item context PATH travels, ABAP parses it and appends the level below |
+| 497 | ListSwipe | the swipe direction rewrites the bound swipe button; the swiped row is removed by index |
+| 498 | ListActions | `itemActionCount` + `ListItemAction` @1.137, the Slider and the count sharing one field |
+| 499 | ListSelectionSearch | `binding_call` search filter plus a selection count over a bound row flag |
+| 500 | StandardNoMargins | two element-bound ObjectHeaders folded to root fields |
+| 501 | MultiInputValidators | three `addValidator` callbacks re-expressed as backend `change` handling, including the confirm round-trip |
+| 502 | ObjectHeaderTitleSel | the popover list moving the header's binding CONTEXT — folded to a copied root record |
+| 503 | InputKeyValueTabularSuggestions | tabular suggestions; the row validator's key taken straight off the selected row |
+| 504 | MultiInputTokenUpdate | the validator switch with `START_TIMER` standing in for its three `setTimeout`s |
+| 505 | TableOutdated | a reused COMPONENT (`sap.m.sample.Table`) inlined, with `showOverlay` bound |
+
+Two findings, both already in the corpus and both re-learned the hard way:
+
+- **A bound aggregation needs its aggregation tag when the control's default
+  aggregation is something else.** `sap.m.MultiInput`'s default aggregation is
+  `suggestionItems`, so a `Token` template directly under it is rejected —
+  apps 501 and 504 rendered `Missing template or factory function for
+  aggregation tokens` until the template moved inside `)->ele( \`tokens\` )`.
+  App 085 got away without it because its control is a `Tokenizer`, whose
+  default aggregation IS `tokens`. Same lesson as b37's IconTabBar, different
+  control.
+- **`IF client->get_event( ) <> \`X\`. RETURN.` reads as a dead wire.** The
+  linter's `event-without-handler` check looks for the event name in an
+  affirmative dispatcher (`= \`X\`` or `WHEN \`X\``); the negated guard app 496
+  first used matched nothing, so a fully handled event was reported as raised
+  and never handled. Write the dispatcher the way the recipe prescribes.
+
+`START_TIMER` earned its second use: app 504's asynchronous validator adds its
+token after 3 seconds and its second one after 10, and the framework's timer
+reproduces both without a client-side callback. What stays lost there is the
+PASTE path the sample is written around — one `tokenUpdate` for three tokens at
+once, where the port sees one `change` per value.
+
 ## 2026-08-22 — batch b39 (sap.m): ten ports, three of them post-1.71 picker properties (apps 486–495)
 
 | app | sample | what it adds |
