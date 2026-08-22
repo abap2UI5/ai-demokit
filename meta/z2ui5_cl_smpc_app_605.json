@@ -1,0 +1,28 @@
+{
+  "class": "z2ui5_cl_smpc_app_605",
+  "sample": "sap.m.sample.HeaderContainerLazyLoading",
+  "entity": "sap.m.HeaderContainer",
+  "file": "src/01/01/z2ui5_cl_smpc_app_605.clas.abap",
+  "batch": "b50",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "the tile press is a round-trip-free MESSAGE_BOX alert; only the scroll comes back to the backend"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the ObjectHeader carries binding=\"{/ProductCollection/}\", so every one of its bindings is RELATIVE to that single record. The port folds it to root fields (app 229 idiom): DESCRIPTION, NAME, PRICE, CURRENCYCODE and SUPPLIERNAME, seeded verbatim from the sample's own data.json. The binding attribute itself has no counterpart once the paths are absolute."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "onScroll is the lazy loading this sample is about: on every scroll it pushes THREE more tiles onto the model, each with a RANDOM value ((Math.random() * 10 + '').substring(0, 3)), a colour picked from Math.round(Math.random() * 10) % 3 and a growth direction from the same number % 2. A backend cannot draw the browser's random numbers, and reproducing them with ABAP randomness would make the port unrepeatable for the gates, so the three tiles that come next are taken from the mock's own eleven, cycling. The behaviour the sample demonstrates is identical - scroll to the end and three more tiles appear, indefinitely - only the numbers repeat instead of being new each time."
+    },
+    {
+      "type": "NOTE",
+      "what": "press does MessageBox.alert('Link was clicked!'), a constant-text alert, so it is wired round-trip-free as follow_up_action( control_global, MESSAGE_BOX alert ) - the tile answers in the browser, as upstream."
+    }
+  ]
+}

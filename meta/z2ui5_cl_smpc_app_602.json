@@ -1,0 +1,28 @@
+{
+  "class": "z2ui5_cl_smpc_app_602",
+  "sample": "sap.m.sample.TreeExpandTo",
+  "entity": "sap.m.Tree",
+  "file": "src/01/01/z2ui5_cl_smpc_app_602.clas.abap",
+  "batch": "b50",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "expandToLevel and collapseAll are round-trip-free control_by_id actions; the port raises no backend event at all"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "handleSelectChange does this.byId('Tree').expandToLevel(oEvent.getParameter('selectedItem').getKey()) and onCollapseAllPress does oTree.collapseAll(). Both methods ARE whitelisted in CONTROL_METHODS, so both are round-trip-free follow_up_action( control_by_id, ... ) wires (app 248/365 idiom): the Select's change carries ${$parameters>/selectedItem}.getKey() straight into expandToLevel, and the button calls collapseAll with no argument at all."
+    },
+    {
+      "type": "NOTE",
+      "what": "onInit does the same expandToLevel(1) a second time, before any interaction, so the tree comes up with its first level open - which is what the toolbar's own 'Initially expand to Level1' text and the Select's selectedKey='1' announce. It is issued once per render as a frontend action."
+    },
+    {
+      "type": "NOTE",
+      "what": "Tree.json is the 44-node variant this sample and TreeExpandMulti ship (six Node1-n branches, five levels deep). It is seeded verbatim into five nested ABAP structure levels - the depth of the data is the depth of the type (app 437 precedent)."
+    }
+  ]
+}

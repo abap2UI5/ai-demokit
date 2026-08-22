@@ -1,0 +1,36 @@
+{
+  "class": "z2ui5_cl_smpc_app_608",
+  "sample": "sap.m.sample.Select2Columns",
+  "entity": "sap.m.Select",
+  "file": "src/02/01/z2ui5_cl_smpc_app_608.clas.abap",
+  "batch": "b50",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false,
+    "note": "no frontend action; the one round trip only recomputes the ratio strings"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "two post-1.71 properties are kept for the 1:1 port, and they are what the sample is FOR: sap.m.Select.columnRatio (@since 1.86) and twoColumnSeparator (@since 1.140). The app needs a UI5 release >= 1.140 for both halves of the sample to work; wrapItemsText and showSecondaryValues are older."
+    },
+    {
+      "type": "NOTE",
+      "what": "four of the controller's five handlers are setters on bindable properties, so the port binds the control that WRITES and the Select that READS to the same field and drops the handler: the Wrap-items Switch shares wrapItemsText with the first Select, the separator Select's selectedKey IS select2's twoColumnSeparator, and the Editable Switch's state IS select2's editable. None of the three needs a round trip."
+    },
+    {
+      "type": "NOTE",
+      "what": "setCorrectData is the one that cannot be folded: it composes three strings from BOTH slider values - columnRatio '<a>:<b>', the same text for text1 and the rounded percentages for text2 - and an expression binding that computes Math.round over two fields twice would run past the 255-character abapGit line limit. The two Sliders are therefore bound two-way and their change (which is what the sample wires, not liveChange) recomputes the three fields in ABAP, rounding the first percentage and taking the second as 100 minus it, exactly as the original does."
+    },
+    {
+      "type": "NOTE",
+      "what": "onInit builds the two ten-item lists in JavaScript with 'First column text '.repeat(5) + ' ' + i. The port seeds the same twenty rows literally - the repeated text is what makes the column ratio visible, so it is data, not code."
+    },
+    {
+      "type": "NOTE",
+      "what": "the separator Select carries no selectedKey in the sample, so UI5 shows its first item (Dash) and getSelectedKey() returns 'Dash' before any change. The port seeds that value, which is also what keeps an empty string out of select2's twoColumnSeparator enum."
+    }
+  ]
+}

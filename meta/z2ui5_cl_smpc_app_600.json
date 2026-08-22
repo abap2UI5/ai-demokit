@@ -1,0 +1,36 @@
+{
+  "class": "z2ui5_cl_smpc_app_600",
+  "sample": "sap.m.sample.TreeDnD",
+  "entity": "sap.m.Tree",
+  "file": "src/01/01/z2ui5_cl_smpc_app_600.clas.abap",
+  "batch": "b50",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true,
+    "note": "the dragged and the dropped node's titles travel with the drop"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onInit does oTree.setMode('MultiSelect') imperatively. mode IS a bindable property, so the port writes it in the view instead of calling the setter through a frontend action - the bindable-property-beats-frontend-action rule (app 401/437 precedent). The mode attribute is therefore present where the original view does not write it, and the tree comes up multi-select as it does upstream."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "onDrop rewrites the JSON MODEL in place: it reads the dragged contexts out of the drag session's complex data, pushes each one's data into the drop target's `categories` array and sets the source path to undefined, which is what preserves the expand/collapse state. A thin frontend has neither the drag session nor a context, so the drop transports the two node TITLES instead (${$parameters>/draggedControl}.getTitle() and the same for droppedControl, app 569 idiom) and the backend reparents that node. To make a reparenting expressible at all the model is kept twice: a FLAT table (text, ref, parent) is the source of truth and the five-level nested table the Tree binds is rebuilt from it after every drop. Lost with the drag session: dragging a MULTI-selection moves only the node under the cursor here, since the selection never reaches the backend. The sample's own guard against dropping a node into its own child is reproduced (is_descendant walks the parent chain)."
+    },
+    {
+      "type": "DROPPED_171",
+      "what": "onDragStart's oEvent.preventDefault() vetoes a drag that starts on a row OUTSIDE the current selection. The veto itself is expressible (s_ctrl-check_prevent_default, app 241 idiom) but its condition is not: the flag is baked per wire at RENDER time, and whether the dragged row is selected is known only at the moment of the drag. The wire is dropped rather than baked wrong, so every row can be dragged here. Its second half - stashing the dragged contexts in the drag session - goes with it."
+    },
+    {
+      "type": "NOTE",
+      "what": "the sample's onDrop pushes into a `categories` array while Tree.json nests its children under `nodes` and the view binds path '/' - so upstream a dropped node lands in an array the tree does not read and simply disappears from the visible hierarchy. The port reparents under `nodes`, i.e. it does what the comment in the sample says it is doing ('the children of a node are inside an array with the name categories') rather than what the file actually contains."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: that dragging a node onto another reparents it and the tree redraws with the node under its new parent."
+    }
+  ]
+}

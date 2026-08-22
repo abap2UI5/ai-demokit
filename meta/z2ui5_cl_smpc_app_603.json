@@ -1,0 +1,28 @@
+{
+  "class": "z2ui5_cl_smpc_app_603",
+  "sample": "sap.m.sample.TreeOData",
+  "entity": "sap.m.Tree",
+  "file": "src/01/01/z2ui5_cl_smpc_app_603.clas.abap",
+  "batch": "b50",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false,
+    "note": "the sample has no controller - the port raises no event"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the sample's items come from an OData v2 tree binding over a mock service: the Nodes entity is a FLAT list carrying HierarchyLevel / NodeID / ParentNodeID / DrillState, and the service METADATA carries the matching sap:hierarchy-* annotations, which the ODataTreeBinding reads on its own to build the tree (the binding parameter countMode: 'Inline' goes with it). abap2UI5 serves one JSON model and has no ODataTreeBinding, so the same sixteen nodes are re-shaped into a nested table whose `children` arrays ARE the hierarchy - which is exactly how app 366 ports the same mock for sap.ui.table.TreeTable, and this port reuses its shape and its data verbatim."
+    },
+    {
+      "type": "NOTE",
+      "what": "the flat fields the annotations use are kept on every node (nodeid, hierarchylevel, parentnodeid, drillstate) even though the view binds only Description, because they are the mock's own data and they are what makes the improvisation checkable against the original: the nesting the port builds is the nesting those ids and levels describe. The root nodes' ParentNodeID is null in the JSON and becomes the empty string in the ABAP row."
+    },
+    {
+      "type": "NOTE",
+      "what": "the mock server (localService/mockserver.js over localService/metadata.xml) and the Component's ODataModel on '/here/goes/your/odata/service/url/' have no counterpart in an abap2UI5 app, whose backend IS the service. The MessageStrip that warns about the data volume sap.m.Tree can carry is ported 1:1, closable as upstream."
+    }
+  ]
+}

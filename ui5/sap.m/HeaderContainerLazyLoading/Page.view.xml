@@ -1,0 +1,38 @@
+<mvc:View
+	height="100%"
+	controllerName="sap.m.sample.HeaderContainerLazyLoading.Page"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:l="sap.ui.layout"
+	xmlns="sap.m">
+	<ObjectHeader
+		id="oh1"
+		responsive="true"
+		binding="{/ProductCollection/}"
+		intro="{Description}"
+		title="{Name}"
+		number="{Price}"
+		numberUnit="{CurrencyCode}"
+		numberState="Success"
+		backgroundDesign="Translucent">
+		<attributes>
+			<ObjectAttribute
+				title="Manufacturer"
+				text="{SupplierName}"/>
+		</attributes>
+		<statuses>
+			<ObjectStatus
+				title="Approval"
+				text="Pending"
+				state="Warning"/>
+		</statuses>
+		<markers>
+			<ObjectMarker type="Flagged"/>
+			<ObjectMarker type="Favorite"/>
+		</markers>
+		<headerContainer>
+			<HeaderContainer scrollStep="200" id="headerContainer" scroll=".onScroll" content="{/ContentData/}">
+				<NumericContent scale="M" value="{value}" valueColor="{color}" indicator="{growth}" press=".press" />
+			</HeaderContainer>
+		</headerContainer>
+	</ObjectHeader>
+</mvc:View>

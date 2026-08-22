@@ -80,6 +80,15 @@
     // fails the port if the finding stops firing; this file has no access to
     // it, so leaving the rule on here would re-report a judged finding as a
     // second, dumber opinion - exactly what the thirteen above are off for.
-    "invalid-aggregation-child": false
+    "invalid-aggregation-child": false,
+
+    // added 2026-08-22 (batch b50, app 611 CalendarAriaHasPopup): the fifteenth.
+    // sap.ui.unified.DateTypeRange.ariaHasPopup is @since 1.152.0 and this
+    // repo's control metadata is pinned at 1.151.0, so the member does not
+    // exist in the snapshot and the rule reads it as a typo. The port declares
+    // a `property_gate` skip for exactly that type (and a render skip for the
+    // 1.151 runtime that rejects the attribute); both live in meta/ and are
+    // re-verified per run by view-gates, which this file cannot see.
+    "unknown-property": false
   }
 }

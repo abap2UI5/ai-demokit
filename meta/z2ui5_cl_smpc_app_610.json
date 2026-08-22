@@ -1,0 +1,40 @@
+{
+  "class": "z2ui5_cl_smpc_app_610",
+  "sample": "sap.m.sample.SinglePlanningCalendarDND",
+  "entity": "sap.m.SinglePlanningCalendar",
+  "file": "src/02/01/z2ui5_cl_smpc_app_610.clas.abap",
+  "batch": "b50",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true,
+    "note": "the dragged interval's local date parts, the appointment's binding path and the copy flag travel with each of the three wires"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.SinglePlanningCalendar's drag-and-drop members are all newer than the 1.71 floor and are kept for the 1:1 port, since they are the sample: enableAppointmentsDragAndDrop and the appointmentDrop event (@since 1.64 on the control, but the sample's whole subject), enableAppointmentsResize with appointmentResize and enableAppointmentsCreate with appointmentCreate. The port is filed in src/02 for the same reason apps 549-555 are."
+    },
+    {
+      "type": "NOTE",
+      "what": "the calendar's startDate and every CalendarAppointment date are typed \"object\" and demand a real JS Date. The model keeps ISO strings and Formatter.DateCreateObject converts them at the point of use, which is why the two binding values read differently from the sample's plain {startDate} / {endDate} - same field, one formatter (app 549/553 idiom)."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleAppointmentDrop, handleAppointmentResize and handleAppointmentCreateDnD all mutate the model: a copy drag pushes a new row carrying the dragged appointment's title, icon, text and type, a move or a resize rewrites the two dates on the row that was dragged, and a create pushes a bare 'New Appointment'. All three port 1:1 over the bound ABAP table. The wires carry the interval's LOCAL date parts (getFullYear / getMonth + 1 / getDate / getHours / getMinutes) rather than a UTC toISOString, which would shift the day west of Greenwich, plus the dragged appointment's binding path and the copy flag - app 549 carries the identical three wires."
+    },
+    {
+      "type": "NOTE",
+      "what": "the three Switches write a settings> model in the sample and are bound BOTH to that model and to the calendar's three enable* properties. abap2UI5 serves one default model, so the settings> prefix folds away (same-data prefix-drop) and each Switch shares one field with the property it enables - which is what the sample's own two-way binding already does, without a handler. All three start on, as the model seeds them."
+    },
+    {
+      "type": "NOTE",
+      "what": "the 36 appointments and the 2018-07-09 start date are seeded verbatim from onInit's JSON. The mock builds its dates with UI5Date.getInstance('2018', '6', ...) - month 6 is July - and two of them carry an out-of-range minute (hour 7 minute 9, hour 9 minute 9) that JavaScript normalizes; the port stores the same values as ISO strings."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: that dragging an appointment moves it and toasts, that Ctrl-dragging copies it, that resizing rewrites its end and that dragging on empty space creates one."
+    }
+  ]
+}

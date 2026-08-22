@@ -7,6 +7,68 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-22 — batch b50 (sap.m + sap.ui.unified): nine libraries at 100 % (apps 600–611)
+
+Twelve samples with almost nothing in common except that they were what stood
+between the corpus and a clean sweep: the four remaining `sap.m.Tree` samples,
+the last `sap.ui.unified` one, and seven scattered `sap.m` singles. It leaves
+**sap.m alone** below 100 % — every other library is complete.
+
+| app | sample | what it adds |
+|---|---|---|
+| 600 | TreeDnD | a drop that REPARENTS a node; the model is kept flat and the nested table rebuilt |
+| 601 | TreeExpandMulti | `expand` / `collapse` over the selected indices, a shared sticky table, an info toolbar |
+| 602 | TreeExpandTo | `expandToLevel` from a Select, `collapseAll` from a button |
+| 603 | TreeOData | an ODataTreeBinding's hierarchy annotations folded into a nested table |
+| 604 | CarouselWithDisplayOptions | eleven bound Carousel / CarouselLayout options and no frontend action at all (POST_171, `src/02`) |
+| 605 | HeaderContainerLazyLoading | `scroll` appends three more tiles, indefinitely |
+| 606 | GenericTileLineMode | the same tiles in both modes, two SlideTiles and a `LinkTileContent` (POST_171, `src/02`) |
+| 607 | OverflowToolbarFooter | four content types in a header and a footer toolbar, both shrunk by one slider (POST_171, `src/02`) |
+| 608 | Select2Columns | `columnRatio` and `twoColumnSeparator`, both written by bound controls (POST_171, `src/02`) |
+| 609 | SinglePlanningCalendarCreateApp | app 549's calendar with the toolbar off — the create-and-edit half (POST_171, `src/02`) |
+| 610 | SinglePlanningCalendarDND | drag, resize and drag-to-create over the bound appointment table (POST_171, `src/02`) |
+| 611 | CalendarAriaHasPopup | `DateTypeRange.ariaHasPopup` — a property NEWER than the corpus's own metadata pin |
+
+**The pin caught up with a sample.** App 611's whole subject,
+`sap.ui.unified.DateTypeRange.ariaHasPopup`, is `@since 1.152.0`, and the
+linter's control metadata is pinned at **1.151.0** — so the member does not
+exist in the snapshot at all and the property gate reads it as a typo, which no
+`POST_171` deviation can excuse (only version findings are excusable that way).
+The render harness runs the same 1.151 runtime and rejects the attribute
+outright. The port therefore carries three declarations for one attribute: the
+`POST_171` for the fact, batch b49's new `property_gate` skip for the
+`unknown-property` finding, and a `render_smoke` skip for the runtime. All three
+are re-verified per run, so the day the pin reaches 1.152 every one of them
+fails as stale and gets removed. That is the design working, not a workaround.
+
+Three findings:
+
+- **A whitelist is not the whole boundary.** `expand` and `collapse` are NOT in
+  the framework's `CONTROL_METHODS`, and app 601 needs both. They work anyway:
+  a resolved argument reaches an unlisted PUBLIC method through `castArgAuto`
+  untouched, which app 248 established and e2e-verified. Worth writing down,
+  because reading the whitelist alone says the sample cannot be ported.
+- **A settings model is usually two names for one field.** Apps 601, 606 and
+  610 each keep a `settings>` model whose only readers are the control that
+  writes it and the control it configures — a Switch and `enableAppointmentsDragAndDrop`,
+  a ComboBox and every `scope` binding. Folding the prefix away leaves the two
+  sharing one bound field and the handler disappears: app 604 ends up with
+  ELEVEN bound options and not a single frontend action.
+- **Two mock arrays of the same shape confuse data-fidelity.** `tiles.json`
+  carries `slideTile1` and `slideTile2` with identical fields and identical
+  lengths, so the gate compares both ABAP blocks against the first and reports
+  every row of the second as changed. The data is verbatim; the sidecar says so
+  and names the fields, which is what the gate's field-level declaration is for.
+
+App 600 is the one real improvisation. Its `onDrop` reparents by pushing the
+dragged context's data into the target's `categories` array and setting the
+source path to `undefined` — and `Tree.json` nests its children under `nodes`,
+so upstream a dropped node lands in an array the tree never reads and vanishes.
+The port keeps the model FLAT (text, ref, parent) and rebuilds the five-level
+nested table after every drop, which is the only way a reparenting is
+expressible at all when the type of a node depends on its depth. It reparents
+under `nodes`, i.e. it does what the sample's own comment says it is doing.
+
 ## 2026-08-22 — batch b49 (sap.uxap): the ObjectPage tail, and a fourth escape hatch (apps 586–599)
 
 Every unported `sap.uxap` sample in one batch, which finishes the library at
