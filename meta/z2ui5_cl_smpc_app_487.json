@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_smpc_app_487",
   "sample": "sap.m.sample.PanelSticky",
   "entity": "sap.m.Panel",
-  "file": "src/01/01/z2ui5_cl_smpc_app_487.clas.abap",
+  "file": "src/02/01/z2ui5_cl_smpc_app_487.clas.abap",
   "batch": "b39",
   "audit": {
     "frontend_action": false,
@@ -10,5 +10,10 @@
   },
   "status": "generated",
   "checked": null,
-  "deviations": []
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.Panel.stickyHeader is @since 1.117 and is the subject of the sample (the first Panel has it, the second does not), so it is kept 1:1 and the port needs a UI5 runtime >= 1.117."
+    }
+  ]
 }

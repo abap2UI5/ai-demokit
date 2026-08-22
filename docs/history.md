@@ -7,6 +7,34 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-22 — batch b39 (sap.m): ten ports, three of them post-1.71 picker properties (apps 486–495)
+
+| app | sample | what it adds |
+|---|---|---|
+| 486 | ObjectHeaderTitleActive | the fragment popover anchored to the active title via `openBy` + `$event.oSource.sId` |
+| 487 | PanelSticky | `stickyHeader` @1.117 over two 20-paragraph panels (POST_171, `src/02`) |
+| 488 | TableNavigated | `ColumnListItem.navigated` @1.72, decided in ABAP per press |
+| 489 | SegmentedButtonDialog | a `SegmentedButton` inside a `popup_display` dialog |
+| 490 | MultiComboBox | the selection pair: a client-composed `selectionChange` toast and a `selectionFinish` list built in ABAP over bound `selectedKeys` |
+| 491 | MultiComboBoxClearIcon | the same with `showClearIcon` @1.96 |
+| 492 | ListGrouping | the grouping sorter kept, `groupHeaderFactory` declared as the control-factory boundary |
+| 493 | ComboBoxLazyLoading | the suspended-OData lazy load expressed as a `loadItems` round-trip that fills the empty table |
+| 494 | ComboBoxMaxPickerHeight | `maxPickerHeight` @1.150 in three variants over 100 items |
+| 495 | MultiComboBoxMaxPickerHeight | the same on MultiComboBox |
+
+**The `selectionFinish` shape is worth remembering.** The original lists the
+TEXTS of every selected item, and a UI5 expression argument cannot map an array
+of controls — the grammar has no loop, the same wall app 432's `tokenDelete`
+hit. The way through is not a bigger expression but a bound PROPERTY: 
+`selectedKeys` is two-way bound, so the round-trip already carries the whole
+selection and ABAP composes the line. Reach for a bindable property before
+trying to transport a collection through an event argument.
+
+`groupHeaderFactory` joins `setFilterFunction` as a documented control-factory
+boundary: the port keeps the sorter (so the grouping is real) and lets UI5
+render its default group header, with the deviation saying which control the
+sample builds that the port does not.
+
 ## 2026-08-22 — batch b38 (sap.m): eleven ports, and the JS-callback boundary twice more (apps 475–485)
 
 | app | sample | what it adds |

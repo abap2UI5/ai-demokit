@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_smpc_app_494",
   "sample": "sap.m.sample.ComboBoxMaxPickerHeight",
   "entity": "sap.m.ComboBox",
-  "file": "src/01/01/z2ui5_cl_smpc_app_494.clas.abap",
+  "file": "src/02/01/z2ui5_cl_smpc_app_494.clas.abap",
   "batch": "b39",
   "audit": {
     "frontend_action": false,
@@ -10,5 +10,10 @@
   },
   "status": "generated",
   "checked": null,
-  "deviations": []
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.ComboBox inherits maxPickerHeight from sap.m.ComboBoxBase, where it is @since 1.150 - it is the subject of this sample, so all three variants keep it 1:1 and the port needs a UI5 runtime >= 1.150."
+    }
+  ]
 }

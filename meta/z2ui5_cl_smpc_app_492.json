@@ -6,9 +6,22 @@
   "batch": "b39",
   "audit": {
     "frontend_action": false,
-    "event_t_arg": false
+    "event_t_arg": true
   },
   "status": "generated",
   "checked": null,
-  "deviations": []
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "The items binding names a groupHeaderFactory ('.getGroupHeader') that returns a sap.m.GroupHeaderListItem built in JavaScript. A control-returning factory is a documented boundary of abap2UI5 (CAPABILITIES), so the port keeps the grouping sorter 1:1 and lets UI5 render its DEFAULT group header - same grouping and the same group key text, but the header control the sample constructs is not the port's."
+    },
+    {
+      "type": "NOTE",
+      "what": "onToggleContextMenu creates a sap.m.Menu with two MenuItems in JavaScript on press and destroys it again. The port declares the same Menu in the List's contextMenu aggregation and rebuilds the view on the toggle, so the subtree is emitted only while the button is pressed (app 436 precedent); structural-diff therefore reports the Menu and both MenuItems as control extra."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The context-menu toggle and the grouped list are unverified in a running system."
+    }
+  ]
 }

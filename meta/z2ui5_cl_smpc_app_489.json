@@ -5,10 +5,19 @@
   "file": "src/01/01/z2ui5_cl_smpc_app_489.clas.abap",
   "batch": "b39",
   "audit": {
-    "frontend_action": false,
+    "frontend_action": true,
     "event_t_arg": false
   },
   "status": "generated",
   "checked": null,
-  "deviations": []
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The controller loads Dialog.fragment.xml lazily and opens it; onCloseDialog is a plain dialog.close( ). The port builds the same fragment in its own chain, shows it with popup_display and closes it with the client-side follow_up_action popup_close."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The dialog with its SegmentedButton and the popup_close on the Close button are unverified in a running system."
+    }
+  ]
 }
