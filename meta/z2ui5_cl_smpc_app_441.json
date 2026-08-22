@@ -24,8 +24,8 @@
       "what": "The original leaves /separatorStyle unset until the first change, so the Breadcrumbs starts on the control default. An ABAP string field cannot be absent - it would serialize as \"\" and an enum-typed property rejects that - so the port seeds the control's own default value Slash (sap.m.Breadcrumbs.separatorStyle defaultValue), which renders identically and pre-selects the matching Select entry."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The client-composed link toasts and the two-way bound separatorStyle (Select -> Breadcrumbs) are unverified in a running system."
+      "type": "NOTE",
+      "what": "The client-composed link toasts and the two-way bound separatorStyle (Select -> Breadcrumbs) are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_441.mjs)."
     }
   ]
 }

@@ -24,8 +24,8 @@
       "what": "The controller loads Menu.fragment.xml lazily and toggles it (isOpen -> close, otherwise openBy(button)). The port declares the same Menu in the Button's dependents aggregation and toggles it roundtrip-free through follow_up_action control_by_id / toggleBy anchored to $event.oSource.sId, so the separate core:FragmentDefinition is dropped (app 419 precedent)."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The anchored toggleBy of the menu and the endContent buttons inside its items are unverified in a running system."
+      "type": "NOTE",
+      "what": "The anchored toggleBy of the menu and the endContent buttons inside its items are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_440.mjs)."
     }
   ]
 }

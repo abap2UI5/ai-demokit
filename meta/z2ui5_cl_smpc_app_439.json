@@ -20,8 +20,8 @@
       "what": "onCssClassChange calls containerAuto.toggleStyleClass('sapMShowEmpty-CTX'). The port makes the same call on the same control id through follow_up_action control_by_id, so the Switch needs no round-trip (toggleStyleClass is a public control method the frontend action dispatches)."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The Switch -> toggleStyleClass wire and with it the Auto indicator appearing inside the sapMShowEmpty-CTX Panel are unverified in a running system."
+      "type": "NOTE",
+      "what": "The Switch -> toggleStyleClass wire and with it the Auto indicator appearing inside the sapMShowEmpty-CTX Panel are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_439.mjs)."
     }
   ]
 }

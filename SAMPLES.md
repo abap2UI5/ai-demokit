@@ -3,7 +3,7 @@
 
 # The sample catalogue
 
-Every port in this repository — 487 of them — with what it shows and a
+Every port in this repository — 498 of them — with what it shows and a
 link to its source. This is the [overview app](src/z2ui5_cl_smpc_app_000.clas.abap)
 as a page you can read here, before installing anything.
 
@@ -44,7 +44,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 
 ### sap.m
 
-260 port(s).
+270 port(s).
 
 | Sample | Class |
 |---|---|
@@ -223,6 +223,16 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.m.ComboBox** — Combo box - Custom filtering "Starts with"<br>You can override the default filtering "Starts with per term" with your own filter function using the setFilterFunction method. The "Starts with" approach searches only in the beginning of the entries in both columns.<br><sub>combobox combo box sap.m comboboxfilteringstartswith vbox label</sub><br><sub>○ generated · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_471`](src/01/01/z2ui5_cl_smpc_app_471.clas.abap) |
 | **sap.m.Input** — Input - Suggestions - Dynamic<br>With the Input control's suggest event, you can handle the suggestionItems yourself dynamically.<br><sub>input sap.m inputsuggestionsdynamic label</sub><br><sub>○ generated · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_473`](src/01/01/z2ui5_cl_smpc_app_473.clas.abap) |
 | **sap.m.FlexBox** — Flex Box - Navigation Examples<br>Here is an example of how you can use navigation items as unordered list items in a Flex Box.<br><sub>flexbox flex box sap.m flexboxnav vbox panel flexitemdata</sub><br><sub>○ generated · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_474`](src/01/01/z2ui5_cl_smpc_app_474.clas.abap) |
+| **sap.m.ComboBox** — ComboBox - Validation<br>ComboBoxValidation | [`Z2UI5_CL_SMPC_APP_475`](src/01/01/z2ui5_cl_smpc_app_475.clas.abap) |
+| **sap.m.ObjectHeader**<br>ObjectHeaderResponsiveVI | [`Z2UI5_CL_SMPC_APP_476`](src/01/01/z2ui5_cl_smpc_app_476.clas.abap) |
+| **sap.m.HeaderContainer** — Header Container with Object Header<br>HeaderContainerOH | [`Z2UI5_CL_SMPC_APP_477`](src/01/01/z2ui5_cl_smpc_app_477.clas.abap) |
+| **sap.m.MultiInput** — MultiInput Custom Filtering<br>MultiInputCustomFiltering | [`Z2UI5_CL_SMPC_APP_478`](src/01/01/z2ui5_cl_smpc_app_478.clas.abap) |
+| **sap.m.ComboBox** — Combo box - Search in both columns<br>ComboBoxSearchBoth | [`Z2UI5_CL_SMPC_APP_479`](src/01/01/z2ui5_cl_smpc_app_479.clas.abap) |
+| **sap.m.List** — List - Unread Indication<br>ListUnread | [`Z2UI5_CL_SMPC_APP_480`](src/01/01/z2ui5_cl_smpc_app_480.clas.abap) |
+| **sap.m.MultiComboBox** — MultiComboBox - Custom Filtering and Suggestions<br>MultiComboBoxCustomFiltering | [`Z2UI5_CL_SMPC_APP_481`](src/01/01/z2ui5_cl_smpc_app_481.clas.abap) |
+| **sap.m.StandardListItem** — Standard List Item - Navigated<br>StandardListItemNavigated | [`Z2UI5_CL_SMPC_APP_482`](src/01/01/z2ui5_cl_smpc_app_482.clas.abap) |
+| **sap.m.StandardListItem** — Standard List Item - Adapt Title<br>StandardListItemTitle | [`Z2UI5_CL_SMPC_APP_483`](src/01/01/z2ui5_cl_smpc_app_483.clas.abap) |
+| **sap.m.TextArea** — TextArea with MaxLength = true<br>TextAreaMaxLength | [`Z2UI5_CL_SMPC_APP_485`](src/01/01/z2ui5_cl_smpc_app_485.clas.abap) |
 | **sap.m.Carousel** — Carousel with Controls<br>With the Carousel a user can browse through multi-page content by swiping left or right.<br><sub>carousel sap.m user browse through title image text scrollcontainer list standardlistitem</sub><br><sub>✓ checked · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_006`](src/02/01/z2ui5_cl_smpc_app_006.clas.abap) |
 | **sap.m.DatePicker** — Date Picker - Open by Another Control<br>This example shows Date Picker which is opened by another control.<br><sub>datepicker date picker sap.m open another title vbox label button link</sub><br><sub>✓ checked · 5 deviations</sub> | [`Z2UI5_CL_SMPC_APP_016`](src/02/01/z2ui5_cl_smpc_app_016.clas.abap) |
 | **sap.m.DateRangeSelection**<br>The Date Range Selection is an extension of the Date Picker Control and enables the user to select range of dates.<br><sub>daterangeselection date range selection sap.m single-field input vbox label text</sub><br><sub>✓ checked · 8 deviations</sub> | [`Z2UI5_CL_SMPC_APP_017`](src/02/01/z2ui5_cl_smpc_app_017.clas.abap) |
@@ -499,7 +509,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 
 ### sap.ui.core
 
-19 port(s).
+20 port(s).
 
 | Sample | Class |
 |---|---|
@@ -513,6 +523,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.ui.core.StandardMargins** — Two-Sided Margins<br>Clear the space to the left and right, top and bottom of your control. Choose a size ('Tiny', 'Small', 'Medium' or 'Large', which stands for 8px (0.<br><sub>standardmargins standard margins sap.ui.core standardmarginstwosided text panel</sub><br><sub>○ generated</sub> | [`Z2UI5_CL_SMPC_APP_464`](src/01/01/z2ui5_cl_smpc_app_464.clas.abap) |
 | **sap.ui.core.StandardMargins** — Collapsing Margins<br>See how adjacent margins collapse to a single margin.<br><sub>standardmargins standard margins sap.ui.core standardmarginscollapse panel text</sub><br><sub>○ generated</sub> | [`Z2UI5_CL_SMPC_APP_469`](src/01/01/z2ui5_cl_smpc_app_469.clas.abap) |
 | **sap.ui.core.StandardMargins** — Responsive Margins<br>Clear the space around your control, where the margin depends on the device your are using.<br><sub>standardmargins standard margins sap.ui.core standardmarginsresponsive panel text</sub><br><sub>○ generated</sub> | [`Z2UI5_CL_SMPC_APP_472`](src/01/01/z2ui5_cl_smpc_app_472.clas.abap) |
+| **sap.ui.core.StandardMargins** — Enforce Width 'auto'<br>StandardMarginsEnforceWidthAuto | [`Z2UI5_CL_SMPC_APP_484`](src/01/01/z2ui5_cl_smpc_app_484.clas.abap) |
 | **sap.ui.core.HTML**<br>With the HTML controls you can easily embed any kind of HTML content into your UI5 mobile application.<br><sub>html sap.ui.core raw injection</sub><br><sub>◐ reviewed · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_120`](src/01/02/z2ui5_cl_smpc_app_120.clas.abap) |
 | **sap.ui.core.Icon**<br>Built with an embedded font, icons scale well, and can be altered with CSS. They can also fire a press event. See the Icon Explorer for more icons.<br><sub>icon sap.ui.core font gallery hbox flexitemdata</sub><br><sub>◐ reviewed · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_122`](src/01/02/z2ui5_cl_smpc_app_122.clas.abap) |
 | **sap.ui.core.InvisibleText**<br>Many controls provide the associations ariaLabelledBy and ariaDescribedBy for accessibility purposes. The InvisibleText control can be used by application to provide hidden texts on the UI which can be referenced via these associations.<br><sub>invisibletext invisible text sap.ui.core aria descriptions toolbar button toolbarspacer title hbox flexitemdata</sub><br><sub>◐ reviewed · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_127`](src/01/02/z2ui5_cl_smpc_app_127.clas.abap) |

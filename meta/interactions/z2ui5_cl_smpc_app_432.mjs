@@ -1,16 +1,14 @@
 // the bound Token template plus the tokenDelete wire: the per-token X removes
 // exactly that row from the backend table
-import { waitForUi5, ui5All } from '../../scripts/lib-e2e.mjs';
-
-const tokens = () => ui5All().filter((c) => c.getMetadata().getName() === 'sap.m.Token').length;
+import { dispatchMouse, waitForUi5 } from '../../scripts/lib-e2e.mjs';
 
 export default async (page, expect) => {
-  await waitForUi5(page, () => ui5All().filter((c) => c.getMetadata().getName() === 'sap.m.Token').length === 19,
+  // count the RENDERED tokens - the control registry also holds the bound template
+  await waitForUi5(page, () => document.querySelectorAll('.sapMToken').length === 19,
     'the 19 bound Tokens never rendered');
-  // the X of the first token fires tokenDelete with its key
-  const del = page.locator('.sapMTokenIcon').first();
-  await expect(del, 'the delete icon of the first token').toBeVisibleEnabled();
-  await del.click();
-  await waitForUi5(page, () => ui5All().filter((c) => c.getMetadata().getName() === 'sap.m.Token').length === 18,
+  // the token's delete icon has a ZERO-WIDTH box in the headless layout, so a
+  // real click never lands - dispatch the mouse events instead
+  await dispatchMouse(page.locator('.sapMTokenIcon').first());
+  await waitForUi5(page, () => document.querySelectorAll('.sapMToken').length === 18,
     'tokenDelete never removed the row from the bound table');
 };

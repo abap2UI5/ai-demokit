@@ -28,8 +28,8 @@
       "what": "The demonstrated text carries the whitespace itself - the original writes it as &#xA; / &#x9; entities in the view attribute; the port writes the same characters as \\n and \\t in an ABAP string template, so the rendered string is byte-identical."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Both two-way bound Text properties and the slider-driven Panel width are unverified in a running system."
+      "type": "NOTE",
+      "what": "Both two-way bound Text properties and the slider-driven Panel width are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_443.mjs)."
     }
   ]
 }

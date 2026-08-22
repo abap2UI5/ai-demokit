@@ -24,8 +24,8 @@
       "what": "InvisibleMessage.getInstance().announce(...) is reproduced through the global INVISIBLE_MESSAGE target (the singleton has no control id) with the same 'Previous value was X. New value is Y%.' text, composed in ABAP because the previous value is backend state. The original defers the announcement with setTimeout to let the value change land first; the port announces it in the same round-trip that writes the new value, and passes no mode (the original passes none either, so it stays Polite)."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The six button wires (id split -> bound displayValue/percentValue) and the screen-reader announcement are unverified in a running system."
+      "type": "NOTE",
+      "what": "The six button wires (id split -> bound displayValue/percentValue) and the screen-reader announcement are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_435.mjs)."
     }
   ]
 }

@@ -28,8 +28,8 @@
       "what": "onInit moves the search Bar below the PullToRefresh on touch devices (page.insertAggregation('content', bar, 1)). The port has no client-side reordering and keeps the desktop order (Bar in subHeader) on every device - the only leg of the sample the port does not reproduce."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The refresh wire (grow-by-one plus the search filter), the PullToRefresh hide( ) follow-up and both device> expressions are unverified in a running system."
+      "type": "NOTE",
+      "what": "The refresh wire (grow-by-one plus the search filter), the PullToRefresh hide( ) follow-up and both device> expressions are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_438.mjs)."
     }
   ]
 }

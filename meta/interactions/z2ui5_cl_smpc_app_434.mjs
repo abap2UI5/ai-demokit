@@ -1,4 +1,6 @@
 // popup_display of the Dialog fragment and the popup_close on its buttons
+import { waitForUi5 } from '../../scripts/lib-e2e.mjs';
+
 export default async (page, expect) => {
   const btn = page.getByRole('button', { name: 'Show Dialog with content padding' }).first();
   await expect(btn, 'the dialog-open button').toBeVisibleEnabled();
@@ -7,5 +9,6 @@ export default async (page, expect) => {
   const ok = page.getByRole('button', { name: 'Ok' }).first();
   await expect(ok, 'the Ok button').toBeVisibleEnabled();
   await ok.click();
-  await expect(page.locator('.sapMDialog'), 'the dialog after popup_close').toHaveCount(0);
+  await waitForUi5(page, () => document.querySelectorAll('.sapMDialog').length === 0,
+    'the dialog never closed on popup_close');
 };

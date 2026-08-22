@@ -16,8 +16,8 @@
       "what": "handleSelectChange calls tree.setMode(selectedItem.getKey()). The port two-way binds one field on Select.selectedKey and Tree.mode, so the mode switch happens roundtrip-free in the model and the Select.change attribute is dropped (structural-diff reports attr missing Select.change)."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The shared two-way bound mode field (Select -> Tree.mode across all five selection modes) is unverified in a running system."
+      "type": "NOTE",
+      "what": "The shared two-way bound mode field (Select -> Tree.mode across all five selection modes) is unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_437.mjs)."
     }
   ]
 }
