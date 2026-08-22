@@ -1,0 +1,40 @@
+{
+  "class": "z2ui5_cl_smpc_app_566",
+  "sample": "sap.m.sample.TableBreadcrumb",
+  "entity": "sap.m.Table",
+  "file": "src/01/01/z2ui5_cl_smpc_app_566.clas.abap",
+  "batch": "b47",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true,
+    "note": "the pressed row's Name and the pressed breadcrumb's level travel with the events"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the sample keeps its data as a nested hierarchy (/ProductHierarchy/Suppliers/*/Categories/*/Products) and drills into it by REBINDING the table's items aggregation to a deeper path (_setAggregation). abap2UI5 sends the rows it wants shown, so the hierarchy is flattened into one node table (level 1 Suppliers, 2 Categories, 3 Products, each row carrying its parents' names) and the backend keeps the current path; rows_refresh emits exactly the branch the original would have bound. All 4 suppliers, 9 categories and 14 products of productHierarchy.json are seeded."
+    },
+    {
+      "type": "NOTE",
+      "what": "the breadcrumb is built in the controller (addLink per drill-down, destroy on the way back). Breadcrumbs.links is an aggregation, so the port binds it to a crumb table the backend maintains, with a Link template carrying the target level - the same links appear and disappear, without the imperative add/destroy. That Link is the control extra against the archived Page.view.xml, where the Breadcrumbs is empty and the controller fills it."
+    },
+    {
+      "type": "NOTE",
+      "what": "_setAggregation also switches the table's mode (MultiSelect on the leaf level, SingleSelectMaster above it) and the visibility of the Dimensions and Weight columns. All three are bindable properties, so they become expressions over the current level instead of setter calls."
+    },
+    {
+      "type": "NOTE",
+      "what": "the four frontend formatters are computed in the ABAP backend (thin-frontend rule) and seeded into the node rows: Formatter.dimensions (join the non-empty Width/Depth/Height and append DimUnit) into DIMENSIONS, Formatter.round2DP into the two-decimal PRICE string, Formatter.weightState (<0 None, <1000 Success, <2000 Warning, else Error) into WEIGHT_STATE, and Formatter.listItemType (a row with a ProductId is Inactive, otherwise Navigation) into ROW_TYPE. Formatter.isProductSelected becomes the two-way bound SELECTED flag, which is why the row template's core:require for the Formatter module has no counterpart (attr missing ColumnListItem.core:require)."
+    },
+    {
+      "type": "NOTE",
+      "what": "the Order model (products / count / hasCounts) becomes the SELECTED flag on the product nodes plus the derived ORDER_COUNT and HAS_COUNTS fields: the info toolbar's visible and its '<n> Products Selected' Label bind them, and so does the footer button's enabled - the original's isAnyProductSelected formatter. handleOrderPress toasts the selected product names, which the backend composes because it is the one holding the selection."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: the two drill-down steps, the breadcrumb links back up, and the leaf-level multi-selection feeding the order count."
+    }
+  ]
+}

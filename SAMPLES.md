@@ -3,7 +3,7 @@
 
 # The sample catalogue
 
-Every port in this repository — 578 of them — with what it shows and a
+Every port in this repository — 589 of them — with what it shows and a
 link to its source. This is the [overview app](src/z2ui5_cl_smpc_app_000.clas.abap)
 as a page you can read here, before installing anything.
 
@@ -44,7 +44,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 
 ### sap.m
 
-343 port(s).
+354 port(s).
 
 | Sample | Class |
 |---|---|
@@ -266,6 +266,14 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.m.SinglePlanningCalendar** — Single Planning Calendar with Custom Views<br>SinglePlanningCalendarWithCustomViews | [`Z2UI5_CL_SMPC_APP_552`](src/01/01/z2ui5_cl_smpc_app_552.clas.abap) |
 | **sap.m.DatePicker** — Date Picker Mass Editing Scenario<br>DatePickerMassEdit | [`Z2UI5_CL_SMPC_APP_556`](src/01/01/z2ui5_cl_smpc_app_556.clas.abap) |
 | **sap.m.TabContainer** — Tab Container - Multi-instance handling concept<br>TabContainerMHC<br><sub>tabcontainer tab container sap.m tabcontainermhc navcontainer page table columnlistitem tabcontaineritem objectheader simpleform</sub><br><sub>○ generated · 13 deviations</sub> | [`Z2UI5_CL_SMPC_APP_558`](src/01/01/z2ui5_cl_smpc_app_558.clas.abap) |
+| **sap.m.Table** — Table - Breadcrumb<br>TableBreadcrumb<br><sub>table sap.m tablebreadcrumb breadcrumbs link overflowtoolbar column columnlistitem objectidentifier objectnumber hierarchy</sub><br><sub>○ generated · 6 deviations</sub> | [`Z2UI5_CL_SMPC_APP_566`](src/01/01/z2ui5_cl_smpc_app_566.clas.abap) |
+| **sap.m.Table** — Table - Defining Column Width<br>TableColumnWidth<br><sub>table sap.m tablecolumnwidth messagestrip toolbar title checkbox column input columnlistitem fixedlayout</sub><br><sub>○ generated · 5 deviations</sub> | [`Z2UI5_CL_SMPC_APP_567`](src/01/01/z2ui5_cl_smpc_app_567.clas.abap) |
+| **sap.m.Table** — Table - ContextualWidth (Static)<br>TableContextualWidthStatic<br><sub>table sap.m tablecontextualwidthstatic messagestrip overflowtoolbar button column label columnlistitem popin</sub><br><sub>○ generated · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_568`](src/01/01/z2ui5_cl_smpc_app_568.clas.abap) |
+| **sap.m.Table** — Table - Drag and Drop<br>TableDnD<br><sub>table sap.m tabledvd draganddrop dnd draginfo dropinfo dragdropinfo column columnlistitem contextmenu ranking</sub><br><sub>○ generated · 7 deviations</sub> | [`Z2UI5_CL_SMPC_APP_569`](src/01/01/z2ui5_cl_smpc_app_569.clas.abap) |
+| **sap.m.Table** — Table - Editable<br>TableEditable<br><sub>table sap.m tableeditable page overflowtoolbar button column columnlistitem objectidentifier objectnumber input paste</sub><br><sub>○ generated · 6 deviations</sub> | [`Z2UI5_CL_SMPC_APP_570`](src/01/01/z2ui5_cl_smpc_app_570.clas.abap) |
+| **sap.m.Table** — Table - Fixed vs Auto Layout<br>TableLayout<br><sub>table sap.m tablelayout fixedlayout overflowtoolbar title checkbox button column columnlistitem dialog</sub><br><sub>○ generated · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_572`](src/01/01/z2ui5_cl_smpc_app_572.clas.abap) |
+| **sap.m.Table** — Table - Merge Cells<br>TableMergeCells<br><sub>table sap.m tablemergecells mergeduplicates mergefunctionname column columnlistitem objectidentifier objectnumber text</sub><br><sub>○ generated · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_573`](src/01/01/z2ui5_cl_smpc_app_573.clas.abap) |
+| **sap.m.Table** — Table - Vertical Alignment<br>TableVerticalAlignment<br><sub>table sap.m tableverticalalignment overflowtoolbar title column columnlistitem objectidentifier input objectnumber valign</sub><br><sub>○ generated · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_576`](src/01/01/z2ui5_cl_smpc_app_576.clas.abap) |
 | **sap.m.Carousel** — Carousel with Controls<br>With the Carousel a user can browse through multi-page content by swiping left or right.<br><sub>carousel sap.m user browse through title image text scrollcontainer list standardlistitem</sub><br><sub>✓ checked · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_006`](src/02/01/z2ui5_cl_smpc_app_006.clas.abap) |
 | **sap.m.DatePicker** — Date Picker - Open by Another Control<br>This example shows Date Picker which is opened by another control.<br><sub>datepicker date picker sap.m open another title vbox label button link</sub><br><sub>✓ checked · 5 deviations</sub> | [`Z2UI5_CL_SMPC_APP_016`](src/02/01/z2ui5_cl_smpc_app_016.clas.abap) |
 | **sap.m.DateRangeSelection**<br>The Date Range Selection is an extension of the Date Picker Control and enables the user to select range of dates.<br><sub>daterangeselection date range selection sap.m single-field input vbox label text</sub><br><sub>✓ checked · 8 deviations</sub> | [`Z2UI5_CL_SMPC_APP_017`](src/02/01/z2ui5_cl_smpc_app_017.clas.abap) |
@@ -391,6 +399,9 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.m.MessageView** — Message View inside Popover<br>MessageViewInsidePopover<br><sub>messageview message sap.m messageviewinsidepopover page button popover bar title messageitem link</sub><br><sub>○ generated · 8 deviations</sub> | [`Z2UI5_CL_SMPC_APP_563`](src/02/01/z2ui5_cl_smpc_app_563.clas.abap) |
 | **sap.m.MessageView** — Message View inside ResponsivePopover<br>MessageViewInsideResponsivePopover<br><sub>messageview message sap.m messageviewinsideresponsivepopover page button responsivepopover bar title messageitem link</sub><br><sub>○ generated · 8 deviations</sub> | [`Z2UI5_CL_SMPC_APP_564`](src/02/01/z2ui5_cl_smpc_app_564.clas.abap) |
 | **sap.m.Popover** — Popover with NavContainer<br>PopoverNavCon<br><sub>popover navcontainer sap.m popovernavcon verticallayout button page list standardlistitem objectheader objectattribute text</sub><br><sub>○ generated · 7 deviations</sub> | [`Z2UI5_CL_SMPC_APP_565`](src/02/01/z2ui5_cl_smpc_app_565.clas.abap) |
+| **sap.m.Table** — Table - IColumnHeaderMenu<br>TableIColumnHeaderMenu<br><sub>table sap.m tableicolumnheadermenu columnmenu headermenu quicksort actionitem column columnlistitem sortindicator</sub><br><sub>○ generated · 7 deviations</sub> | [`Z2UI5_CL_SMPC_APP_571`](src/02/01/z2ui5_cl_smpc_app_571.clas.abap) |
+| **sap.m.Table** — Table - MultiSelectMode<br>TableMultiSelectMode<br><sub>table sap.m tablemultiselectmode multiselectmode itemactioncount listitemaction searchfield switch combobox title</sub><br><sub>○ generated · 8 deviations</sub> | [`Z2UI5_CL_SMPC_APP_574`](src/02/01/z2ui5_cl_smpc_app_574.clas.abap) |
+| **sap.m.Table** — Table - Scroll To Index<br>TableScrollToIndex<br><sub>table sap.m tablescrolltoindex flexiblecolumnlayout dynamicpage objectpagelayout searchfield column columnlistitem sticky</sub><br><sub>○ generated · 11 deviations</sub> | [`Z2UI5_CL_SMPC_APP_575`](src/02/01/z2ui5_cl_smpc_app_575.clas.abap) |
 
 ### sap.uxap
 

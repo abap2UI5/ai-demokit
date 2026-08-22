@@ -133,7 +133,11 @@ const ADVISORY_BUDGET = {
   // delivers two empty strings at runtime, so the port reads `item`, like the
   // sample's own onSortChange does. Satisfying this rule here would mean
   // breaking the port.
-  'unknown-event-parameter': 2, // app 268: ColorPickerPopover forwards colorString undeclared — works live
+  // raised 2026-08-22 (batch b47, app 571 TableIColumnHeaderMenu): the SAME
+  // QuickSort.change metadata gap app 298 documents above - the event declares
+  // key and sortOrder and fires neither, so this port reads the `item` the
+  // control really passes, exactly as the sample's own handler does
+  'unknown-event-parameter': 3, // app 268: ColorPickerPopover forwards colorString undeclared — works live
   // both entries below are new rules from the 2026-08-12 linter bump (363c6e9),
   // budgeted here because the bump PR is where the debt decision belongs:
   // apps 101/102/144/268/280/407 — a liveChange/live wire that round-trips per

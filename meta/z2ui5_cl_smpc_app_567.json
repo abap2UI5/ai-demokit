@@ -1,0 +1,35 @@
+{
+  "class": "z2ui5_cl_smpc_app_567",
+  "sample": "sap.m.sample.TableColumnWidth",
+  "entity": "sap.m.Table",
+  "file": "src/01/01/z2ui5_cl_smpc_app_567.clas.abap",
+  "batch": "b47",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onCheckBoxSelect calls setFixedLayout(selected ? 'Strict' : true) on the first table. Table.fixedLayout takes a boolean OR the string 'Strict', and it is a bindable property, so the CheckBox binds a flag two-way and the table binds the expression {= ${/STRICT_LAYOUT} ? 'Strict' : true } - which yields the same two values the controller sets. The CheckBox select attribute is therefore not emitted (attr missing CheckBox.select)."
+    },
+    {
+      "type": "NOTE",
+      "what": "the sample runs on three named models (products, columns, clone). abap2UI5 serves one default model, so the three become three tables in it: the products rows, the columns array of the second (wrong-usage) table, and the clone array of the first, whose first column width is 'auto' - the deepExtend copy the controller patches. Each table's columns aggregation binds its own array, exactly as the original binds columns=\"{clone>/}\" and columns=\"{columns>/}\"."
+    },
+    {
+      "type": "NOTE",
+      "what": "the products model is created with setSizeLimit(3), so the original renders only the first three rows of the mock /ProductCollection; the port seeds exactly those three."
+    },
+    {
+      "type": "NOTE",
+      "what": "onReset (which would put the untouched oData back into the columns model) is wired to nothing in the view - the sample declares the handler and never calls it - so it has no counterpart here either."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: the bound columns aggregation on both tables and the Strict-layout switch."
+    }
+  ]
+}

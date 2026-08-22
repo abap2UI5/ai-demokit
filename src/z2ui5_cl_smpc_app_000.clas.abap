@@ -5331,6 +5331,44 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         post171 = `Table.autoPopinMode (since 1.76), Table.hiddenInPopin (since 1.77), Table.popinChanged (since 1.77) and Column.importance (since 1.76), the core of the auto-pop-in demo, are kept 1:1; needs UI5 >=` &&
                  ` 1.77.` ) ).
 
+    lv_text1 = `NOTE: the sample keeps its data as a nested hierarchy (/ProductHierarchy/Suppliers/*/Categories/*/Products) and drills into it by REBINDING the table's items aggregation to a deeper path` &&
+               ` (_setAggregation). abap2UI5 sends the rows it wants shown, so the hierarchy is flattened into one node table (level 1 Suppliers, 2 Categories, 3 Products, each row carrying its parents' names) and` &&
+               ` the backend keeps the current path; rows_refresh emits exactly the branch the original would have bound. All 4 suppliers, 9 categories and 14 products of productHierarchy.json are seeded. // NOTE:` &&
+               ` the breadcrumb is built in the controller (addLink per drill-down, destroy on the way back). Breadcrumbs.links is an aggregation, so the port binds it to a crumb table the backend maintains, with a` &&
+               ` Link template carrying the target level - the same links appear and disappear, without the imperative add/destroy. That Link is the control extra against the archived Page.view.xml, where the` &&
+               ` Breadcrumbs is empty and the controller fills it. // NOTE: _setAggregation also switches the table's mode (MultiSelect on the leaf level, SingleSelectMaster above it) and the visibility of the`.
+    lv_text1 = lv_text1 && ` Dimensions and Weight columns. All three are bindable properties, so they become expressions over the current level instead of setter calls. // NOTE: the four frontend formatters are computed in the` &&
+               ` ABAP backend (thin-frontend rule) and seeded into the node rows: Formatter.dimensions (join the non-empty Width/Depth/Height and append DimUnit) into DIMENSIONS, Formatter.round2DP into the` &&
+               ` two-decimal PRICE string, Formatter.weightState (<0 None, <1000 Success, <2000 Warning, else Error) into WEIGHT_STATE, and Formatter.listItemType (a row with a ProductId is Inactive, otherwise` &&
+               ` Navigation) into ROW_TYPE. Formatter.isProductSelected becomes the two-way bound SELECTED flag, which is why the row template's core:require for the Formatter module has no counterpart (attr missing` &&
+               ` ColumnListItem.core:require). // NOTE: the Order model (products / count / hasCounts) becomes the SELECTED flag on the product nodes plus the derived ORDER_COUNT and HAS_COUNTS fields: the info` &&
+               ` toolbar's visible and its '<n> Products Selected' Label bind them, and so does the footer button's enabled - the original's isAnyProductSelected formatter. handleOrderPress toasts the selected`.
+    lv_text1 = lv_text1 && ` product names, which the backend composes because it is the one holding the selection. // LIVE-TEST: not yet verified in a running system: the two drill-down steps, the breadcrumb links back up, and` &&
+               ` the leaf-level multi-selection feeding the order count.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Table`                           name = `TableBreadcrumb`                               class = `z2ui5_cl_smpc_app_566` path = `src/01/01/z2ui5_cl_smpc_app_566.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: onCheckBoxSelect calls setFixedLayout(selected ? 'Strict' : true) on the first table. Table.fixedLayout takes a boolean OR the string 'Strict', and it is a bindable property, so the CheckBox` &&
+               ` binds a flag two-way and the table binds the expression {= ${/STRICT_LAYOUT} ? 'Strict' : true } - which yields the same two values the controller sets. The CheckBox select attribute is therefore not` &&
+               ` emitted (attr missing CheckBox.select). // NOTE: the sample runs on three named models (products, columns, clone). abap2UI5 serves one default model, so the three become three tables in it: the` &&
+               ` products rows, the columns array of the second (wrong-usage) table, and the clone array of the first, whose first column width is 'auto' - the deepExtend copy the controller patches. Each table's` &&
+               ` columns aggregation binds its own array, exactly as the original binds columns="{clone>/}" and columns="{columns>/}". // NOTE: the products model is created with setSizeLimit(3), so the original` &&
+               ` renders only the first three rows of the mock /ProductCollection; the port seeds exactly those three. // NOTE: onReset (which would put the untouched oData back into the columns model) is wired to`.
+    lv_text1 = lv_text1 && ` nothing in the view - the sample declares the handler and never calls it - so it has no counterpart here either. // LIVE-TEST: not yet verified in a running system: the bound columns aggregation on` &&
+               ` both tables and the Strict-layout switch.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Table`                           name = `TableColumnWidth`                              class = `z2ui5_cl_smpc_app_567` path = `src/01/01/z2ui5_cl_smpc_app_567.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16`
+        notes = lv_text1 ) ).
+
     lv_text1 = `NOTE: the whole controller is one responsive rule: onBeforeRendering + _orientationHandler + _showMessageStrip hide the MessageStrip on a PHONE in portrait and show it again in landscape (and onExit` &&
                ` detaches the handler). The port replaces all four methods with one expression binding on the shared device model - visible = !${device>/system/phone} || ${device>/orientation/landscape} - which UI5` &&
                ` keeps current on every rotation. No round-trip, no controller; the added ``visible`` attribute is the only difference to the archived Table.view.xml. // NOTE: contextualWidth='Auto' +` &&
@@ -5349,6 +5387,137 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.16`
         checked = `CHECKED (2026-08-02): verified in a running system - human live check 2026-08-02 (maintainer): app started and exercised, no findings.`
         notes = lv_text1 ) ).
+
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Table`                           name = `TableContextualWidthStatic`                    class = `z2ui5_cl_smpc_app_568` path = `src/01/01/z2ui5_cl_smpc_app_568.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.16`
+        notes = `NOTE: onPress calls oTable.setContextualWidth('100px'). Table.contextualWidth is a bindable property, so - per the prefer-a-bindable-property rule - it is bound to a field seeded with the view's own` &&
+                 ` initial value ('500px') and the button writes '100px' into it. The rendered result is identical and no frontend action is needed. // NOTE: the controller's oData array is seeded verbatim: all 22` &&
+                 ` people with their firstName / lastName / birthDate / gender. birthDate is carried as the ISO string the sample stores, which is what its Label binding renders. // LIVE-TEST: not yet verified in a` &&
+                 ` running system: the contextualWidth switch and the popin layout it drives.` ) ).
+
+    lv_text1 = `NOTE: the sample is one container view plus two nearly identical sub-views (mvc:XMLView availableProducts / selectedProducts) with a controller each. abap2UI5 serves one view, so both tables are built` &&
+               ` here by one parameterised method - which is why the reconstructed view shows ONE of each control where the archived originals have two (the linter emits a helper's chain once, however often it is` &&
+               ` called): Table, Menu, OverflowToolbar, Title, ColumnListItem all count 1 vs 2, Column 3 vs 6 and Text 6 vs 12. The two mvc:XMLView wrappers have no counterpart at all. // NOTE: both tables bind the` &&
+               ` SAME collection and differ only in their filter, exactly as the original does: Rank EQ 0 for Available, Rank GT 0 plus a descending Rank sorter for Selected. The whole Utils.ranking arithmetic is` &&
+               ` kept - Initial 0, Default 1024, Before(r) = r + 1024, After(r) = r / 2, Between(a,b) = (a + b) / 2 - only in ABAP, and on an integer rank (the sample's own comment caps the scheme at 53 rows, which` &&
+               ` integer halving matches). // NOTE: the sample reads the selection with getSelectedItems() and toasts 'Please select a row!' when there is none; the row flag is bound two-way here and the backend does`.
+    lv_text1 = lv_text1 && ` the same check. moveSelectedItem's rank swap between a row and its neighbour is done on the same descending order the Selected table renders. // NOTE: the drag and drop configuration is kept 1:1 (the` &&
+               ` two groupNames, sourceAggregation/targetAggregation, dropPosition Between, and the DragDropInfo that lets the Selected table re-order itself). The drop handlers need the dragged row, the row it was` &&
+               ` dropped on and the drop position; all three travel with the event as UI5 expressions over draggedControl / droppedControl / dropPosition, and the backend then computes the new rank the way` &&
+               ` onDropSelectedProductsTable does. // 1.71: the plugins:ContextMenuSetting scope="Selection" plugin (sap.m.plugins, since UI5 1.121) is dropped from both tables together with the beforeOpenContextMenu` &&
+               ` handler that pairs with it: the plugin class does not exist on a 1.71 runtime, so keeping it would crash view creation there. Its only effect is that right-clicking a row also selects it before the` &&
+               ` context menu opens; the context menus themselves are kept 1:1 and act on the selected row. // NOTE: the full mock /ProductCollection is seeded with the three fields the tables bind (Name, Category,`.
+    lv_text1 = lv_text1 && ` Quantity) and the Rank the controller adds to every row (Initial = 0), so every product starts in the Available table. // LIVE-TEST: not yet verified in a running system: the drag and drop across the` &&
+               ` two tables, the re-ordering inside the Selected one, and the four move buttons.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Table`                           name = `TableDnD`                                      class = `z2ui5_cl_smpc_app_569` path = `src/01/01/z2ui5_cl_smpc_app_569.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: onEdit / onSave / onCancel rebind the SAME table between a read-only ColumnListItem template (the one the view declares) and an editable one the controller builds in JavaScript. abap2UI5` &&
+               ` rebuilds the view on every round trip, so the two templates are the two branches of one IF in view_display, driven by an EDIT_MODE flag - the rendered table carries exactly one of them at a time. The` &&
+               ` four Inputs of the editable template are the control extra against the archived Table.view.xml, which only holds the read-only one; they are also why the linter's static reconstruction shows eight` &&
+               ` cells in a four-column row - it does not evaluate the IF, and only one branch is ever emitted at runtime. // NOTE: the three toolbar buttons swap visibility through setVisible in the original;` &&
+               ` visible is a bindable property, so Edit binds the negated EDIT_MODE expression and Save/Cancel bind the flag itself - no setter and no extra state. onCancel's deepExtend copy of /ProductCollection is` &&
+               ` a plain table copy taken on Edit and put back on Cancel. // NOTE: the original derives the ObjectNumber weight state in its frontend Formatter.js (weightState: <0 None, <1000 Success, <2000 Warning,`.
+    lv_text1 = lv_text1 && ` else Error, over the RAW WeightMeasure). That is business logic, so - abap2UI5 being a thin frontend - it is computed in ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}". //` &&
+               ` NOTE: onPaste and onOrder both only show a MessageToast, composed on the client, so both stay there as roundtrip-free control_global MESSAGE_TOAST wires - onPaste with the {0} placeholder for the` &&
+               ` pasted data, onOrder with its static text. rebindTable's sKeyboardMode argument is never used by the original (it is accepted and dropped), so it has no counterpart. // NOTE: the full mock` &&
+               ` /ProductCollection is seeded with the fields the two templates bind (ProductId, Name, Quantity, UoM, WeightMeasure, WeightUnit, Price, CurrencyCode); the price column keeps the original` &&
+               ` sap.ui.model.type.Currency composite binding and the quantity column its sap.ui.model.type.String one. // LIVE-TEST: not yet verified in a running system: the Edit/Save/Cancel template swap and the` &&
+               ` Cancel rollback.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Table`                           name = `TableEditable`                                 class = `z2ui5_cl_smpc_app_570` path = `src/01/01/z2ui5_cl_smpc_app_570.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `POST-1.71: six post-1.71 members are kept for the 1:1 port, all of them what the sample is about: the column header menu itself - sap.m.table.columnmenu.Menu, QuickSort, QuickSortItem, ActionItem and` &&
+               ` QuickAction (all since UI5 1.110) - and the sap.m.Column headerMenu association (since UI5 1.98). App 298 carries the same stack. // IMPROVISED: the sample DEFINES a control class in JavaScript` &&
+               ` (CustomMenuAdapter, a sap.m.table.columnmenu.MenuBase subclass that wraps a plain sap.m.Menu and implements IColumnHeaderMenu) and hangs it on three of the five columns. A backend cannot define a` &&
+               ` control class - the same wall app 552 hits with its two custom calendar views - so those three menus are expressed with the framework's OWN column menu instead: the Supplier column gets a Menu with` &&
+               ` the Toggle Grouping ActionItem, and the Price and Dimensions columns get a Menu whose QuickAction holds the sample's two sort Buttons / three align Buttons, each with the icon and text the original` &&
+               ` MenuItems carry. Same entries, same actions, no custom class. (A second reason forces the QuickAction shape for those two: the linter's metadata snapshot records Menu.items without multiple, so it`.
+    lv_text1 = lv_text1 && ` treats the aggregation as single - the snapshot follows the UI5 source, which omits the flag and relies on ManagedObject's default of true. QuickAction.content does carry multiple, so it takes the` &&
+               ` two and three buttons.) // NOTE: the Product column keeps the built-in QuickSort 1:1. Its change event declares key and sortOrder and fires NEITHER - onChange does fireChange({item: oItem}) and` &&
+               ` nothing else - so the port reads the item the control really passes and asks it for its sort order, exactly as app 298 does and as the sample's own handler does. That is what the advisory` &&
+               ` unknown-event-parameter finding on this port is. // NOTE: the four setter calls the menus make are all bindable properties, so they become bound fields instead: setSortIndicator on the Product and` &&
+               ` Price columns, and setHAlign on the Dimensions column. Sorting itself is done where the data is - the ABAP table is re-ordered (app 298 idiom) instead of sorting the items binding. // NOTE: Toggle` &&
+               ` Grouping calls oBinding.sort with a Sorter carrying a group function. The declarative equivalent is the items binding with sorter: { path: 'SUPPLIERNAME', group: true }, so the port switches the`.
+    lv_text1 = lv_text1 && ` binding string between the plain and the grouping form - which is what the toggle does. // NOTE: the full mock /ProductCollection is seeded with the fields the view binds (ProductId, Name,` &&
+               ` SupplierName, Width, Depth, Height, DimUnit, WeightMeasure, WeightUnit, Price, CurrencyCode); the price column keeps the original sap.ui.model.type.Currency composite binding 1:1. // LIVE-TEST: not` &&
+               ` yet verified in a running system: the four column header menus, the grouping toggle and the two sort indicators.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Table`                           name = `TableIColumnHeaderMenu`                        class = `z2ui5_cl_smpc_app_571` path = `src/02/01/z2ui5_cl_smpc_app_571.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `six post-1.71 members are kept for the 1:1 port, all of them what the sample is about: the column header menu itself - sap.m.table.columnmenu.Menu, QuickSort, QuickSortItem, ActionItem and QuickAction` &&
+                 ` (all since UI5 1.110) - and the sap.m.Column headerMenu association (since UI5 1.98). App 298 carries the same stack.` ) ).
+
+    lv_text1 = `NOTE: onCheckBoxSelect walks up from the CheckBox to its table and calls setFixedLayout(selected). Table.fixedLayout is a bindable property, so - per the prefer-a-bindable-property rule - each table` &&
+               ` binds a flag that its own CheckBox also binds two-way; the CheckBox select attribute is therefore not emitted (attr missing CheckBox.select) and the two tables keep separate flags, exactly as the` &&
+               ` original's getParent().getParent() walk gives each CheckBox its own table. // NOTE: Dialog.fragment.xml, which onOpenPressed loads and opens, is rebuilt as a core:FragmentDefinition shown with` &&
+               ` popup_display; onClosePressed becomes popup_destroy. syncStyleClass('sapUiSizeCompact', view, dialog) has no counterpart - it copies the demo kit frame's own density class onto the dialog, which is` &&
+               ` host chrome rather than sample behaviour. // NOTE: both tables keep their items binding with the Name sorter 1:1 (raw binding-info string over the bound table), so the rows are seeded in the mock's` &&
+               ` own order and the frontend sorts them. The full mock /ProductCollection is seeded with the four fields the two views bind (ProductId, Name, SupplierName, Description). // LIVE-TEST: not yet verified`.
+    lv_text1 = lv_text1 && ` in a running system: the fixedLayout toggle on each of the two tables and the dialog round trip.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Table`                           name = `TableLayout`                                   class = `z2ui5_cl_smpc_app_572` path = `src/01/01/z2ui5_cl_smpc_app_572.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.16`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: the two frontend formatters are computed in the ABAP backend (thin-frontend rule): Formatter.weightState (<0 None, <10 Success, <20 Warning, else Error - this sample compares the RAW` &&
+               ` WeightMeasure, with thresholds of its own) becomes the WEIGHT_STATE field bound to ObjectNumber.state, and Formatter.formatType (Price > 400 -> Navigation, else Inactive) becomes ROW_TYPE bound to` &&
+               ` ColumnListItem.type. // NOTE: the items binding keeps its sorter on SupplierName 1:1 (raw binding-info string over the bound table) - which is what makes the mergeDuplicates columns merge: the rows` &&
+               ` are seeded in the mock's own order and the frontend sorts them, so identical suppliers end up adjacent. mergeFunctionName="getNumber" on the Weight column is kept as the literal it is. // NOTE: the` &&
+               ` full mock /ProductCollection is seeded with the fields this view binds (ProductId, Name, SupplierName, Width, Depth, Height, DimUnit, WeightMeasure, WeightUnit, Price, CurrencyCode); the price column` &&
+               ` keeps the original sap.ui.model.type.Currency composite binding 1:1. // LIVE-TEST: not yet verified in a running system: the cell merging across the three mergeDuplicates columns.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Table`                           name = `TableMergeCells`                               class = `z2ui5_cl_smpc_app_573` path = `src/01/01/z2ui5_cl_smpc_app_573.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.16`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `POST-1.71: six post-1.71 members are kept for the 1:1 port, all of them what this sample demonstrates: sap.m.Table.itemActionCount, Table.itemActionPress, the ListItemBase actions aggregation and the` &&
+               ` sap.m.ListItemAction control (all since UI5 1.137), sap.m.table.Title (since 1.147) and Table.multiSelectMode (since 1.93). // NOTE: the sample's onSelectionChange calls` &&
+               ` oTable.setMultiSelectionMode(sMode) - a setter sap.m.Table does not have. The property is multiSelectMode (sap.m.MultiSelectMode, since 1.93), and the ComboBox's own keys (Default / ClearAll) are its` &&
+               ` values, so the port binds the ComboBox's selectedKey and the table's multiSelectMode to one field: the ComboBox change needs no handler and the mode actually switches, which in the original it does` &&
+               ` not. // NOTE: the ui> view model (totalCount, selectedCount, extViewSwitchEnabled) becomes four backend fields. _updateTotalCount reads oBinding.getCount() and _updateSelectedCount` &&
+               ` getSelectedItems().length; the backend holds the rows and the selection flags, so it counts them directly, and the Show-totalCount switch sets the count to -1 exactly as onToggleTotalCount does.`.
+    lv_text1 = lv_text1 && ` onToggleExtView's setShowExtendedView and the extended-view Switch share one bound flag, so that handler is not needed either; the totalCount switch keeps its change wire because it drives the` &&
+               ` recount. // NOTE: onSearch filters Name, SupplierName and ProductId with an OR filter on the items binding. The port filters in the backend into a second table (T_ROWS) and keeps the full set in` &&
+               ` T_PRODUCTS, so the search can widen again; Contains on a client model is case-insensitive, which the ABAP comparison matches by upper-casing both sides. // NOTE: onAddRow builds a product from four` &&
+               ` Math.random() draws (id, supplier, three dimensions, price, currency). A client-side random draw is not reproducible from a backend (the corpus rule for now/random values), so the port counts up` &&
+               ` instead: PRD-1, Product 1, the three suppliers in turn and dimensions derived from the counter. The row is appended and toasted exactly as the original does. The sample's own new row carries Price` &&
+               ` and CurrencyCode fields that no column of this table binds, so they have no counterpart. // NOTE: the items binding keeps its sorter on Name 1:1; its events: { change: '.onBindingChange' } hook has`.
+    lv_text1 = lv_text1 && ` no counterpart - it exists to recount after a binding change, which the backend does whenever it changes the rows. // NOTE: the sample writes itemActionPress="onItemActionPress" without the leading` &&
+               ` dot, which is not a controller-method reference in a modern XML view; the port wires the event properly, so the delete action works here. // LIVE-TEST: not yet verified in a running system: the row` &&
+               ` actions, the multi-select mode switch, the extended title view and the search round trip.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Table`                           name = `TableMultiSelectMode`                          class = `z2ui5_cl_smpc_app_574` path = `src/02/01/z2ui5_cl_smpc_app_574.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `six post-1.71 members are kept for the 1:1 port, all of them what this sample demonstrates: sap.m.Table.itemActionCount, Table.itemActionPress, the ListItemBase actions aggregation and the` &&
+                 ` sap.m.ListItemAction control (all since UI5 1.137), sap.m.table.Title (since 1.147) and Table.multiSelectMode (since 1.93).` ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Table`                           name = `TableNavigated`                                class = `z2ui5_cl_smpc_app_488` path = `src/02/01/z2ui5_cl_smpc_app_488.clas.abap`
@@ -5376,6 +5545,42 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16`
         notes = lv_text1 ) ).
+
+    lv_text1 = `POST-1.71: three post-1.71 members are kept for the 1:1 port: sap.f.FlexibleColumnLayout.autoFocus (since UI5 1.76) and restoreFocusOnBackNavigation (since 1.77), both set by the sample's own FCL` &&
+               ` view, and the sap.m.Avatar control (since 1.73) that its detail page uses twice. // NOTE: the sample is a Component with a ROUTER and three views (FlexibleColumnLayout, Master, Detail). abap2UI5` &&
+               ` serves one view, so the three become one: the FCL declares its begin and mid column pages inline, and the routing collapses to the FCL's own layout property - onListItemPress opens the mid column` &&
+               ` (TwoColumnsMidExpanded), handleFullScreen / handleExitFullScreen / handleClose set MidColumnFullScreen / TwoColumnsMidExpanded / OneColumn. That is what the router's navTo(layout) does; the URL it` &&
+               ` also writes has no counterpart. This is the corpus's first sap.f.FlexibleColumnLayout port. // NOTE: the three archived views declare different default namespaces - FlexibleColumnLayout.view.xml has` &&
+               ` xmlns="sap.f", Master.view.xml xmlns="sap.m" with f: for sap.f, and Detail.view.xml xmlns="sap.uxap" with m: for sap.m. One abap2UI5 view can only have one default namespace (sap.m here), so every`.
+    lv_text1 = lv_text1 && ` control of the detail page carries a different PREFIX than in its original file even though it is the same control: ObjectPageLayout, ObjectPageDynamicHeaderTitle, ObjectPageSection and` &&
+               ` ObjectPageSubSection become uxap:-prefixed; FlexBox, VBox, Label, Text, Title, Avatar, ObjectNumber, OverflowToolbarButton and form:SimpleForm lose their m: prefix; and the FlexibleColumnLayout gains` &&
+               ` an f: one. The whole missing/extra pairing of this port's structural diff is that shift - no control is actually added or dropped. // NOTE: the three navigation-action buttons are shown by the sample` &&
+               ` through the FCL helper's actionButtonsInfo (visible="{= ${/actionButtonsInfo/midColumn/fullScreen} !== null }" and so on). The helper is a JavaScript utility, so the port derives the same three` &&
+               ` visibilities from the layout itself: full-screen while the mid column is not full screen, exit-full-screen while it is, and close while any mid column is open. // NOTE: Detail.controller binds the` &&
+               ` mid column with bindElement('/ProductCollection/<n>'), so all its bindings are relative. The port folds them to root-seeded D_* fields (app 229 idiom): the pressed row's ProductId travels with the`.
+    lv_text1 = lv_text1 && ` press and the backend copies that product's fields over. The detail Price is pre-composed as '<CurrencyCode> <Price>', which is the composite text the original's ObjectNumber binds. // IMPROVISED:` &&
+               ` the sample exists to show sap.m.Table.scrollToIndex: the FCL's columnResize handler calls oTable.scrollToIndex(iIndex) with the index of the row the user last pressed, so that row stays in view when` &&
+               ` the columns resize. scrollToIndex is an imperative Table method with no bindable counterpart and it is not on the framework's control-method whitelist, so the port keeps the press index bookkeeping` &&
+               ` out and lets the table keep its own scroll position - everything else about the sample (the FCL layout changes, the master/detail binding, the growing table, the search) is ported. Wiring` &&
+               ` columnResize alone would fire a round trip that could not do anything with it. // NOTE: the table's sticky="ColumnHeaders,HeaderToolbar" is a literal in the sample, so the port keeps it as one - no` &&
+               ` bound string table is needed here (app 235 binds it because its check boxes change it). // NOTE: onSearch filters the table's items on Name; the port filters in the backend into a second table so the`.
+    lv_text1 = lv_text1 && ` search can widen again. Contains on a client model is case-insensitive, which the ABAP comparison matches by upper-casing both sides. The master title's count comes from` &&
+               ` ProductCollectionStats/Counts/Total (123), seeded as a field. // NOTE: the two Avatar src values are '../../../../../../../{products>ProductPicUrl}' in the sample - a relative path out of the demo` &&
+               ` kit's own frame. The port binds the mock's ProductPicUrl as it stands, without the traversal prefix, which is what the corpus does everywhere for these images. // LIVE-TEST: not yet verified in a` &&
+               ` running system: the FlexibleColumnLayout column changes, the master/detail fold and the ObjectPage header. // NOTE: two attributes of the archived views have no counterpart. mvc:View` &&
+               ` displayBlock="true" is a Component-app setting (it makes the view fill the page when it is the root of a Component) and abap2UI5 owns the view container itself. FlexibleColumnLayout stateChange is` &&
+               ` wired in the sample only to rewrite the URL through the router after a navigation arrow was used; there is no URL to rewrite here, so the port drops it - unlike columnResize, which is dropped for the` &&
+               ` reason given above.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Table`                           name = `TableScrollToIndex`                            class = `z2ui5_cl_smpc_app_575` path = `src/02/01/z2ui5_cl_smpc_app_575.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `three post-1.71 members are kept for the 1:1 port: sap.f.FlexibleColumnLayout.autoFocus (since UI5 1.76) and restoreFocusOnBackNavigation (since 1.77), both set by the sample's own FCL view, and the` &&
+                 ` sap.m.Avatar control (since 1.73) that its detail page uses twice.` ) ).
 
     lv_text1 = `POST-1.71: sap.m.plugins.CellSelector is @since 1.119 and sap.m.plugins.CopyProvider is @since 1.110 (its visible property @since 1.114) - all newer than the 1.71 floor. The CellSelector is kept, so` &&
                ` the port is filed under src/02. // IMPROVISED: The CopyProvider is DROPPED. Its extractData is a JavaScript callback that reads each column's app:bindings CustomData and formats it with app:template,` &&
@@ -5411,6 +5616,21 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         post171 = `sap.m.Table autoPopinMode (since UI5 1.76) kept 1:1 from the original; needs a UI5 release >= 1.76 to render. // sap.m.plugins.ColumnResizer (since UI5 1.91) kept 1:1 in the Table dependents` &&
                  ` aggregation; needs a UI5 release >= 1.91 to render. The Table fixedLayout='Strict' value is also newer than 1.71 (a value-level extension of the 1.22 property, invisible to the property gate; the` &&
                  ` source JSDoc carries no value-level @since) - covered by the same >= 1.91 floor.` ) ).
+
+    lv_text1 = `NOTE: the sample writes type="{Text}" and fieldWidth="{60%}" on the Quantity Input. Both are PATH bindings, not literals: no such property exists in its model, so both resolve to undefined and the` &&
+               ` Input renders with its defaults (type Text, fieldWidth 50%). Carrying them over would mean binding to a field the rows do not have - which the property gate rejects, and rightly so - and would change` &&
+               ` nothing on screen, so the two attributes are dropped (attr missing Input.type, Input.fieldWidth). // NOTE: the original derives the ObjectNumber weight state in its frontend Formatter.js` &&
+               ` (weightState: <0 None, <1000 Success, <2000 Warning, else Error - note this sample compares the RAW WeightMeasure, without the KG conversion its siblings do). That is business logic, so - abap2UI5` &&
+               ` being a thin frontend - it is computed in ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}". // NOTE: the items binding keeps its sorter on Name 1:1 (raw binding-info string` &&
+               ` over the bound table), so the rows are seeded in the mock's own order and the frontend sorts them. The full mock /ProductCollection is seeded with the fields this view binds (ProductId, Name,`.
+    lv_text1 = lv_text1 && ` Quantity, UoM, WeightMeasure, WeightUnit, Price, CurrencyCode); the price column keeps the original sap.ui.model.type.Currency composite binding. // LIVE-TEST: not yet verified in a running system:` &&
+               ` the vAlign="Middle" row alignment with the Input in a cell.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Table`                           name = `TableVerticalAlignment`                        class = `z2ui5_cl_smpc_app_576` path = `src/01/01/z2ui5_cl_smpc_app_576.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.16`
+        notes = lv_text1 ) ).
 
     lv_text1 = `POST-1.71: The whole column-header menu is newer than the 1.71 floor: sap.m.table.columnmenu.Menu, QuickSort, QuickSortItem and ActionItem are @since 1.110, QuickResize is @since 1.137, and the` &&
                ` sap.m.Column headerMenu association that points at it is @since 1.98.0. The sample's ColumnMenu fragment is nothing but those controls, so a faithful port cannot avoid them - the app needs a UI5` &&

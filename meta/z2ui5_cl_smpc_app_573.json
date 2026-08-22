@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_smpc_app_573",
+  "sample": "sap.m.sample.TableMergeCells",
+  "entity": "sap.m.Table",
+  "file": "src/01/01/z2ui5_cl_smpc_app_573.clas.abap",
+  "batch": "b47",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the two frontend formatters are computed in the ABAP backend (thin-frontend rule): Formatter.weightState (<0 None, <10 Success, <20 Warning, else Error - this sample compares the RAW WeightMeasure, with thresholds of its own) becomes the WEIGHT_STATE field bound to ObjectNumber.state, and Formatter.formatType (Price > 400 -> Navigation, else Inactive) becomes ROW_TYPE bound to ColumnListItem.type."
+    },
+    {
+      "type": "NOTE",
+      "what": "the items binding keeps its sorter on SupplierName 1:1 (raw binding-info string over the bound table) - which is what makes the mergeDuplicates columns merge: the rows are seeded in the mock's own order and the frontend sorts them, so identical suppliers end up adjacent. mergeFunctionName=\"getNumber\" on the Weight column is kept as the literal it is."
+    },
+    {
+      "type": "NOTE",
+      "what": "the full mock /ProductCollection is seeded with the fields this view binds (ProductId, Name, SupplierName, Width, Depth, Height, DimUnit, WeightMeasure, WeightUnit, Price, CurrencyCode); the price column keeps the original sap.ui.model.type.Currency composite binding 1:1."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: the cell merging across the three mergeDuplicates columns."
+    }
+  ]
+}

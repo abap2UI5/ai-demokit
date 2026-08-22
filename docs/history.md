@@ -7,6 +7,65 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-22 — batch b47 (sap.m): the Table family, all eleven that were left (apps 566–576)
+
+Every unported `sap.m.Table` sample in one batch, which finishes the control:
+the drill-down, the two column-width tables, the drag-and-drop pair, the
+editable one, the column header menus, the merged cells and the master/detail
+app that only pretends to be a table sample.
+
+| app | sample | what it adds |
+|---|---|---|
+| 566 | TableBreadcrumb | a three-level hierarchy drill-down with a bound `Breadcrumbs.links` |
+| 567 | TableColumnWidth | two tables whose `columns` aggregation is BOUND to a column array |
+| 568 | TableContextualWidthStatic | `contextualWidth` as a bound property |
+| 569 | TableDnD | rank-based drag and drop between two tables, both bound to one collection |
+| 570 | TableEditable | a read-only and an editable row template, swapped by an `IF` |
+| 571 | TableIColumnHeaderMenu | four column header menus; the sample's own `MenuBase` subclass cannot be defined from ABAP |
+| 572 | TableLayout | `fixedLayout` per table, page and dialog |
+| 573 | TableMergeCells | `mergeDuplicates` + `mergeFunctionName`, made to merge by the supplier sorter |
+| 574 | TableMultiSelectMode | `itemActionCount` / `ListItemAction` / `sap.m.table.Title` (POST_171, `src/02`) |
+| 575 | TableScrollToIndex | the corpus's first `sap.f.FlexibleColumnLayout` — a master/detail app (POST_171, `src/02`) |
+| 576 | TableVerticalAlignment | `vAlign` rows with an Input in a cell |
+
+Five findings, three of them about the view-builder reconstruction rather than
+the ports:
+
+- **A secondary chain must be BALANCED or no gate ever sees it.** App 570's
+  footer hung off a captured `page` node and ended inside two open elements;
+  the reconstructed view came back with no `<footer>` at all — the render gate,
+  the property gate and the structural diff all judged a view that was missing
+  it. A root chain may end unbalanced; a `node->…` statement may not. Close it
+  with ``)->end(`` down to the node you started from.
+- **An attribute whose value is a METHOD PARAMETER is invisible the same way.**
+  Also app 570: an Edit form built by a helper that took the four binding
+  strings reconstructed as `<Input type="Text"/>` with no `value` at all. The
+  linter resolves literals and ``client->_bind( <attribute> )``, not
+  parameters. Inline the attributes, or the gates check a different view than
+  the one that ships.
+- **Two branches of an `IF` are BOTH emitted into the reconstruction.** App 570
+  shows eight cells in a four-column row, app 569 shows one table where the
+  sample has two (a helper called twice is emitted once). Neither is wrong at
+  runtime — but the same merge makes a conditional `items` attribute an
+  *error*: "items is set twice on the same control". Hoist the value into a
+  `COND` and set the attribute once (app 569).
+- **`sap.m.table.columnmenu.Menu.items` is metadata-single.** The UI5 source
+  omits `multiple: true` and relies on `ManagedObject`'s default of true, but
+  the metadata snapshot records what the source says, so a Menu with two
+  `ActionItem`s is rejected. `QuickAction.content` does carry the flag — which
+  is where app 571's two sort buttons and three align buttons went, and it is
+  the better fit anyway.
+- **`t_products[ rank = 0 selected = abap_true ]` reads as a table INDEX to
+  abaplint** (`invalid_table_index`, "Table index starts from 1"). Putting a
+  non-numeric key first — `[ selected = abap_true rank = 0 ]` — parses fine.
+  Same table expression, same semantics.
+
+Three upstream slips are recorded in the sidecars rather than reproduced: app
+574's `oTable.setMultiSelectionMode(...)` (the property is `multiSelectMode`,
+so that setter does not exist) and its `itemActionPress="onItemActionPress"`
+without the leading dot, and app 576's `type="{Text}"` / `fieldWidth="{60%}"`,
+which are path bindings to fields that do not exist.
+
 ## 2026-08-22 — batch b46 (sap.m + sap.f): the popup-and-page tail (apps 556–565)
 
 Ten samples with nothing in common but their shape: each one builds most of its

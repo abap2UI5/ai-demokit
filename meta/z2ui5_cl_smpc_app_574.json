@@ -1,0 +1,48 @@
+{
+  "class": "z2ui5_cl_smpc_app_574",
+  "sample": "sap.m.sample.TableMultiSelectMode",
+  "entity": "sap.m.Table",
+  "file": "src/02/01/z2ui5_cl_smpc_app_574.clas.abap",
+  "batch": "b47",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true,
+    "note": "the search query and the acted-on row's ProductId travel with the events"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "six post-1.71 members are kept for the 1:1 port, all of them what this sample demonstrates: sap.m.Table.itemActionCount, Table.itemActionPress, the ListItemBase actions aggregation and the sap.m.ListItemAction control (all since UI5 1.137), sap.m.table.Title (since 1.147) and Table.multiSelectMode (since 1.93)."
+    },
+    {
+      "type": "NOTE",
+      "what": "the sample's onSelectionChange calls oTable.setMultiSelectionMode(sMode) - a setter sap.m.Table does not have. The property is multiSelectMode (sap.m.MultiSelectMode, since 1.93), and the ComboBox's own keys (Default / ClearAll) are its values, so the port binds the ComboBox's selectedKey and the table's multiSelectMode to one field: the ComboBox change needs no handler and the mode actually switches, which in the original it does not."
+    },
+    {
+      "type": "NOTE",
+      "what": "the ui> view model (totalCount, selectedCount, extViewSwitchEnabled) becomes four backend fields. _updateTotalCount reads oBinding.getCount() and _updateSelectedCount getSelectedItems().length; the backend holds the rows and the selection flags, so it counts them directly, and the Show-totalCount switch sets the count to -1 exactly as onToggleTotalCount does. onToggleExtView's setShowExtendedView and the extended-view Switch share one bound flag, so that handler is not needed either; the totalCount switch keeps its change wire because it drives the recount."
+    },
+    {
+      "type": "NOTE",
+      "what": "onSearch filters Name, SupplierName and ProductId with an OR filter on the items binding. The port filters in the backend into a second table (T_ROWS) and keeps the full set in T_PRODUCTS, so the search can widen again; Contains on a client model is case-insensitive, which the ABAP comparison matches by upper-casing both sides."
+    },
+    {
+      "type": "NOTE",
+      "what": "onAddRow builds a product from four Math.random() draws (id, supplier, three dimensions, price, currency). A client-side random draw is not reproducible from a backend (the corpus rule for now/random values), so the port counts up instead: PRD-1, Product 1, the three suppliers in turn and dimensions derived from the counter. The row is appended and toasted exactly as the original does. The sample's own new row carries Price and CurrencyCode fields that no column of this table binds, so they have no counterpart."
+    },
+    {
+      "type": "NOTE",
+      "what": "the items binding keeps its sorter on Name 1:1; its events: { change: '.onBindingChange' } hook has no counterpart - it exists to recount after a binding change, which the backend does whenever it changes the rows."
+    },
+    {
+      "type": "NOTE",
+      "what": "the sample writes itemActionPress=\"onItemActionPress\" without the leading dot, which is not a controller-method reference in a modern XML view; the port wires the event properly, so the delete action works here."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet verified in a running system: the row actions, the multi-select mode switch, the extended title view and the search round trip."
+    }
+  ]
+}
