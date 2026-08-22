@@ -3,6 +3,9 @@ CLASS z2ui5_cl_smpc_app_548 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
+    " RecurrenceRule.days is an int[]: a table of STRINGS serializes to ['1','2']
+    " and UI5 rejects it, so the day tables are integer tables
+    TYPES ty_t_int TYPE STANDARD TABLE OF i WITH EMPTY KEY.
     TYPES: BEGIN OF ty_s_appointment,
              start_at          TYPE string,
              end_at            TYPE string,
@@ -12,7 +15,7 @@ CLASS z2ui5_cl_smpc_app_548 DEFINITION PUBLIC.
              recurrencetype    TYPE string,
              recurrencepattern TYPE i,
              recurrenceenddate TYPE string,
-             t_recurrence_day  TYPE string_table,
+             t_recurrence_day  TYPE ty_t_int,
              ruletype          TYPE string,
              ruledayofmonth    TYPE i,
              ruleweekofmonth   TYPE string,
@@ -28,7 +31,7 @@ CLASS z2ui5_cl_smpc_app_548 DEFINITION PUBLIC.
              recurrencetype    TYPE string,
              recurrencepattern TYPE i,
              recurrenceenddate TYPE string,
-             t_recurrence_day  TYPE string_table,
+             t_recurrence_day  TYPE ty_t_int,
            END OF ty_s_non_working.
     TYPES ty_t_non_working TYPE STANDARD TABLE OF ty_s_non_working WITH EMPTY KEY.
     TYPES: BEGIN OF ty_s_header,
@@ -209,7 +212,7 @@ CLASS z2ui5_cl_smpc_app_548 IMPLEMENTATION.
                             )->ele( n = `RecurringCalendarAppointment` ns = `unified`
                                 )->a( n = `startDate`         v = `{ path: 'START_AT', formatter: 'Formatter.DateCreateObject' }`
                                 )->a( n = `endDate`           v = `{ path: 'END_AT', formatter: 'Formatter.DateCreateObject' }`
-                                )->a( n = `recurrenceType`    v = `{RECURRENCETYPE}`
+                                )->a( n = `recurrenceType`    v = |\{= $\{RECURRENCETYPE\} \|\| null \}|
                                 )->a( n = `recurrencePattern` v = `{RECURRENCEPATTERN}`
                                 )->a( n = `recurrenceEndDate` v = `{ path: 'RECURRENCEENDDATE', formatter: 'Formatter.DateCreateObject' }`
                                 )->a( n = `title`             v = `{TITLE}`
@@ -218,9 +221,9 @@ CLASS z2ui5_cl_smpc_app_548 IMPLEMENTATION.
                                 )->ele( n = `recurrenceRule` ns = `unified`
                                     )->tag( n = `RecurrenceRule` ns = `unified`
                                         )->a( n = `days`        v = `{T_RECURRENCE_DAY}`
-                                        )->a( n = `type`        v = `{RULETYPE}`
+                                        )->a( n = `type`        v = |\{= $\{RULETYPE\} \|\| null \}|
                                         )->a( n = `dayOfMonth`  v = `{RULEDAYOFMONTH}`
-                                        )->a( n = `weekOfMonth` v = `{RULEWEEKOFMONTH}`
+                                        )->a( n = `weekOfMonth` v = |\{= $\{RULEWEEKOFMONTH\} \|\| null \}|
                                         )->a( n = `dayOfWeek`   v = `{RULEDAYOFWEEK}`
                                         )->a( n = `month`       v = `{RULEMONTH}`
 
@@ -230,7 +233,7 @@ CLASS z2ui5_cl_smpc_app_548 IMPLEMENTATION.
 
                         )->ele( `nonWorkingPeriods`
                             )->ele( n = `RecurringNonWorkingPeriod` ns = `unified`
-                                )->a( n = `recurrenceType`    v = `{RECURRENCETYPE}`
+                                )->a( n = `recurrenceType`    v = |\{= $\{RECURRENCETYPE\} \|\| null \}|
                                 )->a( n = `recurrenceEndDate` v = `{ path: 'RECURRENCEENDDATE', formatter: 'Formatter.DateCreateObject' }`
                                 )->a( n = `recurrencePattern` v = `{RECURRENCEPATTERN}`
                                 )->a( n = `date`              v = `{ path: 'DATE_AT', formatter: 'Formatter.DateCreateObject' }`

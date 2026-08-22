@@ -4,8 +4,10 @@ import { waitForUi5, ui5All } from '../../scripts/lib-e2e.mjs';
 export default async (page, expect) => {
   await waitForUi5(page, () => {
     const t = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.Table');
-    return t && t.getItems().length === 123 && t.getItemActionCount() === 1;
-  }, 'the table never rendered its 123 rows with one row action');
+        // 100, not 123: a JSONModel's default sizeLimit is 100 and neither the
+    // sample nor the port raises it, so the original renders 100 rows too
+    return t && t.getItems().length === 100 && t.getItemActionCount() === 1;
+  }, 'the table never rendered its rows with one row action');
   // the counted title starts on the full row count and no selection
   await waitForUi5(page, () => ui5All().some((c) => c.getMetadata().getName() === 'sap.m.table.Title'
     && c.getTotalCount() === 123 && c.getSelectedCount() === 0),
@@ -22,7 +24,7 @@ export default async (page, expect) => {
   await waitForUi5(page, () => {
     const t = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.Table');
     const title = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.table.Title');
-    return t.getItems().length < 123 && title.getTotalCount() === t.getItems().length;
+    return t.getItems().length < 100 && title.getTotalCount() === t.getItems().length;
   }, 'the search never narrowed the rows and the count with them');
   // the ComboBox key really reaches the table's multiSelectMode
   await page.evaluate(() => {

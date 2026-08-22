@@ -16,7 +16,12 @@ export default async (page, expect) => {
   await waitForUi5(page, () => ui5All().some((c) => c.getMetadata().getName() === 'sap.m.SinglePlanningCalendar'
     && c.getEnableAppointmentsDragAndDrop() === false && c.getEnableAppointmentsResize() === false),
     'the seeded action flags never reached the calendar');
-  await page.locator('button:has-text("Create")').first().click();
+  // the Create button sits in the calendar's own toolbar and may be in the
+  // overflow area, so it is fired through the registry
+  await page.evaluate(() => {
+    const reg = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
+    reg.find((c) => c.getMetadata().getName() === 'sap.m.Button' && /Create/.test(c.getText() || '')).firePress();
+  });
   await waitForUi5(page, () => ui5All().some((c) => c.getMetadata().getName() === 'sap.m.Dialog'),
     'the Create press never opened the modify dialog (popup_display)');
 };

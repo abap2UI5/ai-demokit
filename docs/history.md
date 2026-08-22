@@ -7,6 +7,48 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-22 — the first full e2e sweep of the calendar batches: five port defects and a harness rule
+
+The e2e harness was rebuilt after batch b46 and every port of b44, b45 and b46
+was run against it for the first time. Nine of the thirty failed. Five were
+real port defects, four were wrong assertions in the interaction modules —
+and the four teach the same three things about reading a running abap2UI5 app.
+
+**The port defects.** All five are the same shape: *a flat ABAP row serializes
+EVERY field, so a property the sample leaves ABSENT arrives as an empty string
+or a string where a number belongs, and UI5 rejects the value and terminates
+the app.* The static render gate cannot see it because it mocks the model.
+
+- `secondaryType` on a `DateTypeRange` (apps 541, 553) and `type` on a
+  `RecurrenceRule` (apps 548, 555): empty string against an enum. Where the
+  enum has a neutral value the port now seeds it (`None`); where it has none
+  (`RecurrenceType` is Daily/Weekly/Monthly/Yearly, `RecurrenceRuleType` is
+  DayOfMonth/DayOfWeek) the binding became ``{= ${X} || null }`` — UI5's
+  `validateProperty` maps `null` to the property's default, which is exactly
+  what "the field is absent" means in the sample's own JSON.
+- `nonWorkingDays` / `nonWorkingHours` / `RecurrenceRule.days` (apps 537, 548,
+  555): an `int[]` bound to a table of STRINGS serializes to `['5','6']`, and
+  UI5 answers `"5,6" is of type object, expected int[]`. The tables are integer
+  tables now. This also closes app 537's `render_smoke.skip` reasoning: the
+  nesting was never the whole story.
+
+**The harness rules.** Three of them, all about counting controls:
+
+- **A bound aggregation's TEMPLATE is a live Element.** `Element.registry`
+  always holds one row, one list, one item more than the model has, so an exact
+  count from the registry is off by one and an `.every()` over it fails on the
+  template (which has no binding context). Count through the aggregation —
+  `pc.getRows()`, `ff.getLists()`, `list.getItems()`.
+- **A JSONModel's default `sizeLimit` is 100.** A table bound to the 123-row
+  product mock renders 100 rows — in the ORIGINAL too. Only app 567's sample
+  sets a limit of its own (3) and app 558's raises it to 200.
+- **A button in an `OverflowToolbar` may not be in the DOM at all**, so a
+  text or title locator times out; fire it through the registry by id.
+
+And one timing rule: a press fired while a round trip is still in flight is
+dropped. Two selections in a row need the first to come back before the second
+is sent (app 558).
+
 ## 2026-08-22 — batch b47 (sap.m): the Table family, all eleven that were left (apps 566–576)
 
 Every unported `sap.m.Table` sample in one batch, which finishes the control:

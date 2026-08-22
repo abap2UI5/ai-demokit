@@ -15,7 +15,12 @@ export default async (page, expect) => {
   // the recurrence stack reaches the calendar
   await waitForUi5(page, () => ui5All().filter((c) => c.getMetadata().getName() === 'sap.ui.unified.RecurringCalendarAppointment').length === 9,
     'the nine recurring appointments never rendered');
-  await page.locator('button:has-text("Create Appointment")').first().click();
+  // the Create Appointment button sits in the calendar's own toolbar and may be
+  // in the overflow area, so it is fired through the registry
+  await page.evaluate(() => {
+    const reg = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
+    reg.find((c) => c.getMetadata().getName() === 'sap.m.Button' && (c.getText() || '') === 'Create Appointment').firePress();
+  });
   await waitForUi5(page, () => ui5All().some((c) => c.getMetadata().getName() === 'sap.m.Dialog'),
     'the Create Appointment press never opened the dialog (popup_display)');
 };

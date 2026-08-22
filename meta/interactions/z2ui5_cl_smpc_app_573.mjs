@@ -4,8 +4,10 @@ import { waitForUi5, ui5All } from '../../scripts/lib-e2e.mjs';
 export default async (page, expect) => {
   await waitForUi5(page, () => {
     const t = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.Table');
-    return t && t.getItems().length === 123;
-  }, 'the table never rendered its 123 bound rows');
+        // 100, not 123: a JSONModel's default sizeLimit is 100 and neither the
+    // sample nor the port raises it, so the original renders 100 rows too
+    return t && t.getItems().length === 100;
+  }, 'the table never rendered its bound rows');
   // three columns merge duplicates, one of them through getNumber
   await waitForUi5(page, () => ui5All().filter((c) => c.getMetadata().getName() === 'sap.m.Column'
     && c.getMergeDuplicates() === true).length === 3, 'the three merging columns did not survive');

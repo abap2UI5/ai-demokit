@@ -220,14 +220,18 @@ CLASS z2ui5_cl_smpc_app_553 IMPLEMENTATION.
       ( title = `Discussion with clients` text = `Online meeting` type = `Type08` icon = `sap-icon://home` start_at = `2018-07-17T15:30:00` end_at = `2018-07-17T16:30:00` )
     ).
 
+    " a flat ABAP row serializes EVERY field, so a special date the sample gives
+    " no secondaryType would send an empty string - which overrides the
+    " CalendarDayType enum DEFAULT and takes the whole view down (apps 531/532);
+    " the default None is therefore seeded explicitly
     t_special_dates = VALUE #(
-      ( start_at = `2018-07-06T00:00:00` end_at = `2018-07-09T00:00:00` type = `Type14` )
-      ( start_at = `2018-07-02T00:00:00` end_at = `2018-07-02T23:59:00` type = `Type08` )
-      ( start_at = `2018-07-11T00:00:00` end_at = `2018-07-11T23:59:00` type = `Type11` color = `#ff69b4` )
-      ( start_at = `2018-07-12T00:00:00` end_at = `2018-07-12T23:59:00` type = `Type03` color = `#add8e6` )
-      ( start_at = `2018-07-13T00:00:00` end_at = `2018-07-13T23:59:00` type = `Type09` )
+      ( start_at = `2018-07-06T00:00:00` end_at = `2018-07-09T00:00:00` type = `Type14` secondarytype = `None` )
+      ( start_at = `2018-07-02T00:00:00` end_at = `2018-07-02T23:59:00` type = `Type08` secondarytype = `None` )
+      ( start_at = `2018-07-11T00:00:00` end_at = `2018-07-11T23:59:00` type = `Type11` color = `#ff69b4` secondarytype = `None` )
+      ( start_at = `2018-07-12T00:00:00` end_at = `2018-07-12T23:59:00` type = `Type03` color = `#add8e6` secondarytype = `None` )
+      ( start_at = `2018-07-13T00:00:00` end_at = `2018-07-13T23:59:00` type = `Type09` secondarytype = `None` )
       ( start_at = `2018-07-14T00:00:00` end_at = `2018-07-14T00:00:00` type = `Type10` secondarytype = `Working` )
-      ( start_at = `2018-07-17T00:00:00` end_at = `2018-07-18T23:59:00` type = `Type07` )
+      ( start_at = `2018-07-17T00:00:00` end_at = `2018-07-18T23:59:00` type = `Type07` secondarytype = `None` )
     ).
 
     t_legend_items = VALUE #(

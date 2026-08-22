@@ -27,8 +27,11 @@ CLASS z2ui5_cl_smpc_app_537 DEFINITION PUBLIC.
              pic            TYPE string,
              name           TYPE string,
              role           TYPE string,
-             t_free_days    TYPE string_table,
-             t_free_hours   TYPE string_table,
+             " nonWorkingDays / nonWorkingHours are int[] properties: a table of
+             " STRINGS serializes to ['5','6'] and UI5 rejects it ("is of type
+             " object, expected int[]"), so both are integer tables
+             t_free_days    TYPE ty_t_int,
+             t_free_hours   TYPE ty_t_int,
              t_appointments TYPE ty_t_appointment,
              t_headers      TYPE ty_t_header,
            END OF ty_s_person.
@@ -356,8 +359,8 @@ CLASS z2ui5_cl_smpc_app_537 IMPLEMENTATION.
 
     t_people = VALUE #(
       ( pic = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/John_Miller.png` name = `John Miller` role = `team member`
-        t_free_days  = VALUE #( ( `5` ) ( `6` ) )
-        t_free_hours = VALUE #( ( `0` ) ( `1` ) ( `2` ) ( `3` ) ( `4` ) ( `5` ) ( `6` ) ( `17` ) ( `19` ) ( `20` ) ( `21` ) ( `22` ) ( `23` ) )
+        t_free_days  = VALUE #( ( 5 ) ( 6 ) )
+        t_free_hours = VALUE #( ( 0 ) ( 1 ) ( 2 ) ( 3 ) ( 4 ) ( 5 ) ( 6 ) ( 17 ) ( 19 ) ( 20 ) ( 21 ) ( 22 ) ( 23 ) )
         t_appointments = VALUE #(
           ( start_at = `2016-12-02T11:30:00` end_at = `2016-12-02T13:30:00` title = `Online Meeting` type = `Type03` tentative = abap_true aria = `Dialog` )
           ( start_at = `2017-01-15T13:30:00` end_at = `2017-01-29T17:30:00` title = `Discussion with clients` info = `online meeting` type = `Type02` tentative = abap_false aria = `Dialog` )
@@ -376,8 +379,8 @@ CLASS z2ui5_cl_smpc_app_537 IMPLEMENTATION.
           ( start_at = `2017-02-09T11:30:00` end_at = `2017-02-09T14:00:00` title = `Lunch` type = `Type03` )
         ) )
       ( pic = `sap-icon://employee` name = `Max Mustermann` role = `team member`
-        t_free_days  = VALUE #( ( `0` ) ( `6` ) )
-        t_free_hours = VALUE #( ( `0` ) ( `1` ) ( `2` ) ( `3` ) ( `4` ) ( `5` ) ( `6` ) ( `7` ) ( `18` ) ( `19` ) ( `20` ) ( `21` ) ( `22` ) ( `23` ) )
+        t_free_days  = VALUE #( ( 0 ) ( 6 ) )
+        t_free_hours = VALUE #( ( 0 ) ( 1 ) ( 2 ) ( 3 ) ( 4 ) ( 5 ) ( 6 ) ( 7 ) ( 18 ) ( 19 ) ( 20 ) ( 21 ) ( 22 ) ( 23 ) )
         t_appointments = VALUE #(
           ( start_at = `2017-01-02T11:30:00` end_at = `2017-01-02T13:30:00` title = `Online Meeting` type = `Type03` tentative = abap_true aria = `Dialog` )
           ( start_at = `2017-01-15T13:30:00` end_at = `2017-01-29T11:30:00` title = `Meeting with managers` info = `online meeting` type = `Type02` tentative = abap_false aria = `Dialog` )

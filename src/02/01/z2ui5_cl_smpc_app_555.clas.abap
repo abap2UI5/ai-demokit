@@ -3,6 +3,9 @@ CLASS z2ui5_cl_smpc_app_555 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
+    " RecurrenceRule.days is an int[]: a table of STRINGS serializes to ['1','2']
+    " and UI5 rejects it, so the day tables are integer tables
+    TYPES ty_t_int TYPE STANDARD TABLE OF i WITH EMPTY KEY.
     TYPES: BEGIN OF ty_s_appointment,
              start_at          TYPE string,
              end_at            TYPE string,
@@ -12,7 +15,7 @@ CLASS z2ui5_cl_smpc_app_555 DEFINITION PUBLIC.
              recurrencetype    TYPE string,
              recurrencepattern TYPE i,
              recurrenceenddate TYPE string,
-             t_recurrence_day  TYPE string_table,
+             t_recurrence_day  TYPE ty_t_int,
              ruletype          TYPE string,
              ruledayofmonth    TYPE i,
              ruleweekofmonth   TYPE string,
@@ -30,7 +33,7 @@ CLASS z2ui5_cl_smpc_app_555 DEFINITION PUBLIC.
              recurrencetype    TYPE string,
              recurrencepattern TYPE i,
              recurrenceenddate TYPE string,
-             t_recurrence_day  TYPE string_table,
+             t_recurrence_day  TYPE ty_t_int,
            END OF ty_s_non_working.
     TYPES ty_t_non_working TYPE STANDARD TABLE OF ty_s_non_working WITH EMPTY KEY.
 
@@ -128,7 +131,7 @@ CLASS z2ui5_cl_smpc_app_555 IMPLEMENTATION.
                 )->ele( `nonWorkingPeriods`
                     )->ele( n = `RecurringNonWorkingPeriod` ns = `unified`
                         )->a( n = `date`              v = `{ path: 'DATE_AT', formatter: 'Formatter.DateCreateObject' }`
-                        )->a( n = `recurrenceType`    v = `{RECURRENCETYPE}`
+                        )->a( n = `recurrenceType`    v = |\{= $\{RECURRENCETYPE\} \|\| null \}|
                         )->a( n = `recurrencePattern` v = `{RECURRENCEPATTERN}`
                         )->a( n = `recurrenceEndDate` v = `{ path: 'RECURRENCEENDDATE', formatter: 'Formatter.DateCreateObject' }`
 
@@ -154,16 +157,16 @@ CLASS z2ui5_cl_smpc_app_555 IMPLEMENTATION.
                         )->a( n = `title`             v = `{TITLE}`
                         )->a( n = `text`              v = `{TEXT}`
                         )->a( n = `type`              v = `{TYPE}`
-                        )->a( n = `recurrenceType`    v = `{RECURRENCETYPE}`
+                        )->a( n = `recurrenceType`    v = |\{= $\{RECURRENCETYPE\} \|\| null \}|
                         )->a( n = `recurrencePattern` v = `{RECURRENCEPATTERN}`
                         )->a( n = `recurrenceEndDate` v = `{ path: 'RECURRENCEENDDATE', formatter: 'Formatter.DateCreateObject' }`
 
                         )->ele( n = `recurrenceRule` ns = `unified`
                             )->tag( n = `RecurrenceRule` ns = `unified`
                                 )->a( n = `days`        v = `{T_RECURRENCE_DAY}`
-                                )->a( n = `type`        v = `{RULETYPE}`
+                                )->a( n = `type`        v = |\{= $\{RULETYPE\} \|\| null \}|
                                 )->a( n = `dayOfMonth`  v = `{RULEDAYOFMONTH}`
-                                )->a( n = `weekOfMonth` v = `{RULEWEEKOFMONTH}`
+                                )->a( n = `weekOfMonth` v = |\{= $\{RULEWEEKOFMONTH\} \|\| null \}|
                                 )->a( n = `dayOfWeek`   v = `{RULEDAYOFWEEK}`
                                 )->a( n = `month`       v = `{RULEMONTH}`
 
@@ -624,11 +627,11 @@ CLASS z2ui5_cl_smpc_app_555 IMPLEMENTATION.
       ( start_at = `2024-01-01T16:00:00` end_at = `2024-01-01T16:30:00` title = `Log Review (every 2 days)` text = `Should appear every other day: Jan 1, 3, 5, 7...` type = `Type08` recurrencetype = `Daily` recurrencepattern = 2
         recurrenceenddate = `2024-12-31T00:00:00` )
       ( start_at = `2024-01-01T10:00:00` end_at = `2024-01-01T11:00:00` title = `Team Meeting (every Mon)` text = `Should appear once per week on Monday` type = `Type01` recurrencetype = `Weekly` recurrencepattern = 1
-        recurrenceenddate = `2024-12-31T00:00:00` t_recurrence_day = VALUE #( ( `1` ) ) )
+        recurrenceenddate = `2024-12-31T00:00:00` t_recurrence_day = VALUE #( ( 1 ) ) )
       ( start_at = `2024-01-03T14:00:00` end_at = `2024-01-03T15:30:00` title = `Code Review (every Wed+Fri)` text = `Should appear twice per week: Wednesday and Friday` type = `Type02` recurrencetype = `Weekly` recurrencepattern = 1
-        recurrenceenddate = `2024-12-31T00:00:00` t_recurrence_day = VALUE #( ( `3` ) ( `5` ) ) )
+        recurrenceenddate = `2024-12-31T00:00:00` t_recurrence_day = VALUE #( ( 3 ) ( 5 ) ) )
       ( start_at = `2024-01-02T11:00:00` end_at = `2024-01-02T11:30:00` title = `1-on-1 (every 2nd Tue)` text = `Should appear every other Tuesday: Jan 2, 16, 30...` type = `Type06` recurrencetype = `Weekly` recurrencepattern = 2
-        recurrenceenddate = `2024-12-31T00:00:00` t_recurrence_day = VALUE #( ( `2` ) ) )
+        recurrenceenddate = `2024-12-31T00:00:00` t_recurrence_day = VALUE #( ( 2 ) ) )
       ( start_at = `2024-01-01T13:00:00` end_at = `2024-01-01T14:30:00` title = `Retro (1st of each month)` text = `Should appear on the 1st of every month: Jan 1, Feb 1...` type = `Type03` recurrencetype = `Monthly` recurrencepattern = 1
         recurrenceenddate = `2026-12-31T00:00:00` )
       ( start_at = `2024-01-15T09:00:00` end_at = `2024-01-15T12:00:00` title = `Board Review (every 3 months)` text = `Should appear quarterly on 15th: Jan 15, Apr 15, Jul 15, Oct 15` type = `Type07` recurrencetype = `Monthly`
@@ -641,15 +644,15 @@ CLASS z2ui5_cl_smpc_app_555 IMPLEMENTATION.
 
     t_non_working = VALUE #(
       ( date_at = `2024-01-01T00:00:00` start_at = `00:00` end_at = `08:00` valueformat = `HH:mm` title = `Before Work Hours` recurrencetype = `Weekly` recurrencepattern = 1 recurrenceenddate = `2024-12-31T00:00:00`
-        t_recurrence_day = VALUE #( ( `1` ) ( `2` ) ( `3` ) ( `4` ) ( `5` ) ) )
+        t_recurrence_day = VALUE #( ( 1 ) ( 2 ) ( 3 ) ( 4 ) ( 5 ) ) )
       ( date_at = `2024-01-01T00:00:00` start_at = `12:00` end_at = `13:00` valueformat = `HH:mm` title = `Lunch Break` recurrencetype = `Weekly` recurrencepattern = 1 recurrenceenddate = `2024-12-31T00:00:00`
-        t_recurrence_day = VALUE #( ( `1` ) ( `2` ) ( `3` ) ( `4` ) ( `5` ) ) )
+        t_recurrence_day = VALUE #( ( 1 ) ( 2 ) ( 3 ) ( 4 ) ( 5 ) ) )
       ( date_at = `2024-01-01T00:00:00` start_at = `18:00` end_at = `23:59` valueformat = `HH:mm` title = `After Work Hours` recurrencetype = `Weekly` recurrencepattern = 1 recurrenceenddate = `2024-12-31T00:00:00`
-        t_recurrence_day = VALUE #( ( `1` ) ( `2` ) ( `3` ) ( `4` ) ( `5` ) ) )
+        t_recurrence_day = VALUE #( ( 1 ) ( 2 ) ( 3 ) ( 4 ) ( 5 ) ) )
       ( date_at = `2024-01-06T00:00:00` start_at = `00:00` end_at = `23:59` valueformat = `HH:mm` title = `Weekend - Saturday` recurrencetype = `Weekly` recurrencepattern = 1 recurrenceenddate = `2024-12-31T00:00:00`
-        t_recurrence_day = VALUE #( ( `6` ) ) )
+        t_recurrence_day = VALUE #( ( 6 ) ) )
       ( date_at = `2024-01-07T00:00:00` start_at = `00:00` end_at = `23:59` valueformat = `HH:mm` title = `Weekend - Sunday` recurrencetype = `Weekly` recurrencepattern = 1 recurrenceenddate = `2024-12-31T00:00:00`
-        t_recurrence_day = VALUE #( ( `0` ) ) )
+        t_recurrence_day = VALUE #( ( 0 ) ) )
       ( date_at = `2024-01-01T00:00:00` start_at = `02:00` end_at = `02:30` valueformat = `HH:mm` title = `Server Backup` recurrencetype = `Daily` recurrencepattern = 1 recurrenceenddate = `2024-12-31T00:00:00` )
       ( date_at = `2024-01-01T00:00:00` start_at = `06:00` end_at = `08:00` valueformat = `HH:mm` title = `Monthly Maintenance` recurrencetype = `Monthly` recurrencepattern = 1 recurrenceenddate = `2026-12-31T00:00:00` )
       ( date_at = `2024-01-15T00:00:00` start_at = `08:00` end_at = `12:00` valueformat = `HH:mm` title = `Monthly Inventory` recurrencetype = `Monthly` recurrencepattern = 1 recurrenceenddate = `2026-12-31T00:00:00` )

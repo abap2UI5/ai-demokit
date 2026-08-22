@@ -258,10 +258,14 @@ CLASS z2ui5_cl_smpc_app_541 IMPLEMENTATION.
     view_key     = `Hour`.
     first_day    = `-1`.
 
+    " a flat ABAP row serializes EVERY field, so a special date the sample gives
+    " no secondaryType would send an empty string - which overrides the
+    " CalendarDayType enum DEFAULT and takes the whole view down (the b45
+    " lesson of apps 531/532); the default None is therefore seeded explicitly
     t_people = VALUE #(
       ( pic = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/John_Miller.png` name = `John Miller` role = `team member`
         t_specials = VALUE #(
-          ( start_at = `2017-01-24T00:00:00` type = `NonWorking` )
+          ( start_at = `2017-01-24T00:00:00` type = `NonWorking` secondarytype = `None` )
           ( start_at = `2017-01-22T00:00:00` type = `Type10` secondarytype = `Working` )
         )
         t_appointments = VALUE #(
@@ -296,7 +300,7 @@ CLASS z2ui5_cl_smpc_app_541 IMPLEMENTATION.
         )  )
       ( pic = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/Donna_Moore.jpg` name = `Donna Moore` role = `team member`
         t_specials = VALUE #(
-          ( start_at = `2017-01-13T00:00:00` type = `NonWorking` )
+          ( start_at = `2017-01-13T00:00:00` type = `NonWorking` secondarytype = `None` )
         )
         t_appointments = VALUE #(
           ( start_at = `2017-01-10T18:00:00` end_at = `2017-01-10T19:10:00` title = `Discussion of the plan` info = `Online meeting` type = `Type04` tentative = abap_false )

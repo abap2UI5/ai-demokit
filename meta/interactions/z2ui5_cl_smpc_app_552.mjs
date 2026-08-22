@@ -13,6 +13,13 @@ export default async (page, expect) => {
     .filter((c) => c.getStartDate() instanceof Date).length > 0,
     'no appointment reached the calendar with a real start date');
   // only the three BUILT-IN views survive the custom-view classes
-  await waitForUi5(page, () => ui5All().filter((c) => /SinglePlanningCalendar(Day|WorkWeek|Week)View/.test(c.getMetadata().getName())).length === 3,
-    'the three built-in views never rendered');
+  // only the three BUILT-IN views survive the custom-view classes (the control
+  // also keeps internal instances of them, so the check is on the distinct set)
+  await waitForUi5(page, () => {
+    const names = new Set(ui5All().map((c) => c.getMetadata().getName())
+      .filter((n) => /^sap\.m\.SinglePlanningCalendar\w*View$/.test(n)));
+    return names.size === 3 && names.has('sap.m.SinglePlanningCalendarDayView')
+      && names.has('sap.m.SinglePlanningCalendarWorkWeekView')
+      && names.has('sap.m.SinglePlanningCalendarWeekView');
+  }, 'the three built-in views never rendered');
 };
