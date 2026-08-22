@@ -73,7 +73,12 @@ CLASS z2ui5_cl_smpc_app_444 IMPLEMENTATION.
                     )->a( n = `close`                         v = client->_event( `GROUP_CLOSE` )
                     )->a( n = `showEmptyGroup`                v = `true`
                     )->a( n = `enableCollapseButtonWhenEmpty` v = `true`
-                    )->a( n = `visible`                       b = group_visible
+                    " NOT `b = <field>`: that parameter writes the LITERAL 'true' or
+                    " 'false' into the attribute at render time (view_builder->a),
+                    " so a field the event handler changes never reaches the
+                    " control - none of these apps re-renders after an event
+                    " (e2e-caught on app 505, 2026-08-22)
+                    )->a( n = `visible`                       v = client->_bind( group_visible )
                     )->a( n = `items`                         v = client->_bind( t_notifications )
 
                     )->ele( `buttons`

@@ -123,9 +123,15 @@ CLASS z2ui5_cl_smpc_app_565 IMPLEMENTATION.
                             )->a( n = `icon`             v = `{PRODUCTPICURL}`
                             )->a( n = `iconDensityAware` v = `false`
                             )->a( n = `iconInset`        v = `false`
-                            " onNavToProduct reads the pressed row's binding context
+                            " onNavToProduct reads the pressed row's product id.
+                            " $source> is UI5's CONTROL model: it sees the pressed
+                            " control's PROPERTIES, not the row's model fields, so
+                            " '${$source>/PRODUCT_ID}' resolved to null and the
+                            " detail page stayed empty (e2e-caught 2026-08-22). The
+                            " id is on the item as its bound description, which is
+                            " what every other $source> wire in the corpus reads.
                             )->a( n = `press`            v = client->_event( val   = `NAV_TO_PRODUCT`
-                                                                             t_arg = VALUE #( ( `${$source>/PRODUCT_ID}` ) ) )
+                                                                             t_arg = VALUE #( ( `${$source>/description}` ) ) )
 
                     )->end(
                 )->end(

@@ -2,7 +2,10 @@
 import { waitForUi5, ui5All } from '../../scripts/lib-e2e.mjs';
 
 export default async (page, expect) => {
-  await page.locator('.sapMInputValHelp .sapMInputValHelpInner, .sapMInputValueHelpIcon').first().click();
+  // the value-help icon measures 0x0 in the unthemed harness — F4 on the
+  // focused field raises the same valueHelpRequest through the control
+  await page.locator('.sapMInputBaseInner').first().focus();
+  await page.keyboard.press('F4');
   await waitForUi5(page, () => ui5All().some((c) => c.getMetadata().getName() === 'sap.m.SelectDialog'),
     'the valueHelpRequest never opened the SelectDialog (popup_display)');
   await waitForUi5(page, () => ui5All().filter((c) => c.getMetadata().getName() === 'sap.m.StandardListItem' && c.getDomRef()).length > 0,

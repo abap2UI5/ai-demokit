@@ -111,9 +111,14 @@ CLASS z2ui5_cl_smpc_app_499 IMPLEMENTATION.
 
       WHEN `SEARCH`.
         DATA(term) = client->get_event_arg( ).
+        " The compound payload is an array of GROUPS, each group an array of
+        " [path, operator, value1] ROWS (app 022's shape). It was written as an
+        " array of objects, which buildFilterGroups drops as not-an-array - and
+        " an empty group list CLEARS the filter, so every search showed the full
+        " list (e2e-caught 2026-08-22).
         DATA(filter) = COND string( WHEN term IS INITIAL
                                     THEN `[]`
-                                    ELSE |[\{"path":"NAME","operator":"Contains","value1":"{ term }"\}]| ).
+                                    ELSE |[[["NAME","Contains","{ term }"]]]| ).
         client->follow_up_action( val   = client->cs_event-binding_call
                                   t_arg = VALUE #( ( `idList` ) ( `items` ) ( `filter` ) ( filter ) ) ).
 

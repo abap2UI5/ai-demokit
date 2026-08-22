@@ -74,8 +74,13 @@ CLASS z2ui5_cl_smpc_app_520 IMPLEMENTATION.
           )->a( n = `showItemsCounter`              v = `false`
           )->a( n = `collapsed`                     v = `true`
           " onToggleCollapse fills the group the first time it is expanded
+          " The collapsed flag travels as a STRING TOKEN, not as the raw boolean:
+          " a JSON boolean t_arg is normalised to X/space by ajson on a real
+          " system, but reaches the transpiled backend verbatim as 'true'/'false'
+          " - and 'false' is not INITIAL, so the group was never filled there
+          " (e2e-caught 2026-08-22, the app 421 idiom).
           )->a( n = `onCollapse`                    v = client->_event( val   = `TOGGLE_COLLAPSE`
-                                                                        t_arg = VALUE #( ( |{ group }| ) ( `${$parameters>/collapsed}` ) ) )
+                                                                        t_arg = VALUE #( ( |{ group }| ) ( `${$parameters>/collapsed} ? 'collapsed' : 'expanded'` ) ) )
           )->a( n = `close`                         v = client->_event( val   = `GROUP_CLOSE`
                                                                         t_arg = VALUE #( ( |{ group }| ) ) )
           )->a( n = `showEmptyGroup`                v = `true`
@@ -122,7 +127,7 @@ CLASS z2ui5_cl_smpc_app_520 IMPLEMENTATION.
 
       WHEN `TOGGLE_COLLAPSE`.
         " the group is filled the first time it is EXPANDED
-        IF client->get_event_arg( 2 ) IS INITIAL.
+        IF client->get_event_arg( 2 ) = `expanded`.
           group_fill( group ).
         ENDIF.
 

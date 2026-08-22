@@ -2,10 +2,15 @@
 import { waitForUi5 } from '../../scripts/lib-e2e.mjs';
 
 export default async (page, expect) => {
-  const field = page.locator('.sapMSFI').first();
-  await expect(field, 'the search field').toBeVisibleEnabled();
-  await field.click();
-  await field.pressSequentially('Notebook', { delay: 400 });
+  // `.sapMSFI` is the SearchField's wrapper, not its input: typing into it
+  // left the control's value empty (measured 2026-08-22) and the liveChange
+  // wire never ran. Raise it through the control instead.
+  await page.evaluate(() => {
+    const reg = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
+    const sf = reg.find((c) => c.getMetadata().getName() === 'sap.m.SearchField');
+    sf.setValue('Notebook');
+    sf.fireLiveChange({ newValue: 'Notebook' });
+  });
   await waitForUi5(page, () => Object.values(sap.ui.require('sap/ui/core/Element').registry.all())
     .filter((c) => c.getMetadata().getName() === 'sap.m.StandardListItem' && c.getDomRef()).length > 0
     && Object.values(sap.ui.require('sap/ui/core/Element').registry.all())

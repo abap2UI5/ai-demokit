@@ -122,7 +122,12 @@ CLASS z2ui5_cl_smpc_app_505 IMPLEMENTATION.
             )->ele( `Table`
                 )->a( n = `id`          v = `idProductsTable`
                 )->a( n = `inset`       v = `false`
-                )->a( n = `showOverlay` b = overlay
+                " NOT `b = <field>`: that parameter writes the LITERAL 'true' or
+                " 'false' into the attribute at render time (view_builder->a),
+                " so a field the event handler changes never reaches the
+                " control - none of these apps re-renders after an event
+                " (e2e-caught on app 505, 2026-08-22)
+                )->a( n = `showOverlay` v = client->_bind( overlay )
                 )->a( n = `items`       v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
                 )->ele( `columns`

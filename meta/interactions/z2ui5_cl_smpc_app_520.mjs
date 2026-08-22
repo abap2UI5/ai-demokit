@@ -10,7 +10,11 @@ export default async (page, expect) => {
     'the groups did not boot collapsed and empty');
   await page.evaluate(`(() => {
     const ui5All = () => Object.values(sap.ui.require("sap/ui/core/Element").registry.all());
-    ui5All().find((c) => c.getMetadata().getName() === 'sap.m.NotificationListGroup').setCollapsed(false);
+    const g = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.NotificationListGroup');
+    g.setCollapsed(false);
+    // setCollapsed alone changes the CONTROL: the onCollapse wire is what
+    // fetches the group's items, so it has to be fired too
+    g.fireEvent('onCollapse', { collapsed: false });
   })()`);
   await waitForUi5(page, () => ui5All().filter((c) => c.getMetadata().getName() === 'sap.m.NotificationListItem').length === 3,
     'expanding the first group never filled it with its three notifications');

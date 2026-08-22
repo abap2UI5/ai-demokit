@@ -86,7 +86,12 @@ CLASS z2ui5_cl_smpc_app_436 IMPLEMENTATION.
             )->tag( `ToggleButton`
                 )->a( n = `icon`    v = `sap-icon://menu`
                 )->a( n = `tooltip` v = `Enable / Disable Custom Context Menu`
-                )->a( n = `pressed` b = menu_on
+                " NOT `b = <field>`: that parameter writes the LITERAL 'true' or
+                " 'false' into the attribute at render time (view_builder->a),
+                " so a field the event handler changes never reaches the
+                " control - none of these apps re-renders after an event
+                " (e2e-caught on app 505, 2026-08-22)
+                )->a( n = `pressed` v = client->_bind( menu_on )
                 )->a( n = `press`   v = client->_event( val   = `TOGGLE_CONTEXT_MENU`
                                                         t_arg = VALUE #( ( `${$parameters>/pressed}` ) ) ) ).
 
