@@ -10,5 +10,10 @@
   },
   "status": "generated",
   "checked": null,
-  "deviations": []
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The ObjectHeader binds the fixed record {/ProductCollection/0}. The port seeds the three fields it actually reads (Price, CurrencyCode, SupplierName) at the default-model root and binds them absolutely, so the attr ObjectHeader.binding is dropped. Everything else in this sample is a literal in the view."
+    }
+  ]
 }

@@ -10,5 +10,10 @@
   },
   "status": "generated",
   "checked": null,
-  "deviations": []
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Formatter.randomBoolean decides the unread flag per row with Math.random. A backend cannot repeat a client-side random draw, so unread is a plain model field seeded alternately (every second row unread) - same two states over the same 123 rows, deterministic instead of random."
+    }
+  ]
 }

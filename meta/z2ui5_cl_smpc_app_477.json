@@ -10,5 +10,18 @@
   },
   "status": "generated",
   "checked": null,
-  "deviations": []
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The ObjectHeader binds the fixed record {/ProductCollection/0}. The port seeds the five bound fields (Description, Name, Price, CurrencyCode, SupplierName) at the default-model root and binds them absolutely, so the attr ObjectHeader.binding is dropped."
+    },
+    {
+      "type": "NOTE",
+      "what": "press shows MessageBox.alert('Link was clicked!') for all eight NumericContents - one round-trip event raising message_box_display with the same text and type."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The eight NumericContent presses raising the alert are unverified in a running system."
+    }
+  ]
 }

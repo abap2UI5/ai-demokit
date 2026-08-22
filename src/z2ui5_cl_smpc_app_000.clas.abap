@@ -1526,17 +1526,23 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxGrouping`                              class = `z2ui5_cl_smpc_app_199` path = `src/01/01/z2ui5_cl_smpc_app_199.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        since = `1.22` )
-      ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxSearchBoth`                            class = `z2ui5_cl_smpc_app_479` path = `src/01/01/z2ui5_cl_smpc_app_479.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22` ) ).
 
     result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxSearchBoth`                            class = `z2ui5_cl_smpc_app_479` path = `src/01/01/z2ui5_cl_smpc_app_479.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22`
+        notes = `NOTE: fnFormatter joins the ComboBox value and key into 'text (key)' (or whichever one is set). A formatter is business logic, so the text is composed in ABAP and bound; the port adds a change wire on` &&
+                 ` the ComboBox to tell the backend when to recompute it, which the original does not need because its formatter re-evaluates on every model change. // LIVE-TEST: The change wire and the composed text` &&
+                 ` are unverified in a running system.` )
       ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxValidation`                            class = `z2ui5_cl_smpc_app_475` path = `src/01/01/z2ui5_cl_smpc_app_475.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        since = `1.22` )
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22`
+        notes = `NOTE: handleChange validates the entry (a typed value with no matching key is an error) and calls setValueState / setValueStateText. Validation is business logic, so the port keeps the change wire,` &&
+                 ` binds selectedKey, value, valueState and valueStateText, and decides the state in ABAP - the same two branches with the same message. // LIVE-TEST: The change wire and the two bound value-state` &&
+                 ` properties are unverified in a running system.` )
       ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxWrapping`                              class = `z2ui5_cl_smpc_app_384` path = `src/01/01/z2ui5_cl_smpc_app_384.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2157,9 +2163,14 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` HeaderContainer.ariaLabelledBy attribute listing all eight ids instead of building it imperatively. // NOTE: press shows MessageToast.show('Fire press') - a constant text, so all eight NumericContent` &&
                  ` presses are composed on the client via follow_up_action control_global MESSAGE_TOAST.show and need no round-trip.` )
       ( module = `sap.m`              control = `sap.m.HeaderContainer`                 name = `HeaderContainerOH`                             class = `z2ui5_cl_smpc_app_477` path = `src/01/01/z2ui5_cl_smpc_app_477.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        since = `1.44.0` )
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.44.0`
+        notes = `NOTE: The ObjectHeader binds the fixed record {/ProductCollection/0}. The port seeds the five bound fields (Description, Name, Price, CurrencyCode, SupplierName) at the default-model root and binds` &&
+                 ` them absolutely, so the attr ObjectHeader.binding is dropped. // NOTE: press shows MessageBox.alert('Link was clicked!') for all eight NumericContents - one round-trip event raising` &&
+                 ` message_box_display with the same text and type. // LIVE-TEST: The eight NumericContent presses raising the alert are unverified in a running system.` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.HeaderContainer`                 name = `HeaderContainerVM`                             class = `z2ui5_cl_smpc_app_157` path = `src/01/01/z2ui5_cl_smpc_app_157.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2563,8 +2574,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` literal mode=MultiSelect / selectedKey=MultiSelect becoming bindings. // NOTE: The full /ProductCollection mock (123 rows) is inlined; the row type is restricted to the columns the StandardListItem` &&
                  ` binds (Name, ProductId, ProductPicUrl) - a column subset, not a row subset. ProductPicUrl relative asset paths are rehosted to the OpenUI5 host https://sdk.openui5.org/ per the asset-URL rule.` )
       ( module = `sap.m`              control = `sap.m.List`                            name = `ListUnread`                                    class = `z2ui5_cl_smpc_app_480` path = `src/01/01/z2ui5_cl_smpc_app_480.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: Formatter.randomBoolean decides the unread flag per row with Math.random. A backend cannot repeat a client-side random draw, so unread is a plain model field seeded alternately (every second row` &&
+                 ` unread) - same two states over the same 123 rows, deterministic instead of random.` ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MaskInput`                       name = `MaskInput`                                     class = `z2ui5_cl_smpc_app_153` path = `src/02/01/z2ui5_cl_smpc_app_153.clas.abap`
@@ -2902,9 +2915,11 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
 
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MultiComboBox`                   name = `MultiComboBoxCustomFiltering`                  class = `z2ui5_cl_smpc_app_481` path = `src/01/01/z2ui5_cl_smpc_app_481.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        since = `1.22.0` )
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22.0`
+        notes = `IMPROVISED: onInit gives both MultiComboBoxes a JavaScript setFilterFunction - a case-insensitive starts-with on the first, a contains on the second. A JS filter callback has no bindable or backend` &&
+                 ` equivalent (the app-authored-JS-function boundary), so both carry UI5's default filtering and the contrast the sample demonstrates is lost.` )
       ( module = `sap.m`              control = `sap.m.MultiComboBox`                   name = `MultiComboBoxDefaultFiltering`                 class = `z2ui5_cl_smpc_app_459` path = `src/01/01/z2ui5_cl_smpc_app_459.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2964,8 +2979,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
 
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputCustomFiltering`                     class = `z2ui5_cl_smpc_app_478` path = `src/01/01/z2ui5_cl_smpc_app_478.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `IMPROVISED: onInit gives both MultiInputs a JavaScript setFilterFunction - a case-insensitive starts-with on the first, a contains on the second. A JS filter callback has no bindable or backend` &&
+                 ` equivalent (the app-authored-JS-function boundary), so both suggestion lists carry UI5's default filtering and the difference between the two MultiInputs the sample demonstrates is lost.` )
       ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputDatabinding`                         class = `z2ui5_cl_smpc_app_457` path = `src/01/01/z2ui5_cl_smpc_app_457.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
@@ -3224,8 +3241,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
 
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ObjectHeader`                    name = `ObjectHeaderResponsiveVI`                      class = `z2ui5_cl_smpc_app_476` path = `src/01/01/z2ui5_cl_smpc_app_476.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: The ObjectHeader binds the fixed record {/ProductCollection/0}. The port seeds the three fields it actually reads (Price, CurrencyCode, SupplierName) at the default-model root and binds them` &&
+                 ` absolutely, so the attr ObjectHeader.binding is dropped. Everything else in this sample is a literal in the view.` )
       ( module = `sap.m`              control = `sap.m.ObjectIdentifier`                name = `ObjectIdentifier`                              class = `z2ui5_cl_smpc_app_071` path = `src/01/01/z2ui5_cl_smpc_app_071.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -4032,12 +4051,19 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         post171 = `sap.m.StandardListItem infoStateInverted (since 1.74) is kept 1:1 from the original view; needs a UI5 release >= 1.74 to render.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.StandardListItem`                name = `StandardListItemNavigated`                     class = `z2ui5_cl_smpc_app_482` path = `src/01/01/z2ui5_cl_smpc_app_482.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+      ( module = `sap.m`              control = `sap.m.StandardListItem`                name = `StandardListItemNavigated`                     class = `z2ui5_cl_smpc_app_482` path = `src/02/01/z2ui5_cl_smpc_app_482.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        is_post171 = abap_true
+        notes = `POST-1.71: sap.m.StandardListItem.navigated is @since 1.72 and is the subject of this sample, so it is kept 1:1 and the port needs a UI5 runtime >= 1.72. // NOTE: The navigated flag comes from the` &&
+                 ` .isNavigated formatter comparing the settings model's navigatedItem with each row's ProductId. A formatter is business logic, so the port binds a plain navigated field per row and the press wire` &&
+                 ` (carrying ${PRODUCTID}) sets it in ABAP - exactly one row navigated at a time, like the original. // LIVE-TEST: The press wire setting the navigated row is unverified in a running system.`
+        post171 = `sap.m.StandardListItem.navigated is @since 1.72 and is the subject of this sample, so it is kept 1:1 and the port needs a UI5 runtime >= 1.72.` )
       ( module = `sap.m`              control = `sap.m.StandardListItem`                name = `StandardListItemTitle`                         class = `z2ui5_cl_smpc_app_483` path = `src/01/01/z2ui5_cl_smpc_app_483.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: onInit calls list.bindElement('/ProductCollection'), which is why the four items address their records as {0/...} .. {3/...}. The port keeps that element binding on the List (binding attribute` &&
+                 ` over the bound table), so the relative indexed paths resolve exactly as in the original - including the third item's empty description and the fourth's missing one, both reproduced verbatim.` ) ).
 
     lv_text1 = `POST-1.71: infoIcon (since UI5 1.150) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.150 to render the status icon next to the info text. // POST-1.71:` &&
                ` infoStateInverted (since UI5 1.74) is newer than 1.71 but kept for the 1:1 port - it is what the sample's Toggle Inverted button drives. // POST-1.71: wrapCharLimit (since UI5 1.94) is newer than` &&
@@ -4322,9 +4348,13 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.9.0` )
       ( module = `sap.m`              control = `sap.m.TextArea`                        name = `TextAreaMaxLength`                             class = `z2ui5_cl_smpc_app_485` path = `src/01/01/z2ui5_cl_smpc_app_485.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        since = `1.9.0` )
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.9.0`
+        notes = `NOTE: handleLiveChange sets the TextArea valueState from the current length. The first TextArea's valueState is already an expression binding over the same bound value in the ORIGINAL view, so the` &&
+                 ` port keeps that expression and drops the liveChange attribute - the state follows the value without a round-trip. The second TextArea keeps its static Warning state as the sample sets it. // NOTE:` &&
+                 ` The second and third TextAreas carry their value as a literal in the view, exactly as the original does (only the first one is model-bound); structural-diff reports the literal against the first` &&
+                 ` TextArea's {/value} because it compares the attribute across all three.` )
       ( module = `sap.m`              control = `sap.m.TextArea`                        name = `TextAreaValueStates`                           class = `z2ui5_cl_smpc_app_371` path = `src/01/01/z2ui5_cl_smpc_app_371.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -4647,8 +4677,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
 
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.ui.core.StandardMargins`           name = `StandardMarginsEnforceWidthAuto`               class = `z2ui5_cl_smpc_app_484` path = `src/01/01/z2ui5_cl_smpc_app_484.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: The IconTabBar binds expanded to the demo kit's own device model flag {device>/isNoPhone}. abap2UI5 serves the raw sap.ui.Device under device>, so the port expresses the same branch as {=` &&
+                 ` !${device>/system/phone} } (apps 030/089 precedent) - same value on the same devices.` )
       ( module = `sap.m`              control = `sap.ui.core.StandardMargins`           name = `StandardMarginsResponsive`                     class = `z2ui5_cl_smpc_app_472` path = `src/01/01/z2ui5_cl_smpc_app_472.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )

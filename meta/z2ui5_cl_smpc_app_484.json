@@ -10,5 +10,10 @@
   },
   "status": "generated",
   "checked": null,
-  "deviations": []
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The IconTabBar binds expanded to the demo kit's own device model flag {device>/isNoPhone}. abap2UI5 serves the raw sap.ui.Device under device>, so the port expresses the same branch as {= !${device>/system/phone} } (apps 030/089 precedent) - same value on the same devices."
+    }
+  ]
 }

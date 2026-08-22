@@ -7,6 +7,40 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-22 — batch b38 (sap.m): eleven ports, and the JS-callback boundary twice more (apps 475–485)
+
+| app | sample | what it adds |
+|---|---|---|
+| 475 | ComboBoxValidation | validation stays in ABAP: bound `valueState` + `valueStateText` written on the change wire |
+| 476 | ObjectHeaderResponsiveVI | active intro/title links, the row-0 element binding folded to root fields |
+| 477 | HeaderContainerOH | an ObjectHeader with a HeaderContainer of eight NumericContents raising one alert |
+| 478 | MultiInputCustomFiltering | two MultiInputs whose only difference is a JS filter callback (IMPROVISED) |
+| 479 | ComboBoxSearchBoth | `filterSecondaryValues` plus a formatter recomposed in ABAP on a change wire |
+| 480 | ListUnread | `showUnread` with the random unread flag made deterministic |
+| 481 | MultiComboBoxCustomFiltering | the same JS-callback boundary on two MultiComboBoxes |
+| 482 | StandardListItemNavigated | `navigated` @1.72 (POST_171, `src/02`), one row at a time, decided in ABAP |
+| 483 | StandardListItemTitle | `bindElement('/ProductCollection')` kept, `{0/…}`..`{3/…}` items with the empty and the missing description reproduced |
+| 484 | StandardMarginsEnforceWidthAuto | `sapUiForceWidthAuto` and the device branch on `expanded` |
+| 485 | TextAreaMaxLength | `showExceededText` with the ORIGINAL's own valueState expression kept |
+
+Three things this batch settled:
+
+- **A formatter is business logic even when it only joins two strings.** Apps
+  479 and 482 both compute in ABAP what the sample computes in a `.formatter`,
+  and both needed a wire the original does not have (a `change` on the ComboBox,
+  a `press` carrying `${PRODUCTID}`) because a backend-composed value has to be
+  told when to recompute. That added attribute is the honest cost and is
+  declared.
+- **`setFilterFunction` is the second reliable IMPROVISED of the corpus.** Four
+  ports now carry it (470/471/478/481): a JS filter callback has no bindable or
+  backend equivalent, so the ports ship UI5's default filtering and say which
+  half of the sample's point is lost.
+- **A sample can exist without a demo kit sentence.** `ObjectHeaderResponsiveVI`
+  ships a complete manifest/view/controller and the coverage scanner offers it,
+  but `docuindex.json` lists the family only up to V — so its summary is a
+  `written` entry in `ui5/descriptions.json` with the reason, the fourth in the
+  corpus.
+
 ## 2026-08-22 — batch b37 (sap.m): the IconTabBar/margins tail, 10 ports (apps 465–474)
 
 Ten more, and the batch that produced the most reusable finding of the day.
