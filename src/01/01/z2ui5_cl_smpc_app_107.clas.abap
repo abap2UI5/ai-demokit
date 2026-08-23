@@ -229,7 +229,10 @@ CLASS z2ui5_cl_smpc_app_107 IMPLEMENTATION.
         client->message_toast_display( |Pressed: { client->get_event_arg( ) }| ).
 
       WHEN `SELECT_CHANGE`.
-        client->message_toast_display( |Selected: { sort_key }| ).
+        " onSemanticSelectChange derives the same class name as onSemanticButtonPress
+        " - getMetadata( ).getName( ) minus the LIBRARY 'sap.m' - and appends the
+        " selected item's text, so the original prints 'semantic.SortSelect by <text>'
+        client->message_toast_display( |Selected: semantic.SortSelect by { sort_key }| ).
 
       WHEN `MULTI`.
         " onMultiSelectPress: getPressed() ? 'MultiSelect Pressed' : 'MultiSelect Unpressed'

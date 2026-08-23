@@ -21,7 +21,7 @@
     },
     {
       "type": "POST_171",
-      "what": "Formatter.DateCreateObject is referenced via core:require (UI5 >= 1.74). sap.m.SinglePlanningCalendar and its DayView/WorkWeekView/WeekView/MonthView are since 1.61 (in scope). Also the SinglePlanningCalendar events weekNumberPress and selectedDatesChange (@since 1.123) are kept 1:1 from the original view; newer than 1.71, declared per the property-171 policy."
+      "what": "Formatter.DateCreateObject is referenced via core:require (UI5 >= 1.74). sap.m.SinglePlanningCalendar and its DayView/WorkWeekView/WeekView are since 1.61 and MonthView since 1.69 (corrected 2026-08-23 - all four had been listed at 1.61; both figures sit inside the 1.71 floor, so scope and the version floor are unaffected, but the pinned fact was wrong). Also the SinglePlanningCalendar events weekNumberPress and selectedDatesChange (@since 1.123) are kept 1:1 from the original view; newer than 1.71, declared per the property-171 policy."
     },
     {
       "type": "POST_171",

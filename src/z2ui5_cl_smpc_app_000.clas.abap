@@ -5682,17 +5682,19 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26.0` ) ).
 
-    lv_text1 = `NOTE: onSemanticButtonPress toasts each action's class name, reproduced by passing the name as a t_arg literal. The SortSelect change toasts the two-way selectedKey (sort_key); PagingButton` &&
-               ` positionChange transports ${$parameters>/newPosition}; the custom footer / share buttons transport $event.oSource.sId. // NOTE: MultiSelectAction and MessagesIndicator reproduced 1:1 since` &&
-               ` 2026-07-30. onMultiSelectPress: the press transports ${$source>/pressed} and the backend toasts 'MultiSelect Pressed'/'MultiSelect Unpressed' from the toggle state exactly like getPressed().` &&
-               ` onMessagesButtonPress: the controller-built MessagePopover over the message model is declared as a dependent of the MessagesIndicator (added controls vs the original view.xml: MessagePopover +` &&
-               ` MessageItem with the original's {message>description}/{message>type}/{message>message} template) and toggled roundtrip-free via follow_up_action control_by_id toggleBy ($event.oSource.sId) - the` &&
-               ` _messagePopover.toggle(oMessagesButton) equivalent. onInit's MessageManager.addMessages seed ('Something wrong happened', Error) rides on an added z2ui5.cc.MessageManager bridge control (in an added`.
-    lv_text1 = lv_text1 && ` semantic content aggregation, declared) with its one-row items table - the app-065 idiom. // NOTE: The SortSelect items are bound to a 2-row filter-type table reproducing` &&
+    lv_text1 = `NOTE: onSemanticButtonPress toasts each action's class name, reproduced by passing the name as a t_arg literal. The SortSelect change toasts what the original composes: onSemanticSelectChange runs the` &&
+               ` SAME derivation as onSemanticButtonPress - getMetadata( ).getName( ) minus the LIBRARY, which for a sap.m.semantic.* control is 'sap.m' - and appends the selected item's text, so it prints 'Selected:` &&
+               ` semantic.SortSelect by <text>'. Corrected 2026-08-23 with the button literals: the port had toasted the bare selectedKey and lost the class-name half (the value half was always right, since the item` &&
+               ` key equals its text here); PagingButton positionChange transports ${$parameters>/newPosition}; the custom footer / share buttons transport $event.oSource.sId. // NOTE: MultiSelectAction and` &&
+               ` MessagesIndicator reproduced 1:1 since 2026-07-30. onMultiSelectPress: the press transports ${$source>/pressed} and the backend toasts 'MultiSelect Pressed'/'MultiSelect Unpressed' from the toggle` &&
+               ` state exactly like getPressed(). onMessagesButtonPress: the controller-built MessagePopover over the message model is declared as a dependent of the MessagesIndicator (added controls vs the original`.
+    lv_text1 = lv_text1 && ` view.xml: MessagePopover + MessageItem with the original's {message>description}/{message>type}/{message>message} template) and toggled roundtrip-free via follow_up_action control_by_id toggleBy` &&
+               ` ($event.oSource.sId) - the _messagePopover.toggle(oMessagesButton) equivalent. onInit's MessageManager.addMessages seed ('Something wrong happened', Error) rides on an added z2ui5.cc.MessageManager` &&
+               ` bridge control (in an added semantic content aggregation, declared) with its one-row items table - the app-065 idiom. // NOTE: The SortSelect items are bound to a 2-row filter-type table reproducing` &&
                ` /ProductCollectionStats/Filters (the two ``type`` values Category and SupplierName; the per-type ``values`` sub-arrays are unused by the Select). The binding keeps the original sorter { path: 'Name'` &&
                ` } 1:1 — a no-op there too, since the Filters entries carry ``type``, not ``Name``. // NOTE: The semantic-action toast strings were corrected 2026-08-23, together with app 105's. The original derives` &&
-               ` the text as getMetadata().getName() minus the LIBRARY name, and the library of a sap.m.semantic.* control is 'sap.m' - so it prints 'Pressed: semantic.AddAction'. These ports had passed the bare` &&
-               ` action name, stripping the namespace as well, so every one of them differed from the original.`.
+               ` the text as getMetadata().getName() minus the LIBRARY name, and the library of a sap.m.semantic.* control is 'sap.m' - so it prints 'Pressed: semantic.AddAction'. These ports had passed the bare`.
+    lv_text1 = lv_text1 && ` action name, stripping the namespace as well, so every one of them differed from the original.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.semantic.SemanticPage`           name = `SemanticPage`                                  class = `z2ui5_cl_smpc_app_107` path = `src/01/01/z2ui5_cl_smpc_app_107.clas.abap`
         score = 5
@@ -5700,16 +5702,18 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.30.0`
         notes = lv_text1 ) ).
 
-    lv_text1 = `NOTE: onSemanticButtonPress toasts each action's class name, reproduced by passing the name as a t_arg literal. The SortSelect change toasts the two-way selectedKey (sort_key); PagingButton` &&
-               ` positionChange transports ${$parameters>/newPosition}; the custom footer / share buttons transport $event.oSource.sId. // NOTE: MultiSelectAction and MessagesIndicator reproduced 1:1 since` &&
-               ` 2026-07-30. onMultiSelectPress: the press transports ${$source>/pressed} and the backend toasts 'MultiSelect Pressed'/'MultiSelect Unpressed' from the toggle state exactly like getPressed().` &&
-               ` onMessagesButtonPress: the controller-built MessagePopover over the message model is declared as a dependent of the MessagesIndicator (added controls vs the original view.xml: MessagePopover +` &&
-               ` MessageItem with the original's {message>description}/{message>type}/{message>message} template) and toggled roundtrip-free via follow_up_action control_by_id toggleBy ($event.oSource.sId) - the` &&
-               ` _messagePopover.toggle(oMessagesButton) equivalent. onInit's MessageManager.addMessages seed ('Something wrong happened', Error) rides on an added z2ui5.cc.MessageManager bridge control (in an added`.
-    lv_text1 = lv_text1 && ` semantic content aggregation, declared) with its one-row items table - the app-065 idiom. // NOTE: The SortSelect items are bound to a 2-row filter-type table reproducing` &&
+    lv_text1 = `NOTE: onSemanticButtonPress toasts each action's class name, reproduced by passing the name as a t_arg literal. The SortSelect change toasts what the original composes: onSemanticSelectChange runs the` &&
+               ` SAME derivation as onSemanticButtonPress - getMetadata( ).getName( ) minus the LIBRARY, which for a sap.m.semantic.* control is 'sap.m' - and appends the selected item's text, so it prints 'Selected:` &&
+               ` semantic.SortSelect by <text>'. Corrected 2026-08-23 with the button literals: the port had toasted the bare selectedKey and lost the class-name half (the value half was always right, since the item` &&
+               ` key equals its text here); PagingButton positionChange transports ${$parameters>/newPosition}; the custom footer / share buttons transport $event.oSource.sId. // NOTE: MultiSelectAction and` &&
+               ` MessagesIndicator reproduced 1:1 since 2026-07-30. onMultiSelectPress: the press transports ${$source>/pressed} and the backend toasts 'MultiSelect Pressed'/'MultiSelect Unpressed' from the toggle` &&
+               ` state exactly like getPressed(). onMessagesButtonPress: the controller-built MessagePopover over the message model is declared as a dependent of the MessagesIndicator (added controls vs the original`.
+    lv_text1 = lv_text1 && ` view.xml: MessagePopover + MessageItem with the original's {message>description}/{message>type}/{message>message} template) and toggled roundtrip-free via follow_up_action control_by_id toggleBy` &&
+               ` ($event.oSource.sId) - the _messagePopover.toggle(oMessagesButton) equivalent. onInit's MessageManager.addMessages seed ('Something wrong happened', Error) rides on an added z2ui5.cc.MessageManager` &&
+               ` bridge control (in an added semantic content aggregation, declared) with its one-row items table - the app-065 idiom. // NOTE: The SortSelect items are bound to a 2-row filter-type table reproducing` &&
                ` /ProductCollectionStats/Filters (the two ``type`` values Category and SupplierName; the per-type ``values`` sub-arrays are unused by the Select). The binding keeps the original sorter { path: 'Name'` &&
-               ` } 1:1 — a no-op there too, since the Filters entries carry ``type``, not ``Name``. // NOTE: Same as SemanticPage but the MasterPage and DetailPage carry floatingFooter='true' and the MasterPage drops` &&
-               ` the PageAccessibleLandmarkInfo (matching the SemanticPageFloatingFooter variant). // NOTE: The semantic-action toast strings were corrected 2026-08-23, together with app 105's. The original derives` &&
+               ` } 1:1 — a no-op there too, since the Filters entries carry ``type``, not ``Name``. // NOTE: Same as SemanticPage but the MasterPage and DetailPage carry floatingFooter='true' and the MasterPage drops`.
+    lv_text1 = lv_text1 && ` the PageAccessibleLandmarkInfo (matching the SemanticPageFloatingFooter variant). // NOTE: The semantic-action toast strings were corrected 2026-08-23, together with app 105's. The original derives` &&
                ` the text as getMetadata().getName() minus the LIBRARY name, and the library of a sap.m.semantic.* control is 'sap.m' - so it prints 'Pressed: semantic.AddAction'. These ports had passed the bare` &&
                ` action name, stripping the namespace as well, so every one of them differed from the original.`.
     result = VALUE #( BASE result
@@ -5810,22 +5814,24 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` rendering. West of Greenwich and in UTC it is correct, so a CI run in UTC would report a false all-clear. Transporting the array would therefore trade a missing line for a wrong date east of` &&
                ` Greenwich; the toast keeps the event name alone until the framework can project a Date timezone-safely (backlog item event-arg-date-utc-shift in abap2UI5). App 060's parent-chain breadcrumb is a` &&
                ` different boundary and stays open on its own reasoning. The transported start date is the client-side string form of the JS Date, not the original's oStartDate.toString() rendering, so the exact` &&
-               ` wording of that one line can differ. // POST-1.71: Formatter.DateCreateObject is referenced via core:require (UI5 >= 1.74). sap.m.SinglePlanningCalendar and its` &&
-               ` DayView/WorkWeekView/WeekView/MonthView are since 1.61 (in scope). Also the SinglePlanningCalendar events weekNumberPress and selectedDatesChange (@since 1.123) are kept 1:1 from the original view;` &&
-               ` newer than 1.71, declared per the property-171 policy. // POST-1.71: the icon ``sap-icon://select-appointments`` reached the SAP icon font in 1.96 and is kept 1:1 from the original Page.view.xml,`.
-    lv_text1 = lv_text1 && ` which names it on the 'Enable multi-day selection' ToggleButton. Newer than the 1.71 floor: there IconPool resolves nothing and the button renders with NO icon, silently - the app needs a UI5 release` &&
-               ` >= 1.96 to show it. The dateSelectionMode property the same button drives carries no @since of its own, but its ENUM TYPE sap.m.SinglePlanningCalendarSelectionMode is @since 1.113 - invisible to the` &&
-               ` property gate at the attribute-name level (AGENTS section 5, the enum-value residual limit), so it is declared here BY POLICY: the app needs a UI5 release >= 1.113 for the multi-day selection to mean` &&
-               ` anything. // NOTE: onPress reproduced 1:1 since 2026-08-21. The port toasted a constant 'Day selection mode toggled' before and carried NO dateSelectionMode at all, so the one behaviour` &&
-               ` SinglePlanningCalendarDateSelection exists to demonstrate was silently absent and undeclared - found by the review sweep. Both halves of the original handler are bindable properties, so both are held` &&
-               ` in the model and bound two-way rather than driven through a frontend action (the prefer-a-bindable-property rule): dateSelectionMode flips SingleSelect <-> MultiSelect and the ToggleButton's tooltip`.
-    lv_text1 = lv_text1 && ` follows with 'Enable multi-day selection' / 'Disable multi-day selection', exactly the strings the original's setTooltip uses.`.
-    lv_text2 = `Formatter.DateCreateObject is referenced via core:require (UI5 >= 1.74). sap.m.SinglePlanningCalendar and its DayView/WorkWeekView/WeekView/MonthView are since 1.61 (in scope). Also the` &&
-               ` SinglePlanningCalendar events weekNumberPress and selectedDatesChange (@since 1.123) are kept 1:1 from the original view; newer than 1.71, declared per the property-171 policy. // the icon` &&
+               ` wording of that one line can differ. // POST-1.71: Formatter.DateCreateObject is referenced via core:require (UI5 >= 1.74). sap.m.SinglePlanningCalendar and its DayView/WorkWeekView/WeekView are` &&
+               ` since 1.61 and MonthView since 1.69 (corrected 2026-08-23 - all four had been listed at 1.61; both figures sit inside the 1.71 floor, so scope and the version floor are unaffected, but the pinned` &&
+               ` fact was wrong). Also the SinglePlanningCalendar events weekNumberPress and selectedDatesChange (@since 1.123) are kept 1:1 from the original view; newer than 1.71, declared per the property-171`.
+    lv_text1 = lv_text1 && ` policy. // POST-1.71: the icon ``sap-icon://select-appointments`` reached the SAP icon font in 1.96 and is kept 1:1 from the original Page.view.xml, which names it on the 'Enable multi-day selection'` &&
+               ` ToggleButton. Newer than the 1.71 floor: there IconPool resolves nothing and the button renders with NO icon, silently - the app needs a UI5 release >= 1.96 to show it. The dateSelectionMode property` &&
+               ` the same button drives carries no @since of its own, but its ENUM TYPE sap.m.SinglePlanningCalendarSelectionMode is @since 1.113 - invisible to the property gate at the attribute-name level (AGENTS` &&
+               ` section 5, the enum-value residual limit), so it is declared here BY POLICY: the app needs a UI5 release >= 1.113 for the multi-day selection to mean anything. // NOTE: onPress reproduced 1:1 since` &&
+               ` 2026-08-21. The port toasted a constant 'Day selection mode toggled' before and carried NO dateSelectionMode at all, so the one behaviour SinglePlanningCalendarDateSelection exists to demonstrate was`.
+    lv_text1 = lv_text1 && ` silently absent and undeclared - found by the review sweep. Both halves of the original handler are bindable properties, so both are held in the model and bound two-way rather than driven through a` &&
+               ` frontend action (the prefer-a-bindable-property rule): dateSelectionMode flips SingleSelect <-> MultiSelect and the ToggleButton's tooltip follows with 'Enable multi-day selection' / 'Disable` &&
+               ` multi-day selection', exactly the strings the original's setTooltip uses.`.
+    lv_text2 = `Formatter.DateCreateObject is referenced via core:require (UI5 >= 1.74). sap.m.SinglePlanningCalendar and its DayView/WorkWeekView/WeekView are since 1.61 and MonthView since 1.69 (corrected` &&
+               ` 2026-08-23 - all four had been listed at 1.61; both figures sit inside the 1.71 floor, so scope and the version floor are unaffected, but the pinned fact was wrong). Also the SinglePlanningCalendar` &&
+               ` events weekNumberPress and selectedDatesChange (@since 1.123) are kept 1:1 from the original view; newer than 1.71, declared per the property-171 policy. // the icon` &&
                ` ``sap-icon://select-appointments`` reached the SAP icon font in 1.96 and is kept 1:1 from the original Page.view.xml, which names it on the 'Enable multi-day selection' ToggleButton. Newer than the` &&
                ` 1.71 floor: there IconPool resolves nothing and the button renders with NO icon, silently - the app needs a UI5 release >= 1.96 to show it. The dateSelectionMode property the same button drives` &&
-               ` carries no @since of its own, but its ENUM TYPE sap.m.SinglePlanningCalendarSelectionMode is @since 1.113 - invisible to the property gate at the attribute-name level (AGENTS section 5, the` &&
-               ` enum-value residual limit), so it is declared here BY POLICY: the app needs a UI5 release >= 1.113 for the multi-day selection to mean anything.`.
+               ` carries no @since of its own, but its ENUM TYPE sap.m.SinglePlanningCalendarSelectionMode is @since 1.113 - invisible to the property gate at the attribute-name level (AGENTS section 5, the`.
+    lv_text2 = lv_text2 && ` enum-value residual limit), so it is declared here BY POLICY: the app needs a UI5 release >= 1.113 for the multi-day selection to mean anything.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.SinglePlanningCalendar`          name = `SinglePlanningCalendarDateSelection`           class = `z2ui5_cl_smpc_app_109` path = `src/02/01/z2ui5_cl_smpc_app_109.clas.abap`
         score = 4
@@ -6962,22 +6968,31 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` Select.change attribute is dropped (structural-diff reports attr missing Select.change). // NOTE: The shared two-way bound mode field (Select -> Tree.mode across all five selection modes) is` &&
                  ` unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_437.mjs).` ) ).
 
-    lv_text1 = `NOTE: **Rebuilt on 2026-08-05** - it was a breadth probe with THREE INVENTED rows (Screenshot.png / Notes.txt / Report.doc) and a reduced toolbar. Both rows of the sample's own items.json are there` &&
-               ` verbatim now (Business Plan Agenda.doc with its five ObjectMarkers and four ObjectStatuses, Picture of a woman.png with its two), the item template carries the markers/statuses aggregations and` &&
-               ` uploadState, the UploadSet its terminationEnabled / maxFileNameLength / maxFileSize / mediaTypes / uploadUrl, and the toolbar its three buttons plus the UploadSetToolbarPlaceholder. The asset URLs` &&
-               ` point at the OpenUI5 host per the offline asset rule. The port has no structural difference from the original left, so its breadth-probe structural_diff skip is gone. Upload itself still targets the` &&
-               ` abap2UI5 FileUploader path in a live system, and the control stays a decided scope exception (sap.m.upload.UploadSet is deprecated, KEEP 2026-07-30). // POST-1.71: UploadSet.mode (since UI5 1.100)` &&
-               ` and UploadSet.afterItemRemoved (since UI5 1.83) kept for the 1:1 port - surfaced when the property gate gained the sap.m/upload sub-package (control-level source scan 2026-07-26). The whole control`.
-    lv_text1 = lv_text1 && ` is deprecated out-of-scope debt anyway (pr/scope-since-from-source). // POST-1.71: Found on 2026-08-21, when view-gates stopped letting ANY deviation excuse a version finding: a NOTE that merely` &&
-               ` contained the member's name had been satisfying the gate, and only POST_171 / DROPPED_171 carry that claim. sap.m.upload.UploadSetToolbarPlaceholder is @since 1.103.0 and is kept 1:1 from the` &&
-               ` sample's toolbar. It is a CONTROL-level finding, so nothing about it appears as an attribute; the port already sits in src/02/01 for sap.m.upload.UploadSet itself, and the app needs UI5 >= 1.103. //` &&
-               ` NOTE: The items' ``url`` field is host-absolutized: items.json carries the demo kit's relative 'demokit/sample/UploadCollection/LinkedDocuments/Business Plan Agenda.doc', and the port serves it from` &&
-               ` https://sdk.openui5.org/test-resources/sap/m/... because an abap2UI5 app has no demo-kit document root to resolve a relative path against. Declared explicitly on 2026-08-21: data-fidelity used to` &&
-               ` clear this because an unrelated deviation contained the word 'url', and it now requires the field to be named as a field.`.
+    lv_text1 = `NOTE: **Rebuilt on 2026-08-05** - it was a breadth probe with THREE INVENTED rows (Screenshot.png / Notes.txt / Report.doc) and a reduced toolbar. Both rows of the sample's own items.json are there.` &&
+               ` Corrected 2026-08-23: row 2 had carried an invented mediaType='image/png' - the mock's second row has mimeType, which nothing in the sample binds, so the bound mediaType property is undefined there.` &&
+               ` It is empty now, and the row is verbatim (Business Plan Agenda.doc with its five ObjectMarkers and four ObjectStatuses, Picture of a woman.png with its two), the item template carries the` &&
+               ` markers/statuses aggregations and uploadState, the UploadSet its terminationEnabled / maxFileNameLength / maxFileSize / mediaTypes / uploadUrl, and the toolbar its three buttons plus the` &&
+               ` UploadSetToolbarPlaceholder. The asset URLs point at the OpenUI5 host per the offline asset rule. The port has no structural difference from the original left, so its breadth-probe structural_diff` &&
+               ` skip is gone. Upload itself is not wired at all - the port keeps the original's relative uploadUrl and nothing else, so in an abap2UI5 deployment that URL resolves to nothing. Corrected 2026-08-23:`.
+    lv_text1 = lv_text1 && ` the sentence used to point at "the abap2UI5 FileUploader path", and the framework ships a purpose-built companion for exactly this control (z2ui5.cc.UploadSetExt, which reads each added file as a` &&
+               ` base64 data URL into bindable properties so the backend needs no upload endpoint; CAPABILITIES.md lists it). Converting this port to it is open work, and the control stays a decided scope exception` &&
+               ` (sap.m.upload.UploadSet is deprecated, KEEP 2026-07-30). // POST-1.71: UploadSet.mode (since UI5 1.100) and UploadSet.afterItemRemoved (since UI5 1.83) kept for the 1:1 port - surfaced when the` &&
+               ` property gate gained the sap.m/upload sub-package (control-level source scan 2026-07-26). The whole control is deprecated out-of-scope debt anyway (pr/scope-since-from-source). // POST-1.71: Found on` &&
+               ` 2026-08-21, when view-gates stopped letting ANY deviation excuse a version finding: a NOTE that merely contained the member's name had been satisfying the gate, and only POST_171 / DROPPED_171 carry` &&
+               ` that claim. sap.m.upload.UploadSetToolbarPlaceholder is @since 1.103.0 and is kept 1:1 from the sample's toolbar. It is a CONTROL-level finding, so nothing about it appears as an attribute; the port`.
+    lv_text1 = lv_text1 && ` already sits in src/02/01 for sap.m.upload.UploadSet itself, and the app needs UI5 >= 1.103. // NOTE: The items' ``url`` field is host-absolutized: items.json carries the demo kit's relative` &&
+               ` 'demokit/sample/UploadCollection/LinkedDocuments/Business Plan Agenda.doc', and the port serves it from https://sdk.openui5.org/test-resources/sap/m/... because an abap2UI5 app has no demo-kit` &&
+               ` document root to resolve a relative path against. Declared explicitly on 2026-08-21: data-fidelity used to clear this because an unrelated deviation contained the word 'url', and it now requires the` &&
+               ` field to be named as a field. // IMPROVISED: Three of the original's five handlers are still not reproduced, and the two that are were reworked 2026-08-23. WHAT WORKS NOW: onAfterItemRemoved really` &&
+               ` deletes the row (it used to only toast, so a removed file came back on the next render - the wire transports the item's file name, since the sample matches on an id this row type does not carry), and` &&
+               ` onSelectionChange drives the version button's enabled state for exactly one selection (it had been hard-coded false, so the button the sample's selection logic exists to demonstrate was permanently`.
+    lv_text1 = lv_text1 && ` dead). The five invented toasts are gone with them; the original raises no MessageToast anywhere. STILL DROPPED: uploadItem( ) on the two toolbar buttons and download( true ); onInit's FileUploader` &&
+               ` customisation (setButtonOnly(false) / setIconOnly(true) / the attachment icon), so the add control renders as the default upload button rather than the bare icon the sample is recognisable by; and` &&
+               ` uploadCompleted, which unshifts the newly uploaded file into the list.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.upload.UploadSet`                name = `UploadSet`                                     class = `z2ui5_cl_smpc_app_121` path = `src/02/01/z2ui5_cl_smpc_app_121.clas.abap`
-        score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.63`
         is_post171 = abap_true
         is_deprecated = abap_true
@@ -7293,8 +7308,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = `NOTE: The two toolbar buttons reproduce the original controller behaviour server-side: 'Toggle Collapse/Expand' flips NavigationList.expanded (bound to a boolean model field), 'Show/Hide SubItem 3'` &&
                ` flips subItemThree.visible. The original used byId().setExpanded/setVisible; here the properties are two-way bound and toggled on a backend round-trip. The 'expanded' attribute on NavigationList and` &&
                ` the 'visible' attribute on subItemThree are added to carry these bindings (the original set them imperatively). **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend +` &&
-               ` real browser): 'Show/Hide SubItem 3' removes exactly one of the two same-named sub items (the bound visible flag flipped on a round-trip) and 'Toggle Collapse/Expand' collapses the NavigationList so` &&
-               ` the item texts disappear - both toolbar buttons reproduce the original byId().setVisible/setExpanded server-side.`.
+               ` real browser): 'Show/Hide SubItem 3' removes one of the two same-named sub items - scope, added 2026-08-23: the module asserts the count drops BELOW 2, so a run in which both disappeared would pass` &&
+               ` just as well; 'exactly one' is not what it checks (the bound visible flag flipped on a round-trip) and 'Toggle Collapse/Expand' collapses the NavigationList so the item texts disappear - both toolbar` &&
+               ` buttons reproduce the original byId().setVisible/setExpanded server-side.`.
     result = VALUE #( BASE result
       ( module = `sap.tnt`            control = `sap.tnt.NavigationList`                name = `NavigationList`                                class = `z2ui5_cl_smpc_app_123` path = `src/01/05/z2ui5_cl_smpc_app_123.clas.abap`
         score = 2
@@ -7722,15 +7738,21 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = lv_text1
         post171 = lv_text2 ) ).
 
+    lv_text1 = `NOTE: Breadth-probe: the ACE-based sap.ui.codeeditor CodeEditor (a wrapped third-party editor). **Both findings of the 2026-07-27 review are fixed (2026-08-05)**: the value carries all TWELVE language` &&
+               ` entries of the original verbatim (it had been shortened to four, against the verbatim-data rule), and the brace escaping is right. The original's own view.xml writes value='\{…' - the backslash has` &&
+               ` to SURVIVE into the serialized attribute or the XMLView parser reads the JSON braces as a binding - so the braces come from ``backtick`` literals (taken verbatim) while the body uses |…| templates` &&
+               ` for the real newlines; inside a template \{ would collapse to a bare brace. That distinction is now a linter rule of its own (escaped-brace-in-backtick, the mirror of collapsed-brace-in-style). //` &&
+               ` NOTE: The editor renders 13 tab-indented lines where the ORIGINAL renders one collapsed line, and the port is the source-faithful side rather than the display-faithful one. The original puts literal`.
+    lv_text1 = lv_text1 && ` LF and TAB characters into an XML attribute value, and XML attribute-value normalisation turns each into a single space before the value reaches CodeEditor.value - so the demo kit shows the JSON on` &&
+               ` one long line. abap2UI5's builder deliberately emits &#xA;/&#x9; character references instead (a character reference is NOT normalised), precisely so a two-line noDataText survives, and here that` &&
+               ` preserves the formatting the sample's source has and its rendering loses. Declared 2026-08-23 rather than collapsed to match: reproducing the original's RENDERING would mean deliberately writing` &&
+               ` spaces where the sample wrote newlines.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.codeeditor`  control = `sap.ui.codeeditor.CodeEditor`          name = `CodeEditor`                                    class = `z2ui5_cl_smpc_app_114` path = `src/01/02/z2ui5_cl_smpc_app_114.clas.abap`
         score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.46`
-        notes = `NOTE: Breadth-probe: the ACE-based sap.ui.codeeditor CodeEditor (a wrapped third-party editor). **Both findings of the 2026-07-27 review are fixed (2026-08-05)**: the value carries all TWELVE language` &&
-                 ` entries of the original verbatim (it had been shortened to four, against the verbatim-data rule), and the brace escaping is right. The original's own view.xml writes value='\{…' - the backslash has` &&
-                 ` to SURVIVE into the serialized attribute or the XMLView parser reads the JSON braces as a binding - so the braces come from ``backtick`` literals (taken verbatim) while the body uses |…| templates` &&
-                 ` for the real newlines; inside a template \{ would collapse to a bare brace. That distinction is now a linter rule of its own (escaped-brace-in-backtick, the mirror of collapsed-brace-in-style).` ) ).
+        notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: The original's onSelectTab swaps the CodeEditor value per selected key imperatively (A -> example2, B -> example1, any other key -> setValue() i.e. empty) and its onInit seeds the hint '//` &&
                ` select tabs to see value of CodeEditor changing'. Rebuilt on the client with no round-trip: selectedKey is two-way bound to selected_key (seeded with the original's literal 'invalidKey') and the` &&
@@ -9922,10 +9944,14 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` ResponsivePopover-with-ColorPicker is reproduced 1:1 via popover_display( xml = fragment by_id = $event.oSource.sId ): a core:FragmentDefinition with ResponsivePopover (title 'Color Picker'), a` &&
                ` second u:ColorPicker (HSL/Simplified) in its content and Submit/Cancel Button pair - all extra controls vs the original view.xml, which declared none of them (controller-built). The original's` &&
                ` Device.system.phone branch (phone: begin/end Submit/Cancel buttons that close; desktop: setShowHeader(false)) is expressed declaratively: showHeader='{device>/system/phone}' and` &&
-               ` visible='{device>/system/phone}' on both buttons, so phone and desktop render as the original without a JS branch; the buttons close via the popover_close frontend action (oRP.close()). // NOTE: the` &&
-               ` anchored ResponsivePopover open (popover_display by_id) with the embedded ColorPicker and the device-bound header/button variants are unverified in a running system. **e2e-verified 2026-07-30**`.
-    lv_text1 = lv_text1 && ` (transpiled-framework interaction, scripts/e2e-smoke.mjs): the button press opens the ResponsivePopover anchored with the embedded ColorPicker attached (the picker's inner sliders render zero-size` &&
-               ` headless, so only the container is asserted). **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_112.mjs).`.
+               ` visible='{device>/system/phone}' on both buttons, so the buttons themselves appear only on a phone. Corrected 2026-08-23: this used to claim phone AND desktop render as the original, and desktop does` &&
+               ` not. Declaring the two aggregations at all runs ResponsivePopover._setButton, which on desktop - where the inner control is a Popover - CREATES a footer Toolbar with a ToolbarSpacer and attaches it,`.
+    lv_text1 = lv_text1 && ` before any binding is evaluated, and tears it down only when the button object is falsy rather than invisible. So the port's desktop popover shows an empty footer bar under the ColorPicker where the` &&
+               ` original, which never calls setBeginButton/setEndButton on desktop, has no footer at all. The headless e2e runs on desktop and asserts only that the popover opened, so it cannot see this; the buttons` &&
+               ` close via the popover_close frontend action (oRP.close()). // NOTE: the anchored ResponsivePopover open (popover_display by_id) with the embedded ColorPicker and the device-bound header/button` &&
+               ` variants are unverified in a running system. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the button press opens the ResponsivePopover anchored with the` &&
+               ` embedded ColorPicker attached (the picker's inner sliders render zero-size headless, so only the container is asserted). **e2e-verified 2026-08-04** (nightly e2e interaction,` &&
+               ` meta/interactions/z2ui5_cl_smpc_app_112.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.ColorPicker`            name = `ColorPickerSimplified`                         class = `z2ui5_cl_smpc_app_112` path = `src/01/02/z2ui5_cl_smpc_app_112.clas.abap`
         score = 3
@@ -9990,12 +10016,15 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` checked.note records.` ) ).
 
     lv_text1 = `NOTE: The full upload cycle is backend/endpoint dependent, so it is reduced to client-side MessageToasts: 'Upload File' press shows an upload-started toast (original handleUploadPress ran` &&
-               ` checkFileReadable().then(upload)), and FileUploader.uploadComplete shows the hardcoded success message the original built (handleUploadComplete parsed a hardcoded 'Status: 200' response and toasted` &&
-               ` '(Upload Success)'). The uploadUrl='upload/' is kept 1:1. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_126.mjs). // NOTE: The sample's own stylesheet is` &&
-               ` injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). This sample's manifest lists ``../style.css`` - the sheet the sap.ui.unified samples SHARE one` &&
-               ` folder up - and it was never archived, so the viewPadding / labelMarginLeft classes the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders` &&
-               ` padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by`.
-    lv_text1 = lv_text1 && ` scripts/probes/orphan-style-class-probe.mjs.`.
+               ` checkFileReadable().then(upload)), and FileUploader.uploadComplete shows the hardcoded success message the original built - which until 2026-08-23 could never fire: nothing called upload( ) and` &&
+               ` uploadOnChange defaults to false, so the event's only firing paths were unreachable, and the press raised an invented 'Uploading file to the local server ...' toast the original does not have. The` &&
+               ` press now calls upload( ) through control_by_id, which is what handleUploadPress does and what makes the uploadComplete toast live. Its checkFileReadable( ) guard and the error toast it feeds stay` &&
+               ` dropped (handleUploadComplete parsed a hardcoded 'Status: 200' response and toasted '(Upload Success)'). The uploadUrl='upload/' is kept 1:1. **e2e-verified 2026-08-04** (nightly e2e interaction,` &&
+               ` meta/interactions/z2ui5_cl_smpc_app_126.mjs). // NOTE: The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). This`.
+    lv_text1 = lv_text1 && ` sample's manifest lists ``../style.css`` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding class the view carries had no rule behind it` &&
+               ` (corrected 2026-08-23 - labelMarginLeft was named here too and this sample's view does not carry it; it is a rule of the shared sap.ui.unified sheet that other samples use) and the port rendered` &&
+               ` flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only the rules this view actually uses` &&
+               ` are injected. Found by scripts/probes/orphan-style-class-probe.mjs.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.FileUploader`           name = `FileUploaderBasic`                             class = `z2ui5_cl_smpc_app_126` path = `src/01/02/z2ui5_cl_smpc_app_126.clas.abap`
         score = 3

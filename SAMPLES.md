@@ -760,7 +760,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 
 | Sample | Class |
 |---|---|
-| **sap.ui.codeeditor.CodeEditor**<br>Display or edit source code with syntax highlighting for various source types.<br><sub>codeeditor code editor sap.ui.codeeditor ace</sub><br><sub>◐ reviewed · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_114`](src/01/02/z2ui5_cl_smpc_app_114.clas.abap) |
+| **sap.ui.codeeditor.CodeEditor**<br>Display or edit source code with syntax highlighting for various source types.<br><sub>codeeditor code editor sap.ui.codeeditor ace</sub><br><sub>◐ reviewed · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_114`](src/01/02/z2ui5_cl_smpc_app_114.clas.abap) |
 | **sap.ui.codeeditor.CodeEditor** — Code Editor with IconTabHeader<br>Example how to use CodeEditor with IconTabHeader to create a tab-based experience.<br><sub>codeeditor code editor sap.ui.codeeditor icontabheader icontabfilter</sub><br><sub>◐ reviewed · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_150`](src/01/02/z2ui5_cl_smpc_app_150.clas.abap) |
 
 ### sap.ui.model
@@ -778,7 +778,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 
 | Sample | Class |
 |---|---|
-| **sap.m.upload.UploadSet**<br>This sample shows an Upload Set control with a list of files to be uploaded and actions you can perform on them.<br><sub>uploadset upload set sap.m.upload file list overflowtoolbar toolbarspacer button uploadsettoolbarplaceholder uploadsetitem objectmarker</sub><br><sub>◐ reviewed · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_121`](src/02/01/z2ui5_cl_smpc_app_121.clas.abap) |
+| **sap.m.upload.UploadSet**<br>This sample shows an Upload Set control with a list of files to be uploaded and actions you can perform on them.<br><sub>uploadset upload set sap.m.upload file list overflowtoolbar toolbarspacer button uploadsettoolbarplaceholder uploadsetitem objectmarker</sub><br><sub>◐ reviewed · 5 deviations</sub> | [`Z2UI5_CL_SMPC_APP_121`](src/02/01/z2ui5_cl_smpc_app_121.clas.abap) |
 
 ### sap.ui.core.hyphenation
 
