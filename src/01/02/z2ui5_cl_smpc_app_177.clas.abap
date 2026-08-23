@@ -97,21 +97,22 @@ CLASS z2ui5_cl_smpc_app_177 IMPLEMENTATION.
                         )->a( n = `startDate` v = |\{ path: 'START', formatter: 'Formatter.DateAbapDateToDateObject' \}|
 
                 )->end(
+            )->end(
 
-                )->ele( n = `VerticalLayout` ns = `l`
-                    )->tag( `Button`
-                        )->a( n = `press` v = client->_event( `SELECT_TODAY` )
-                        )->a( n = `text`  v = `Select Today`
+            )->ele( n = `VerticalLayout` ns = `l`
+                )->tag( `Button`
+                    )->a( n = `press` v = client->_event( `SELECT_TODAY` )
+                    )->a( n = `text`  v = `Select Today`
 
-                    )->ele( n = `HorizontalLayout` ns = `l`
-                        )->tag( `Label`
-                            )->a( n = `text`     v = `Selected Date:`
-                            )->a( n = `labelFor` v = `selectedDate`
-                            )->a( n = `class`    v = `labelMarginLeft`
-                        )->tag( `Text`
-                            )->a( n = `id`    v = `selectedDate`
-                            )->a( n = `text`  v = client->_bind( selected_date )
-                            )->a( n = `class` v = `labelMarginLeft` ).
+                )->ele( n = `HorizontalLayout` ns = `l`
+                    )->tag( `Label`
+                        )->a( n = `text`     v = `Selected Date:`
+                        )->a( n = `labelFor` v = `selectedDate`
+                        )->a( n = `class`    v = `labelMarginLeft`
+                    )->tag( `Text`
+                        )->a( n = `id`    v = `selectedDate`
+                        )->a( n = `text`  v = client->_bind( selected_date )
+                        )->a( n = `class` v = `labelMarginLeft` ).
 
     client->view_display( view->stringify( ) ).
 

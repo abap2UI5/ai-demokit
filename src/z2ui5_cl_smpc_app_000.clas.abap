@@ -3159,23 +3159,30 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` ${/inputPopulated} ? ... : ... } with the i18n operands replaced by the literal strings. The Label ...:'-suffixed i18n texts are likewise inlined. // NOTE: formatter.deliveryStatusState` &&
                ` (Shipped->Success, Failed Shipping->Error, else None) is business logic; per the thin-frontend principle it moves out of the frontend formatter into the ABAP model (deliverystatus_state, computed in` &&
                ` model_init per purchase) and the ObjectStatus state binds that precomputed field (sel_delivery_state) directly instead of a formatter binding. // NOTE: handleValueHelpSearch / _getCombinedFilter`.
-    lv_text1 = lv_text1 && ` build an OR filter of PurchaseID Contains + SupplierName Contains, and _filterAndOpenValueHelpDialog opens the dialog pre-filtered with the current input value. **Both reproduced 2026-08-05** against` &&
-               ` capabilities that had shipped and were unused: the search round-trips its value and the backend issues the COMPOUND binding_call filter (a JSON group with both fields, ORed inside the group -` &&
-               ` pr/binding-call-compound-filters; the payload is one JSON string, so the value cannot be substituted client-side, which is why this one wire round-trips like app 022's - re-verified 2026-08-23:` &&
-               ` get_t_arg emits an argument raw only when it starts with $ or { (or is an .eB/.eBP/.eF expression), and the compound payload starts with [, so it is quoted as a JS string and any ${...} inside it` &&
-               ` stays literal text), and valueHelpRequest now passes $event.oSource.getValue() to open( ), the search-string argument the whitelist already declared. The Input's setFilterFunction (case-insensitive` &&
-               ` contains over key+text) stays unreproduced - it is UI5's built-in suggestion filtering. // NOTE: Namespace-prefix representation: the port declares xmlns=sap.m (default) plus xmlns:uxap=sap.uxap, so`.
-    lv_text1 = lv_text1 && ` the uxap controls are emitted uxap:-prefixed. In the originals ObjectPageLayout/ObjectPageDynamicHeaderTitle (App.view.xml) and the IllustratedMessage-fragment ObjectPageSection/ObjectPageSubSection` &&
-               ` are unprefixed (their file's default xmlns is sap.uxap), while the ProductsTable/SupplierDetails fragments already use the uxap: prefix. Same library, identical rendering; structural-diff sees` &&
-               ` uxap:ObjectPageSection vs ObjectPageSection (and likewise ObjectPageLayout/ObjectPageDynamicHeaderTitle/ObjectPageSubSection) as control missing/extra. m:IllustratedMessage keeps its m: prefix to` &&
-               ` match the original. // POST-1.71: sap.m.IllustratedMessage (control since UI5 1.98, with illustrationType/title/description) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release` &&
-               ` >= 1.98 to render it. property-check does not track IllustratedMessage members, so this is declared by policy, not gate-forced. // POST-1.71: sap.m.Input.autocomplete (since UI5 1.108) is newer than` &&
-               ` 1.71 but kept 1:1 (autocomplete='false'); the app needs a UI5 release >= 1.108 to render it. Not tracked by property-check (declared by policy). // NOTE: leg (c) is closed: **e2e-verified`.
-    lv_text1 = lv_text1 && ` 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): F4 on the PurchaseID Input (the keyboard form of valueHelpRequest - its icon has no layout box headless) opens the` &&
-               ` SelectDialog client-side through control_by_id, and the dialog renders its bound purchase rows. Still unverified in a running system: (a) Input submit resolving the entered PurchaseID and redrawing;` &&
-               ` (b) suggestionItemSelected transporting ${$parameters>/selectedItem}.getKey(); (d) the SelectDialog search (binding_call filter) and its confirm arg - the dialog row has no layout box headless and` &&
-               ` neither a click nor a keyboard Enter reaches the confirm; (e) the ObjectPageLayout/IllustratedMessage/Table rendering. **e2e-verified 2026-08-04** (nightly e2e interaction,` &&
-               ` meta/interactions/z2ui5_cl_smpc_app_233.mjs).`.
+    lv_text1 = lv_text1 && ` build an OR filter of PurchaseID Contains + SupplierName Contains, and _filterAndOpenValueHelpDialog opens the dialog pre-filtered with the current input value. **Both reproduced - the pre-filter` &&
+               ` only since 2026-08-23** against capabilities that had shipped and were unused: the search round-trips its value and the backend issues the COMPOUND binding_call filter (a JSON group with both fields,` &&
+               ` ORed inside the group - pr/binding-call-compound-filters; the payload is one JSON string, so the value cannot be substituted client-side, which is why this one wire round-trips like app 022's -` &&
+               ` re-verified 2026-08-23: get_t_arg emits an argument raw only when it starts with $ or { (or is an .eB/.eBP/.eF expression), and the compound payload starts with [, so it is quoted as a JS string and` &&
+               ` any ${...} inside it stays literal text), and valueHelpRequest now passes $event.oSource.getValue() to open( ), the search-string argument the whitelist already declared. The Input's` &&
+               ` setFilterFunction (case-insensitive contains over key+text) stays unreproduced - it is UI5's built-in suggestion filtering. Until then only the open( sInputValue ) half was: SelectDialog.open does`.
+    lv_text1 = lv_text1 && ` NOT filter, it just seeds its search field, so the dialog listed everything while the search box showed the typed text. The valueHelpRequest wire now chains the same compound binding_call filter the` &&
+               ` search handler uses - built from $event.oSource.getValue( ) inside the argument expression - before the open, which is what _filterAndOpenValueHelpDialog does. // NOTE: Namespace-prefix` &&
+               ` representation: the port declares xmlns=sap.m (default) plus xmlns:uxap=sap.uxap, so the uxap controls are emitted uxap:-prefixed. In the originals ObjectPageLayout/ObjectPageDynamicHeaderTitle` &&
+               ` (App.view.xml) and the IllustratedMessage-fragment ObjectPageSection/ObjectPageSubSection are unprefixed (their file's default xmlns is sap.uxap), while the ProductsTable/SupplierDetails fragments` &&
+               ` already use the uxap: prefix. Same library, identical rendering; structural-diff sees uxap:ObjectPageSection vs ObjectPageSection (and likewise` &&
+               ` ObjectPageLayout/ObjectPageDynamicHeaderTitle/ObjectPageSubSection) as control missing/extra. m:IllustratedMessage keeps its m: prefix to match the original. // POST-1.71: sap.m.IllustratedMessage`.
+    lv_text1 = lv_text1 && ` (control since UI5 1.98, with illustrationType/title/description) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.98 to render it. property-check does not track` &&
+               ` IllustratedMessage members, so this is declared by policy, not gate-forced. // NOTE: sap.m.Input.autocomplete is kept 1:1 from the original (autocomplete="false"). It was declared POST_171 here as` &&
+               ` '@since 1.108' until 2026-08-23 - the sources say otherwise: Input.js carries @since 1.61 on that property, below the 1.71 floor, so nothing is owed and the stated minimum runtime was wrong. The port` &&
+               ` stays under src/02 for the IllustratedMessage declaration, which is genuine. // NOTE: leg (c) is closed: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real` &&
+               ` browser): F4 on the PurchaseID Input (the keyboard form of valueHelpRequest - its icon has no layout box headless) opens the SelectDialog client-side through control_by_id, and the dialog renders its` &&
+               ` bound purchase rows. Still unverified in a running system: (a) Input submit resolving the entered PurchaseID and redrawing; (b) suggestionItemSelected transporting`.
+    lv_text1 = lv_text1 && ` ${$parameters>/selectedItem}.getKey(); (d) the SelectDialog search (binding_call filter) and its confirm arg - the dialog row has no layout box headless and neither a click nor a keyboard Enter` &&
+               ` reaches the confirm; (e) the ObjectPageLayout/IllustratedMessage/Table rendering. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_233.mjs). // NOTE: Two more` &&
+               ` differences from the original controller, both corrected 2026-08-23. (a) An EMPTY submit set has_selection = false and collapsed the whole ObjectPage back to the IllustratedMessage; handleInputSubmit` &&
+               ` only writes /inputPopulated and leaves the selection alone. (b) The input showed the bare key after a selection, because the port writes the field and re-renders. The original resolves the purchase` &&
+               ` through Input.setSelectedKey, and with textFormatMode="KeyValue" the field then reads "(<key>) <text>" - the port composes exactly that string now. Note the original's own follow-on quirk comes with` &&
+               ` it: submitting that composed text matches no PurchaseID, so the not-found state shows, on both sides.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.InitialPagePattern`              name = `InitialPagePattern`                            class = `z2ui5_cl_smpc_app_233` path = `src/02/01/z2ui5_cl_smpc_app_233.clas.abap`
         score = 5
@@ -3185,8 +3192,7 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         is_post171 = abap_true
         notes = lv_text1
         post171 = `sap.m.IllustratedMessage (control since UI5 1.98, with illustrationType/title/description) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.98 to render it.` &&
-                 ` property-check does not track IllustratedMessage members, so this is declared by policy, not gate-forced. // sap.m.Input.autocomplete (since UI5 1.108) is newer than 1.71 but kept 1:1` &&
-                 ` (autocomplete='false'); the app needs a UI5 release >= 1.108 to render it. Not tracked by property-check (declared by policy).` ) ).
+                 ` property-check does not track IllustratedMessage members, so this is declared by policy, not gate-forced.` ) ).
 
     lv_text1 = `NOTE: onValueHelpRequest loads ValueHelpDialog.fragment.xml, pre-filters its items by the Input's current value and opens it. The port builds the same SelectDialog with popup_display and applies the` &&
                ` same pre-filter through follow_up_action binding_call in the same round-trip; onValueHelpSearch and onValueHelpClose are the same two wires as in the fragment. // NOTE: The first Input's value is` &&
@@ -4779,21 +4785,34 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` 2026-08-21: this sentence claimed all three were wired while tokenizerShowItems carried no tokenDelete at all, and claimed the toast while none of the wires composed one - so the sentence that` &&
                ` satisfies the gate described a port that did not exist. All four tokenizers are wired now and each chains the toast, which is expressible in one attribute (the app-076 idiom). // POST-1.71:` &&
                ` sap.m.OverflowToolbar ariaHasPopup (since 1.79.0) is kept 1:1 from the original view; needs a UI5 release >= 1.79 to render. // POST-1.71: REVIEW FINDING (out of scope, maintainer decision needed):` &&
-               ` the ported control sap.m.OverflowToolbarTokenizer itself is tagged @ui5-experimental-since 1.139 in the OpenUI5 source and carries NO plain @since tag, so scripts/scope-of.mjs misreads it as` &&
-               ` base-version (<= 1.71, 'no @since header') and the property gate cannot see it either. The sample is out of porting scope per AGENTS §1 (control must exist since UI5 1.71); the app needs a UI5` &&
-               ` release >= 1.139 (experimental API) to render. Either drop the port or add a ui5/scope-exceptions.json entry; scope-of.mjs should also learn @ui5-experimental-since.`.
+               ` the ported control sap.m.OverflowToolbarTokenizer itself is tagged @ui5-experimental-since 1.139 in the OpenUI5 source and carries NO plain @since tag, so The control is @ui5-experimental-since 1.139` &&
+               ` (OverflowToolbarTokenizer.js). The paragraph that stood here until 2026-08-23 - that scope-of.mjs misreads it as base-version, that the property gate cannot see it, and that a maintainer decision is` &&
+               ` still owed - was stale on all three counts: scope-of.mjs matches @ui5-experimental-since (and cites this very port in its own comment), the linter emits control-too-new for it off`.
+    lv_text1 = lv_text1 && ` ui5/properties.json, and ui5/scope-exceptions.json carries the KEEP decision dated 2026-07-30. // POST-1.71: sap.m.Tokenizer.tokenDelete is @since 1.82 and is wired on all four tokenizers, 1:1 with` &&
+               ` the original. Newer than the 1.71 floor, so the app needs UI5 >= 1.82 for the delete handlers to exist at all. Undeclared until 2026-08-23: the linter does raise member-too-new for it, and the view` &&
+               ` gate accepted the port only because its declares( ) check matches the deviation text as a SUBSTRING and the control's own name appears in the two POST_171 texts beside it - AGENTS section 5 requires` &&
+               ` a deviation naming the member. // NOTE: onTokenDelete iterates aDeletedTokens: sap.m.Tokenizer fires tokenDelete with getSelectedTokens( ) when there is a selection and with the focused token` &&
+               ` otherwise, so several tokens really do arrive at once. Every wire read ${$parameters>/tokens}[0] until 2026-08-23, so selecting three tokens and pressing Delete removed and toasted one. The BOUND` &&
+               ` tokenizer now sends the whole array - the frontend marshals each control into its properties - and ABAP loops over it. The three tokenizers whose tokens are static controls still delete the first`.
+    lv_text1 = lv_text1 && ` token only: their removal is a client-side control_by_id removeToken, and a client action cannot iterate an array. That residual is the price of keeping those three roundtrip-free, and it is now` &&
+               ` written down rather than implied.`.
+    lv_text2 = `sap.m.OverflowToolbar ariaHasPopup (since 1.79.0) is kept 1:1 from the original view; needs a UI5 release >= 1.79 to render. // REVIEW FINDING (out of scope, maintainer decision needed): the ported` &&
+               ` control sap.m.OverflowToolbarTokenizer itself is tagged @ui5-experimental-since 1.139 in the OpenUI5 source and carries NO plain @since tag, so The control is @ui5-experimental-since 1.139` &&
+               ` (OverflowToolbarTokenizer.js). The paragraph that stood here until 2026-08-23 - that scope-of.mjs misreads it as base-version, that the property gate cannot see it, and that a maintainer decision is` &&
+               ` still owed - was stale on all three counts: scope-of.mjs matches @ui5-experimental-since (and cites this very port in its own comment), the linter emits control-too-new for it off` &&
+               ` ui5/properties.json, and ui5/scope-exceptions.json carries the KEEP decision dated 2026-07-30. // sap.m.Tokenizer.tokenDelete is @since 1.82 and is wired on all four tokenizers, 1:1 with the` &&
+               ` original. Newer than the 1.71 floor, so the app needs UI5 >= 1.82 for the delete handlers to exist at all. Undeclared until 2026-08-23: the linter does raise member-too-new for it, and the view gate`.
+    lv_text2 = lv_text2 && ` accepted the port only because its declares( ) check matches the deviation text as a SUBSTRING and the control's own name appears in the two POST_171 texts beside it - AGENTS section 5 requires a` &&
+               ` deviation naming the member.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.OverflowToolbarTokenizer`        name = `OverflowToolbarTokenizer`                      class = `z2ui5_cl_smpc_app_203` path = `src/02/01/z2ui5_cl_smpc_app_203.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.139`
         since_post171 = abap_true
         is_post171 = abap_true
         notes = lv_text1
-        post171 = `sap.m.OverflowToolbar ariaHasPopup (since 1.79.0) is kept 1:1 from the original view; needs a UI5 release >= 1.79 to render. // REVIEW FINDING (out of scope, maintainer decision needed): the ported` &&
-                 ` control sap.m.OverflowToolbarTokenizer itself is tagged @ui5-experimental-since 1.139 in the OpenUI5 source and carries NO plain @since tag, so scripts/scope-of.mjs misreads it as base-version (<=` &&
-                 ` 1.71, 'no @since header') and the property gate cannot see it either. The sample is out of porting scope per AGENTS §1 (control must exist since UI5 1.71); the app needs a UI5 release >= 1.139` &&
-                 ` (experimental API) to render. Either drop the port or add a ui5/scope-exceptions.json entry; scope-of.mjs should also learn @ui5-experimental-since.` ) ).
+        post171 = lv_text2 ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Page`                            name = `PageListReportIconTabBar`                      class = `z2ui5_cl_smpc_app_406` path = `src/02/01/z2ui5_cl_smpc_app_406.clas.abap`
@@ -7842,23 +7861,26 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` the popover is open) could not be expressed - Ctrl+S always hit the page-level command and its flags. cs_event-keyboard_shortcut now takes an optional third t_arg scoping the registration`.
     lv_text1 = lv_text1 && ` (implemented upstream, pr/keyboard-shortcut-scope). The scope here is the CONTROL id: this Popover is declared in the view's dependents and opened with control_by_id openBy, so it never enters the` &&
                ` framework's popover SLOT - the slot-only form of the request would never have fired, which the e2e interaction found immediately and the upstream change then covered. Ctrl+S is therefore registered` &&
-               ` twice - unscoped -> SAVE, and scoped to cs_view-popover -> PSAVE - so the popover's own enabled/visible flags gate the command exactly while it is open, and the page-level one applies again once it` &&
-               ` closes. The three CommandExecution CONTROLS themselves stay dropped (abap2UI5 renders no such element); what they DO is now fully reproduced. **e2e-verified 2026-08-06** (scripts/e2e-smoke.mjs` &&
-               ` interaction, transpiled backend + real browser): with the popover's own Save switched off and the popover open, Ctrl+S goes silent, while the page-level command is still enabled and fires with the` &&
-               ` popover closed. // NOTE: The $cmd> command model bindings enabled='{$cmd>Save/enabled}' / enabled='{$cmd>Delete/enabled}' on the popover footer buttons have no command model to bind to`.
-    lv_text1 = lv_text1 && ` (CommandExecution dropped), so they are folded to default-model booleans: the popover buttons bind enabled to {/SAVE_ENABLED}/{/DELETE_ENABLED} (page popover) and {/PSAVE_ENABLED}/{/DELETE_ENABLED}` &&
-               ` (command popover). Correspondingly the controller's onToggleSave/onToggleDelete/onTogglePopoverSave (byId('CE_SAVE').setEnabled(state)) and the *Visibility variants (setVisible) are reproduced as` &&
-               ` two-way bindings: each Switch state is bound two-way to the matching boolean and the popover buttons additionally bind visible to {/SAVE_VISIBLE}/{/DELETE_VISIBLE}/{/PSAVE_VISIBLE}, so the switches` &&
-               ` drive the command-buttons client-side with no round-trip. Consequently the Switch change attributes (change='.onToggleSave' etc., 6 of them) are DROPPED and replaced by the two-way state binding; the` &&
-               ` enabled binding value differs from the original $cmd> path. The flags travel with the next event's two-way model update, which is how the server-side command gating reads the current switch state. //`.
-    lv_text1 = lv_text1 && ` NOTE: The manifest-declared viewModel named JSON model (bindings {viewModel>/value}, {viewModel>/countries}, {viewModel>/selected}, {viewModel>key}, {viewModel>text}) is folded onto the one default` &&
-               ` model as value/t_countries/selected with the same leaf names and the controller's addData seed values (HelloWorld!, DZ Algeria / AR Argentina) - a pure prefix-drop, renders identically,` &&
-               ` structural-diff 0 diffs. // POST-1.71: sap.m.Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the two Open-Popover buttons carry ariaHasPopup='Dialog' as in the` &&
-               ` original; the app needs a UI5 release >= 1.84 to render it. // NOTE: unverified in a running system: (a) the two Open-Popover buttons open the popover anchored to the button via control_by_id openBy` &&
-               ` ($event.oSource.sId); (b) the Ctrl+S / Ctrl+D keyboard_shortcut registrations firing the backend SAVE/DELETE round-trips and their enabled/visible server-side gating; (c) the switch-driven two-way` &&
-               ` enabled/visible of the popover buttons. The e2e interaction (keyboard Ctrl+S -> save toast) covers (b) for the page-level Save. **e2e-verified 2026-07-30** (transpiled-framework interaction,`.
-    lv_text1 = lv_text1 && ` scripts/e2e-smoke.mjs): Ctrl+S fires the SAVE round-trip and toasts 'CTRL+S: save triggered on controller'. **e2e-verified 2026-08-04** (nightly e2e interaction,` &&
-               ` meta/interactions/z2ui5_cl_smpc_app_232.mjs).`.
+               ` twice - unscoped -> SAVE, and scoped to the control id popoverCommand -> PSAVE - so the popover's own enabled/visible flags gate the command exactly while it is open, and the page-level one applies` &&
+               ` again once it closes. The three CommandExecution CONTROLS themselves stay dropped (abap2UI5 renders no such element); what they DO is now fully reproduced. **e2e-verified 2026-08-06**` &&
+               ` (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): with the popover's own Save switched off and the popover open, Ctrl+S goes silent, while the page-level command is still` &&
+               ` enabled and fires with the popover closed. **Corrected 2026-08-23**: enabled and visible are not the same veto. setEnabled( false ) keeps the shortcut registered and CommandExecution.trigger swallows`.
+    lv_text1 = lv_text1 && ` it; setVisible( false ) calls Shortcut.unregister at that parent, so the key PROPAGATES to the ancestor CommandExecution - which is what the class documentation describes and what this sample's` &&
+               ` popover command exists to show. The port gated both the same way, so with the popover's visible switch off Ctrl+S went silent where the original falls through to the page's CE_SAVE. The PSAVE branch` &&
+               ` now falls through to the page command's gate. // NOTE: The $cmd> command model bindings enabled='{$cmd>Save/enabled}' / enabled='{$cmd>Delete/enabled}' on the popover footer buttons have no command` &&
+               ` model to bind to (CommandExecution dropped), so they are folded to default-model booleans: the popover buttons bind enabled to {/SAVE_ENABLED}/{/DELETE_ENABLED} (page popover) and` &&
+               ` {/PSAVE_ENABLED}/{/DELETE_ENABLED} (command popover). Correspondingly the controller's onToggleSave/onToggleDelete/onTogglePopoverSave (byId('CE_SAVE').setEnabled(state)) and the *Visibility variants` &&
+               ` (setVisible) are reproduced as two-way bindings: each Switch state is bound two-way to the matching boolean and the popover buttons additionally bind visible to`.
+    lv_text1 = lv_text1 && ` {/SAVE_VISIBLE}/{/DELETE_VISIBLE}/{/PSAVE_VISIBLE}, so the switches drive the command-buttons client-side with no round-trip. Consequently the Switch change attributes (change='.onToggleSave' etc., 6` &&
+               ` of them) are DROPPED and replaced by the two-way state binding; the enabled binding value differs from the original $cmd> path. The flags travel with the next event's two-way model update, which is` &&
+               ` how the server-side command gating reads the current switch state. // NOTE: The manifest-declared viewModel named JSON model (bindings {viewModel>/value}, {viewModel>/countries},` &&
+               ` {viewModel>/selected}, {viewModel>key}, {viewModel>text}) is folded onto the one default model as value/t_countries/selected with the same leaf names and the controller's addData seed values` &&
+               ` (HelloWorld!, DZ Algeria / AR Argentina) - a pure prefix-drop, renders identically, structural-diff 0 diffs. // POST-1.71: sap.m.Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for` &&
+               ` the 1:1 port - the two Open-Popover buttons carry ariaHasPopup='Dialog' as in the original; the app needs a UI5 release >= 1.84 to render it. // NOTE: unverified in a running system: (a) the two`.
+    lv_text1 = lv_text1 && ` Open-Popover buttons open the popover anchored to the button via control_by_id openBy ($event.oSource.sId); (b) the Ctrl+S / Ctrl+D keyboard_shortcut registrations firing the backend SAVE/DELETE` &&
+               ` round-trips and their enabled/visible server-side gating; (c) the switch-driven two-way enabled/visible of the popover buttons. The e2e interaction (keyboard Ctrl+S -> save toast) covers (b) for the` &&
+               ` page-level Save. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): Ctrl+S fires the SAVE round-trip and toasts 'CTRL+S: save triggered on controller'.` &&
+               ` **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_232.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.core.CommandExecution`          name = `Commands`                                      class = `z2ui5_cl_smpc_app_232` path = `src/02/02/z2ui5_cl_smpc_app_232.clas.abap`
         score = 5
@@ -10210,15 +10232,18 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` attachBrowserEvent tab/keyup tracking) and the explicit Popup.Dock.BeginTop/BeginBottom constants (default docking is visually equivalent). // NOTE: the sample's handleMenuItemPress branches on the` &&
                ` runtime item: a parent that only opens its submenu is skipped, a sap.ui.unified.MenuTextFieldItem reports getValue() + ' entered', every other item getText() + ' pressed'. **Reproduced 1:1 since` &&
                ` 2026-08-05**: measured with scripts/probes/event-arg-expression-probe.mjs, a class-name ternary resolves inside an event arg, so the whole branch travels as ONE client expression and the`.
-    lv_text1 = lv_text1 && ` client-composed toast (a {0} template) prints exactly what the original composes - including the empty text for a submenu parent. The earlier claim that the class cannot be inspected was about the` &&
-               ` BACKEND; the expression runs on the client, where the sample's own code runs too. Distinct from app 060's parent-chain breadcrumb, which stays impossible: the expression grammar has no loop. // NOTE:` &&
-               ` the fragment Menu (added in the controller via getView().addDependent(this._menu)) is declared 1:1 inside the Button's ``dependents`` aggregation (the addDependent equivalent, same as app 060) -` &&
-               ` structurally identical, no loss; structural-diff ignores the aggregation name. // NOTE: the selected item text is read with ${$parameters>/item}.getText() (a method call on the resolved MenuItemBase` &&
-               ` control), NOT ${$parameters>/item/text}: the $parameters model exposes 'item' as the control object and UI5 keeps properties in the control's internal store, so the path .../item/text reads an` &&
-               ` undefined field and the toast arrives empty (same finding as app 060). // NOTE: unverified in a running system: (a) the button press opens the Menu via the 2026-07-27 anchored-open fallback - verify`.
-    lv_text1 = lv_text1 && ` the open in a running system; (b) selecting a menu item toasts "'<text>' pressed" via the Menu-level itemSelect + ${$parameters>/item}.getText(). **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs` &&
-               ` interaction, transpiled backend + real browser): the button press opens the sap.ui.unified.Menu through the 2026-07-27 openBy fallback (open(false, anchor, ...) for a control without its own openBy)` &&
-               ` and selecting an item raises the client-composed "'My 1st Item' pressed" toast.`.
+    lv_text1 = lv_text1 && ` client-composed toast (a {0} template) prints exactly what the original composes - with ONE change made 2026-08-23. The earlier claim that the class cannot be inspected was about the BACKEND; the` &&
+               ` expression runs on the client, where the sample's own code runs too. Distinct from app 060's parent-chain breadcrumb, which stays impossible: the expression grammar has no loop. The original does not` &&
+               ` compose an empty message for a submenu parent - it RETURNS before MessageToast.show, and Menu.selectItem fires itemSelect for a submenu parent too, so the port's client-composed '' produced a real,` &&
+               ` empty toast (neither formatTemplate nor showToast nor MessageToast.show has an early return for it). The skip is a decision, so it travels: the wire carries a SUB/ITEM flag beside the composed` &&
+               ` message and on_event toasts only for ITEM. The message itself is still composed on the client. // NOTE: the fragment Menu (added in the controller via getView().addDependent(this._menu)) is declared` &&
+               ` 1:1 inside the Button's ``dependents`` aggregation (the addDependent equivalent, same as app 060) - structurally identical, no loss; structural-diff ignores the aggregation name. // NOTE: the`.
+    lv_text1 = lv_text1 && ` selected item text is read with ${$parameters>/item}.getText() (a method call on the resolved MenuItemBase control), NOT ${$parameters>/item/text}: the $parameters model exposes 'item' as the control` &&
+               ` object and UI5 keeps properties in the control's internal store, so the path .../item/text reads an undefined field and the toast arrives empty (same finding as app 060). // NOTE: unverified in a` &&
+               ` running system: (a) the button press opens the Menu via the 2026-07-27 anchored-open fallback - verify the open in a running system; (b) selecting a menu item toasts "'<text>' pressed" via the` &&
+               ` Menu-level itemSelect + ${$parameters>/item}.getText(). **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the button press opens the` &&
+               ` sap.ui.unified.Menu through the 2026-07-27 openBy fallback (open(false, anchor, ...) for a control without its own openBy) and selecting an item raises the client-composed "'My 1st Item' pressed"` &&
+               ` toast.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Menu`                   name = `MenuMenuEventing`                              class = `z2ui5_cl_smpc_app_228` path = `src/02/02/z2ui5_cl_smpc_app_228.clas.abap`
         score = 4

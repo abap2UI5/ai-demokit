@@ -291,8 +291,17 @@ CLASS z2ui5_cl_smpc_app_232 IMPLEMENTATION.
         ENDIF.
 
       WHEN `PSAVE`.
-        " original onSave via the popover-local CE_SAVE_POPOVER
-        IF psave_enabled = abap_true AND psave_visible = abap_true.
+        " original onSave via the popover-local CE_SAVE_POPOVER. enabled and
+        " visible are NOT the same veto in UI5: setEnabled( false ) keeps the
+        " registration and swallows the command, while setVisible( false )
+        " UNREGISTERS the shortcut at that parent, so the key travels on to the
+        " ancestor CommandExecution - here the page's CE_SAVE. Reproduced by
+        " falling through to the page command's own gate instead of going silent
+        IF psave_visible = abap_false.
+          IF save_enabled = abap_true AND save_visible = abap_true.
+            client->message_toast_display( `CTRL+S: save triggered on controller` ).
+          ENDIF.
+        ELSEIF psave_enabled = abap_true.
           client->message_toast_display( `CTRL+S: save triggered on controller` ).
         ENDIF.
 

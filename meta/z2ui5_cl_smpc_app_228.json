@@ -7,7 +7,7 @@
   "audit": {
     "frontend_action": true,
     "event_t_arg": true,
-    "note": "init-only, roundtrip-free: the button press wires control_by_id openBy anchored to the button ($event.oSource.sId); the Menu-level itemSelect composes a single toast on the frontend via control_global MESSAGE_TOAST.show (template + ${$parameters>/item}.getText()), so there is no on_event"
+    "note": "the button press wires control_by_id openBy anchored to the button ($event.oSource.sId), roundtrip-free. The Menu-level itemSelect DOES round-trip since 2026-08-23: the toast text is still composed on the client, but whether to toast at all is the original's submenu skip, which a client action cannot express (an empty message still pops an empty toast) - so the flag and the message travel as event args and on_event decides."
   },
   "status": "reviewed",
   "checked": null,
@@ -22,7 +22,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the sample's handleMenuItemPress branches on the runtime item: a parent that only opens its submenu is skipped, a sap.ui.unified.MenuTextFieldItem reports getValue() + ' entered', every other item getText() + ' pressed'. **Reproduced 1:1 since 2026-08-05**: measured with scripts/probes/event-arg-expression-probe.mjs, a class-name ternary resolves inside an event arg, so the whole branch travels as ONE client expression and the client-composed toast (a {0} template) prints exactly what the original composes - including the empty text for a submenu parent. The earlier claim that the class cannot be inspected was about the BACKEND; the expression runs on the client, where the sample's own code runs too. Distinct from app 060's parent-chain breadcrumb, which stays impossible: the expression grammar has no loop."
+      "what": "the sample's handleMenuItemPress branches on the runtime item: a parent that only opens its submenu is skipped, a sap.ui.unified.MenuTextFieldItem reports getValue() + ' entered', every other item getText() + ' pressed'. **Reproduced 1:1 since 2026-08-05**: measured with scripts/probes/event-arg-expression-probe.mjs, a class-name ternary resolves inside an event arg, so the whole branch travels as ONE client expression and the client-composed toast (a {0} template) prints exactly what the original composes - with ONE change made 2026-08-23. The earlier claim that the class cannot be inspected was about the BACKEND; the expression runs on the client, where the sample's own code runs too. Distinct from app 060's parent-chain breadcrumb, which stays impossible: the expression grammar has no loop. The original does not compose an empty message for a submenu parent - it RETURNS before MessageToast.show, and Menu.selectItem fires itemSelect for a submenu parent too, so the port's client-composed '' produced a real, empty toast (neither formatTemplate nor showToast nor MessageToast.show has an early return for it). The skip is a decision, so it travels: the wire carries a SUB/ITEM flag beside the composed message and on_event toasts only for ITEM. The message itself is still composed on the client."
     },
     {
       "type": "NOTE",
