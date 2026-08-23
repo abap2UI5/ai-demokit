@@ -14,21 +14,13 @@ CLASS z2ui5_cl_smpc_app_613 DEFINITION PUBLIC.
            END OF ty_s_product.
     TYPES ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
 
-    TYPES: BEGIN OF ty_s_token,
-             key  TYPE string,
-             text TYPE string,
-           END OF ty_s_token.
-    TYPES ty_t_token TYPE STANDARD TABLE OF ty_s_token WITH EMPTY KEY.
-
     DATA t_products TYPE ty_t_product.
-    DATA t_tokens   TYPE ty_t_token.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
     METHODS model_init.
-    METHODS on_event.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -44,8 +36,6 @@ CLASS z2ui5_cl_smpc_app_613 IMPLEMENTATION.
       view_display( ).
     ELSEIF client->check_on_navigated( ).
       view_display( ).
-    ELSEIF client->check_on_event( ).
-      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -60,6 +50,7 @@ CLASS z2ui5_cl_smpc_app_613 IMPLEMENTATION.
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:z2ui5` v = `z2ui5.cc`
 
         )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
@@ -90,8 +81,8 @@ CLASS z2ui5_cl_smpc_app_613 IMPLEMENTATION.
 
     " the tabular one carries the controller's addValidator( ): the picked row
     " becomes a Token with key = the Name cell and text = 'key(price cell)'.
-    " abap2UI5 cannot register a JS validator, so suggestionItemSelected
-    " transports the first cell and the same token is built in ABAP
+    " The z2ui5.cc.MultiInputExt companion below installs exactly that
+    " validator, so the token is built on the client with no round trip
     layout->tag( `Label`
         )->a( n = `text`     v = `Multi Input with grouped tabular suggestions`
         )->a( n = `labelFor` v = `productMIWithTable`
@@ -103,17 +94,7 @@ CLASS z2ui5_cl_smpc_app_613 IMPLEMENTATION.
             )->a( n = `showSuggestion`               v = `true`
             )->a( n = `showValueHelp`                v = `false`
             )->a( n = `showTableSuggestionValueHelp` v = `false`
-            )->a( n = `tokens`                       v = client->_bind( t_tokens )
             )->a( n = `suggestionRows`               v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'SUPPLIERNAME', group: true, ascending: false \} \}|
-            )->a( n = `suggestionItemSelected`       v = client->_event( val   = `ADD_TOKEN`
-                                                                         t_arg = VALUE #( ( `${$parameters>/selectedRow}.getCells()[0].getText()` ) ) )
-
-            )->ele( `tokens`
-                )->tag( `Token`
-                    )->a( n = `key`  v = `{KEY}`
-                    )->a( n = `text` v = `{TEXT}`
-
-            )->end(
 
             )->ele( `suggestionColumns`
                 )->ele( `Column`
@@ -165,24 +146,18 @@ CLASS z2ui5_cl_smpc_app_613 IMPLEMENTATION.
 
                 )->end(
             )->end(
-        )->end( ).
+        )->end(
+
+        " the controller's addValidator( ), installed by the invisible
+        " z2ui5.cc.MultiInputExt companion: a picked row becomes a Token whose
+        " key is cell 0 (Name) and whose text is rendered key(cell 3) - the
+        " Name(Price CurrencyCode) shape the original builds in JavaScript
+        )->tag( n = `MultiInputExt` ns = `z2ui5`
+            )->a( n = `MultiInputId`   v = `productMIWithTable`
+            )->a( n = `TokenKeyCell`   v = `0`
+            )->a( n = `TokenTextCells` v = `3` ).
 
     client->view_display( view->stringify( ) ).
-
-  ENDMETHOD.
-
-
-  METHOD on_event.
-
-    " the validator: key = the row's first cell, text = 'key(price cell)'
-    IF client->get_event( ) = `ADD_TOKEN`.
-      DATA(name) = client->get_event_arg( ).
-      READ TABLE t_products INTO DATA(product) WITH KEY name = name.
-      IF sy-subrc = 0 AND NOT line_exists( t_tokens[ key = product-name ] ).
-        APPEND VALUE #( key  = product-name
-                        text = |{ product-name }({ product-price } { product-currencycode })| ) TO t_tokens.
-      ENDIF.
-    ENDIF.
 
   ENDMETHOD.
 

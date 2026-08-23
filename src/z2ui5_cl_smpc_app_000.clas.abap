@@ -3996,21 +3996,21 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
 
     lv_text1 = `POST-1.71: sap.m.MultiInput (through sap.m.InputBase) has the formattedValueStateText aggregation only @since 1.78 - newer than the 1.71 floor, but the third MultiInput exists to demonstrate exactly` &&
-               ` that value state message with a Link inside it, so it is kept 1:1. The app needs a UI5 release >= 1.78. // IMPROVISED: the controller registers a JS validator with MultiInput.addValidator( ) on` &&
-               ` multiInput2 and multiInput3: picking a suggestion row builds a Token whose key is the row's first cell (Name) and whose text is 'key(price cell)'. abap2UI5 cannot register such a callback, so each of` &&
-               ` the two MultiInputs binds a tokens table and wires suggestionItemSelected, transporting the first cell's text; the same token (key = Name, text = 'Name(Price Currency)') is appended in ABAP,` &&
-               ` duplicates skipped. The tokens attribute and the tokens aggregation are therefore EXTRA vs the original view.xml, where the tokens only ever exist client-side. multiInput4 has no validator in the` &&
-               ` sample either - a core:Item suggestion becomes a token by itself. // NOTE: the Price cell is a composite currency binding in the sample (parts Price + CurrencyCode through sap.ui.model.type.Currency`.
-    lv_text1 = lv_text1 && ` with showMeasure TRUE, so the unit is part of the text). The port binds the two fields as one composite text ('{PRICE} {CURRENCYCODE}'), which is what that formatter renders, since the mock's prices` &&
-               ` are plain numbers. // NOTE: handleFormattedTextLinkPress calls oEvent.preventDefault( ) and then MessageToast.show with my/at = Popup.Dock.CenterCenter. The veto rides along on the wire as` &&
-               ` s_ctrl-check_prevent_default (baked per wire at render time), the toast is composed on the way back through follow_up_action control_global MESSAGE_TOAST show. The CenterCenter placement is not` &&
-               ` reachable through that global target, so the toast keeps its default bottom placement. // NOTE: the first MultiInput's binding-info carries the sample's sorter { path: 'Name' } 1:1 as sorter { path:` &&
-               ` 'NAME' } over the backend table; the sorted 123 rows come from sap/ui/documentation/sdk/products.json /ProductCollection. // LIVE-TEST: the token creation on both tabular MultiInputs and the Link` &&
-               ` inside the value state message (preventDefault plus toast) are unverified in a running system.`.
+               ` that value state message with a Link inside it, so it is kept 1:1. The app needs a UI5 release >= 1.78. // NOTE: the controller registers a JS validator with MultiInput.addValidator( ) on multiInput2` &&
+               ` and multiInput3: picking a suggestion row builds a Token whose key is the row's first cell (Name) and whose text is 'key(price cell)'. The bundled z2ui5.cc.MultiInputExt companion installs exactly` &&
+               ` that validator, so each tabular MultiInput carries one alongside it with TokenKeyCell 0 (Name) and TokenTextCells 3 (the Price cell), and the token is built on the client with the same key and` &&
+               ` 'Name(Price Currency)' text as the original. The two companion tags are the only addition vs the original view.xml, and the tokens stay client-side exactly as they do there. multiInput4 has no` &&
+               ` validator in the sample either - a core:Item suggestion becomes a token by itself. // NOTE: the Price cell is a composite currency binding in the sample (parts Price + CurrencyCode through`.
+    lv_text1 = lv_text1 && ` sap.ui.model.type.Currency with showMeasure TRUE, so the unit is part of the text). The port binds the two fields as one composite text ('{PRICE} {CURRENCYCODE}'), which is what that formatter` &&
+               ` renders, since the mock's prices are plain numbers. // NOTE: handleFormattedTextLinkPress calls oEvent.preventDefault( ) and then MessageToast.show with my/at = Popup.Dock.CenterCenter. The veto` &&
+               ` rides along on the wire as s_ctrl-check_prevent_default (baked per wire at render time), the toast is composed on the way back through follow_up_action control_global MESSAGE_TOAST show. The` &&
+               ` CenterCenter placement is not reachable through that global target, so the toast keeps its default bottom placement. // NOTE: the first MultiInput's binding-info carries the sample's sorter { path:` &&
+               ` 'Name' } 1:1 as sorter { path: 'NAME' } over the backend table; the sorted 123 rows come from sap/ui/documentation/sdk/products.json /ProductCollection. // LIVE-TEST: the token creation on both` &&
+               ` tabular MultiInputs (now through the z2ui5.cc.MultiInputExt companion) and the Link inside the value state message (preventDefault plus toast) are unverified in a running system.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputFilteringSuggestions`                class = `z2ui5_cl_smpc_app_612` path = `src/02/01/z2ui5_cl_smpc_app_612.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         is_post171 = abap_true
         notes = lv_text1
@@ -4018,19 +4018,19 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` state message with a Link inside it, so it is kept 1:1. The app needs a UI5 release >= 1.78.` ) ).
 
     lv_text1 = `NOTE: the grouping is the sample: both MultiInputs bind their suggestions with sorter { path: 'SupplierName', group: true, ascending: false }, which the port carries over verbatim as sorter { path:` &&
-               ` 'SUPPLIERNAME', group: true, ascending: false } on the backend table, so UI5 builds the descending supplier group headers on the client exactly as before. // IMPROVISED: the controller registers a JS` &&
-               ` validator with MultiInput.addValidator( ) on productMIWithTable: picking a suggestion row builds a Token whose key is the row's first cell (Name) and whose text is 'key(price cell)'. abap2UI5 cannot` &&
-               ` register such a callback, so the MultiInput binds a tokens table and wires suggestionItemSelected, transporting the first cell's text; the same token (key = Name, text = 'Name(Price Currency)') is` &&
-               ` appended in ABAP, duplicates skipped. The tokens attribute and the tokens aggregation are therefore EXTRA vs the original view.xml, where the tokens only ever exist client-side. productMIWithList has` &&
-               ` no validator in the sample either - a core:Item suggestion becomes a token by itself. // NOTE: the Price cell is a composite currency binding in the sample (parts Price + CurrencyCode through`.
-    lv_text1 = lv_text1 && ` sap.ui.model.type.Currency with showMeasure TRUE, so the unit is part of the text). The port binds the two fields as one composite text ('{PRICE} {CURRENCYCODE}'), which is what that formatter` &&
-               ` renders, since the mock's prices are plain numbers. // NOTE: the controller's oModel.setSizeLimit(1000000) has no counterpart: the port ships all 123 rows of sap/ui/demo/mock/products.json` &&
-               ` /ProductCollection to the client in one model, so the 100-entry default limit the call works around never applies. // LIVE-TEST: the grouped suggestion popups of both MultiInputs and the token` &&
-               ` creation on the tabular one are unverified in a running system.`.
+               ` 'SUPPLIERNAME', group: true, ascending: false } on the backend table, so UI5 builds the descending supplier group headers on the client exactly as before. // NOTE: the controller registers a JS` &&
+               ` validator with MultiInput.addValidator( ) on productMIWithTable: picking a suggestion row builds a Token whose key is the row's first cell (Name) and whose text is 'key(price cell)'. The bundled` &&
+               ` z2ui5.cc.MultiInputExt companion installs exactly that validator, so the MultiInput carries one alongside it with TokenKeyCell 0 (Name) and TokenTextCells 3 (the Price cell), and the token is built` &&
+               ` on the client with the same key and 'Name(Price Currency)' text as the original. That companion tag is the only addition vs the original view.xml, and the tokens stay client-side exactly as they do` &&
+               ` there. productMIWithList has no validator in the sample either - a core:Item suggestion becomes a token by itself. // NOTE: the Price cell is a composite currency binding in the sample (parts Price +`.
+    lv_text1 = lv_text1 && ` CurrencyCode through sap.ui.model.type.Currency with showMeasure TRUE, so the unit is part of the text). The port binds the two fields as one composite text ('{PRICE} {CURRENCYCODE}'), which is what` &&
+               ` that formatter renders, since the mock's prices are plain numbers. // NOTE: the controller's oModel.setSizeLimit(1000000) has no counterpart: the port ships all 123 rows of` &&
+               ` sap/ui/demo/mock/products.json /ProductCollection to the client in one model, so the 100-entry default limit the call works around never applies. // LIVE-TEST: the grouped suggestion popups of both` &&
+               ` MultiInputs and the token creation on the tabular one (now through the z2ui5.cc.MultiInputExt companion) are unverified in a running system.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputGrouping`                            class = `z2ui5_cl_smpc_app_613` path = `src/01/01/z2ui5_cl_smpc_app_613.clas.abap`
-        score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         notes = lv_text1 ) ).
 

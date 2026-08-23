@@ -18,7 +18,7 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 | Ports | **622** sidecars in `meta/` (src/01 OpenUI5 <= 1.71: 408 · src/02 OpenUI5 > 1.71: 214) |
 | Per library | sap.f: 36 · sap.m: 393 · sap.tnt: 17 · sap.ui: 131 · sap.uxap: 45 |
 | Status ladder | 206 `generated` · 355 `reviewed` · 61 `checked` (live-verified) |
-| Deviations | 12 DROPPED_171 · 134 IMPROVISED · 120 LIVE_TEST · 1657 NOTE · 284 POST_171 |
+| Deviations | 12 DROPPED_171 · 132 IMPROVISED · 120 LIVE_TEST · 1659 NOTE · 284 POST_171 |
 | Open LIVE_TESTs | **120 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 2 structural-diff · 7 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_smpc_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_smpc_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_smpc_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_smpc_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_smpc_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
@@ -29,30 +29,21 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
 
 ## Open findings (backlog)
 
-- [ ] **Apps 612 and 613 still round-trip for a token the client can now
-  build.** `z2ui5.cc.MultiInputExt` gained `TokenKeyCell` / `TokenTextCells` on
-  2026-08-22 (see the Implemented table in
-  [docs/upstream-requests.md](docs/upstream-requests.md)), which is exactly the
-  `addValidator` branch both ports carry as an `IMPROVISED` deviation. The
-  conversion is written and reverted: `@abap2ui5/linter`'s render harness boots
-  a metadata-only MIRROR of the companion controls
-  (`lib/render.mjs`, `boot()`), the two properties are not in it, and an
-  unmirrored property there is not a version finding but a failed view
-  CREATION — `Error found in View: <z2ui5:MultiInputExt … TokenKeyCell="0"/>`.
-  Shipping it would need a `property_gate` plus a `render_smoke` skip for
-  something that is neither a version gap nor a typo. **The linter side is
-  done** (2026-08-22): the companion-control mirrors moved out of
-  `lib/render.mjs` into `lib/cc-controls.mjs`, the harness script is generated
-  from them and `check-upstream` compares each control against
-  `app/webapp/cc/<Name>.js`, so this cannot rot again. Verified against a
-  patched build — app 612 converted passes the render gate. What is left is a
-  RELEASE: `check-pins` holds this repository on the published
-  `@abap2ui5/linter`, so the conversion lands with the next version.
-  **When the mirror lands:** bind `tokens` off both MultiInputs, drop the
-  `suggestionItemSelected` wires and the `TOKEN_2`/`TOKEN_3` handler, add
-  `xmlns:z2ui5="z2ui5.cc"` plus one `MultiInputExt` per input
-  (`TokenKeyCell="0"`, `TokenTextCells="3"`), and turn both `IMPROVISED`
-  deviations into NOTEs.
+- [x] **Apps 612 and 613 now build their tokens on the client — closed
+  2026-08-23.** `z2ui5.cc.MultiInputExt` gained `TokenKeyCell` /
+  `TokenTextCells` upstream (see the Implemented table in
+  [docs/upstream-requests.md](docs/upstream-requests.md)), the linter's render
+  harness learned the two properties in `@abap2ui5/linter` 0.3.0 (its
+  companion-control mirrors moved into `lib/cc-controls.mjs` and
+  `check-upstream` compares them against `app/webapp/cc/<Name>.js`, so they
+  cannot rot again), and the pin here follows. Both ports drop the `tokens`
+  binding, the `tokens` aggregation and the `suggestionItemSelected` wire, and
+  carry one `MultiInputExt` per tabular input (`TokenKeyCell="0"`,
+  `TokenTextCells="3"` — Name and the Price cell, the `Name(Price Currency)`
+  shape the original builds in JavaScript). 613 handles no event at all any
+  more; 612 keeps only its Link toast. Both `IMPROVISED` deviations became
+  NOTEs, and the render gate accepts both on the published linter: **637 files,
+  0 failing**.
 
 - [ ] **Two ports gave up on a capability that already exists — found
   2026-08-22 while answering "what should we ask the framework for".** Neither
