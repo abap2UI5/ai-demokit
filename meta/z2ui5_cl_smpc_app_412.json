@@ -29,7 +29,7 @@
     },
     {
       "type": "NOTE",
-      "what": "onOrderDetailsPress does oObjectPageLayout.setSelectedSection(byId('orderDetailsSection')). sap.uxap.ObjectPageLayout.selectedSection is an ASSOCIATION, so it cannot be data-bound (app 263 precedent); the 'Order Details' header link is wired round-trip-free via follow_up_action( control_by_id, ObjectPageLayout / setSelectedSection / orderDetailsSection ) - the controlIdOrNull argument kind resolves the section id to the control, exactly like the original's byId lookup."
+      "what": "onOrderDetailsPress does oObjectPageLayout.setSelectedSection(byId('orderDetailsSection')). sap.uxap.ObjectPageLayout.selectedSection is an ASSOCIATION, so it cannot be data-bound (app 263 precedent); the 'Order Details' header link is wired round-trip-free via follow_up_action( control_by_id, ObjectPageLayout / setSelectedSection / orderDetailsSection ) - the controlIdOrNull argument kind resolves the section id to the control, exactly like the original's byId lookup. Re-verified 2026-08-23: still true. An association cannot be data-bound at all, which is a UI5 fact rather than an abap2UI5 limit, and the frontend action is the reproduction rather than a workaround."
     },
     {
       "type": "NOTE",

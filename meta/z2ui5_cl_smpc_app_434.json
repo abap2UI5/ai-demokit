@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "The controller loads Dialog.fragment.xml lazily and calls syncStyleClass('sapUiSizeCompact', view, dialog) before open(). The port builds the same fragment in its own chain and shows it with popup_display; the compact-density sync has no equivalent (abap2UI5 sets the density on the shell, not per popup) and is dropped - it changes control sizing only, not structure."
+      "what": "The controller loads Dialog.fragment.xml lazily and calls syncStyleClass('sapUiSizeCompact', view, dialog) before open(). The port builds the same fragment in its own chain and shows it with popup_display; the compact-density sync is dropped. Re-verified 2026-08-23 with a better reason than the one that stood here ('has no equivalent ... abap2UI5 sets the density on the shell, not per popup'): it is a NO-OP in abap2UI5, not an inexpressible call. syncStyleClass copies sapUiSizeCompact from the view onto the dialog because a UI5 dialog renders in the static area outside the view; abap2UI5 puts that class on the <body> itself (z2ui5_cl_ui5_http_handler / z2ui5_cl_ui5f_index_html both emit class='sapUiBody sapUiSizeCompact'), so the static area is already inside it and the dialog is already compact. addStyleClass is whitelisted, so the call COULD be made - it would just set a class that is already in effect."
     },
     {
       "type": "NOTE",
