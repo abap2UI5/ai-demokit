@@ -25,7 +25,10 @@ CLASS z2ui5_cl_smpc_app_262 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       show_footer = abap_false.
-      avatar_size = `L`.
+      " the control's own default - the original view sets no displaySize.
+      " The controller's L belongs to _getAvatarSizeForRange, which only
+      " onBreakpointChange calls; it is never the initial size
+      avatar_size = `S`.
       view_display( ).
     ELSEIF client->check_on_navigated( ).
       view_display( ).

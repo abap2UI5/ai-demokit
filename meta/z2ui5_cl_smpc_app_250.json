@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "handleLiveChange is reproduced since 2026-08-06, and the earlier verdict - 'direct DOM manipulation outside any bindable property, not expressible in the thin frontend' - was too quick. The original paints the liveChangeButton's ICON by writing rgba(r,g,b,alpha) onto getDomRef().firstChild.firstChild.style.color, i.e. the icon span, and the framework's `css` action deliberately writes only on a control's OWN DOM node (the pr/control-inline-style entry excludes internal DOM on purpose). Measured instead of assumed (scripts/probes/, real OpenUI5): the icon span INHERITS color from the button root, so setting it there gives the identical computed colour without touching internal DOM. The wire is roundtrip-free - the rgba() string is composed on the client from the four liveChange parameters, an event argument being a full UI5 expression. Still NOT ported: onExit's popover destroy calls - the declared dependents die with the view."
+      "what": "handleLiveChange is reproduced since 2026-08-06, and the earlier verdict - 'direct DOM manipulation outside any bindable property, not expressible in the thin frontend' - was too quick. The original paints the liveChangeButton's ICON by writing rgba(r,g,b,alpha) onto getDomRef().firstChild.firstChild.style.color, i.e. the icon span, and the framework's `css` action deliberately writes only on a control's OWN DOM node (the pr/control-inline-style entry excludes internal DOM on purpose). Measured instead of assumed (scripts/probes/, real OpenUI5): the icon span INHERITS color from the button root, so setting it there gives the identical computed colour without touching internal DOM. The wire is roundtrip-free - the rgba() string is composed on the client from the four liveChange parameters, an event argument being a full UI5 expression. Still NOT ported: onExit's popover destroy calls - the declared dependents die with the view. **Corrected 2026-08-23**: that is true only for an argument that STARTS with $ or { (or is an .eB/.eBP/.eF call) - get_t_arg wraps everything else in a single-quoted JS string. The rgba( ) expression opened with a quote, so it reached the css setter as literal text and CSSOM dropped it: the liveChange button's icon never changed colour. It now leads with ${$parameters>/r} !== undefined, which is inert and buys the raw branch. The same shape had just been written into app 233 and was corrected with it."
     },
     {
       "type": "NOTE",
@@ -34,6 +34,14 @@
     {
       "type": "NOTE",
       "what": "The colorSelect toast carries a REAL line break since 2026-08-21. The original's JS double-quoted \"...\\n...\" is a newline and .sapMMessageToast is white-space: pre-line, so it renders as one; an ABAP BACKTICK literal has no escapes, so the port's `\\n` was two literal characters that the client's formatTemplate (which only substitutes {N}) passed straight through to the visible text. All five wires now concatenate ` ... ` && |\\n| && ` ... ` - the string-template form, where \\n IS an escape, and the form app 284 already used. Apps 008 and 186 carried the same defect and are fixed with it. Found by the review sweep; no gate compares a literal toast text."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.ColorPalettePopover.liveChange is @since 1.85 and is wired on the fifth popover, 1:1 with the original. Undeclared until 2026-08-23: the POST_171 entry beside it predates the 2026-08-06 liveChange wire and was never extended, and an EVENT is exactly the member kind the property gate cannot see. The stated >= 1.122 floor is unchanged (selectedColor is the higher one)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The port declares ONE popover for the display-mode samples, so its liveChange handler is attached permanently. In the original the handler is conditional on press order: openSampleWithDisplayModeSet creates the instance without liveChange, and openSampleWithDisplayModeSetLiveChange only adds it if the instance does not exist yet - so pressing the 4th button first leaves the 5th without live change. The shared instance was already declared; that it makes the handler unconditional was not."
     }
   ]
 }

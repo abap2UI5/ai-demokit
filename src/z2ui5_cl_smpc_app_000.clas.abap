@@ -1820,16 +1820,22 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = `POST-1.71: Members newer than 1.71 kept 1:1: sap.m.Carousel.ariaLabelledBy (@1.125) and sap.m.CarouselLayout.scrollMode (@1.121); the CarouselLayout control itself is @1.62. The app needs a UI5` &&
                ` release >= 1.125 to render both. // NOTE: The two named models are folded onto the one default model (pure prefix-drops, same leaf names): products>/ProductCollection -> /T_PRODUCTS (the full 123-row` &&
                ` sap/ui/demo/mock/products.json with the nine bound fields; onInit's oProductsModel.setSizeLimit(10) rides 1:1 as follow_up_action cs_event-set_size_limit 10 MAIN, so exactly 10 pages render like the` &&
-               ` original) and settings>/pagesCount -> /PAGES_COUNT. The Device.system pagesCount branch (desktop 4 / tablet 2 / else 1) is resolved statically to the desktop default 4. ProductPicUrl values are` &&
-               ` host-absolutized to https://sdk.openui5.org/ per the offline asset rule. // NOTE: Thin-frontend folds, both attribute drops declared: onNumberOfPages - the Input's liveChange attribute is DROPPED,` &&
-               ` Input.value is two-way bound with an added valueLiveUpdate='true' and CarouselLayout.visiblePagesCount binds the same /PAGES_COUNT field, so typing drives the carousel client-side exactly like the`.
-    lv_text1 = lv_text1 && ` original's per-keystroke setVisiblePagesCount. OnScrollModeChange - the Switch's change attribute is DROPPED, Switch.state is two-way bound and scrollMode is the expression binding {= state ?` &&
-               ` 'VisiblePages' : 'SinglePage' } over the same field - the original's imperative setScrollMode as a binding. // NOTE: unverified in a running system: the set_size_limit(10, MAIN) follow-up capping the` &&
-               ` pages binding, the shared /PAGES_COUNT driving Input and visiblePagesCount, and the scrollMode expression flip. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs):` &&
-               ` exactly 10 carousel items render from the 123 bound rows (the set_size_limit(10, MAIN) follow-up caps the binding) with the first product card visible; the pages-count input and scrollMode flip` &&
-               ` remain unexercised but are the proven 007/128 client-side class. // NOTE: onInit's device branch is resolved SERVER-SIDE since 2026-08-21: pages_count comes from client->get( )-s_device-system` &&
-               ` (desktop 4 / tablet 2 / else 1), the mirror apps 012/173/302 already read. It was hard-coded to the desktop leg with a NOTE calling that 'resolved statically' - but CAPABILITIES marks the device`.
-    lv_text1 = lv_text1 && ` model ✅ and the branch is expressible, so declaring it did not make it right. The original seeds the value once in onInit and so does the port.`.
+               ` original) and settings>/pagesCount -> /PAGES_COUNT. The Device.system pagesCount branch (desktop 4 / tablet 2 / else 1) was resolved statically to the desktop default 4 when this NOTE was written; it` &&
+               ` has been resolved from the device mirror since 2026-08-21 (see the deviation below, which supersedes this sentence and was added beside it instead of correcting it). ProductPicUrl values are` &&
+               ` host-absolutized to https://sdk.openui5.org/ per the offline asset rule. Corrected 2026-08-23: COMBI counts as desktop. The original tests Device.system.desktop first, and a touchscreen laptop has`.
+    lv_text1 = lv_text1 && ` desktop AND tablet true, so it takes the desktop leg; the mirror collapses that pair into the single string 'combi', and checking 'tablet' alone handed such a machine 2 pages where the sample gives` &&
+               ` 4. // NOTE: Thin-frontend folds, both attribute drops declared: onNumberOfPages - the Input's liveChange attribute is DROPPED, Input.value is two-way bound with an added valueLiveUpdate='true' and` &&
+               ` CarouselLayout.visiblePagesCount binds the same /PAGES_COUNT field, so typing drives the carousel client-side like the original's per-keystroke setVisiblePagesCount. OnScrollModeChange - the Switch's` &&
+               ` change attribute is DROPPED, Switch.state is two-way bound and scrollMode is the expression binding {= state ? 'VisiblePages' : 'SinglePage' } over the same field - the original's imperative` &&
+               ` setScrollMode as a binding. **Corrected 2026-08-23**: it did not. sap.m.Input.value is a string property, so the two-way write-back stored the typed text as a STRING, and` &&
+               ` CarouselLayout.visiblePagesCount is an int - validateProperty casts implicitly for string properties only, so every keystroke threw '"5" is of type string, expected int' out of the binding and the`.
+    lv_text1 = lv_text1 && ` page count never changed. The Input's value now carries type: 'IntegerType' (core:require), which is where the original's Number( sVisiblePageCount ) went. // NOTE: unverified in a running system:` &&
+               ` the set_size_limit(10, MAIN) follow-up capping the pages binding, the shared /PAGES_COUNT driving Input and visiblePagesCount, and the scrollMode expression flip. **e2e-verified 2026-07-30**` &&
+               ` (transpiled-framework interaction, scripts/e2e-smoke.mjs): exactly 10 carousel items render from the 123 bound rows (the set_size_limit(10, MAIN) follow-up caps the binding) with the first product` &&
+               ` card visible; the pages-count input and scrollMode flip remain unexercised but are the proven 007/128 client-side class. // NOTE: onInit's device branch is resolved SERVER-SIDE since 2026-08-21:` &&
+               ` pages_count comes from client->get( )-s_device-system (desktop 4 / tablet 2 / else 1), the mirror apps 012/173/302 already read. It was hard-coded to the desktop leg with a NOTE calling that` &&
+               ` 'resolved statically' - but CAPABILITIES marks the device model ✅ and the branch is expressible, so declaring it did not make it right. The original seeds the value once in onInit and so does the` &&
+               ` port.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Carousel`                        name = `CarouselWithMorePages`                         class = `z2ui5_cl_smpc_app_252` path = `src/02/01/z2ui5_cl_smpc_app_252.clas.abap`
         score = 4
@@ -1880,13 +1886,20 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` getDomRef().firstChild.firstChild.style.color, i.e. the icon span, and the framework's ``css`` action deliberately writes only on a control's OWN DOM node (the pr/control-inline-style entry excludes` &&
                ` internal DOM on purpose). Measured instead of assumed (scripts/probes/, real OpenUI5): the icon span INHERITS color from the button root, so setting it there gives the identical computed colour` &&
                ` without touching internal DOM. The wire is roundtrip-free - the rgba() string is composed on the client from the four liveChange parameters, an event argument being a full UI5 expression. Still NOT`.
-    lv_text1 = lv_text1 && ` ported: onExit's popover destroy calls - the declared dependents die with the view. // NOTE: unverified in a running system: the six dependents-declared ColorPalettePopover configurations opening` &&
-               ` anchored via openBy and the colorSelect toast argument resolution. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the first action button opens its` &&
-               ` ColorPalettePopover anchored (palette content attached); the other five configurations are the identical wire. **e2e-verified 2026-08-04** (nightly e2e interaction,` &&
-               ` meta/interactions/z2ui5_cl_smpc_app_250.mjs). // NOTE: The colorSelect toast carries a REAL line break since 2026-08-21. The original's JS double-quoted "...\n..." is a newline and .sapMMessageToast` &&
-               ` is white-space: pre-line, so it renders as one; an ABAP BACKTICK literal has no escapes, so the port's ``\n`` was two literal characters that the client's formatTemplate (which only substitutes {N})` &&
-               ` passed straight through to the visible text. All five wires now concatenate `` ... `` && |\n| && `` ... `` - the string-template form, where \n IS an escape, and the form app 284 already used. Apps`.
-    lv_text1 = lv_text1 && ` 008 and 186 carried the same defect and are fixed with it. Found by the review sweep; no gate compares a literal toast text.`.
+    lv_text1 = lv_text1 && ` ported: onExit's popover destroy calls - the declared dependents die with the view. **Corrected 2026-08-23**: that is true only for an argument that STARTS with $ or { (or is an .eB/.eBP/.eF call) -` &&
+               ` get_t_arg wraps everything else in a single-quoted JS string. The rgba( ) expression opened with a quote, so it reached the css setter as literal text and CSSOM dropped it: the liveChange button's` &&
+               ` icon never changed colour. It now leads with ${$parameters>/r} !== undefined, which is inert and buys the raw branch. The same shape had just been written into app 233 and was corrected with it. //` &&
+               ` NOTE: unverified in a running system: the six dependents-declared ColorPalettePopover configurations opening anchored via openBy and the colorSelect toast argument resolution. **e2e-verified` &&
+               ` 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the first action button opens its ColorPalettePopover anchored (palette content attached); the other five configurations are` &&
+               ` the identical wire. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_250.mjs). // NOTE: The colorSelect toast carries a REAL line break since 2026-08-21. The`.
+    lv_text1 = lv_text1 && ` original's JS double-quoted "...\n..." is a newline and .sapMMessageToast is white-space: pre-line, so it renders as one; an ABAP BACKTICK literal has no escapes, so the port's ``\n`` was two literal` &&
+               ` characters that the client's formatTemplate (which only substitutes {N}) passed straight through to the visible text. All five wires now concatenate `` ... `` && |\n| && `` ... `` - the` &&
+               ` string-template form, where \n IS an escape, and the form app 284 already used. Apps 008 and 186 carried the same defect and are fixed with it. Found by the review sweep; no gate compares a literal` &&
+               ` toast text. // POST-1.71: sap.m.ColorPalettePopover.liveChange is @since 1.85 and is wired on the fifth popover, 1:1 with the original. Undeclared until 2026-08-23: the POST_171 entry beside it` &&
+               ` predates the 2026-08-06 liveChange wire and was never extended, and an EVENT is exactly the member kind the property gate cannot see. The stated >= 1.122 floor is unchanged (selectedColor is the` &&
+               ` higher one). // NOTE: The port declares ONE popover for the display-mode samples, so its liveChange handler is attached permanently. In the original the handler is conditional on press order:`.
+    lv_text1 = lv_text1 && ` openSampleWithDisplayModeSet creates the instance without liveChange, and openSampleWithDisplayModeSetLiveChange only adds it if the instance does not exist yet - so pressing the 4th button first` &&
+               ` leaves the 5th without live change. The shared instance was already declared; that it makes the handler unconditional was not.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ColorPalette`                    name = `ColorPalettePopover`                           class = `z2ui5_cl_smpc_app_250` path = `src/02/01/z2ui5_cl_smpc_app_250.clas.abap`
         score = 5
@@ -1896,7 +1909,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         is_post171 = abap_true
         notes = lv_text1
         post171 = `Members newer than 1.71 kept 1:1 per the fidelity-first policy: sap.m.ColorPalettePopover.selectedColor (@1.122) and showRecentColorsSection (@1.74) on the selected-color popover, and` &&
-                 ` sap.m.Button.ariaHasPopup (@1.84) on all seven action buttons. The app needs a UI5 release >= 1.122 for the selectedColor variant; the control itself is @1.54.` ) ).
+                 ` sap.m.Button.ariaHasPopup (@1.84) on all seven action buttons. The app needs a UI5 release >= 1.122 for the selectedColor variant; the control itself is @1.54. // sap.m.ColorPalettePopover.liveChange` &&
+                 ` is @since 1.85 and is wired on the fifth popover, 1:1 with the original. Undeclared until 2026-08-23: the POST_171 entry beside it predates the 2026-08-06 liveChange wire and was never extended, and` &&
+                 ` an EVENT is exactly the member kind the property gate cannot see. The stated >= 1.122 floor is unchanged (selectedColor is the higher one).` ) ).
 
     lv_text1 = `NOTE: the shared demo kit mock model sap/ui/demo/mock/products.json (/ProductCollection, snapshotted in ui5/mock/products.json) is flattened into the default model: all 123 rows are kept verbatim, but` &&
                ` only the bound columns (ProductId, Name, SupplierName, WeightMeasure, WeightUnit, Width, Depth, Height, DimUnit, Price, CurrencyCode) are ported - the unbound columns (Category, MainCategory,` &&
@@ -7477,27 +7492,32 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` 1:1 on the Quick Create item. @since verified NavigationListItem.js:131-139. // NOTE: itemPress preventDefault reproduced 1:1 since 2026-07-30: every NavigationListItem press wire carries`.
     lv_text1 = lv_text1 && ` s_ctrl-check_prevent_default = prevent_default, so when the 'preventDefaultCheckbox' is selected the handler cancels the item's built-in default client-side (oEvent.preventDefault() before the` &&
                ` round-trip - selection stays, href navigation is suppressed) exactly like the original. The flag is baked into the handler expression at render time, so the CheckBox got an added select wire` &&
-               ` (PREVENT_TOGGLE, declared) that redraws the view when toggled; the redraw resets the client-side selection back to selectedKey='walked' - a small toggle-time caveat the original (which never redraws)` &&
-               ` does not have. The checkbox state stays two-way bound (selected={/PREVENT_DEFAULT}); the toast heading ('Default was prevented:' vs 'Item Pressed:') is composed server-side from the same flag. //` &&
-               ` NOTE: quickActionPress dialog: reproduced as a core:FragmentDefinition shown via client->popup_display - the controller-built sap.m.Dialog with two Label + Input pairs (Name/Icon, the Inputs two-way` &&
-               ` bound to create_name/create_icon) and Create/Cancel Buttons. These Dialog/Label/Input/Button controls are extra vs the original view.xml, which declared none of them. **The Create button now works`.
-    lv_text1 = lv_text1 && ` 1:1 (2026-08-05)**: the original does sideNavigation.getItem().addItem( new NavigationListItem({ text, expanded, icon }) ), so the main NavigationList is a BOUND aggregation here (the app-085/203` &&
-               ` pattern) and creating appends a row with the same defaults ('New Navigation Item' / sap-icon://building). Consequently the five static tnt:NavigationListItem declarations became one template plus a` &&
-               ` nested one for Mileage's children - 4 instead of 9 against the original count - and the rows bind with omit_initial_paths so an item without an icon/href keeps the control default, while SELECTABLE` &&
-               ` stays outside that list because the two external links must send their explicit false. The earlier 'dynamic addItem is not expressible' rationale is retired. // NOTE: The 2026-07-27 live check` &&
-               ` predates the 2026-07-30 prevent-default rewire (status reset checked -> generated per the invalidation rule): re-verify that with the checkbox set a press does NOT change the selection (eBP cancels` &&
-               ` the default) and still toasts 'Default was prevented:', that with the checkbox clear selection changes normally, and that the PREVENT_TOGGLE redraw keeps working (expanded state and checkbox survive`.
-    lv_text1 = lv_text1 && ` it via their two-way bindings). onCollapseExpandPress (expanded two-way + TOGGLE_EXPAND round-trip), the ITEM_PRESS modifier-key transport and the popup round-trips were live-verified 2026-07-27.` &&
-               ` **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): with the checkbox set, the PREVENT_TOGGLE redraw re-bakes the wires and pressing 'Building' toasts 'Default was` &&
-               ` prevented:' - the eBP wire fires and round-trips; the visual no-selection-change and the popup paths remain for the live check. **e2e-verified 2026-08-04** (nightly e2e interaction,` &&
-               ` meta/interactions/z2ui5_cl_smpc_app_241.mjs). // POST-1.71: sap.tnt.NavigationListItem.expanded is carried by the port's bound item template. Corrected 2026-08-21: this said 'kept 1:1 from the` &&
-               ` original view', which is not true - no NavigationListItem in the original declares ``expanded`` at all. The attribute exists here to carry the Create dialog's expanded item, and the SideNavigation's` &&
-               ` own ``expanded`` (which the original DOES declare) is a different, base-version property needing no declaration. The property PREDATES 1.71, but it now lives on sap.tnt.NavigationListItemBase and its`.
-    lv_text1 = lv_text1 && ` JSDoc there carries @since 1.121, which is the version any scanner reads - the relocated-member residual limit AGENTS section 5 names. Declared by policy 2026-08-21` &&
+               ` (PREVENT_TOGGLE, declared) that redraws the view when toggled; the redraw resets the client-side selection - a small toggle-time caveat the original (which never redraws) does not have. The checkbox` &&
+               ` state stays two-way bound (selected={/PREVENT_DEFAULT}); the toast heading ('Default was prevented:' vs 'Item Pressed:') is composed server-side from the same flag. (Corrected 2026-08-23: the earlier` &&
+               ` wording said the selection resets 'back to selectedKey=walked'. No item declares a key on either side, and _getUniqueKey falls back to the generated control id, so that selectedKey selects nothing -` &&
+               ` in the original too. What the redraw loses is the user's selection, not a named resting state.) // NOTE: quickActionPress dialog: reproduced as a core:FragmentDefinition shown via`.
+    lv_text1 = lv_text1 && ` client->popup_display - the controller-built sap.m.Dialog with two Label + Input pairs (Name/Icon, the Inputs two-way bound to create_name/create_icon) and Create/Cancel Buttons. These` &&
+               ` Dialog/Label/Input/Button controls are extra vs the original view.xml, which declared none of them. **The Create button now works 1:1 (2026-08-05)**: the original does` &&
+               ` sideNavigation.getItem().addItem( new NavigationListItem({ text, expanded, icon }) ), so the main NavigationList is a BOUND aggregation here (the app-085/203 pattern) and creating appends a row with` &&
+               ` the same defaults ('New Navigation Item' / sap-icon://building). Consequently the five static tnt:NavigationListItem declarations became one template plus a nested one for Mileage's children - 4` &&
+               ` instead of 9 against the original count - and the rows bind with omit_initial_paths so an item without an icon/href keeps the control default, while SELECTABLE stays outside that list because the two` &&
+               ` external links must send their explicit false. The earlier 'dynamic addItem is not expressible' rationale is retired. // NOTE: The 2026-07-27 live check predates the 2026-07-30 prevent-default rewire`.
+    lv_text1 = lv_text1 && ` (status reset checked -> generated per the invalidation rule): re-verify that with the checkbox set a press does NOT change the selection (eBP cancels the default) and still toasts 'Default was` &&
+               ` prevented:', that with the checkbox clear selection changes normally, and that the PREVENT_TOGGLE redraw keeps working (expanded state and checkbox survive it via their two-way bindings).` &&
+               ` onCollapseExpandPress (expanded two-way + TOGGLE_EXPAND round-trip), the ITEM_PRESS modifier-key transport and the popup round-trips were live-verified 2026-07-27. **e2e-verified 2026-07-30**` &&
+               ` (transpiled-framework interaction, scripts/e2e-smoke.mjs): with the checkbox set, the PREVENT_TOGGLE redraw re-bakes the wires and pressing 'Building' toasts 'Default was prevented:' - the eBP wire` &&
+               ` fires and round-trips; the visual no-selection-change and the popup paths remain for the live check. **e2e-verified 2026-08-04** (nightly e2e interaction,` &&
+               ` meta/interactions/z2ui5_cl_smpc_app_241.mjs). // POST-1.71: sap.tnt.NavigationListItem.expanded is carried by the port's bound item template. Corrected 2026-08-21: this said 'kept 1:1 from the`.
+    lv_text1 = lv_text1 && ` original view', which is not true - no NavigationListItem in the original declares ``expanded`` at all. The attribute exists here to carry the Create dialog's expanded item, and the SideNavigation's` &&
+               ` own ``expanded`` (which the original DOES declare) is a different, base-version property needing no declaration. The property PREDATES 1.71, but it now lives on sap.tnt.NavigationListItemBase and its` &&
+               ` JSDoc there carries @since 1.121, which is the version any scanner reads - the relocated-member residual limit AGENTS section 5 names. Declared by policy 2026-08-21` &&
                ` (scripts/probes/post171-blindspot-probe.mjs); no gate can raise it. // NOTE: EXPANDED joins omit_initial_paths since 2026-08-21. The original declares ``expanded`` on NO NavigationListItem, so UI5's` &&
                ` own default (true) applies and 'Mileage' opens showing Driven and Walked; the port bound the attribute to a field no seeded row sets, and ajson emitted a real JSON false that collapsed it - the` &&
-               ` sample's only parent item silently lost its children, with selectedKey pointing at a hidden child. Omitting the INITIAL value restores the default while the Create dialog's explicit abap_true still` &&
-               ` travels. Found by the review sweep.`.
+               ` sample's only parent item silently lost its children, with selectedKey pointing at a hidden child. Omitting the INITIAL value restores the default while the Create dialog's explicit abap_true still`.
+    lv_text1 = lv_text1 && ` travels. Found by the review sweep. // NOTE: The nested items aggregation carried no binding on the row template between the 2026-08-05 static-to-bound rewrite and 2026-08-23. The outer` &&
+               ` NavigationList bound {/T_NAV_ITEMS}, but the inner tnt:items element held a STATIC NavigationListItem, so it was cloned with every row and its {TEXT} resolved in the row's own context: Mileage's two` &&
+               ` children (Driven, Walked) never rendered, and all five rows grew one spurious child bearing their own label. The row template now carries items="{ITEMS}", the shape app 167 uses on the same control.` &&
+               ` No gate could see it - structural-diff was satisfied by the declared control count, and the interaction module only presses one top-level item.`.
     lv_text2 = `NavigationListItemBase.press event (@since 1.133) is the whole point of this sample; wired 1:1 on every NavigationListItem (press) to a backend ITEM_PRESS event. @since verified in` &&
                ` fork-openui5/src/sap.tnt/src/sap/tnt/NavigationListItemBase.js:74-79. Requires a UI5 release >= 1.133. // The press event parameters ctrlKey/shiftKey/altKey/metaKey (@since 1.137) are transported via` &&
                ` ${$parameters>/ctrlKey} etc. in the ITEM_PRESS t_arg and echoed into the toast, exactly as the original itemPress reads them. @since verified NavigationListItemBase.js:88-109. Requires a UI5 release` &&
@@ -9164,10 +9184,13 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` sample binds - ProductId, Name and Quantity (the List's title/counter and the Select's Item key/text). Quantity is the mock integer; the full row set is kept. // NOTE: The two PaneContainer resize` &&
                ` handlers (resize='.onRootContainerResize' on the root container and resize='.onInnerContainerResize' on the inner one) compose an informational MessageToast listing the oldSizes/newSizes pane-size` &&
                ` arrays. **Reproduced roundtrip-free since 2026-08-05**: measured with scripts/probes/event-arg-expression-probe.mjs, ``.join( ',' )`` over an ARRAY-valued event parameter resolves inside an event`.
-    lv_text1 = lv_text1 && ` arg, so both arrays travel into a client-composed toast with the original's two-line text (each guarded, since the first resize carries no oldSizes). The earlier rationale - 'an array-valued` &&
-               ` container-resize event has no bound-model equivalent' - looked for a MODEL equivalent where the client expression was the answer. // NOTE: The toast's line break is a REAL newline since 2026-08-21.` &&
-               ` An ABAP backtick literal has no escapes, so the ``\n`` the template used to carry reached the visible text as two literal characters - the client's formatTemplate only substitutes {N}. The wire` &&
-               ` concatenates `` ... `` && |\n| && `` ... `` now, the string-template form where \n IS an escape. Same defect and same fix as app 250, where the review sweep found it.`.
+    lv_text1 = lv_text1 && ` arg, so both arrays travel into a client-composed toast with the original's message. The earlier rationale - 'an array-valued container-resize event has no bound-model equivalent' - looked for a` &&
+               ` MODEL equivalent where the client expression was the answer. Corrected 2026-08-23: the guard is a LINE guard, not a value guard - the original appends the whole "\nOld panes sizes = [...]" line only` &&
+               ` when aOldSizes has entries. The port's template carried that line unconditionally and merely emptied the value, so the first resize - which really does arrive with an empty array, since` &&
+               ` _sizeArraysDiffer compares [] against the new sizes - printed "Old panes sizes = []" where the original prints nothing. The line is composed inside the argument expression now and the template` &&
+               ` carries the placeholder alone. // NOTE: The toast's line break is a REAL newline since 2026-08-21. An ABAP backtick literal has no escapes, so the ``\n`` the template used to carry reached the` &&
+               ` visible text as two literal characters - the client's formatTemplate only substitutes {N}. The wire concatenates `` ... `` && |\n| && `` ... `` now, the string-template form where \n IS an escape.`.
+    lv_text1 = lv_text1 && ` Same defect and same fix as app 250, where the review sweep found it.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.ResponsiveSplitter`      name = `ResponsiveSplitter`                            class = `z2ui5_cl_smpc_app_186` path = `src/01/02/z2ui5_cl_smpc_app_186.clas.abap`
         score = 4
@@ -10198,11 +10221,13 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). This sample's manifest lists ``../style.css`` - the sheet the sap.ui.unified` &&
                ` samples SHARE one folder up - and it was never archived, so the viewPadding class the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders` &&
                ` padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by` &&
-               ` scripts/probes/orphan-style-class-probe.mjs.`.
+               ` scripts/probes/orphan-style-class-probe.mjs. // NOTE: The upload branch clears the FileUploader through control_by_id clear( ) only, and deliberately does NOT clear the bound value field. It did` &&
+               ` until 2026-08-23, and that was a wire that could not work: a changed model is pushed to the client BEFORE the queued follow-up actions run (Slots.action('updateModel') sits ahead of` &&
+               ` _runPendingCustomJs), so FileUploader.setValue('') reset the form and the upload( ) that followed posted an empty one. clear( ) is also all the original does after upload( ).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.FileUploader`           name = `FileUploaderComplex`                           class = `z2ui5_cl_smpc_app_246` path = `src/01/02/z2ui5_cl_smpc_app_246.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
     lv_text1 = `POST-1.71: Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it. // NOTE: anchored open works since the framework` &&
@@ -10971,24 +10996,30 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
 
     lv_text1 = `POST-1.71: sap.uxap.ObjectPageLayout.breakpointChange (@since 1.147, incl. its currentRange / currentWidth parameters) is the whole point of this sample and is wired 1:1 as a view attribute (an added` &&
                ` attr - the original attaches it imperatively in onInit via attachBreakpointChange): BREAKPOINT_CHANGE transports ${$parameters>/currentRange} and ${$parameters>/currentWidth}, the backend maps` &&
-               ` Phone->M / Tablet->L / Desktop and DesktopExtraLarge->XL into the two-way bound Avatar displaySize ({/AVATAR_SIZE}, an added attribute on both Avatars, seeded L like the controller's default branch)` &&
-               ` and toasts 'Media Range: <range> (<width>px) / Avatar Size: <size>' exactly like onBreakpointChange. Same wiring as app 244 (the sap.f.DynamicPage twin of this sample). Requires a UI5 release >=` &&
-               ` 1.147; on older releases the event never fires and both Avatars keep the seeded L. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity` &&
-               ` sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar (id snappedAvatar) and the headerContent avatar (id headerAvatar). Needs a UI5 runtime >= 1.73. // NOTE: showFooter is two-way bound`.
-    lv_text1 = lv_text1 && ` ({/SHOW_FOOTER}, seeded false = the original's ObjectPageLayout default, since the sample sets no showFooter attribute) and the Toggle Footer button flips it on a round-trip - the faithful abap2UI5` &&
+               ` Phone->M / Tablet->L / Desktop and DesktopExtraLarge->XL into the two-way bound Avatar displaySize ({/AVATAR_SIZE}, an added attribute on both Avatars, seeded S, the control's own default) and toasts` &&
+               ` 'Media Range: <range> (<width>px) / Avatar Size: <size>' exactly like onBreakpointChange. Same wiring as app 244 (the sap.f.DynamicPage twin of this sample). Requires a UI5 release >= 1.147; on older` &&
+               ` releases the event never fires and both Avatars keep the seeded L. **Corrected 2026-08-23**: the port seeded L, quoting the controller's default branch - but that branch lives inside` &&
+               ` _getAvatarSizeForRange, which onBreakpointChange calls; it is never the initial size. sap.m.Avatar.displaySize defaults to S and the original view sets nothing, so the first paint showed L where the`.
+    lv_text1 = lv_text1 && ` sample shows S - and on a runtime below 1.147, where breakpointChange never fires, it stayed L forever. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity` &&
+               ` sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar (id snappedAvatar) and the headerContent avatar (id headerAvatar). Needs a UI5 runtime >= 1.73. // NOTE: showFooter is two-way bound` &&
+               ` ({/SHOW_FOOTER}, seeded false = the original's ObjectPageLayout default, since the sample sets no showFooter attribute) and the Toggle Footer button flips it on a round-trip - the faithful abap2UI5` &&
                ` form of the controller's setShowFooter(!getShowFooter()); a scalar literal -> binding is not a structural diff. The two breadcrumb Link presses and the editHeaderButtonPress raise client-composed` &&
                ` MessageToasts via follow_up_action control_global MESSAGE_TOAST (roundtrip-free, apps 005/060/244). Footer round-trip, toast wiring and the editHeaderButtonPress attribute are unverified in a running` &&
-               ` system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the Toggle Footer press flips the two-way bound showFooter over a real round-trip (the` &&
-               ` footer with Accept/Reject appears), and the breadcrumb entry raises its client-composed toast 'Page 1 a very long link clicked' (at this viewport the Breadcrumbs collapse into a Select, so the entry` &&
-               ` is picked from its list). Residual: editHeaderButtonPress - the ObjectPage's pencil button only appears on header hover, so its toast stays a human check. // NOTE: Both Avatar src values point at the`.
-    lv_text1 = lv_text1 && ` sdk.openui5.org host (https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png) per the offline asset-URL rule; the original uses the relative ./test-resources path. Literal src` &&
-               ` values are not compared by structural-diff.`.
+               ` system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the Toggle Footer press flips the two-way bound showFooter over a real round-trip (the`.
+    lv_text1 = lv_text1 && ` footer with Accept/Reject appears), and the breadcrumb entry raises its client-composed toast 'Page 1 a very long link clicked' (at this viewport the Breadcrumbs collapse into a Select, so the entry` &&
+               ` is picked from its list). Residual: editHeaderButtonPress - there is no pencil button to press, so its toast stays a human check. **Corrected 2026-08-23**: showEditHeaderButton is honoured only for a` &&
+               ` classic sap.uxap.ObjectPageHeader - ObjectPageLayout says so in its own JSDoc, and only ObjectPageHeaderContentRenderer draws the button. This sample uses ObjectPageDynamicHeaderTitle, whose content` &&
+               ` class renders no edit button at all, so editHeaderButtonPress can never fire on either side. The port copies both attributes 1:1 and is faithful; the residual parked here was unclosable by any human` &&
+               ` check. // NOTE: Both Avatar src values point at the sdk.openui5.org host (https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png) per the offline asset-URL rule; the original uses` &&
+               ` the relative ./test-resources path. Literal src values are not compared by structural-diff.`.
     lv_text2 = `sap.uxap.ObjectPageLayout.breakpointChange (@since 1.147, incl. its currentRange / currentWidth parameters) is the whole point of this sample and is wired 1:1 as a view attribute (an added attr - the` &&
                ` original attaches it imperatively in onInit via attachBreakpointChange): BREAKPOINT_CHANGE transports ${$parameters>/currentRange} and ${$parameters>/currentWidth}, the backend maps Phone->M /` &&
-               ` Tablet->L / Desktop and DesktopExtraLarge->XL into the two-way bound Avatar displaySize ({/AVATAR_SIZE}, an added attribute on both Avatars, seeded L like the controller's default branch) and toasts` &&
-               ` 'Media Range: <range> (<width>px) / Avatar Size: <size>' exactly like onBreakpointChange. Same wiring as app 244 (the sap.f.DynamicPage twin of this sample). Requires a UI5 release >= 1.147; on older` &&
-               ` releases the event never fires and both Avatars keep the seeded L. // sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the` &&
-               ` snappedHeading avatar (id snappedAvatar) and the headerContent avatar (id headerAvatar). Needs a UI5 runtime >= 1.73.`.
+               ` Tablet->L / Desktop and DesktopExtraLarge->XL into the two-way bound Avatar displaySize ({/AVATAR_SIZE}, an added attribute on both Avatars, seeded S, the control's own default) and toasts 'Media` &&
+               ` Range: <range> (<width>px) / Avatar Size: <size>' exactly like onBreakpointChange. Same wiring as app 244 (the sap.f.DynamicPage twin of this sample). Requires a UI5 release >= 1.147; on older` &&
+               ` releases the event never fires and both Avatars keep the seeded L. **Corrected 2026-08-23**: the port seeded L, quoting the controller's default branch - but that branch lives inside` &&
+               ` _getAvatarSizeForRange, which onBreakpointChange calls; it is never the initial size. sap.m.Avatar.displaySize defaults to S and the original view sets nothing, so the first paint showed L where the`.
+    lv_text2 = lv_text2 && ` sample shows S - and on a runtime below 1.147, where breakpointChange never fires, it stayed L forever. // sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity` &&
+               ` sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar (id snappedAvatar) and the headerContent avatar (id headerAvatar). Needs a UI5 runtime >= 1.73.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageResponsiveAvatar`                    class = `z2ui5_cl_smpc_app_262` path = `src/02/03/z2ui5_cl_smpc_app_262.clas.abap`
         score = 4
@@ -11119,7 +11150,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` was not verified in a running system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the ObjectPage renders and the folded emp1>/emp2>` &&
                ` ModelMapping records show ('Michael Adams'), and the Job Relationship subsection title is there. The TitleOnLeft layout itself stays a human check: measured in the source, subSectionLayout only`.
     lv_text1 = lv_text1 && ` changes the subsection's grid column math (ObjectPageSubSection._calculateLayoutConfiguration) - it emits no own CSS class an assertion could hook onto. **e2e-verified 2026-08-04** (nightly e2e` &&
-               ` interaction, meta/interactions/z2ui5_cl_smpc_app_261.mjs).`.
+               ` interaction, meta/interactions/z2ui5_cl_smpc_app_261.mjs). // NOTE: The two social images (linkedin.png, Twitter.png) are host-absolutized to https://sdk.openui5.org/... since 2026-08-23. The demo` &&
+               ` kit serves them as ./test-resources/..., which an abap2UI5 app has no document root to resolve against, so both icons rendered broken. The sibling ports 262/263 rewrite the same two files and declare` &&
+               ` it; this port kept the relative form and declared nothing.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageTitleOnLeft`                         class = `z2ui5_cl_smpc_app_261` path = `src/02/03/z2ui5_cl_smpc_app_261.clas.abap`
         score = 5

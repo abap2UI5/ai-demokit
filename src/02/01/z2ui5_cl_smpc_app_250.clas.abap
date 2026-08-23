@@ -89,14 +89,20 @@ CLASS z2ui5_cl_smpc_app_250 IMPLEMENTATION.
                 " button's OWN node instead - measured 2026-08-06: the icon
                 " INHERITS color from the button root, so the effect is the
                 " same without reaching into internal DOM. The rgba() string is
-                " composed on the client from the four event parameters
+                " composed on the client from the four event parameters - and the
+                " expression MUST BEGIN WITH $ : get_t_arg leaves an argument raw
+                " only when it starts with $ or { (or is an .eB/.eF call), so the
+                " earlier form that opened with 'rgba(' was wrapped in a JS string
+                " literal, reached the css setter as text and was dropped by CSSOM.
+                " The leading ${$parameters>/r} test is inert (the parameter is
+                " always present when liveChange fires) and buys the raw branch
                 )->a( n = `liveChange`             v = client->follow_up_action(
                           val   = client->cs_event-control_by_id
                           t_arg = VALUE #( ( `liveChangeButton` )
                                            ( `css` )
                                            ( `color` )
-                                           ( `'rgba(' + ${$parameters>/r} + ',' + ${$parameters>/g} + ',' + ` &&
-                                             `${$parameters>/b} + ',' + ${$parameters>/alpha} + ')'` ) ) )
+                                           ( `${$parameters>/r} !== undefined ? 'rgba(' + ${$parameters>/r} + ',' + ${$parameters>/g} + ',' + ` &&
+                                             `${$parameters>/b} + ',' + ${$parameters>/alpha} + ')' : ''` ) ) )
             )->tag( `ColorPalettePopover`
                 )->a( n = `id`                      v = `oColorPaletteSelectedColor`
                 )->a( n = `colors`                  v = `lightgray,lightblue,cornflowerblue,darkslateblue`

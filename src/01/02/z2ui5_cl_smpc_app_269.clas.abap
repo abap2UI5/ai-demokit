@@ -61,6 +61,12 @@ CLASS z2ui5_cl_smpc_app_269 IMPLEMENTATION.
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:core` v = `sap.ui.core`
+        " the sample's own style.css - the view carries sapUiDSCExplored and the
+        " rules behind them have to come with it (apps 122/124/133/138).
+        " \{ \} escaped: the XMLView parser reads an unescaped brace as a binding
+        )->tag( n = `HTML` ns = `core`
+            )->a( n = `content` v = `<style>.sapUiDSC.sapUiDSCExplored h1\{font-size:2rem\}</style>`
 
         )->ele( `Page`
             )->a( n = `showHeader`    v = `false`

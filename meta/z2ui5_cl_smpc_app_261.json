@@ -30,6 +30,10 @@
     {
       "type": "NOTE",
       "what": "subSectionLayout='TitleOnLeft' is the point of the sample (subsection titles rendered in a left column instead of above the content). The property is passed through 1:1 but the resulting layout was not verified in a running system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the ObjectPage renders and the folded emp1>/emp2> ModelMapping records show ('Michael Adams'), and the Job Relationship subsection title is there. The TitleOnLeft layout itself stays a human check: measured in the source, subSectionLayout only changes the subsection's grid column math (ObjectPageSubSection._calculateLayoutConfiguration) - it emits no own CSS class an assertion could hook onto. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_261.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The two social images (linkedin.png, Twitter.png) are host-absolutized to https://sdk.openui5.org/... since 2026-08-23. The demo kit serves them as ./test-resources/..., which an abap2UI5 app has no document root to resolve against, so both icons rendered broken. The sibling ports 262/263 rewrite the same two files and declare it; this port kept the relative form and declared nothing."
     }
   ]
 }

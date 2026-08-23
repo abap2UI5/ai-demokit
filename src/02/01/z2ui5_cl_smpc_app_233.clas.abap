@@ -137,7 +137,13 @@ CLASS z2ui5_cl_smpc_app_233 IMPLEMENTATION.
                                       t_arg = VALUE #( ( `selectDialog` )
                                                        ( `items` )
                                                        ( `filter` )
-                                                       ( `'[[["PURCHASEID","Contains","' + $event.oSource.getValue() + '"],["SUPPLIERNAME","Contains","' + $event.oSource.getValue() + '"]]]'` ) ) ) && `; ` &&
+                                                       " the expression MUST begin with $ : get_t_arg only leaves an
+                                                       " argument raw when it starts with $ or { (or is an .eB/.eF
+                                                       " call) - anything else, a leading quote included, is wrapped
+                                                       " in a JS string literal and never evaluated. The leading
+                                                       " getValue( ) test is also the original's `if (sValue)` guard:
+                                                       " an empty input clears the filter instead of filtering on ''
+                                                       ( `$event.oSource.getValue() ? '[[["PURCHASEID","Contains","' + $event.oSource.getValue() + '"],["SUPPLIERNAME","Contains","' + $event.oSource.getValue() + '"]]]' : '[]'` ) ) ) && `; ` &&
                                                   client->follow_up_action(
                                       val   = client->cs_event-control_by_id
                                       t_arg = VALUE #( ( `selectDialog` )

@@ -58,7 +58,14 @@ CLASS z2ui5_cl_smpc_app_252 IMPLEMENTATION.
         )->a( n = `xmlns:cards` v = `sap.f.cards`
         )->a( n = `xmlns:l`     v = `sap.ui.layout`
         )->a( n = `xmlns:lf`    v = `sap.ui.layout.form`
+        )->a( n = `xmlns:core`  v = `sap.ui.core`
         )->a( n = `height`      v = `100%`
+        " the Input's value has to carry a TYPE, or the two-way write-back
+        " stores the typed text as a STRING and CarouselLayout.visiblePagesCount
+        " (an int property) throws on every keystroke - validateProperty casts
+        " implicitly for string properties only. This is where the original's
+        " Number( sVisiblePageCount ) went
+        )->a( n = `core:require` v = `{IntegerType: 'sap/ui/model/type/Integer'}`
 
         )->ele( `Page`
             )->a( n = `title` v = `Carousel With customLayout aggregation Sample`
@@ -76,7 +83,7 @@ CLASS z2ui5_cl_smpc_app_252 IMPLEMENTATION.
                 " field - the toggles drive the carousel client-side (007/128)
                 )->tag( `Input`
                     )->a( n = `type`            v = `Number`
-                    )->a( n = `value`           v = client->_bind( pages_count )
+                    )->a( n = `value`           v = |\{ path: '{ client->_bind( val = pages_count path = abap_true ) }', type: 'IntegerType' \}|
                     )->a( n = `valueLiveUpdate` v = `true`
                     )->a( n = `width`           v = `320px`
                 )->tag( `Label`
@@ -221,10 +228,15 @@ CLASS z2ui5_cl_smpc_app_252 IMPLEMENTATION.
 
     " onInit's device branch, resolved SERVER-SIDE from the framework's own
     " device mirror rather than hard-coded to the desktop leg (apps 012/173/302
-    " precedent): desktop 4 / tablet 2 / else 1, exactly as the original seeds
-    " it once in onInit
+    " precedent): desktop 4 / tablet 2 / else 1.
+    " COMBI counts as desktop: the original tests Device.system.desktop first,
+    " and a touchscreen laptop has desktop AND tablet true, so it takes the
+    " desktop leg. The mirror collapses that pair to the single string 'combi',
+    " which is why it has to be named here - checking 'tablet' alone would give
+    " such a machine 2 pages where the sample gives 4
     pages_count    = COND #(
-        WHEN client->get( )-s_device-system = z2ui5_if_client=>cs_device-system-desktop THEN 4
+        WHEN client->get( )-s_device-system = z2ui5_if_client=>cs_device-system-desktop
+          OR client->get( )-s_device-system = z2ui5_if_client=>cs_device-system-combi  THEN 4
         WHEN client->get( )-s_device-system = z2ui5_if_client=>cs_device-system-tablet  THEN 2
         ELSE 1 ).
     scroll_visible = abap_false.
