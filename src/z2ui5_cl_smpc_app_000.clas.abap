@@ -4005,8 +4005,11 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` renders, since the mock's prices are plain numbers. // NOTE: handleFormattedTextLinkPress calls oEvent.preventDefault( ) and then MessageToast.show with my/at = Popup.Dock.CenterCenter. The veto` &&
                ` rides along on the wire as s_ctrl-check_prevent_default (baked per wire at render time), the toast is composed on the way back through follow_up_action control_global MESSAGE_TOAST show. The` &&
                ` CenterCenter placement is not reachable through that global target, so the toast keeps its default bottom placement. // NOTE: the first MultiInput's binding-info carries the sample's sorter { path:` &&
-               ` 'Name' } 1:1 as sorter { path: 'NAME' } over the backend table; the sorted 123 rows come from sap/ui/documentation/sdk/products.json /ProductCollection. // LIVE-TEST: the token creation on both` &&
-               ` tabular MultiInputs (now through the z2ui5.cc.MultiInputExt companion) and the Link inside the value state message (preventDefault plus toast) are unverified in a running system.`.
+               ` 'Name' } 1:1 as sorter { path: 'NAME' } over the backend table; the sorted 123 rows come from sap/ui/documentation/sdk/products.json /ProductCollection. // LIVE-TEST: the e2e interaction module now` &&
+               ` covers what this deviation used to name: the z2ui5.cc.MultiInputExt companions are asserted on both tabular MultiInputs with TokenKeyCell 0 and TokenTextCells 3, their tokenFromRow( ) builds the`.
+    lv_text1 = lv_text1 && ` sample's token from a real bound suggestion row, the tokens aggregation is empty with no binding behind it, and the Link inside the value state message fires its preventDefault wire and raises the` &&
+               ` toast (2026-08-23, headless). What stays unverified in a running system is the interaction a person performs: opening the suggestion popover and picking a row so that MultiInput itself calls the` &&
+               ` registered validator - the assertion reaches the validator's code through the companion rather than through the popup, which measures zero unthemed.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputFilteringSuggestions`                class = `z2ui5_cl_smpc_app_612` path = `src/02/01/z2ui5_cl_smpc_app_612.clas.abap`
         score = 5
@@ -4025,8 +4028,11 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` there. productMIWithList has no validator in the sample either - a core:Item suggestion becomes a token by itself. // NOTE: the Price cell is a composite currency binding in the sample (parts Price +`.
     lv_text1 = lv_text1 && ` CurrencyCode through sap.ui.model.type.Currency with showMeasure TRUE, so the unit is part of the text). The port binds the two fields as one composite text ('{PRICE} {CURRENCYCODE}'), which is what` &&
                ` that formatter renders, since the mock's prices are plain numbers. // NOTE: the controller's oModel.setSizeLimit(1000000) has no counterpart: the port ships all 123 rows of` &&
-               ` sap/ui/demo/mock/products.json /ProductCollection to the client in one model, so the 100-entry default limit the call works around never applies. // LIVE-TEST: the grouped suggestion popups of both` &&
-               ` MultiInputs and the token creation on the tabular one (now through the z2ui5.cc.MultiInputExt companion) are unverified in a running system.`.
+               ` sap/ui/demo/mock/products.json /ProductCollection to the client in one model, so the 100-entry default limit the call works around never applies. // LIVE-TEST: the e2e interaction module now covers` &&
+               ` what this deviation used to name: the grouping sorter is asserted through the sap.ui.core.SeparatorItem entries it produces in both suggestion aggregations, and the z2ui5.cc.MultiInputExt companion` &&
+               ` is asserted on productMIWithTable with TokenKeyCell 0 and TokenTextCells 3, its tokenFromRow( ) building the sample's token from a real bound suggestion row with an empty, unbound tokens aggregation` &&
+               ` behind it (2026-08-23, headless). What stays unverified in a running system is the interaction a person performs: opening either suggestion popover, seeing the grey supplier group headers rendered in`.
+    lv_text1 = lv_text1 && ` it, and picking a row so that MultiInput itself calls the registered validator.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputGrouping`                            class = `z2ui5_cl_smpc_app_613` path = `src/01/01/z2ui5_cl_smpc_app_613.clas.abap`
         score = 4

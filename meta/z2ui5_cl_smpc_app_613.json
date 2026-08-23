@@ -30,7 +30,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "the grouped suggestion popups of both MultiInputs and the token creation on the tabular one (now through the z2ui5.cc.MultiInputExt companion) are unverified in a running system."
+      "what": "the e2e interaction module now covers what this deviation used to name: the grouping sorter is asserted through the sap.ui.core.SeparatorItem entries it produces in both suggestion aggregations, and the z2ui5.cc.MultiInputExt companion is asserted on productMIWithTable with TokenKeyCell 0 and TokenTextCells 3, its tokenFromRow( ) building the sample's token from a real bound suggestion row with an empty, unbound tokens aggregation behind it (2026-08-23, headless). What stays unverified in a running system is the interaction a person performs: opening either suggestion popover, seeing the grey supplier group headers rendered in it, and picking a row so that MultiInput itself calls the registered validator."
     }
   ]
 }

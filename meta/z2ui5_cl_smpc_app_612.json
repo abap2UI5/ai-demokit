@@ -34,7 +34,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "the token creation on both tabular MultiInputs (now through the z2ui5.cc.MultiInputExt companion) and the Link inside the value state message (preventDefault plus toast) are unverified in a running system."
+      "what": "the e2e interaction module now covers what this deviation used to name: the z2ui5.cc.MultiInputExt companions are asserted on both tabular MultiInputs with TokenKeyCell 0 and TokenTextCells 3, their tokenFromRow( ) builds the sample's token from a real bound suggestion row, the tokens aggregation is empty with no binding behind it, and the Link inside the value state message fires its preventDefault wire and raises the toast (2026-08-23, headless). What stays unverified in a running system is the interaction a person performs: opening the suggestion popover and picking a row so that MultiInput itself calls the registered validator - the assertion reaches the validator's code through the companion rather than through the popup, which measures zero unthemed."
     }
   ]
 }
