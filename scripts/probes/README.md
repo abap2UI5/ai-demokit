@@ -41,7 +41,7 @@ the claim lives.
 | probe | the question it settled |
 |---|---|
 | `event-arg-expression-probe.mjs` | is an event arg a full UI5 expression? **Yes** — method calls, indexed access, ternaries all resolve, which retired seven IMPROVISED deviations |
-| `control-valued-event-arg-probe.mjs` | can an event parameter that IS a control (or an array of them) travel? |
+| `control-valued-event-arg-probe.mjs` | can an event parameter that IS a control (or an array of them) travel? Answer: yes, projected to its public properties — **except a `Date`-typed property**, which `JSON.stringify` writes as UTC, so a control holding LOCAL midnight lands a day early east of Greenwich (candidate `dateRange-array`, added 2026-08-23; `--tz=<id>` sets the browser timezone and defaults to `Europe/Berlin`, because a run in UTC reports a false all-clear) |
 | `device-model-live-probe.mjs` | is the `device>` model a per-round-trip snapshot, or does it mutate live on resize? |
 | `conditional-veto-probe.mjs` | `check_prevent_default` is baked per wire — can a veto be made conditional per firing? |
 | `aggregation-item-probe.mjs` | a control cloned from an aggregation template has no id the backend knows; what can address it? |

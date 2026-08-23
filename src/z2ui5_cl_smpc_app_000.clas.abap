@@ -3880,15 +3880,20 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.46`
         notes = lv_text1 ) ).
 
+    lv_text1 = `NOTE: handleSelectionChange toasts the changed item and whether it was selected - composed on the client from ${$parameters>/selected} and ${$parameters>/changedItem}.getText(), so it needs no` &&
+               ` round-trip. // NOTE: handleSelectionFinish lists the TEXTS of every selected item. A UI5 expression argument cannot MAP an array of controls itself - the grammar has no loop - though since the` &&
+               ` frontend learned to project a control-valued event parameter (Lib.normalizeEventArgs) the array would travel whole and could be read here, the item texts being plain strings that survive the` &&
+               ` projection intact. The port keeps the bound route anyway: it binds selectedKeys two-way and composes the same 'Event 'selectionFinished': [...]' line in ABAP on a round-trip; the order follows the` &&
+               ` bound item order, which is the sorted order the picker shows. // LIVE-TEST: Both wires (the client-composed selectionChange toast and the selectionFinish round-trip) are unverified in a running` &&
+               ` system.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MultiComboBox`                   name = `MultiComboBox`                                 class = `z2ui5_cl_smpc_app_490` path = `src/01/01/z2ui5_cl_smpc_app_490.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
-        notes = `NOTE: handleSelectionChange toasts the changed item and whether it was selected - composed on the client from ${$parameters>/selected} and ${$parameters>/changedItem}.getText(), so it needs no` &&
-                 ` round-trip. // NOTE: handleSelectionFinish lists the TEXTS of every selected item. A UI5 expression argument cannot map an array of controls (the grammar has no loop), so the port binds selectedKeys` &&
-                 ` two-way and composes the same 'Event 'selectionFinished': [...]' line in ABAP on a round-trip; the order follows the bound item order, which is the sorted order the picker shows. // LIVE-TEST: Both` &&
-                 ` wires (the client-composed selectionChange toast and the selectionFinish round-trip) are unverified in a running system.` )
+        notes = lv_text1 ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MultiComboBox`                   name = `MultiComboBoxClearIcon`                        class = `z2ui5_cl_smpc_app_491` path = `src/02/01/z2ui5_cl_smpc_app_491.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -3898,9 +3903,7 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` // NOTE: handleSelectionChange toasts the changed item and whether it was selected - composed on the client from the two event parameters, so it needs no round-trip. // NOTE: handleSelectionFinish` &&
                  ` lists the TEXTS of every selected item. A UI5 expression argument cannot map an array of controls, so the port binds selectedKeys two-way and composes the same line in ABAP on a round-trip. //` &&
                  ` LIVE-TEST: Both wires and the clear icon are unverified in a running system.`
-        post171 = `sap.m.MultiComboBox inherits showClearIcon from sap.m.ComboBoxBase, where it is @since 1.96 - it is the subject of this sample, so it is kept 1:1 and the port needs a UI5 runtime >= 1.96.` ) ).
-
-    result = VALUE #( BASE result
+        post171 = `sap.m.MultiComboBox inherits showClearIcon from sap.m.ComboBoxBase, where it is @since 1.96 - it is the subject of this sample, so it is kept 1:1 and the port needs a UI5 runtime >= 1.96.` )
       ( module = `sap.m`              control = `sap.m.MultiComboBox`                   name = `MultiComboBoxCustomFiltering`                  class = `z2ui5_cl_smpc_app_481` path = `src/01/01/z2ui5_cl_smpc_app_481.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -3910,7 +3913,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.MultiComboBox`                   name = `MultiComboBoxDefaultFiltering`                 class = `z2ui5_cl_smpc_app_459` path = `src/01/01/z2ui5_cl_smpc_app_459.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        since = `1.22.0` )
+        since = `1.22.0` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MultiComboBox`                   name = `MultiComboBoxGrouping`                         class = `z2ui5_cl_smpc_app_039` path = `src/01/01/z2ui5_cl_smpc_app_039.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -3918,9 +3923,7 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`
         notes = `NOTE: the custom groupHeaderFactory '.getGroupHeader' (controller code) is replaced by UI5's default group headers - the sample's factory builds a SeparatorItem with the group key, which is exactly` &&
                  ` what the default renders anyway (CAPABILITIES.md group-sorter row, source-verified on both sides), so this is a faithful 1:1, not a workaround. The items are a bound template with the original's` &&
-                 ` sorter (path SUPPLIER_NAME, group: true) as a raw binding-info string.` ) ).
-
-    result = VALUE #( BASE result
+                 ` sorter (path SUPPLIER_NAME, group: true) as a raw binding-info string.` )
       ( module = `sap.m`              control = `sap.m.MultiComboBox`                   name = `MultiComboBoxMaxPickerHeight`                  class = `z2ui5_cl_smpc_app_495` path = `src/02/01/z2ui5_cl_smpc_app_495.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -5440,15 +5443,21 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` the two-way bound productInput, so picking a product lands it in the field and closing without a selection clears it - the original's setValue / resetProperty pair. The preselection now compares` &&
                ` against that same bound value rather than the seed literal, which is what _configValueHelpDialog does. Both were wrong before: the sidecar claimed selectedItem was 'a control reference not` &&
                ` transportable as an event arg', which CAPABILITIES contradicts - an arg is a FULL UI5 expression and may call methods on the event's controls (proven 2026-07-31, and app 233 already transported` &&
-               ` selectedItem.getDescription()). The multi-select CONFIRM toast is still simplified: selectedContexts is an ARRAY the original iterates, and the client expression grammar has no loop - the same` &&
-               ` boundary as app 109's selectedDatesChange. // NOTE: The StandardListItem icon binds ProductPicUrl, which is derived in ABAP from the product id (the mock's test-resources/<id>.jpg) built from a` &&
-               ` shared base pointing at the OpenUI5 host, like app 006's image flattening. The full 123-row /ProductCollection is inlined. // NOTE: The per-button dialog configuration`.
-    lv_text1 = lv_text1 && ` (multi/growing/remember/clear/confirm text/draggable/resizable), the client-side search filter and the value-help selection need an in-system check; machine gates only verify the views are valid.` &&
-               ` **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Show Select Dialog' popup opens with the 'Select Product' title; the per-button variants, search and` &&
-               ` copy-back remain unexercised. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_103.mjs). // POST-1.71: sap.m.SelectDialog.searchPlaceholder (since 1.110) is` &&
-               ` kept 1:1 on the value-help dialog; needs UI5 >= 1.110. // NOTE: The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no` &&
-               ` document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency: this rewrite is now declared` &&
-               ` by all 77 ports that do it - before that day 64 declared it and thirteen did not, which left a real difference asserted nowhere and gave every review sweep the same thing to re-find.`.
+               ` selectedItem.getDescription()). The CONFIRM toast is reproduced 1:1 since 2026-08-23. It was simplified to a constant on the reasoning that selectedContexts is an ARRAY the original iterates and the` &&
+               ` expression grammar has no loop - the loop half is right and the conclusion was not: the frontend marshals a control-valued event parameter into its public properties (Lib.normalizeEventArgs), so the` &&
+               ` ARRAY travels whole and the app never needs a loop in the expression. The wire carries ${$parameters>/selectedItems} - the selected StandardListItems, whose title is the bound Name - instead of`.
+    lv_text1 = lv_text1 && ` selectedContexts, which is NOT a control and would be handed to JSON.stringify untouched, where a Context's model/binding graph is circular and would take the whole round-trip body down. on_event` &&
+               ` composes 'You have chosen A, B, C' and, for the empty case that cancel also produces, 'No new item was selected.' - both texts exactly as onDialogClose builds them. // NOTE: The StandardListItem icon` &&
+               ` binds ProductPicUrl, which is derived in ABAP from the product id (the mock's test-resources/<id>.jpg) built from a shared base pointing at the OpenUI5 host, like app 006's image flattening. The full` &&
+               ` 123-row /ProductCollection is inlined. // NOTE: The per-button dialog configuration (multi/growing/remember/clear/confirm text/draggable/resizable), the client-side search filter and the value-help` &&
+               ` selection need an in-system check; machine gates only verify the views are valid. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Show Select Dialog' popup` &&
+               ` opens with the 'Select Product' title; the per-button variants, search and copy-back remain unexercised. **e2e-verified 2026-08-04** (nightly e2e interaction,`.
+    lv_text1 = lv_text1 && ` meta/interactions/z2ui5_cl_smpc_app_103.mjs). // POST-1.71: sap.m.SelectDialog.searchPlaceholder (since 1.110) is kept 1:1 on the value-help dialog; needs UI5 >= 1.110. // NOTE: The sample's asset` &&
+               ` paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/...` &&
+               ` instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency: this rewrite is now declared by all 77 ports that do it - before that day 64 declared it and thirteen did not,` &&
+               ` which left a real difference asserted nowhere and gave every review sweep the same thing to re-find. // NOTE: The selectedItems payload is unmarshalled with z2ui5_cl_ajson, the framework's VENDORED` &&
+               ` ajson copy (src/00/01) - outside abap2UI5's released API (src/02), which the linter reports as non-released-api and which is waived on those two lines with an abap2ui5lint-disable-next-line naming` &&
+               ` the rule. Same reasoning and same waiver as app 298: there is no released JSON reader, and a sample class installed on its own cannot ship its own ajson copy. Revisit when the framework releases one.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.SelectDialog`                    name = `SelectDialog`                                  class = `z2ui5_cl_smpc_app_103` path = `src/02/01/z2ui5_cl_smpc_app_103.clas.abap`
         score = 5
@@ -5596,17 +5605,23 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` reasons: viewChange because the original's toast carries no value either, and selectedDatesChange because its selectedDates parameter is an ARRAY OF DateRange CONTROLS which the original iterates and`.
     lv_text1 = lv_text1 && ` formats (oRange.getStartDate().toDateString() per entry) - each entry has to be formatted separately and the client expression grammar has NO LOOP - measured 2026-08-05 with` &&
                ` scripts/probes/event-arg-expression-probe.mjs, which showed that indexed access and chained calls DO resolve (so ``[0].getStartDate()`` would work for a single range), but a per-entry map does not` &&
-               ` exist. The same boundary as app 060's parent-chain breadcrumb; the toast keeps the event name alone. The transported start date is the client-side string form of the JS Date, not the original's` &&
-               ` oStartDate.toString() rendering, so the exact wording of that one line can differ. // POST-1.71: Formatter.DateCreateObject is referenced via core:require (UI5 >= 1.74). sap.m.SinglePlanningCalendar` &&
-               ` and its DayView/WorkWeekView/WeekView/MonthView are since 1.61 (in scope). Also the SinglePlanningCalendar events weekNumberPress and selectedDatesChange (@since 1.123) are kept 1:1 from the original` &&
-               ` view; newer than 1.71, declared per the property-171 policy. // POST-1.71: the icon ``sap-icon://select-appointments`` reached the SAP icon font in 1.96 and is kept 1:1 from the original`.
-    lv_text1 = lv_text1 && ` Page.view.xml, which names it on the 'Enable multi-day selection' ToggleButton. Newer than the 1.71 floor: there IconPool resolves nothing and the button renders with NO icon, silently - the app` &&
-               ` needs a UI5 release >= 1.96 to show it. The dateSelectionMode property the same button drives carries no @since of its own, but its ENUM TYPE sap.m.SinglePlanningCalendarSelectionMode is @since 1.113` &&
-               ` - invisible to the property gate at the attribute-name level (AGENTS section 5, the enum-value residual limit), so it is declared here BY POLICY: the app needs a UI5 release >= 1.113 for the` &&
-               ` multi-day selection to mean anything. // NOTE: onPress reproduced 1:1 since 2026-08-21. The port toasted a constant 'Day selection mode toggled' before and carried NO dateSelectionMode at all, so the` &&
-               ` one behaviour SinglePlanningCalendarDateSelection exists to demonstrate was silently absent and undeclared - found by the review sweep. Both halves of the original handler are bindable properties, so` &&
-               ` both are held in the model and bound two-way rather than driven through a frontend action (the prefer-a-bindable-property rule): dateSelectionMode flips SingleSelect <-> MultiSelect and the`.
-    lv_text1 = lv_text1 && ` ToggleButton's tooltip follows with 'Enable multi-day selection' / 'Disable multi-day selection', exactly the strings the original's setTooltip uses.`.
+               ` exist. **Re-measured 2026-08-23, and the reason has changed while the outcome has not.** The frontend meanwhile learned to marshal a control-valued event parameter (Lib.normalizeEventArgs projects` &&
+               ` each control to its public properties), so the DateRange array now travels WHOLE in one arg and no loop in the expression is needed at all - the route that was missing exists. It still cannot serve` &&
+               ` this port: scripts/probes/control-valued-event-arg-probe.mjs (candidate dateRange-array, real OpenUI5) shows DateRange.startDate is a Date-typed property, which JSON.stringify writes through` &&
+               ` toISOString(), so LOCAL midnight of 2018-07-09 arrives as "2018-07-08T22:00:00.000Z" in a browser at Europe/Berlin - a day early, and the original prints getStartDate().toDateString(), a LOCAL`.
+    lv_text1 = lv_text1 && ` rendering. West of Greenwich and in UTC it is correct, so a CI run in UTC would report a false all-clear. Transporting the array would therefore trade a missing line for a wrong date east of` &&
+               ` Greenwich; the toast keeps the event name alone until the framework can project a Date timezone-safely (backlog item event-arg-date-utc-shift in abap2UI5). App 060's parent-chain breadcrumb is a` &&
+               ` different boundary and stays open on its own reasoning. The transported start date is the client-side string form of the JS Date, not the original's oStartDate.toString() rendering, so the exact` &&
+               ` wording of that one line can differ. // POST-1.71: Formatter.DateCreateObject is referenced via core:require (UI5 >= 1.74). sap.m.SinglePlanningCalendar and its` &&
+               ` DayView/WorkWeekView/WeekView/MonthView are since 1.61 (in scope). Also the SinglePlanningCalendar events weekNumberPress and selectedDatesChange (@since 1.123) are kept 1:1 from the original view;` &&
+               ` newer than 1.71, declared per the property-171 policy. // POST-1.71: the icon ``sap-icon://select-appointments`` reached the SAP icon font in 1.96 and is kept 1:1 from the original Page.view.xml,`.
+    lv_text1 = lv_text1 && ` which names it on the 'Enable multi-day selection' ToggleButton. Newer than the 1.71 floor: there IconPool resolves nothing and the button renders with NO icon, silently - the app needs a UI5 release` &&
+               ` >= 1.96 to show it. The dateSelectionMode property the same button drives carries no @since of its own, but its ENUM TYPE sap.m.SinglePlanningCalendarSelectionMode is @since 1.113 - invisible to the` &&
+               ` property gate at the attribute-name level (AGENTS section 5, the enum-value residual limit), so it is declared here BY POLICY: the app needs a UI5 release >= 1.113 for the multi-day selection to mean` &&
+               ` anything. // NOTE: onPress reproduced 1:1 since 2026-08-21. The port toasted a constant 'Day selection mode toggled' before and carried NO dateSelectionMode at all, so the one behaviour` &&
+               ` SinglePlanningCalendarDateSelection exists to demonstrate was silently absent and undeclared - found by the review sweep. Both halves of the original handler are bindable properties, so both are held` &&
+               ` in the model and bound two-way rather than driven through a frontend action (the prefer-a-bindable-property rule): dateSelectionMode flips SingleSelect <-> MultiSelect and the ToggleButton's tooltip`.
+    lv_text1 = lv_text1 && ` follows with 'Enable multi-day selection' / 'Disable multi-day selection', exactly the strings the original's setTooltip uses.`.
     lv_text2 = `Formatter.DateCreateObject is referenced via core:require (UI5 >= 1.74). sap.m.SinglePlanningCalendar and its DayView/WorkWeekView/WeekView/MonthView are since 1.61 (in scope). Also the` &&
                ` SinglePlanningCalendar events weekNumberPress and selectedDatesChange (@since 1.123) are kept 1:1 from the original view; newer than 1.71, declared per the property-171 policy. // the icon` &&
                ` ``sap-icon://select-appointments`` reached the SAP icon font in 1.96 and is kept 1:1 from the original Page.view.xml, which names it on the 'Enable multi-day selection' ToggleButton. Newer than the` &&
@@ -9425,17 +9440,23 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         post171 = lv_text2 ) ).
 
     lv_text1 = `NOTE: handleCalendarSelect walks oCalendar.getSelectedDates() and rebuilds the JSON model with one yyyy-MM-dd string per selected day. An event arg is a full UI5 expression but the grammar has no` &&
-               ` loop, so the wire carries a FIXED set of 31 index-guarded expression args (one per selectable slot), each formatting getSelectedDates()[i].getStartDate() to yyyy-MM-dd from its LOCAL parts on the` &&
-               ` client and yielding an empty string past the end of the aggregation. on_event stops at the first empty arg and rebuilds the bound table from the rest. // IMPROVISED: the 31-slot cap is a real limit,` &&
-               ` not a formality: 31 is the most days one displayed month can hold, but the user can navigate months and keep selecting, and every day past the 31st is silently dropped from the list (the calendar` &&
-               ` itself still shows it selected). A loop-free expression grammar leaves no way to transport a variable-length aggregation in one arg. // NOTE: e2e-verified 2026-08-10 (scripts/e2e-smoke.mjs` &&
-               ` interaction, transpiled backend + real browser): a day is selected the keyboard way (the day cell carries no clickable layout box headless), the 31-slot expression round-trip fills the List, and`.
-    lv_text1 = lv_text1 && ` "Remove All Selected Dates" clears BOTH sides - the List returns to its "No Dates Selected" noData text AND .sapUiCalItemSel drops to zero, which is the removeAllSelectedDates follow-up action doing` &&
-               ` what no model write could: sap.ui.unified.Calendar writes selectedDates itself. The assertion has real discriminating power - before abap2UI5 #2535 the list emptied and the days stayed highlighted,` &&
-               ` which is exactly the state it now rejects. // NOTE: The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). This sample's` &&
-               ` manifest lists ``../style.css`` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding / labelMarginLeft classes the view carries had no rule` &&
-               ` behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only` &&
-               ` the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs.`.
+               ` loop, and the one route that would not need a loop - handing the whole getSelectedDates() ARRAY over and letting the frontend project each control (Lib.normalizeEventArgs) - cannot carry a DATE.` &&
+               ` Measured 2026-08-23 with scripts/probes/control-valued-event-arg-probe.mjs (candidate dateRange-array, real OpenUI5, browser timezone Europe/Berlin): a DateRange projects to {ID, startDate, endDate},` &&
+               ` and startDate - a Date-typed property - is serialized by JSON.stringify through toISOString(), so LOCAL midnight of 2018-07-09 arrives as "2018-07-08T22:00:00.000Z". The date part of that is the` &&
+               ` PREVIOUS day. Re-run west of Greenwich (America/New_York) and in UTC it is correct, which is why a CI run in UTC reports a false all-clear. So the wire keeps a FIXED set of 31 index-guarded` &&
+               ` expression args (one per selectable slot), each formatting getSelectedDates()[i].getStartDate() to yyyy-MM-dd from its LOCAL parts on the client and yielding an empty string past the end of the`.
+    lv_text1 = lv_text1 && ` aggregation. on_event stops at the first empty arg and rebuilds the bound table from the rest. // IMPROVISED: the 31-slot cap is a real limit, not a formality: 31 is the most days one displayed month` &&
+               ` can hold, but the user can navigate months and keep selecting, and every day past the 31st is silently dropped from the list (the calendar itself still shows it selected). The cap is deliberate and` &&
+               ` is the lesser of two defects. A variable-length aggregation CAN be transported in one arg since the frontend learned to project control-valued event parameters - but only losslessly for properties` &&
+               ` JSON has a type for. sap.ui.unified.DateRange.startDate is a Date, and a Date is serialized as UTC, so taking that route would trade a documented 31-day cap for a silent off-by-one-day on every` &&
+               ` selection east of Greenwich - measured, see the NOTE above. Revisit if the framework gains a timezone-safe projection for Date-typed properties (backlog item event-arg-date-utc-shift in abap2UI5). //` &&
+               ` NOTE: e2e-verified 2026-08-10 (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): a day is selected the keyboard way (the day cell carries no clickable layout box headless), the`.
+    lv_text1 = lv_text1 && ` 31-slot expression round-trip fills the List, and "Remove All Selected Dates" clears BOTH sides - the List returns to its "No Dates Selected" noData text AND .sapUiCalItemSel drops to zero, which is` &&
+               ` the removeAllSelectedDates follow-up action doing what no model write could: sap.ui.unified.Calendar writes selectedDates itself. The assertion has real discriminating power - before abap2UI5 #2535` &&
+               ` the list emptied and the days stayed highlighted, which is exactly the state it now rejects. // NOTE: The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf` &&
+               ` (no counterpart in the original view). This sample's manifest lists ``../style.css`` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding /` &&
+               ` labelMarginLeft classes the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css` &&
+               ` (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarMultipleDaySelection`                  class = `z2ui5_cl_smpc_app_307` path = `src/01/02/z2ui5_cl_smpc_app_307.clas.abap`
         score = 4

@@ -143,11 +143,33 @@ const FAMILIES = [
   // --- suspected gaps whose premise is not measured yet -------------------
   // (event-veto and window-resize-event were measured 2026-08-05 and moved to
   //  GAP above; what stays here is genuinely unmeasured)
+  /* Was `event-value-unreachable` (PROBE) until 2026-08-23: "the value the
+   * original reads sits in an array / control reference on the event". That
+   * premise is MEASURED now, and it split in two.
+   *
+   * The transport half is CLOSED. A control-valued event parameter - a single
+   * control or a whole array of them - travels: the frontend projects each
+   * one to its id plus its public properties (Lib.normalizeEventArgs), so no
+   * loop in the expression grammar is needed at all. Measured in
+   * control-valued-event-arg-probe.mjs; apps 298 and 103 consume it, and the
+   * shapes this family used to catch on that reasoning went with it -
+   * `getMetadata().getName()` (app 228 reproduces its branch 1:1 since
+   * 2026-08-05), `oldSizes` (an array of PRIMITIVES, which `.join()` already
+   * carried), `not transportable` (contradicted for app 103's selectedItem).
+   * They are deliberately NOT listed below: a new deviation written on that
+   * old reasoning should hit --strict and be classified by a human, not be
+   * filed again under a gap that no longer exists.
+   *
+   * What is left is one measured gap, and it is about the TYPE, not the
+   * transport: a Date-typed property is serialized through toISOString(), so
+   * a control holding LOCAL midnight arrives a day early east of Greenwich.
+   * Filed in abap2UI5's backlog as the item this key is named after, which is
+   * what backlog-mine matches on. */
   {
-    key: 'event-value-unreachable',
-    verdict: 'PROBE',
-    label: 'the value the original reads sits in an array / control reference on the event',
-    re: /not transportable|control references are not transportable|carries no date parameter|array indexing|ARRAY OF DateRange|oldSizes|getSelectedDates|is control state|getMetadata\(\)\.getName\(\)|cannot branch|DateRange control reference|not a value that can be transported|selected day is not read|calendar focus is not moved/i,
+    key: 'event-arg-date-utc-shift',
+    verdict: 'GAP',
+    label: 'a DATE the original reads off a control-valued event parameter — the array travels, the Date is projected as UTC and loses its local day',
+    re: /ARRAY OF DateRange|getSelectedDates|DateRange control reference|carries no date parameter|selected day is not read|calendar focus is not moved/i,
   },
   {
     key: 'event-veto',
