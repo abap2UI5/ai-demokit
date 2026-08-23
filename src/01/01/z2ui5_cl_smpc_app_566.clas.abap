@@ -279,7 +279,7 @@ CLASS z2ui5_cl_smpc_app_566 IMPLEMENTATION.
       WHEN `CRUMB`.
         " onBreadcrumbPress: the links after the pressed one are dropped and the
         " table goes back to that level
-        cur_level = CONV i( client->get_event_arg( ) ).
+        cur_level = client->get_event_arg( ).
         rows_refresh( ).
         view_display( ).
 

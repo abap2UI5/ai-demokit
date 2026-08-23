@@ -261,7 +261,7 @@ CLASS z2ui5_cl_smpc_app_356 IMPLEMENTATION.
         " onLimitChange: only a positive integer is accepted, 0 disables the
         " limit, anything else snaps the Input back to the current value
         IF limit_text CO ` 0123456789` AND limit_text IS NOT INITIAL.
-          limit = CONV i( limit_text ).
+          limit = limit_text.
           client->message_toast_display( COND #( WHEN limit = 0
                                                  THEN `Limit disabled`
                                                  ELSE |Limit set to { limit }| ) ).

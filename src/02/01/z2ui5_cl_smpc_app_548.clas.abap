@@ -747,7 +747,7 @@ CLASS z2ui5_cl_smpc_app_548 IMPLEMENTATION.
     " the last segment of a binding path such as /T_PEOPLE/1
     SPLIT path AT `/` INTO TABLE DATA(segments).
     DELETE segments WHERE table_line IS INITIAL.
-    result = COND #( WHEN segments IS NOT INITIAL THEN CONV i( segments[ lines( segments ) ] ) ELSE 0 ).
+    result = COND i( WHEN segments IS NOT INITIAL THEN segments[ lines( segments ) ] ELSE 0 ).
 
   ENDMETHOD.
 

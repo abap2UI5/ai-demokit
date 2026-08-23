@@ -88,6 +88,47 @@ const RULES = [
     find: grepLines(/^"!.*<[a-zA-Z][^ >]*>/),
   },
   {
+    // SLIN's "Redundant conversion for type I", which abaplint does not model
+    // (measured on 2.120.24) and which therefore only ever surfaced from a
+    // user's system: nine findings across 534/546/547/548/549/566/609 on
+    // 2026-08-23, after a single one in 295 on 2026-08-17. An assignment
+    // converts by itself, so CONV i( ) into a target that is already TYPE i
+    // says nothing and reads as if a conversion were needed.
+    //
+    // Scoped to targets this file DECLARES as TYPE i - a DATA/CLASS-DATA line,
+    // or a RETURNING/CHANGING/EXPORTING parameter. Anything whose type lives
+    // in another class is left alone rather than guessed at: a false error
+    // here costs more than a missed hint, and the CONV inside a string
+    // template (|{ CONV i( ... ) WIDTH = 2 }|) is a real conversion that must
+    // not be caught.
+    id: 'redundant-conv-i',
+    level: 'error',
+    doc: 'CONV i( ) assigned to a target already TYPE i - the assignment converts by itself; SLIN reports "Redundant conversion for type I" (abap-check §3)',
+    find(content) {
+      const typed = new Set();
+      const decl = /^\s*(?:CLASS-)?DATA\s+([a-z_][a-z_0-9]*)\s+TYPE\s+i\s*(?:VALUE\b[^.]*)?\./gim;
+      let m;
+      while ((m = decl.exec(content)) !== null) typed.add(m[1].toLowerCase());
+      const param = /^\s*(?:VALUE\()?([a-z_][a-z_0-9]*)\)?\s+TYPE\s+i\s*$/gim;
+      while ((m = param.exec(content)) !== null) typed.add(m[1].toLowerCase());
+      if (typed.size === 0) return [];
+      const out = [];
+      // The CONV must be the WHOLE right-hand side: `<name> = CONV i( x ).`
+      // That is the shape SLIN flags and the only one that is provably
+      // pointless. A CONV inside a comparison (`COND #( WHEN CONV i( x ) < 14`)
+      // or an arithmetic expression (`CONV i( x ) + 1`) is load-bearing or at
+      // least arguable, and both were in the first draft of this rule as false
+      // errors - apps 350 and 353, neither of which SLIN reported.
+      const assign = /^[ \t]*([a-z_][a-z_0-9]*)[ \t]*=[ \t]*CONV[ \t]+i\([^()|]*\)[ \t]*\.[ \t]*$/gim;
+      while ((m = assign.exec(content)) !== null) {
+        if (!typed.has(m[1].toLowerCase())) continue;
+        const line = lineOf(content, m.index);
+        out.push({ line, text: content.split('\n')[line - 1].trim().slice(0, 90) });
+      }
+      return out;
+    },
+  },
+  {
     id: 'header-in-port',
     level: 'error',
     doc: 'port classes carry no ABAP Doc header — sample/entity/status/checked/deviations live in meta/<class>.json (AGENTS §5)',

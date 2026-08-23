@@ -336,13 +336,13 @@ CLASS z2ui5_cl_smpc_app_363 IMPLEMENTATION.
       " had to be corrected. A non-numeric entry keeps the last value - the
       " original's parseInt would hand setFixedColumnCount a NaN there.
       IF column_count_text CO ` 0123456789` AND column_count_text IS NOT INITIAL.
-        fixed_column_count = CONV i( column_count_text ).
+        fixed_column_count = column_count_text.
       ENDIF.
       IF top_row_count_text CO ` 0123456789` AND top_row_count_text IS NOT INITIAL.
-        fixed_top_row_count = CONV i( top_row_count_text ).
+        fixed_top_row_count = top_row_count_text.
       ENDIF.
       IF bottom_row_count_text CO ` 0123456789` AND bottom_row_count_text IS NOT INITIAL.
-        fixed_bottom_row_count = CONV i( bottom_row_count_text ).
+        fixed_bottom_row_count = bottom_row_count_text.
       ENDIF.
 
       IF fixed_column_count > cv_total_columns.
