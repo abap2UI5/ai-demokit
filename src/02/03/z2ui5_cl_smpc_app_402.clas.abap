@@ -1,4 +1,4 @@
-" @keywords objectpagelayout object layout sap.uxap objectpagewithheadercontainer objectpagedynamicheadertitle objectpagesection objectpagesubsection
+" @keywords objectpagelayout object layout sap.uxap objectpagewithheadercontainer objectpagedynamicheadertitle title hbox vbox avatar label button
 " @summary ObjectPage sample with Header Container
 CLASS z2ui5_cl_smpc_app_402 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords objectpagelayout object layout sap.uxap objectpageonjsonwithlazyloading objectpagedynamicheadertitle objectpagesection objectpagesubsection
+" @keywords objectpagelayout object layout sap.uxap objectpageonjsonwithlazyloading objectpagedynamicheadertitle title button overflowtoolbarbutton objectpagesection objectpagesubsection grid
 " @summary Object Page with LazyLoading
 CLASS z2ui5_cl_smpc_app_593 DEFINITION PUBLIC.
 

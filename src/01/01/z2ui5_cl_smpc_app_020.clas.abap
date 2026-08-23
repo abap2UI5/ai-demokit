@@ -1,4 +1,4 @@
-" @keywords displaylistitem display list item sap.m represent label
+" @keywords displaylistitem display list item sap.m represent label verticallayout
 " @summary Use the Display List Item for showing name/value pairs.
 CLASS z2ui5_cl_smpc_app_020 DEFINITION PUBLIC.
 

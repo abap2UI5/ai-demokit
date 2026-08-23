@@ -1,4 +1,4 @@
-" @keywords semanticpage semantic sap.m.semantic floating footer splitcontainer messagepopover messageitem pagingbutton overflowtoolbarbutton button
+" @keywords semanticpage semantic sap.m.semantic floating footer splitcontainer masterpage sortselect item filteraction groupaction addaction
 " @summary Integration of Floating Footer inside Semantic Page
 CLASS z2ui5_cl_smpc_app_106 DEFINITION PUBLIC.
 

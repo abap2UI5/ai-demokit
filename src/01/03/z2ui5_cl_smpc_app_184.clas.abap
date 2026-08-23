@@ -1,4 +1,4 @@
-" @keywords objectpagesection object section sap.uxap objectpagelayout objectpageheader objectpagesubsection
+" @keywords objectpagesection object section sap.uxap objectpagelayout objectpageheader objectattribute objectpagesubsection html
 " @summary This example explains the rules for the rendering of sections
 CLASS z2ui5_cl_smpc_app_184 DEFINITION PUBLIC.
 

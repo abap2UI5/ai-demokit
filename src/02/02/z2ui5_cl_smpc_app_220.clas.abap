@@ -1,4 +1,4 @@
-" @keywords calendar sap.ui.unified calendarminmax label text flexbox switch
+" @keywords calendar sap.ui.unified calendarminmax html verticallayout daterange horizontallayout label text flexbox switch
 " @summary Calendar with minimum date 2000-01-01 and maximum date 2050-12-31, some disabled days (in January 2016) and ability to show or hide week numbers.
 CLASS z2ui5_cl_smpc_app_220 DEFINITION PUBLIC.
 

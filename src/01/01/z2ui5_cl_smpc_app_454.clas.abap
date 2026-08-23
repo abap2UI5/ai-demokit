@@ -1,4 +1,4 @@
-" @keywords tableselectdialog table select dialog sap.m tableselectdialoggrowing button column text columnlistitem objectidentifier objectnumber
+" @keywords tableselectdialog table select dialog sap.m tableselectdialoggrowing verticallayout button customdata column text columnlistitem
 " @summary Table Select Dialog can be created with property growing set to true or false.
 CLASS z2ui5_cl_smpc_app_454 DEFINITION PUBLIC.
 

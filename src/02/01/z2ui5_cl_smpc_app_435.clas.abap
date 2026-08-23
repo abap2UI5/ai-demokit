@@ -1,4 +1,4 @@
-" @keywords progressindicator progress indicator sap.m progressindicatorwithannouncement text flexbox button
+" @keywords progressindicator progress indicator sap.m progressindicatorwithannouncement verticallayout text flexbox button
 " @summary Announce the progress of the ProgressIndicator.
 CLASS z2ui5_cl_smpc_app_435 DEFINITION PUBLIC.
 

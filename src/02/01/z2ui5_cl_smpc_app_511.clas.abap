@@ -1,4 +1,4 @@
-" @keywords select sap.m selectchangeevents
+" @keywords select sap.m selectchangeevents listitem
 " @summary Demonstrates the use of 'change' and 'liveChange' events.
 CLASS z2ui5_cl_smpc_app_511 DEFINITION PUBLIC.
 

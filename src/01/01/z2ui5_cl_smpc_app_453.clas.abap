@@ -1,4 +1,4 @@
-" @keywords objectattribute object attribute sap.m objectheaderresponsivei objectheader objectstatus objectmarker icontabbar icontabfilter image text
+" @keywords objectattribute object attribute sap.m objectheaderresponsivei objectheader objectstatus objectmarker icontabbar icontabfilter verticallayout image
 " @summary This is a responsive Object Header with a Title, 2 Statuses/Attributes rendered next to the title in a fullScreenOptimized mode (fullScreenOptimized = true).
 CLASS z2ui5_cl_smpc_app_453 DEFINITION PUBLIC.
 

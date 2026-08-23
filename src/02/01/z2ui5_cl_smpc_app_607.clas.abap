@@ -309,24 +309,28 @@ CLASS z2ui5_cl_smpc_app_607 IMPLEMENTATION.
 
     " fnApplyFiltersAndOrdering: a Name Contains filter plus one Sorter - on
     " SupplierName when grouped, on Name otherwise, descending when flipped.
-    " A thin frontend filters and sorts the data it sends (app 298 idiom)
+    " The filter is applied here, over the data this thin frontend sends
+    " (app 298 idiom); the SORTER is handed to the live binding instead, so
+    " UI5 builds it itself and can draw the grey SupplierName group headers
+    " the sample's _fnGroup produces. binding_call's sort takes
+    " [path, descending, group], and UI5's DEFAULT group function returns
+    " \{ key, text \} of the sorted property - which is exactly what _fnGroup
+    " returns, so the third parameter reproduces the sample's headers rather
+    " than approximating them.
     t_products = t_all.
 
     IF search_query IS NOT INITIAL.
       DELETE t_products WHERE name NS search_query.
     ENDIF.
 
-    IF grouped = abap_true.
-      SORT t_products BY suppliername AS TEXT ASCENDING.
-      IF descending = abap_true.
-        SORT t_products BY suppliername AS TEXT DESCENDING.
-      ENDIF.
-    ELSE.
-      SORT t_products BY name AS TEXT ASCENDING.
-      IF descending = abap_true.
-        SORT t_products BY name AS TEXT DESCENDING.
-      ENDIF.
-    ENDIF.
+    client->follow_up_action(
+        val   = client->cs_event-binding_call
+        t_arg = VALUE #( ( `idProductsTable` )
+                         ( `items` )
+                         ( `sort` )
+                         ( COND #( WHEN grouped = abap_true THEN `SUPPLIERNAME` ELSE `NAME` ) )
+                         ( COND #( WHEN descending = abap_true THEN `X` ELSE `` ) )
+                         ( COND #( WHEN grouped = abap_true THEN `X` ELSE `` ) ) ) ).
 
   ENDMETHOD.
 

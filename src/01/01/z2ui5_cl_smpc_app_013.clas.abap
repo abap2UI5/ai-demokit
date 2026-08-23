@@ -1,4 +1,4 @@
-" @keywords cookiesettingsdialogpattern cookie settings dialog pattern sap.m button vbox text hbox title switch
+" @keywords cookiesettingsdialogpattern cookie settings dialog pattern sap.m verticallayout button vbox text gridlist gridbasiclayout
 " @summary The Cookie Settings Dialog allows you to easily manage the cookie settings according to the needs of the specific product.
 CLASS z2ui5_cl_smpc_app_013 DEFINITION PUBLIC.
 

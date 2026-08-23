@@ -1,4 +1,4 @@
-" @keywords input sap.m inputassisted label selectdialog standardlistitem
+" @keywords input sap.m inputassisted verticallayout label item selectdialog standardlistitem
 " @summary Assisted input is available via suggestions - shown as you type - and a value help dialog.
 CLASS z2ui5_cl_smpc_app_515 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords table sap.ui.table selectcopypaste column
+" @keywords table sap.ui.table selectcopypaste multiselectionplugin fixed busyindicator overflowtoolbar title toolbarspacer select item button
 " @summary Shows cell selection, copy and paste interaction in the table.
 CLASS z2ui5_cl_smpc_app_360 DEFINITION PUBLIC.
 

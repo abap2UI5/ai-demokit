@@ -1,4 +1,4 @@
-" @keywords messagestrip message strip sap.m custommessagestripdesign panel label select
+" @keywords messagestrip message strip sap.m custommessagestripdesign verticallayout panel horizontallayout label select item
 " @summary Demonstrates MessageStrips with different colorSet and colorScheme properties.
 CLASS z2ui5_cl_smpc_app_452 DEFINITION PUBLIC.
 

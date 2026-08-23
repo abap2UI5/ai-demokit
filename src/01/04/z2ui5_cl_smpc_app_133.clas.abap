@@ -1,4 +1,4 @@
-" @keywords gridlist grid list sap.f selection modes hbox segmentedbutton segmentedbuttonitem vbox image title
+" @keywords gridlist grid list sap.f selection modes html hbox segmentedbutton segmentedbuttonitem gridbasiclayout gridlistitem
 " @summary This is a sample for GridList with different modes of selection.
 CLASS z2ui5_cl_smpc_app_133 DEFINITION PUBLIC.
 

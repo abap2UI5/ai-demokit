@@ -1,4 +1,4 @@
-" @keywords fixflex fix flex sap.ui.layout fixflexhorizontal image text
+" @keywords fixflex fix flex sap.ui.layout fixflexhorizontal html image text
 " @summary Shows a FixFlex control with a horizontal layout.
 CLASS z2ui5_cl_smpc_app_219 DEFINITION PUBLIC.
 

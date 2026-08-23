@@ -1,4 +1,4 @@
-" @keywords button sap.m buttonwithbadge toolbar title badgecustomdata flexbox text stepinput input select checkbox
+" @keywords button sap.m buttonwithbadge verticallayout toolbar title badgecustomdata flexbox text stepinput input select
 " @summary Button with a Badge attached
 CLASS z2ui5_cl_smpc_app_249 DEFINITION PUBLIC.
 

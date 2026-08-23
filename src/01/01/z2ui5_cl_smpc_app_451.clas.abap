@@ -1,4 +1,4 @@
-" @keywords tabcontainer tab container sap.m tabcontainericons tabcontaineritem text
+" @keywords tabcontainer tab container sap.m tabcontainericons tabcontaineritem form title responsivegridlayout formcontainer formelement text
 " @summary This example shows how you can add additional text and an Icon to the tabs in TabContainer.
 CLASS z2ui5_cl_smpc_app_451 DEFINITION PUBLIC.
 

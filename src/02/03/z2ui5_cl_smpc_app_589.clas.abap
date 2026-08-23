@@ -1,4 +1,4 @@
-" @keywords objectpagelayout object layout sap.uxap objectpageblockviewtypes objectpageaccessiblelandmarkinfo objectpageheader objectpageheaderactionbutton objectpagesection objectpagesubsection
+" @keywords objectpagelayout object layout sap.uxap objectpageblockviewtypes objectpageaccessiblelandmarkinfo objectpageheader objectpageheaderactionbutton breadcrumbs link verticallayout horizontallayout
 " @summary ObjectPage sample with blocks that use different view types
 CLASS z2ui5_cl_smpc_app_589 DEFINITION PUBLIC.
 

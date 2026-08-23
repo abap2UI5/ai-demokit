@@ -1,4 +1,4 @@
-" @keywords dynamicsidecontent dynamic side content sap.ui.layout title text toolbar button slider
+" @keywords dynamicsidecontent dynamic side content sap.ui.layout html title text toolbar button slider
 " @summary Attaches side content area which is next to the main content of the page on larger screens taking different ratios between the two on different screen sizes and on phone size screens the side content area falls down under the main content area.
 CLASS z2ui5_cl_smpc_app_138 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords headercontainer header container sap.m provides toolbar label select feedcontent input numericcontent tilecontent
+" @keywords headercontainer header container sap.m provides toolbar label select item feedcontent input numericcontent
 " @summary The Header Container with horizontal layout. It provides horizontal scrolling on mobile devices (tablet and phone). On a desktop, it provides scroll left and scroll right buttons.
 CLASS z2ui5_cl_smpc_app_029 DEFINITION PUBLIC.
 

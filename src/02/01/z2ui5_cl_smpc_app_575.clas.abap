@@ -1,4 +1,4 @@
-" @keywords table sap.m tablescrolltoindex title overflowtoolbar toolbarspacer searchfield column text columnlistitem objectidentifier objectnumber
+" @keywords table sap.m tablescrolltoindex flexiblecolumnlayout dynamicpage dynamicpagetitle title overflowtoolbar toolbarspacer searchfield column text
 " @summary This sample demonstrates the scroll-to-index functionality.
 CLASS z2ui5_cl_smpc_app_575 DEFINITION PUBLIC.
 

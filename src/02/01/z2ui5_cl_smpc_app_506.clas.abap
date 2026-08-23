@@ -1,4 +1,4 @@
-" @keywords icontabbar icon tab bar sap.m icontabbardragdrop label stepinput icontabfilter text
+" @keywords icontabbar icon tab bar sap.m icontabbardragdrop simpleform label stepinput icontabfilter text
 " @summary This example shows how the tab filters can be reordered and nested with drag and drop. Works only on desktop devices.
 CLASS z2ui5_cl_smpc_app_506 DEFINITION PUBLIC.
 

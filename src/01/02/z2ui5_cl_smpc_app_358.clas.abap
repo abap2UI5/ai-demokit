@@ -1,4 +1,4 @@
-" @keywords table sap.ui.table odata2 column
+" @keywords table sap.ui.table odata2 overflowtoolbar title busyindicator column label text currency
 " @summary Shows an example how an OData metadata driven table creation can look like.
 CLASS z2ui5_cl_smpc_app_358 DEFINITION PUBLIC.
 

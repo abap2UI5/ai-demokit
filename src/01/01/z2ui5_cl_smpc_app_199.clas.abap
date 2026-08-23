@@ -1,4 +1,4 @@
-" @keywords combobox combo box sap.m comboboxgrouping
+" @keywords combobox combo box sap.m comboboxgrouping item
 " @summary Items in the ComboBox could be grouped by a property
 CLASS z2ui5_cl_smpc_app_199 DEFINITION PUBLIC.
 

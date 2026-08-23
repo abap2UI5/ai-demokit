@@ -1,4 +1,4 @@
-" @keywords calendar sap.ui.unified calendarmultiplemonth button label text
+" @keywords calendar sap.ui.unified calendarmultiplemonth verticallayout daterange horizontallayout button label text
 " @summary Calendar with more than one month
 CLASS z2ui5_cl_smpc_app_304 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords image sap.m visualizes state vbox flexitemdata text hbox
+" @keywords image sap.m visualizes state html verticallayout grid vbox flexitemdata text hbox
 " @summary Visualizes the state of the control when the mode property is set to ImageMode.Background.
 CLASS z2ui5_cl_smpc_app_031 DEFINITION PUBLIC.
 

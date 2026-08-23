@@ -1,4 +1,4 @@
-" @keywords integer sap.ui.model.type data type label input text
+" @keywords integer sap.ui.model.type data type simpleform label input text
 " @summary Formats and parses only the integer digits. The decimal digits are ignored.
 CLASS z2ui5_cl_smpc_app_129 DEFINITION PUBLIC.
 

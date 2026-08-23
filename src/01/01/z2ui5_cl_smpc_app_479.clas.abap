@@ -1,4 +1,4 @@
-" @keywords combobox combo box sap.m comboboxsearchboth label text
+" @keywords combobox combo box sap.m comboboxsearchboth verticallayout listitem label text
 " @summary Combo box dropdown list with search functionality which checks both columns. When you need to display additional information on your options, like e.g. keys of countries or system abbreviations, and want to search in those as well.
 CLASS z2ui5_cl_smpc_app_479 DEFINITION PUBLIC.
 

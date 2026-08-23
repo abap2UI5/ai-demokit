@@ -1,4 +1,4 @@
-" @keywords objectpagelayout object layout sap.uxap anchorbar objectpagedynamicheadertitle objectpagesection objectpagesubsection
+" @keywords objectpagelayout object layout sap.uxap anchorbar objectpagedynamicheadertitle title objectpagesection objectpagesubsection simpleform label text
 " @summary AnchorBar has a different behavior based on the device
 CLASS z2ui5_cl_smpc_app_586 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords calendar sap.ui.unified calendarspecialdayslegend togglebutton
+" @keywords calendar sap.ui.unified calendarspecialdayslegend html verticallayout datetyperange calendarlegend calendarlegenditem togglebutton
 " @summary Calendar with special days and legend
 CLASS z2ui5_cl_smpc_app_308 DEFINITION PUBLIC.
 

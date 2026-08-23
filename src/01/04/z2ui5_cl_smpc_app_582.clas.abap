@@ -1,4 +1,4 @@
-" @keywords gridlist grid list sap.f gridlistkeyboardarrowsnavigation app slider vbox title label
+" @keywords gridlist grid list sap.f gridlistkeyboardarrowsnavigation app slider gridresponsivelayout gridsettings gridbasiclayout gridlistitem griditemlayoutdata
 " @summary This sample demonstrates the keyboard navigation between multiple grids
 CLASS z2ui5_cl_smpc_app_582 DEFINITION PUBLIC.
 

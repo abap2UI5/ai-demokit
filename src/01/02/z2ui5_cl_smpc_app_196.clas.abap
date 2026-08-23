@@ -1,4 +1,4 @@
-" @keywords currency sap.ui.unified list customlistitem
+" @keywords currency sap.ui.unified grid list customlistitem
 " @summary Display Currencies with proper Alignment
 CLASS z2ui5_cl_smpc_app_196 DEFINITION PUBLIC.
 

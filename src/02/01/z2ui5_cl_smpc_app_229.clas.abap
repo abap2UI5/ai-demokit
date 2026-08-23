@@ -1,4 +1,4 @@
-" @keywords popover sap.m button overflowtoolbar toolbarspacer image
+" @keywords popover sap.m verticallayout button overflowtoolbar toolbarspacer image
 " @summary The Popover controls allows to show contextual information without leaving the current page. Press somewhere outside the popover to close it.
 CLASS z2ui5_cl_smpc_app_229 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords progressindicator progress indicator sap.m states display-only animation text flexbox button
+" @keywords progressindicator progress indicator sap.m states display-only animation verticallayout text flexbox button
 " @summary Shows the progress of a process in a graphical way. To indicate the progress, the inside of the ProgressIndicator is filled with a color.
 CLASS z2ui5_cl_smpc_app_070 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords multicombobox multi combo box sap.m items could gr
+" @keywords multicombobox multi combo box sap.m items could gr verticallayout item
 " @summary Items in the MultiComboBox could be grouped by a property
 CLASS z2ui5_cl_smpc_app_039 DEFINITION PUBLIC.
 

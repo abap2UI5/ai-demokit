@@ -1,4 +1,4 @@
-" @keywords table sap.ui.table aggregations column
+" @keywords table sap.ui.table aggregations hbox icon title overflowtoolbar toolbarspacer searchfield facetfilter facetfilterlist facetfilteritem
 " @summary Example which shows the different aggregations of the table
 CLASS z2ui5_cl_smpc_app_352 DEFINITION PUBLIC.
 

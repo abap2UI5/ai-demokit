@@ -1,4 +1,4 @@
-" @keywords multicombobox multi combo box sap.m multicomboboxclearicon
+" @keywords multicombobox multi combo box sap.m multicomboboxclearicon verticallayout item
 " @summary The multi combo box control can show 'clear' icon, which when pressed will remove the user's input.
 CLASS z2ui5_cl_smpc_app_491 DEFINITION PUBLIC.
 

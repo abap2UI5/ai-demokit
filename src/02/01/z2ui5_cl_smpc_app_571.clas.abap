@@ -1,4 +1,4 @@
-" @keywords table sap.m tableicolumnheadermenu button overflowtoolbar title column text columnlistitem objectidentifier objectnumber
+" @keywords table sap.m tableicolumnheadermenu menu quicksort quicksortitem actionitem quickaction button overflowtoolbar title column
 " @summary This example demonstrates an implementation of the IColumnHeaderMenu interface with the sap.m.Menu as a breakout scenario.
 CLASS z2ui5_cl_smpc_app_571 DEFINITION PUBLIC.
 

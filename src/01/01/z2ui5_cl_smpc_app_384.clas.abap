@@ -1,4 +1,4 @@
-" @keywords combobox combo box sap.m comboboxwrapping label
+" @keywords combobox combo box sap.m comboboxwrapping verticallayout label item
 " @summary Suggestions wrap automatically when longer then the dropdown width
 CLASS z2ui5_cl_smpc_app_384 DEFINITION PUBLIC.
 

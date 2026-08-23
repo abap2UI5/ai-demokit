@@ -1,4 +1,4 @@
-" @keywords table sap.ui.table columnresizing column
+" @keywords table sap.ui.table columnresizing overflowtoolbar title column label text link segmentedbutton segmentedbuttonitem
 " @summary Example for column resizing
 CLASS z2ui5_cl_smpc_app_247 DEFINITION PUBLIC.
 

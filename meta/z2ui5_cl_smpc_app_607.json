@@ -25,8 +25,8 @@
       "what": "Thin frontend: fnApplyFiltersAndOrdering builds a sap.ui.model.Filter (Name Contains <query>) and one sap.ui.model.Sorter and calls filter()/sort() on the items binding. The port filters and sorts the ABAP table it sends instead (app 298 idiom): onSort flips the sorter's descending flag, onGroup switches the sort key between SupplierName and Name, onReset clears the query and both flags."
     },
     {
-      "type": "IMPROVISED",
-      "what": "grouping loses its group headers. onGroup's Sorter carries a _fnGroup that returns a {key, text} per row, which is what makes UI5 draw a grey SupplierName header above each block. abap2UI5 has no client-side grouping function, so the port sorts by SupplierName instead: the rows end up in the same order, without the headers. App 298 records the same loss for the same reason."
+      "type": "NOTE",
+      "what": "grouping keeps its group headers. onGroup's Sorter carries a _fnGroup that returns a {key, text} per row, which is what makes UI5 draw a grey SupplierName header above each block. The port hands the SORTER to the live binding instead of ordering the ABAP table: binding_call's sort takes [path, descending, group] and builds new Sorter(path, descending, group) on the client, and UI5's DEFAULT group function returns {key, text} of the sorted property - the same shape _fnGroup returns - so the headers are reproduced rather than approximated. The Name Contains filter stays server-side over the data this thin frontend sends. (App 298 records the header loss for the same control and predates this; its rework is separate.)"
     },
     {
       "type": "NOTE",

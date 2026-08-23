@@ -1,4 +1,4 @@
-" @keywords select sap.m selectwithwrappeditemtext
+" @keywords select sap.m selectwithwrappeditemtext item
 " @summary Illustrates how the text in items wrap.
 CLASS z2ui5_cl_smpc_app_374 DEFINITION PUBLIC.
 

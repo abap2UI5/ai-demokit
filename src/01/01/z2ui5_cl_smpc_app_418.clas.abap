@@ -1,4 +1,4 @@
-" @keywords title sap.m titlewrapping label switch slider panel messagestrip
+" @keywords title sap.m titlewrapping simpleform label switch slider panel messagestrip
 " @summary This sample shows the different behaviors of a title.
 CLASS z2ui5_cl_smpc_app_418 DEFINITION PUBLIC.
 

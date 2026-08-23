@@ -1,4 +1,4 @@
-" @keywords multicombobox multi combo box sap.m multicomboboxcustomfiltering label
+" @keywords multicombobox multi combo box sap.m multicomboboxcustomfiltering verticallayout label item
 " @summary The default filtering for the suggestionsItems aggregation uses a 'starts with per term' style operator. You can override this with your own custom filter function using the setFilterFunction method.
 CLASS z2ui5_cl_smpc_app_481 DEFINITION PUBLIC.
 

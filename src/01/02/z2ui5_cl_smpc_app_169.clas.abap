@@ -1,4 +1,4 @@
-" @keywords grid sap.ui.layout griddata messagestrip title slider formattedtext
+" @keywords grid sap.ui.layout griddata verticallayout html messagestrip title slider formattedtext
 " @summary Take advantage of sap.ui.layout.GridData to control the appearance of individual Grid children.
 CLASS z2ui5_cl_smpc_app_169 DEFINITION PUBLIC.
 

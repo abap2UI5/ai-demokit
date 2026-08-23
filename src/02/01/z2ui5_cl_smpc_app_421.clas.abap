@@ -1,4 +1,4 @@
-" @keywords quickviewcard quick card sap.m quickviewcardscrollbar button label switch panel quickviewpage avatar quickviewgroup
+" @keywords quickviewcard quick card sap.m quickviewcardscrollbar button grid label griddata switch panel quickviewpage
 " @summary QuickViewCard embedded in container with scroll bar
 CLASS z2ui5_cl_smpc_app_421 DEFINITION PUBLIC.
 

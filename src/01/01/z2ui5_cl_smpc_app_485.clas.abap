@@ -1,4 +1,4 @@
-" @keywords textarea text area sap.m textareamaxlength
+" @keywords textarea text area sap.m textareamaxlength verticallayout
 " @summary Shows the behavior of the control with the new showExceededText property (since 1.48) and maxLength = true
 CLASS z2ui5_cl_smpc_app_485 DEFINITION PUBLIC.
 

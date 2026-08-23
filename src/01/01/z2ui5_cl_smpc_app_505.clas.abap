@@ -1,4 +1,4 @@
-" @keywords table sap.m tableoutdated overflowtoolbar combobox button toolbarspacer segmentedbutton segmentedbuttonitem column text columnlistitem
+" @keywords table sap.m tableoutdated overflowtoolbar combobox item button toolbarspacer segmentedbutton segmentedbuttonitem verticallayout column
 " @summary You can use the 'showOverlay' property to indicate that the table data is no longer up to date. When the user modifies the filter values of the table, this results in displaying an overlay, which disables operations on the table.
 CLASS z2ui5_cl_smpc_app_505 DEFINITION PUBLIC.
 

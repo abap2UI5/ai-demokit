@@ -1,4 +1,4 @@
-" @keywords interactivelinechart shell link text flexbox
+" @keywords interactivelinechart shell tabcontainer tab grid link text griddata flexbox interactivelinechartpoint verticallayout
 " @summary sap.suite.ui.microchart.InteractiveLineChart expressed in abap2UI5 - a SAPUI5-only control, so the demo kit original is outside OpenUI5 and this is orientation rather than a 1:1 port.
 "! <p class="shorttext">sap.suite.ui.microchart - InteractiveLineChart</p>
 "!

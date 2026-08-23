@@ -1,4 +1,4 @@
-" @keywords sap.ui.core fieldgroup label input select combobox messagestrip toolbar button
+" @keywords sap.ui.core fieldgroup simpleform title label input griddata select item combobox messagestrip toolbar
 " @summary A control's field group id can be used to define a virtual group of fields that should be validated together.
 CLASS z2ui5_cl_smpc_app_272 DEFINITION PUBLIC.
 

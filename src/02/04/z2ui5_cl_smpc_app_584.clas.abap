@@ -1,4 +1,4 @@
-" @keywords flexiblecolumnlayout flexible column layout sap.f shellbarwithflexiblecolumnlayout menu menuitem avatar title table overflowtoolbar
+" @keywords flexiblecolumnlayout flexible column layout sap.f shellbarwithflexiblecolumnlayout shellbar menu menuitem avatar dynamicpage dynamicpagetitle
 " @summary Example of Shell Bar in combination with Flexible Column Layout.
 CLASS z2ui5_cl_smpc_app_584 DEFINITION PUBLIC.
 

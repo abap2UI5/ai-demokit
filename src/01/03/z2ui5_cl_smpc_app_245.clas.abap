@@ -1,4 +1,4 @@
-" @keywords objectpagesubsection object sub section sap.uxap objectpagesubsectionhiddentitle label text table overflowtoolbar title toolbarspacer
+" @keywords objectpagesubsection object sub section sap.uxap objectpagesubsectionhiddentitle objectpagelayout objectpageheader objectpagesection simpleform label text
 " @summary Example of a subsection with showTitle property set to false.
 CLASS z2ui5_cl_smpc_app_245 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords segmentedbutton segmented button sap.m segmentedbuttondialog dialog segmentedbuttonitem
+" @keywords segmentedbutton segmented button sap.m segmentedbuttondialog verticallayout dialog segmentedbuttonitem
 " @summary Segmented Button used in Dialog component
 CLASS z2ui5_cl_smpc_app_489 DEFINITION PUBLIC.
 

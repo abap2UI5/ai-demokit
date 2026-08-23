@@ -1,4 +1,4 @@
-" @keywords dialog sap.m dialogfullscreen button list standardlistitem
+" @keywords dialog sap.m dialogfullscreen verticallayout button list standardlistitem
 " @summary A dialog that can be toggled to fullscreen mode through a header button, by double-clicking the header, or by using the 'Shift+Ctrl+F' keyboard shortcut.
 CLASS z2ui5_cl_smpc_app_274 DEFINITION PUBLIC.
 

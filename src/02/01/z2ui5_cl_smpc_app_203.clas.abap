@@ -1,4 +1,4 @@
-" @keywords overflowtoolbartokenizer overflow toolbar tokenizer sap.m token text input button label overflowtoolbarlayoutdata overflowtoolbar
+" @keywords overflowtoolbartokenizer overflow toolbar tokenizer sap.m token text input button verticallayout label overflowtoolbarlayoutdata
 " @summary Tokenizer integration with sap.m.OverflowToolbar
 CLASS z2ui5_cl_smpc_app_203 DEFINITION PUBLIC.
 

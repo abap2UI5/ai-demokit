@@ -1,4 +1,4 @@
-" @keywords input sap.m inputassistedtwovalues label
+" @keywords input sap.m inputassistedtwovalues verticallayout label listitem
 " @summary This example shows how to easily implement an assisted input with two-value suggestions.
 CLASS z2ui5_cl_smpc_app_456 DEFINITION PUBLIC.
 

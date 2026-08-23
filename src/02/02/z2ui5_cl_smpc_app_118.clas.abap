@@ -1,4 +1,4 @@
-" @keywords card sap.ui.integration manifest menu menuitem avatar icontabbar icontabfilter title
+" @keywords card sap.ui.integration manifest shellbar menu menuitem avatar icontabbar icontabfilter gridcontainer gridcontainersettings cardbadgecustomdata
 " @summary Different types of cards types arranged in a sap.f.GridContainer.
 CLASS z2ui5_cl_smpc_app_118 DEFINITION PUBLIC.
 

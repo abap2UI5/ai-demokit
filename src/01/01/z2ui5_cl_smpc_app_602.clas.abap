@@ -1,4 +1,4 @@
-" @keywords tree sap.m treeexpandto text toolbarspacer select button standardtreeitem
+" @keywords tree sap.m treeexpandto text toolbarspacer select item button standardtreeitem
 " @summary This example shows the initial expand state and how to collapse all nodes.
 CLASS z2ui5_cl_smpc_app_602 DEFINITION PUBLIC.
 

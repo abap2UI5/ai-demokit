@@ -1,4 +1,4 @@
-" @keywords splitter sap.ui.layout splitter4 app button
+" @keywords splitter sap.ui.layout splitter4 app button splitterlayoutdata
 " @summary Simple splitter example with three content areas
 CLASS z2ui5_cl_smpc_app_340 DEFINITION PUBLIC.
 

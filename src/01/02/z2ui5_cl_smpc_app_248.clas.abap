@@ -1,4 +1,4 @@
-" @keywords treetable tree table sap.ui.table treetable.jsontreebinding column
+" @keywords treetable tree table sap.ui.table treetable.jsontreebinding overflowtoolbar title toolbarspacer button column label text
 " @summary Basic example showing how a TreeTable can be built using a JSONModel
 CLASS z2ui5_cl_smpc_app_248 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords text sap.m textemptyindicator panel label switch
+" @keywords text sap.m textemptyindicator panel simpleform label switch
 " @summary The Text control has a property allowing an empty text indicator to be displayed.
 CLASS z2ui5_cl_smpc_app_439 DEFINITION PUBLIC.
 

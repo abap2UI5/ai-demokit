@@ -1,4 +1,4 @@
-" @keywords singleplanningcalendar single planning calendar sap.m singleplanningcalendarwithzoominzoomout vbox togglebutton button singleplanningcalendardayview singleplanningcalendarworkweekview singleplanningcalendarweekview
+" @keywords singleplanningcalendar single planning calendar sap.m singleplanningcalendarwithzoominzoomout dynamicsidecontent vbox togglebutton button singleplanningcalendardayview singleplanningcalendarworkweekview
 " @summary SinglePlanningCalendar with enabled Zoom In and Zoom Out functionality.
 CLASS z2ui5_cl_smpc_app_554 DEFINITION PUBLIC.
 

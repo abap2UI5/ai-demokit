@@ -1,4 +1,4 @@
-" @keywords multiinput multi input sap.m multiinputvaluestates label
+" @keywords multiinput multi input sap.m multiinputvaluestates verticallayout label
 " @summary This sample illustrates the different value states of the sap.m.MultiInput control.
 CLASS z2ui5_cl_smpc_app_386 DEFINITION PUBLIC.
 

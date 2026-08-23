@@ -1,4 +1,4 @@
-" @keywords overflowtoolbar overflow toolbar sap.m toolbarenabled checkbox button toolbarspacer input radiobutton
+" @keywords overflowtoolbar overflow toolbar sap.m toolbarenabled invisibletext checkbox button toolbarspacer input radiobutton
 " @summary The Enabled property can be used to enable or disable all the controls inside the OverflowToolbar/Toolbar.
 CLASS z2ui5_cl_smpc_app_425 DEFINITION PUBLIC.
 

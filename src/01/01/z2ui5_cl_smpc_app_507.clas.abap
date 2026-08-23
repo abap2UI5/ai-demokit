@@ -1,4 +1,4 @@
-" @keywords input sap.m inputgrouping label column columnlistitem
+" @keywords input sap.m inputgrouping verticallayout label item column columnlistitem
 " @summary Items in the Input could be grouped by a property
 CLASS z2ui5_cl_smpc_app_507 DEFINITION PUBLIC.
 

@@ -104,8 +104,16 @@ for (const file of walk(path.join(ROOT, 'src'))) {
    * `VBox`) and an aggregation is lowercase (`content`, `items`, `cells`) -
    * so the case is the discriminator, and it is exact rather than a list to
    * maintain. An aggregation name is not what anybody searches for: `content`
-   * appeared in 93 of the 431 lines and told a reader nothing. */
-  const built = [...source.matchAll(/\)->(?:ele|tag)\(\s*`([A-Z][A-Za-z]*)`/g)].map((m) => m[1]);
+   * appeared in 93 of the 431 lines and told a reader nothing.
+   *
+   * BOTH call shapes. `)->tag( `Label` )` is the positional one; `)->tag( n =
+   * `Label` ns = `z2ui5` )` is the named one, and it is the only shape that can
+   * carry a namespace - so without the optional `n =` this matcher could never
+   * see a companion control at all (`multiinputext` was missing from apps 040,
+   * 612 and 613 for exactly that reason). It is not a companion-only gap
+   * either: 469 of the 622 ports write the named form somewhere, and it hid
+   * 7051 control occurrences from the keyword lines. */
+  const built = [...source.matchAll(/\)->(?:ele|tag)\(\s*(?:n\s*=\s*)?`([A-Z][A-Za-z]*)`/g)].map((m) => m[1]);
 
   const seen = new Set();
   const out = [];

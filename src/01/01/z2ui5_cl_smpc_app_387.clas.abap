@@ -1,4 +1,4 @@
-" @keywords multiinput multi input sap.m multiinputwrapping label
+" @keywords multiinput multi input sap.m multiinputwrapping verticallayout label item
 " @summary Suggestions wrap automatically when longer then the dropdown width
 CLASS z2ui5_cl_smpc_app_387 DEFINITION PUBLIC.
 

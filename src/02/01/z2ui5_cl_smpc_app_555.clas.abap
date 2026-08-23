@@ -1,4 +1,4 @@
-" @keywords singleplanningcalendar single planning calendar sap.m singleplanningcalendarrecurringitem vbox overflowtoolbar button toolbarseparator singleplanningcalendardayview singleplanningcalendarworkweekview
+" @keywords singleplanningcalendar single planning calendar sap.m singleplanningcalendarrecurringitem vbox overflowtoolbar button toolbarseparator recurringnonworkingperiod timerange
 " @summary SinglePlanningCalendar with recurring calendar items
 CLASS z2ui5_cl_smpc_app_555 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords simpleform simple form sap.ui.layout.form simpleform354widedual bar button vbox label text input select
+" @keywords simpleform simple form sap.ui.layout.form simpleform354widedual bar button vbox title label text input
 " @summary Form with two groups with long labels and fields in a fullscreen app.
 CLASS z2ui5_cl_smpc_app_327 DEFINITION PUBLIC.
 

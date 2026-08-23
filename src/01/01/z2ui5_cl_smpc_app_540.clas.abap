@@ -1,4 +1,4 @@
-" @keywords planningcalendar planning calendar sap.m planningcalendarminmax vbox title planningcalendarrow
+" @keywords planningcalendar planning calendar sap.m planningcalendarminmax vbox title planningcalendarrow calendarappointment
 " @summary PlanningCalendar with min. date 2000-01-01 and max. date 2050-12-31
 CLASS z2ui5_cl_smpc_app_540 DEFINITION PUBLIC.
 

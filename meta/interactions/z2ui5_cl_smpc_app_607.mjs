@@ -38,4 +38,30 @@ export default async (page, expect) => {
     const t = reg.find((c) => c.getMetadata().getName() === 'sap.m.Table');
     return t.getItems()[0].getCells()[0].getTitle() !== prev;
   }, before, { timeout: 15000 });
+
+  // Group hands a Sorter with group:true to the LIVE binding, so UI5 draws a
+  // grey SupplierName header above each block - the sample's _fnGroup result,
+  // reproduced by UI5's default group function. Before the rework the port
+  // only re-sorted the ABAP table and no header existed at all.
+  await page.evaluate(() => {
+    const reg = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
+    reg.find((c) => c.getMetadata().getName() === 'sap.m.OverflowToolbarButton'
+      && c.getTooltip() === 'Group').firePress();
+  });
+  await waitForUi5(page, () => {
+    const t = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.Table');
+    const heads = t.getItems().filter((i) => i.getMetadata().getName() === 'sap.m.GroupHeaderListItem');
+    // one header per supplier block, and each carries the supplier's own name
+    return heads.length > 1 && heads.every((h) => typeof h.getTitle() === 'string' && h.getTitle().length > 0);
+  }, 'Group never produced the supplier group headers');
+  // Reset takes them away again
+  await page.evaluate(() => {
+    const reg = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
+    reg.find((c) => c.getMetadata().getName() === 'sap.m.OverflowToolbarButton'
+      && c.getTooltip() === 'Reset').firePress();
+  });
+  await waitForUi5(page, () => {
+    const t = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.Table');
+    return t.getItems().every((i) => i.getMetadata().getName() !== 'sap.m.GroupHeaderListItem');
+  }, 'Reset never cleared the group headers');
 };

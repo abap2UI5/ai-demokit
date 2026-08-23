@@ -1,4 +1,4 @@
-" @keywords multiinput multi input sap.m multiinputfilteringsuggestions vbox token column label columnlistitem formattedtext link
+" @keywords multiinput multi input sap.m multiinputfilteringsuggestions vbox item column label columnlistitem multiinputext formattedtext
 " @summary The default filtering is 'starts with per term', which filters by the beginning of every word in every column.
 CLASS z2ui5_cl_smpc_app_612 DEFINITION PUBLIC.
 
@@ -14,15 +14,7 @@ CLASS z2ui5_cl_smpc_app_612 DEFINITION PUBLIC.
            END OF ty_s_product.
     TYPES ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
 
-    TYPES: BEGIN OF ty_s_token,
-             key  TYPE string,
-             text TYPE string,
-           END OF ty_s_token.
-    TYPES ty_t_token TYPE STANDARD TABLE OF ty_s_token WITH EMPTY KEY.
-
     DATA t_products TYPE ty_t_product.
-    DATA t_tokens_2 TYPE ty_t_token.
-    DATA t_tokens_3 TYPE ty_t_token.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -60,6 +52,7 @@ CLASS z2ui5_cl_smpc_app_612 IMPLEMENTATION.
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:z2ui5` v = `z2ui5.cc`
         )->a( n = `height`     v = `100%`
 
         )->ele( `VBox`
@@ -90,9 +83,9 @@ CLASS z2ui5_cl_smpc_app_612 IMPLEMENTATION.
 
     " the second: tabular suggestions with an Information value state. The
     " controller's addValidator( ) turns the picked row into a Token
-    " (key = the Name cell, text = 'Name(Price)'); abap2UI5 cannot register a
-    " JS validator, so suggestionItemSelected carries the Name cell back and
-    " the same token is built in ABAP over the bound tokens table
+    " (key = the Name cell, text = 'Name(Price)') - the z2ui5.cc.MultiInputExt
+    " companion below installs exactly that validator, so the token is built
+    " on the client and no round trip is needed
     box->tag( `Label`
         )->a( n = `text`     v = `MultiInput with suggestion table`
         )->a( n = `labelFor` v = `multiInput2`
@@ -108,16 +101,6 @@ CLASS z2ui5_cl_smpc_app_612 IMPLEMENTATION.
             )->a( n = `valueState`             v = `Information`
             )->a( n = `valueStateText`         v = `Information message. Extra long text used as a information message. Extra long text used as a information message - 2. Extra long text used as a information message - 3.`
             )->a( n = `suggestionRows`         v = client->_bind( t_products )
-            )->a( n = `tokens`                 v = client->_bind( t_tokens_2 )
-            )->a( n = `suggestionItemSelected` v = client->_event( val   = `TOKEN_2`
-                                                                   t_arg = VALUE #( ( `${$parameters>/selectedRow}.getCells()[0].getText()` ) ) )
-
-            )->ele( `tokens`
-                )->tag( `Token`
-                    )->a( n = `key`  v = `{KEY}`
-                    )->a( n = `text` v = `{TEXT}`
-
-            )->end(
 
             )->ele( `suggestionColumns`
                 )->ele( `Column`
@@ -169,9 +152,19 @@ CLASS z2ui5_cl_smpc_app_612 IMPLEMENTATION.
 
                 )->end(
             )->end(
-        )->end( ).
+        )->end(
 
-    " the third adds formattedValueStateText: the value state message is a
+        " the controller's addValidator( ), installed by the invisible
+        " z2ui5.cc.MultiInputExt companion: a picked row becomes a Token whose
+        " key is cell 0 (Name) and whose text is rendered key(cell 3) - the
+        " Name(Price CurrencyCode) shape the original builds in JavaScript
+        )->tag( n = `MultiInputExt` ns = `z2ui5`
+            )->a( n = `MultiInputId`   v = `multiInput2`
+            )->a( n = `TokenKeyCell`   v = `0`
+            )->a( n = `TokenTextCells` v = `3` ).
+
+    " the third adds formattedValueStateText on top of the same companion:
+    " the value state message is a
     " FormattedText whose %%0 placeholder is a Link. The link handler calls
     " oEvent.preventDefault( ) and shows a MessageToast - the wire carries the
     " veto flag (baked per wire at render time) and the toast is composed on
@@ -190,16 +183,6 @@ CLASS z2ui5_cl_smpc_app_612 IMPLEMENTATION.
             )->a( n = `valueState`             v = `Information`
             )->a( n = `valueStateText`         v = `Information message. Extra long text used as a information message. Extra long text used as a information message - 2. Extra long text used as a information message - 3.`
             )->a( n = `suggestionRows`         v = client->_bind( t_products )
-            )->a( n = `tokens`                 v = client->_bind( t_tokens_3 )
-            )->a( n = `suggestionItemSelected` v = client->_event( val   = `TOKEN_3`
-                                                                   t_arg = VALUE #( ( `${$parameters>/selectedRow}.getCells()[0].getText()` ) ) )
-
-            )->ele( `tokens`
-                )->tag( `Token`
-                    )->a( n = `key`  v = `{KEY}`
-                    )->a( n = `text` v = `{TEXT}`
-
-            )->end(
 
             )->ele( `suggestionColumns`
                 )->ele( `Column`
@@ -266,7 +249,16 @@ CLASS z2ui5_cl_smpc_app_612 IMPLEMENTATION.
                     )->end(
                 )->end(
             )->end(
-        )->end( ).
+        )->end(
+
+        " the controller's addValidator( ), installed by the invisible
+        " z2ui5.cc.MultiInputExt companion: a picked row becomes a Token whose
+        " key is cell 0 (Name) and whose text is rendered key(cell 3) - the
+        " Name(Price CurrencyCode) shape the original builds in JavaScript
+        )->tag( n = `MultiInputExt` ns = `z2ui5`
+            )->a( n = `MultiInputId`   v = `multiInput3`
+            )->a( n = `TokenKeyCell`   v = `0`
+            )->a( n = `TokenTextCells` v = `3` ).
 
     client->view_display( view->stringify( ) ).
 
@@ -275,35 +267,17 @@ CLASS z2ui5_cl_smpc_app_612 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get_event( ).
-
-      WHEN `TOKEN_2` OR `TOKEN_3`.
-        " the validator: key = the row's first cell, text = 'key(price cell)'
-        DATA(name) = client->get_event_arg( ).
-        READ TABLE t_products INTO DATA(product) WITH KEY name = name.
-        IF sy-subrc <> 0.
-          RETURN.
-        ENDIF.
-        DATA(token) = VALUE ty_s_token( key  = product-name
-                                        text = |{ product-name }({ product-price } { product-currencycode })| ).
-        IF client->get_event( ) = `TOKEN_2`.
-          IF NOT line_exists( t_tokens_2[ key = token-key ] ).
-            APPEND token TO t_tokens_2.
-          ENDIF.
-        ELSEIF NOT line_exists( t_tokens_3[ key = token-key ] ).
-          APPEND token TO t_tokens_3.
-        ENDIF.
-
-      WHEN `LINK`.
-        " MessageToast.show( 'You have pressed a link in value state message' )
-        " - the my/at Popup.Dock.CenterCenter placement of the original is not
-        " reachable through the global target, the default placement is used
-        client->follow_up_action( val   = client->cs_event-control_global
-                                  t_arg = VALUE #( ( `MESSAGE_TOAST` )
-                                                   ( `show` )
-                                                   ( `You have pressed a link in value state message` ) ) ).
-
-    ENDCASE.
+    " the token wires are gone with the MultiInputExt companion, so LINK is the
+    " only event this app still handles - an IF rather than a one-branch CASE
+    IF client->get_event( ) = `LINK`.
+      " MessageToast.show( 'You have pressed a link in value state message' )
+      " - the my/at Popup.Dock.CenterCenter placement of the original is not
+      " reachable through the global target, the default placement is used
+      client->follow_up_action( val   = client->cs_event-control_global
+                                t_arg = VALUE #( ( `MESSAGE_TOAST` )
+                                                 ( `show` )
+                                                 ( `You have pressed a link in value state message` ) ) ).
+    ENDIF.
 
   ENDMETHOD.
 

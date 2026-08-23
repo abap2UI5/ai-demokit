@@ -1,4 +1,4 @@
-" @keywords carousel sap.m carouselwithmorepages label input switch title carousellayout scrollcontainer hbox text
+" @keywords carousel sap.m carouselwithmorepages simpleform label input switch title carousellayout scrollcontainer card header
 " @summary The customLayout aggregation determines how many pages are displayed in Carousel's visible area.
 CLASS z2ui5_cl_smpc_app_252 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords multiinput multi input sap.m multiinputmaxtokens label
+" @keywords multiinput multi input sap.m multiinputmaxtokens verticallayout label item
 " @summary Number of Tokens in MultiInput cannot exceed the maxToken number.
 CLASS z2ui5_cl_smpc_app_461 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords modelmapping model mapping sap.uxap mpmodelmapping text
+" @keywords modelmapping model mapping sap.uxap mpmodelmapping simpleform title text
 " @summary Use of dynamic model mapping
 CLASS z2ui5_cl_smpc_app_411 DEFINITION PUBLIC.
 

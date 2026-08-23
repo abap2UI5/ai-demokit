@@ -1,4 +1,4 @@
-" @keywords date sap.ui.model.type typedateasstring label datepicker text
+" @keywords date sap.ui.model.type typedateasstring simpleform label datepicker text
 " @summary This sample explains the formatting options of the Date type with the date being available as string.
 CLASS z2ui5_cl_smpc_app_181 DEFINITION PUBLIC.
 

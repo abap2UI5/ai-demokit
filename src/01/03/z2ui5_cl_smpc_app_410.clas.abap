@@ -1,4 +1,4 @@
-" @keywords blockbase block base sap.uxap blockbaseeventing objectpagelayout objectpageheader objectpagesection objectpagesubsection
+" @keywords blockbase block base sap.uxap blockbaseeventing html objectpagelayout objectpageheader objectpagesection objectpagesubsection vbox button
 " @summary Uses of a block that is firing a dummy event
 CLASS z2ui5_cl_smpc_app_410 DEFINITION PUBLIC.
 

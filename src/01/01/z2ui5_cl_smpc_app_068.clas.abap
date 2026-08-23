@@ -1,4 +1,4 @@
-" @keywords slider sap.m variants: tickmarks tooltips scale text responsivescale
+" @keywords slider sap.m variants: tickmarks tooltips scale verticallayout text responsivescale
 " @summary With the Slider a user can choose a value from a numerical range.
 CLASS z2ui5_cl_smpc_app_068 DEFINITION PUBLIC.
 

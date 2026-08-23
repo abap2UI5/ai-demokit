@@ -1,4 +1,4 @@
-" @keywords breadcrumbs sap.m breadcrumbswithcurrentpagelink title link
+" @keywords breadcrumbs sap.m breadcrumbswithcurrentpagelink verticallayout title link
 " @summary Breadcrumbs sample with current page set as aggregation, resulting in a link
 CLASS z2ui5_cl_smpc_app_286 DEFINITION PUBLIC.
 

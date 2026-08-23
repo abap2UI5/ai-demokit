@@ -1,4 +1,4 @@
-" @keywords cssgrid sap.ui.layout.cssgrid layout slider panel overflowtoolbar title
+" @keywords cssgrid sap.ui.layout.cssgrid layout html slider panel overflowtoolbar title griditemlayoutdata
 " @summary CSSGrid example for page layout.
 CLASS z2ui5_cl_smpc_app_124 DEFINITION PUBLIC.
 

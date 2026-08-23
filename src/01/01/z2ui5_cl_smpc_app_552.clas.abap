@@ -1,4 +1,4 @@
-" @keywords singleplanningcalendar single planning calendar sap.m singleplanningcalendarwithcustomviews vbox singleplanningcalendardayview singleplanningcalendarworkweekview singleplanningcalendarweekview
+" @keywords singleplanningcalendar single planning calendar sap.m singleplanningcalendarwithcustomviews vbox singleplanningcalendardayview singleplanningcalendarworkweekview singleplanningcalendarweekview calendarappointment
 " @summary SinglePlanningCalendar showing the provided predefined views and custom views.
 CLASS z2ui5_cl_smpc_app_552 DEFINITION PUBLIC.
 

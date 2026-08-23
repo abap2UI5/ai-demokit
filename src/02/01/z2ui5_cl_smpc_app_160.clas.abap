@@ -1,4 +1,4 @@
-" @keywords link sap.m variants label
+" @keywords link sap.m variants verticallayout label
 " @summary Here are some links. Typically links are used in user interfaces to trigger navigation to related content inside or outside of the current application.
 CLASS z2ui5_cl_smpc_app_160 DEFINITION PUBLIC.
 

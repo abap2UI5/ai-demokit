@@ -1,4 +1,4 @@
-" @keywords tree sap.m treeexpandmulti overflowtoolbar title toolbarspacer button multicombobox togglebutton standardtreeitem
+" @keywords tree sap.m treeexpandmulti overflowtoolbar title toolbarspacer button multicombobox item togglebutton standardtreeitem
 " @summary This example shows how to expand/collapse multiple nodes and demonstrates the sticky header toolbar and info toolbar options.
 CLASS z2ui5_cl_smpc_app_601 DEFINITION PUBLIC.
 

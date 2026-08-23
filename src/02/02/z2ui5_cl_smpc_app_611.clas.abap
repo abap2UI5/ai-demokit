@@ -1,4 +1,4 @@
-" @keywords calendar sap.ui.unified calendarariahaspopup text popover vbox title
+" @keywords calendar sap.ui.unified calendarariahaspopup verticallayout text datetyperange popover vbox title
 " @summary A Calendar whose three special dates carry ariaHasPopup='dialog': day 5 with a Type01 colour bar, days 10-12 as a Type02 range, and day 20 with type='None' so the attribute reaches the DOM with no visual marking at all; selecting a marked...
 CLASS z2ui5_cl_smpc_app_611 DEFINITION PUBLIC.
 

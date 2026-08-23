@@ -1,4 +1,4 @@
-" @keywords panel sap.m overflowtoolbar title image text toolbarspacer button
+" @keywords panel sap.m overflowtoolbar title horizontallayout image text toolbarspacer button
 " @summary Panels are helpful to group custom content. They can be decorated with header and info toolbars.
 CLASS z2ui5_cl_smpc_app_397 DEFINITION PUBLIC.
 
