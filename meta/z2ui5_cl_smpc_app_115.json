@@ -25,15 +25,19 @@
     },
     {
       "type": "NOTE",
-      "what": "The MultiInput's suggestionItems template carries key=\"{ProductId}\" in the original although it is bound over /Categories, whose rows only have a Name - so a token added from a suggestion gets an empty key there. The quirk is ported verbatim (key={PRODUCTID}) rather than repaired; the tokenUpdate handler mirrors the original's filter-by-removed-key, which drops the empty-key tokens together, and additionally gates on the event's update type ('removed') because the original recomputes from the post-update token list instead of reacting to a type."
+      "what": "The MultiInput's suggestionItems template carries key=\"{ProductId}\" in the original although it is bound over /Categories, whose rows only have a Name - so a token added from a suggestion gets an empty key there. The quirk is ported verbatim (key={PRODUCTID}) rather than repaired; the tokenUpdate handler removes the token the event names. Corrected 2026-08-23 on two counts. The wire THREW on every token ADD: MultiInput fires tokenUpdate with type 'added' and removedTokens = [], and the unguarded ${$parameters>/removedTokens}[0].getKey() raised a TypeError in the expression parser before any round-trip started, so a suggestion pick produced a console exception instead of the original's model write. It is guarded now. And the sentence used to claim the port \"mirrors the original's filter-by-removed-key, which drops the empty-key tokens together\", which it cannot: the original REWRITES the whole list from the post-update aggregation on every firing and that write is the only thing that ever puts a token into the model, while the port only DELETEs, so the bound table stays empty for all 123 rows and the delete matches nothing, and additionally gates on the event's update type ('removed') because the original recomputes from the post-update token list instead of reacting to a type."
     },
     {
       "type": "NOTE",
-      "what": "The controller's three handlers are all display-only and resolve on the client: handleDetailsPress toasts the row's ProductId, onPaste toasts the pasted data - both composed through control_global MESSAGE_TOAST with the row/parameter value as an event argument, so neither needs a round-trip. updateMultipleSelection genuinely mutates the model, so it stays a backend event (TOKEN_UPDATE): the removed token key and the row's binding context path travel and ABAP deletes the row's token entry."
+      "what": "Two of the controller's three handlers are display-only and resolve on the client (corrected 2026-08-23 - this said all three, and the next clause of the same sentence already said updateMultipleSelection mutates the model and stays a backend event): handleDetailsPress toasts the row's ProductId, onPaste toasts the pasted data - both composed through control_global MESSAGE_TOAST with the row/parameter value as an event argument, so neither needs a round-trip. updateMultipleSelection genuinely mutates the model, so it stays a backend event (TOKEN_UPDATE): the removed token key and the row's binding context path travel and ABAP deletes the row's token entry."
     },
     {
       "type": "DROPPED_171",
-      "what": "sap.m.plugins.ColumnAIAction (@since 1.136, on the Product Name column, with the controller's onAIActionPress opening an AI-hint dialog) is dropped: sap.m.plugins does not exist in UI5 1.71, which the corpus targets. The column itself is present, only the plugin aggregation and its press handler are missing."
+      "what": "sap.m.plugins.ColumnAIAction (@since 1.136, on the Product Name column, with the controller's onAIActionPress showing an AI-hint MessageToast (corrected 2026-08-23 - it was described as a dialog; the plugin also sits in the view's dependents rather than a plugin aggregation)) is dropped: sap.m.plugins does not exist in UI5 1.71, which the corpus targets. The column itself is present, only the plugin aggregation and its press handler are missing."
+    },
+    {
+      "type": "NOTE",
+      "what": "The inline comment above the row type said the token table \"grows through the tokenUpdate wire\", and it cannot: on_event only DELETEs from it. Corrected 2026-08-23 together with the wire guard. Growing it the way the original does would mean rewriting the row's token list from the post-update aggregation, which needs the whole list transported rather than one removed key."
     }
   ]
 }

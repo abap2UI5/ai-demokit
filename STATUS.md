@@ -18,7 +18,7 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 | Ports | **622** sidecars in `meta/` (src/01 OpenUI5 <= 1.71: 408 · src/02 OpenUI5 > 1.71: 214) |
 | Per library | sap.f: 36 · sap.m: 393 · sap.tnt: 17 · sap.ui: 131 · sap.uxap: 45 |
 | Status ladder | 208 `generated` · 355 `reviewed` · 59 `checked` (live-verified) |
-| Deviations | 12 DROPPED_171 · 135 IMPROVISED · 123 LIVE_TEST · 1691 NOTE · 284 POST_171 |
+| Deviations | 12 DROPPED_171 · 136 IMPROVISED · 123 LIVE_TEST · 1692 NOTE · 284 POST_171 |
 | Open LIVE_TESTs | **123 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 2 structural-diff · 7 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_smpc_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_smpc_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_smpc_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_smpc_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_smpc_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
@@ -371,7 +371,49 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   an undeclared content difference (093's added tab), a dropped
   `templateShareable` (099, 100), a dropped a11y override (100), and e2e claims
   wider than their modules (091, 093, 096, 097, 101, 104).
-  **What is left: 295 `reviewed` and 206 `generated` ports above 061.**
+  **Block 3 (2026-08-23) read ports 106–126.** **Nine clean** (110, 111, 113,
+  117, 119, 120, 122, 124, 125) and the block produced the sweep's first
+  outright CRASH plus several dead wires:
+  - **App 115 threw a TypeError on every token ADD.** `MultiInput` fires
+    `tokenUpdate` with `type: "added"` and `removedTokens: []`, and the wire's
+    unguarded `${$parameters>/removedTokens}[0].getKey()` raised in the
+    expression parser *before* the round-trip started — so picking a suggestion
+    produced a console exception instead of the original's model write. Guarded
+    now. Its `removed` branch was a no-op besides: the original REWRITES the
+    whole token list from the post-update aggregation and that write is the
+    only thing that ever fills the model, so the port's bound table is empty for
+    all 123 rows and its `DELETE` matches nothing.
+  - **App 126's `uploadComplete` could never fire.** Nothing called `upload()`
+    and `uploadOnChange` defaults to `false`, so both firing paths were
+    unreachable, while the press raised an invented toast the original does not
+    have. `upload` is an ordinary public method and is not on the frontend
+    denylist; the press calls it now.
+  - **App 121's remove only toasted** — the file came back on the next render —
+    **and its version button was hard-coded off**, so the button the sample's
+    selection logic exists to demonstrate was permanently dead. Both wired; the
+    five invented toasts are gone (the original raises none).
+  - **App 118 printed "URL: undefined" on every date click.** The original
+    guards on the action TYPE and only toasts for `Navigation`; the Calendar
+    card fires a `DateChange` whose parameters carry no `url`. Guarded — a
+    view-wired client action always fires, so suppressing it entirely would need
+    a per-firing veto that form does not have, and that residue is declared.
+  - **Apps 106/107 lost half of the SortSelect toast**, the same derivation
+    fixed for the button literals earlier the same day: the original prints
+    `Selected: semantic.SortSelect by <text>`. A reminder that fixing one
+    handler does not fix its sibling.
+  Documentation drift, same shapes as before: a rendering claim wrong on
+  desktop (112 — declaring the two button aggregations at all makes
+  `ResponsivePopover._setButton` create a footer Toolbar that `visible=false`
+  cannot remove), an `@since` the sources do not carry (109's MonthView is
+  1.69), a deviation typed `NOTE` where the recipe requires `IMPROVISED` (116,
+  the canonical two-view BlockBase case), counts and classes that do not match
+  the code (115, 116, 126), and e2e claims wider than their modules (123).
+  One difference was declared rather than "fixed": app 114 renders 13
+  tab-indented lines where the original's literal newlines collapse to spaces
+  through XML attribute-value normalisation — the port is the source-faithful
+  side, and matching the original's RENDERING would mean writing spaces where
+  the sample wrote newlines.
+  **What is left: 275 `reviewed` and 206 `generated` ports above 061.**
 
 - [x] **CAPABILITIES.md's stale class citations — DONE.** Both halves of this
   are closed, and neither closed the way the entry predicted. The shared

@@ -649,7 +649,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 
 | Sample | Class |
 |---|---|
-| **sap.ui.table.Table** — Basic<br>Basic example showing most controls which are intended to be used inside a table.<br><sub>table sap.ui.table grid overflowtoolbar title column label text input objectstatus currency combobox</sub><br><sub>◐ reviewed · 6 deviations</sub> | [`Z2UI5_CL_SMPC_APP_115`](src/01/02/z2ui5_cl_smpc_app_115.clas.abap) |
+| **sap.ui.table.Table** — Basic<br>Basic example showing most controls which are intended to be used inside a table.<br><sub>table sap.ui.table grid overflowtoolbar title column label text input objectstatus currency combobox</sub><br><sub>◐ reviewed · 7 deviations</sub> | [`Z2UI5_CL_SMPC_APP_115`](src/01/02/z2ui5_cl_smpc_app_115.clas.abap) |
 | **sap.ui.table.Table** — Multi Header<br>Example for multi-header of table<br><sub>table sap.ui.table multi-level column headers overflowtoolbar title label text input</sub><br><sub>◐ reviewed · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_137`](src/01/02/z2ui5_cl_smpc_app_137.clas.abap) |
 | **sap.ui.table.Table** — Row Highlights<br>Shows how row highlights and alternating row colors can be used.<br><sub>table sap.ui.table rowhighlights overflowtoolbar title toolbarspacer label select item togglebutton rowsettings column</sub><br><sub>◐ reviewed · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_174`](src/01/02/z2ui5_cl_smpc_app_174.clas.abap) |
 | **sap.ui.table.Table** — Column Resizing<br>Example for column resizing<br><sub>table sap.ui.table columnresizing overflowtoolbar title column label text link segmentedbutton segmentedbuttonitem</sub><br><sub>◐ reviewed · 5 deviations</sub> | [`Z2UI5_CL_SMPC_APP_247`](src/01/02/z2ui5_cl_smpc_app_247.clas.abap) |
@@ -802,7 +802,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 
 | Sample | Class |
 |---|---|
-| **sap.ui.integration.Card** — Home page with cards<br>Different types of cards types arranged in a sap.f.GridContainer.<br><sub>card sap.ui.integration manifest shellbar menu menuitem avatar icontabbar icontabfilter gridcontainer gridcontainersettings cardbadgecustomdata</sub><br><sub>◐ reviewed · 6 deviations</sub> | [`Z2UI5_CL_SMPC_APP_118`](src/02/02/z2ui5_cl_smpc_app_118.clas.abap) |
+| **sap.ui.integration.Card** — Home page with cards<br>Different types of cards types arranged in a sap.f.GridContainer.<br><sub>card sap.ui.integration manifest shellbar menu menuitem avatar icontabbar icontabfilter gridcontainer gridcontainersettings cardbadgecustomdata</sub><br><sub>◐ reviewed · 7 deviations</sub> | [`Z2UI5_CL_SMPC_APP_118`](src/02/02/z2ui5_cl_smpc_app_118.clas.abap) |
 
 ---
 

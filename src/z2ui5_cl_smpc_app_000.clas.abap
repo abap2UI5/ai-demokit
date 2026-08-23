@@ -8067,16 +8067,20 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` were quoted strings the control would have fetched as URLs. The JSON never enters the view XML (a raw { would be read as a binding), it travels as model data. Asset URLs inside the manifests are` &&
                ` absolutized to the OpenUI5 host per the asset-URL rule; the mock carries them host-relative. The model's unused ninth entry ('table') is not seeded - the sample's view binds eight. // NOTE: The` &&
                ` controller's three members are all resolved without a round-trip. resolveCardUrl is a formatter turning the component card's relative manifest path into a URL - computed in ABAP instead` &&
-               ` (thin-frontend rule). onAction toasts the navigation URL off the event, composed through control_global MESSAGE_TOAST with ${$parameters>/parameters}.url as the argument. onInit's date is DateFormat` &&
-               ` over UI5Date.getInstance(), a MOVING value, so it is anchored on a fixed date here (the corpus rule for now/random values, apps 164/181/289). // POST-1.71: sap.f.cards.CardBadgeCustomData (@since` &&
-               ` 1.128, with icon/state/announcementText/visibilityMode) is kept 1:1 on the three badged cards, and sap.m.Avatar in the ShellBar's profile is @since 1.73; the Card ``action`` event's ``parameters```.
-    lv_text1 = lv_text1 && ` parameter is @since 1.76. All newer than UI5 1.71, declared per the property-171 policy - the app needs a runtime that has them. // NOTE: The 'component' Card keeps its manifest, which is a URL to a` &&
-               ` UI5 COMPONENT card (componentCard/manifest.json) rather than an inline card definition. It points at the OpenUI5 host, so whether the component itself loads depends on that host's CORS policy - the` &&
-               ` card renders either way, and abap2UI5 has no place to ship a UI5 Component of its own. Declared rather than dropped, so the port keeps the sample's eight cards. // NOTE: The sample's asset paths are` &&
-               ` host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The` &&
-               ` values are otherwise the mock's own. Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the sentence used to claim the rewrite was 'declared by all 77 ports that do it', which had`.
-    lv_text1 = lv_text1 && ` stopped being true as the corpus grew past that day's snapshot - 126 ports do it now, and 17 of them declared it nowhere. Those 17 carry the declaration since today, so the claim holds again; a stale` &&
-               ` absolute count is what made it wrong, so this wording names the date the count was taken.`.
+               ` (thin-frontend rule). onAction toasts the navigation URL off the event, composed through control_global MESSAGE_TOAST. The original guards on the action TYPE and only toasts for Navigation; a` &&
+               ` view-wired client action always fires, so the port toasts for every CardActionType. That is reachable here - the Calendar card fires a DateChange action whose parameters carry a selectedDate and no` &&
+               ` url - and until 2026-08-23 it printed the literal 'URL: undefined' on every date click. The url argument is guarded now, so a non-Navigation action shows the prefix with an empty value instead;`.
+    lv_text1 = lv_text1 && ` suppressing the toast entirely would need a per-firing veto the client action form does not have. onInit's date is DateFormat over UI5Date.getInstance(), a MOVING value, so it is anchored on a fixed` &&
+               ` date here (the corpus rule for now/random values, apps 164/181/289). // POST-1.71: sap.f.cards.CardBadgeCustomData (@since 1.128, with icon/state/announcementText/visibilityMode) is kept 1:1 on the` &&
+               ` three badged cards, and sap.m.Avatar in the ShellBar's profile is @since 1.73; the Card ``action`` event's ``parameters`` parameter is @since 1.76. All newer than UI5 1.71, declared per the` &&
+               ` property-171 policy - the app needs a runtime that has them. // NOTE: The 'component' Card keeps its manifest, which is a URL to a UI5 COMPONENT card (componentCard/manifest.json) rather than an` &&
+               ` inline card definition. It points at the OpenUI5 host, so whether the component itself loads depends on that host's CORS policy - the card renders either way, and abap2UI5 has no place to ship a UI5` &&
+               ` Component of its own. Declared rather than dropped, so the port keeps the sample's eight cards. // NOTE: The sample's asset paths are host-absolutized. The demo kit serves them relative`.
+    lv_text1 = lv_text1 && ` (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared` &&
+               ` 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the sentence used to claim the rewrite was 'declared by all 77 ports that do it', which had stopped being true as the corpus grew past that` &&
+               ` day's snapshot - 126 ports do it now, and 17 of them declared it nowhere. Those 17 carry the declaration since today, so the claim holds again; a stale absolute count is what made it wrong, so this` &&
+               ` wording names the date the count was taken. // NOTE: The root mvc:View carries height="100%", which this original does not set (unlike the neighbouring sap.ui.table / sap.uxap / sap.f samples, whose` &&
+               ` roots do). Declared 2026-08-23; structural_diff is skipped for this port, so no gate compares the root attributes.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.integration` control = `sap.ui.integration.Card`               name = `CardsLayout`                                   class = `z2ui5_cl_smpc_app_118` path = `src/02/02/z2ui5_cl_smpc_app_118.clas.abap`
         score = 5
@@ -9169,13 +9173,20 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` yielded 739618 and the yyyy-MM-dd offsets cut that into '7.39-61-80' - measured on the running port, every row carried a value the DatePicker's sap.ui.model.type.Date binding cannot parse. Nothing` &&
                ` caught it: the port BOOTS (the generic e2e gate passes), structural_diff compares structure and data_fidelity does not compare a DERIVED field. The arithmetic now lands in a TYPE d field before it is` &&
                ` formatted. // NOTE: The MultiInput's suggestionItems template carries key="{ProductId}" in the original although it is bound over /Categories, whose rows only have a Name - so a token added from a`.
-    lv_text1 = lv_text1 && ` suggestion gets an empty key there. The quirk is ported verbatim (key={PRODUCTID}) rather than repaired; the tokenUpdate handler mirrors the original's filter-by-removed-key, which drops the` &&
-               ` empty-key tokens together, and additionally gates on the event's update type ('removed') because the original recomputes from the post-update token list instead of reacting to a type. // NOTE: The` &&
-               ` controller's three handlers are all display-only and resolve on the client: handleDetailsPress toasts the row's ProductId, onPaste toasts the pasted data - both composed through control_global` &&
-               ` MESSAGE_TOAST with the row/parameter value as an event argument, so neither needs a round-trip. updateMultipleSelection genuinely mutates the model, so it stays a backend event (TOKEN_UPDATE): the` &&
-               ` removed token key and the row's binding context path travel and ABAP deletes the row's token entry. // 1.71: sap.m.plugins.ColumnAIAction (@since 1.136, on the Product Name column, with the` &&
-               ` controller's onAIActionPress opening an AI-hint dialog) is dropped: sap.m.plugins does not exist in UI5 1.71, which the corpus targets. The column itself is present, only the plugin aggregation and`.
-    lv_text1 = lv_text1 && ` its press handler are missing.`.
+    lv_text1 = lv_text1 && ` suggestion gets an empty key there. The quirk is ported verbatim (key={PRODUCTID}) rather than repaired; the tokenUpdate handler removes the token the event names. Corrected 2026-08-23 on two counts.` &&
+               ` The wire THREW on every token ADD: MultiInput fires tokenUpdate with type 'added' and removedTokens = [], and the unguarded ${$parameters>/removedTokens}[0].getKey() raised a TypeError in the` &&
+               ` expression parser before any round-trip started, so a suggestion pick produced a console exception instead of the original's model write. It is guarded now. And the sentence used to claim the port` &&
+               ` "mirrors the original's filter-by-removed-key, which drops the empty-key tokens together", which it cannot: the original REWRITES the whole list from the post-update aggregation on every firing and` &&
+               ` that write is the only thing that ever puts a token into the model, while the port only DELETEs, so the bound table stays empty for all 123 rows and the delete matches nothing, and additionally gates` &&
+               ` on the event's update type ('removed') because the original recomputes from the post-update token list instead of reacting to a type. // NOTE: Two of the controller's three handlers are display-only`.
+    lv_text1 = lv_text1 && ` and resolve on the client (corrected 2026-08-23 - this said all three, and the next clause of the same sentence already said updateMultipleSelection mutates the model and stays a backend event):` &&
+               ` handleDetailsPress toasts the row's ProductId, onPaste toasts the pasted data - both composed through control_global MESSAGE_TOAST with the row/parameter value as an event argument, so neither needs` &&
+               ` a round-trip. updateMultipleSelection genuinely mutates the model, so it stays a backend event (TOKEN_UPDATE): the removed token key and the row's binding context path travel and ABAP deletes the` &&
+               ` row's token entry. // 1.71: sap.m.plugins.ColumnAIAction (@since 1.136, on the Product Name column, with the controller's onAIActionPress showing an AI-hint MessageToast (corrected 2026-08-23 - it` &&
+               ` was described as a dialog; the plugin also sits in the view's dependents rather than a plugin aggregation)) is dropped: sap.m.plugins does not exist in UI5 1.71, which the corpus targets. The column` &&
+               ` itself is present, only the plugin aggregation and its press handler are missing. // NOTE: The inline comment above the row type said the token table "grows through the tokenUpdate wire", and it`.
+    lv_text1 = lv_text1 && ` cannot: on_event only DELETEs from it. Corrected 2026-08-23 together with the wire guard. Growing it the way the original does would mean rewriting the row's token list from the post-update` &&
+               ` aggregation, which needs the whole list transported rather than one removed key.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Basic`                                         class = `z2ui5_cl_smpc_app_115` path = `src/01/02/z2ui5_cl_smpc_app_115.clas.abap`
         score = 5
@@ -10904,17 +10915,19 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` since the sample writes exactly <ui:rowMode><uirm:Auto minRowCount="2"/></ui:rowMode>. The app needs a UI5 release >= 1.119: below it the lowercase rowMode tag resolves as a control class and the 404` &&
                  ` takes the whole view down, which is why this is an error rather than a warning.` ) ).
 
-    lv_text1 = `NOTE: **Rebuilt on 2026-08-05** - it was a breadth probe whose blocks were replaced by a Text and whose third subsection plus both moreBlocks aggregations were dropped. All three subsections and all` &&
-               ` TEN sample:MultiViewBlock positions are there now, each inlined with its block view's CONTENT (CAPABILITIES 'Custom BlockBase blocks', apps 161/178/188): a BlockBase is only a lazy-loading wrapper` &&
-               ` around a view, and ObjectPageSubSection.blocks/moreBlocks accept any control. MultiViewBlock ships TWO views and picks by the block MODE - Collapsed (Country/Subsidiary) and Expanded (+` &&
+    lv_text1 = `IMPROVISED: **Rebuilt on 2026-08-05** - it was a breadth probe whose blocks were replaced by a Text and whose third subsection plus both moreBlocks aggregations were dropped. All three subsections and` &&
+               ` all TEN sample:MultiViewBlock positions are there now, each inlined with its block view's CONTENT (CAPABILITIES 'Custom BlockBase blocks', apps 161/178/188): a BlockBase is only a lazy-loading` &&
+               ` wrapper around a view, and ObjectPageSubSection.blocks/moreBlocks accept any control. MultiViewBlock ships TWO views and picks by the block MODE - Collapsed (Country/Subsidiary) and Expanded (+` &&
                ` Building/Room). abap2UI5 has no BlockBase mode, so each block carries the variant its subsection asks for (mode='Expanded' the expanded form, the default-mode subsection the collapsed one), which is` &&
                ` exactly what the sample renders on load; what is lost is the per-block runtime switching. Structurally that means: the 10 sample:MultiViewBlock controls are absent, 10 forms:SimpleForm are present in` &&
                ` their place (the original side counts the two block VIEWS once, not their ten instances), and their Label/Text children move to the m: prefix - 6 vs 32 each, the same shape every BlockBase port in`.
-    lv_text1 = lv_text1 && ` this corpus declares. The view is written out per block rather than through a helper method, so the structural diff can reconstruct it statically.`.
+    lv_text1 = lv_text1 && ` this corpus declares. The view is written out per block rather than through a helper method, so the structural diff can reconstruct it statically. Retyped NOTE -> IMPROVISED 2026-08-23: the entry` &&
+               ` states a lost behaviour (the per-block runtime switching) and ten absent controls, and both the porting recipe and CAPABILITIES put exactly this block-to-content substitution at IMPROVISED - app 261` &&
+               ` declares the same two-view BlockBase case that way.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageSubSection`                          class = `z2ui5_cl_smpc_app_116` path = `src/01/03/z2ui5_cl_smpc_app_116.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
         notes = lv_text1 ) ).
 
