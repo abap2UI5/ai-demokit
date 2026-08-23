@@ -36,7 +36,12 @@
  *     displayDate). Those claims are sound.
  *   - the method may be the one the port REPLACED rather than the one it
  *     cannot call (app 284 names setVisible/setText precisely because it binds
- *     them instead).
+ *     them instead). Apps 563 and 564 are that same sentence written twice
+ *     more — the MessageView-in-a-popover twins of 284 — so this shape is
+ *     three of the current hits, not one. All three were re-read and cleared
+ *     on 2026-08-23: the claim they carry applies only to navigateBack, which
+ *     really is a method with no bindable twin and really is wired as a
+ *     frontend action. Do not re-derive it a fourth time.
  * Expect roughly one true positive in three. Six lines are cheap to read; a
  * port quietly doing less than its original for a year is not.
  *
