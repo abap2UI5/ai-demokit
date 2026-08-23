@@ -1,4 +1,4 @@
-" @keywords input sap.m inputstates label selectdialog standardlistitem
+" @keywords input sap.m inputstates verticallayout label selectdialog standardlistitem
 " @summary This example demonstrates the different input field states, e.g. disabled, editable, with value help and value help only.
 CLASS z2ui5_cl_smpc_app_623 DEFINITION PUBLIC.
 

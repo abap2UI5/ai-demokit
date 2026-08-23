@@ -1,4 +1,4 @@
-" @keywords icon sap.ui.core font gallery hbox flexitemdata
+" @keywords icon sap.ui.core font gallery html hbox flexitemdata
 " @summary Built with an embedded font, icons scale well, and can be altered with CSS. They can also fire a press event. See the Icon Explorer for more icons.
 CLASS z2ui5_cl_smpc_app_122 DEFINITION PUBLIC.
 

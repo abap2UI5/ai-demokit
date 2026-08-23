@@ -1,4 +1,4 @@
-" @keywords standardmargins standard margins sap.ui.core standardmarginsenforcewidthauto icontabbar icontabfilter label text list feedinput
+" @keywords standardmargins standard margins sap.ui.core standardmarginsenforcewidthauto icontabbar icontabfilter simpleform title label text list
 " @summary Some controls (for example the IconTabBar) do not have a 'width' property but still have a default width of 100%. We provide css class 'sapUiForceWidthAuto' to overwrite the control's width in such a case.
 CLASS z2ui5_cl_smpc_app_484 DEFINITION PUBLIC.
 

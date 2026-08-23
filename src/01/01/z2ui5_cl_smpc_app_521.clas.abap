@@ -1,4 +1,4 @@
-" @keywords input sap.m inputkeyvalue label text selectdialog standardlistitem
+" @keywords input sap.m inputkeyvalue verticallayout label listitem text selectdialog standardlistitem
 " @summary This sample illustrates how the Input works with key and value values, when the data is available via list of suggestions.
 CLASS z2ui5_cl_smpc_app_521 DEFINITION PUBLIC.
 

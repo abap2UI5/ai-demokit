@@ -1,4 +1,4 @@
-" @keywords productswitch product switch sap.f productswitchnavigation button text responsivepopover
+" @keywords productswitch product switch sap.f productswitchnavigation verticallayout button text responsivepopover productswitchitem
 " @summary This sample demonstrates the navigation behavior of Product Switch, configurable by the app developer.
 CLASS z2ui5_cl_smpc_app_165 DEFINITION PUBLIC.
 

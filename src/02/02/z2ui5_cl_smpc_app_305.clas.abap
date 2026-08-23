@@ -1,4 +1,4 @@
-" @keywords calendar sap.ui.unified calendardatedeselection label text
+" @keywords calendar sap.ui.unified calendardatedeselection html verticallayout horizontallayout label text
 " @summary An example of recommended implementation of deselection logic when the calendar is in single selection mode.
 CLASS z2ui5_cl_smpc_app_305 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords combobox combo box sap.m comboboxdefaultfiltering vbox label
+" @keywords combobox combo box sap.m comboboxdefaultfiltering vbox label listitem
 " @summary The default filtering is 'starts with per term', which filters by the beginning of every word in every column. Autocomplete (type-ahead) works only for the first column, the leading value.
 CLASS z2ui5_cl_smpc_app_463 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords input sap.m inputassistedtabularsuggestions column label columnlistitem
+" @keywords input sap.m inputassistedtabularsuggestions verticallayout column label columnlistitem
 " @summary In this example assisted input is provided with table-like suggestions where several columns can display more details.
 CLASS z2ui5_cl_smpc_app_621 DEFINITION PUBLIC.
 

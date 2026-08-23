@@ -1,4 +1,4 @@
-" @keywords select sap.m selectwithicons
+" @keywords select sap.m selectwithicons listitem
 " @summary Illustrates the usage of a Select with icons
 CLASS z2ui5_cl_smpc_app_205 DEFINITION PUBLIC.
 

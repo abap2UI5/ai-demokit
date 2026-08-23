@@ -1,4 +1,4 @@
-" @keywords tilecontent tile content sap.m numeric feed news numericcontent feedcontent newscontent
+" @keywords tilecontent tile content sap.m numeric feed news grid numericcontent feedcontent newscontent
 " @summary Shows the universal container for different content types and context information in the footer area.
 CLASS z2ui5_cl_smpc_app_078 DEFINITION PUBLIC.
 

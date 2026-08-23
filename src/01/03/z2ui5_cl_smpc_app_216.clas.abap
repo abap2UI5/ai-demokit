@@ -1,4 +1,4 @@
-" @keywords objectpageheadercontent object header content sap.uxap headercontent objectpageheaderlayoutdata
+" @keywords objectpageheadercontent object header content sap.uxap headercontent verticallayout objectstatus text objectnumber progressindicator label
 " @summary This is an example of an ObjectPageHeaderContent.
 CLASS z2ui5_cl_smpc_app_216 DEFINITION PUBLIC.
 

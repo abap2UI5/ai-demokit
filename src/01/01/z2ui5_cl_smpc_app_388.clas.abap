@@ -1,4 +1,4 @@
-" @keywords generictile generic tile sap.m generictileasfeedtile tilecontent feedcontent slidetile newscontent
+" @keywords generictile generic tile sap.m generictileasfeedtile html tilecontent feedcontent slidetile newscontent
 " @summary Shows Feed Tile and News Tile samples that can contain feed content, news content, and a footer.
 CLASS z2ui5_cl_smpc_app_388 DEFINITION PUBLIC.
 

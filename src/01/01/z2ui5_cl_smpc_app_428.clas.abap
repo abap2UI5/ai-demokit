@@ -1,4 +1,4 @@
-" @keywords headercontainer header container sap.m headercontainernodividers numericcontent
+" @keywords headercontainer header container sap.m headercontainernodividers numericcontent invisibletext
 " @summary The Header Container without divider lines.
 CLASS z2ui5_cl_smpc_app_428 DEFINITION PUBLIC.
 

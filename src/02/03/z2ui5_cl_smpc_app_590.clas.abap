@@ -1,4 +1,4 @@
-" @keywords objectpagelayout object layout sap.uxap objectpageformfocusableinput objectpagedynamicheadertitle objectpagesection objectpagesubsection
+" @keywords objectpagelayout object layout sap.uxap objectpageformfocusableinput objectpagedynamicheadertitle breadcrumbs link title flexbox avatar text
 " @summary Object Page that focuses its first editable input in the currently selected section.
 CLASS z2ui5_cl_smpc_app_590 DEFINITION PUBLIC.
 

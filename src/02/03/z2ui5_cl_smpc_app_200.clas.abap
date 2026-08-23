@@ -1,4 +1,4 @@
-" @keywords headerfacetpattern header facet pattern sap.uxap objectpagesectionshowtitle objectpagelayout objectpagedynamicheadertitle objectpagesection objectpagesubsection
+" @keywords headerfacetpattern header facet pattern sap.uxap objectpagesectionshowtitle objectpagelayout objectpagedynamicheadertitle title hbox avatar vbox
 " @summary ObjectPage sample that demonstrates the combination of header facets and showTitle properties of sections and subsections.
 CLASS z2ui5_cl_smpc_app_200 DEFINITION PUBLIC.
 

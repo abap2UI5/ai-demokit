@@ -1,4 +1,4 @@
-" @keywords ganttchartwithtable messagestrip text
+" @keywords ganttchartwithtable messagestrip ganttchartcontainer proportionzoomstrategy timehorizon treetable column text ganttrowsettings task
 " @summary sap.gantt.GanttChartWithTable expressed in abap2UI5 - a SAPUI5-only control, so the demo kit original is outside OpenUI5 and this is orientation rather than a 1:1 port.
 "! <p class="shorttext">sap.gantt - GanttChartWithTable</p>
 "!

@@ -1,4 +1,4 @@
-" @keywords combobox combo box sap.m comboboxvalidation label
+" @keywords combobox combo box sap.m comboboxvalidation verticallayout label item
 " @summary The combo box control could be restricted to allow selection only from the items in the list.
 CLASS z2ui5_cl_smpc_app_475 DEFINITION PUBLIC.
 

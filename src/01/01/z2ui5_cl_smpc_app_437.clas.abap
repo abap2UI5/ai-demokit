@@ -1,4 +1,4 @@
-" @keywords tree sap.m treeselection overflowtoolbar title toolbarspacer select standardtreeitem
+" @keywords tree sap.m treeselection overflowtoolbar title toolbarspacer select item standardtreeitem
 " @summary This example shows different selection modes of Tree.
 CLASS z2ui5_cl_smpc_app_437 DEFINITION PUBLIC.
 

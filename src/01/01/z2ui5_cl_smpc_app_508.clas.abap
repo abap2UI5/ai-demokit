@@ -1,4 +1,4 @@
-" @keywords list sap.m listtoolbar standardlistitem overflowtoolbar title toolbarspacer multicombobox togglebutton button label
+" @keywords list sap.m listtoolbar standardlistitem overflowtoolbar title toolbarspacer multicombobox item togglebutton button label
 " @summary The 'headerText' property is an easy but limited way of setting the list header. If you need more flexibility you should assemble your own header or info toolbar that can also contain buttons.
 CLASS z2ui5_cl_smpc_app_508 DEFINITION PUBLIC.
 

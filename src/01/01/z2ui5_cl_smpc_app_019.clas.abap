@@ -1,4 +1,4 @@
-" @keywords dialog sap.m confirm reject submit order dialogs button text label textarea
+" @keywords dialog sap.m confirm reject submit order dialogs verticallayout button text label textarea
 " @summary Creating a dialog with confirm and reject options that replaces the confirmDialog functionality.
 CLASS z2ui5_cl_smpc_app_019 DEFINITION PUBLIC.
 

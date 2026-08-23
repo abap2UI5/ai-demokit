@@ -1,4 +1,4 @@
-" @keywords gridlist grid list sap.f layout slider panel toolbar title vbox flexitemdata label
+" @keywords gridlist grid list sap.f layout slider panel toolbar title gridlistitem vbox flexitemdata
 " @summary A GridList with the default grid layout, resized live with a slider to show how the grid reflows.
 CLASS z2ui5_cl_smpc_app_111 DEFINITION PUBLIC.
 

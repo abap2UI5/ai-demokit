@@ -1,4 +1,4 @@
-" @keywords table sap.ui.table multiselectionplugin column
+" @keywords table sap.ui.table multiselectionplugin overflowtoolbar title toolbarspacer label select item input toolbarseparator togglebutton
 " @summary Example showing the behavior of MultiSelectionPlugin
 CLASS z2ui5_cl_smpc_app_356 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords multiinput multi input sap.m provides functionality add label token
+" @keywords multiinput multi input sap.m provides functionality add verticallayout label item token multiinputext
 " @summary MultiInput provides functionality to add / remove / enter tokens.
 CLASS z2ui5_cl_smpc_app_040 DEFINITION PUBLIC.
 

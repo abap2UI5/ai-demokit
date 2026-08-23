@@ -1,4 +1,4 @@
-" @keywords multicombobox multi combo box sap.m multicomboboxsuggestionsandvaluestate label formattedtext link
+" @keywords multicombobox multi combo box sap.m multicomboboxsuggestionsandvaluestate verticallayout label item formattedtext link
 " @summary MultiComboBox with suggestions and Value State Message containing a link.
 CLASS z2ui5_cl_smpc_app_519 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords singleplanningcalendar single planning calendar sap.m singleplanningcalendarsnappingheader vbox hbox label select singleplanningcalendardayview singleplanningcalendarworkweekview
+" @keywords singleplanningcalendar single planning calendar sap.m singleplanningcalendarsnappingheader vbox hbox label select listitem item
 " @summary SinglePlanningCalendar showing the modes for snapping the header part of the calendar.
 CLASS z2ui5_cl_smpc_app_551 DEFINITION PUBLIC.
 

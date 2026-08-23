@@ -1,4 +1,4 @@
-" @keywords blockbase block base sap.uxap objectpageblockbase objectpagelayout objectpageheader objectpageheaderactionbutton objectpagesection objectpagesubsection
+" @keywords blockbase block base sap.uxap objectpageblockbase objectpagelayout objectpageheader objectpageheaderactionbutton objectpagesection objectpagesubsection html text
 " @summary This example shows the different layout of the blocks based on their ColumnLayout.
 CLASS z2ui5_cl_smpc_app_408 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords multiinput multi input sap.m multiinputdatabinding label token
+" @keywords multiinput multi input sap.m multiinputdatabinding verticallayout label token
 " @summary MultiInput data binding allows data to be bound to tokens in MultiInput.
 CLASS z2ui5_cl_smpc_app_457 DEFINITION PUBLIC.
 

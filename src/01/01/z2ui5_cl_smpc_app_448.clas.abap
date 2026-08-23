@@ -1,4 +1,4 @@
-" @keywords draftindicator draft indicator sap.m semanticpagedraftindicator messagepopover messageitem objectheader label input
+" @keywords draftindicator draft indicator sap.m semanticpagedraftindicator fullscreenpage addaction flagaction favoriteaction messagesindicator messagepopover messageitem
 " @summary Integration of Draft Indicator inside Semantic Page
 CLASS z2ui5_cl_smpc_app_448 DEFINITION PUBLIC.
 

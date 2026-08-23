@@ -1,4 +1,4 @@
-" @keywords flexbox flex box sap.m flexboxcols text flexitemdata
+" @keywords flexbox flex box sap.m flexboxcols html verticallayout text flexitemdata
 " @summary You can create balanced areas with Flex Box, such as these columns with equal height regardless of content.
 CLASS z2ui5_cl_smpc_app_426 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords planningcalendar planning calendar sap.m planningcalendarrecurringitem vbox title toolbarspacer button planningcalendarrow dialog label
+" @keywords planningcalendar planning calendar sap.m planningcalendarrecurringitem vbox title toolbarspacer button planningcalendarrow customdata recurringcalendarappointment
 " @summary PlanningCalendar with recurring calendar items.
 CLASS z2ui5_cl_smpc_app_548 DEFINITION PUBLIC.
 

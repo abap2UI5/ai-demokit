@@ -1,4 +1,4 @@
-" @keywords blocklayout block layout sap.ui.layout blocklayoutdefault label slider segmentedbutton segmentedbuttonitem text radiobuttongroup radiobutton
+" @keywords blocklayout block layout sap.ui.layout blocklayoutdefault simpleform label slider segmentedbutton segmentedbuttonitem verticallayout blocklayoutrow
 " @summary The BlockLayout is intended to be used with rows and cells. The cells have predefined width, the rows have predefined rendering modes - scrollable/vertical/horizontal.
 CLASS z2ui5_cl_smpc_app_214 DEFINITION PUBLIC.
 

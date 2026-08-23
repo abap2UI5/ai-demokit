@@ -1,4 +1,4 @@
-" @keywords calendar sap.ui.unified single day button label text
+" @keywords calendar sap.ui.unified single day html verticallayout daterange button horizontallayout label text
 " @summary Calendar where the user can select a single day
 CLASS z2ui5_cl_smpc_app_139 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords overflowtoolbar overflow toolbar sap.m toolbaractive checkbox text toolbarspacer
+" @keywords overflowtoolbar overflow toolbar sap.m toolbaractive checkbox text toolbarspacer icon
 " @summary Making an OverflowToolbar or a Toolbar active allows them to react to the click event.
 CLASS z2ui5_cl_smpc_app_424 DEFINITION PUBLIC.
 

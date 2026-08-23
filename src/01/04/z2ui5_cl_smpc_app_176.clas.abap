@@ -1,4 +1,4 @@
-" @keywords gridlist grid list sap.f gridlistboxcontainergrouping slider panel toolbar title toolbarspacer searchfield vbox
+" @keywords gridlist grid list sap.f gridlistboxcontainergrouping slider panel toolbar title toolbarspacer searchfield gridboxlayout
 " @summary This sample illustrates subgroups with headers, custom header and lazy loading of GridList items.
 CLASS z2ui5_cl_smpc_app_176 DEFINITION PUBLIC.
 

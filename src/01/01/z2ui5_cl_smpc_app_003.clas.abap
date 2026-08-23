@@ -1,4 +1,4 @@
-" @keywords breadcrumbs sap.m breadcrumb trail separator link hbox label select
+" @keywords breadcrumbs sap.m breadcrumb trail separator verticallayout link hbox label select item
 " @summary Breadcrumbs is useful for displaying link hierarchy
 CLASS z2ui5_cl_smpc_app_003 DEFINITION PUBLIC.
 

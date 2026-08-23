@@ -1,4 +1,4 @@
-" @keywords table sap.ui.table rowmodes named model column
+" @keywords table sap.ui.table rowmodes named model overflowtoolbar title column label text link segmentedbutton
 " @summary Example for the different row modes
 CLASS z2ui5_cl_smpc_app_164 DEFINITION PUBLIC.
 

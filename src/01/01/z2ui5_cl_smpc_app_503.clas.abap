@@ -1,4 +1,4 @@
-" @keywords input sap.m inputkeyvaluetabularsuggestions label column columnlistitem text
+" @keywords input sap.m inputkeyvaluetabularsuggestions verticallayout label column columnlistitem text
 " @summary This sample illustrates how the Input works with key and value values, when the data is provided with table-like suggestions.
 CLASS z2ui5_cl_smpc_app_503 DEFINITION PUBLIC.
 

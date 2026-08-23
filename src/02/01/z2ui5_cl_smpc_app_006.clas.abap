@@ -1,4 +1,4 @@
-" @keywords carousel sap.m user browse through title image text scrollcontainer list standardlistitem
+" @keywords carousel sap.m user browse through title verticallayout image text scrollcontainer list standardlistitem
 " @summary With the Carousel a user can browse through multi-page content by swiping left or right.
 CLASS z2ui5_cl_smpc_app_006 DEFINITION PUBLIC.
 

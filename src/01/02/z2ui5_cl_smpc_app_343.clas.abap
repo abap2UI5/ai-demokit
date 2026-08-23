@@ -1,4 +1,4 @@
-" @keywords blocklayout block layout sap.ui.layout blocklayoutcustombackgroundpercell vbox label select text input textarea
+" @keywords blocklayout block layout sap.ui.layout blocklayoutcustombackgroundpercell html blocklayoutrow blocklayoutcell vbox label select item
 " @summary Block Layout in which all cells use different background color set and different shade.
 CLASS z2ui5_cl_smpc_app_343 DEFINITION PUBLIC.
 

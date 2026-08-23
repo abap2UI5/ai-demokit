@@ -1,4 +1,4 @@
-" @keywords input sap.m inputcustomvaluehelpicon label selectdialog standardlistitem
+" @keywords input sap.m inputcustomvaluehelpicon verticallayout label selectdialog standardlistitem
 " @summary This example shows the usage of a custom value help icon instead of the default one.
 CLASS z2ui5_cl_smpc_app_510 DEFINITION PUBLIC.
 

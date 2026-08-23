@@ -1,4 +1,4 @@
-" @keywords tokenizer sap.m tokenizermultiline text token
+" @keywords tokenizer sap.m tokenizermultiline verticallayout text token
 " @summary Tokenizer with Multi-line support and Clear All button
 CLASS z2ui5_cl_smpc_app_432 DEFINITION PUBLIC.
 

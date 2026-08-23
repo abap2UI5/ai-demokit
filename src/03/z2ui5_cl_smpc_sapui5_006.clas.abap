@@ -1,4 +1,4 @@
-" @keywords processflow shell
+" @keywords processflow shell processflownode processflowlaneheader
 " @summary sap.suite.ui.commons.ProcessFlow expressed in abap2UI5 - a SAPUI5-only control, so the demo kit original is outside OpenUI5 and this is orientation rather than a 1:1 port.
 "! <p class="shorttext">sap.suite.ui.commons - ProcessFlow</p>
 "!

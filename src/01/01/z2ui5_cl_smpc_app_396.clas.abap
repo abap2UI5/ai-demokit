@@ -1,4 +1,4 @@
-" @keywords overflowtoolbar overflow toolbar sap.m toolbaralignment messagestrip button toolbarspacer checkbox radiobutton input
+" @keywords overflowtoolbar overflow toolbar sap.m toolbaralignment invisibletext messagestrip button toolbarspacer checkbox radiobutton input
 " @summary OverflowToolbar and Toolbar are often used for left/right alignment. This is easily achieved with ToolbarSpacer.
 CLASS z2ui5_cl_smpc_app_396 DEFINITION PUBLIC.
 

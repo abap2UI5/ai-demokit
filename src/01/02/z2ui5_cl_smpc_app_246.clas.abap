@@ -1,4 +1,4 @@
-" @keywords fileuploader file uploader sap.ui.unified fileuploadercomplex button
+" @keywords fileuploader file uploader sap.ui.unified fileuploadercomplex html verticallayout fileuploaderparameter button
 " @summary File Uploader Example with Parameters
 CLASS z2ui5_cl_smpc_app_246 DEFINITION PUBLIC.
 

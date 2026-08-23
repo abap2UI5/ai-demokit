@@ -1,4 +1,4 @@
-" @keywords form sap.ui.layout.form form354widedual bar button vbox text input select
+" @keywords form sap.ui.layout.form form354widedual bar button vbox title responsivegridlayout formcontainer formelement text input
 " @summary Form with two groups with long labels and fields in a fullscreen app.
 CLASS z2ui5_cl_smpc_app_314 DEFINITION PUBLIC.
 

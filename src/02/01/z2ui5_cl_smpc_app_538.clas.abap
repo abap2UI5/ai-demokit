@@ -1,4 +1,4 @@
-" @keywords planningcalendar planning calendar sap.m planningcalendarmulti vbox title planningcalendarrow
+" @keywords planningcalendar planning calendar sap.m planningcalendarmulti vbox title planningcalendarrow calendarappointment
 " @summary PlanningCalendar with multiple row selection. No interval headers are displayed. On click on an interval a new appointment is created.
 CLASS z2ui5_cl_smpc_app_538 DEFINITION PUBLIC.
 

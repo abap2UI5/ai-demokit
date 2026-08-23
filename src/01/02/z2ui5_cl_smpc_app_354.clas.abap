@@ -1,4 +1,4 @@
-" @keywords table sap.ui.table filtering column
+" @keywords table sap.ui.table filtering overflowtoolbar title toolbarspacer togglebutton button toolbarseparator searchfield column label
 " @summary Example showing the different facets of filtering within a table
 CLASS z2ui5_cl_smpc_app_354 DEFINITION PUBLIC.
 

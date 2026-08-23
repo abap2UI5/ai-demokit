@@ -1,4 +1,4 @@
-" @keywords input sap.m inputsuggestionsopensearch label
+" @keywords input sap.m inputsuggestionsopensearch verticallayout label item
 " @summary If you need to use an Open Search Provider (OSP) to supply possible values, you can do this with the Input control's suggest event, and build the suggestionItems dynamically according to the results of the Open Search call.
 CLASS z2ui5_cl_smpc_app_509 DEFINITION PUBLIC.
 

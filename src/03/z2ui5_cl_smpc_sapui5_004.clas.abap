@@ -1,4 +1,4 @@
-" @keywords radialmicrochart shell link
+" @keywords radialmicrochart shell tabcontainer tab grid link verticallayout horizontallayout
 " @summary sap.suite.ui.microchart.RadialMicroChart expressed in abap2UI5 - a SAPUI5-only control, so the demo kit original is outside OpenUI5 and this is orientation rather than a 1:1 port.
 "! <p class="shorttext">sap.suite.ui.microchart - RadialMicroChart</p>
 "!

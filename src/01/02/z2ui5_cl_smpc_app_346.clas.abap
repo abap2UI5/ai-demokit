@@ -1,4 +1,4 @@
-" @keywords cssgrid sap.ui.layout.cssgrid gridautorows panel togglebutton overflowtoolbar title text label vbox toolbar
+" @keywords cssgrid sap.ui.layout.cssgrid gridautorows html panel togglebutton overflowtoolbar title text simpleform label vbox
 " @summary Example of setting gridAutoRows and gridAutoColumns properties.
 CLASS z2ui5_cl_smpc_app_346 DEFINITION PUBLIC.
 

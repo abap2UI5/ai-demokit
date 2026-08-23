@@ -1,4 +1,4 @@
-" @keywords input sap.m inputsuggestionsdynamic label
+" @keywords input sap.m inputsuggestionsdynamic verticallayout label item
 " @summary With the Input control's suggest event, you can handle the suggestionItems yourself dynamically.
 CLASS z2ui5_cl_smpc_app_473 DEFINITION PUBLIC.
 

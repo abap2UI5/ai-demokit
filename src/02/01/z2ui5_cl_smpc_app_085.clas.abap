@@ -1,4 +1,4 @@
-" @keywords tokenizer sap.m tokens editable delete input button checkbox token label
+" @keywords tokenizer sap.m tokens editable delete horizontallayout input button checkbox verticallayout token label
 " @summary Basic Tokenizer with tokens
 CLASS z2ui5_cl_smpc_app_085 DEFINITION PUBLIC.
 

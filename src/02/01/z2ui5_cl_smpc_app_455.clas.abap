@@ -1,4 +1,4 @@
-" @keywords combobox combo box sap.m comboboxclearicon
+" @keywords combobox combo box sap.m comboboxclearicon item
 " @summary The combo box control can show 'clear' icon, which when pressed will remove the user's input and selected key.
 CLASS z2ui5_cl_smpc_app_455 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords sidenavigation side navigation sap.tnt groups vbox button
+" @keywords sidenavigation side navigation sap.tnt groups vbox button navigationlist navigationlistitem navigationlistgroup
 " @summary SideNavigation in container with fixed width.
 CLASS z2ui5_cl_smpc_app_128 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords input sap.m inputdescription
+" @keywords input sap.m inputdescription verticallayout invisibletext
 " @summary This sample illustrates the usage of the description with input fields, e.g. description for units of measurements and currencies.
 CLASS z2ui5_cl_smpc_app_367 DEFINITION PUBLIC.
 

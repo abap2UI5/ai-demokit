@@ -1,4 +1,4 @@
-" @keywords dialog sap.m dialogwithmessagepopover button label input select toolbar messagepopover messageitem toolbarspacer
+" @keywords dialog sap.m dialogwithmessagepopover button simpleform title label input columnelementdata select item toolbar
 " @summary Dialog with custom footer and support for message popover.
 CLASS z2ui5_cl_smpc_app_562 DEFINITION PUBLIC.
 

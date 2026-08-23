@@ -1,4 +1,4 @@
-" @keywords input sap.m inputchecked label button
+" @keywords input sap.m inputchecked verticallayout label button
 " @summary Input checks are handled via the validation of the data binding. In this example there are two inputs that are validated (a) while the user types and (b) when the user continues the process.
 CLASS z2ui5_cl_smpc_app_622 DEFINITION PUBLIC.
 

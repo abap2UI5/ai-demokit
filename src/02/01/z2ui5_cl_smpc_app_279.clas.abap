@@ -1,4 +1,4 @@
-" @keywords image sap.m imageerrorwithillustration vbox button flexitemdata illustratedmessage
+" @keywords image sap.m imageerrorwithillustration verticallayout grid vbox button flexitemdata illustratedmessage
 " @summary Handle errors using the sap.m.IllustratedMessage with the error event.
 CLASS z2ui5_cl_smpc_app_279 DEFINITION PUBLIC.
 

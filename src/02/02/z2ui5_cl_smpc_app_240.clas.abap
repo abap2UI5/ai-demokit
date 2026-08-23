@@ -1,4 +1,4 @@
-" @keywords calendarlegend calendar legend sap.ui.unified calendarlegendnavigation
+" @keywords calendarlegend calendar legend sap.ui.unified calendarlegendnavigation html verticallayout datetyperange calendarlegenditem
 " @summary An example of adding navigatable legend to the calendar.
 CLASS z2ui5_cl_smpc_app_240 DEFINITION PUBLIC.
 

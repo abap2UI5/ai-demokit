@@ -1,4 +1,4 @@
-" @keywords objectstatus object status sap.m text semantic states label table column columnlistitem dialog
+" @keywords objectstatus object status sap.m text semantic states verticallayout blocklayout blocklayoutrow blocklayoutcell label
 " @summary The object status is a small building block representing a status with a semantic color.
 CLASS z2ui5_cl_smpc_app_042 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords flexbox flex box sap.m flexboxsizeadjustments vbox panel button flexitemdata
+" @keywords flexbox flex box sap.m flexboxsizeadjustments html vbox panel button flexitemdata
 " @summary Automatic size adjustments can be achieved for Flex Items with the use of Flex Item Data settings on the contained controls.
 CLASS z2ui5_cl_smpc_app_514 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords flexiblecolumnlayout flexible column layout sap.f flexiblecolumnlayoutwithtwocolumnstart title table overflowtoolbar toolbarspacer searchfield overflowtoolbarbutton
+" @keywords flexiblecolumnlayout flexible column layout sap.f flexiblecolumnlayoutwithtwocolumnstart dynamicpage dynamicpagetitle title table overflowtoolbar toolbarspacer
 " @summary Flexible Column Layout as an app with routing that starts with two initial columns.
 CLASS z2ui5_cl_smpc_app_580 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords menu sap.ui.unified menuitemeventing button
+" @keywords menu sap.ui.unified menuitemeventing horizontallayout button menuitem menutextfielditem
 " @summary Menu with Item Eventing
 CLASS z2ui5_cl_smpc_app_227 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords card sap.ui.integration.widgets cardsloading label input button
+" @keywords card sap.ui.integration.widgets cardsloading simpleform label input button gridcontainer gridcontaineritemlayoutdata
 " @summary Different types of cards types and their loading placeholder
 CLASS z2ui5_cl_smpc_app_341 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords popover sap.m popoverwithinarea button vbox flexitemdata flexbox image list standardlistitem
+" @keywords popover sap.m popoverwithinarea horizontallayout button vbox flexitemdata flexbox image list standardlistitem
 " @summary Within area of sap.ui.core.Popup determines where all popups (including popovers) are positioned.
 CLASS z2ui5_cl_smpc_app_285 DEFINITION PUBLIC.
 

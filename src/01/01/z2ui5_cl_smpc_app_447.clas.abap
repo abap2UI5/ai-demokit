@@ -1,4 +1,4 @@
-" @keywords messagebox message box sap.m messageboxinfo button
+" @keywords messagebox message box sap.m messageboxinfo verticallayout button
 " @summary MessageBox with the option to display detailed information.
 CLASS z2ui5_cl_smpc_app_447 DEFINITION PUBLIC.
 

@@ -1,4 +1,4 @@
-" @keywords input sap.m inputsuggestionscustomfilter label
+" @keywords input sap.m inputsuggestionscustomfilter verticallayout label item
 " @summary The default filtering for the suggestionItems aggregation uses a 'begins with' style operator. You can override this with your own custom filter function using the Input control's setFilterFunction method.
 CLASS z2ui5_cl_smpc_app_460 DEFINITION PUBLIC.
 

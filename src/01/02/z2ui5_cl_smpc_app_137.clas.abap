@@ -1,4 +1,4 @@
-" @keywords table sap.ui.table multi-level column headers
+" @keywords table sap.ui.table multi-level column headers overflowtoolbar title label text input
 " @summary Example for multi-header of table
 CLASS z2ui5_cl_smpc_app_137 DEFINITION PUBLIC.
 

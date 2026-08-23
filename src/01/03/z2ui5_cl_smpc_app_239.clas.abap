@@ -1,4 +1,4 @@
-" @keywords objectpageheaderactionbutton object header action button sap.uxap objectpageheaderactionbuttons objectpagelayout objectpagedynamicheadertitle objectpagesection objectpagesubsection
+" @keywords objectpageheaderactionbutton object header action button sap.uxap objectpageheaderactionbuttons objectpagelayout objectpagedynamicheadertitle breadcrumbs link title
 " @summary This example demonstrates ObjectPage with ObjectPageHeaderActionButtons and a GenericTag in the header.
 CLASS z2ui5_cl_smpc_app_239 DEFINITION PUBLIC.
 

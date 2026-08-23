@@ -1,4 +1,4 @@
-" @keywords singleplanningcalendar single planning calendar sap.m singleplanningcalendarweeknumbering vbox hbox label select singleplanningcalendardayview singleplanningcalendarworkweekview
+" @keywords singleplanningcalendar single planning calendar sap.m singleplanningcalendarweeknumbering vbox hbox label select listitem item
 " @summary This sample demonstrates how the SinglePlanningCalendar control can be used width different week numbering (only Week and Month views are affected)
 CLASS z2ui5_cl_smpc_app_550 DEFINITION PUBLIC.
 

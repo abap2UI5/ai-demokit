@@ -1,4 +1,4 @@
-" @keywords multicombobox multi combo box sap.m
+" @keywords multicombobox multi combo box sap.m verticallayout item
 " @summary Choose one or more out of multiple options with the MultiComboBox control.
 CLASS z2ui5_cl_smpc_app_490 DEFINITION PUBLIC.
 

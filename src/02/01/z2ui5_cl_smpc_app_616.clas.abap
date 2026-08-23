@@ -1,4 +1,4 @@
-" @keywords combobox combo box sap.m comboboxvaluestate formattedtext link
+" @keywords combobox combo box sap.m comboboxvaluestate verticallayout listitem formattedtext link
 " @summary The combo box can show different value states.
 CLASS z2ui5_cl_smpc_app_616 DEFINITION PUBLIC.
 

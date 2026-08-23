@@ -1,4 +1,4 @@
-" @keywords flexiblecolumnlayout flexible column layout sap.f flexiblecolumnlayoutlandmarkinfo button vbox
+" @keywords flexiblecolumnlayout flexible column layout sap.f flexiblecolumnlayoutlandmarkinfo flexiblecolumnlayoutaccessiblelandmarkinfo button vbox
 " @summary Flexible Column Layout where the first and the last columns have custom Landmark Info
 CLASS z2ui5_cl_smpc_app_449 DEFINITION PUBLIC.
 

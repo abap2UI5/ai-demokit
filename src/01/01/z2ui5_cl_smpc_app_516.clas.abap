@@ -1,4 +1,4 @@
-" @keywords segmentedbutton segmented button sap.m segmentedbuttonvsd viewsettingsdialog viewsettingsitem viewsettingsfilteritem
+" @keywords segmentedbutton segmented button sap.m segmentedbuttonvsd verticallayout viewsettingsdialog viewsettingsitem viewsettingsfilteritem
 " @summary Segmented Button used in View Settings Dialog component
 CLASS z2ui5_cl_smpc_app_516 DEFINITION PUBLIC.
 

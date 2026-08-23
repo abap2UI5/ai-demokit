@@ -1,4 +1,4 @@
-" @keywords grid sap.ui.layout gridproperties messagestrip title formattedtext slider
+" @keywords grid sap.ui.layout gridproperties html verticallayout messagestrip title formattedtext slider
 " @summary You can see how the different properties of the sap.ui.layout.Grid affect it's final appearance.
 CLASS z2ui5_cl_smpc_app_345 DEFINITION PUBLIC.
 

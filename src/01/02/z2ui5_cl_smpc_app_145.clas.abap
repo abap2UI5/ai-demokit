@@ -1,4 +1,4 @@
-" @keywords cssgrid sap.ui.layout.cssgrid css grid autoflow togglebutton panel overflowtoolbar title radiobuttongroup radiobutton vbox
+" @keywords cssgrid sap.ui.layout.cssgrid css grid autoflow html togglebutton panel overflowtoolbar title radiobuttongroup radiobutton
 " @summary Example of setting the gridAutoFlow property.
 CLASS z2ui5_cl_smpc_app_145 DEFINITION PUBLIC.
 

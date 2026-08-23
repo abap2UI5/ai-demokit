@@ -1,4 +1,4 @@
-" @keywords containerpadding container padding sap.ui.core containerpaddingandmargin messagestrip scrollcontainer image flexitemdata
+" @keywords containerpadding container padding sap.ui.core containerpaddingandmargin messagestrip scrollcontainer horizontallayout image flexitemdata
 " @summary By combining the margin and padding concepts you can flexibly design your application layout without having to write any custom CSS.
 CLASS z2ui5_cl_smpc_app_433 DEFINITION PUBLIC.
 

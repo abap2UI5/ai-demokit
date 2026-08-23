@@ -1,4 +1,4 @@
-" @keywords gridlist grid list sap.f gridlistbreakpoints slider panel toolbar title vbox flexitemdata label
+" @keywords gridlist grid list sap.f gridlistbreakpoints slider panel toolbar title gridresponsivelayout gridsettings gridlistitem
 " @summary This sample illustrates how to configure the responsive settings for different container sizes.
 CLASS z2ui5_cl_smpc_app_213 DEFINITION PUBLIC.
 

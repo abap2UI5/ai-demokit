@@ -1,4 +1,4 @@
-" @keywords navcontainer nav container sap.m vbox overflowtoolbar button hbox flexitemdata select
+" @keywords navcontainer nav container sap.m html vbox overflowtoolbar button hbox flexitemdata customdata select
 " @summary The Nav Container stacks multiple pages and offers an API to switch between them with some animation. Typically application developers would use the App control which inherits from NavContainer.
 CLASS z2ui5_cl_smpc_app_242 DEFINITION PUBLIC.
 

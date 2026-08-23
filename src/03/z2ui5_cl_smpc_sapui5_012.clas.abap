@@ -1,4 +1,4 @@
-" @keywords ui5.controls.vizframe shell title button combobox
+" @keywords ui5.controls.vizframe shell dynamicpage dynamicpagetitle title dynamicpageheader button filterbar filtergroupitem combobox item vizframe
 " @summary sap.viz.ui5.controls.VizFrame expressed in abap2UI5 - a SAPUI5-only control, so the demo kit original is outside OpenUI5 and this is orientation rather than a 1:1 port.
 "! <p class="shorttext">sap.viz - ui5.controls.VizFrame</p>
 "!

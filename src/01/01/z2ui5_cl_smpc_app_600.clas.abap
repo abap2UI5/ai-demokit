@@ -1,4 +1,4 @@
-" @keywords tree sap.m treednd standardtreeitem
+" @keywords tree sap.m treednd dragdropinfo standardtreeitem
 " @summary This example shows drag-and-drop capability.
 CLASS z2ui5_cl_smpc_app_600 DEFINITION PUBLIC.
 

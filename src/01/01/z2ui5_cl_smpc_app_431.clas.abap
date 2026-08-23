@@ -1,4 +1,4 @@
-" @keywords containerpadding container padding sap.ui.core containerresponsivepadding messagestrip panel toolbar text toolbarspacer button image
+" @keywords containerpadding container padding sap.ui.core containerresponsivepadding messagestrip panel toolbar text toolbarspacer button horizontallayout
 " @summary Apply the CSS class 'sapUiResponsiveContentPadding' on a UI5 container control to add a responsive padding based on the screen size around the container content area.
 CLASS z2ui5_cl_smpc_app_431 DEFINITION PUBLIC.
 

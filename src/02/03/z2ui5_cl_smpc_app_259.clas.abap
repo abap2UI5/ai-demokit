@@ -1,4 +1,4 @@
-" @keywords objectpagedynamicheadertitle object dynamic header title sap.uxap objectpageprogressratingindicators objectpagelayout objectpagesection objectpagesubsection
+" @keywords objectpagedynamicheadertitle object dynamic header title sap.uxap objectpageprogressratingindicators objectpagelayout hbox vbox avatar label
 " @summary ObjectPage sample with header content arranged using containers, called facets, ProgressIndicator and RatingIndicator.
 CLASS z2ui5_cl_smpc_app_259 DEFINITION PUBLIC.
 

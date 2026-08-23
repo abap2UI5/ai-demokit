@@ -1,4 +1,4 @@
-" @keywords dynamicsidecontent dynamic side content sap.ui.layout dynamicsidecontentposition title text toolbar button slider
+" @keywords dynamicsidecontent dynamic side content sap.ui.layout dynamicsidecontentposition html title text toolbar button slider
 " @summary The side content is positioned on the left side of the main content in left-to-right mode and on the right side of the main content in right-to-left mode.
 CLASS z2ui5_cl_smpc_app_344 DEFINITION PUBLIC.
 

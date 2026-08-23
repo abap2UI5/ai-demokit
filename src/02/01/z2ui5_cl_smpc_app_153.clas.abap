@@ -1,4 +1,4 @@
-" @keywords maskinput mask input sap.m rules app label maskinputrule
+" @keywords maskinput mask input sap.m rules app simpleform label maskinputrule
 " @summary The sap.m.MaskInput control allows users to easily enter data in a certain format and in a fixed-width input (for example: date, time, credit card number, and others).
 CLASS z2ui5_cl_smpc_app_153 DEFINITION PUBLIC.
 

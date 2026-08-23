@@ -1,4 +1,4 @@
-" @keywords shellbar shell bar sap.f shellbarwithsearch searchmanager
+" @keywords shellbar shell bar sap.f shellbarwithsearch menu menuitem avatar searchmanager suggestionitem
 " @summary Shell Bar example with configured search functionality.
 CLASS z2ui5_cl_smpc_app_218 DEFINITION PUBLIC.
 

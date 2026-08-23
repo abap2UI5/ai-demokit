@@ -1,4 +1,4 @@
-" @keywords sap.m pagelistreporttoolbar vbox label text flexitemdata overflowtoolbar title toolbarspacer searchfield segmentedbutton segmentedbuttonitem
+" @keywords sap.m pagelistreporttoolbar vbox simpleform title label text flexitemdata analyticaltable auto overflowtoolbar toolbarspacer
 " @summary This page shows flexible sizing with a Toolbar. The upper part extends with its content, but doesn't react to viewport changes. The lower part reacts to the viewport size. The table inside takes the available space.
 CLASS z2ui5_cl_smpc_app_405 DEFINITION PUBLIC.
 
