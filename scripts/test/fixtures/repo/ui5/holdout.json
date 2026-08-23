@@ -1,0 +1,6 @@
+{
+ "comment": "Fixture hold-out set: FixtureHeld is in scope and unported ON PURPOSE, so the golden covers the reserved column, the note under the table and the api.md marker. FixtureOpen stays a real backlog row so both states are exercised.",
+ "samples": [
+  "sap.m.sample.FixtureHeld"
+ ]
+}

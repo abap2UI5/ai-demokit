@@ -7,6 +7,10 @@ release's `api.json` (empty = not deprecated), **Sample** links the
 source in the [OpenUI5 repository](https://github.com/SAP/openui5) and
 its ↗ opens the live fullscreen sample, **ABAP** is the generated class.
 `—` = in scope, not ported yet — those rows are the backlog.
+`⊘` = in scope and deliberately **reserved**: the sample belongs to the
+hold-out set (`ui5/holdout.json`) that measures the generator, so it is
+kept unported on purpose and is not part of the backlog — see the
+[README](README.md#coverage).
 `✗` = **out of scope**: the control is deprecated or newer than UI5 1.71
 (not legacy-free ready / not 1.71-compatible), or the sample is not an app
 view at all (UI5 test infrastructure, Component routing, view-templating and
@@ -23,3 +27,4 @@ _Control metadata (Since, deprecation) from the OpenUI5 **1.152.0** `api.json`._
 | sap.m | [Button](https://sdk.openui5.org/api/sap.m.Button) |  |  | [FixtureOpen](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/FixtureOpen) [↗](https://sdk.openui5.org/resources/sap/ui/documentation/sdk/index.html?sap-ui-xx-sample-id=sap.m.sample.FixtureOpen&sap-ui-xx-sample-lib=sap.m) | — |
 | sap.m | [List](https://sdk.openui5.org/api/sap.m.List) | 1.16 |  | [FixtureBad](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/FixtureBad) [↗](https://sdk.openui5.org/resources/sap/ui/documentation/sdk/index.html?sap-ui-xx-sample-id=sap.m.sample.FixtureBad&sap-ui-xx-sample-lib=sap.m) | [z2ui5_cl_smpc_app_002](https://github.com/abap2UI5/samples-controls/blob/main/src/01/z2ui5_cl_smpc_app_002.clas.abap) |
 | sap.m | [Page](https://sdk.openui5.org/api/sap.m.Page) | 1.12 |  | [FixtureGood](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/FixtureGood) [↗](https://sdk.openui5.org/resources/sap/ui/documentation/sdk/index.html?sap-ui-xx-sample-id=sap.m.sample.FixtureGood&sap-ui-xx-sample-lib=sap.m) | [z2ui5_cl_smpc_app_001](https://github.com/abap2UI5/samples-controls/blob/main/src/01/z2ui5_cl_smpc_app_001.clas.abap) |
+| sap.m | [Text](https://sdk.openui5.org/api/sap.m.Text) |  |  | [FixtureHeld](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/FixtureHeld) [↗](https://sdk.openui5.org/resources/sap/ui/documentation/sdk/index.html?sap-ui-xx-sample-id=sap.m.sample.FixtureHeld&sap-ui-xx-sample-lib=sap.m) | ⊘ |
