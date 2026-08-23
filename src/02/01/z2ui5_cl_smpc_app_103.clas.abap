@@ -367,6 +367,13 @@ CLASS z2ui5_cl_smpc_app_103 IMPLEMENTATION.
           ENDLOOP.
           client->message_toast_display( |You have chosen { sel_names }| ).
         ENDIF.
+        " ... and the last line of onDialogClose:
+        " oEvent.getSource( ).getBinding( 'items' ).filter( [] ) - so the
+        " search a user typed is gone the next time the dialog opens. A
+        " binding_call filter with no values is exactly that clear (the
+        " client leaves the filter empty when value1 and value2 both are)
+        client->follow_up_action( val   = client->cs_event-binding_call
+                                  t_arg = VALUE #( ( `mySelectDialog` ) ( `items` ) ( `filter` ) ) ).
 
       WHEN `VH_CLOSE`.
         " onValueHelpDialogClose: the picked title lands in the input, and a

@@ -5447,17 +5447,20 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` expression grammar has no loop - the loop half is right and the conclusion was not: the frontend marshals a control-valued event parameter into its public properties (Lib.normalizeEventArgs), so the` &&
                ` ARRAY travels whole and the app never needs a loop in the expression. The wire carries ${$parameters>/selectedItems} - the selected StandardListItems, whose title is the bound Name - instead of`.
     lv_text1 = lv_text1 && ` selectedContexts, which is NOT a control and would be handed to JSON.stringify untouched, where a Context's model/binding graph is circular and would take the whole round-trip body down. on_event` &&
-               ` composes 'You have chosen A, B, C' and, for the empty case that cancel also produces, 'No new item was selected.' - both texts exactly as onDialogClose builds them. // NOTE: The StandardListItem icon` &&
-               ` binds ProductPicUrl, which is derived in ABAP from the product id (the mock's test-resources/<id>.jpg) built from a shared base pointing at the OpenUI5 host, like app 006's image flattening. The full` &&
-               ` 123-row /ProductCollection is inlined. // NOTE: The per-button dialog configuration (multi/growing/remember/clear/confirm text/draggable/resizable), the client-side search filter and the value-help` &&
-               ` selection need an in-system check; machine gates only verify the views are valid. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Show Select Dialog' popup` &&
-               ` opens with the 'Select Product' title; the per-button variants, search and copy-back remain unexercised. **e2e-verified 2026-08-04** (nightly e2e interaction,`.
-    lv_text1 = lv_text1 && ` meta/interactions/z2ui5_cl_smpc_app_103.mjs). // POST-1.71: sap.m.SelectDialog.searchPlaceholder (since 1.110) is kept 1:1 on the value-help dialog; needs UI5 >= 1.110. // NOTE: The sample's asset` &&
-               ` paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/...` &&
-               ` instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency: this rewrite is now declared by all 77 ports that do it - before that day 64 declared it and thirteen did not,` &&
-               ` which left a real difference asserted nowhere and gave every review sweep the same thing to re-find. // NOTE: The selectedItems payload is unmarshalled with z2ui5_cl_ajson, the framework's VENDORED` &&
-               ` ajson copy (src/00/01) - outside abap2UI5's released API (src/02), which the linter reports as non-released-api and which is waived on those two lines with an abap2ui5lint-disable-next-line naming` &&
-               ` the rule. Same reasoning and same waiver as app 298: there is no released JSON reader, and a sample class installed on its own cannot ship its own ajson copy. Revisit when the framework releases one.`.
+               ` composes 'You have chosen A, B, C' and, for the empty case that cancel also produces, 'No new item was selected.' - both texts exactly as onDialogClose builds them. Its last line came with it and had` &&
+               ` been missing undeclared: the handler ends with oEvent.getSource().getBinding('items').filter([]), so a search typed into the dialog is cleared when it closes and the next open starts from the full` &&
+               ` list. The port issues a binding_call filter with no values, which is that clear (source-verified in the framework's ControlCall.js: the positional filter form clears when value1 and value2 are both` &&
+               ` empty - 'the demo kit search pattern: an emptied search field'). // NOTE: The StandardListItem icon binds ProductPicUrl, which is derived in ABAP from the product id (the mock's` &&
+               ` test-resources/<id>.jpg) built from a shared base pointing at the OpenUI5 host, like app 006's image flattening. The full 123-row /ProductCollection is inlined. // NOTE: The per-button dialog`.
+    lv_text1 = lv_text1 && ` configuration (multi/growing/remember/clear/confirm text/draggable/resizable), the client-side search filter and the value-help selection need an in-system check; machine gates only verify the views` &&
+               ` are valid. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Show Select Dialog' popup opens with the 'Select Product' title; the per-button variants, search` &&
+               ` and copy-back remain unexercised. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_103.mjs). // POST-1.71: sap.m.SelectDialog.searchPlaceholder (since 1.110)` &&
+               ` is kept 1:1 on the value-help dialog; needs UI5 >= 1.110. // NOTE: The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no` &&
+               ` document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency: this rewrite is now declared`.
+    lv_text1 = lv_text1 && ` by all 77 ports that do it - before that day 64 declared it and thirteen did not, which left a real difference asserted nowhere and gave every review sweep the same thing to re-find. // NOTE: The` &&
+               ` selectedItems payload is unmarshalled with z2ui5_cl_ajson, the framework's VENDORED ajson copy (src/00/01) - outside abap2UI5's released API (src/02), which the linter reports as non-released-api and` &&
+               ` which is waived on those two lines with an abap2ui5lint-disable-next-line naming the rule. Same reasoning and same waiver as app 298: there is no released JSON reader, and a sample class installed on` &&
+               ` its own cannot ship its own ajson copy. Revisit when the framework releases one.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.SelectDialog`                    name = `SelectDialog`                                  class = `z2ui5_cl_smpc_app_103` path = `src/02/01/z2ui5_cl_smpc_app_103.clas.abap`
         score = 5
