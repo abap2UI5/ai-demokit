@@ -305,10 +305,10 @@ CLASS z2ui5_cl_smpc_app_546 IMPLEMENTATION.
     result = -1.
     IF last = abap_true.
       IF lines( parts ) >= 1.
-        result = CONV i( parts[ lines( parts ) ] ).
+        result = parts[ lines( parts ) ].
       ENDIF.
     ELSEIF lines( parts ) >= 2.
-      result = CONV i( parts[ 2 ] ).
+      result = parts[ 2 ].
     ENDIF.
 
   ENDMETHOD.

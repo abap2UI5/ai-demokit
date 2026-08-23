@@ -545,7 +545,7 @@ CLASS z2ui5_cl_smpc_app_534 IMPLEMENTATION.
       WHEN `APPLY_PATH`.
         " discardAndApplyPath discards the progress, resets the Select and
         " rewires the path the picked radio button spells out
-        path_index = CONV i( client->get_event_arg( ) ).
+        path_index = client->get_event_arg( ).
         client->follow_up_action( val   = client->cs_event-control_by_id
                                   t_arg = VALUE #( ( `BranchingWizard` ) ( `discardProgress` ) ( `A` ) ) ).
         branchingselectedstep = `A`.

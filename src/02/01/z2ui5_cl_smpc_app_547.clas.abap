@@ -350,8 +350,8 @@ CLASS z2ui5_cl_smpc_app_547 IMPLEMENTATION.
         ELSE.
           SPLIT path AT `/` INTO TABLE DATA(parts).
           DELETE parts WHERE table_line IS INITIAL.
-          sel_row   = CONV i( parts[ 2 ] ).
-          sel_index = CONV i( parts[ lines( parts ) ] ).
+          sel_row   = parts[ 2 ].
+          sel_index = parts[ lines( parts ) ].
           READ TABLE t_people INDEX sel_row + 1 INTO DATA(person).
           IF sy-subrc = 0 AND sel_index >= 0 AND sel_index < lines( person-t_appointments ).
             DATA(appointment) = person-t_appointments[ sel_index + 1 ].

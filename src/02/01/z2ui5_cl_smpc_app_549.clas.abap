@@ -483,7 +483,7 @@ CLASS z2ui5_cl_smpc_app_549 IMPLEMENTATION.
         ELSE.
           SPLIT path AT `/` INTO TABLE DATA(parts).
           DELETE parts WHERE table_line IS INITIAL.
-          sel_index = CONV i( parts[ lines( parts ) ] ).
+          sel_index = parts[ lines( parts ) ].
           IF sel_index >= 0 AND sel_index < lines( t_appointments ).
             DATA(appointment) = t_appointments[ sel_index + 1 ].
             sel_title   = appointment-title.
