@@ -75,6 +75,9 @@ CLASS z2ui5_cl_smpc_app_128 IMPLEMENTATION.
                         )->a( n = `text` v = `New`
                         )->tag( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text` v = `People`
+                            " POST_171: people-connected reached the icon font in 1.96 -
+                            " below that IconPool resolves nothing and the item renders
+                            " without an icon, silently
                             )->a( n = `icon` v = `sap-icon://people-connected`
                         )->ele( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text` v = `Building`

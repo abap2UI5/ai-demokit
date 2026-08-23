@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "sap.ui.table grid Table with multi-level column headers (multiLabels + headerSpan '3,2'/'2') and an extension OverflowToolbar. The 5 contact rows are inlined from the controller's JSON model; column templates bind {SUPPLIER}/{STREET}/{CITY}/{PHONE}/{OPENORDERS} 1:1."
+      "what": "sap.ui.table grid Table with multi-level column headers (multiLabels + headerSpan '3,2'/'2') and an extension OverflowToolbar. The 5 contact rows are inlined from the controller's JSON model; column templates bind {SUPPLIER}/{STREET}/{CITY}/{PHONE}/{OPENORDERS} 1:1. sortProperty/filterProperty carry the UPPER-CASED ABAP field names (SUPPLIER/STREET/CITY/PHONE), not the original's lowercase ones: abap2UI5 derives the model paths from the ABAP component names, which is why the cell bindings on the same columns read {SUPPLIER} etc. The port copied the original's lowercase paths until 2026-08-23, and Column.isSortableByMenu/isFilterableByMenu only need the property to be SET - so the menu entries were generated and then sorted and filtered on a path that resolves to undefined on every row: sorting a no-op, filtering empty. Same convention as app 357."
     }
   ]
 }

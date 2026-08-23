@@ -172,6 +172,14 @@ function makeExpect(errs) {
         await new Promise((r) => setTimeout(r, 250));
       }
     },
+    // numeric bound — a MEASURED value (a duration, a count computed in the
+    // page) that no locator matcher can express. app 147 needs it: only the
+    // LENGTH of the busy overlay's visible episode separates the port's wire
+    // from the framework's own per-round-trip show/hide.
+    async toBeAtLeast(n) {
+      const v = Number(locator);
+      if (!(v >= n)) throw new Error(`${label}: ${v} is below ${n}`);
+    },
     // negative form — a filter assertion needs it (the row that must be GONE).
     // Polls until the text is absent so an async re-filter is tolerated.
     async notToContainText(txt) {

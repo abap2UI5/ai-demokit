@@ -7,7 +7,6 @@ CLASS z2ui5_cl_smpc_app_136 DEFINITION PUBLIC.
 
     DATA prevent_expand   TYPE abap_bool.
     DATA prevent_collapse TYPE abap_bool.
-    DATA panel_expanded   TYPE abap_bool.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -38,6 +37,12 @@ CLASS z2ui5_cl_smpc_app_136 IMPLEMENTATION.
 
   METHOD view_display.
 
+    " (!expanded && preventCollapse) || (expanded && preventExpand) - the two
+    " Switch states are two-way bound, so the expression reads what the user
+    " last flipped, not what the last render happened to bake in
+    DATA(veto_expr) = `(!${$parameters>/expanded} && $` && client->_bind( prevent_collapse ) &&
+                      `) || (${$parameters>/expanded} && $` && client->_bind( prevent_expand ) && `)`.
+
     DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
@@ -51,18 +56,18 @@ CLASS z2ui5_cl_smpc_app_136 IMPLEMENTATION.
             )->ele( `content`
                 )->ele( n = `SidePanel` ns = `f`
                     )->a( n = `id`     v = `mySidePanel`
-                    " onToggle vetoes the NEXT toggle when the matching switch is on
-                    " (preventDefault) and resets that switch. The framework's veto flag
-                    " is baked into the wire at RENDER time - which is enough here,
-                    " because the direction of the next toggle is known: an expanded
-                    " panel can only collapse next. So the flag is the switch that
-                    " applies to that direction, and the round-trip re-bakes it
-                    )->a( n = `toggle` v = client->_event( val    = `TOGGLE`
-                                                           t_arg  = VALUE #( ( `${$parameters>/expanded}` ) )
-                                                           s_ctrl = VALUE #( check_prevent_default =
-                                                             COND #( WHEN panel_expanded = abap_true
-                                                                     THEN prevent_collapse
-                                                                     ELSE prevent_expand ) ) )
+                    " onToggle reads BOTH switch states when the event fires and vetoes
+                    " that firing (preventDefault). prevent_default_expr is the same
+                    " decision per firing: the direction comes out of the event itself,
+                    " so one wire covers both branches of the original handler. The
+                    " boolean check_prevent_default cannot: it is baked into the XML at
+                    " RENDER time, the Switches carry no event, and a flipped switch
+                    " therefore only reached the wire on the NEXT render - one toggle
+                    " too late (corrected 2026-08-23)
+                    )->a( n = `toggle` v = client->_event(
+                              val    = `TOGGLE`
+                              t_arg  = VALUE #( ( `${$parameters>/expanded}` ) )
+                              s_ctrl = VALUE #( prevent_default_expr = veto_expr ) )
 
                     )->ele( n = `mainContent` ns = `f`
                         )->tag( `Button`
@@ -155,7 +160,8 @@ CLASS z2ui5_cl_smpc_app_136 IMPLEMENTATION.
       " the event still reaches the backend when the veto fired (the framework
       " calls preventDefault synchronously and sends the event anyway), so the
       " branch is the original's: on a vetoed direction, toast and reset that
-      " switch; otherwise the panel really toggled and the new state is kept
+      " switch; otherwise the control has already toggled itself and there is
+      " nothing for the backend to do
       DATA(expanded) = xsdbool( client->get_event_arg( ) = abap_true ).
       IF expanded = abap_false AND prevent_collapse = abap_true.
         prevent_collapse = abap_false.
@@ -163,12 +169,12 @@ CLASS z2ui5_cl_smpc_app_136 IMPLEMENTATION.
       ELSEIF expanded = abap_true AND prevent_expand = abap_true.
         prevent_expand = abap_false.
         client->message_toast_display( `I am prevented EXPAND event` ).
-      ELSE.
-        panel_expanded = expanded.
       ENDIF.
-      " re-render: the veto flag is baked into the wire, so it has to be
-      " rebuilt from the switch states the round-trip just brought back
-      view_display( ).
+      " deliberately NO view_display( ): the panel's expanded state and its
+      " selectedItem live in the control, not in the model, so a re-render
+      " would hand back a fresh tree with the side content collapsed again -
+      " the sample's whole interaction. The switch reset travels with the
+      " automatic model push
     ENDIF.
 
   ENDMETHOD.

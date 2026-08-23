@@ -62,11 +62,14 @@ CLASS z2ui5_cl_smpc_app_139 IMPLEMENTATION.
 
         " the sample's own ../style.css (shared by the sap.ui.unified samples and
         " listed in this sample's manifest) - the view carries the class and the
-        " rule behind it has to come with it. \{ \} escaped: the XMLView parser
-        " reads an unescaped brace as a binding
+        " rule behind it has to come with it. .sapUiCal is not an author class:
+        " CalendarRenderer writes it on the Calendar's own root, so the phone
+        " rule of the sheet does apply to this view. \{ \} escaped: the XMLView
+        " parser reads an unescaped brace as a binding
         )->tag( n = `HTML` ns = `core`
             )->a( n = `content` v = `<style>.viewPadding\{padding:1rem\}` &&
                                     `.sap-phone .viewPadding\{padding:0rem\}` &&
+                                    `.sap-phone .sapUiCal\{position:relative\}` &&
                                     `.labelMarginLeft\{margin:1rem\}</style>`
         )->ele( n = `VerticalLayout` ns = `l`
 
@@ -77,7 +80,9 @@ CLASS z2ui5_cl_smpc_app_139 IMPLEMENTATION.
                 " access and chained calls resolve there (measured with
                 " scripts/probes/event-arg-expression-probe.mjs). The LOCAL date parts
                 " travel, not toISOString( ), which would shift the day east of
-                " Greenwich; the length guard reproduces the deselect case
+                " Greenwich. The length guard is defensive only - in single-selection
+                " mode Month._selectDay never leaves selectedDates empty, and the
+                " deselect path belongs to the sibling CalendarDateDeselection sample
                 )->a( n = `select` v = client->_event( val   = `CAL_SELECT`
                                                        t_arg = VALUE #(
                                                          ( `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getFullYear() : 0` )

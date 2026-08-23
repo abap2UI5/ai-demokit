@@ -1411,16 +1411,18 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` 'GridList with mode ' + key on a backend round-trip. The GridList delete / selectionChange and the GridListItem press / detailPress are wired to client-side MessageToasts (the original toasted the` &&
                ` affected item's runtime id). mode/headerText/selectedKey carry bindings the original set statically. **e2e-verified 2026-08-21** (the 2026-07-30 stamp was WRONG: the interaction's mode leg was` &&
                ` shadowed by a duplicate key in the old in-file INTERACTIONS map and never ran once - found by the review sweep, and the two legs are merged into one module now) (transpiled-framework interaction,` &&
-               ` scripts/e2e-smoke.mjs): selecting 'MultiSelect' round-trips the two-way bound mode and the list renders checkboxes. // NOTE: The 11 product rows are inlined from the sample's model/data.json. Fields` &&
-               ` the original JSON omits are given their UI5 defaults so the bound enum-ish properties stay valid: GridListItem.type -> 'Inactive' (8 rows), highlight/Status -> 'None' (5 rows). Both render`.
-    lv_text1 = lv_text1 && ` identically to the original's undefined values; structural-diff compares only binding paths, not data. // NOTE: the four MessageToast handlers are reproduced as roundtrip-free CLIENT-COMPOSED toasts` &&
-               ` (follow_up_action cs_event-control_global MESSAGE_TOAST.show with a {N} template): onSelectionChange as '{0?Selected:Unselected} item with ID {1}' over ${$parameters>/selected} and` &&
-               ` ${$parameters>/listItem}.getId(), onDelete as 'Delete item with ID {0}', and onDetailPress/onPress as 'Request details for item with ID {0}' / 'Pressed item with ID {0}' over $event.oSource.sId.` &&
-               ` **Corrected 2026-08-01** (faked-event-value audit): all four used to toast a CONSTANT ('Selection changed', 'Delete item', 'Request details', 'Pressed item') and dropped the item identity the` &&
-               ` original shows. The ids are the runtime UI5 ids, exactly as in the original. // NOTE: The sample's own main.css is archived and injected since 2026-08-21. The view carries class="imageDisplayBlock"` &&
-               ` and the rule behind it (.imageDisplayBlock{display:block}) was missing entirely - the class name rendered with nothing behind it, which is exactly the gap apps 122/124 had and closed: 'a sample whose`.
-    lv_text1 = lv_text1 && ` stylesheet is not in ui5/ is an archive gap to close, not a reason to drop the CSS'. main.css now sits in ui5/sap.f/GridListModes/ (closing the AGENTS section 4 archive gap) and reaches the view` &&
-               ` through a core:HTML style leaf.`.
+               ` scripts/e2e-smoke.mjs): selecting 'SingleSelectLeft' round-trips the two-way bound mode: the GridList's mode follows and the header text the BACKEND composes ('GridList with mode SingleSelectLeft')` &&
+               ` appears, which nothing but a completed round-trip can produce. Until 2026-08-23 the leg clicked 'MultiSelect' - the mode the port already loads in - and SegmentedButton returns early when the pressed`.
+    lv_text1 = lv_text1 && ` segment is the selected one, so no selectionChange fired and both assertions were already true at page load: the second stamp was as vacuous as the first, for a different reason. // NOTE: The 11` &&
+               ` product rows are inlined from the sample's model/data.json. Fields the original JSON omits are given their UI5 defaults so the bound enum-ish properties stay valid: GridListItem.type -> 'Inactive' (8` &&
+               ` rows), highlight/Status -> 'None' (5 rows). Both render identically to the original's undefined values; structural-diff compares only binding paths, not data. // NOTE: the four MessageToast handlers` &&
+               ` are reproduced as roundtrip-free CLIENT-COMPOSED toasts (follow_up_action cs_event-control_global MESSAGE_TOAST.show with a {N} template): onSelectionChange as '{0?Selected:Unselected} item with ID` &&
+               ` {1}' over ${$parameters>/selected} and ${$parameters>/listItem}.getId(), onDelete as 'Delete item with ID {0}', and onDetailPress/onPress as 'Request details for item with ID {0}' / 'Pressed item` &&
+               ` with ID {0}' over $event.oSource.sId. **Corrected 2026-08-01** (faked-event-value audit): all four used to toast a CONSTANT ('Selection changed', 'Delete item', 'Request details', 'Pressed item') and`.
+    lv_text1 = lv_text1 && ` dropped the item identity the original shows. The ids are the runtime UI5 ids, exactly as in the original. // NOTE: The sample's own main.css is archived and injected since 2026-08-21. The view` &&
+               ` carries class="imageDisplayBlock" and the rule behind it (.imageDisplayBlock{display:block}) was missing entirely - the class name rendered with nothing behind it, which is exactly the gap apps` &&
+               ` 122/124 had and closed: 'a sample whose stylesheet is not in ui5/ is an archive gap to close, not a reason to drop the CSS'. main.css now sits in ui5/sap.f/GridListModes/ (closing the AGENTS section` &&
+               ` 4 archive gap) and reaches the view through a core:HTML style leaf.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListModes`                                 class = `z2ui5_cl_smpc_app_133` path = `src/01/04/z2ui5_cl_smpc_app_133.clas.abap`
         score = 4
@@ -1591,13 +1593,15 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         post171 = `two post-1.71 members are kept for the 1:1 port: sap.m.Avatar (since UI5 1.73) in the ShellBar's profile aggregation, and sap.tnt.NavigationListItem.expanded (since 1.121), which the sample's own` &&
                  ` NavigationList fragment binds - app 407 declares the same property with the note that it predates 1.71 on the control and only reads as 1.121 because it moved to a newer base class.` ) ).
 
-    lv_text1 = `NOTE: onToggle vetoes the NEXT toggle when the matching switch is on (event.preventDefault) and resets that switch. **Reproduced 2026-08-05**: the framework's veto flag (s_ctrl-check_prevent_default,` &&
-               ` merged 2026-07-30 - AFTER this port was written, which is why the sidecar said 'an event veto is not expressible') is baked into the wire at RENDER time, and that is enough here because the DIRECTION` &&
-               ` of the next toggle is known - an expanded panel can only collapse next. The flag is therefore the switch that applies to that direction, the two Switches are two-way bound, and the toggle round-trip` &&
-               ` re-renders so the flag is rebuilt from the state the client just sent back. The handler is the original's if/else: on a vetoed direction it toasts 'I am prevented COLLAPSE/EXPAND event' and clears` &&
-               ` that switch, otherwise it keeps the new expanded state. Residual: the veto costs a round-trip per toggle, where the original decides in the handler - the state the decision needs (the switches) lives`.
-    lv_text1 = lv_text1 && ` in the model either way. // POST-1.71: the SidePanel and SidePanelItem controls (both since UI5 1.107) are newer than 1.71 but are the whole point of this sample and kept for the 1:1 port - the app` &&
-               ` needs a UI5 release >= 1.107 to render it. @since verified in sap/f/SidePanel.js and sap/f/SidePanelItem.js:34 (control-level, which the member-level property gate never saw).`.
+    lv_text1 = `NOTE: onToggle vetoes the firing when the matching Switch is on (event.preventDefault) and resets that Switch. **Reproduced 1:1 since 2026-08-23** with s_ctrl-prevent_default_expr: the client` &&
+               ` expression (!${$parameters>/expanded} && {/PREVENT_COLLAPSE}) || (${$parameters>/expanded} && {/PREVENT_EXPAND}) is evaluated when the event fires and reads the two two-way bound Switch states, which` &&
+               ` is exactly what the original handler does. The event still reaches the backend either way, and on_event raises the matching toast and resets that Switch. Two defects of the earlier shape are gone` &&
+               ` with it. (1) The boolean s_ctrl-check_prevent_default is baked into the XML at RENDER time and the Switches carry no event, so a flipped Switch only reached the wire on the next render: the first` &&
+               ` toggle after a flip - the one the flip was meant to block - was never vetoed. The sidecar's claim that the direction of the next toggle is known and the round-trip re-bakes the flag was wrong on both` &&
+               ` halves. (2) The TOGGLE branch ended in view_display( ), and a re-render hands back a fresh control tree: SidePanel.selectedItem is an association and sideContentExpanded a hidden property, so the`.
+    lv_text1 = lv_text1 && ` side content the user had just opened collapsed again on every toggle - the sample's central interaction never persisted. There is no re-render any more; the Switch reset travels with the automatic` &&
+               ` model push. // POST-1.71: the SidePanel and SidePanelItem controls (both since UI5 1.107) are newer than 1.71 but are the whole point of this sample and kept for the 1:1 port - the app needs a UI5` &&
+               ` release >= 1.107 to render it. @since verified in sap/f/SidePanel.js and sap/f/SidePanelItem.js:34 (control-level, which the member-level property gate never saw).`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.SidePanel`                       name = `SidePanelSingle`                               class = `z2ui5_cl_smpc_app_136` path = `src/02/04/z2ui5_cl_smpc_app_136.clas.abap`
         score = 3
@@ -7066,17 +7070,20 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` handleConfirm. // POST-1.71: ViewSettingsDialog.beforeClose is @since 1.132 - newer than the 1.71 floor. It is the event the original's handleBeforeClose hangs on to veto closing while the DatePicker` &&
                ` is invalid, so a faithful port cannot drop it; the app needs a UI5 release >= 1.132 for that third dialog. // NOTE: The beforeClose veto is reproduced with s_ctrl-prevent_default_expr: a client` &&
                ` expression over the bound date_value_state field decides per firing whether the close is cancelled, which is what the original's conditional oEvent.preventDefault() does. The event still reaches the` &&
-               ` backend, which adds the 'The entered date is invalid' toast - so the decision travels as data, not as a controller branch. // NOTE: The DatePicker carries bound valueState and valueStateText`.
-    lv_text1 = lv_text1 && ` attributes the original does not have, and its change event reports the public valid parameter (${$parameters>/valid}). The original's validateDate sets both imperatively in the controller; both are` &&
-               ` bindable properties, so the port computes the state in ABAP (thin frontend) and binds it. The error text is identical. // NOTE: The three fragments each use id='app-settings' for their` &&
-               ` ViewSettingsCustomTab, and the first two additionally repeat the whole Settings-tab id set (VSDThemeLabel, VSDThemeButtons, VSDsap_hcb, VSDsap_quartzlight, VSDCompactModeButtons, VSDcompactOn,` &&
-               ` VSDcompactOff, VSDRTLButtons, VSDRTLOn, VSDRTLOff). In UI5 those are separate fragment id scopes; abap2UI5 renders all three dialogs into ONE view, where the duplicates would collide. The second and` &&
-               ` third dialog therefore carry suffixed ids (app-settings-single, app-settings-datepicker, and the Single suffix on the repeated Settings-tab ids). Only the id VALUES differ - every control and` &&
-               ` attribute is the original's. // NOTE: The Settings tab body is written out twice instead of through a helper method, mirroring the original, which also carries one copy per fragment. A`.
-    lv_text1 = lv_text1 && ` builder-returning helper would hide the open/shut tree from the static view gates. // IMPROVISED: The custom tabs are inert, exactly as in the original: the SegmentedButtons for Theme, Compact` &&
-               ` Content Density and Right To Left Mode carry no handler in the sample either, so nothing is applied when they are pressed. // NOTE: The sample's own style.css is injected since 2026-08-21 through an` &&
-               ` added core:HTML style leaf (no counterpart in the original view). It was archived but never reached the view, so the SegmentedButton's vsdSetting margin and the DatePicker's vsd-dp insets did nothing` &&
-               ` - a class name with no rule behind it, the gap apps 122/124/133 closed. Found by scripts/probes/orphan-style-class-probe.mjs.`.
+               ` backend, which adds the 'The entered date is invalid' toast - so the decision travels as data, not as a controller branch. Corrected 2026-08-23: the expression was built as |${ client->_bind( path =`.
+    lv_text1 = lv_text1 && ` abap_true ) } === 'Error'|, and an ABAP string template treats the following brace as an embedded expression, so what reached the wire was "$/DATE_VALUE_STATE === 'Error'" - $ followed by a path is` &&
+               ` not a token the UI5 event-handler parser knows, and the veto could never have fired. The braced _bind( ) form yields ${/DATE_VALUE_STATE}, which is what the expression needs. The corpus' other` &&
+               ` prevent_default_expr wires (247/306/354) all read $parameters and were never affected. // NOTE: The DatePicker carries bound valueState and valueStateText attributes the original does not have, and` &&
+               ` its change event reports the public valid parameter (${$parameters>/valid}). The original's validateDate sets both imperatively in the controller; both are bindable properties, so the port computes` &&
+               ` the state in ABAP (thin frontend) and binds it. The error text is identical. // NOTE: The three fragments each use id='app-settings' for their ViewSettingsCustomTab, and the first two additionally` &&
+               ` repeat the whole Settings-tab id set (VSDThemeLabel, VSDThemeButtons, VSDsap_hcb, VSDsap_quartzlight, VSDCompactModeButtons, VSDcompactOn, VSDcompactOff, VSDRTLButtons, VSDRTLOn, VSDRTLOff). In UI5`.
+    lv_text1 = lv_text1 && ` those are separate fragment id scopes; abap2UI5 renders all three dialogs into ONE view, where the duplicates would collide. The second and third dialog therefore carry suffixed ids` &&
+               ` (app-settings-single, app-settings-datepicker, and the Single suffix on the repeated Settings-tab ids). Only the id VALUES differ - every control and attribute is the original's. // NOTE: The` &&
+               ` Settings tab body is written out twice instead of through a helper method, mirroring the original, which also carries one copy per fragment. A builder-returning helper would hide the open/shut tree` &&
+               ` from the static view gates. // IMPROVISED: The custom tabs are inert, exactly as in the original: the SegmentedButtons for Theme, Compact Content Density and Right To Left Mode carry no handler in` &&
+               ` the sample either, so nothing is applied when they are pressed. // NOTE: The sample's own style.css is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original` &&
+               ` view). It was archived but never reached the view, so the SegmentedButton's vsdSetting margin and the DatePicker's vsd-dp insets did nothing - a class name with no rule behind it, the gap apps`.
+    lv_text1 = lv_text1 && ` 122/124/133 closed. Found by scripts/probes/orphan-style-class-probe.mjs.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ViewSettingsDialog`              name = `ViewSettingsDialogCustomTabs`                  class = `z2ui5_cl_smpc_app_297` path = `src/02/01/z2ui5_cl_smpc_app_297.clas.abap`
         score = 5
@@ -7260,25 +7267,7 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = `NOTE: The two ObjectHeaders bind the fixed records {/ProductCollection/0} and {/ProductCollection/1}. The port seeds both records' bound fields at the default-model root under a per-header prefix and` &&
                  ` binds them absolutely, so both ObjectHeader.binding attributes are dropped and the composed attribute texts read the same values. // NOTE: The last ObjectAttribute of each header is the literal` &&
                  ` 'www.sap.com' with active="true", which structural-diff reports against the {Description} attribute of the same control because it compares the attribute across all four - both texts are present, in` &&
-                 ` the original's order.` ) ).
-
-    lv_text1 = `NOTE: The two toggles the original drives from its controller are now bound and dispatched instead of decorative. onToggleFooter flips DynamicPage.showFooter - the port binds showFooter to a boolean` &&
-               ` member (an attribute the original view does not carry: it relies on the property default false and the controller's setter). toggleAreaPriority alternates DynamicPageTitle.areaShrinkRatio between the` &&
-               ` property default '1:1.6:1.6' (read from the metadata in the original, verified in sap/f/DynamicPageTitle.js) and '1.6:1:1.6'; the port carries that as an expression binding over a boolean flag, so` &&
-               ` the title reflects exactly the same two states. Both Button press wires now reach an on_event dispatcher that flips the flag - one backend round-trip per press, the abap2UI5 equivalent of the` &&
-               ` controller call. Before this rework both were wired to TOGGLE_PRIO/TOGGLE_FOOTER events this class never dispatched (dead wires, pattern-lint dead-event-wire). // NOTE: f:DynamicPage with title` &&
-               ` (heading, expanded/snapped tnt:InfoLabel, actions), pinnable header (ObjectAttributes), content (two long Texts) and footer. The footer message Button binds text and visible='{=`.
-    lv_text1 = lv_text1 && ` !!${/MESSAGESLENGTH}}' to a model field (initial 0), reproducing the original {/messagesLength} wiring. // NOTE: The two long body Texts are SHORTENED representative Lorem, not the original's full` &&
-               ` strings (the first runs to 1372 characters upstream and ends here at 631, the second 913 -> 410). Declared 2026-08-21 after the review sweep found it undeclared: neither structural_diff nor` &&
-               ` data_fidelity compares literal text VALUES, so nothing else would ever catch it. App 138 declares the same shortening on the same shape.`.
-    result = VALUE #( BASE result
-      ( module = `sap.tnt`            control = `sap.f.DynamicPage`                     name = `InfoLabelInDynamicPage`                        class = `z2ui5_cl_smpc_app_143` path = `src/01/05/z2ui5_cl_smpc_app_143.clas.abap`
-        score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        since = `1.54`
-        notes = lv_text1 ) ).
-
-    result = VALUE #( BASE result
+                 ` the original's order.` )
       ( module = `sap.tnt`            control = `sap.tnt.InfoLabel`                     name = `InfoLabel`                                     class = `z2ui5_cl_smpc_app_113` path = `src/02/05/z2ui5_cl_smpc_app_113.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -7290,6 +7279,22 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` because the property gate is blind to sap.tnt; found by the non-sap.m @since audit 2026-07-24.`
         post171 = `sap.tnt.InfoLabel.icon (@since 1.74) is used 1:1 (one InfoLabel carries icon='sap-icon://home-share'). Newer than UI5 1.71; declared per the property-171 policy. Previously undeclared because the` &&
                  ` property gate is blind to sap.tnt; found by the non-sap.m @since audit 2026-07-24.` ) ).
+
+    lv_text1 = `NOTE: The two toggles the original drives from its controller are now bound and dispatched instead of decorative. onToggleFooter flips DynamicPage.showFooter - the port binds showFooter to a boolean` &&
+               ` member (an attribute the original view does not carry: it relies on the property default false and the controller's setter). toggleAreaPriority alternates DynamicPageTitle.areaShrinkRatio between the` &&
+               ` property default '1:1.6:1.6' (read from the metadata in the original, verified in sap/f/DynamicPageTitle.js) and '1.6:1:1.6'; the port carries that as an expression binding over a boolean flag, so` &&
+               ` the title reflects exactly the same two states. Both Button press wires now reach an on_event dispatcher that flips the flag - one backend round-trip per press, the abap2UI5 equivalent of the` &&
+               ` controller call. Before this rework both were wired to TOGGLE_PRIO/TOGGLE_FOOTER events this class never dispatched (dead wires, pattern-lint dead-event-wire). // NOTE: f:DynamicPage with title` &&
+               ` (heading, expanded/snapped tnt:InfoLabel, actions), pinnable header (ObjectAttributes), content (two long Texts) and footer. The footer message Button binds text and visible='{=`.
+    lv_text1 = lv_text1 && ` !!${/MESSAGESLENGTH}}' to a model field (initial 0), reproducing the original {/messagesLength} wiring. // NOTE: The two long body Texts are SHORTENED representative Lorem, not the original's full` &&
+               ` strings (the first runs to 1372 characters upstream and ends here at 631, the second 913 -> 410). Declared 2026-08-21 after the review sweep found it undeclared: neither structural_diff nor` &&
+               ` data_fidelity compares literal text VALUES, so nothing else would ever catch it. App 138 declares the same shortening on the same shape.`.
+    result = VALUE #( BASE result
+      ( module = `sap.tnt`            control = `sap.tnt.InfoLabel`                     name = `InfoLabelInDynamicPage`                        class = `z2ui5_cl_smpc_app_143` path = `src/01/05/z2ui5_cl_smpc_app_143.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.54`
+        notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: the controller's onPopinLayoutChanged (ComboBox change handler running a PopinLayout switch with a Block default) is expressed as bound properties instead of a round-trip (AGENTS 'prefer a` &&
                ` bindable property', as app 009): the ComboBox's change attribute is dropped, its selectedKey is bound two-way, and the Table gains a popinLayout expression binding that reproduces the switch` &&
@@ -7323,18 +7328,22 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` 'visible' attribute added to the walked item carries that binding (the original toggled it imperatively). **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the` &&
                ` 'Toggle Collapse/Expand' round-trip flips the two-way bound expanded (the sapTntSideNavigationNotExpanded class disappears); the 'Show/Hide Walked' visible flip is the same two-way idiom but not` &&
                ` exercised. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_128.mjs). // POST-1.71: NavigationListItem.selectable (@since 1.116) is kept 1:1 from the original` &&
-               ` (selectable=false on the two 'External Link' fixedItem entries). Newer than UI5 1.71; declared per the property-171 policy. Was previously undeclared because the property gate is blind to sap.tnt`.
-    lv_text1 = lv_text1 && ` (properties.json holds sap.m only); found and corrected by the app-172 cold-read probe 2026-07-24. // POST-1.71: sap.tnt.NavigationListGroup (control @since 1.121) is used 1:1 for the 'New',` &&
-               ` 'Recently used' and 'Restricted' groups. Newer than UI5 1.71; declared per the property-171 policy (control-level, app 152 Avatar precedent - the gate only checks members), so the app needs UI5 >=` &&
-               ` 1.121 to render the groups. Found by the 2026-07-27 review sweep. // POST-1.71: the icon ``sap-icon://people-connected`` reached the SAP icon font in 1.96 and is kept 1:1 from the original` &&
-               ` V.view.xml, which names it on the 'People' NavigationListItem of the 'New' group. Newer than the 1.71 floor: there IconPool resolves nothing and the item renders with NO icon, silently - the app` &&
-               ` needs a UI5 release >= 1.96 to show it.`.
+               ` (selectable=false on the two 'External Link' fixedItem entries). Newer than UI5 1.71; declared per the property-171 policy. Was previously undeclared, and the reason recorded here until 2026-08-23 -`.
+    lv_text1 = lv_text1 && ` "the property gate is blind to sap.tnt (properties.json holds sap.m only)" - was false: ui5/properties.json carries 11 sap.tnt controls and lists` &&
+               ` controls["sap.tnt.NavigationListItem"].members.selectable = "1.116" itself, as does the linter's own copy. The gate does see it; that is exactly why the declaration is needed to excuse the view-gates` &&
+               ` finding. // POST-1.71: sap.tnt.NavigationListGroup (control @since 1.121) is used 1:1 for the 'New', 'Recently used' and 'Restricted' groups. Newer than UI5 1.71; declared per the property-171 policy` &&
+               ` (control-level, app 152 Avatar precedent; the gate checks controls as well as members - the linter emits control-too-new straight off the class @since, and view-gates lists that type first, so this` &&
+               ` is a declaration the gate reads, not a courtesy note), so the app needs UI5 >= 1.121 to render the groups. Found by the 2026-07-27 review sweep. // POST-1.71: the icon ``sap-icon://people-connected``` &&
+               ` reached the SAP icon font in 1.96 and is kept 1:1 from the original V.view.xml, which names it on the 'People' NavigationListItem of the 'New' group. Newer than the 1.71 floor: there IconPool`.
+    lv_text1 = lv_text1 && ` resolves nothing and the item renders with NO icon, silently - the app needs a UI5 release >= 1.96 to show it.`.
     lv_text2 = `NavigationListItem.selectable (@since 1.116) is kept 1:1 from the original (selectable=false on the two 'External Link' fixedItem entries). Newer than UI5 1.71; declared per the property-171 policy.` &&
-               ` Was previously undeclared because the property gate is blind to sap.tnt (properties.json holds sap.m only); found and corrected by the app-172 cold-read probe 2026-07-24. //` &&
-               ` sap.tnt.NavigationListGroup (control @since 1.121) is used 1:1 for the 'New', 'Recently used' and 'Restricted' groups. Newer than UI5 1.71; declared per the property-171 policy (control-level, app` &&
-               ` 152 Avatar precedent - the gate only checks members), so the app needs UI5 >= 1.121 to render the groups. Found by the 2026-07-27 review sweep. // the icon ``sap-icon://people-connected`` reached the` &&
-               ` SAP icon font in 1.96 and is kept 1:1 from the original V.view.xml, which names it on the 'People' NavigationListItem of the 'New' group. Newer than the 1.71 floor: there IconPool resolves nothing` &&
-               ` and the item renders with NO icon, silently - the app needs a UI5 release >= 1.96 to show it.`.
+               ` Was previously undeclared, and the reason recorded here until 2026-08-23 - "the property gate is blind to sap.tnt (properties.json holds sap.m only)" - was false: ui5/properties.json carries 11` &&
+               ` sap.tnt controls and lists controls["sap.tnt.NavigationListItem"].members.selectable = "1.116" itself, as does the linter's own copy. The gate does see it; that is exactly why the declaration is` &&
+               ` needed to excuse the view-gates finding. // sap.tnt.NavigationListGroup (control @since 1.121) is used 1:1 for the 'New', 'Recently used' and 'Restricted' groups. Newer than UI5 1.71; declared per` &&
+               ` the property-171 policy (control-level, app 152 Avatar precedent; the gate checks controls as well as members - the linter emits control-too-new straight off the class @since, and view-gates lists` &&
+               ` that type first, so this is a declaration the gate reads, not a courtesy note), so the app needs UI5 >= 1.121 to render the groups. Found by the 2026-07-27 review sweep. // the icon`.
+    lv_text2 = lv_text2 && ` ``sap-icon://people-connected`` reached the SAP icon font in 1.96 and is kept 1:1 from the original V.view.xml, which names it on the 'People' NavigationListItem of the 'New' group. Newer than the` &&
+               ` 1.71 floor: there IconPool resolves nothing and the item renders with NO icon, silently - the app needs a UI5 release >= 1.96 to show it.`.
     result = VALUE #( BASE result
       ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigation`                                class = `z2ui5_cl_smpc_app_128` path = `src/02/05/z2ui5_cl_smpc_app_128.clas.abap`
         score = 3
@@ -7544,14 +7553,17 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` sap.tnt.NavigationListGroup (control @since 1.121, the 'Business Operations' group); NavigationListItem.expanded (expanded=true on the Favorites and Projects items - reads as @since 1.121 because the` &&
                ` property was relocated to the newer base class NavigationListItemBase, the property itself predates 1.71, declared per the relocated-member note); and the IndicationColor enum values Indication15,` &&
                ` Indication16, Indication17, Indication18, Indication19, Indication20 (@since 1.120) carried by all 8 ObjectStatus tag states (enum values are invisible at the attribute-name level). The app needs UI5` &&
-               ` >= 1.121 to render groups and tags. Found by the 2026-07-27 review sweep.`.
+               ` >= 1.149 to render as the sample does: the group is 1.121, but the tag aggregation this port uses eight times is @since 1.149, and on 1.121-1.148 every tnt:tag is an unknown aggregation and all eight` &&
+               ` status tags silently vanish. (Said 1.121 here until 2026-08-23, contradicting this sidecar's own earlier deviation and the port's inline comment, both of which name 1.149.) Found by the 2026-07-27` &&
+               ` review sweep.`.
     lv_text2 = `Two sap.tnt.NavigationListItem members newer than UI5 1.71 are kept 1:1: selectable (@since 1.116, selectable=false on the Favorites parent item) and the tag aggregation (@since 1.149, a` &&
                ` sap.m.ObjectStatus per item, used 8x). Declared per the property-171 policy. Previously undeclared because the property gate is blind to sap.tnt (properties.json holds sap.m only); selectable found` &&
                ` by the app-172 cold-read probe and tag by the non-sap.m @since audit, 2026-07-24. // Kept 1:1 but newer than UI5 1.71 and invisible to the property gate: sap.tnt.NavigationListGroup (control @since` &&
                ` 1.121, the 'Business Operations' group); NavigationListItem.expanded (expanded=true on the Favorites and Projects items - reads as @since 1.121 because the property was relocated to the newer base` &&
                ` class NavigationListItemBase, the property itself predates 1.71, declared per the relocated-member note); and the IndicationColor enum values Indication15, Indication16, Indication17, Indication18,` &&
-               ` Indication19, Indication20 (@since 1.120) carried by all 8 ObjectStatus tag states (enum values are invisible at the attribute-name level). The app needs UI5 >= 1.121 to render groups and tags. Found`.
-    lv_text2 = lv_text2 && ` by the 2026-07-27 review sweep.`.
+               ` Indication19, Indication20 (@since 1.120) carried by all 8 ObjectStatus tag states (enum values are invisible at the attribute-name level). The app needs UI5 >= 1.149 to render as the sample does:`.
+    lv_text2 = lv_text2 && ` the group is 1.121, but the tag aggregation this port uses eight times is @since 1.149, and on 1.121-1.148 every tnt:tag is an unknown aggregation and all eight status tags silently vanish. (Said` &&
+               ` 1.121 here until 2026-08-23, contradicting this sidecar's own earlier deviation and the port's inline comment, both of which name 1.149.) Found by the 2026-07-27 review sweep.`.
     result = VALUE #( BASE result
       ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationWithTags`                        class = `z2ui5_cl_smpc_app_132` path = `src/02/05/z2ui5_cl_smpc_app_132.clas.abap`
         score = 3
@@ -7591,18 +7603,21 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = lv_text1
         post171 = lv_text2 ) ).
 
-    lv_text1 = `NOTE: the two 'Prоduct Name' menu/select texts contain CYRILLIC SMALL LETTER O (U+043E) in place of the Latin o - reproduced verbatim from the original V.view.xml, which carries the same homoglyph` &&
-               ` (upstream defect kept for 1:1 fidelity; do not ASCII-fix it). // NOTE: The SAP-logo Image and profile Avatar presses show client-side MessageToasts ('Logo pressed!' / 'Avatar pressed!'), matching the` &&
-               ` original onLogoPressed / onAvatarPressed. The original's Device.media handler (which toggles productName/secondTitle/searchField/searchButton visibility per screen range) is a device-responsive` &&
-               ` behaviour not reproduced server-side; those controls keep their static initial visibility (searchButton visible='false'). **e2e-verified 2026-07-30** (transpiled-framework interaction,` &&
-               ` scripts/e2e-smoke.mjs): the logo Image press toasts 'Logo pressed!'; the Avatar press is the identical wire but not exercised, and the Device.media visibility branch stays out of scope.` &&
-               ` **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_134.mjs). // NOTE: Both ToolHeaders, all OverflowToolbarLayoutData priorities/groups, the`.
-    lv_text1 = lv_text1 && ` ToolHeaderUtilitySeparator and the OverflowToolbarButtons are reproduced 1:1, including the original's Cyrillic-o typo in 'Prоduct Name'. The SAP_Logo.png and Woman_avatar_01.png srcs are the` &&
-               ` original's host-relative test-resources/sap/tnt/images/ paths rewritten to the OpenUI5 host https://sdk.openui5.org/test-resources/sap/tnt/images/ per the runtime asset-URL rule (app 152 precedent).` &&
-               ` // POST-1.71: sap.m.Avatar (control @since 1.73) is used 1:1 as the profile avatar in both ToolHeaders (src image, displaySize XS, press). Newer than UI5 1.71; declared per the property-171 policy` &&
-               ` (control-level, app 152 precedent), so the app needs UI5 >= 1.73 to render the avatars. Found by the 2026-07-27 review sweep. // POST-1.71: the icon ``sap-icon://da`` reached the SAP icon font in` &&
-               ` 1.96 and is kept 1:1 from the original V.view.xml, which names it on the 'Joule' OverflowToolbarButton. Newer than the 1.71 floor: there IconPool resolves nothing and the button renders with NO icon,` &&
-               ` silently - the app needs a UI5 release >= 1.96 to show it.`.
+    lv_text1 = `NOTE: the two 'Prоduct Name' Title texts (V.view.xml:19, the productName Title, and :72 - there is no Menu and no Select in this sample; the sidecar said "menu/select" until 2026-08-23) contain` &&
+               ` CYRILLIC SMALL LETTER O (U+043E) in place of the Latin o - reproduced verbatim from the original V.view.xml, which carries the same homoglyph (upstream defect kept for 1:1 fidelity; do not ASCII-fix` &&
+               ` it). // NOTE: The SAP-logo Image and profile Avatar presses show client-side MessageToasts ('Logo pressed!' / 'Avatar pressed!'), matching the original onLogoPressed / onAvatarPressed. The original's` &&
+               ` Device.media handler does two things per screen range, and the port reproduces neither: it toggles productName/secondTitle/searchField/searchButton visibility, AND every one of its four branches` &&
+               ` raises a MessageToast ('Screen width is corresponding to <range>'). onInit calls the handler immediately, and the StdExt range set always resolves to one of the four names, so the ORIGINAL SHOWS A` &&
+               ` TOAST ON EVERY LOAD and the port shows none - a user-visible message lost at load time, not only on a breakpoint crossing. The visibility branch keeps its static initial state (searchButton`.
+    lv_text1 = lv_text1 && ` visible='false'). Three of the four ranges could be expressed declaratively through the {device>/media/range} model (CAPABILITIES, shipped 2026-08-05, Std set: Phone/Tablet/Desktop); LargeDesktop is` &&
+               ` the 1440px point of StdExt and has no counterpart, and a load-time toast has no declarative form at all. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the` &&
+               ` logo Image press toasts 'Logo pressed!'; the Avatar press is the identical wire but not exercised, and the Device.media visibility branch stays out of scope. **e2e-verified 2026-08-04** (nightly e2e` &&
+               ` interaction, meta/interactions/z2ui5_cl_smpc_app_134.mjs). // NOTE: Both ToolHeaders, all OverflowToolbarLayoutData priorities/groups, the ToolHeaderUtilitySeparator and the OverflowToolbarButtons` &&
+               ` are reproduced 1:1, including the original's Cyrillic-o typo in 'Prоduct Name'. The SAP_Logo.png and Woman_avatar_01.png srcs are the original's host-relative test-resources/sap/tnt/images/ paths` &&
+               ` rewritten to the OpenUI5 host https://sdk.openui5.org/test-resources/sap/tnt/images/ per the runtime asset-URL rule (app 152 precedent). // POST-1.71: sap.m.Avatar (control @since 1.73) is used 1:1`.
+    lv_text1 = lv_text1 && ` as the profile avatar in both ToolHeaders (src image, displaySize XS, press). Newer than UI5 1.71; declared per the property-171 policy (control-level, app 152 precedent), so the app needs UI5 >=` &&
+               ` 1.73 to render the avatars. Found by the 2026-07-27 review sweep. // POST-1.71: the icon ``sap-icon://da`` reached the SAP icon font in 1.96 and is kept 1:1 from the original V.view.xml, which names` &&
+               ` it on the 'Joule' OverflowToolbarButton. Newer than the 1.71 floor: there IconPool resolves nothing and the button renders with NO icon, silently - the app needs a UI5 release >= 1.96 to show it.`.
     result = VALUE #( BASE result
       ( module = `sap.tnt`            control = `sap.tnt.ToolHeader`                    name = `ToolHeader`                                    class = `z2ui5_cl_smpc_app_134` path = `src/02/05/z2ui5_cl_smpc_app_134.clas.abap`
         score = 4
@@ -7773,8 +7788,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` clearTimeout of _sTimeoutId. Timing nuance: the hide fires after duration + one round-trip latency, and the show after the press round-trip - a few ms later than the original's purely client-side` &&
                ` call; the press attributes are rewired from the controller handler names to backend events (the earlier MessageToast substitution is gone). // NOTE: the BUSY_INDICATOR show/hide chain and the` &&
                ` START_TIMER HIDE_BUSY round-trips are unverified in a running system - verify the overlay appears (default and zero delay), disappears after ~4s, and never appears in the 2s-delay/1s-duration case.`.
-    lv_text1 = lv_text1 && ` **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the zero-delay button shows the global overlay (#sapUiBusyIndicator) and the HIDE_BUSY timer round-trip removes` &&
-               ` it after ~4s; the default-delay and 2s-delay/1s-duration buttons are the identical wire with different literals.`.
+    lv_text1 = lv_text1 && ` **e2e-verified 2026-07-30, sharpened 2026-08-23** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the module used to assert only that the overlay appears after the click and is gone later,` &&
+               ` which the FRAMEWORK satisfies on its own - View1.controller.js shows the same global singleton on every request and hides it in the finally of _processAfterRendering, before the port's follow-up JS` &&
+               ` runs at all. It now measures how long the overlay stays up and requires an episode of at least 2s: the framework's own episode ends when rendering finishes, so only the port's show(0) + START_TIMER(` &&
+               ` HIDE_BUSY, 4000 ) can produce one. The default-delay and 2s-delay/1s-duration buttons are the identical wire with different literals and stay unasserted.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.core.BusyIndicator`             name = `BusyIndicator`                                 class = `z2ui5_cl_smpc_app_147` path = `src/01/02/z2ui5_cl_smpc_app_147.clas.abap`
         score = 3
@@ -7821,9 +7838,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
       ( module = `sap.ui.core`        control = `sap.ui.core.Control`                   name = `ControlBusyIndicator`                          class = `z2ui5_cl_smpc_app_130` path = `src/01/02/z2ui5_cl_smpc_app_130.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        notes = `NOTE: The 'Toggle Busy State' button flips a boolean model field bound to Panel1.busy and the Icon.busy (both added to carry the binding; the original set busy imperatively via byId().setBusy). The` &&
-                 ` original set both busy=true then cleared them after a 5s setTimeout; the client-side auto-reset is simplified to a server-side toggle. **e2e-verified 2026-07-30** (transpiled-framework interaction,` &&
-                 ` scripts/e2e-smoke.mjs): the toggle round-trip turns the bound controls busy (sapUiLocalBusy present after the click).` ) ).
+        notes = `NOTE: The 'Toggle Busy State' button sets a boolean model field bound to Panel1.busy and the Icon.busy (both added to carry the binding; the original set busy imperatively via byId().setBusy). The 5s` &&
+                 ` auto-reset of the original setTimeout is reproduced with START_TIMER, which fires a CLEAR_BUSY round trip that clears the same field. **e2e-verified 2026-07-30** (transpiled-framework interaction,` &&
+                 ` scripts/e2e-smoke.mjs): the button round-trip turns the bound controls busy (sapUiLocalBusy present after the click).` ) ).
 
     lv_text1 = `NOTE: The sample's own idiom is sap.ui.core.Control's fieldGroupIds plus the SimpleForm's validateFieldGroup event, both passed through 1:1: every Input/Select/ComboBox keeps its fieldGroupIds` &&
                ` ('Billing Information' / 'Discount Code' / 'Credit Card' / 'Online') and the form's validateFieldGroup is wired to a backend event carrying ${$parameters>/fieldGroupIds}. The parameter reaches the` &&
@@ -7884,16 +7901,19 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.11.1`
         notes = lv_text1 ) ).
 
-    lv_text1 = `NOTE: The four buttons announce the pressed button's type+text to the sap.ui.core.InvisibleMessage a11y service and echo it into the status Text; here a press updates the bound status Text with a` &&
-               ` generic confirmation (the a11y live-region announce and the per-button identity are not reproduced server-side). The original's 'Infromation' button-text typo is kept 1:1. **e2e-verified 2026-08-01**` &&
-               ` (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): pressing a button really round-trips and the bound status Text shows 'A new message was sent to the invisible messaging` &&
-               ` service.'. What stays unverifiable by machine is the announcement itself - a live region has no assertable rendering. // NOTE: The pressed button's identity is transported since 2026-08-21: each` &&
-               ` press carries $event.oSource.getType() and $event.oSource.getText(), and ABAP composes the original's sentence verbatim. Before that the status text was a constant - a faked event value found by the` &&
-               ` review sweep. The InvisibleMessage announce itself has no control_global entry and stays dropped, which is a separate and correctly declared loss.`.
+    lv_text1 = `NOTE: The four buttons announce the pressed button's type+text to the sap.ui.core.InvisibleMessage a11y service and echo the sentence into the status Text; the port reproduces both. The original's` &&
+               ` 'Infromation' button-text typo is kept 1:1. **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser), re-checked 2026-08-23: pressing Success round-trips and` &&
+               ` the bound status Text carries 'Button with type Accept and text Success is pressed' inside '... was sent to the invisible messaging service.' - the two strings` &&
+               ` meta/interactions/z2ui5_cl_smpc_app_141.mjs actually asserts. What stays unverifiable by machine is the announcement itself - a live region has no assertable rendering. // NOTE: The pressed button's` &&
+               ` identity is transported since 2026-08-21: each press carries $event.oSource.getType() and $event.oSource.getText(), and ABAP composes the original's sentence verbatim. Before that the status text was` &&
+               ` a constant - a faked event value found by the review sweep. The announce( ) call itself was dropped until 2026-08-23 on the claim that it has no control_global entry; that was wrong - ControlCall.js`.
+    lv_text1 = lv_text1 && ` defines INVISIBLE_MESSAGE with announce: ["string","string"], CAPABILITIES.md marks the idiom expressible, and apps 289/435 use it. on_event now fires follow_up_action( control_global,` &&
+               ` INVISIBLE_MESSAGE / announce / <the composed sentence> / Assertive ), matching InvisibleMessageMode.Assertive in the original. Nothing of the sample is dropped any more - which matters here more than` &&
+               ` elsewhere, since ui5/scope-exceptions.json keeps this post-1.71 sample precisely because the accessibility-announcement idiom exists nowhere else in the corpus.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.core.InvisibleMessage`          name = `InvisibleMessage`                              class = `z2ui5_cl_smpc_app_141` path = `src/02/02/z2ui5_cl_smpc_app_141.clas.abap`
-        score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.78`
         since_post171 = abap_true
         is_post171 = abap_true
@@ -7979,13 +7999,22 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` minUI5Version 1.146.0). Here it filters each row's Select items by the RELATIVE row field value1: '{REGION}', so every row lists only the account managers of its own region and re-filters when that` &&
                  ` row's region changes. Passed through 1:1 as a raw binding-info string; a binding-info parameter is invisible to the property gate, so this is a by-policy declaration and the app needs UI5 >= 1.146.` ) ).
 
+    lv_text1 = `NOTE: Composite data-type binding paradigm: the Currency type is pulled in via core:require and every Input/Text binds a composite parts:['/amount','/currency'] with type:'CurrencyType' plus` &&
+               ` formatOptions (showMeasure/showNumber/preserveDecimals/currencyCode/style) 1:1. The two model fields amount ('123456789.123') and currency ('USD') are serialized by abap2UI5 as /AMOUNT and /CURRENCY;` &&
+               ` the paths are generated via _bind (never hardcoded). // POST-1.71: the Currency type's formatOptions { showNumber: false } on the third Input is @since 1.89 (sap/ui/model/type/Currency.js: "since` &&
+               ` 1.89.0, if the format option showNumber is set to false, the amount is not shown in the control") and is kept 1:1 from the original. A format option is a binding-info parameter, not a control member,` &&
+               ` so no gate can ever see it - declared by policy, the same route apps 264/265 take for boundFilters. Below 1.89 the option is ignored and that Input renders the full amount plus the currency instead` &&
+               ` of the bare 'USD', which is exactly what the field is in the sample to show. Undeclared until 2026-08-23; declaring it moves the port from src/01/02 to src/02/02 per AGENTS section 3.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.core`        control = `sap.ui.model.type.Currency`            name = `TypeCurrency`                                  class = `z2ui5_cl_smpc_app_135` path = `src/01/02/z2ui5_cl_smpc_app_135.clas.abap`
+      ( module = `sap.ui.core`        control = `sap.ui.model.type.Currency`            name = `TypeCurrency`                                  class = `z2ui5_cl_smpc_app_135` path = `src/02/02/z2ui5_cl_smpc_app_135.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        notes = `NOTE: Composite data-type binding paradigm: the Currency type is pulled in via core:require and every Input/Text binds a composite parts:['/amount','/currency'] with type:'CurrencyType' plus` &&
-                 ` formatOptions (showMeasure/showNumber/preserveDecimals/currencyCode/style) 1:1. The two model fields amount ('123456789.123') and currency ('USD') are serialized by abap2UI5 as /AMOUNT and /CURRENCY;` &&
-                 ` the paths are generated via _bind (never hardcoded).` ) ).
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `the Currency type's formatOptions { showNumber: false } on the third Input is @since 1.89 (sap/ui/model/type/Currency.js: "since 1.89.0, if the format option showNumber is set to false, the amount is` &&
+                 ` not shown in the control") and is kept 1:1 from the original. A format option is a binding-info parameter, not a control member, so no gate can ever see it - declared by policy, the same route apps` &&
+                 ` 264/265 take for boundFilters. Below 1.89 the option is ignored and that Input renders the full amount plus the currency instead of the bare 'USD', which is exactly what the field is in the sample to` &&
+                 ` show. Undeclared until 2026-08-23; declaring it moves the port from src/01/02 to src/02/02 per AGENTS section 3.` ) ).
 
     lv_text1 = `NOTE: the sample's whole point is a JSON model holding a Date OBJECT (UI5Date.getInstance()), which is exactly what an abap2UI5 model can never carry - the model travels as JSON, so a date is a` &&
                ` string. Every binding therefore keeps the original { path, type: 'DateType', formatOptions: { style / relative } } 1:1 and only ADDS formatOptions.source { pattern: 'yyyy-MM-dd' }, which makes` &&
@@ -8248,8 +8277,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` - is fully reproduced; the reveal overlay is a debugging aid around it. // NOTE: grid:CSSGrid with gridAutoFlow + 10 VBox demo boxes, four carrying GridItemLayoutData row/column spans, 1:1. // NOTE:` &&
                ` The sample's own css/main.css is archived and injected since 2026-08-21. All ten grid tiles carry class="demoBox" and the rules behind it (.sapMFlexBox.demoBox rounded blue box, .demoBox .sapMText` &&
                ` white) were missing entirely, so the tiles rendered as bare text instead of the blue rounded boxes the sample is a picture of - the same gap apps 122/124/133 had, and the sibling ports 346/347/271` &&
-               ` already inject this very stylesheet. css/main.css now sits in ui5/sap.ui.layout/GridAutoFlow/css/ (closing the AGENTS section 4 archive gap). It reaches the view through an added core:HTML style` &&
-               ` leaf, which the original view does not declare.`.
+               ` already inject this very stylesheet. css/main.css now sits in ui5/sap.ui.layout/GridAutoFlow/css/. That did NOT close the AGENTS section 4 archive gap, as this sidecar claimed until 2026-08-23: the` &&
+               ` manifest also lists RevealGrid/RevealGrid.js - the controller's only dependency - and it was absent while RevealGrid.css was there. It is archived since 2026-08-23, taken from the two sibling`.
+    lv_text1 = lv_text1 && ` sap.ui.layout samples that carry the same module byte-identically (GridResponsiveness, GridResponsiveColumnLayout), the network being out of reach here. scripts/check-archive.mjs now gates the whole` &&
+               ` class of gap. It reaches the view through an added core:HTML style leaf, which the original view does not declare.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `GridAutoFlow`                                  class = `z2ui5_cl_smpc_app_145` path = `src/01/02/z2ui5_cl_smpc_app_145.clas.abap`
         score = 4
@@ -8411,14 +8442,21 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` nothing on screen. sap/ui/layout/DynamicSideContent.js shows toggle( ) leaving showSideContent alone while it is at its true default and swapping the private _MCVisible/_SCVisible pair instead;` &&
                ` setShowSideContent, conversely, re-derives those flags through _setResizeData( S ) and ends with _MCVisible = true, so the flip could never reveal the side content on the one breakpoint where the`.
     lv_text1 = lv_text1 && ` button is enabled. An unlisted public method is callable through the wire (the denylist covers teardown, model/binding swaps, event-handler tampering and the render lifecycle), and toggle( ) takes no` &&
-               ` argument, so nothing can be lost in the cast. // NOTE: The width Slider's liveChange is reproduced roundtrip-free since 2026-08-05. The original's handleSliderChange resizes the containing Page` &&
-               ` through jQuery - this.byId('sideContentContainer').$().width(iValue + '%') - i.e. it writes a CSS width straight onto the rendered DOM node, and sap.m.Page has no width property to bind. The ``css``` &&
-               ` control method added upstream for this class of gap (pr/control-inline-style) does the same write from the wire: follow_up_action( control_by_id, sideContentContainer / css / width /` &&
-               ` ${$parameters>/value} + '%' ), the arg being a full UI5 expression (CAPABILITIES). The Slider keeps its value='100' literal and now resizes the page again. // NOTE: The hint Text.visible is bound to` &&
-               ` a boolean model field (initial true); the original used a literal visible='getVisible()' (a sample quirk) toggled per Device.system.phone in onBeforeRendering. The two long body texts are shortened`.
-    lv_text1 = lv_text1 && ` representative Lorem (not gate-compared, static). // NOTE: The sample's own style.css is archived and injected since 2026-08-21. The view carries class="sapUiDSCExplored" and the rule behind it` &&
-               ` (.sapUiDSC.sapUiDSCExplored h1{font-size:2rem}) was missing entirely - a class name with nothing behind it, the same gap apps 122/124/133 had. style.css now sits in` &&
-               ` ui5/sap.ui.layout/DynamicSideContent/ (closing the AGENTS section 4 archive gap) and reaches the view through a core:HTML style leaf.`.
+               ` argument, so nothing can be lost in the cast. Residual, recorded 2026-08-23: _updateToggleButtonState has TWO call sites upstream - handleBreakpointChanged and onAfterRendering - and only the first` &&
+               ` is reproduced. DynamicSideContent fires breakpointChanged exactly once, in _setBreakpointFromWidth, and only when the new breakpoint differs from the previous one; on the first determination` &&
+               ` _currentBreakpoint is undefined, so the event never fires for the initial layout. An app opened at breakpoint S therefore renders with the Toggle button disabled - the one breakpoint where toggle( )` &&
+               ` does anything - until the container crosses a breakpoint and comes back. There is no declarative substitute: the S breakpoint is the CONTAINER's (containerQuery=true, width < 720px), not a device` &&
+               ` media range, so the device> model cannot express it. // NOTE: The width Slider's liveChange is reproduced roundtrip-free since 2026-08-05. The original's handleSliderChange delegates to`.
+    lv_text1 = lv_text1 && ` updateControlWidth, whose body is var $DSCContainer = this.byId('sideContentContainer').$(); if (iValue) { $DSCContainer.width(iValue + '%'); } - i.e. it writes a CSS width straight onto the rendered` &&
+               ` DOM node, and sap.m.Page has no width property to bind. The ``css`` control method added upstream for this class of gap (pr/control-inline-style) does the same write from the wire: follow_up_action(` &&
+               ` control_by_id, sideContentContainer / css / width / ${$parameters>/value} + '%' ), the arg being a full UI5 expression (CAPABILITIES). The Slider keeps its value='100' literal and now resizes the` &&
+               ` page again. Residual, recorded 2026-08-23: the guard is NOT reproduced. sap.m.Slider.min defaults to 0, so the left stop is reachable; the original skips the write there and the container keeps its` &&
+               ` last width, while the port writes width: 0% and collapses it. A wire that writes a computed value has no way to express "write nothing" - the alternatives would either invent a value the original` &&
+               ` never shows or add a round-trip the rest of this port does not need. // NOTE: The original's onBeforeRendering sets setVisible( !Device.system.phone ) on the width Slider and on the hint Text alike`.
+    lv_text1 = lv_text1 && ` (the view's literal visible="getVisible()" is a sample quirk that resolves to nothing). Both are expressed over the framework's device> model as {= !${device>/system/phone} } - same truth value,` &&
+               ` different binding text (app 030/344 precedent). The two long body texts are shortened representative Lorem (not gate-compared, static). // NOTE: The sample's own style.css is archived and injected` &&
+               ` since 2026-08-21. The view carries class="sapUiDSCExplored" and the rule behind it (.sapUiDSC.sapUiDSCExplored h1{font-size:2rem}) was missing entirely - a class name with nothing behind it, the same` &&
+               ` gap apps 122/124/133 had. style.css now sits in ui5/sap.ui.layout/DynamicSideContent/ (closing the AGENTS section 4 archive gap) and reaches the view through a core:HTML style leaf.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.DynamicSideContent`      name = `DynamicSideContent`                            class = `z2ui5_cl_smpc_app_138` path = `src/01/02/z2ui5_cl_smpc_app_138.clas.abap`
         score = 4
@@ -9299,12 +9337,16 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
+    lv_text1 = `NOTE: sap.ui.table grid Table with multi-level column headers (multiLabels + headerSpan '3,2'/'2') and an extension OverflowToolbar. The 5 contact rows are inlined from the controller's JSON model;` &&
+               ` column templates bind {SUPPLIER}/{STREET}/{CITY}/{PHONE}/{OPENORDERS} 1:1. sortProperty/filterProperty carry the UPPER-CASED ABAP field names (SUPPLIER/STREET/CITY/PHONE), not the original's` &&
+               ` lowercase ones: abap2UI5 derives the model paths from the ABAP component names, which is why the cell bindings on the same columns read {SUPPLIER} etc. The port copied the original's lowercase paths` &&
+               ` until 2026-08-23, and Column.isSortableByMenu/isFilterableByMenu only need the property to be SET - so the menu entries were generated and then sorted and filtered on a path that resolves to` &&
+               ` undefined on every row: sorting a no-op, filtering empty. Same convention as app 357.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `MultiHeader`                                   class = `z2ui5_cl_smpc_app_137` path = `src/01/02/z2ui5_cl_smpc_app_137.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        notes = `NOTE: sap.ui.table grid Table with multi-level column headers (multiLabels + headerSpan '3,2'/'2') and an extension OverflowToolbar. The 5 contact rows are inlined from the controller's JSON model;` &&
-                 ` column templates bind {SUPPLIER}/{STREET}/{CITY}/{PHONE}/{OPENORDERS} 1:1.` ) ).
+        notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: The sample serves its rows from an in-page OData MockServer (sap/ui/core/util/MockServer over metadata.xml, autoRespondAfter 2000, operationMode Server, threshold 15). An abap2UI5 app has a real` &&
                ` ABAP backend, so the mock service is replaced by the model itself: all 115 rows of the sample's own ProductSet.json are inlined and the Table binds them directly. What that costs is the sample's` &&
@@ -9814,10 +9856,12 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` handlers re-state that row. Every click round-trips through CAL_SELECT, so the model stays the source of truth and the control's own click-selection is re-stated rather than fought. Same` &&
                ` stale-rationale shape as apps 305 and 306. // NOTE: The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). This sample's` &&
                ` manifest lists ``../style.css`` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding / labelMarginLeft classes the view carries had no rule`.
-    lv_text1 = lv_text1 && ` behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only` &&
-               ` the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs. // POST-1.71: core:require (UI5 >= 1.74) on the view root loads z2ui5/model/formatter for the` &&
-               ` selectedDates startDate binding through Formatter.DateAbapDateToDateObject - the app needs a UI5 release >= 1.74 to render it. Without it the XMLView parser rejects the binding outright ("formatter` &&
-               ` function ... not found"), which is what the render gate caught. Same shape as app 017.`.
+    lv_text1 = lv_text1 && ` behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap). Injected` &&
+               ` are the rules that reach this view: the two viewPadding rules, labelMarginLeft, and - since 2026-08-23 - .sap-phone .sapUiCal{position:relative}, which the first pass dropped as "not used by the` &&
+               ` view". It is: sapUiCal is written by CalendarRenderer on the Calendar's own root, not by the author, so on a phone the original positions its calendar relative and the port did not. The sheet's` &&
+               ` remaining rule, .sap-phone .sapUiCal > .sapUiCancel, targets a class no sap.ui.unified or sap.m renderer writes and is dead upstream. Found by scripts/probes/orphan-style-class-probe.mjs. //` &&
+               ` POST-1.71: core:require (UI5 >= 1.74) on the view root loads z2ui5/model/formatter for the selectedDates startDate binding through Formatter.DateAbapDateToDateObject - the app needs a UI5 release >=` &&
+               ` 1.74 to render it. Without it the XMLView parser rejects the binding outright ("formatter function ... not found"), which is what the render gate caught. Same shape as app 017.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarSingleDaySelection`                    class = `z2ui5_cl_smpc_app_139` path = `src/02/02/z2ui5_cl_smpc_app_139.clas.abap`
         score = 3

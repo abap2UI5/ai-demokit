@@ -480,7 +480,7 @@ For what is NOT here — which demo kit samples are still unported and why — s
 
 ### sap.f
 
-35 port(s).
+34 port(s).
 
 | Sample | Class |
 |---|---|
@@ -501,7 +501,6 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | **sap.f.DynamicPage** — Dynamic Page with Wizard<br>Dynamic Page containing a sap.m.Wizard and WizardProgressNavigator in the content area.<br><sub>dynamicpage dynamic sap.f dynamicpagewithwizard navcontainer dynamicpagetitle title wizard wizardstep objectheader objectattribute list</sub><br><sub>○ generated · 10 deviations</sub> | [`Z2UI5_CL_SMPC_APP_560`](src/01/04/z2ui5_cl_smpc_app_560.clas.abap) |
 | **sap.f.GridList** — Grid List - Item Designs<br>This is a sample for GridList item templates representing a typical tools page dashboard style.<br><sub>gridlist grid list sap.f gridlistboxcontainerreal toolbar title gridboxlayout vbox flexitemdata label text</sub><br><sub>○ generated · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_581`](src/01/04/z2ui5_cl_smpc_app_581.clas.abap) |
 | **sap.f.GridList** — Navigation with keyboard arrows between multiple GridLists<br>This sample demonstrates the keyboard navigation between multiple grids<br><sub>gridlist grid list sap.f gridlistkeyboardarrowsnavigation app slider gridresponsivelayout gridsettings gridbasiclayout gridlistitem griditemlayoutdata</sub><br><sub>○ generated · 7 deviations</sub> | [`Z2UI5_CL_SMPC_APP_582`](src/01/04/z2ui5_cl_smpc_app_582.clas.abap) |
-| **sap.f.DynamicPage** — InfoLabel in DynamicPage<br>InfoLabel used as subheader in DynamicPage<br><sub>dynamicpage dynamic sap.f infolabel dynamicpagetitle title button dynamicpageheader flexbox panel horizontallayout verticallayout</sub><br><sub>◐ reviewed · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_143`](src/01/05/z2ui5_cl_smpc_app_143.clas.abap) |
 | **sap.f.ShellBar** — Shell Bar with title mega menu<br>Shell Bar example showing the control title as part of a mega menu, configurable by the app developer.<br><sub>shellbar shell bar sap.f application header menu menuitem avatar</sub><br><sub>◐ reviewed · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_110`](src/02/04/z2ui5_cl_smpc_app_110.clas.abap) |
 | **sap.f.SidePanel** — Side Panel with single action item<br>Demonstrates the usage of Side Panel with single action item.<br><sub>sidepanel side panel sap.f single item button vbox label switch text sidepanelitem</sub><br><sub>◐ reviewed · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_136`](src/02/04/z2ui5_cl_smpc_app_136.clas.abap) |
 | **sap.f.ShellBar** — Shell Bar with menu button<br>Shell Bar example with a menu button and a plain title.<br><sub>shellbar shell bar sap.f menu button avatar</sub><br><sub>◐ reviewed · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_152`](src/02/04/z2ui5_cl_smpc_app_152.clas.abap) |
@@ -673,11 +672,12 @@ For what is NOT here — which demo kit samples are still unported and why — s
 
 ### sap.tnt
 
-16 port(s).
+17 port(s).
 
 | Sample | Class |
 |---|---|
 | **sap.tnt.NavigationList**<br>Navigation List in a Page<br><sub>navigationlist navigation list sap.tnt overflowtoolbar button navigationlistitem</sub><br><sub>◐ reviewed · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_123`](src/01/05/z2ui5_cl_smpc_app_123.clas.abap) |
+| **sap.tnt.InfoLabel** — InfoLabel in DynamicPage<br>InfoLabel used as subheader in DynamicPage<br><sub>infolabel info label sap.tnt dynamicpage dynamicpagetitle title button dynamicpageheader flexbox panel horizontallayout</sub><br><sub>◐ reviewed · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_143`](src/01/05/z2ui5_cl_smpc_app_143.clas.abap) |
 | **sap.tnt.InfoLabel** — InfoLabel in Table<br>InfoLabel used in content of Table<br><sub>infolabel info label sap.tnt infolabelintable table toolbar title toolbarspacer combobox item column</sub><br><sub>◐ reviewed · 3 deviations</sub> | [`Z2UI5_CL_SMPC_APP_192`](src/01/05/z2ui5_cl_smpc_app_192.clas.abap) |
 | **sap.tnt.InfoLabel**<br>InfoLabel with all available color schemes<br><sub>infolabel info label sap.tnt status labels scrollcontainer flexbox text</sub><br><sub>◐ reviewed · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_113`](src/02/05/z2ui5_cl_smpc_app_113.clas.abap) |
 | **sap.tnt.SideNavigation**<br>SideNavigation in container with fixed width.<br><sub>sidenavigation side navigation sap.tnt groups vbox button navigationlist navigationlistitem navigationlistgroup</sub><br><sub>◐ reviewed · 4 deviations</sub> | [`Z2UI5_CL_SMPC_APP_128`](src/02/05/z2ui5_cl_smpc_app_128.clas.abap) |
@@ -717,11 +717,11 @@ For what is NOT here — which demo kit samples are still unported and why — s
 | Sample | Class |
 |---|---|
 | **sap.ui.model.type.Integer** — Integer Format<br>Formats and parses only the integer digits. The decimal digits are ignored.<br><sub>integer sap.ui.model.type data type simpleform label input text</sub><br><sub>◐ reviewed · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_129`](src/01/02/z2ui5_cl_smpc_app_129.clas.abap) |
-| **sap.ui.model.type.Currency** — Currency Format<br>Formats the number by using the parameters defined for the given currency code. Either currency symbol, currency code or none of them can be included in the final formatted string.<br><sub>currency sap.ui.model.type data type simpleform label input text</sub><br><sub>◐ reviewed · 1 deviation</sub> | [`Z2UI5_CL_SMPC_APP_135`](src/01/02/z2ui5_cl_smpc_app_135.clas.abap) |
 | **sap.ui.model.type.Date** — Date Type - Source As String<br>This sample explains the formatting options of the Date type with the date being available as string.<br><sub>date sap.ui.model.type typedateasstring simpleform label datepicker text</sub><br><sub>◐ reviewed · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_181`](src/01/02/z2ui5_cl_smpc_app_181.clas.abap) |
 | **sap.ui.model.type.Time** — Time Type<br>This sample explains the formatting options of the Time type.<br><sub>time sap.ui.model.type typetimeastime simpleform label timepicker text</sub><br><sub>◐ reviewed · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_182`](src/01/02/z2ui5_cl_smpc_app_182.clas.abap) |
 | **sap.ui.model.type.DateTime** — DateTime Type<br>This sample explains the formatting options of the DateTime type.<br><sub>datetime date time sap.ui.model.type typedatetime simpleform label datetimepicker input text</sub><br><sub>◐ reviewed · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_183`](src/01/02/z2ui5_cl_smpc_app_183.clas.abap) |
 | **sap.ui.model.type.Date** — Date Type - Source As Date<br>This sample explains the formatting options of the Date type with the date being available as date object.<br><sub>date sap.ui.model.type typedateasdate simpleform label datepicker text</sub><br><sub>◐ reviewed · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_282`](src/01/02/z2ui5_cl_smpc_app_282.clas.abap) |
+| **sap.ui.model.type.Currency** — Currency Format<br>Formats the number by using the parameters defined for the given currency code. Either currency symbol, currency code or none of them can be included in the final formatted string.<br><sub>currency sap.ui.model.type data type simpleform label input text</sub><br><sub>◐ reviewed · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_135`](src/02/02/z2ui5_cl_smpc_app_135.clas.abap) |
 | **sap.ui.model.type.Float** — Float Format<br>Formats and parses both integer and decimal digits.<br><sub>float sap.ui.model.type typefloat simpleform label input text</sub><br><sub>◐ reviewed · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_179`](src/02/02/z2ui5_cl_smpc_app_179.clas.abap) |
 | **sap.ui.model.type.FileSize** — FileSize Type<br>This sample explains the formatting options of the FileSize type.<br><sub>filesize file size sap.ui.model.type typefilesize simpleform label input text</sub><br><sub>◐ reviewed · 2 deviations</sub> | [`Z2UI5_CL_SMPC_APP_180`](src/02/02/z2ui5_cl_smpc_app_180.clas.abap) |
 

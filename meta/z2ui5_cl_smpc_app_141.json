@@ -5,7 +5,7 @@
   "file": "src/02/02/z2ui5_cl_smpc_app_141.clas.abap",
   "batch": "b05",
   "audit": {
-    "frontend_action": false,
+    "frontend_action": true,
     "event_t_arg": true
   },
   "status": "reviewed",
@@ -13,11 +13,11 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "The four buttons announce the pressed button's type+text to the sap.ui.core.InvisibleMessage a11y service and echo it into the status Text; here a press updates the bound status Text with a generic confirmation (the a11y live-region announce and the per-button identity are not reproduced server-side). The original's 'Infromation' button-text typo is kept 1:1. **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): pressing a button really round-trips and the bound status Text shows 'A new message was sent to the invisible messaging service.'. What stays unverifiable by machine is the announcement itself - a live region has no assertable rendering."
+      "what": "The four buttons announce the pressed button's type+text to the sap.ui.core.InvisibleMessage a11y service and echo the sentence into the status Text; the port reproduces both. The original's 'Infromation' button-text typo is kept 1:1. **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser), re-checked 2026-08-23: pressing Success round-trips and the bound status Text carries 'Button with type Accept and text Success is pressed' inside '... was sent to the invisible messaging service.' - the two strings meta/interactions/z2ui5_cl_smpc_app_141.mjs actually asserts. What stays unverifiable by machine is the announcement itself - a live region has no assertable rendering."
     },
     {
       "type": "NOTE",
-      "what": "The pressed button's identity is transported since 2026-08-21: each press carries $event.oSource.getType() and $event.oSource.getText(), and ABAP composes the original's sentence verbatim. Before that the status text was a constant - a faked event value found by the review sweep. The InvisibleMessage announce itself has no control_global entry and stays dropped, which is a separate and correctly declared loss."
+      "what": "The pressed button's identity is transported since 2026-08-21: each press carries $event.oSource.getType() and $event.oSource.getText(), and ABAP composes the original's sentence verbatim. Before that the status text was a constant - a faked event value found by the review sweep. The announce( ) call itself was dropped until 2026-08-23 on the claim that it has no control_global entry; that was wrong - ControlCall.js defines INVISIBLE_MESSAGE with announce: [\"string\",\"string\"], CAPABILITIES.md marks the idiom expressible, and apps 289/435 use it. on_event now fires follow_up_action( control_global, INVISIBLE_MESSAGE / announce / <the composed sentence> / Assertive ), matching InvisibleMessageMode.Assertive in the original. Nothing of the sample is dropped any more - which matters here more than elsewhere, since ui5/scope-exceptions.json keeps this post-1.71 sample precisely because the accessibility-announcement idiom exists nowhere else in the corpus."
     }
   ]
 }

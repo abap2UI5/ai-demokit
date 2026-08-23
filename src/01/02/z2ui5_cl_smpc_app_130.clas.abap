@@ -92,11 +92,20 @@ CLASS z2ui5_cl_smpc_app_130 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->get_event( ) = `TOGGLE_BUSY`.
-      " original onAction: sets both controls busy, then clears after 5s
-      " (setTimeout). The client-side auto-reset is simplified to a toggle.
-      busy = xsdbool( busy = abap_false ).
-    ENDIF.
+    CASE client->get_event( ).
+
+      WHEN `TOGGLE_BUSY`.
+        " original onAction: sets both controls busy, then clears them again
+        " after a 5s setTimeout - START_TIMER fires the clearing round trip
+        busy = abap_true.
+        client->follow_up_action( val   = client->cs_event-start_timer
+                                  t_arg = VALUE #( ( `CLEAR_BUSY` ) ( `5000` ) ) ).
+
+      WHEN `CLEAR_BUSY`.
+        " the timer callback - the setTimeout body
+        busy = abap_false.
+
+    ENDCASE.
 
   ENDMETHOD.
 

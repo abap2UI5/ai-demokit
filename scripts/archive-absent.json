@@ -1,0 +1,5 @@
+{
+  "sap.ui.core/BasicThemeParameters/parameters.json": "the sample's own theme-parameter dump; not served by the demo-kit sample route and not in @openui5/sap.ui.core — the port reads the parameter names out of the view, which IS archived",
+  "sap.ui.integration/LazyLoading/manifests/listManifestDescriptionTable.json": "one of 22 card manifests; the other 21 are archived and the port's cards are built from those — this one is referenced by the manifest list but was never served",
+  "sap.ui.layout/BlockLayoutCustomBackground/resources/Night_sky.jpg": "a binary asset; the corpus archives source, not images, and the port carries no background image"
+}

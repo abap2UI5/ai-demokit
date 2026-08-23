@@ -76,8 +76,8 @@ CLASS z2ui5_cl_smpc_app_137 IMPLEMENTATION.
                     )->ele( `columns`
                         )->ele( `Column`
                             )->a( n = `width`          v = `11rem`
-                            )->a( n = `sortProperty`   v = `supplier`
-                            )->a( n = `filterProperty` v = `supplier`
+                            )->a( n = `sortProperty`   v = `SUPPLIER`
+                            )->a( n = `filterProperty` v = `SUPPLIER`
                             )->tag( n = `Label` ns = `m`
                                 )->a( n = `text`      v = `Supplier`
                                 )->a( n = `textAlign` v = `Center`
@@ -91,8 +91,8 @@ CLASS z2ui5_cl_smpc_app_137 IMPLEMENTATION.
 
                         )->ele( `Column`
                             )->a( n = `width`          v = `11rem`
-                            )->a( n = `sortProperty`   v = `street`
-                            )->a( n = `filterProperty` v = `street`
+                            )->a( n = `sortProperty`   v = `STREET`
+                            )->a( n = `filterProperty` v = `STREET`
                             )->a( n = `headerSpan`     v = `3,2`
                             )->ele( `multiLabels`
                                 )->tag( n = `Label` ns = `m`
@@ -119,7 +119,7 @@ CLASS z2ui5_cl_smpc_app_137 IMPLEMENTATION.
 
                         )->ele( `Column`
                             )->a( n = `width`        v = `11rem`
-                            )->a( n = `sortProperty` v = `city`
+                            )->a( n = `sortProperty` v = `CITY`
                             )->a( n = `headerSpan`   v = `2`
                             )->ele( `multiLabels`
                                 )->tag( n = `Label` ns = `m`
@@ -141,7 +141,7 @@ CLASS z2ui5_cl_smpc_app_137 IMPLEMENTATION.
 
                         )->ele( `Column`
                             )->a( n = `width`        v = `11rem`
-                            )->a( n = `sortProperty` v = `phone`
+                            )->a( n = `sortProperty` v = `PHONE`
                             )->ele( `multiLabels`
                                 )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Contact`

@@ -18,7 +18,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the BUSY_INDICATOR show/hide chain and the START_TIMER HIDE_BUSY round-trips are unverified in a running system - verify the overlay appears (default and zero delay), disappears after ~4s, and never appears in the 2s-delay/1s-duration case. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the zero-delay button shows the global overlay (#sapUiBusyIndicator) and the HIDE_BUSY timer round-trip removes it after ~4s; the default-delay and 2s-delay/1s-duration buttons are the identical wire with different literals."
+      "what": "the BUSY_INDICATOR show/hide chain and the START_TIMER HIDE_BUSY round-trips are unverified in a running system - verify the overlay appears (default and zero delay), disappears after ~4s, and never appears in the 2s-delay/1s-duration case. **e2e-verified 2026-07-30, sharpened 2026-08-23** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the module used to assert only that the overlay appears after the click and is gone later, which the FRAMEWORK satisfies on its own - View1.controller.js shows the same global singleton on every request and hides it in the finally of _processAfterRendering, before the port's follow-up JS runs at all. It now measures how long the overlay stays up and requires an episode of at least 2s: the framework's own episode ends when rendering finishes, so only the port's show(0) + START_TIMER( HIDE_BUSY, 4000 ) can produce one. The default-delay and 2s-delay/1s-duration buttons are the identical wire with different literals and stay unasserted."
     }
   ]
 }

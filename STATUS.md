@@ -15,10 +15,10 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 
 | Aspect | State |
 |---|---|
-| Ports | **622** sidecars in `meta/` (src/01 OpenUI5 <= 1.71: 408 · src/02 OpenUI5 > 1.71: 214) |
+| Ports | **622** sidecars in `meta/` (src/01 OpenUI5 <= 1.71: 407 · src/02 OpenUI5 > 1.71: 215) |
 | Per library | sap.f: 36 · sap.m: 393 · sap.tnt: 17 · sap.ui: 131 · sap.uxap: 45 |
 | Status ladder | 208 `generated` · 355 `reviewed` · 59 `checked` (live-verified) |
-| Deviations | 12 DROPPED_171 · 136 IMPROVISED · 123 LIVE_TEST · 1692 NOTE · 284 POST_171 |
+| Deviations | 12 DROPPED_171 · 136 IMPROVISED · 123 LIVE_TEST · 1692 NOTE · 285 POST_171 |
 | Open LIVE_TESTs | **123 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 2 structural-diff · 7 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_smpc_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_smpc_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_smpc_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_smpc_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_smpc_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
@@ -414,6 +414,73 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   side, and matching the original's RENDERING would mean writing spaces where
   the sample wrote newlines.
   **What is left: 275 `reviewed` and 206 `generated` ports above 061.**
+
+  **Block 4 (2026-08-23) read ports 127–147.** **Six clean** (127, 129, 131,
+  142, 144, 146). The block's finds were fewer dead wires and more claims that
+  did not survive being checked:
+  - **App 130 lost the sample's only behaviour.** The original presses once and
+    the busy state clears itself after 5s (`setTimeout`); the port toggled, so
+    busy stayed until a second press. `cs_event-start_timer` has expressed this
+    since 2026-07-30 and app 147 — the *other* BusyIndicator sample — already
+    used it. Now `busy = abap_true` plus a `CLEAR_BUSY` timer.
+  - **App 136 threw the panel's state away on every toggle.** The `TOGGLE`
+    branch ended in `view_display( )`, and `SidePanel.selectedItem` is an
+    association and `sideContentExpanded` a hidden property, so the side content
+    the user had just opened came back collapsed. The re-render existed only to
+    re-bake the render-time veto flag — which was itself one toggle late,
+    because the two Switches carry no event. `s_ctrl-prevent_default_expr`
+    decides per firing and reads both Switch states, so the re-render is gone
+    and both defects with it.
+  - **App 137's sort and filter menus operated on paths that do not exist.**
+    `sortProperty`/`filterProperty` were copied lowercase from the original
+    while the cells bind `{SUPPLIER}`/`{STREET}`/`{CITY}`/`{PHONE}` — abap2UI5
+    derives model paths from the ABAP component names. UI5 generates the menu
+    entries off the property being *set*, so sorting was a no-op and filtering
+    returned nothing.
+  - **App 141 dropped the announce the sample exists for**, justified by "no
+    control_global entry" — `ControlCall.js` has defined
+    `INVISIBLE_MESSAGE.announce` since 2026-08-05, CAPABILITIES marks it ✅ and
+    apps 289/435 use it. Sharper still: `ui5/scope-exceptions.json` keeps this
+    post-1.71 sample precisely because the accessibility-announcement idiom
+    exists nowhere else in the corpus.
+  - **Two e2e claims were vacuous, in two different ways.** App 133's mode leg
+    clicked the segment the port already loads in, and `SegmentedButton` returns
+    early there — no `selectionChange`, both assertions true at page load. App
+    147's asserted that the busy overlay appears and later disappears, which the
+    *framework* satisfies on its own (it shows the same global singleton on
+    every request and hides it before the port's follow-up JS runs). 133 now
+    clicks a different segment and asserts the sentence the backend composes;
+    147 measures how long the overlay stays up.
+  - **App 297, found while checking 136's framework contract:** its
+    `prevent_default_expr` was built as `|${ client->_bind( path = abap_true ) }
+    === 'Error'|`, and an ABAP template treats the following brace as an
+    embedded expression — what reached the wire was `$/DATE_VALUE_STATE`, which
+    the UI5 event-handler parser does not know. That veto could never have
+    fired.
+  - **App 145's archive was incomplete while its sidecar said the gap was
+    closed.** `RevealGrid/RevealGrid.js` — the controller's only dependency — was
+    missing, though `manifest.json` lists it and two sibling samples archive it
+    byte-identically. That named a whole gate class: `scripts/check-archive.mjs`
+    now checks every manifest-listed file against the archive on disk (0 errors
+    after this fix; the 57 `../SharedBlocks` files 30 sap.uxap samples pull from
+    sibling folders are reported as a standing advisory, since backfilling them
+    needs a harvest run).
+  - **App 135 was in the wrong category folder.** `formatOptions
+    { showNumber: false }` is `@since 1.89` — a binding-info parameter no gate
+    can see — so the port owed a `POST_171` and, with it, `src/02`.
+  - Documentation-only corrections: 128 (two justifications that were false
+    against the files in the repo today — the property gate is *not* blind to
+    sap.tnt, and it *does* check controls as well as members), 132 (the floor is
+    1.149, the `tag` aggregation's, not the group's 1.121), 134 (the dropped
+    device handler also toasts, and `onInit` calls it — the original shows a
+    message on every load), 138 (two residuals now stated: the dropped
+    `if (iValue)` guard and the initial toggle-button state the
+    `breakpointChanged` wire provably cannot cover), 139 (a phone rule dropped
+    as "not used by the view" — `sapUiCal` is written by the renderer, not the
+    author), 143 (the sidecar's `entity` named a foreign library, which put the
+    port under `sap.f` in the generated catalogue; `validate-meta` now
+    cross-checks the entity's library against the universe).
+  **What is left: 255 `reviewed` and 206 `generated` ports above 147.**
 
 - [x] **CAPABILITIES.md's stale class citations — DONE.** Both halves of this
   are closed, and neither closed the way the entry predicted. The shared
