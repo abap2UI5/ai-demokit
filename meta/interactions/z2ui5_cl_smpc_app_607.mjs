@@ -54,11 +54,13 @@ export default async (page, expect) => {
     // one header per supplier block, and each carries the supplier's own name
     return heads.length > 1 && heads.every((h) => typeof h.getTitle() === 'string' && h.getTitle().length > 0);
   }, 'Group never produced the supplier group headers');
-  // Reset takes them away again
+  // Reset takes them away again. It is a plain sap.m.Button carrying only a
+  // text - Sort and Group are OverflowToolbarButtons with a tooltip, and
+  // looking Reset up the same way found nothing and fired on undefined.
   await page.evaluate(() => {
     const reg = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
-    reg.find((c) => c.getMetadata().getName() === 'sap.m.OverflowToolbarButton'
-      && c.getTooltip() === 'Reset').firePress();
+    reg.find((c) => c.getMetadata().getName() === 'sap.m.Button'
+      && c.getText() === 'Reset').firePress();
   });
   await waitForUi5(page, () => {
     const t = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.Table');
