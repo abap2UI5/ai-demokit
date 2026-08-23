@@ -38,6 +38,10 @@
     {
       "type": "LIVE_TEST",
       "what": "Unverified in a running system: whether the drop wires deliver the row indices and drop position as expected, whether the internal-vs-external drag expression resolves, and whether the context menu's beforeOpenContextMenu round-trip arrives before the menu item press."
+    },
+    {
+      "type": "NOTE",
+      "what": "sortProperty/filterProperty carry the UPPER-CASED ABAP field names, not the original's mixed-case ones: abap2UI5 derives the model paths from the ABAP component names, which is why the cells on the same columns bind {NAME}/{CATEGORY} and friends. Copied verbatim from the original until 2026-08-23, and UI5 generates the column menu's sort and filter entries off the property merely being SET - so the entries were there and resolved to undefined on every row: sorting a no-op, filtering empty. Corpus convention, same sweep that fixed apps 137/164/174/247/353."
     }
   ]
 }

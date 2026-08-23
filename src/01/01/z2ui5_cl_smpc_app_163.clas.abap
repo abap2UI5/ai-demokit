@@ -5,11 +5,6 @@ CLASS z2ui5_cl_smpc_app_163 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
-    DATA isnophone          TYPE abap_bool.
-    DATA isnotphoneortablet TYPE abap_bool.
-    DATA istablet           TYPE abap_bool.
-    DATA isphoneortablet    TYPE abap_bool.
-    DATA isphone            TYPE abap_bool.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -78,32 +73,32 @@ CLASS z2ui5_cl_smpc_app_163 IMPLEMENTATION.
                     )->tag( `Button`
                         )->a( n = `text`    v = `Mark as Favorite`
                         )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
-                        )->a( n = `visible` v = client->_bind( isnophone )
+                        )->a( n = `visible` v = `{= ${device>/media/range} !== 'Phone' }`
                     )->tag( `Button`
                         )->a( n = `text`    v = `Send Email`
                         )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
-                        )->a( n = `visible` v = client->_bind( isnophone )
+                        )->a( n = `visible` v = `{= ${device>/media/range} !== 'Phone' }`
                     )->tag( `Button`
                         )->a( n = `text`    v = `Share`
                         )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
-                        )->a( n = `visible` v = client->_bind( isnophone )
+                        )->a( n = `visible` v = `{= ${device>/media/range} !== 'Phone' }`
                     )->tag( `Button`
                         )->a( n = `text`    v = `Print`
                         )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
-                        )->a( n = `visible` v = client->_bind( isnotphoneortablet )
+                        )->a( n = `visible` v = `{= ${device>/media/range} !== 'Phone' && ${device>/media/range} !== 'Tablet' }`
                     )->tag( `Button`
                         )->a( n = `icon`    v = `sap-icon://print`
                         )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
-                        )->a( n = `visible` v = client->_bind( istablet )
+                        )->a( n = `visible` v = `{= ${device>/media/range} === 'Tablet' }`
                     )->tag( `Button`
                         )->a( n = `text`    v = `Export as Excel`
                         )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
-                        )->a( n = `visible` v = client->_bind( isnotphoneortablet )
+                        )->a( n = `visible` v = `{= ${device>/media/range} !== 'Phone' && ${device>/media/range} !== 'Tablet' }`
                     )->tag( `Button`
                         )->a( n = `icon`    v = `sap-icon://overflow`
                         )->a( n = `press`   v = client->_event( val   = `OPEN_SHEET`
                                                                 t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
-                        )->a( n = `visible` v = client->_bind( isphoneortablet ) ).
+                        )->a( n = `visible` v = `{= ${device>/media/range} === 'Phone' || ${device>/media/range} === 'Tablet' }` ).
 
     client->view_display( view->stringify( ) ).
 
@@ -131,27 +126,27 @@ CLASS z2ui5_cl_smpc_app_163 IMPLEMENTATION.
                       )->a( n = `text`    v = `Mark as Favorite`
                       )->a( n = `icon`    v = `sap-icon://favorite`
                       )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
-                      )->a( n = `visible` v = client->_bind( isphone )
+                      )->a( n = `visible` v = `{= ${device>/media/range} === 'Phone' }`
                   )->tag( `Button`
                       )->a( n = `text`    v = `Send Email`
                       )->a( n = `icon`    v = `sap-icon://email`
                       )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
-                      )->a( n = `visible` v = client->_bind( isphone )
+                      )->a( n = `visible` v = `{= ${device>/media/range} === 'Phone' }`
                   )->tag( `Button`
                       )->a( n = `text`    v = `Share`
                       )->a( n = `icon`    v = `sap-icon://share-2`
                       )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
-                      )->a( n = `visible` v = client->_bind( isphone )
+                      )->a( n = `visible` v = `{= ${device>/media/range} === 'Phone' }`
                   )->tag( `Button`
                       )->a( n = `text`    v = `Print`
                       )->a( n = `icon`    v = `sap-icon://print`
                       )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
-                      )->a( n = `visible` v = client->_bind( isphone )
+                      )->a( n = `visible` v = `{= ${device>/media/range} === 'Phone' }`
                   )->tag( `Button`
                       )->a( n = `text`    v = `Export as Excel`
                       )->a( n = `icon`    v = `sap-icon://excel-attachment`
                       )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
-                      )->a( n = `visible` v = client->_bind( isphoneortablet ) ).
+                      )->a( n = `visible` v = `{= ${device>/media/range} === 'Phone' || ${device>/media/range} === 'Tablet' }` ).
 
       client->popover_display( xml   = sheet->stringify( )
                                by_id = client->get_event_arg( ) ).
@@ -162,13 +157,13 @@ CLASS z2ui5_cl_smpc_app_163 IMPLEMENTATION.
 
   METHOD model_init.
 
-    " original fills the 'range' model from Device.media ranges; the desktop
-    " ranges are used here (a client-only decision in the original).
-    isnophone          = abap_true.
-    isnotphoneortablet = abap_true.
-    istablet           = abap_false.
-    isphoneortablet    = abap_false.
-    isphone            = abap_false.
+    " the original's 'range' model - Device.media.getCurrentRange( 'Std' ) plus a
+    " live attachHandler on the same range set - has no ABAP counterpart and needs
+    " none: the framework publishes exactly that range as {device>/media/range},
+    " from the same 'Std' set and refreshed on every resize, so the six flags are
+    " expression bindings in the view. Seeding them here froze them at the desktop
+    " values until 2026-08-23, which left the overflow Button permanently hidden
+    " and the whole ActionSheet branch unreachable
 
   ENDMETHOD.
 

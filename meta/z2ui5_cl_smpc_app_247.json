@@ -30,6 +30,10 @@
     {
       "type": "NOTE",
       "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the SegmentedButton width switch really round-trips: picking 'Flexible' sends WIDTHS_CHANGE with ${$parameters>/item}.getKey(), the backend recomputes the widths and the Table's columns come back at 25%. The button sits in an OverflowToolbar, where it renders as a Select - drivable once the 'Additional Options' popover is open (AGENTS 10). Residual: the columnResize client toast (a real column drag) and the timestamp-typed DeliveryDate formatting."
+    },
+    {
+      "type": "NOTE",
+      "what": "sortProperty/filterProperty carry the UPPER-CASED ABAP field names, not the original's mixed-case ones: abap2UI5 derives the model paths from the ABAP component names, which is why the cells on the same columns bind {NAME}/{CATEGORY} and friends. Copied verbatim from the original until 2026-08-23, and UI5 generates the column menu's sort and filter entries off the property merely being SET - so the entries were there and resolved to undefined on every row: sorting a no-op, filtering empty. Corpus convention, same sweep that fixed apps 137/164/174/247/353."
     }
   ]
 }

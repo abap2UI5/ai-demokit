@@ -156,7 +156,11 @@ CLASS z2ui5_cl_smpc_app_192 IMPLEMENTATION.
 
   METHOD model_init.
 
-    popin_layout = `Block`.
+    " popin_layout stays EMPTY on purpose: the original's ComboBox carries no
+    " selectedKey, so its placeholder is what the user sees until they pick
+    " something, and the popinLayout expression already falls through to
+    " 'Block' for an empty value - which is sap.m.Table's own default too
+    " (app 009, the checked reference for this idiom, seeds nothing either)
 
     t_products = VALUE #(
       ( productid = `HT-1000` suppliername = `Very Best Screens` name = `Notebook Basic 15`

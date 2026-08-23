@@ -22,6 +22,10 @@
     {
       "type": "NOTE",
       "what": "27 items inlined from model/data.json; absent enum fields defaulted (highlight None, type Inactive) so the bound GridListItem properties stay valid. Template binds counter/highlight/type/unread + title/subtitle 1:1."
+    },
+    {
+      "type": "NOTE",
+      "what": "The reorder is two Array.splice calls in the original (remove at the drag index, insert at the drop index + 1) and DELETE + INSERT INDEX in the port. They differ in one place, corrected 2026-08-23: JavaScript's splice CLAMPS a start index past the end and appends, ABAP's INSERT ... INDEX does not - past lines + 1 it sets sy-subrc = 4 and inserts nothing, so the row just deleted would vanish. It is reachable: sap.f.dnd.GridDragOver._calculateDropPosition falls back to the LAST item with 'After' when the pointer is over no item at all, and that item can be the dragged one, which yields drag_pos = drop_pos = lines - 1 and an insert index of lines + 2. The index is clamped now. Under the transpiler the runtime splices like JS, so this is one of the defects that only shows on a real system."
     }
   ]
 }

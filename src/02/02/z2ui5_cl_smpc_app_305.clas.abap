@@ -59,6 +59,7 @@ CLASS z2ui5_cl_smpc_app_305 IMPLEMENTATION.
         )->tag( n = `HTML` ns = `core`
             )->a( n = `content` v = `<style>.viewPadding\{padding:1rem\}` &&
                                     `.sap-phone .viewPadding\{padding:0rem\}` &&
+                                    `.sap-phone .sapUiCal\{position:relative\}` &&
                                     `.labelMarginLeft\{margin:1rem\}</style>`
         )->ele( n = `VerticalLayout` ns = `l`
 

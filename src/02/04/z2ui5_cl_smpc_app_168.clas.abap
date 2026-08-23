@@ -143,12 +143,29 @@ CLASS z2ui5_cl_smpc_app_168 IMPLEMENTATION.
 
             )->ele( n = `GridContainer` ns = `f`
                 )->a( n = `id`                v = `demoGrid`
+                " the view's own static class, as in the original
+                )->a( n = `class`             v = `sapUiSmallMargin`
                 " the onInit attachLayoutChange handler: tiny margin on the two
-                " narrow layouts, small margin otherwise. Bound to the shared
-                " device model's breakpoint since 2026-08-05 - the class follows
-                " a live resize with no wire and no roundtrip, exactly like the
-                " original's handler
-                )->a( n = `class`             v = |\{= $\{device>/media/range\} === 'Phone' ? 'sapUiTinyMargin' : 'sapUiSmallMargin' \}|
+                " narrow layouts, small margin otherwise. class= is NOT bindable -
+                " XMLTemplateProcessor intercepts it before the property branch and
+                " hands the raw string to addStyleClass, which drops any value
+                " carrying a quote, so an expression there sets NO class at all
+                " (which is what this port did between 2026-08-05 and 2026-08-23,
+                " losing the static class too). The switch is the control's own
+                " layoutChange event driving addStyleClass/removeStyleClass, both
+                " whitelisted, with the branch inside the argument expression -
+                " roundtrip-free, and _applyLayout fires on the FIRST layout
+                " determination too, so a phone starts out tiny like the original
+                )->a( n = `layoutChange`      v = client->follow_up_action(
+                          val   = client->cs_event-control_by_id
+                          t_arg = VALUE #( ( `demoGrid` )
+                                           ( `removeStyleClass` )
+                                           ( `${$parameters>/layout} === 'layoutXS' || ${$parameters>/layout} === 'layoutS' ? 'sapUiSmallMargin' : 'sapUiTinyMargin'` ) ) ) && `; ` &&
+                                            client->follow_up_action(
+                          val   = client->cs_event-control_by_id
+                          t_arg = VALUE #( ( `demoGrid` )
+                                           ( `addStyleClass` )
+                                           ( `${$parameters>/layout} === 'layoutXS' || ${$parameters>/layout} === 'layoutS' ? 'sapUiTinyMargin' : 'sapUiSmallMargin'` ) ) )
                 " added attrs (declared): the switch-driven properties the original
                 " set imperatively (setSnapToRow / setAllowDenseFill / setInlineBlockLayout)
                 )->a( n = `snapToRow`         v = client->_bind( snap_to_row )

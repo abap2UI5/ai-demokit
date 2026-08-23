@@ -49,8 +49,10 @@ CLASS z2ui5_cl_smpc_app_165 IMPLEMENTATION.
 
     " The ProductSwitch itself is built in the sample's controller (fnOpen) and
     " shown in a popover; the shipped view is just the trigger button plus two
-    " explanatory texts, rebuilt 1:1 here. abap2UI5 has no JS controller, so the
-    " button press raises a client toast in place of the controller-built popup.
+    " explanatory texts, rebuilt 1:1 here. The press raises a backend event and
+    " on_event builds the same popover - the older claim that there is no JS
+    " controller so the press only toasts was refuted on 2026-08-05 and had
+    " been left standing in this comment until 2026-08-23.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:layout` v = `sap.ui.layout`
@@ -122,7 +124,12 @@ CLASS z2ui5_cl_smpc_app_165 IMPLEMENTATION.
                                         client->follow_up_action(
                             val   = client->cs_event-urlhelper
                             t_arg = VALUE #( ( `REDIRECT` )
-                                             ( `\{ URL: ${$parameters>/itemPressed}.getTargetSrc(), NEW_WINDOW: true \}` ) ) )
+                                             " a STRING TEMPLATE, not a backtick literal: only |...| treats
+                                             " \{ as an escape. In a backtick literal the backslash is a real
+                                             " character, the arg no longer starts with { , and get_t_arg
+                                             " QUOTES the whole thing - the expression would never evaluate
+                                             " and URLHelper would be handed a string with URL undefined
+                                             ( |\{ URL: $\{$parameters>/itemPressed\}.getTargetSrc(), NEW_WINDOW: true \}| ) ) )
 
                   )->ele( n = `items` ns = `f`
                       )->tag( n = `ProductSwitchItem` ns = `f`

@@ -116,8 +116,8 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
                         )->end(
                         )->ele( `columns`
                             )->ele( `Column`
-                                )->a( n = `sortProperty`   v = `Name`
-                                )->a( n = `filterProperty` v = `Name`
+                                )->a( n = `sortProperty`   v = `NAME`
+                                )->a( n = `filterProperty` v = `NAME`
 
                                 )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `Product Name`
@@ -130,8 +130,8 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
                                 )->end(
                             )->end(
                             )->ele( `Column`
-                                )->a( n = `sortProperty`   v = `Category`
-                                )->a( n = `filterProperty` v = `Category`
+                                )->a( n = `sortProperty`   v = `CATEGORY`
+                                )->a( n = `filterProperty` v = `CATEGORY`
 
                                 )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `Category`
@@ -146,7 +146,7 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
                             )->ele( `Column`
                                 )->a( n = `hAlign`       v = `End`
                                 )->a( n = `width`        v = `6rem`
-                                )->a( n = `sortProperty` v = `Quantity`
+                                )->a( n = `sortProperty` v = `QUANTITY`
 
                                 )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `Quantity`

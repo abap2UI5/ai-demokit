@@ -29,6 +29,10 @@
     {
       "type": "NOTE",
       "what": "onInit lazily requires sap/ui/table/sample/TableExampleUtils and appends a ToolbarSpacer plus its createInfoButton( ) to the footer toolbar; the port drops both (it keeps the toolbar's id infobar, which the original addresses to append them). The button opens the demo kit's own sample-info popover, which has no counterpart outside the demo kit. Every sap.ui.table sample of this batch drops it the same way - apps 352/353/354/355/357/362 declare exactly this; 164 had been dropping it undeclared until 2026-08-23."
+    },
+    {
+      "type": "NOTE",
+      "what": "sortProperty/filterProperty carry the UPPER-CASED ABAP field names, not the original's mixed-case ones: abap2UI5 derives the model paths from the ABAP component names, which is why the cells on the same columns bind {NAME}/{CATEGORY} and friends. Copied verbatim from the original until 2026-08-23, and UI5 generates the column menu's sort and filter entries off the property merely being SET - so the entries were there and resolved to undefined on every row: sorting a no-op, filtering empty. Corpus convention, same sweep that fixed apps 137/164/174/247/353."
     }
   ]
 }
