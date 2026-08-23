@@ -34,6 +34,10 @@
     {
       "type": "NOTE",
       "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the feed list renders all four feed.json rows, the side content's Close button hides the side content through the SIDE_CONTENT_HIDE round-trip that flips the two-way-bound showSideContent (setShowSideContent false), the Open Side Content button then shows (its visible flag comes from the breakpointChanged round-trip) and brings it back through SIDE_CONTENT_SHOW. Residual (nothing headless can assert): the FeedListItem layout with its remote author pictures, and toggle() on a real S-breakpoint device."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's own style.css is injected since 2026-08-23 through an added core:HTML style leaf (no counterpart in the original view, which loads the sheet through its manifest). The view carries sapUiDSCExplored and the rule behind it has to come with it. The port carried the class names with nothing behind them until then - the gap CAPABILITIES names as one of the two most common generation mistakes, and the same one the 2026-08-21 sweep closed in apps 122/124/133/138/145. \\{ \\} escaped: the XMLView parser reads an unescaped brace as a binding."
     }
   ]
 }

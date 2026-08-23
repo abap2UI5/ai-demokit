@@ -8550,7 +8550,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` sideContentContainer / css / width / ${$parameters>/value} + '%' ) - so the drag has its original effect; apps 213/214 keep the bound-property path where the target HAS a width. // NOTE:`.
     lv_text1 = lv_text1 && ` **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): shrinking the viewport into the S range makes the DynamicSideContent fire breakpointChanged, the` &&
                ` round-trip transports 'S' and the footer Toggle button becomes enabled through the two-way bound flag - the whole _updateToggleButtonState wire. The main/side content render side by side beforehand.` &&
-               ` Residual (nothing headless can assert): that toggle() then really swaps main and side content visually, and the Slider's device-model visible flag on a real phone.`.
+               ` Residual (nothing headless can assert): that toggle() then really swaps main and side content visually, and the Slider's device-model visible flag on a real phone. // NOTE: The sample's own style.css` &&
+               ` is injected since 2026-08-23 through an added core:HTML style leaf (no counterpart in the original view, which loads the sheet through its manifest). Both rules of the sheet apply here:` &&
+               ` sapUiDSCRightText sits on the side-content Text and sapUiDSCExplored on the DynamicSideContent. The port carried the class names with nothing behind them until then - the gap CAPABILITIES names as` &&
+               ` one of the two most common generation mistakes, and the same one the 2026-08-21 sweep closed in apps 122/124/133/138/145. \{ \} escaped: the XMLView parser reads an unescaped brace as a binding.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.DynamicSideContent`      name = `DynamicSideContentEqualSplit`                  class = `z2ui5_cl_smpc_app_267` path = `src/01/02/z2ui5_cl_smpc_app_267.clas.abap`
         score = 4
@@ -8600,6 +8603,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the feed list renders all four feed.json rows, the side content's Close button hides the side content through the` &&
                ` SIDE_CONTENT_HIDE round-trip that flips the two-way-bound showSideContent (setShowSideContent false), the Open Side Content button then shows (its visible flag comes from the breakpointChanged` &&
                ` round-trip) and brings it back through SIDE_CONTENT_SHOW. Residual (nothing headless can assert): the FeedListItem layout with its remote author pictures, and toggle() on a real S-breakpoint device.`.
+    lv_text1 = lv_text1 && ` // NOTE: The sample's own style.css is injected since 2026-08-23 through an added core:HTML style leaf (no counterpart in the original view, which loads the sheet through its manifest). The view` &&
+               ` carries sapUiDSCExplored and the rule behind it has to come with it. The port carried the class names with nothing behind them until then - the gap CAPABILITIES names as one of the two most common` &&
+               ` generation mistakes, and the same one the 2026-08-21 sweep closed in apps 122/124/133/138/145. \{ \} escaped: the XMLView parser reads an unescaped brace as a binding.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.DynamicSideContent`      name = `DynamicSideContentProduct`                     class = `z2ui5_cl_smpc_app_269` path = `src/01/02/z2ui5_cl_smpc_app_269.clas.abap`
         score = 5
