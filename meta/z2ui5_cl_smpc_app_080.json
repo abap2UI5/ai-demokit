@@ -18,7 +18,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the press toast was switched to a roundtrip-free client-composed toast on 2026-07-22 using the conditional placeholder (control_global MESSAGE_TOAST.show, template `{0} {1?Pressed:Unpressed}`; on_event dropped, init-only) - re-verify pressing a ToggleButton toasts \"<id> Pressed\" when down and \"<id> Unpressed\" when up. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): pressing the 'Pressed' ToggleButton (down -> up) toasts '<id> Unpressed' - the {1?Pressed:Unpressed} conditional placeholder resolves from the toggle state; the other buttons are the identical wire."
+      "what": "the press toast was switched to a roundtrip-free client-composed toast on 2026-07-22 using the conditional placeholder (control_global MESSAGE_TOAST.show, template `{0} {1?Pressed:Unpressed}`; on_event dropped, init-only) - re-verify pressing a ToggleButton toasts \"<id> Pressed\" when down and \"<id> Unpressed\" when up. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): pressing the 'Pressed' ToggleButton (down -> up) toasts '<id> Unpressed' - scope, added 2026-08-23: the module asserts only the '{1?Pressed:Unpressed}' half. The {0} half, $event.oSource.sId, is not covered, and formatTemplate does String(values[0]), so an unresolved id would render the literal 'undefined Unpressed' and still satisfy the assertion - the {1?Pressed:Unpressed} conditional placeholder resolves from the toggle state; the other buttons are the identical wire."
     }
   ]
 }

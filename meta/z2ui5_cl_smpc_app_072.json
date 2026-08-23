@@ -17,7 +17,11 @@
     },
     {
       "type": "POST_171",
-      "what": "ObjectNumber.inverted, ObjectNumber.active and ObjectNumber.press (all since UI5 1.86) are kept 1:1 for the inverted/interactive variants; needs UI5 >= 1.86."
+      "what": "ObjectNumber.inverted, ObjectNumber.active and ObjectNumber.press (all since UI5 1.86) are kept 1:1 for the inverted/interactive variants; needs UI5 >= 1.86 for those, and >= 1.110 for the last section: it keeps the original's sapMObjectNumberLongText class, and ObjectNumber's own class doc dates inner-text wrapping via that class to 1.110 (contrast sapMObjectNumberLarge, 'With 1.63', which is under the floor). Below 1.110 the class resolves to no rule and that block silently does not wrap - corrected 2026-08-23, the floor read 1.86 alone."
+    },
+    {
+      "type": "NOTE",
+      "what": "The twelve press handlers are roundtrip-free client toasts (follow_up_action cs_event-control_global MESSAGE_TOAST.show) instead of the controller's MessageToast.show('PRESS fired!'), so the class stays init-only. Behaviourally identical - the text is the controller's verbatim - and the standard substitution every comparable port declares (005, 074, 076, 156, 198). Added 2026-08-23: 072 was the one doing it undeclared."
     }
   ]
 }

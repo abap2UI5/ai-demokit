@@ -18,7 +18,7 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 | Ports | **622** sidecars in `meta/` (src/01 OpenUI5 <= 1.71: 408 · src/02 OpenUI5 > 1.71: 214) |
 | Per library | sap.f: 36 · sap.m: 393 · sap.tnt: 17 · sap.ui: 131 · sap.uxap: 45 |
 | Status ladder | 208 `generated` · 355 `reviewed` · 59 `checked` (live-verified) |
-| Deviations | 12 DROPPED_171 · 131 IMPROVISED · 123 LIVE_TEST · 1664 NOTE · 284 POST_171 |
+| Deviations | 12 DROPPED_171 · 133 IMPROVISED · 123 LIVE_TEST · 1682 NOTE · 284 POST_171 |
 | Open LIVE_TESTs | **123 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 2 structural-diff · 7 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_smpc_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_smpc_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_smpc_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_smpc_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_smpc_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
@@ -273,8 +273,54 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   only thing keeping the port green; 274 — a residual blamed on UI5 1.149 when
   the harness serves 1.151), and an e2e claim wider than its module (273, 280,
   281).
-  **What is left: ports 062 and up that are `reviewed` or `generated` — 335 and
-  206 of them — are still unread against their originals.**
+  **The `reviewed` re-read has started (2026-08-23), and the first block of 20
+  changed the picture again.** Ports 062–064, 067–083 were read the same way.
+  **Ten came back clean** (062, 063, 064, 068, 069, 070, 071, 075, 078, 079,
+  082) and ten carried findings — including the worst defect the whole sweep
+  has produced:
+  - **App 077's close button silently did nothing on 11 of its 15 handlers.**
+    The original resolves the parent per item (`oItem.getParent()`), and
+    `sap.m.NotificationListGroup` declares its own `items` aggregation, so a
+    NESTED item's parent is the GROUP. All fifteen wires were hard-coded to the
+    outer list id: right for the four group closes, and for the eleven item
+    closes `ManagedObject.removeAggregation` looped the list's four groups,
+    matched nothing and returned `null` — no error, no log, the item stayed on
+    screen and only the toast fired. Every gate was green because the call
+    fails silently, and the sidecar called it "reproduced 1:1". The groups now
+    carry ids and each nested item removes itself from its own group. Note the
+    same wire is CORRECT in app 076, where every item is a direct child — which
+    is why the probe it leaned on (a flat Tokenizer) never covered this.
+  - **App 067 dropped a user-visible toast on a false justification.** Its
+    deviation said `setAsyncDescriptionHandler` and the `longtextLoaded` toast
+    both never fire because no mock row has a `longtextUrl`. That is true of
+    the first and false of the second: `longtextLoaded` is ungated —
+    `_navigateToDetails` fires it on every drill-down — so in the original
+    clicking any message toasts "Description validation has been performed."
+    Now wired.
+  - **App 073 lost the Cancel button's `type="Reject"`** (Submit's `Accept` was
+    there, so the pair was asymmetric) **and toasted with every default** where
+    the original shows the toast ON the still-open dialog for 2 s, centre
+    docked, and closes it from `onClose`. Both fixed; only `of` stays dropped,
+    because the framework hands that option to MessageToast unresolved so a
+    control id cannot travel in it.
+  A corpus-wide claim also turned out false and is now closed rather than just
+  corrected: 22 sidecars asserted the asset-path rewrite was "declared by all
+  77 ports that do it". Re-counted: **126 ports do it and 17 declared it
+  nowhere** — exactly the condition the sentence claimed to have closed. The 17
+  now carry the declaration and the sentence names the date its count was
+  taken, since a bare absolute count is what went stale.
+  The remaining findings are the familiar shapes: an undeclared substitution
+  (072's twelve client toasts, 076's `onErrorPress` losing a persistent
+  MessageStrip and its link, 077's `onAcceptErrors` inventing a toast the
+  original does not have), a version floor that is understated (072 needs
+  1.110 for `sapMObjectNumberLongText`, not the 1.86 it claimed), a member
+  declared POST_171 that carries no `@since` at all (067's
+  `markupDescription`), a leftover comment the code below it contradicts (077),
+  a justification that is simply not how UI5 behaves (077's "UI5 boolean
+  parsing rejects `falseue`" — it coerces), a dead `LIVE_TEST` pointer (074),
+  and e2e claims wider than their modules (067, 074, 080 — 074's module now
+  asserts the whole composed toast instead of its prefix).
+  **What is left: 315 `reviewed` and 206 `generated` ports above 061.**
 
 - [x] **CAPABILITIES.md's stale class citations — DONE.** Both halves of this
   are closed, and neither closed the way the entry predicted. The shared
