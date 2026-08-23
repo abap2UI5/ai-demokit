@@ -16,7 +16,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "BlockLayout with six rows / seven cells across background color shades A-F; the Select (11 ColorSet items) and every cell's backgroundColorSet are two-way bound to one model field (initial ColorSet5), reproducing the original {/colorSet} wiring. Cell body texts are reproduced 1:1 (long ones split with &&)."
+      "what": "BlockLayout with six rows / seven cells across background color shades A-F; the Select (11 ColorSet items) and six of the seven cells' backgroundColorSet (the row-2 image cell carries none, in the original as in the port) are two-way bound to one model field (initial ColorSet5), reproducing the original {/colorSet} wiring. Cell body texts are reproduced 1:1 (long ones split with &&)."
     },
     {
       "type": "POST_171",

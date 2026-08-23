@@ -373,13 +373,13 @@ CLASS z2ui5_cl_smpc_app_528 IMPLEMENTATION.
                                         )->a( n = `value` v = `+1 202 34869-0`
                                         )->a( n = `type`  v = `Active`
                                         )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-urlhelper
-                                                                                        t_arg = VALUE #( ( `TRIGGER_TEL` ) ( `+1 202 34869-0` ) ) )
+                                                                                        t_arg = VALUE #( ( `TRIGGER_TEL` ) ( |\{ TEL: '+1 202 34869-0' \}| ) ) )
                                     )->tag( `DisplayListItem`
                                         )->a( n = `label` v = `Phone`
                                         )->a( n = `value` v = `+1 202 555 5555`
                                         )->a( n = `type`  v = `Active`
                                         )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-urlhelper
-                                                                                        t_arg = VALUE #( ( `TRIGGER_TEL` ) ( `+1 202 555 5555` ) ) )
+                                                                                        t_arg = VALUE #( ( `TRIGGER_TEL` ) ( |\{ TEL: '+1 202 555 5555' \}| ) ) )
                                     )->tag( `DisplayListItem`
                                         )->a( n = `label` v = `Email`
                                         )->a( n = `value` v = `donna@peachvalley.com`

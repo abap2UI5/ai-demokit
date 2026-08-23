@@ -20,7 +20,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the controller's only handler is MessageToast.show('The generic tile is pressed.') with a CONSTANT text, so every press wire is the roundtrip-free client toast (follow_up_action cs_event-control_global MESSAGE_TOAST.show, app 005 idiom) and the app stays init-only. The four tiles the original leaves without a press handler keep none, so the 'no press event' half of the sample still demonstrates exactly that."
+      "what": "the controller's only handler is MessageToast.show('The generic tile is pressed.') with a CONSTANT text, so every press wire is the roundtrip-free client toast (follow_up_action cs_event-control_global MESSAGE_TOAST.show, app 005 idiom) and the app stays init-only. The FIVE tiles the original leaves without a press handler keep none (corrected 2026-08-23 - the count read four and silently dropped the GenericTile nested inside the SlideTile; the original has 10 tiles and 5 press wires, and so does the port), so the 'no press event' half of the sample still demonstrates exactly that."
     },
     {
       "type": "NOTE",

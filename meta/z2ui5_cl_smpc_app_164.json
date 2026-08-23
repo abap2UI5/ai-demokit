@@ -25,6 +25,10 @@
     {
       "type": "POST_171",
       "what": "sap.ui.table.Table.rowMode (aggregation, @since 1.119) is used 1:1 (the RowModes sample binds rowMode to the folded 'ui>' state). Newer than UI5 1.71; declared per the property-171 policy. Previously undeclared because the property gate is blind to sap.ui.table (properties.json holds sap.m only); found by the non-sap.m @since audit 2026-07-24."
+    },
+    {
+      "type": "NOTE",
+      "what": "onInit lazily requires sap/ui/table/sample/TableExampleUtils and appends a ToolbarSpacer plus its createInfoButton( ) to the footer toolbar; the port drops both (it keeps the toolbar's id infobar, which the original addresses to append them). The button opens the demo kit's own sample-info popover, which has no counterpart outside the demo kit. Every sap.ui.table sample of this batch drops it the same way - apps 352/353/354/355/357/362 declare exactly this; 164 had been dropping it undeclared until 2026-08-23."
     }
   ]
 }

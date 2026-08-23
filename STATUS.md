@@ -17,9 +17,9 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 |---|---|
 | Ports | **622** sidecars in `meta/` (src/01 OpenUI5 <= 1.71: 408 · src/02 OpenUI5 > 1.71: 214) |
 | Per library | sap.f: 36 · sap.m: 393 · sap.tnt: 17 · sap.ui: 131 · sap.uxap: 45 |
-| Status ladder | 206 `generated` · 355 `reviewed` · 61 `checked` (live-verified) |
-| Deviations | 12 DROPPED_171 · 131 IMPROVISED · 120 LIVE_TEST · 1661 NOTE · 284 POST_171 |
-| Open LIVE_TESTs | **120 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
+| Status ladder | 208 `generated` · 355 `reviewed` · 59 `checked` (live-verified) |
+| Deviations | 12 DROPPED_171 · 131 IMPROVISED · 123 LIVE_TEST · 1664 NOTE · 284 POST_171 |
+| Open LIVE_TESTs | **123 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 2 structural-diff · 7 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_smpc_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_smpc_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_smpc_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_smpc_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_smpc_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
 
@@ -227,7 +227,54 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   message-box hooks live in `core/actions/ControlCall.js`). Understating a
   capability in the file whose whole job is to stop a port from improvising is
   the more expensive of the two.
-  Ports 062 and up are still unread against their originals.
+  **The `checked` re-read is now complete for the whole corpus (2026-08-23).**
+  The 20 remaining `checked` ports above 061 — 065, 066, 084, 085, 108, 140,
+  164, 171, 256, 257, 272–281 — were read the same way. **Four came back clean** (066, 085,
+  276, 278) and sixteen carried a finding — **and this time three were
+  BEHAVIOURAL**, which is exactly what a re-read of human-signed-off ports
+  existed to find out:
+  - **App 084's tel and sms could never have worked.** Both were wired
+    `t_arg = ( 'TRIGGER_TEL' ) ( <number as a plain string> )`, but
+    `evUrlHelper` reads `args[2]` as an OBJECT and takes `params.TEL`, so
+    `URLHelper` got `undefined` and `formatTel` returned `''` — the items
+    navigated to a bare `tel:`/`sms:`. Its `checked.note` said "tel/sms/email
+    and REDIRECT all fire correctly", `CAPABILITIES.md` documented the plain
+    string as the API, and app 528 had copied the shape. All four are fixed;
+    the check is retired and the port is back to `generated`. **The key is
+    `TEL` for sms too** — the handler reads `params.TEL` for both.
+  - **App 065 showed two invented message texts.** Only two of the original's
+    four Save messages are authored by hand; the ZIP and Email ones are UI5's
+    own type messages ("Enter a number with no decimal places", "Enter a valid
+    value"). The port had paraphrased both, which also made it disagree with
+    itself — typing the same bad value makes abap2UI5's auto-collection emit
+    the real bundle text. Corrected to the strings the sample shows.
+  - **App 272's four toasts ran 3000 ms instead of the original's 500**, on a
+    deviation claiming `message_toast_display` has no `duration` parameter. It
+    has one, at the pinned commit, and five ports here were already passing it.
+  A third class is new and worth naming: **a `checked` stamp that outlived the
+  code it certified.** App 108 was signed off 2026-07-27 for "interactions
+  toast as declared", but the port raises no toast at all (both handlers open a
+  MessageBox, faithfully), and its interactions were only built on 2026-08-05 —
+  so the run can only have covered rendering. App 084's is the same shape.
+  AGENTS §10 already rules on this, and both are now `generated` with the
+  historical check kept as a `LIVE_TEST`. **App 277's e2e close was withdrawn**
+  for the neighbouring reason: `close-live-tests` stamps a deviation only when
+  the module drives the wire it names, and 277's module asserts the strip is
+  VISIBLE on a desktop viewport while the deviation is about the phone-portrait
+  branch — which nothing rotates. It is a `LIVE_TEST` again.
+  The rest were documentation drift of the shapes the 001–061 wave established:
+  a mis-scoped declaration (065's ColumnElementData, 140's "every cell", 275's
+  "four tiles", 281's `getSelectedItems`), an `@since` the sources do not carry
+  (281's `showSelectAll` 1.111), an undeclared drop (108's `icon="{pic}"`,
+  164's `TableExampleUtils` info button, which six sibling ports declare), a
+  stale sentence asking for a check the same deviation records (171), a
+  justification that is the opposite of the truth (279 — "no gate sees it",
+  when the linter reports four version findings and that declaration is the
+  only thing keeping the port green; 274 — a residual blamed on UI5 1.149 when
+  the harness serves 1.151), and an e2e claim wider than its module (273, 280,
+  281).
+  **What is left: ports 062 and up that are `reviewed` or `generated` — 335 and
+  206 of them — are still unread against their originals.**
 
 - [x] **CAPABILITIES.md's stale class citations — DONE.** Both halves of this
   are closed, and neither closed the way the entry predicted. The shared

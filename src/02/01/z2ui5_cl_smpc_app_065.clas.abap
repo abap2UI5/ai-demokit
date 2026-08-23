@@ -311,9 +311,9 @@ CLASS z2ui5_cl_smpc_app_065 IMPLEMENTATION.
         t_messages = VALUE #(
           ( message = `A mandatory field is required` type = `Error` additionaltext = `Name`
             target = `/T_FORMS/4/NAME` )
-          ( message = `Enter a number without decimals.` type = `Error` additionaltext = `ZIP Code/City`
+          ( message = `Enter a number with no decimal places` type = `Error` additionaltext = `ZIP Code/City`
             target = `/T_FORMS/5/ZIP_CODE` )
-          ( message = `Enter a valid email address.` type = `Error` additionaltext = `Email`
+          ( message = `Enter a valid value` type = `Error` additionaltext = `Email`
             target = `/T_FORMS/6/EMAIL` )
           ( message = `The value should not exceed 40` type = `Warning` additionaltext = `Standard Weekly Hours`
             description = `The value of the working hours field should not exceed 40 hours.`

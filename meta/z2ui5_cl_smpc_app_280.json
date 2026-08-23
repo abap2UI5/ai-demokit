@@ -11,7 +11,7 @@
   "status": "checked",
   "checked": {
     "date": "2026-08-02",
-    "note": "verified in a running system - human live check 2026-08-02 (maintainer): app started and exercised, no findings. Both legs are additionally e2e-verified (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): with the Switch off the liveChange round-trip fills GET_VALUE while model.getProperty() stays behind, and after flipping it the model follows."
+    "note": "verified in a running system - human live check 2026-08-02 (maintainer): app started and exercised, no findings. Both legs are additionally e2e-verified (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): with the Switch off the liveChange round-trip fills GET_VALUE while model.getProperty() stays behind, and after flipping it the model follows. Restated 2026-08-23: the e2e half of that is narrower than it reads. The module asserts the PRE-flip text in the second Text after the flip, and clicking the Switch blurs the TextArea, which fires change and writes the model regardless of valueLiveUpdate - so that assertion passes even if the flip did nothing. The off-leg is genuinely covered; the model-follows leg rests on the human live check alone. Asserting the POST-flip text would close it."
   },
   "deviations": [
     {

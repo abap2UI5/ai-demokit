@@ -28,7 +28,7 @@
     },
     {
       "type": "NOTE",
-      "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the Default and the Error dialog each open with their own title/state/text and close again on the Emphasized OK button (popup_close, no round-trip) - the second open proves the rebuild-per-open lifecycle works. The other three differ only in the three literals the same builder method fills in, and render-smoke covers their views."
+      "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the Default and the Error dialog each open with their own text and close again on the OK button. Restated 2026-08-23: the claim used to say \"title/state/text\" and \"the Emphasized OK button\", and the module asserts none of those three - it matches the dialog CONTENT text, locates the button by its accessible name OK, and never looks at the title, at state, or at the button type. The close leg and the second open are genuinely covered (popup_close, no round-trip) - the second open proves the rebuild-per-open lifecycle works. The other three differ only in the three literals the same builder method fills in, and render-smoke covers their views."
     }
   ]
 }

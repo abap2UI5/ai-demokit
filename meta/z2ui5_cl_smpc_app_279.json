@@ -16,7 +16,7 @@
   "deviations": [
     {
       "type": "POST_171",
-      "what": "sap.m.IllustratedMessage (control since UI5 1.98, with its description / title / illustrationType members) is newer than 1.71 but kept for the 1:1 port - it is the sample's whole point, the error fallback. No gate sees it (the control is not in ui5/properties.json), so this entry is declared by policy; the app needs a UI5 release >= 1.98."
+      "what": "sap.m.IllustratedMessage (control since UI5 1.98, with its description / title / illustrationType members) is newer than 1.71 but kept for the 1:1 port - it is the sample's whole point, the error fallback. Corrected 2026-08-23: this used to claim \"no gate sees it (the control is not in ui5/properties.json), so this entry is declared by policy\", and both halves were false. sap.m.IllustratedMessage IS in ui5/properties.json at since 1.98, with description/title/illustrationType carrying the same version, and the linter reports control-too-new plus three member-too-new findings on this port. Since view-gates lets only a POST_171/DROPPED_171 excuse a VERSION finding, this declaration is not a formality at all - it is the load-bearing entry that keeps the port green; the app needs a UI5 release >= 1.98."
     },
     {
       "type": "NOTE",

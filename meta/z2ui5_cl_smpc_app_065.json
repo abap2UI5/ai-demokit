@@ -12,7 +12,7 @@
   "status": "checked",
   "checked": {
     "date": "2026-07-27",
-    "note": "verified in a running system 2026-07-27 - MessageManager cc: add/remove app-authored messages reconciled, MessagePopover shows both sources"
+    "note": "verified in a running system 2026-07-27 - MessageManager cc: add of app-authored messages reconciled (the REMOVE arm is not exercised by this port - corrected 2026-08-23: t_messages is assigned in one place, always to the same four rows, nothing clears or shrinks it, and the cc control's removal path only runs when a row leaves items or the view is destroyed), MessagePopover shows both sources"
   },
   "deviations": [
     {
@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the sample's nested JSON model (street/name, zip/code, phone/number) is flattened into a flat ABAP row (STREET_NAME, ZIP_CODE, PHONE_NUMBER, ...) - abap2UI5 serves one default model; the bindings use the flattened field names. The three f:ColumnElementData layoutData hints (cellsSmall/cellsLarge column spans on the street-number, zip-code and one employment Input) are dropped - responsive-span cosmetics with no data/behaviour."
+      "what": "the sample's nested JSON model (street/name, zip/code, phone/number) is flattened into a flat ABAP row (STREET_NAME, ZIP_CODE, PHONE_NUMBER, ...) - abap2UI5 serves one default model; the bindings use the flattened field names. The three f:ColumnElementData layoutData hints (cellsSmall/cellsLarge column spans on the street-number, zip-code and the {phone/time} Input in the Personal form's Contact section (corrected 2026-08-23 - this said 'one employment Input', and the employment SimpleForm carries no ColumnElementData at all; the count of three was right, the third one's home was not)) are dropped - responsive-span cosmetics with no data/behaviour."
     },
     {
       "type": "DROPPED_171",
@@ -41,7 +41,7 @@
     },
     {
       "type": "NOTE",
-      "what": "activeTitlePress scroll-to-control navigation is RESTORED (activeTitle=true): pressing a message title fires ACTIVE_TITLE with the message's target control id (${$parameters>/item}.getBindingContext('message').getObject().getControlIds()[0]), and the handler runs follow_up_action( scroll_into_view ) + control_by_id close + set_focus on it - the 1:1 equivalent of the sample's scrollToElement + close + focus. Needs the upstream fix that lets SET_FOCUS/SCROLL_INTO_VIEW resolve a fully-qualified control id (resolveById), since a UI5 Message carries the view-prefixed id."
+      "what": "activeTitlePress scroll-to-control navigation is RESTORED (activeTitle=true): pressing a message title fires ACTIVE_TITLE with the message's target control id (${$parameters>/item}.getBindingContext('message').getObject().getControlIds()[0]), and the handler runs follow_up_action( scroll_into_view ) + control_by_id close + set_focus on it - the 1:1 equivalent of the sample's scrollToElement + close + focus. Needs the upstream fix that lets SET_FOCUS/SCROLL_INTO_VIEW resolve a fully-qualified control id (resolveById), since a UI5 Message carries the view-prefixed id. Scope, added 2026-08-23: the grouping is restored for the APP-AUTHORED messages only. groupName binds {message>code}, and code is set only on rows the cc MessageManager creates, so a message UI5 collects itself has none and falls to the empty default, landing ungrouped. The original computes the header from controlIds for every message."
     },
     {
       "type": "NOTE",
@@ -50,6 +50,14 @@
     {
       "type": "NOTE",
       "what": "MessageItem grouping (groupItems=true + the 'Personal, <section>' group headers) is RESTORED: the original derives groupName in its controller (getGroupName). That is a domain classification, so - abap2UI5 being a thin frontend - it is computed in the ABAP backend (COND on additionaltext: Email -> 'Personal, Contact', else 'Personal, Information') and carried on the Message code field (sap.ui.core.message.Message has no groupName slot), bound groupName=\"{message>code}\" - no frontend expression. Only Email sits in the Contact group, all others in Information, matching the original's headers."
+    },
+    {
+      "type": "NOTE",
+      "what": "Two of the four Save messages carry the text UI5 itself produces, corrected 2026-08-23. Only two of the original's four are authored by hand - the required-field Error and the weekly-hours Warning; the ZIP and Email ones come from the registered form container turning the failed two-way updates of setValue('AAA') and setValue('MariaFontes.com') into messages whose text is the TYPE's (Integer -> EnterInt 'Enter a number with no decimal places', String search constraint -> 'Enter a valid value', both in the OpenUI5 message bundle). The port had paraphrased them as 'Enter a number without decimals.' and 'Enter a valid email address.', which the sample never shows - and which made the port disagree with ITSELF, since typing AAA into the same field makes abap2UI5's own auto-collection emit the real bundle text."
+    },
+    {
+      "type": "NOTE",
+      "what": "After Save the ZIP field renders EMPTY where the original shows the invalid 'AAA'. The original calls setValue('AAA') on the CONTROL, so the text stays visible while the two-way update throws a ParseException and the model keeps 12345 - showing the bad input next to its message is the point of that step. The port writes 'AAA' into the MODEL instead, and the field's Integer type formats a non-numeric value to '' (NumberFormat.format returns the empty string when the value is NaN and emptyString is NaN). Reproducing it needs the value set on the control while the model keeps the valid one, which the current shape has no route for; declared rather than improvised."
     }
   ]
 }
