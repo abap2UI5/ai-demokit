@@ -16,13 +16,16 @@
  *   inside the sample folder   an ERROR. This is the sample's own material;
  *                              if it is missing, the archive is incomplete
  *                              and nobody can tell by looking.
- *   `../<Shared*>/...`         ADVISORY. 37 sap.uxap samples pull their
- *                              content blocks from sibling folders
- *                              (`../SharedBlocks`, `../SharedJSONData`) that
- *                              the harvest never walked into. That is one
- *                              backfill, not 37 findings, and it needs the
- *                              network — so it is counted and named here
- *                              rather than failing a gate nobody can green.
+ *   `../<Shared*>/...`         REPORTED, never an error. AGENTS section 4
+ *                              carries an explicit exception for these: the
+ *                              uxap manifests OVER-LIST, naming the whole
+ *                              `../SharedBlocks/` set regardless of what the
+ *                              view instantiates, and structural-diff resolves
+ *                              manifest-listed `../<OtherSample>/*.view.xml`,
+ *                              so archiving them would make it demand phantom
+ *                              controls from correct ports. They are counted
+ *                              here so the exception stays visible and its
+ *                              size is known — not so someone backfills it.
  *
  * `scripts/archive-absent.json` allowlists files that are listed upstream but
  * genuinely not fetchable (binaries the corpus does not archive, manifest
@@ -100,7 +103,7 @@ let advisory = '';
 if (shared.size) {
   const owners = new Set();
   for (const s of shared.values()) for (const o of s) owners.add(o);
-  advisory = `, ${shared.size} cross-sample file(s) under ${[...new Set([...shared.keys()].map((k) => k.split('/').slice(0, 2).join('/')))].join(', ')} unarchived for ${owners.size} sample(s) (advisory; needs a harvest run)`;
+  advisory = `, ${shared.size} cross-sample file(s) under ${[...new Set([...shared.keys()].map((k) => k.split('/').slice(0, 2).join('/')))].join(', ')} unarchived for ${owners.size} sample(s) (the AGENTS section 4 exception — deliberate, see the header)`;
 }
 
 if (errors) {

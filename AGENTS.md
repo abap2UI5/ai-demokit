@@ -411,7 +411,12 @@ manifest-listed `../<OtherSample>/*.view.xml` paths, so archiving
 it then demands phantom controls (`layout:Grid`/`GridData`/`VerticalLayout`)
 from correct ports. So uxap block templates stay out of `ui5/`, and the
 BlockBase inlining is declared in each sidecar instead
-(apps 161/187/188/217/258–263).
+(apps 161/187/188/217/258–263). `scripts/check-archive.mjs` gates the rule and
+knows the exception: a file listed inside the sample's own folder and missing
+from disk is an ERROR (with `scripts/archive-absent.json` for the handful that
+were never served), while a `../<Shared*>/` reference is counted and reported,
+never failed — so the size of this exception stays visible without anyone being
+told to backfill it.
 
 ---
 
@@ -690,7 +695,7 @@ The deterministic gates run on every PR, one workflow each; the heavy
 | `structural-diff.yaml` | `structural_diff` | port vs. archived original, binding values included |
 | `data-fidelity.yaml` | `data_fidelity` | seeded values vs. the archived sample mocks |
 | `view-gates.yaml` | `view_gates` | properties + structure + headless render — the three former view gates, now run from [abap2UI5-linter](https://github.com/abap2UI5/linter) with only the corpus policy kept here in `scripts/view-gates.mjs`; also `npm run check:collection` for `src/03`, and it publishes the two README badges |
-| `meta-valid.yaml` | `meta_valid` | sidecar schema + referential integrity, and that every generated artefact (overview app, `README.md`, `api.md`, `STATUS.md`, `SAMPLES.md`) is in sync |
+| `meta-valid.yaml` | `meta_valid` | sidecar schema + referential integrity, the archive the sidecars point at (`check-archive`, §4), and that every generated artefact (overview app, `README.md`, `api.md`, `STATUS.md`, `SAMPLES.md`) is in sync |
 | `tooling-tests.yaml` | `tooling_tests` | the gate/generator tooling's own fixture tests |
 | `check-prose-names.yaml` | `prose_names` | every `z2ui5_cl_*` class named in prose exists, here or in the repository that owns it |
 | `check-app-rules.yaml`, `check-keywords.yaml`, `check-summary.yaml` | same | the shared abaplint app rules, the `@keywords` and the `@summary` lines |
@@ -719,7 +724,8 @@ at the bump PR, where the debt decision belongs.
 npm run gates        # full offline gate set, fail-fast; needs NO node_modules and no network
 ```
 It chains: chain-format → check-prose-names → pattern-lint → check-pins →
-validate-meta → structural-diff → data-fidelity → check-mcp-contract →
+check-archive → validate-meta → structural-diff → data-fidelity →
+check-mcp-contract →
 regenerate overview/coverage/status/SAMPLES.md/catalogue.json →
 `git diff --exit-code -- src README.md api.md STATUS.md SAMPLES.md catalogue.json`
 (regenerated artefacts must leave the tree clean, exactly as the `meta_valid`
