@@ -35,4 +35,29 @@ export default async (page, expect) => {
     const t = ui5All().find((c) => c.getId().endsWith('productMIWithTable'));
     return t && t.getShowTableSuggestionValueHelp() === false && t.getShowValueHelp() === false;
   }, 'the tabular MultiInput kept a value help it should not have');
+  // the conversion: productMIWithTable carries a z2ui5.cc.MultiInputExt
+  // companion, and its tokenFromRow( ) builds the Token the sample's own
+  // addValidator( ) builds - key = the Name cell, text = `key(price cell)`.
+  // Asserted on a REAL bound suggestion row rather than through the popover:
+  // this is the code path the conversion added, and it is deterministic.
+  await waitForUi5(page, () => {
+    const ext = ui5All().find((c) => c.getMetadata().getName() === 'z2ui5.cc.MultiInputExt');
+    return ext && ext.getProperty('MultiInputId') === 'productMIWithTable'
+      && ext.getProperty('TokenKeyCell') === 0 && ext.getProperty('TokenTextCells') === '3';
+  }, 'the MultiInputExt companion never reached productMIWithTable');
+  await waitForUi5(page, () => {
+    const ext = ui5All().find((c) => c.getMetadata().getName() === 'z2ui5.cc.MultiInputExt');
+    const t = ui5All().find((c) => c.getId().endsWith('productMIWithTable'));
+    // the FIRST row under the descending SupplierName grouping, whichever it
+    // is - read from the row itself so the assertion does not restate the sort
+    const row = t.getSuggestionRows().find((r) => r.getMetadata().getName() === 'sap.m.ColumnListItem');
+    const cells = row.getCells();
+    const token = ext.tokenFromRow(row);
+    return token && token.getKey() === cells[0].getText()
+      && token.getText() === `${cells[0].getText()}(${cells[3].getText()})`;
+  }, 'the companion did not build the sample\'s token from a suggestion row');
+  await waitForUi5(page, () => {
+    const t = ui5All().find((c) => c.getId().endsWith('productMIWithTable'));
+    return t && t.getTokens().length === 0 && !t.getBinding('tokens');
+  }, 'a tokens binding survived the conversion');
 };
