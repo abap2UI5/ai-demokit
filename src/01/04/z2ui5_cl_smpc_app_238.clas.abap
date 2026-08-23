@@ -331,8 +331,12 @@ CLASS z2ui5_cl_smpc_app_238 IMPLEMENTATION.
       WHEN `GENERIC_TAG_PRESS`.
         popover_card( ).
       WHEN `TOGGLE_FOOTER`.
+        " showFooter is BOUND, so the automatic model push is the whole update -
+        " no view_display( ). A re-render would hand back a fresh control tree
+        " and throw away what the original never touches: the IconTabBar's
+        " selected tab (neither side declares a selectedKey), the pinnable
+        " header's expanded state and the scroll position
         showfooter = xsdbool( showfooter = abap_false ).
-        view_display( ).
     ENDCASE.
 
   ENDMETHOD.

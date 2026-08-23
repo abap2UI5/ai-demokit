@@ -17,7 +17,7 @@
     },
     {
       "type": "NOTE",
-      "what": "The SegmentedButton.selectedKey and the BlockLayout.background are both two-way bound to the same /SELECTEDBACKGROUND field, so changing the segmented button updates the BlockLayout background entirely on the client with no round-trip (the app-048/003 shared-binding idiom, matching the original {/selectedBackground} on both). The field is seeded with the enum default Default (the original leaves /selectedBackground undefined; an empty string would fail BlockBackgroundType validateProperty). Live sync unverified. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_214.mjs)."
+      "what": "The SegmentedButton.selectedKey and the BlockLayout.background are both two-way bound to the same /SELECTEDBACKGROUND field, so changing the segmented button updates the BlockLayout background entirely on the client with no round-trip (the app-048/003 shared-binding idiom, matching the original {/selectedBackground} on both). The field is seeded with the enum default Default (the original leaves /selectedBackground undefined; an empty string would fail BlockBackgroundType validateProperty). Live sync unverified. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_214.mjs). (Scope corrected 2026-08-23: that module runs sliderDrivenWidth only - it never clicks a SegmentedButtonItem and never reads BlockLayout.getBackground( ), so the shared-binding claim beside it is unverified. The mechanism is sound: SegmentedButton writes selectedKey through setProperty, and ManagedObject.setProperty runs updateModelProperty regardless of the suppress flag.)"
     },
     {
       "type": "NOTE",

@@ -29,7 +29,7 @@
     },
     {
       "type": "NOTE",
-      "what": "onAfterRendering seeds the info Text from the layout that is active after the first render (getCustomLayout().getActiveGridSettings().sParentAggregationName). The backend cannot read that, so the port ships the view's own initial text ('Layout size is: ') and the first real value arrives with the first layoutChange event - which UI5 fires whenever the active GridSettings change, including on the initial breakpoint evaluation."
+      "what": "onAfterRendering seeds the info Text from the layout that is active after the first render (getCustomLayout().getActiveGridSettings().sParentAggregationName). The backend cannot read that, so the port ships the view's own initial text ('Layout size is: ') and the first real value arrives with the first layoutChange event - which UI5 fires whenever the active GridSettings change, but NOT on the initial evaluation. **Corrected 2026-08-23**: onGridAfterRendering calls setActiveLayout with bTriggerLayoutChange = false, and _sActiveLayout starts as 'layout' while _getLayoutToApply falls back to 'layout' for any missing aggregation - this sample supplies only layoutS/layout/layoutXL, so Tablet and Desktop both resolve to 'layout' and hit the early exit. The info Text therefore shows the bare 'Layout size is: ' at every load, and between 600 and 1440px no event ever arrives to fill it, where the original's onAfterRendering seeds it from getActiveGridSettings( )."
     },
     {
       "type": "NOTE",

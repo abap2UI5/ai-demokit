@@ -12,12 +12,12 @@
   "checked": null,
   "render_smoke": {
     "skip": true,
-    "reason": "The 20 DateTypeRange rows are COMPUTED in model_init (a DO loop over sy-datum building 'yyyy-MM-dd' strings into VALUE #( BASE t_special )), so the static reconstruction cannot resolve START_DATE and the row reaches the harness without it - Formatter.DateCreateObject then gets undefined and XMLView.create fails with 'Date must be a JavaScript or UI5Date date object'. It is the harness's row, not the port's: at runtime every row carries a real ISO date. Verified against the render each run - the skip is honoured only while it still errors."
+    "reason": "The 20 DateTypeRange rows are COMPUTED in model_init (a DO loop over sy-datum building 'yyyy-MM-dd' strings into VALUE #( BASE t_special )), so the static reconstruction cannot resolve START_DATE and the row reaches the harness without it - Formatter.DateAbapDateToDateObject then gets undefined and XMLView.create fails with 'Date must be a JavaScript or UI5Date date object'. It is the harness's row, not the port's: at runtime every row carries a real ISO date. Verified against the render each run - the skip is honoured only while it still errors. (Reason re-stated 2026-08-23: the port has bound DateAbapDateToDateObject since the 2026-08-21 rewrite, and that formatter returns null rather than an Invalid Date for a non-date, so the failure mode named here no longer describes this class - the skip stands on the harness not carrying the row, not on the formatter.)"
   },
   "deviations": [
     {
       "type": "POST_171",
-      "what": "DateTypeRange.startDate is a date-object (type object) property, so it is bound through core:require=\"{Formatter: 'z2ui5/model/formatter'}\" + formatter 'Formatter.DateCreateObject' (the curated module), which needs UI5 >= 1.74 - a plain ISO-string binding would crash view creation (CAPABILITIES 'Date-object properties'; same idiom as apps 108/109). The xmlns:core + core:require were added for it; the original view had neither."
+      "what": "DateTypeRange.startDate is a date-object (type object) property, so it is bound through core:require=\"{Formatter: 'z2ui5/model/formatter'}\" + formatter 'Formatter.DateAbapDateToDateObject' (the curated module), which needs UI5 >= 1.74 - a plain ISO-string binding would crash view creation (CAPABILITIES 'Date-object properties'; same idiom as apps 108/109). The xmlns:core + core:require were added for it; the original view had neither."
     },
     {
       "type": "NOTE",
