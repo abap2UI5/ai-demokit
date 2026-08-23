@@ -18,7 +18,7 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 | Ports | **622** sidecars in `meta/` (src/01 OpenUI5 <= 1.71: 408 · src/02 OpenUI5 > 1.71: 214) |
 | Per library | sap.f: 36 · sap.m: 393 · sap.tnt: 17 · sap.ui: 131 · sap.uxap: 45 |
 | Status ladder | 206 `generated` · 355 `reviewed` · 61 `checked` (live-verified) |
-| Deviations | 12 DROPPED_171 · 132 IMPROVISED · 120 LIVE_TEST · 1659 NOTE · 284 POST_171 |
+| Deviations | 12 DROPPED_171 · 131 IMPROVISED · 120 LIVE_TEST · 1660 NOTE · 284 POST_171 |
 | Open LIVE_TESTs | **120 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 2 structural-diff · 7 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_smpc_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_smpc_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_smpc_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_smpc_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_smpc_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
@@ -56,38 +56,31 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   613. The 12-word cap is unchanged, so a few lines traded a weaker term for a
   control that is actually built.
 
-- [ ] **Two ports gave up on a capability that already exists — found
-  2026-08-22 while answering "what should we ask the framework for".** Neither
-  is a framework gap; both sidecars reason from an older state of the framework
-  than the one they were written against, and the fix is in this repository.
-  - **App 607 (`OverflowToolbarFooter`) — grouping is not lost.** Its
-    `IMPROVISED` says "abap2UI5 has no client-side grouping function, so the
-    port sorts by SupplierName instead" and the grey `SupplierName` group
-    headers go with it. But `BINDING_CALL`'s `sort` takes THREE parameters —
-    `sort(binding, [path, descending, group])` builds
-    `new Sorter(path, castArg("bool", descending), castArg("bool", group))`
-    (`app/webapp/core/actions/ControlCall.js`) — and the sample's own
-    `_fnGroup` returns `{ key: SupplierName, text: SupplierName }`, which is
-    exactly what UI5's DEFAULT group function produces for
-    `Sorter(path, descending, true)`. So the headers are reachable as they
-    stand, either through `binding_call` or by rebuilding the binding-info
-    sorter per round trip the way apps 176 / 613 write theirs. Rework, then the
-    deviation becomes a NOTE.
-  - **App 600 (`TreeDnD`) — the drag veto is expressible.** Its `DROPPED_171`
+- [~] **Two ports gave up on a capability that already exists — 607 done,
+  600 awaiting its live check (found 2026-08-22, reworked 2026-08-23).**
+  Neither was a framework gap; both sidecars reasoned from an older state of
+  the framework than the one they were written against.
+  - **App 607 (`OverflowToolbarFooter`) — done.** Its `IMPROVISED` said
+    "abap2UI5 has no client-side grouping function, so the port sorts by
+    SupplierName instead" and the grey group headers went with it. But
+    `BINDING_CALL`'s `sort` takes THREE parameters — `[path, descending, group]`
+    → `new Sorter(path, descending, group)` — and UI5's DEFAULT group function
+    returns `{ key, text }` of the sorted property, which is exactly what the
+    sample's `_fnGroup` returns. `filters_apply` now hands the sorter to the
+    live binding instead of ordering the ABAP table; the Name filter stays
+    server-side. The deviation is a NOTE, and the interaction module asserts
+    the `sap.m.GroupHeaderListItem`s appear on Group and are gone after Reset.
+  - **App 600 (`TreeDnD`) — wired, not yet live-verified.** Its `DROPPED_171`
     reads "the veto itself is expressible (`s_ctrl-check_prevent_default`) but
     its condition is not: the flag is baked per wire at RENDER time". That was
-    true until 2026-08-05, when `pr/conditional-prevent-default` landed
-    `s_ctrl-prevent_default_expr` — the same veto decided per FIRING, a client
-    expression evaluated when the event fires, and it wins over the flag when
-    both are set. The sample's condition is
-    `aSelectedItems.length > 0 && aSelectedIndices.indexOf(iDraggedItemIndex) === -1`,
-    and a `$`-prefixed argument is a full UI5 expression with method calls
-    (app 093 already writes
-    `${$parameters>/item/oParent}.indexOfItem(${$parameters>/item})`), so the
-    dragged item's parent tree can be asked for its selection inline. Worth a
-    live check before the sidecar changes — the veto is the half of `onDragStart`
-    that is testable; stashing the dragged contexts in the drag session stays
-    dropped either way.
+    true until `s_ctrl-prevent_default_expr` landed — the same veto decided per
+    FIRING. The `dragStart` wire now carries
+    `${$parameters>/target}.getParent().getSelectedItems()…`, since a tree
+    item's parent IS the Tree. **The cost is real and has to be measured before
+    the sidecar moves:** `_event_client` takes no `s_ctrl`, so the veto only
+    exists on a wire that also round-trips, and whether that round trip
+    disturbs the drag it just allowed is a browser question. The `DROPPED_171`
+    stays until the e2e says otherwise.
 
 - [ ] **The per-port review sweep — every port that was `generated` has now
   been read.** Each port is read against its ARCHIVED ORIGINAL

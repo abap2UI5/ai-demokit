@@ -4507,20 +4507,22 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` for the footer toolbar, on every liveChange. width IS a bindable property, so both toolbars take an expression over the two-way bound Slider value and follow it in the browser - the liveChange wire` &&
                ` is dropped, since a round trip per keystroke would be slower AND lossy (apps 582/604 carry the same fold). // NOTE: Thin frontend: fnApplyFiltersAndOrdering builds a sap.ui.model.Filter (Name` &&
                ` Contains <query>) and one sap.ui.model.Sorter and calls filter()/sort() on the items binding. The port filters and sorts the ABAP table it sends instead (app 298 idiom): onSort flips the sorter's` &&
-               ` descending flag, onGroup switches the sort key between SupplierName and Name, onReset clears the query and both flags. // IMPROVISED: grouping loses its group headers. onGroup's Sorter carries a`.
-    lv_text1 = lv_text1 && ` _fnGroup that returns a {key, text} per row, which is what makes UI5 draw a grey SupplierName header above each block. abap2UI5 has no client-side grouping function, so the port sorts by SupplierName` &&
-               ` instead: the rows end up in the same order, without the headers. App 298 records the same loss for the same reason. // NOTE: onFilter runs on the SearchField's liveChange. The port binds value` &&
-               ` two-way and filters on search instead - the final-value event - which is the prefer-a-bindable-property rule: a round trip per keystroke drops the events behind one already in flight. onReset's` &&
-               ` byId('maxPrice').setValue('') becomes a CLEAR on the same bound field. // NOTE: onDefaultActionAccept and onBeforeMenuOpen toast constants, so both are wired round-trip-free as follow_up_action(` &&
-               ` control_global, MESSAGE_TOAST show ). onMenuAction walks the MenuItem's parent chain to build a ' > ' path; this menu is one level deep, so the path IS the item's text and the wire carries` &&
-               ` ${$parameters>/item}.getText(). onTogglePress toasts the button's generated id plus Pressed / Unpressed - the port gives the button the explicit id 'toggleButton' and binds its pressed state, so the`.
-    lv_text1 = lv_text1 && ` backend can name and read it. // NOTE: the Price cell is a composite currency binding in the sample (parts Price + CurrencyCode through sap.ui.model.type.Currency with showMeasure false). The port` &&
-               ` binds the two fields directly on the ObjectNumber's number and unit, which is what the formatter renders, since the mock's prices are plain integers. // LIVE-TEST: not yet verified in a running` &&
-               ` system: that the slider shrinks both toolbars into their overflow areas, and that Sort / Group / Reset and the Export menu behave as upstream.`.
+               ` descending flag, onGroup switches the sort key between SupplierName and Name, onReset clears the query and both flags. // NOTE: grouping keeps its group headers. onGroup's Sorter carries a _fnGroup`.
+    lv_text1 = lv_text1 && ` that returns a {key, text} per row, which is what makes UI5 draw a grey SupplierName header above each block. The port hands the SORTER to the live binding instead of ordering the ABAP table:` &&
+               ` binding_call's sort takes [path, descending, group] and builds new Sorter(path, descending, group) on the client, and UI5's DEFAULT group function returns {key, text} of the sorted property - the` &&
+               ` same shape _fnGroup returns - so the headers are reproduced rather than approximated. The Name Contains filter stays server-side over the data this thin frontend sends. (App 298 records the header` &&
+               ` loss for the same control and predates this; its rework is separate.) // NOTE: onFilter runs on the SearchField's liveChange. The port binds value two-way and filters on search instead - the` &&
+               ` final-value event - which is the prefer-a-bindable-property rule: a round trip per keystroke drops the events behind one already in flight. onReset's byId('maxPrice').setValue('') becomes a CLEAR on` &&
+               ` the same bound field. // NOTE: onDefaultActionAccept and onBeforeMenuOpen toast constants, so both are wired round-trip-free as follow_up_action( control_global, MESSAGE_TOAST show ). onMenuAction`.
+    lv_text1 = lv_text1 && ` walks the MenuItem's parent chain to build a ' > ' path; this menu is one level deep, so the path IS the item's text and the wire carries ${$parameters>/item}.getText(). onTogglePress toasts the` &&
+               ` button's generated id plus Pressed / Unpressed - the port gives the button the explicit id 'toggleButton' and binds its pressed state, so the backend can name and read it. // NOTE: the Price cell is` &&
+               ` a composite currency binding in the sample (parts Price + CurrencyCode through sap.ui.model.type.Currency with showMeasure false). The port binds the two fields directly on the ObjectNumber's number` &&
+               ` and unit, which is what the formatter renders, since the mock's prices are plain integers. // LIVE-TEST: not yet verified in a running system: that the slider shrinks both toolbars into their` &&
+               ` overflow areas, and that Sort / Group / Reset and the Export menu behave as upstream.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.OverflowToolbar`                 name = `OverflowToolbarFooter`                         class = `z2ui5_cl_smpc_app_607` path = `src/02/01/z2ui5_cl_smpc_app_607.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         since = `1.28`
         is_post171 = abap_true
