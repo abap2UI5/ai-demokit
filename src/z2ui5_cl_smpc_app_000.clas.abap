@@ -6600,17 +6600,18 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` instead (${$parameters>/draggedControl}.getTitle() and the same for droppedControl, app 569 idiom) and the backend reparents that node. To make a reparenting expressible at all the model is kept` &&
                ` twice: a FLAT table (text, ref, parent) is the source of truth and the five-level nested table the Tree binds is rebuilt from it after every drop. Lost with the drag session: dragging a`.
     lv_text1 = lv_text1 && ` MULTI-selection moves only the node under the cursor here, since the selection never reaches the backend. The sample's own guard against dropping a node into its own child is reproduced` &&
-               ` (is_descendant walks the parent chain). // 1.71: onDragStart's oEvent.preventDefault() vetoes a drag that starts on a row OUTSIDE the current selection. The veto itself is expressible` &&
-               ` (s_ctrl-check_prevent_default, app 241 idiom) but its condition is not: the flag is baked per wire at RENDER time, and whether the dragged row is selected is known only at the moment of the drag. The` &&
-               ` wire is dropped rather than baked wrong, so every row can be dragged here. Its second half - stashing the dragged contexts in the drag session - goes with it. // NOTE: the sample's onDrop pushes into` &&
-               ` a ``categories`` array while Tree.json nests its children under ``nodes`` and the view binds path '/' - so upstream a dropped node lands in an array the tree does not read and simply disappears from` &&
-               ` the visible hierarchy. The port reparents under ``nodes``, i.e. it does what the comment in the sample says it is doing ('the children of a node are inside an array with the name categories') rather`.
-    lv_text1 = lv_text1 && ` than what the file actually contains. // LIVE-TEST: not yet verified in a running system: that dragging a node onto another reparents it and the tree redraws with the node under its new parent.`.
+               ` (is_descendant walks the parent chain). // NOTE: onDragStart's oEvent.preventDefault() vetoes a drag that starts on a row OUTSIDE the current selection. The veto is wired, but not the way the flag` &&
+               ` would do it: s_ctrl-check_prevent_default (app 241 idiom) is baked per wire at RENDER time, and whether the dragged row is selected is known only at the moment of the drag - so the port carries` &&
+               ` prevent_default_expr instead, a client expression evaluated on each firing, and DRAG_START reaches on_event unhandled because the decision has already been made. What stays dropped is the sample's` &&
+               ` second half: stashing the dragged contexts in the drag session, which has no counterpart here. // NOTE: the sample's onDrop pushes into a ``categories`` array while Tree.json nests its children under` &&
+               ` ``nodes`` and the view binds path '/' - so upstream a dropped node lands in an array the tree does not read and simply disappears from the visible hierarchy. The port reparents under ``nodes``, i.e.`.
+    lv_text1 = lv_text1 && ` it does what the comment in the sample says it is doing ('the children of a node are inside an array with the name categories') rather than what the file actually contains. // NOTE: not yet verified` &&
+               ` in a running system: that dragging a node onto another reparents it and the tree redraws with the node under its new parent. **e2e-verified 2026-08-23** (nightly e2e interaction,` &&
+               ` meta/interactions/z2ui5_cl_smpc_app_600.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Tree`                            name = `TreeDnD`                                       class = `z2ui5_cl_smpc_app_600` path = `src/01/01/z2ui5_cl_smpc_app_600.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.42`
         notes = lv_text1 ) ).
 

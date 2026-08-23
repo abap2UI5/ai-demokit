@@ -51,6 +51,19 @@ const APIJSON_ROOT = process.env.APIJSON_ROOT ||
 const SNAPSHOT = path.join(ROOT, 'ui5', 'universe.json');
 const COVERAGE = path.join(ROOT, 'api.md');
 const README = path.join(ROOT, 'README.md');
+// The hold-out set (ui5/holdout.json, TRAINING.md): samples deliberately kept
+// unported so the generator can be measured against them. They are IN SCOPE -
+// nothing about the control disqualifies them - but they are not backlog, so
+// counting them as missing coverage reads as a gap that nobody is meant to
+// close. They are reported in their own column and left out of the coverage
+// denominator instead; see summaryLines().
+const HOLDOUT = (() => {
+  const f = path.join(ROOT, 'ui5', 'holdout.json');
+  return fs.existsSync(f)
+    ? new Set(JSON.parse(fs.readFileSync(f, 'utf8')).samples)
+    : new Set();
+})();
+
 const START = '<!-- coverage:start -->';
 const END = '<!-- coverage:end -->';
 
@@ -317,10 +330,7 @@ if (scopeErrors) process.exit(1);
 // the hold-out set (ui5/holdout.json, see TRAINING.md) are marked HOLDOUT and
 // stay out of regular batch planning.
 if (process.argv.includes('--backlog')) {
-  const holdoutFile = path.join(ROOT, 'ui5', 'holdout.json');
-  const holdout = fs.existsSync(holdoutFile)
-    ? new Set(JSON.parse(fs.readFileSync(holdoutFile, 'utf8')).samples)
-    : new Set();
+  const holdout = HOLDOUT;
   // ports per control — depth planning prefers thinly-covered controls
   const portsPerEntity = new Map();
   for (const e of libs) for (const s of e.samples) {
@@ -372,43 +382,61 @@ const bar = (n, d) => {
 // (ui5/scope-exceptions.json) is not coverage of the in-scope backlog, and
 // counting it as such made sap.ui.core read 19/20 while 18 of its ports were
 // in scope (and 21/20 once the batch closed the gap).
+// "Reserved" is the part of the in-scope set that is NOT backlog: an unported
+// hold-out sample. A ported hold-out counts as coverage like any other port -
+// it has been spent as a measurement and is no longer held. The denominator is
+// therefore inScope - reserved: what remains to port. That is the number the
+// bar is about, and it reaches 100% when nothing portable is left.
 const summary = libs
   .map((l) => ({
     lib: l.lib,
     total: l.samples.length,
     inScope: l.samples.filter((s) => s.scope === 'in').length,
+    reserved: l.samples.filter((s) => s.scope === 'in' && !s.port
+      && HOLDOUT.has(`${l.lib}.sample.${s.name}`)).length,
     ported: l.samples.filter((s) => s.port && s.scope === 'in').length,
     portedOut: l.samples.filter((s) => s.port && s.scope !== 'in').length,
   }))
+  .map((s) => ({ ...s, toPort: s.inScope - s.reserved }))
   .sort((a, b) => {
-    // a lib with inScope 0 must sort deterministically, not on NaN
-    const r = (s) => (s.inScope ? s.ported / s.inScope : -1);
+    // a lib with toPort 0 must sort deterministically, not on NaN
+    const r = (s) => (s.toPort ? s.ported / s.toPort : -1);
     return (r(b) - r(a)) || a.lib.localeCompare(b.lib);
   });
 
 let totalSamples = 0;
 let totalInScope = 0;
+let totalReserved = 0;
 let totalPorted = 0;
 let totalPortedOut = 0;
 const outBy = { deprecated: 0, newer: 0, nonapp: 0, unknown: 0 };
-for (const s of summary) { totalSamples += s.total; totalInScope += s.inScope; totalPorted += s.ported; totalPortedOut += s.portedOut; }
+for (const s of summary) { totalSamples += s.total; totalInScope += s.inScope; totalReserved += s.reserved; totalPorted += s.ported; totalPortedOut += s.portedOut; }
+const totalToPort = totalInScope - totalReserved;
 for (const e of libs) for (const s of e.samples) if (s.scope !== 'in') outBy[s.scope]++;
 
 // README block: overall figure + coverage-per-module summary table
 function summaryLines() {
   const l = [];
-  l.push(`Overall **${totalPorted} / ${totalInScope}** in-scope demo kit samples ported (${pct(totalPorted, totalInScope)}).`);
+  l.push(`Overall **${totalPorted} / ${totalToPort}** portable demo kit samples ported (${pct(totalPorted, totalToPort)}).`);
   l.push(`**In scope**: samples whose control exists since **UI5 1.71** and is **not deprecated** (legacy-free ready).`);
   l.push(`Out of scope: ${totalSamples - totalInScope} of ${totalSamples} samples — ${outBy.deprecated} on deprecated controls, ${outBy.newer} on controls newer than 1.71, ${outBy.nonapp} that are not app views (UI5 test infrastructure, Component routing, view-templating demos — see \`ui5/scope-nonapp.json\`), ${outBy.unknown} demo apps without an owning control.`);
   if (totalPortedOut) l.push(`Plus **${totalPortedOut}** ported samples outside that scope — maintainer-decided exceptions (\`ui5/scope-exceptions.json\`, listed in [STATUS.md](STATUS.md)); they are not counted as coverage of the in-scope backlog.`);
   if (release) l.push(`Control metadata from OpenUI5 **${release}**.`);
   l.push('');
-  l.push('| Module | Samples | In scope | Ported | Coverage | |');
-  l.push('|--------|--------:|---------:|-------:|---------:|---|');
+  l.push('| Module | Samples | In scope | Reserved | To port | Ported | Coverage | |');
+  l.push('|--------|--------:|---------:|---------:|--------:|-------:|---------:|---|');
   for (const s of summary) {
-    l.push(`| \`${s.lib}\` | ${s.total} | ${s.inScope} | ${s.ported} | ${pct(s.ported, s.inScope)} | ${bar(s.ported, s.inScope)} |`);
+    l.push(`| \`${s.lib}\` | ${s.total} | ${s.inScope} | ${s.reserved || ''} | ${s.toPort} | ${s.ported} | ${pct(s.ported, s.toPort)} | ${bar(s.ported, s.toPort)} |`);
   }
-  l.push(`| **Total** | **${totalSamples}** | **${totalInScope}** | **${totalPorted}** | **${pct(totalPorted, totalInScope)}** | ${bar(totalPorted, totalInScope)} |`);
+  l.push(`| **Total** | **${totalSamples}** | **${totalInScope}** | **${totalReserved || ''}** | **${totalToPort}** | **${totalPorted}** | **${pct(totalPorted, totalToPort)}** | ${bar(totalPorted, totalToPort)} |`);
+  if (totalReserved) {
+    l.push('');
+    const one = totalReserved === 1;
+    // the closing claim is CONDITIONAL: with a real backlog row left, "the
+    // portable backlog is zero" would be a false statement printed by a gate
+    const dry = totalPorted === totalToPort ? ' **The portable backlog is zero.**' : '';
+    l.push(`**Reserved** — ${totalReserved} in-scope sample${one ? '' : 's'} ${one ? 'is' : 'are'} deliberately *not* ported. ${one ? 'It belongs to' : 'They are'} the hold-out set (\`ui5/holdout.json\`, see [TRAINING.md](TRAINING.md#measuring-progress)): never used as prompt references, kept out of batch planning, and regenerated from scratch to measure the generator itself — CI-green on the first try, structural-diff violations, review findings per app. Spending one as a measurement is what ports it, so they leave this column by being used, not by being worked off. They are excluded from the coverage denominator because they are not backlog.${dry}`);
+  }
   return l;
 }
 
@@ -422,6 +450,10 @@ function controlLines() {
   l.push('source in the [OpenUI5 repository](https://github.com/SAP/openui5) and');
   l.push('its ↗ opens the live fullscreen sample, **ABAP** is the generated class.');
   l.push('`—` = in scope, not ported yet — those rows are the backlog.');
+  l.push('`⊘` = in scope and deliberately **reserved**: the sample belongs to the');
+  l.push('hold-out set (`ui5/holdout.json`) that measures the generator, so it is');
+  l.push('kept unported on purpose and is not part of the backlog — see the');
+  l.push('[README](README.md#coverage).');
   l.push('`✗` = **out of scope**: the control is deprecated or newer than UI5 1.71');
   l.push('(not legacy-free ready / not 1.71-compatible), or the sample is not an app');
   l.push('view at all (UI5 test infrastructure, Component routing, view-templating and');
@@ -456,9 +488,14 @@ function controlLines() {
       ? `${s.deprecated.since || ''}${s.deprecated.text ? ` — ${s.deprecated.text.replace(/\|/g, '/')}` : ''}`.trim()
       : '';
     const sample = `[${s.name}](${sampleSrcUrl(s.lib, s.name)}) [↗](${fullscreenUrl(s.lib, s.name)})`;
+    // an unported hold-out gets its own marker: it is in scope, so '✗' would be
+    // wrong, but it is not backlog either, so '—' would put it on a list nobody
+    // is meant to work off
     const abap = s.port
       ? `[${s.port.cls}](${abapUrl(s.port.file)})${s.port.post171 ? ' **⁺**' : ''}`
-      : (s.scope === 'in' ? '—' : '✗');
+      : s.scope !== 'in' ? '✗'
+      : HOLDOUT.has(`${s.lib}.sample.${s.name}`) ? '⊘'
+      : '—';
     l.push(`| ${s.lib} | ${control} | ${s.since || ''} | ${deprecated} | ${sample} | ${abap} |`);
   }
   l.push('');
@@ -491,5 +528,7 @@ if (!fs.existsSync(promptFile)) {
 }
 fs.writeFileSync(README, readme);
 
-console.log(`api.md + README: ${totalPorted}/${totalInScope} in-scope samples ported across ${libs.length} libraries` +
+console.log(`api.md + README: ${totalPorted}/${totalToPort} portable samples ported` +
+  (totalReserved ? ` (${totalReserved} in-scope reserved as hold-out)` : '') +
+  ` across ${libs.length} libraries` +
   (release ? ` (metadata from OpenUI5 ${release})` : ' (no api.json — Since column blank)'));
