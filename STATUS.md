@@ -45,6 +45,20 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   NOTEs, and the render gate accepts both on the published linter: **637 files,
   0 failing**.
 
+- [ ] **`generate-keywords.mjs` sees only the POSITIONAL builder form — found
+  2026-08-23 while converting apps 612/613.** The control matcher is
+  `/\)->(?:ele|tag)\(\s*`([A-Z][A-Za-z]*)`/`, which matches
+  `)->tag( \`Label\` )` but not `)->tag( n = \`Label\` ns = \`z2ui5\` )` — the
+  named form, the only one that can carry a namespace. Measured over the
+  corpus: **469 of 622 ports** use the named form somewhere, **7051 control
+  occurrences** are invisible to the keyword line. It shows up as a companion
+  control never reaching `@keywords` (`multiinputext` is absent from 040, 612
+  and 613), and as ordinary controls missing from the lines of three quarters
+  of the corpus. The fix is one alternation in the regex, but it rewrites
+  hundreds of generated lines at once, so it wants its own change rather than
+  riding along with a port conversion. Not urgent — the lines that exist are
+  correct, just short.
+
 - [ ] **Two ports gave up on a capability that already exists — found
   2026-08-22 while answering "what should we ask the framework for".** Neither
   is a framework gap; both sidecars reason from an older state of the framework
