@@ -73,11 +73,18 @@ CLASS z2ui5_cl_smpc_app_162 IMPLEMENTATION.
 
   METHOD model_init.
 
-    " original widths are Device.system.phone dependent; the desktop values
-    " are used here (the phone branch is a client-only decision).
-    widths = `5em`.
-    widthm = `10em`.
-    widthl = `15em`.
+    " original widths are Device.system.phone dependent - reproduced from the
+    " server-side device mirror (client->get( )-s_device, app 012 precedent;
+    " the twin sample 173 has done it this way since it was written)
+    IF client->get( )-s_device-system = z2ui5_if_client=>cs_device-system-phone.
+      widths = `2em`.
+      widthm = `4em`.
+      widthl = `6em`.
+    ELSE.
+      widths = `5em`.
+      widthm = `10em`.
+      widthl = `15em`.
+    ENDIF.
     pic1   = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg`.
 
   ENDMETHOD.

@@ -9085,12 +9085,14 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: The original uses a separate 'img' JSON model for the image src ({img>/products/pic1}) alongside the default model for the widths. abap2UI5 has one default model, so the picture path is folded` &&
-               ` into it and the src binds it directly - the 'img>' prefix is dropped and the path flattened to a single field (pic1); the last path segment is identical, which structural-diff matches. Widths use the` &&
-               ` desktop values (the original's phone branch is a client-only Device decision). // NOTE: The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an` &&
-               ` abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency, and` &&
-               ` RE-COUNTED 2026-08-23: the sentence used to claim the rewrite was 'declared by all 77 ports that do it', which had stopped being true as the corpus grew past that day's snapshot - 126 ports do it` &&
-               ` now, and 17 of them declared it nowhere. Those 17 carry the declaration since today, so the claim holds again; a stale absolute count is what made it wrong, so this wording names the date the count`.
-    lv_text1 = lv_text1 && ` was taken.`.
+               ` into it and the src binds it directly - the 'img>' prefix is dropped and the path flattened to a single field (pic1); the last path segment is identical, which structural-diff matches. The widths` &&
+               ` reproduce the original's Device.system.phone branch since 2026-08-23 (2em/4em/6em against 5em/10em/15em) from the server-side device mirror client->get( )-s_device, the shape the twin sample 173 has` &&
+               ` used since it was written. The port carried the desktop leg only until then, justified as 'a client-only Device decision' - which was never true on either side of the wire: the mirror is in` &&
+               ` z2ui5_if_client, and the device> model expresses the same branch declaratively (CAPABILITIES, apps 277/279). // NOTE: The sample's asset paths are host-absolutized. The demo kit serves them relative` &&
+               ` (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared`.
+    lv_text1 = lv_text1 && ` 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the sentence used to claim the rewrite was 'declared by all 77 ports that do it', which had stopped being true as the corpus grew past that` &&
+               ` day's snapshot - 131 ports do it now, and 17 of them declared it nowhere. Those 17 carry the declaration since that day, so the claim holds again - re-measured 2026-08-23, when the re-count itself` &&
+               ` turned out to be 5 low, which is the same failure mode one sentence later. A stale absolute count is what made the original wording wrong, so this one names the date it was taken.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.HorizontalLayout`        name = `HorizontalLayout`                              class = `z2ui5_cl_smpc_app_162` path = `src/01/02/z2ui5_cl_smpc_app_162.clas.abap`
         score = 2
