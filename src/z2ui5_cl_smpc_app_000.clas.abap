@@ -3519,18 +3519,22 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` re-parents its items through an internal sap.m.MenuWrapper, and the chain changes with the runtime state - while the submenu is closed the parent MenuItem is TWO hops up (MenuItem -> MenuWrapper ->` &&
                ` MenuItem), once the submenu popover exists it is FOUR (MenuItem -> MenuWrapper -> Popover -> ResponsivePopover -> MenuItem). An event arg IS a full UI5 expression (EventHandlerResolver hands the` &&
                ` whole handler to BindingParser.parseExpression, so method calls / isA() / ternaries resolve - a fixed-hop walk was built and did toast 'Create New Site > Official Store' when the event was fired` &&
-               ` programmatically), but an expression has no loop, so no fixed hop count addresses the parent in both states. The same wrapper breaks the SAMPLE's own 'while (oItem instanceof MenuItem) { ...` &&
-               ` oItem.getParent(); }' loop: the live demo kit sample toasts the leaf text too on this release, so the port is behaviour-identical with upstream - hence NOTE, not IMPROVISED. The e2e interaction` &&
-               ` asserts the nested-selection leaf toast to guard the boundary. // NOTE: the selected item's text is read with ${$parameters>/item}.getText() (a method call on the resolved MenuItem control), NOT`.
-    lv_text1 = lv_text1 && ` ${$parameters>/item/text}: the $parameters model exposes 'item' as the control object and UI5 keeps properties in the control's internal property store, so the path .../item/text reads an undefined` &&
-               ` direct field and the toast arrives empty. // NOTE: live-verified 2026-07-22 - confirm in a running system that the Menu opens anchored to the button (openBy) and that ${$parameters>/item}.getText()` &&
-               ` delivers the clicked MenuItem's text to the toast. // NOTE: the Menu open/close is wired roundtrip-free via client->follow_up_action( cs_event-control_by_id, toggleBy ) on the button press (anchored` &&
-               ` by $event.oSource.sId) - the original's client-side toggle 1:1; the item-selected toast is now roundtrip-free too, composed on the frontend via control_global MESSAGE_TOAST.show (template +` &&
-               ` ${$parameters>/item}.getText()), so the app has no on_event at all (init-only). // NOTE: the menu toggle was switched from a follow_up_action round-trip to roundtrip-free follow_up_action on` &&
-               ` 2026-07-22 - re-verify the button opens/closes the Menu. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Open Menu' press opens the Menu anchored`.
-    lv_text1 = lv_text1 && ` (toggleBy). // NOTE: the item-selected toast was switched from a message_toast_display round-trip to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template` &&
-               ` ``Action triggered on item: {0}`` filled by ${$parameters>/item}.getText()) - re-verify selecting a menu item toasts "Action triggered on item: <text>". **e2e-verified 2026-07-30**` &&
-               ` (transpiled-framework interaction, scripts/e2e-smoke.mjs): selecting 'Hide Existing Sites' toasts 'Action triggered on item: Hide Existing Sites'.`.
+               ` programmatically), but an expression has no loop, so no fixed hop count addresses the parent in both states. **Re-verified 2026-08-23 and the reasoning updated**: the framework has since gained a` &&
+               ` LOOPING helper reachable from an event argument - $controller.textPath( control, separator ), Lib.getTextPath - so 'an expression has no loop' no longer decides this on its own. It does not change` &&
+               ` the outcome, for a reason worth writing down rather than rediscovering: getTextPath breaks at the first ancestor that has no getText( ) rather than skipping it, sap.m.Menu forwards its items`.
+    lv_text1 = lv_text1 && ` aggregation to an internal sap.m.MenuWrapper (Menu.js, forwarding idSuffix '-menuWrapper', @since 1.136), and MenuWrapper declares no text property and no getText at all. So the walk runs exactly one` &&
+               ` iteration and returns the leaf text - byte-identical to what this port already toasts. Rewiring to textPath would be a no-op. The same wrapper breaks the SAMPLE's own 'while (oItem instanceof` &&
+               ` MenuItem) { ... oItem.getParent(); }' loop: the live demo kit sample toasts the leaf text too on this release, so the port is behaviour-identical with upstream - hence NOTE, not IMPROVISED. The e2e` &&
+               ` interaction asserts the nested-selection leaf toast to guard the boundary. // NOTE: the selected item's text is read with ${$parameters>/item}.getText() (a method call on the resolved MenuItem` &&
+               ` control), NOT ${$parameters>/item/text}: the $parameters model exposes 'item' as the control object and UI5 keeps properties in the control's internal property store, so the path .../item/text reads` &&
+               ` an undefined direct field and the toast arrives empty. // NOTE: live-verified 2026-07-22 - confirm in a running system that the Menu opens anchored to the button (openBy) and that`.
+    lv_text1 = lv_text1 && ` ${$parameters>/item}.getText() delivers the clicked MenuItem's text to the toast. // NOTE: the Menu open/close is wired roundtrip-free via client->follow_up_action( cs_event-control_by_id, toggleBy )` &&
+               ` on the button press (anchored by $event.oSource.sId) - the original's client-side toggle 1:1; the item-selected toast is now roundtrip-free too, composed on the frontend via control_global` &&
+               ` MESSAGE_TOAST.show (template + ${$parameters>/item}.getText()), so the app has no on_event at all (init-only). // NOTE: the menu toggle was switched from a follow_up_action round-trip to` &&
+               ` roundtrip-free follow_up_action on 2026-07-22 - re-verify the button opens/closes the Menu. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Open Menu'` &&
+               ` press opens the Menu anchored (toggleBy). // NOTE: the item-selected toast was switched from a message_toast_display round-trip to a roundtrip-free client-composed toast on 2026-07-22 (control_global` &&
+               ` MESSAGE_TOAST.show, template ``Action triggered on item: {0}`` filled by ${$parameters>/item}.getText()) - re-verify selecting a menu item toasts "Action triggered on item: <text>". **e2e-verified`.
+    lv_text1 = lv_text1 && ` 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): selecting 'Hide Existing Sites' toasts 'Action triggered on item: Hide Existing Sites'.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Menu`                            name = `Menu`                                          class = `z2ui5_cl_smpc_app_060` path = `src/02/01/z2ui5_cl_smpc_app_060.clas.abap`
         score = 5
@@ -3572,22 +3576,27 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` sap.m.MenuItem.selected (since 1.127.0) is kept 1:1 on the pre-selected group items; needs UI5 >= 1.127. // sap.m.MenuItem.endContent (aggregation since 1.131) is kept 1:1 for the transparent icon` &&
                  ` Buttons at the end of two items; needs UI5 >= 1.131. // sap.m.Button.ariaHasPopup (since 1.84) is kept 1:1 on the trigger button; needs UI5 >= 1.84.` ) ).
 
-    lv_text1 = `POST-1.71: the MenuButton ``beforeMenuOpen`` event (since UI5 1.94) is kept 1:1 on the split-mode buttons that use it. menuPosition (1.56), buttonMode and useDefaultActionOnly are <= 1.71. // NOTE:` &&
-               ` onMenuAction builds a breadcrumb path by walking the selected MenuItem's parent chain (e.g. 'basic > add'); the port toasts only the selected item's own text, transported via` &&
-               ` ${$parameters>/item}.getText(). **Measured 2026-07-31 (browser probe + e2e against the transpiled backend, OpenUI5 1.152), closing pr/menu-item-selected-path as a capability boundary:** sap.m.Menu` &&
-               ` re-parents its items through an internal sap.m.MenuWrapper, and the chain changes with the runtime state - while the submenu is closed the parent MenuItem is TWO hops up (MenuItem -> MenuWrapper ->` &&
-               ` MenuItem), once the submenu popover exists it is FOUR (MenuItem -> MenuWrapper -> Popover -> ResponsivePopover -> MenuItem). An event arg IS a full UI5 expression (EventHandlerResolver hands the` &&
-               ` whole handler to BindingParser.parseExpression, so method calls / isA() / ternaries resolve - a fixed-hop walk was built and did toast 'Create New Site > Official Store' when the event was fired`.
-    lv_text1 = lv_text1 && ` programmatically), but an expression has no loop, so no fixed hop count addresses the parent in both states. The same wrapper breaks the SAMPLE's own 'while (oItem instanceof MenuItem) { ...` &&
-               ` oItem.getParent(); }' loop: the live demo kit sample toasts the leaf text too on this release, so the port is behaviour-identical with upstream - hence NOTE, not IMPROVISED. The e2e interaction` &&
-               ` asserts the nested-selection leaf toast to guard the boundary. // NOTE: onPress toasts the pressed MenuItem's control id (the sample's evt.getSource().getId() + ' Pressed'), transported via` &&
-               ` $event.oSource.sId. The Edit item's core:CustomData (key=target, value=p1) is kept 1:1 as inert view metadata. // NOTE: the selected item's text is read with ${$parameters>/item}.getText() (a method` &&
-               ` call on the resolved MenuItem control), NOT ${$parameters>/item/text}: the $parameters model exposes 'item' as the control object and UI5 keeps properties in the control's internal property store, so` &&
-               ` the path .../item/text reads an undefined direct field and the toast arrives empty. // NOTE: live-verified 2026-07-22 - confirm in a running system that`.
-    lv_text1 = lv_text1 && ` itemSelected/press/defaultAction/beforeMenuOpen all fire their toasts and that ${$parameters>/item}.getText() delivers the selected MenuItem text. // NOTE: all toasts were switched from` &&
-               ` message_toast_display round-trips to roundtrip-free client-composed control_global toasts on 2026-07-22 (the app is now init-only) - re-verify each button/menu still toasts its text. **e2e-verified` &&
-               ` 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): opening the 'File' MenuButton and selecting 'Save' toasts 'Action triggered on item: Save' (the ${$parameters>/item}.getText()` &&
-               ` template resolves); the remaining buttons/defaultAction wires are the same class but unexercised. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_061.mjs).`.
+    lv_text1 = `POST-1.71: the MenuButton ``beforeMenuOpen`` event (since UI5 1.94) is kept 1:1 on the five buttons that carry it (four split-mode ones and the menuPosition=RightBottom button, which has no buttonMode` &&
+               ` at all - the earlier wording said 'the split-mode buttons', which is one button short). menuPosition (1.56), buttonMode and useDefaultActionOnly are <= 1.71. // NOTE: onMenuAction builds a breadcrumb` &&
+               ` path by walking the selected MenuItem's parent chain (e.g. 'basic > add'); the port toasts only the selected item's own text, transported via ${$parameters>/item}.getText(). **Measured 2026-07-31` &&
+               ` (browser probe + e2e against the transpiled backend, OpenUI5 1.152), closing pr/menu-item-selected-path as a capability boundary:** sap.m.Menu re-parents its items through an internal` &&
+               ` sap.m.MenuWrapper, and the chain changes with the runtime state - while the submenu is closed the parent MenuItem is TWO hops up (MenuItem -> MenuWrapper -> MenuItem), once the submenu popover exists` &&
+               ` it is FOUR (MenuItem -> MenuWrapper -> Popover -> ResponsivePopover -> MenuItem). An event arg IS a full UI5 expression (EventHandlerResolver hands the whole handler to BindingParser.parseExpression,`.
+    lv_text1 = lv_text1 && ` so method calls / isA() / ternaries resolve - a fixed-hop walk was built and did toast 'Create New Site > Official Store' when the event was fired programmatically), but an expression has no loop, so` &&
+               ` no fixed hop count addresses the parent in both states. **Re-verified 2026-08-23 and the reasoning updated**: the framework has since gained a LOOPING helper reachable from an event argument -` &&
+               ` $controller.textPath( control, separator ), Lib.getTextPath - so 'an expression has no loop' no longer decides this on its own. It does not change the outcome, for a reason worth writing down rather` &&
+               ` than rediscovering: getTextPath breaks at the first ancestor that has no getText( ) rather than skipping it, sap.m.Menu forwards its items aggregation to an internal sap.m.MenuWrapper (Menu.js,` &&
+               ` forwarding idSuffix '-menuWrapper', @since 1.136), and MenuWrapper declares no text property and no getText at all. So the walk runs exactly one iteration and returns the leaf text - byte-identical` &&
+               ` to what this port already toasts. Rewiring to textPath would be a no-op. The same wrapper breaks the SAMPLE's own 'while (oItem instanceof MenuItem) { ... oItem.getParent(); }' loop: the live demo`.
+    lv_text1 = lv_text1 && ` kit sample toasts the leaf text too on this release, so the port is behaviour-identical with upstream - hence NOTE, not IMPROVISED. The e2e interaction asserts the nested-selection leaf toast to` &&
+               ` guard the boundary. // NOTE: onPress toasts the pressed MenuItem's control id (the sample's evt.getSource().getId() + ' Pressed'), transported via $event.oSource.sId. The Edit item's core:CustomData` &&
+               ` (key=target, value=p1) is kept 1:1 as inert view metadata. // NOTE: the selected item's text is read with ${$parameters>/item}.getText() (a method call on the resolved MenuItem control), NOT` &&
+               ` ${$parameters>/item/text}: the $parameters model exposes 'item' as the control object and UI5 keeps properties in the control's internal property store, so the path .../item/text reads an undefined` &&
+               ` direct field and the toast arrives empty. // NOTE: live-verified 2026-07-22 - confirm in a running system that itemSelected/press/defaultAction/beforeMenuOpen all fire their toasts and that` &&
+               ` ${$parameters>/item}.getText() delivers the selected MenuItem text. // NOTE: all toasts were switched from message_toast_display round-trips to roundtrip-free client-composed control_global toasts on`.
+    lv_text1 = lv_text1 && ` 2026-07-22 (the app is now init-only) - re-verify each button/menu still toasts its text. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): opening the 'File'` &&
+               ` MenuButton and selecting 'Save' toasts 'Action triggered on item: Save' (the ${$parameters>/item}.getText() template resolves); the remaining buttons/defaultAction wires are the same class but` &&
+               ` unexercised. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_061.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MenuButton`                      name = `MenuButton`                                    class = `z2ui5_cl_smpc_app_061` path = `src/02/01/z2ui5_cl_smpc_app_061.clas.abap`
         score = 5
@@ -3596,7 +3605,8 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         is_post171 = abap_true
         checked = `CHECKED (2026-07-22): verified in a running system 2026-07-22: itemSelected/press/defaultAction/beforeMenuOpen all fire their toasts and the item text resolves.`
         notes = lv_text1
-        post171 = `the MenuButton ``beforeMenuOpen`` event (since UI5 1.94) is kept 1:1 on the split-mode buttons that use it. menuPosition (1.56), buttonMode and useDefaultActionOnly are <= 1.71.` ) ).
+        post171 = `the MenuButton ``beforeMenuOpen`` event (since UI5 1.94) is kept 1:1 on the five buttons that carry it (four split-mode ones and the menuPosition=RightBottom button, which has no buttonMode at all -` &&
+                 ` the earlier wording said 'the split-mode buttons', which is one button short). menuPosition (1.56), buttonMode and useDefaultActionOnly are <= 1.71.` ) ).
 
     lv_text1 = `NOTE: the sample opens every sap.m.MessageBox from its controller, so there is no such control in the view. The nine buttons are wired to events that call client->message_box_display with the sample's` &&
                ` own method name as type (confirm, alert, error, information, warning, success) - the documented 1:1 path (CAPABILITIES.md marks sap.m.MessageBox as expressible, app 036 is its evidence port), not a` &&
@@ -3790,11 +3800,13 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` a core:FragmentDefinition shown with popup_display. So Dialog, Bar, Title, MessageView, MessageItem, Link and two of the three Button controls are extra against the original view.xml. // NOTE: the` &&
                ` two controller handlers that reach into controls become bound state, per the prefer-a-bindable-property rule: oBackButton.setVisible(...) is the two-way bound visible={/BACK_VISIBLE} and` &&
                ` oDialogTitle.setText(...) is text={/DIALOG_TITLE}. Only navigateBack has no bindable equivalent - it is the one frontend action (control_by_id, view = cs_view-popup, on the MessageView id` &&
-               ` messageView, an unlisted public control method that passes the framework's deny-prefix guard). handleDialogPress's own navigateBack is not needed: popup_display rebuilds the fragment, so the`.
-    lv_text1 = lv_text1 && ` MessageView always opens on its list page; only the header state is reset in ABAP. // NOTE: activeTitlePress keeps the original's client-side MessageToast.show('Active title pressed') as a` &&
-               ` roundtrip-free follow_up_action MESSAGE_TOAST show - the text is static, so nothing has to travel. // NOTE: a flat ABAP row serializes every field, so the properties the mock omits carry their UI5` &&
-               ` defaults: markupDescription is false on all six messages (never set in the original), activeTitle false except on the last one, and the counter of the second message (Warning without description) is` &&
-               ` 0 - ListItemBaseRenderer.renderCounter only renders a truthy counter, so 0 and 'absent' render identically.`.
+               ` messageView, an unlisted public control method that passes the framework's deny-prefix guard). Re-verified 2026-08-23: still true. navigateBack is a method with no bindable twin, and the port wires`.
+    lv_text1 = lv_text1 && ` it as a frontend action - the setVisible/setText this sentence also names are the ones it BOUND instead, which is what makes it read like a stale claim to the stale-impossibility probe.` &&
+               ` handleDialogPress's own navigateBack is not needed: popup_display rebuilds the fragment, so the MessageView always opens on its list page; only the header state is reset in ABAP. // NOTE:` &&
+               ` activeTitlePress keeps the original's client-side MessageToast.show('Active title pressed') as a roundtrip-free follow_up_action MESSAGE_TOAST show - the text is static, so nothing has to travel. //` &&
+               ` NOTE: a flat ABAP row serializes every field, so the properties the mock omits carry their UI5 defaults: markupDescription is false on all six messages (never set in the original), activeTitle false` &&
+               ` except on the last one, and the counter of the second message (Warning without description) is 0 - ListItemBaseRenderer.renderCounter only renders a truthy counter, so 0 and 'absent' render` &&
+               ` identically.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MessageView`                     name = `MessageViewInsideDialog`                       class = `z2ui5_cl_smpc_app_284` path = `src/01/01/z2ui5_cl_smpc_app_284.clas.abap`
         score = 5
@@ -3810,13 +3822,15 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` NOTE: the Popover keeps the controller's geometry 1:1 - contentWidth/contentHeight 440px, verticalScrolling false, modal true - and the Close button sits in a footer Bar's contentRight, with the` &&
                ` sapUiTinyMarginEnd class the controller adds with addStyleClass. // NOTE: the two controller handlers that reach into controls become bound state, per the prefer-a-bindable-property rule:`.
     lv_text1 = lv_text1 && ` oBackButton.setVisible(...) is visible={/BACK_VISIBLE} and oPopoverTitle.setText(...) is text={/POPOVER_TITLE}. Only navigateBack has no bindable equivalent - it is the one frontend action` &&
-               ` (control_by_id, view = cs_view-popup, on the MessageView id messageView), the same path app 284 uses. handlePopoverPress's own navigateBack is not needed: popover_display rebuilds the fragment, so` &&
-               ` the MessageView always opens on its list page; only the header state is reset in ABAP. // NOTE: the back button's press also calls oPopover.focus() to keep keyboard focus inside the popover after` &&
-               ` navigating back. The port does not: the popover keeps focus because it is never re-anchored, and a set_focus on a popup that is already focused would be a no-op round trip. // NOTE: a flat ABAP row` &&
-               ` serializes every field, so the properties the mock omits carry their UI5 defaults: markupDescription is false on all five messages (the template binds it, the data never sets it), and the second` &&
-               ` message (Warning without description) has no subtitle and counter 0 - ListItemBaseRenderer.renderCounter only renders a truthy counter, so 0 and 'absent' render identically. // NOTE: the nav-back`.
-    lv_text1 = lv_text1 && ` Button is icon-only in the original (IconPool.getIconURI('nav-back'), no text and no tooltip). The port gives it tooltip="Back" so it is reachable with a screen reader - the one accessibility` &&
-               ` addition in this port. // LIVE-TEST: not yet verified in a running system: the anchored popover with a MessageView inside it and the navigateBack frontend action on the popup view.`.
+               ` (control_by_id, view = cs_view-popup, on the MessageView id messageView), the same path app 284 uses. Re-verified 2026-08-23: still true. navigateBack is a method with no bindable twin, and the port` &&
+               ` wires it as a frontend action - the setVisible/setText this sentence also names are the ones it BOUND instead, which is what makes it read like a stale claim to the stale-impossibility probe.` &&
+               ` handlePopoverPress's own navigateBack is not needed: popover_display rebuilds the fragment, so the MessageView always opens on its list page; only the header state is reset in ABAP. // NOTE: the back` &&
+               ` button's press also calls oPopover.focus() to keep keyboard focus inside the popover after navigating back. The port does not: the popover keeps focus because it is never re-anchored, and a set_focus` &&
+               ` on a popup that is already focused would be a no-op round trip. // NOTE: a flat ABAP row serializes every field, so the properties the mock omits carry their UI5 defaults: markupDescription is false`.
+    lv_text1 = lv_text1 && ` on all five messages (the template binds it, the data never sets it), and the second message (Warning without description) has no subtitle and counter 0 - ListItemBaseRenderer.renderCounter only` &&
+               ` renders a truthy counter, so 0 and 'absent' render identically. // NOTE: the nav-back Button is icon-only in the original (IconPool.getIconURI('nav-back'), no text and no tooltip). The port gives it` &&
+               ` tooltip="Back" so it is reachable with a screen reader - the one accessibility addition in this port. // LIVE-TEST: not yet verified in a running system: the anchored popover with a MessageView` &&
+               ` inside it and the navigateBack frontend action on the popup view.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MessageView`                     name = `MessageViewInsidePopover`                      class = `z2ui5_cl_smpc_app_563` path = `src/02/01/z2ui5_cl_smpc_app_563.clas.abap`
         score = 5
@@ -3835,13 +3849,15 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` footer), with the sapUiTinyMarginEnd class the controller adds with addStyleClass. This is the only difference from the sibling sample MessageViewInsidePopover (app 563), apart from the button's`.
     lv_text1 = lv_text1 && ` margin class. // NOTE: the two controller handlers that reach into controls become bound state, per the prefer-a-bindable-property rule: oBackButton.setVisible(...) is visible={/BACK_VISIBLE} and` &&
                ` oPopoverTitle.setText(...) is text={/POPOVER_TITLE}. Only navigateBack has no bindable equivalent - it is the one frontend action (control_by_id, view = cs_view-popup, on the MessageView id` &&
-               ` messageView), the same path app 284 uses. handlePopoverPress's own navigateBack is not needed: popover_display rebuilds the fragment, so the MessageView always opens on its list page; only the header` &&
-               ` state is reset in ABAP. // NOTE: the back button's press also calls oPopover.focus() to keep keyboard focus inside the popover after navigating back. The port does not: the popover keeps focus` &&
-               ` because it is never re-anchored, and a set_focus on a popup that is already focused would be a no-op round trip. // NOTE: a flat ABAP row serializes every field, so the properties the mock omits` &&
-               ` carry their UI5 defaults: markupDescription is false on all five messages (the template binds it, the data never sets it), and the second message (Warning without description) has no subtitle and`.
-    lv_text1 = lv_text1 && ` counter 0 - ListItemBaseRenderer.renderCounter only renders a truthy counter, so 0 and 'absent' render identically. // NOTE: the nav-back Button is icon-only in the original` &&
-               ` (IconPool.getIconURI('nav-back'), no text and no tooltip). The port gives it tooltip="Back" so it is reachable with a screen reader - the one accessibility addition in this port. // LIVE-TEST: not` &&
-               ` yet verified in a running system: the anchored popover with a MessageView inside it and the navigateBack frontend action on the popup view.`.
+               ` messageView), the same path app 284 uses. Re-verified 2026-08-23: still true. navigateBack is a method with no bindable twin, and the port wires it as a frontend action - the setVisible/setText this` &&
+               ` sentence also names are the ones it BOUND instead, which is what makes it read like a stale claim to the stale-impossibility probe. handlePopoverPress's own navigateBack is not needed:` &&
+               ` popover_display rebuilds the fragment, so the MessageView always opens on its list page; only the header state is reset in ABAP. // NOTE: the back button's press also calls oPopover.focus() to keep` &&
+               ` keyboard focus inside the popover after navigating back. The port does not: the popover keeps focus because it is never re-anchored, and a set_focus on a popup that is already focused would be a`.
+    lv_text1 = lv_text1 && ` no-op round trip. // NOTE: a flat ABAP row serializes every field, so the properties the mock omits carry their UI5 defaults: markupDescription is false on all five messages (the template binds it,` &&
+               ` the data never sets it), and the second message (Warning without description) has no subtitle and counter 0 - ListItemBaseRenderer.renderCounter only renders a truthy counter, so 0 and 'absent'` &&
+               ` render identically. // NOTE: the nav-back Button is icon-only in the original (IconPool.getIconURI('nav-back'), no text and no tooltip). The port gives it tooltip="Back" so it is reachable with a` &&
+               ` screen reader - the one accessibility addition in this port. // LIVE-TEST: not yet verified in a running system: the anchored popover with a MessageView inside it and the navigateBack frontend action` &&
+               ` on the popup view.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MessageView`                     name = `MessageViewInsideResponsivePopover`            class = `z2ui5_cl_smpc_app_564` path = `src/02/01/z2ui5_cl_smpc_app_564.clas.abap`
         score = 5
@@ -3852,15 +3868,18 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = lv_text1
         post171 = `one post-1.71 member is kept for the 1:1 port: Button.ariaHasPopup (since UI5 1.84) on the Messages button, which the sample's own view.xml carries.` ) ).
 
+    lv_text1 = `NOTE: the original registers its four messages on the sap.ui.core.message.MessageManager and the MessageView binds them via the message> model. abap2UI5 carries the message> model on every view slot` &&
+               ` since pr/message-model (2026-07-18, auto-collecting control validation messages). The messages are bound here as a plain ABAP table on MessageView items with a MessageItem template (client->_bind(` &&
+               ` t_messages )) - the path CAPABILITIES.md explicitly endorses for a static message set. Same rendering as the original. **Corrected 2026-08-23**: this sentence used to justify the choice with 'there` &&
+               ` is no ABAP API to push an arbitrary static message set into the message> model', which stopped being true two days after it was written - the z2ui5.cc.MessageManager companion control does exactly` &&
+               ` that from a bound ABAP table (upstream pr/message-manager-write, 2026-07-20; app 065 in this corpus wires it). So the plain table is a CHOICE and the right one for a render-only sample, not the only` &&
+               ` route. The same sentence also cited a class of the retired z2ui5_cl_demo_app_* naming scheme of abap2UI5/samples, which does not exist; the MessageView/MessagePopover evidence ports are 066/067.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MessageView`                     name = `MessageViewMessageManager`                     class = `z2ui5_cl_smpc_app_038` path = `src/01/01/z2ui5_cl_smpc_app_038.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.46`
-        notes = `NOTE: the original registers its four messages on the sap.ui.core.message.MessageManager and the MessageView binds them via the message> model. abap2UI5 DOES carry the message> model on every view` &&
-                 ` slot since pr/message-model (2026-07-18, auto-collecting control validation messages), but there is no ABAP API to push an arbitrary static message set into it - so for this render-only sample the` &&
-                 ` messages are bound as a plain ABAP table on MessageView items with a MessageItem template (client->_bind( t_messages )), the path CAPABILITIES.md explicitly endorses for static message sets. Same` &&
-                 ` rendering as the original. Proven by the curated sample z2ui5_cl_demo_app_038 (MessageView + MessageItem + MessagePopover over a bound table).` ) ).
+        notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: the three formatters are computed in the backend, which is the point of the thin-frontend rule (apps 009/010/022/092). buttonIconFormatter, buttonTypeFormatter and highestSeverityMessages each` &&
                ` walk the whole message list to find the highest severity (Error > Warning > Success > Information) and count how many messages carry it - a computation over the data, not a presentation format.` &&
@@ -3972,10 +3991,12 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.22.0` ) ).
 
     lv_text1 = `NOTE: the controller's onInit pre-sets the tokens on both MultiInputs (Token 1..6 and one long token); they are declared statically in the view's tokens aggregation instead - same rendering` &&
-               ` (CAPABILITIES.md marks controller-filled aggregations as expressible, the tokens aggregation is public since UI5 1.16), so this is a faithful 1:1, not a workaround. // NOTE: the controller's onInit` &&
-               ` addValidator on multiInput1 and multiInput2 (typing free text + Enter -> new Token({key: text, text})) is wired via the bundled invisible companion control z2ui5.cc.MultiInputExt` &&
-               ` (xmlns:z2ui5="z2ui5.cc"): one MultiInputExt per input, referencing it by MultiInputId - the control installs exactly the original's validator (source-verified in app/webapp/cc/MultiInputExt.js). The` &&
-               ` two MultiInputExt elements are extra vs the original view.xml (there the validator lives in the controller); first cc-control usage in these ports (converted 2026-07-18). // NOTE: The original's` &&
+               ` (CAPABILITIES.md marks controller-filled aggregations as expressible, the tokens aggregation is comfortably pre-1.71, so no POST_171 is owed. **Corrected 2026-08-23**: this used to name 'UI5 1.16', a` &&
+               ` figure the sources do not carry - sap/m/MultiInput.js declares the tokens aggregation with no @since at all, and the control itself carries none either, so the correct reading is base-version. The` &&
+               ` nearest sourced figure is sap.m.Tokenizer @since 1.22, which renders the aggregation, so the aggregation cannot predate 1.22), so this is a faithful 1:1, not a workaround. // NOTE: the controller's` &&
+               ` onInit addValidator on multiInput1 and multiInput2 (typing free text + Enter -> new Token({key: text, text})) is wired via the bundled invisible companion control z2ui5.cc.MultiInputExt` &&
+               ` (xmlns:z2ui5="z2ui5.cc"): one MultiInputExt per input, referencing it by MultiInputId - the control installs exactly the original's validator (source-verified in app/webapp/cc/MultiInputExt.js). The`.
+    lv_text1 = lv_text1 && ` two MultiInputExt elements are extra vs the original view.xml (there the validator lives in the controller); first cc-control usage in these ports (converted 2026-07-18). // NOTE: The original's` &&
                ` stray placeholder attributes on the two Labels (not a Label property) are dropped. // POST-1.71: showClearIcon (since UI5 1.94) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5` &&
                ` release >= 1.94 to render it.`.
     result = VALUE #( BASE result
@@ -4488,10 +4509,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
 
     lv_text1 = `POST-1.71: the ObjectStatus state values Indication06-Indication08 (since UI5 1.75) and Indication09-Indication20 (since UI5 1.120) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5` &&
                ` release >= 1.120 to render them all (>= 1.75 for Indication06-Indication08). // NOTE: the active status press opens the controller-built Dialog 1:1 (core:FragmentDefinition + popup_display): the` &&
-               ` Dialog with its VBox, the two content Texts (one EXTRA Text vs the original view) and the Close Button are EXTRA controls vs the archived view.xml, which only holds the ObjectStatus rows. Confirmed` &&
-               ` working in the 2026-07-20 live check. // POST-1.71: the icon ``sap-icon://information`` reached the SAP icon font in 1.80 and is kept 1:1 from the original V.view.xml, which names it on the two` &&
-               ` 'Currently closed'/'Information' ObjectStatus rows. Newer than the 1.71 floor: there IconPool resolves nothing and the ObjectStatus renders its text with NO icon, silently - the app needs a UI5` &&
-               ` release >= 1.80 to show it. (The framework's own equivalent is sap-icon://message-information, which exists from 1.71 on; using it here would deviate from the original.)`.
+               ` Dialog with its VBox, its one content Text (an EXTRA control vs the archived view.xml, which has no Dialog at all) and its OK Button are EXTRA controls vs the archived view.xml, which only holds the` &&
+               ` ObjectStatus rows. Confirmed working in the 2026-07-20 live check. // POST-1.71: the icon ``sap-icon://information`` reached the SAP icon font in 1.80 and is kept 1:1 from the original V.view.xml,` &&
+               ` which names it on the two 'Currently closed'/'Information' ObjectStatus rows. Newer than the 1.71 floor: there IconPool resolves nothing and the ObjectStatus renders its text with NO icon, silently -` &&
+               ` the app needs a UI5 release >= 1.80 to show it. (The framework's own equivalent is sap-icon://message-information, which exists from 1.71 on; using it here would deviate from the original.)`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ObjectStatus`                    name = `ObjectStatus`                                  class = `z2ui5_cl_smpc_app_042` path = `src/02/01/z2ui5_cl_smpc_app_042.clas.abap`
         score = 5
@@ -5910,8 +5931,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` would render enabled) - which is why the port binds enabled/editable as plain {ENABLED}/{EDITABLE} again, with no expression binding and no binding-value deviation left. Rows the sample leaves` &&
                ` untouched send the control default true explicitly. // NOTE: the change toast was switched to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template ``Value`.
     lv_text1 = lv_text1 && ` changed to '{0}'`` with get_t_arg single-quote escaping; on_event dropped, init-only) - re-verify changing a StepInput toasts "Value changed to '<value>'" with the quotes intact. **e2e-verified` &&
-               ` 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): ArrowUp + Enter on the first StepInput fires change and toasts "Value changed to '<value>'" with the quotes intact; the other` &&
-               ` StepInputs are the identical wire.`.
+               ` 2026-07-30, restated 2026-08-23** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the port's change wire fires and toasts "Value changed to ..."; the other StepInputs are the identical` &&
+               ` wire. The earlier wording claimed more than the module does and had drifted from it: ArrowUp + Enter stopped producing a change on the pinned UI5 (the +/- icons render zero-size headless, which is` &&
+               ` why the keyboard route was chosen in the first place), so the module now falls back to firing change through the control API after checking that no toast appeared - it still exercises the port's` &&
+               ` wire, which is what is under test, but it is not the keyboard path. The assertion is also toContainText("Value changed to") only, so the quoted <value> and its quotes are NOT asserted.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.StepInput`                       name = `StepInput`                                     class = `z2ui5_cl_smpc_app_049` path = `src/01/01/z2ui5_cl_smpc_app_049.clas.abap`
         score = 3
@@ -7565,9 +7588,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` attribute is therefore dropped - no backend round-trip fires while dragging, and the resize behaves as in the original. Before this rework the liveChange was wired to a SLIDER backend event the class` &&
                ` never dispatched (dead wire, pattern-lint dead-event-wire). // IMPROVISED: The three core:HTML panels stay empty. The original controller fills them from sap/ui/core/hyphenation/Hyphenation - it` &&
                ` awaits hyph.initialize() per language and then writes the hyphenated text into each HTML control. That is an asynchronous client-side API with a promise chain and no declarative form: it is neither a` &&
-               ` binding nor one of the whitelisted control methods, and the hyphenation itself cannot be done on the ABAP side (the algorithm and its language dictionaries live in the browser). The port therefore`.
-    lv_text1 = lv_text1 && ` keeps the view 1:1 with the original XML, which also carries content="" on all three, and loses the sample's actual payload - the visible hyphenated text. This is the sample's whole point, so the` &&
-               ` port is a structural port only.`.
+               ` binding nor one of the whitelisted control methods, and the hyphenation itself cannot be done on the ABAP side (the algorithm and its language dictionaries live in the browser). Re-verified`.
+    lv_text1 = lv_text1 && ` 2026-08-23: still true. initialize( ) returns a Promise whose RESULT has to be written into a control, and no declarative abap2UI5 action can carry a promise callback - CONTROL_GLOBAL/CONTROL_BY_ID` &&
+               ` call a method and are done. Nothing in the framework has changed that. The port therefore keeps the view 1:1 with the original XML, which also carries content="" on all three, and loses the sample's` &&
+               ` actual payload - the visible hyphenated text. This is the sample's whole point, so the port is a structural port only.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.core.hyphenation.Hyphenation`   name = `HyphenationAPI`                                class = `z2ui5_cl_smpc_app_146` path = `src/01/02/z2ui5_cl_smpc_app_146.clas.abap`
         score = 3

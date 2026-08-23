@@ -72,7 +72,17 @@ const DENY_PREFIX = ['bind', 'unbind', 'attach', 'detach', 'addDependent', 'plac
 const denied = (m) => DENY_EXACT.has(m) || DENY_PREFIX.some((p) => m.startsWith(p));
 
 const CLAIM = /(cannot be|no abap2UI5 equivalent|not expressible|has no equivalent|no wire (?:can|exists)|cannot express|no bindable equivalent|which no wire|that no wire)/i;
-const SETTLED = /(the earlier claim|earlier rationale|is retired|was (?:too quick|wrong|half wrong)|called the earlier|corrected 20|since 20\d\d-\d\d-\d\d|reproduced since|is reproduced)/i;
+/* A hit leaves the list in one of TWO ways, and both have to be recorded in
+ * the sidecar where the claim lives, or the next reader re-derives it. The
+ * first is the claim being RETIRED (the port now does the thing). The second
+ * is the claim being re-read and found still TRUE - which was invisible until
+ * 2026-08-23, so a sound claim stayed a hit forever and cost somebody the same
+ * six lines every sweep. `re-verified <date>` in the deviation is that second
+ * exit. It deliberately requires a DATE: a claim cannot be silenced without
+ * somebody writing down when they last checked it, and a framework release can
+ * make a re-verified claim stale again, at which point the date is what says
+ * how old the check is. */
+const SETTLED = /(the earlier claim|earlier rationale|is retired|was (?:too quick|wrong|half wrong)|called the earlier|corrected 20|since 20\d\d-\d\d-\d\d|reproduced since|is reproduced|re-verified 20\d\d-\d\d-\d\d)/i;
 const METHOD = /\b([a-z][A-Za-z0-9]{3,})\(\s*\)?/g;
 
 const metas = fs.readdirSync(META).filter((f) => /^z2ui5_cl_smpc_app_\d+\.json$/.test(f))

@@ -51,9 +51,12 @@ CLASS z2ui5_cl_smpc_app_060 IMPLEMENTATION.
                 )->ele( `dependents`
                     )->ele( `Menu`
                         )->a( n = `id`           v = `theMenu`
-                        " compose the toast on the frontend (1:1 with the sample's
-                        " MessageToast.show("Action triggered on item: " + item.getText())),
-                        " roundtrip-free - {0} is filled by the client-resolved item text
+                        " compose the toast on the frontend, roundtrip-free - {0} is
+                        " filled by the client-resolved item text. The sample builds
+                        " that text by walking the item's parent chain, not by asking
+                        " the item alone; on this UI5 release its own loop stops at the
+                        " internal MenuWrapper too, so both print the leaf text (the
+                        " sidecar carries the measurement)
                         )->a( n = `itemSelected` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
 

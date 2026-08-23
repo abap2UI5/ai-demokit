@@ -176,8 +176,58 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   undeclared handler-to-binding swap (022), inline comments citing apps that do
   not exist (010 cited app 534) or the wrong one (009 cited 401 for 022), and
   a `checked.note` claiming no interaction paths were open on a port that ships
-  a press → Dialog → close wire (010). Ports 035–061 are still unread against
-  their originals.
+  a press → Dialog → close wire (010).
+  **Ports 035–061 were read on 2026-08-23** — all 27, each against its archived
+  original (view, controller, fragments, manifest, mock) and against the pinned
+  OpenUI5 sources wherever a claim rested on UI5 behaviour. **20 came back
+  clean** (035–037, 039, 041, 043–048, 050–059) and **7 carried a finding**, all
+  of them documentation drift and not one of them a behavioural defect — which
+  is itself the result worth recording, since the first batch of this re-read
+  found a real one in app 003 and the fear was that `checked` ports hid more.
+  What the seven were: a deviation justifying its choice with a framework
+  limitation that had been lifted two days after the sentence was written (038,
+  the `message>` write half — `z2ui5.cc.MessageManager` does it, and app 065
+  here uses it) *and* citing a class in the retired `z2ui5_cl_demo_app_*` scheme that
+  exists nowhere — see the gate gap below; an `@since` the sources do not carry (040, "the
+  tokens aggregation is public since 1.16" — `MultiInput.js` tags it not at all,
+  and `Tokenizer`, which renders it, is @since 1.22; the figure was in
+  CAPABILITIES.md too); a declared extra control the port does not build (042
+  claimed two content Texts and a "Close Button"; it builds one Text and an OK
+  button, exactly as the original's controller does); an e2e claim its own
+  interaction module contradicts (049 promised ArrowUp + Enter and "the quotes
+  intact", while the module records that the keyboard route stopped firing
+  `change` on the pinned UI5, falls back to the control API, and asserts the
+  text without the quoted value); a mis-scoped `POST_171` (061 said
+  `beforeMenuOpen` sits on "the split-mode buttons", one button short — the
+  `menuPosition="RightBottom"` one carries it with no `buttonMode` at all); an
+  inline comment quoting the original as something it is not (060 said the
+  sample toasts `item.getText()`, where it actually walks the parent chain); and
+  an interaction module whose header named the wrong wire (061 said `{0}
+  Pressed`, asserts `Action triggered on item: Save`). All seven are corrected.
+  **Two of the findings were not in the ports at all**, and both left this
+  repository: 060/061's breadcrumb reasoning ("an expression has no loop") is no
+  longer the operative reason — the framework has `$controller.textPath`, which
+  *does* loop — and the sidecars now carry the real one, that `getTextPath`
+  breaks at the first ancestor without `getText` and `sap.m.Menu` puts a
+  `MenuWrapper` (@since 1.136, no `getText`) exactly there, so it returns the
+  leaf text and rewiring would be a no-op. The framework's own comment on that
+  helper promised the opposite and is fixed upstream.
+  A **gate gap** explains why 038's dead class name outlived the 2026-08-21
+  sweep that removed the others: `check-prose-names` reads eight markdown files
+  and no `meta/` sidecar, although a deviation is prose, is what agents read,
+  and is baked verbatim into the generated overview app. The script is shared
+  with `samples` and `samples-stack`, so it is filed as
+  `prose-gate-blind-to-sidecars` in abap2UI5's backlog rather than changed in
+  one consumer.
+  A second corpus-wide drift surfaced from the same reading and is fixed:
+  **ten CAPABILITIES.md rows still said "LIVE-TEST pending" for apps that are
+  now `checked`** (007, 013, 022, 026, 028, 030, 033, 039, 040, 044, 046, 047 —
+  all live-verified between 2026-07-15 and 2026-07-20), and four rows pointed at
+  `app/webapp/core/Messages.js`, a module that no longer exists (the toast and
+  message-box hooks live in `core/actions/ControlCall.js`). Understating a
+  capability in the file whose whole job is to stop a port from improvising is
+  the more expensive of the two.
+  Ports 062 and up are still unread against their originals.
 
 - [x] **CAPABILITIES.md's stale class citations — DONE.** Both halves of this
   are closed, and neither closed the way the entry predicted. The shared
