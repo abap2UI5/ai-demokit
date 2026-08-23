@@ -70,17 +70,23 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
     live binding instead of ordering the ABAP table; the Name filter stays
     server-side. The deviation is a NOTE, and the interaction module asserts
     the `sap.m.GroupHeaderListItem`s appear on Group and are gone after Reset.
-  - **App 600 (`TreeDnD`) — wired, not yet live-verified.** Its `DROPPED_171`
+  - **App 600 (`TreeDnD`) — written, parked, patch kept.** Its `DROPPED_171`
     reads "the veto itself is expressible (`s_ctrl-check_prevent_default`) but
     its condition is not: the flag is baked per wire at RENDER time". That was
     true until `s_ctrl-prevent_default_expr` landed — the same veto decided per
-    FIRING. The `dragStart` wire now carries
+    FIRING — and the wire is written:
     `${$parameters>/target}.getParent().getSelectedItems()…`, since a tree
-    item's parent IS the Tree. **The cost is real and has to be measured before
-    the sidecar moves:** `_event_client` takes no `s_ctrl`, so the veto only
-    exists on a wire that also round-trips, and whether that round trip
-    disturbs the drag it just allowed is a browser question. The `DROPPED_171`
-    stays until the e2e says otherwise.
+    item's parent IS the Tree. Two things stopped it shipping, and both are the
+    same objection from different directions. `_event_client` takes no `s_ctrl`,
+    so this veto only exists on a wire that ALSO round-trips, and nothing on the
+    backend wants that event — which `view_gates` then named on its own:
+    `event-without-handler` went 4 → 5 and broke the advisory ratchet. Raising
+    the budget is the sanctioned answer for a deliberate round trip, but not
+    before the round trip is shown to be harmless: whether it disturbs the drag
+    it just allowed is a browser question. The change is parked as
+    `600-drag-veto.patch` with its three-case interaction assertion (no
+    selection, dragging outside it, dragging the selected row) and comes back
+    with the e2e result, or not at all.
 
 - [ ] **The per-port review sweep — every port that was `generated` has now
   been read.** Each port is read against its ARCHIVED ORIGINAL
