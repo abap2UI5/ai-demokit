@@ -18,7 +18,7 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 | Ports | **622** sidecars in `meta/` (src/01 OpenUI5 <= 1.71: 408 · src/02 OpenUI5 > 1.71: 214) |
 | Per library | sap.f: 36 · sap.m: 393 · sap.tnt: 17 · sap.ui: 131 · sap.uxap: 45 |
 | Status ladder | 208 `generated` · 355 `reviewed` · 59 `checked` (live-verified) |
-| Deviations | 12 DROPPED_171 · 133 IMPROVISED · 123 LIVE_TEST · 1682 NOTE · 284 POST_171 |
+| Deviations | 12 DROPPED_171 · 134 IMPROVISED · 123 LIVE_TEST · 1690 NOTE · 284 POST_171 |
 | Open LIVE_TESTs | **123 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 2 structural-diff · 7 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_smpc_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_smpc_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_smpc_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_smpc_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_smpc_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
@@ -320,7 +320,58 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   parsing rejects `falseue`" — it coerces), a dead `LIVE_TEST` pointer (074),
   and e2e claims wider than their modules (067, 074, 080 — 074's module now
   asserts the whole composed toast instead of its prefix).
-  **What is left: 315 `reviewed` and 206 `generated` ports above 061.**
+  **Block 2 (2026-08-23) read ports 086–105** (103 excepted, reworked the same
+  day). **Six clean** (086, 087, 088, 089, 090, 095, 098) and the rest carried
+  findings — and the behavioural share keeps rising as the sweep moves into
+  ports that actually wire things:
+  - **App 101 had two step texts silently TRUNCATED to roughly half** — 475 of
+    955 characters and 385 of 575, each a clean prefix stopping mid-paragraph —
+    and had quietly corrected the original's own typo "Donec ppellentesque".
+    Restored. No gate in this repo compares long text bodies, which is exactly
+    why it survived three sweeps. Its navigation also used `to` for all three
+    legs where the original uses `backToPage` for two (a reverse transition
+    that unwinds the NavContainer stack rather than pushing onto it), its
+    weight check demanded all digits where the original tests `parseInt() is
+    NaN` (so `12.5`, `-5` and `12abc` are valid there — on an `Input
+    type="Number"`, where a decimal is what a user types), and it dropped the
+    `setCurrentStep` both failing branches call. All fixed.
+  - **App 105 and its siblings 106/107 printed the wrong text in 36 toasts.**
+    The original strips the LIBRARY name, and the library of a
+    `sap.m.semantic.*` control is `sap.m` — so it prints
+    `Pressed: semantic.AddAction`. All three ports passed the bare action name,
+    stripping the namespace too.
+  - **App 099 dropped the navigate toast's identity and its whole back-button
+    branch**, on the justification that `navOrigin` "is a control reference not
+    transportable as an event arg" — which its own twin, app 100, had recorded
+    as a corrected defect three weeks earlier. The correction never reached
+    099; it has now.
+  - **App 102 does not reproduce the guard its sidecar says it does, and the
+    handler is worse than the "no-op" it was called.** `sap.m.Input` writes its
+    value binding on change, not per keystroke, so the delta carries nothing
+    and the comparison can only ever be true; and every round-trip clears all
+    pending timers *before* running, so one keystroke cancels the armed rebind
+    entirely, where the original's `dataReceived` always fires and is merely
+    declined. Declared precisely rather than reworked — the fix needs the value
+    transported AND the timer problem solved together.
+  - **App 104 kept its search filter across a close**, where `handleClose`
+    resets it first on confirm and cancel alike (`open()` clears the search
+    field but never the binding filter). Fixed.
+  Two twin-port lessons came out of this block and are worth carrying forward:
+  a correction applied to one port of a pair does not reach the other by
+  itself (096→097, 100→099), and the same wire can be right in one port and
+  silently wrong in the next when the aggregation nests one level deeper
+  (076 vs 077 in block 1).
+  The rest are the established documentation shapes: a deviation declaring a
+  wire the port does not have (094, 096, 097 — all three claimed a `setMode`
+  frontend action where the handler only assigns a two-way bound field), a
+  limitation the framework lifted (093's aggregation-item addressing, available
+  since 2026-08-06 and already used by app 012), a dead pointer (092's
+  "core:require dropped" — the sample has none), a mis-stated moment rather
+  than mechanism (092's popin re-flow happens per tick, not on picker close),
+  an undeclared content difference (093's added tab), a dropped
+  `templateShareable` (099, 100), a dropped a11y override (100), and e2e claims
+  wider than their modules (091, 093, 096, 097, 101, 104).
+  **What is left: 295 `reviewed` and 206 `generated` ports above 061.**
 
 - [x] **CAPABILITIES.md's stale class citations — DONE.** Both halves of this
   are closed, and neither closed the way the entry predicted. The shared

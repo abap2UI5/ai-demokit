@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "Master-detail navigation is driven 1:1 via follow_up_action( cs_event-control_by_id ) on the newly whitelisted SplitContainer methods: to (Go-to-Detail button), backDetail/backMaster (page navButtonPress), toMaster (master list item), toDetail (master2 list items) and setMode (RadioButtonGroup). The methods were added to the abap2UI5 framework in the same change set (CONTROL_METHODS)."
+      "what": "Master-detail navigation is driven 1:1 via follow_up_action( cs_event-control_by_id ) on the newly whitelisted SplitContainer methods: to (Go-to-Detail button), backDetail/backMaster (page navButtonPress), toMaster (master list item), toDetail (master2 list items) and toDetail (master2 list items). Corrected 2026-08-23: this list used to end \"and setMode (RadioButtonGroup)\", and no such wire exists - the handler only assigns the two-way bound mode field, which is what two later deviations in this same sidecar say. The methods were added to the abap2UI5 framework in the same change set (CONTROL_METHODS)."
     },
     {
       "type": "NOTE",
@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-07-27: SplitContainer as the root view plus the control_by_id navigation (to/toDetail/toMaster/backDetail/backMaster/setMode) need an in-system check — machine gates only verify view validity, not the runtime navigation roundtrip."
+      "what": "live-verified 2026-07-27: SplitContainer as the root view plus the control_by_id navigation (to/toDetail/toMaster/backDetail/backMaster - setMode is NOT among them, see the correction above) need an in-system check — machine gates only verify view validity, not the runtime navigation roundtrip."
     },
     {
       "type": "NOTE",
@@ -33,7 +33,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the two-way mode binding replaces the setMode( ) action and is not live-verified. The imperative form it replaces WAS verified: verified in a running system 2026-07-27 - SplitContainer toDetail/toMaster/backDetail/backMaster/setMode navigation works across modes (2026-07-27) - kept as context. A fresh live run (each radio button switches the split mode and the toast names it) restamps this port to checked. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_096.mjs)."
+      "what": "the two-way mode binding replaces the setMode( ) action and is not live-verified. The imperative form it replaces WAS verified: verified in a running system 2026-07-27 - SplitContainer toDetail/toMaster/backDetail/backMaster/setMode navigation works across modes (2026-07-27) - kept as context. A fresh live run (each radio button switches the split mode and the toast names it) restamps this port to checked. Residual, added 2026-08-23: the interaction module clicks ONE radio ('hide') and asserts one toast; the other three are never touched and nothing asserts the SplitContainer's mode actually changed. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_096.mjs)."
     }
   ]
 }

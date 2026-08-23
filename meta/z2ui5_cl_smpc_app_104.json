@@ -17,7 +17,7 @@
     },
     {
       "type": "NOTE",
-      "what": "The ObjectNumber weightState is business logic (parseFloat thresholds), so it is computed in ABAP (WEIGHT_STATE, thin-frontend principle) and bound state='{WEIGHT_STATE}' instead of the frontend Formatter.weightState; core:require is therefore dropped and the Currency binding keeps the full standard type path 'sap.ui.model.type.Currency' 1:1. The full 123-row /ProductCollection is inlined (ProductPicUrl is not needed — the table cells carry no icon)."
+      "what": "The ObjectNumber weightState is business logic (parseFloat thresholds), so it is computed in ABAP (WEIGHT_STATE, thin-frontend principle) and bound state='{WEIGHT_STATE}' instead of the frontend Formatter.weightState; core:require is therefore dropped and the Currency binding keeps the full standard type path 'sap.ui.model.type.Currency' 1:1. The full 123-row /ProductCollection is inlined (ProductPicUrl is not needed — the table cells carry no icon; nor are TaxTarifCode, DateOfSale, Status and UoM, which this sample's cells do not use either — the list was completed 2026-08-23)."
     },
     {
       "type": "NOTE",
@@ -25,11 +25,15 @@
     },
     {
       "type": "NOTE",
-      "what": "The per-button dialog configuration, the client-side search filter, multi-select confirm and the value-help selection copy-back need an in-system check; machine gates only verify the views are valid. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the dialog opens with the full 123-row mock and the client-side Contains search filters to 'Gladiator MX'; multi-select confirm and the value-help copy-back remain unexercised. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_104.mjs)."
+      "what": "The per-button dialog configuration, the client-side search filter, multi-select confirm and the value-help selection copy-back need an in-system check; machine gates only verify the views are valid. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the dialog opens and the client-side Contains search finds 'Gladiator MX' - restated 2026-08-23: the module asserts one row is present before the search and that the searched row is present after it, never that the other 122 are gone, so nothing in it would fail if the filter did not apply; multi-select confirm and the value-help copy-back remain unexercised. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_104.mjs)."
     },
     {
       "type": "POST_171",
       "what": "sap.m.TableSelectDialog.searchPlaceholder (since 1.110) is kept 1:1 on the value-help dialog; needs UI5 >= 1.110."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "handleClose's toast is not reproduced. The original names every chosen product - selectedContexts.map( getObject( ).Name ).join( ', ' ) - and stays silent when nothing was chosen; the port toasts a constant 'Selection confirmed' on confirm AND on cancel, which the original does not do either. Declared properly 2026-08-23: the sidecar had covered it with \"selectedContexts / selectedItem are control references not transportable as event args\", a claim the same sidecar retracts a paragraph later. The real obstacles are different and specific: a binding CONTEXT is not a control, so the frontend projection does not marshal it and JSON.stringify would hit its circular model graph; selectedItems ARE controls but project to the ColumnListItem's own properties, not to the cell texts the names live in; and the two-way `selected` route app 490 uses is blocked here because both dialogs bind the SAME t_products and the value help already writes that field for its preselection, so it would need a second flag. The filter reset in the same handler IS reproduced since today."
     }
   ]
 }

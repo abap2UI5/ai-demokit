@@ -21,11 +21,15 @@
     },
     {
       "type": "NOTE",
-      "what": "The SortSelect items are bound to a 2-row filter-type table reproducing /ProductCollectionStats/Filters (the two `type` values Category and SupplierName; the per-type `values` sub-arrays are unused by the Select). The binding keeps the original sorter { path: 'Name' } 1:1 \u2014 a no-op there too, since the Filters entries carry `type`, not `Name`."
+      "what": "The SortSelect items are bound to a 2-row filter-type table reproducing /ProductCollectionStats/Filters (the two `type` values Category and SupplierName; the per-type `values` sub-arrays are unused by the Select). The binding keeps the original sorter { path: 'Name' } 1:1 — a no-op there too, since the Filters entries carry `type`, not `Name`."
     },
     {
       "type": "NOTE",
       "what": "Same as SemanticPage but the MasterPage and DetailPage carry floatingFooter='true' and the MasterPage drops the PageAccessibleLandmarkInfo (matching the SemanticPageFloatingFooter variant)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The semantic-action toast strings were corrected 2026-08-23, together with app 105's. The original derives the text as getMetadata().getName() minus the LIBRARY name, and the library of a sap.m.semantic.* control is 'sap.m' - so it prints 'Pressed: semantic.AddAction'. These ports had passed the bare action name, stripping the namespace as well, so every one of them differed from the original."
     }
   ]
 }

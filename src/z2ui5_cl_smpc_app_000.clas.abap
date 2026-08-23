@@ -3332,11 +3332,16 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
 
-    lv_text1 = `IMPROVISED: The original demonstrates late binding of an Input over an OData v2 mock server: fnRebind calls view.bindElement('/Employees(1)') and, on dataReceived (~3s), rebinds the input to FirstName` &&
-               ` if the value is still untouched. abap2UI5 has no ODataModel roundtrip here, so the OData mock is reduced to ABAP: the button starts a 3s timer (cs_event-start_timer) and the callback sets the bound` &&
-               ` value to the Employees(1) FirstName ('Nancy') only when the input still equals its initial value ('Martin'), reproducing the initialValue===currentValue guard. // NOTE: The input value is a two-way` &&
-               ` binding on the single default model (the original's named 'initialData' JSONModel /currentValue is flattened). liveChange is wired but the current value already flows back via the two-way binding on` &&
-               ` each roundtrip, so the handler is a no-op (the original setProperty('/currentValue', ...) keeps it live between keystrokes).`.
+    lv_text1 = `IMPROVISED: The original demonstrates late binding of an Input over an OData v2 mock server: fnRebind calls view.bindElement('/Employees(1)') and, on dataReceived (the mock server's autoRespondAfter` &&
+               ` is 2000 ms, not the ~3s stated here until 2026-08-23 - the button label's "3 seconds" is the original's own inconsistency, and the port's timer uses 3000), rebinds the input to FirstName if the value` &&
+               ` is still untouched. abap2UI5 has no ODataModel roundtrip here, so the OData mock is reduced to ABAP: the button starts a 3s timer (cs_event-start_timer) and the callback sets the bound value to the` &&
+               ` Employees(1) FirstName ('Nancy') only when the input still equals its initial value ('Martin'), reproducing the initialValue===currentValue guard. // NOTE: The input value is a two-way binding on the` &&
+               ` single default model (the original's named 'initialData' JSONModel /currentValue is flattened). liveChange is wired and the port does NOT reproduce the sample's guard - corrected 2026-08-23, the`.
+    lv_text1 = lv_text1 && ` sentence used to claim the value "already flows back via the two-way binding on each roundtrip, so the handler is a no-op", and both halves are wrong. sap.m.Input writes its value binding in onChange` &&
+               ` (focusout/Enter), not per keystroke, unless valueLiveUpdate is set - which is exactly why the original has a handleLiveChange at all - so the delta carries nothing and current_value still equals` &&
+               ` initial_value. And the handler is worse than a no-op: every eB round-trip clears ALL pending timers before it runs, so a single keystroke CANCELS the armed REBIND_DONE and the late bind never happens` &&
+               ` at all, where the original's dataReceived always fires and is merely declined by the guard. Carrying ${$parameters>/newValue} as the t_arg (or valueLiveUpdate) would make the guard real, but the` &&
+               ` timer cancellation has to be solved with it (the original setProperty('/currentValue', ...) keeps it live between keystrokes).`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.InputModelUpdate`                name = `InputModelUpdate`                              class = `z2ui5_cl_smpc_app_102` path = `src/01/01/z2ui5_cl_smpc_app_102.clas.abap`
         score = 3
@@ -5210,15 +5215,17 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = `POST-1.71: Link.ariaHasPopup (since 1.86) is kept 1:1 on the popover link; needs UI5 >= 1.86. // NOTE: the row Popover reproduces the original bindElement: it is built per-press with relative bindings` &&
                ` ({PRODUCT_ID} title, {NAME}, {PRODUCT_PIC_URL}) and follow_up_action( cs_event-bind_element, view=cs_view-popover ) element-binds the popover slot to t_products/<index>, where the index comes from` &&
                ` the pressed row's binding context ($event.oSource.getBindingContext().getPath()); the popover is anchored by $event.oSource.sId and the Action button reproduces handleActionPress 1:1 (a toast 'Action` &&
-               ` has been pressed' + follow_up_action( cs_event-popover_close )). The disable/enable-pointer-events-while-open behavior is dropped. // NOTE: Two legs of the original restored 2026-08-21, both found` &&
-               ` undeclared by the review sweep. (a) onInit's oModel.setSizeLimit( 10 ) is reproduced 1:1 through follow_up_action( cs_event-set_size_limit ) - the same listed frontend action app 252 uses; the port`.
-    lv_text1 = lv_text1 && ` rendered all 123 rows where the original shows ten. (b) The sample's headline behaviour - table clicks dead while the popover is open, which the page header advertises in so many words - was dropped.` &&
-               ` attachAfterOpen -> disablePointerEvents / afterClose -> enablePointerEvents are now the popover's afterOpen/afterClose toggling a style CLASS on idProductsTable via control_by_id addStyleClass /` &&
-               ` removeStyleClass, with the rule injected as a core:HTML style leaf. The css control method could NOT carry this: pointer-events is not on the framework's CSS_PROPERTIES whitelist, which is why the` &&
-               ` class-toggle is the expressible form rather than a stylistic choice. // NOTE: The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5` &&
-               ` app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency, and RE-COUNTED` &&
-               ` 2026-08-23: the sentence used to claim the rewrite was 'declared by all 77 ports that do it', which had stopped being true as the corpus grew past that day's snapshot - 126 ports do it now, and 17 of`.
-    lv_text1 = lv_text1 && ` them declared it nowhere. Those 17 carry the declaration since today, so the claim holds again; a stale absolute count is what made it wrong, so this wording names the date the count was taken.`.
+               ` has been pressed' + follow_up_action( cs_event-popover_close )). The disable/enable-pointer-events-while-open behaviour is NOT dropped - corrected 2026-08-23, this sentence was left behind by the` &&
+               ` 2026-08-21 restoration and contradicted the next deviation, which describes the reproduction: afterOpen/afterClose toggle a style class on idProductsTable via control_by_id, with the rule injected as` &&
+               ` a core:HTML style leaf. // NOTE: Two legs of the original restored 2026-08-21, both found undeclared by the review sweep. (a) onInit's oModel.setSizeLimit( 10 ) is reproduced 1:1 through`.
+    lv_text1 = lv_text1 && ` follow_up_action( cs_event-set_size_limit ) - the same listed frontend action app 252 uses; the port rendered all 123 rows where the original shows ten. (b) The sample's headline behaviour - table` &&
+               ` clicks dead while the popover is open, which the page header advertises in so many words - was dropped. attachAfterOpen -> disablePointerEvents / afterClose -> enablePointerEvents are now the` &&
+               ` popover's afterOpen/afterClose toggling a style CLASS on idProductsTable via control_by_id addStyleClass / removeStyleClass, with the rule injected as a core:HTML style leaf. The css control method` &&
+               ` could NOT carry this: pointer-events is not on the framework's CSS_PROPERTIES whitelist, which is why the class-toggle is the expressible form rather than a stylistic choice. // NOTE: The sample's` &&
+               ` asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at` &&
+               ` https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the sentence used to claim the rewrite was 'declared by`.
+    lv_text1 = lv_text1 && ` all 77 ports that do it', which had stopped being true as the corpus grew past that day's snapshot - 126 ports do it now, and 17 of them declared it nowhere. Those 17 carry the declaration since` &&
+               ` today, so the claim holds again; a stale absolute count is what made it wrong, so this wording names the date the count was taken.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Popover`                         name = `PopoverControllingCloseBehavior`               class = `z2ui5_cl_smpc_app_094` path = `src/02/01/z2ui5_cl_smpc_app_094.clas.abap`
         score = 5
@@ -5349,7 +5356,11 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own.` &&
                ` Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the sentence used to claim the rewrite was 'declared by all 77 ports that do it', which had stopped being true as the corpus grew past` &&
                ` that day's snapshot - 126 ports do it now, and 17 of them declared it nowhere. Those 17 carry the declaration since today, so the claim holds again; a stale absolute count is what made it wrong, so` &&
-               ` this wording names the date the count was taken.`.
+               ` this wording names the date the count was taken. // NOTE: The top-level pages binding drops the original's templateShareable: true; the relative groups/elements bindings keep it. Declared 2026-08-23` &&
+               ` - app 412 declares the identical drop and cites this port family as its precedent, while the precedent itself carried no such sentence. Harmless here for the reason 412 gives: each display builds a` &&
+               ` fresh fragment, so no template outlives its binding. // NOTE: The original's onAfterRendering overrides the rendered aria-haspopup="dialog" with "true" on three of the four buttons`.
+    lv_text1 = lv_text1 && ` (genericQuickViewNoHeader is deliberately left out); the port renders ariaHasPopup="Dialog" on all four and has no equivalent. An accessibility attribute only, and the same shape app 099 declares for` &&
+               ` its own dropped onAfterRendering. Declared 2026-08-23.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.QuickView`                       name = `QuickView`                                     class = `z2ui5_cl_smpc_app_100` path = `src/02/01/z2ui5_cl_smpc_app_100.clas.abap`
         score = 5
@@ -5402,15 +5413,20 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = `NOTE: The QuickViewCard fragment is inlined into the main view instead of a separate core:Fragment include, so the port has no core:Fragment control. The nested pages/groups/elements are a nested ABAP` &&
                ` table (t_pages) bound 1:1; relative child aggregations (groups, elements) keep the original binding-info form. // NOTE: The external Navigate-Back button drives the card 1:1 via follow_up_action(` &&
                ` cs_event-control_by_id, navigateBack ) — navigateBack was whitelisted in the paired abap2UI5 change. afterNavigate forwards the public isTopPage parameter and enables the button while the card is not` &&
-               ` on its top page. The navigate toast is simplified to a fixed message (the original distinguishes the clicked link's text vs the back button via navOrigin, a control reference that is not` &&
-               ` transportable as an event arg). // NOTE: Elements without an elementType in the source JSON (Address, Slogan) are filled with the QuickViewGroupElementType default 'text', and every element row seeds` &&
-               ` target '_blank' (the QuickViewGroupElement.target default) - absent JSON properties must not serialize as empty strings, which would override the UI5 defaults. onAfterRendering's 320px maxWidth tweak`.
-    lv_text1 = lv_text1 && ` is dropped. // POST-1.71: sap.m.Avatar (control since 1.73) is kept 1:1 as the page icon via the QuickViewPage avatar aggregation, which itself is since UI5 1.92 - so the app needs UI5 >= 1.92 to` &&
-               ` render the avatar.`.
+               ` on its top page. The navigate toast is simplified to a fixed message (the original distinguishes the clicked link's text vs the back button via navOrigin, REPRODUCED since 2026-08-23. The` &&
+               ` justification that stood here - "navOrigin is a control reference that is not transportable as an event arg" - was disproved by the twin port 100, whose own sidecar records the same defect being` &&
+               ` corrected on 2026-08-01. The wire now carries ${$parameters>/navOrigin} ? ${$parameters>/navOrigin}.getText() : '' and a COND rebuilds the original's if/else, so the clicked link is named and the`.
+    lv_text1 = lv_text1 && ` back-button branch exists again). // NOTE: Elements without an elementType in the source JSON (Address, Slogan) are filled with the QuickViewGroupElementType default 'text', and every element row` &&
+               ` seeds target '_blank' (the QuickViewGroupElement.target default) - absent JSON properties must not serialize as empty strings, which would override the UI5 defaults. onAfterRendering's 320px maxWidth` &&
+               ` tweak is dropped. // POST-1.71: sap.m.Avatar (control since 1.73) is kept 1:1 as the page icon via the QuickViewPage avatar aggregation, which itself is since UI5 1.92 - so the app needs UI5 >= 1.92` &&
+               ` to render the avatar. // NOTE: The top-level pages binding drops the original's templateShareable: true; the relative groups/elements bindings keep it. Declared 2026-08-23 - app 412 declares the` &&
+               ` identical drop and cites this port family as its precedent, while the precedent itself carried no such sentence. Harmless here for the reason 412 gives: each display builds a fresh fragment, so no` &&
+               ` template outlives its binding.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.QuickViewCard`                   name = `QuickViewCard`                                 class = `z2ui5_cl_smpc_app_099` path = `src/02/01/z2ui5_cl_smpc_app_099.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
         since = `1.28.11`
         is_post171 = abap_true
         notes = lv_text1
@@ -5674,11 +5690,13 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` _messagePopover.toggle(oMessagesButton) equivalent. onInit's MessageManager.addMessages seed ('Something wrong happened', Error) rides on an added z2ui5.cc.MessageManager bridge control (in an added`.
     lv_text1 = lv_text1 && ` semantic content aggregation, declared) with its one-row items table - the app-065 idiom. // NOTE: The SortSelect items are bound to a 2-row filter-type table reproducing` &&
                ` /ProductCollectionStats/Filters (the two ``type`` values Category and SupplierName; the per-type ``values`` sub-arrays are unused by the Select). The binding keeps the original sorter { path: 'Name'` &&
-               ` } 1:1 — a no-op there too, since the Filters entries carry ``type``, not ``Name``.`.
+               ` } 1:1 — a no-op there too, since the Filters entries carry ``type``, not ``Name``. // NOTE: The semantic-action toast strings were corrected 2026-08-23, together with app 105's. The original derives` &&
+               ` the text as getMetadata().getName() minus the LIBRARY name, and the library of a sap.m.semantic.* control is 'sap.m' - so it prints 'Pressed: semantic.AddAction'. These ports had passed the bare` &&
+               ` action name, stripping the namespace as well, so every one of them differed from the original.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.semantic.SemanticPage`           name = `SemanticPage`                                  class = `z2ui5_cl_smpc_app_107` path = `src/01/01/z2ui5_cl_smpc_app_107.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30.0`
         notes = lv_text1 ) ).
 
@@ -5691,7 +5709,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` semantic content aggregation, declared) with its one-row items table - the app-065 idiom. // NOTE: The SortSelect items are bound to a 2-row filter-type table reproducing` &&
                ` /ProductCollectionStats/Filters (the two ``type`` values Category and SupplierName; the per-type ``values`` sub-arrays are unused by the Select). The binding keeps the original sorter { path: 'Name'` &&
                ` } 1:1 — a no-op there too, since the Filters entries carry ``type``, not ``Name``. // NOTE: Same as SemanticPage but the MasterPage and DetailPage carry floatingFooter='true' and the MasterPage drops` &&
-               ` the PageAccessibleLandmarkInfo (matching the SemanticPageFloatingFooter variant).`.
+               ` the PageAccessibleLandmarkInfo (matching the SemanticPageFloatingFooter variant). // NOTE: The semantic-action toast strings were corrected 2026-08-23, together with app 105's. The original derives` &&
+               ` the text as getMetadata().getName() minus the LIBRARY name, and the library of a sap.m.semantic.* control is 'sap.m' - so it prints 'Pressed: semantic.AddAction'. These ports had passed the bare` &&
+               ` action name, stripping the namespace as well, so every one of them differed from the original.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.semantic.SemanticPage`           name = `SemanticPageFloatingFooter`                    class = `z2ui5_cl_smpc_app_106` path = `src/01/01/z2ui5_cl_smpc_app_106.clas.abap`
         score = 5
@@ -5699,18 +5719,25 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.30.0`
         notes = lv_text1 ) ).
 
-    lv_text1 = `NOTE: onSemanticButtonPress toasts the pressed control's class name (getMetadata().getName() minus the library); reproduced by passing each semantic action's name as a t_arg literal ('AddAction',` &&
-               ` 'EditAction', ...) and toasting 'Pressed: <name>'. The custom footer buttons toast the pressed control id via $event.oSource.sId (original onPress). The MessagesIndicator toast is simplified to a` &&
-               ` fixed message (the original opens a MessagePopover, dropped here). // NOTE: onMessagesButtonPress reproduced 1:1 since 2026-08-21 - the port toasted a bare 'Messages' before, which the review sweep` &&
-               ` found: the whole message-handling leg of the sample was missing, undeclared, while sibling ports 106/107 built from the BYTE-IDENTICAL controller already carried it. The controller-built` &&
-               ` MessagePopover over the message model is now declared as a dependent of the MessagesIndicator (added controls vs the original view.xml: MessagePopover + MessageItem with the original's` &&
-               ` {message>description} / {message>type} / {message>message} template) and toggled roundtrip-free via follow_up_action control_by_id toggleBy ($event.oSource.sId) - the`.
-    lv_text1 = lv_text1 && ` _messagePopover.toggle(oMessagesButton) equivalent. onInit's MessageManager.addMessages seed ('Something wrong happened', Error) rides on an added z2ui5.cc.MessageManager bridge control in an added` &&
-               ` semantic content aggregation (declared) with its one-row items table - the app-065 idiom, identical to apps 106/107.`.
+    lv_text1 = `NOTE: onSemanticButtonPress toasts the pressed control's class name (getMetadata().getName() minus the LIBRARY, which is 'sap.m' and not 'sap.m.semantic' - so the original prints 'Pressed:` &&
+               ` semantic.AddAction'. Corrected 2026-08-23: the port had passed the bare 'AddAction', i.e. minus the library AND the namespace, so all ten toasts differed from the original. The same literals were` &&
+               ` wrong in the sibling ports 106 and 107 and are fixed with them); reproduced by passing each semantic action's name as a t_arg literal ('AddAction', 'EditAction', ...) and toasting 'Pressed: <name>'.` &&
+               ` The custom footer buttons toast the pressed control id via $event.oSource.sId (original onPress). (Removed 2026-08-23: this sentence claimed a simplified MessagesIndicator toast and a dropped` &&
+               ` MessagePopover, and the port has neither - the indicator opens the popover via control_by_id toggleBy and the MessagePopover is built in the view, which the next deviation describes correctly. It was` &&
+               ` left standing by that rework.) // NOTE: onMessagesButtonPress reproduced 1:1 since 2026-08-21 - the port toasted a bare 'Messages' before, which the review sweep found: the whole message-handling leg`.
+    lv_text1 = lv_text1 && ` of the sample was missing, undeclared, while sibling ports 106/107, whose onInit seed and onMessagesButtonPress legs are the same code (corrected 2026-08-23 - the three controllers are not` &&
+               ` byte-identical files: FullScreen has onNavButtonPress where the siblings have onSemanticSelectChange/onPositionChange/onMultiSelectPress) already carried it. The controller-built MessagePopover over` &&
+               ` the message model is now declared as a dependent of the MessagesIndicator (added controls vs the original view.xml: MessagePopover + MessageItem with the original's {message>description} /` &&
+               ` {message>type} / {message>message} template) and toggled roundtrip-free via follow_up_action control_by_id toggleBy ($event.oSource.sId) - the _messagePopover.toggle(oMessagesButton) equivalent.` &&
+               ` onInit's MessageManager.addMessages seed ('Something wrong happened', Error) rides on an added z2ui5.cc.MessageManager bridge control in an added semantic content aggregation (declared) with its` &&
+               ` one-row items table - the app-065 idiom, identical to apps 106/107. // NOTE: The MessagePopover shows a message where the original's shows none, and the port is the more correct side. The original`.
+    lv_text1 = lv_text1 && ` never sets a 'message' model, and MessagePopover only falls back to binding one when it has neither an items binding nor items - which is not this sample - so upstream the popover opens empty.` &&
+               ` abap2UI5 attaches the message model to every view slot unconditionally and the cc.MessageManager bridge pushes the seeded row in, so the port displays it. Framework-level, not a porting choice;` &&
+               ` declared 2026-08-23 because the neighbouring deviation says "reproduced 1:1" and the visible outcome differs.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.semantic.SemanticPage`           name = `SemanticPageFullScreen`                        class = `z2ui5_cl_smpc_app_105` path = `src/01/01/z2ui5_cl_smpc_app_105.clas.abap`
-        score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30.0`
         notes = lv_text1 ) ).
 
@@ -5960,15 +5987,20 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = `NOTE: the sample's demo-kit backgroundImage paths are resolved to absolute sdk.openui5.org URLs.` ) ).
 
     lv_text1 = `NOTE: Master-detail navigation is driven 1:1 via follow_up_action( cs_event-control_by_id ) on the newly whitelisted SplitApp methods: to (Go-to-Detail button), backDetail/backMaster (page` &&
-               ` navButtonPress), toMaster (master list item), toDetail (master2 list items) and setMode (RadioButtonGroup). The methods were added to the abap2UI5 framework in the same change set (CONTROL_METHODS).` &&
-               ` // NOTE: The master2 list navigates via a per-item press event that carries the target page id as a t_arg literal ('detail'/'detailDetail'/'detail2'); the original reads the pressed item's custom:to` &&
-               ` CustomData in one List.itemPress handler, which is not transportable as an event arg. custom:to is kept on the items for fidelity. // NOTE: The split mode is selected via a two-way selectedIndex` &&
-               ` binding on the RadioButtonGroup (mode_idx) and mapped to the SplitAppMode string in ABAP; the original reads the selected RadioButton's custom:splitAppMode CustomData. custom:splitAppMode is kept on` &&
-               ` the buttons for fidelity. The onInit setHomeIcon and the onOrientationChange toast are dropped (device-specific cosmetics). // NOTE: SplitApp as the root view plus the control_by_id navigation`.
-    lv_text1 = lv_text1 && ` (to/toDetail/toMaster/backDetail/backMaster/setMode) need an in-system check — machine gates only verify view validity, not the runtime navigation roundtrip. **e2e-verified 2026-08-04** (nightly e2e` &&
-               ` interaction, meta/interactions/z2ui5_cl_smpc_app_097.mjs). // NOTE: the mode RadioButtonGroup's handler calls oSplitApp.setMode( ) in the original; SplitApp.mode is a bindable property, so the port` &&
-               ` binds it two-way (added attribute, no structural diff) and the handler only assigns the chosen mode - the prefer-a-bindable-property rule, gated by the linter rule settable-property-via-action. The` &&
-               ` state then survives a view rebuild instead of living only in the control.`.
+               ` navButtonPress), toMaster (master list item), toDetail (master2 list items) and toDetail (master2 list items). Corrected 2026-08-23: this list used to end "and setMode (RadioButtonGroup)", and no` &&
+               ` such wire exists - the handler only assigns the two-way bound mode field, which is what two later deviations in this same sidecar say. The methods were added to the abap2UI5 framework in the same` &&
+               ` change set (CONTROL_METHODS). // NOTE: The master2 list navigates via a per-item press event that carries the target page id as a t_arg literal ('detail'/'detailDetail'/'detail2'); the original reads` &&
+               ` the pressed item's custom:to CustomData in one List.itemPress handler, which the port has not yet converted. Corrected 2026-08-23: the old wording said the CustomData "is not transportable as an` &&
+               ` event arg", and that is wrong - an arg is a full UI5 expression, and the twin port 096 was corrected on 2026-08-21 to one List.itemPress carrying`.
+    lv_text1 = lv_text1 && ` ${$parameters>/listItem}.getCustomData()[0].getValue(). The same correction was never applied here. The per-item press is functionally equivalent for Active items, so this is a structural and` &&
+               ` documentation divergence rather than a broken click. custom:to is kept on the items for fidelity. // NOTE: The split mode is selected via a two-way selectedIndex binding on the RadioButtonGroup` &&
+               ` (mode_idx) and mapped to the SplitAppMode string in ABAP; the original reads the selected RadioButton's custom:splitAppMode CustomData. custom:splitAppMode is kept on the buttons for fidelity. The` &&
+               ` onInit setHomeIcon and the onOrientationChange toast are dropped (device-specific cosmetics). // NOTE: Residual, added 2026-08-23: the interaction module clicks the single 'Go to Detail page2' button` &&
+               ` and asserts the SplitApp shows 'Detail Detail', which covers the ``to`` wire only - toDetail, toMaster, backDetail and backMaster are never exercised. SplitApp as the root view plus the control_by_id` &&
+               ` navigation (to/toDetail/toMaster/backDetail/backMaster - setMode is NOT among them, see the correction above) need an in-system check — machine gates only verify view validity, not the runtime`.
+    lv_text1 = lv_text1 && ` navigation roundtrip. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_097.mjs). // NOTE: the mode RadioButtonGroup's handler calls oSplitApp.setMode( ) in` &&
+               ` the original; SplitApp.mode is a bindable property, so the port binds it two-way (added attribute, no structural diff) and the handler only assigns the chosen mode - the prefer-a-bindable-property` &&
+               ` rule, gated by the linter rule settable-property-via-action. The state then survives a view rebuild instead of living only in the control.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.SplitApp`                        name = `SplitApp`                                      class = `z2ui5_cl_smpc_app_097` path = `src/01/01/z2ui5_cl_smpc_app_097.clas.abap`
         score = 4
@@ -5976,19 +6008,22 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: Master-detail navigation is driven 1:1 via follow_up_action( cs_event-control_by_id ) on the newly whitelisted SplitContainer methods: to (Go-to-Detail button), backDetail/backMaster (page` &&
-               ` navButtonPress), toMaster (master list item), toDetail (master2 list items) and setMode (RadioButtonGroup). The methods were added to the abap2UI5 framework in the same change set (CONTROL_METHODS).` &&
-               ` // NOTE: The master2 list navigates through ONE List.itemPress handler, as the original does, carrying the pressed item's CustomData: ``${$parameters>/listItem}.getCustomData()[0].getValue()``.` &&
-               ` Corrected 2026-08-21 - until then the port wired a press per item with the target page id as a t_arg LITERAL ('detail'/'detailDetail'/'detail2') and declared that CustomData 'is not transportable as` &&
-               ` an event arg', which is wrong: an arg is a FULL UI5 expression (CAPABILITIES, proven 2026-07-31) and indexed access into an array-valued getter was measured to resolve by` &&
-               ` scripts/probes/event-arg-expression-probe.mjs. The custom:to CustomData is what the wire now READS, not decoration kept for fidelity. // NOTE: The split mode is selected via a two-way selectedIndex`.
-    lv_text1 = lv_text1 && ` binding on the RadioButtonGroup (mode_idx) and mapped to the SplitAppMode string in ABAP; the original reads the selected RadioButton's custom:splitAppMode CustomData. custom:splitAppMode is kept on` &&
-               ` the buttons for fidelity. The onAfterRendering parent-height fix and the device-model onInit setup (device model is global in abap2UI5) are dropped. // NOTE: live-verified 2026-07-27: SplitContainer` &&
-               ` as the root view plus the control_by_id navigation (to/toDetail/toMaster/backDetail/backMaster/setMode) need an in-system check — machine gates only verify view validity, not the runtime navigation` &&
-               ` roundtrip. // NOTE: the mode RadioButtonGroup's handler calls oSplitContainer.setMode( ) in the original; SplitContainer.mode is a bindable property, so the port binds it two-way (added attribute, no` &&
-               ` structural diff) and the handler only assigns the chosen mode - the prefer-a-bindable-property rule, gated by the linter rule settable-property-via-action. The state then survives a view rebuild`.
-    lv_text1 = lv_text1 && ` instead of living only in the control. // NOTE: the two-way mode binding replaces the setMode( ) action and is not live-verified. The imperative form it replaces WAS verified: verified in a running` &&
-               ` system 2026-07-27 - SplitContainer toDetail/toMaster/backDetail/backMaster/setMode navigation works across modes (2026-07-27) - kept as context. A fresh live run (each radio button switches the split` &&
-               ` mode and the toast names it) restamps this port to checked. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_096.mjs).`.
+               ` navButtonPress), toMaster (master list item), toDetail (master2 list items) and toDetail (master2 list items). Corrected 2026-08-23: this list used to end "and setMode (RadioButtonGroup)", and no` &&
+               ` such wire exists - the handler only assigns the two-way bound mode field, which is what two later deviations in this same sidecar say. The methods were added to the abap2UI5 framework in the same` &&
+               ` change set (CONTROL_METHODS). // NOTE: The master2 list navigates through ONE List.itemPress handler, as the original does, carrying the pressed item's CustomData:` &&
+               ` ``${$parameters>/listItem}.getCustomData()[0].getValue()``. Corrected 2026-08-21 - until then the port wired a press per item with the target page id as a t_arg LITERAL` &&
+               ` ('detail'/'detailDetail'/'detail2') and declared that CustomData 'is not transportable as an event arg', which is wrong: an arg is a FULL UI5 expression (CAPABILITIES, proven 2026-07-31) and indexed`.
+    lv_text1 = lv_text1 && ` access into an array-valued getter was measured to resolve by scripts/probes/event-arg-expression-probe.mjs. The custom:to CustomData is what the wire now READS, not decoration kept for fidelity. //` &&
+               ` NOTE: The split mode is selected via a two-way selectedIndex binding on the RadioButtonGroup (mode_idx) and mapped to the SplitAppMode string in ABAP; the original reads the selected RadioButton's` &&
+               ` custom:splitAppMode CustomData. custom:splitAppMode is kept on the buttons for fidelity. The onAfterRendering parent-height fix and the device-model onInit setup (device model is global in abap2UI5)` &&
+               ` are dropped. // NOTE: live-verified 2026-07-27: SplitContainer as the root view plus the control_by_id navigation (to/toDetail/toMaster/backDetail/backMaster - setMode is NOT among them, see the` &&
+               ` correction above) need an in-system check — machine gates only verify view validity, not the runtime navigation roundtrip. // NOTE: the mode RadioButtonGroup's handler calls oSplitContainer.setMode(` &&
+               ` ) in the original; SplitContainer.mode is a bindable property, so the port binds it two-way (added attribute, no structural diff) and the handler only assigns the chosen mode - the`.
+    lv_text1 = lv_text1 && ` prefer-a-bindable-property rule, gated by the linter rule settable-property-via-action. The state then survives a view rebuild instead of living only in the control. // NOTE: the two-way mode binding` &&
+               ` replaces the setMode( ) action and is not live-verified. The imperative form it replaces WAS verified: verified in a running system 2026-07-27 - SplitContainer` &&
+               ` toDetail/toMaster/backDetail/backMaster/setMode navigation works across modes (2026-07-27) - kept as context. A fresh live run (each radio button switches the split mode and the toast names it)` &&
+               ` restamps this port to checked. Residual, added 2026-08-23: the interaction module clicks ONE radio ('hide') and asserts one toast; the other three are never touched and nothing asserts the` &&
+               ` SplitContainer's mode actually changed. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_096.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.SplitContainer`                  name = `SplitContainer`                                class = `z2ui5_cl_smpc_app_096` path = `src/01/01/z2ui5_cl_smpc_app_096.clas.abap`
         score = 5
@@ -6108,20 +6143,26 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
 
-    lv_text1 = `NOTE: addNewButtonPress appends an empty employee row to the bound /T_EMPLOYEES (the addItem+setSelectedItem equivalent for a bound aggregation; the new tab is appended but not auto-selected -` &&
-               ` TabContainer.selectedItem is an association a bound-row clone cannot address from the backend, the one residual difference). itemCloseHandler reproduced 1:1 since 2026-07-30: the itemClose wire` &&
-               ` carries s_ctrl-check_prevent_default (the original calls oEvent.preventDefault() unconditionally) and transports ${$parameters>/item}.getName() plus the row index via` &&
-               ` ${$parameters>/item/oParent}.indexOfItem(${$parameters>/item}) (the dnd-idiom index transport); the backend raises MessageBox.confirm (Do you want to close the tab '<name>'?, onclose CLOSE_DECIDE)` &&
-               ` and on OK deletes the row (the bound-aggregation removeItem) and toasts 'Item closed: <name>' (duration 500), on Cancel toasts 'Item close canceled: <name>' - exactly the original's onClose branches.` &&
-               ` The pending name/index live in protected state across the confirm round-trip. The earlier static 'Close requested' toast (tab never removable) is gone. // NOTE: the prevent-default itemClose +`.
-    lv_text1 = lv_text1 && ` MessageBox.confirm + row-delete chain and the index transport via the oParent indexOfItem form are unverified in a running system; the e2e interaction covers open-confirm-OK-removes end to end in the` &&
-               ` transpiled harness. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): covered end to end: close icon -> confirm box with the item name -> OK -> row removed +` &&
-               ` 'Item closed:' toast (needs the 2026-07-30 Messages.js onclose fix - under the broken wire the OK action never arrived). **e2e-verified 2026-08-04** (nightly e2e interaction,` &&
-               ` meta/interactions/z2ui5_cl_smpc_app_093.mjs).`.
+    lv_text1 = `NOTE: addNewButtonPress appends an empty employee row to the bound /T_EMPLOYEES (the addItem+setSelectedItem equivalent for a bound aggregation; the new tab is appended but not auto-selected - the new` &&
+               ` tab is not auto-selected. Corrected 2026-08-23: this used to justify it with "TabContainer.selectedItem is an association a bound-row clone cannot address from the backend", which the framework` &&
+               ` lifted on 2026-08-06 - wherever an argument takes a control id it also takes an aggregation ITEM addressed positionally (``myTabContainer/items/<n>``, 0-based), setSelectedItem is whitelisted with` &&
+               ` the controlIdOrNull kind, and app 012 already uses exactly that form for the same class of problem. The auto-selection is therefore expressible and simply not done yet, the one residual difference).` &&
+               ` itemCloseHandler reproduced 1:1 since 2026-07-30: the itemClose wire carries s_ctrl-check_prevent_default (the original calls oEvent.preventDefault() unconditionally) and transports` &&
+               ` ${$parameters>/item}.getName() plus the row index via ${$parameters>/item/oParent}.indexOfItem(${$parameters>/item}) (the dnd-idiom index transport); the backend raises MessageBox.confirm (Do you`.
+    lv_text1 = lv_text1 && ` want to close the tab '<name>'?, onclose CLOSE_DECIDE) and on OK deletes the row (the bound-aggregation removeItem) and toasts 'Item closed: <name>' (duration 500), on Cancel toasts 'Item close` &&
+               ` canceled: <name>' - exactly the original's onClose branches. The pending name/index live in protected state across the confirm round-trip. The earlier static 'Close requested' toast (tab never` &&
+               ` removable) is gone. // NOTE: the prevent-default itemClose + MessageBox.confirm + row-delete chain and the index transport via the oParent indexOfItem form are unverified in a running system; the e2e` &&
+               ` interaction covers open-confirm-OK-removes end to end in the transpiled harness. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): covered in part - restated` &&
+               ` 2026-08-23: the module asserts the MessageBox contains the static prefix "Do you want to close the tab" and that a toast contains "Item closed:", and neither the item NAME in the box nor the row's` &&
+               ` REMOVAL is asserted. Since the texts are composed from close_name while the deletion rides on a separately transported index, a wrong index (or the -1 case the guard swallows) would leave the module`.
+    lv_text1 = lv_text1 && ` green. What it does cover: close icon -> confirm box with the item name -> OK -> row removed + 'Item closed:' toast (needs the 2026-07-30 Messages.js onclose fix - under the broken wire the OK action` &&
+               ` never arrived). **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_093.mjs). // NOTE: The added tab's CONTENT differs, which the auto-selection deviation had` &&
+               ` called "the one residual difference". The original constructs a bare TabContainerItem (name + modified) and addItem's it, so it carries no content and the new tab's body is EMPTY; the port appends a` &&
+               ` row to the bound table, so the new tab is a template clone showing the three Labels and three Inputs over a blank row. Declared 2026-08-23.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.TabContainer`                    name = `TabContainer`                                  class = `z2ui5_cl_smpc_app_093` path = `src/01/01/z2ui5_cl_smpc_app_093.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
         notes = lv_text1 ) ).
 
@@ -6182,20 +6223,23 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.16` ) ).
 
     lv_text1 = `POST-1.71: Table.autoPopinMode (since 1.76), Table.hiddenInPopin (since 1.77), Table.popinChanged (since 1.77) and Column.importance (since 1.76), the core of the auto-pop-in demo, are kept 1:1; needs` &&
-               ` UI5 >= 1.77. // NOTE: onSelectionFinish (setHiddenInPopin(getSelectedKeys())) is reproduced 1:1 as a BINDING: hiddenInPopin is a bindable property and the MultiComboBox's selectedKeys already IS that` &&
-               ` Priority array, so both bind the same field T_HIDDEN and the selectionFinish handler only pushes the model - no frontend action is involved. The added selectedKeys binding has no counterpart in the` &&
-               ` original (the controller reads getSelectedKeys imperatively). onSliderMoved (byId(idProductsTable).setWidth(value + '%')) is reproduced 1:1 without a round-trip: the Slider value is two-way bound to` &&
-               ` width_pct and the Table gains a width expression binding width={= ${width_pct} + '%' }, so moving the Slider shrinks the table live and drives the auto-pop-in (the added Table width attribute and the`.
-    lv_text1 = lv_text1 && ` Slider value binding have no counterpart in the original view, where setWidth is imperative; the original Slider liveChange handler is dropped). autoPopinMode + Column.importance stay declarative and` &&
-               ` 1:1; popinChanged still toasts. Corrected 2026-08-21: this entry used to describe a hand-built JSON array forwarded through follow_up_action( cs_event-control_by_id, setHiddenInPopin ) - the` &&
-               ` mechanism the rework removed - which contradicted the deviation below it. // NOTE: the original derives the ObjectNumber weight state in its frontend Formatter.js (weightState: KG conversion +` &&
-               ` Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin frontend - it is computed in ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via` &&
-               ` a frontend formatter (core:require dropped). Visually 1:1 with the original. // NOTE: onPopinChanged reproduced 1:1 since 2026-07-30: the popinChanged wire is a roundtrip-free client-composed toast` &&
-               ` 'Number of hidden pop-ins: {0}' filled by ${$parameters>/hiddenInPopin}.length (the event parameter array's length, exactly the original's aHiddenInPopin.length) - the earlier static 'Pop-in layout`.
-    lv_text1 = lv_text1 && ` changed' round-trip toast faked the value. The hiddenInPopin event parameter is part of the POST_171-declared popinChanged event (since 1.77). // NOTE: the original's` &&
-               ` setHiddenInPopin(oMultiComboBox.getSelectedKeys()) is a binding here: hiddenInPopin is a bindable property and the MultiComboBox's selectedKeys already IS that Priority array, so both bind the same` &&
-               ` field T_HIDDEN and the selectionFinish handler only pushes the model. The JSON array the port used to build by hand for the frontend action is gone (prefer-a-bindable-property rule, linter rule` &&
-               ` settable-property-via-action).`.
+               ` UI5 >= 1.77. // NOTE: onSelectionFinish (setHiddenInPopin(getSelectedKeys())) is reproduced as a BINDING, and the MECHANISM is equivalent while the MOMENT is not (corrected 2026-08-23 - this said` &&
+               ` 1:1). The original wires selectionFinish only, which MultiComboBox fires from onAfterClose, so the columns re-flow once, when the picker closes. Binding selectedKeys and hiddenInPopin to the same` &&
+               ` field re-flows them on every tick while the picker is still open, because _handleSelectionLiveChange writes selectedKeys per click and the two-way binding pushes it straight through.: hiddenInPopin` &&
+               ` is a bindable property and the MultiComboBox's selectedKeys already IS that Priority array, so both bind the same field T_HIDDEN and the selectionFinish handler only pushes the model - no frontend` &&
+               ` action is involved. The added selectedKeys binding has no counterpart in the original (the controller reads getSelectedKeys imperatively). onSliderMoved (byId(idProductsTable).setWidth(value + '%'))`.
+    lv_text1 = lv_text1 && ` is reproduced 1:1 without a round-trip: the Slider value is two-way bound to width_pct and the Table gains a width expression binding width={= ${width_pct} + '%' }, so moving the Slider shrinks the` &&
+               ` table live and drives the auto-pop-in (the added Table width attribute and the Slider value binding have no counterpart in the original view, where setWidth is imperative; the original Slider` &&
+               ` liveChange handler is dropped). autoPopinMode + Column.importance stay declarative and 1:1; popinChanged still toasts. Corrected 2026-08-21: this entry used to describe a hand-built JSON array` &&
+               ` forwarded through follow_up_action( cs_event-control_by_id, setHiddenInPopin ) - the mechanism the rework removed - which contradicted the deviation below it. // NOTE: the original derives the` &&
+               ` ObjectNumber weight state in its frontend Formatter.js (weightState: KG conversion + Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin frontend - it is computed in` &&
+               ` ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via a frontend formatter (the original reaches its formatter the classic way - ``formatter: Formatter`` in the`.
+    lv_text1 = lv_text1 && ` controller plus ``formatter: '.formatter.weightState'`` in the binding; corrected 2026-08-23, this used to say "core:require dropped" and the sample has no core:require at all). Visually 1:1 with the` &&
+               ` original. // NOTE: onPopinChanged reproduced 1:1 since 2026-07-30: the popinChanged wire is a roundtrip-free client-composed toast 'Number of hidden pop-ins: {0}' filled by` &&
+               ` ${$parameters>/hiddenInPopin}.length (the event parameter array's length, exactly the original's aHiddenInPopin.length) - the earlier static 'Pop-in layout changed' round-trip toast faked the value.` &&
+               ` The hiddenInPopin event parameter is part of the POST_171-declared popinChanged event (since 1.77). // NOTE: the original's setHiddenInPopin(oMultiComboBox.getSelectedKeys()) is a binding here:` &&
+               ` hiddenInPopin is a bindable property and the MultiComboBox's selectedKeys already IS that Priority array, so both bind the same field T_HIDDEN and the selectionFinish handler only pushes the model.` &&
+               ` The JSON array the port used to build by hand for the frontend action is gone (prefer-a-bindable-property rule, linter rule settable-property-via-action).`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Table`                           name = `TableAutoPopin`                                class = `z2ui5_cl_smpc_app_092` path = `src/02/01/z2ui5_cl_smpc_app_092.clas.abap`
         score = 5
@@ -6567,21 +6611,28 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` opening (responsivePadding toggles the style class via control_by_id addStyleClass/removeStyleClass). The core:CustomData is kept on the buttons for fidelity; the dialog is declared once in` &&
                ` mvc:dependents and opened via follow_up_action( cs_event-control_by_id, open ). // NOTE: The ObjectNumber weightState is business logic (parseFloat thresholds), so it is computed in ABAP` &&
                ` (WEIGHT_STATE, thin-frontend principle) and bound state='{WEIGHT_STATE}' instead of the frontend Formatter.weightState; core:require is therefore dropped and the Currency binding keeps the full` &&
-               ` standard type path 'sap.ui.model.type.Currency' 1:1. The full 123-row /ProductCollection is inlined (ProductPicUrl is not needed — the table cells carry no icon). // NOTE: Search filters the dialog's`.
-    lv_text1 = lv_text1 && ` items binding client-side via follow_up_action( cs_event-binding_call, filter NAME Contains ${$parameters>/value} ). The valueHelpRequest opens a second TableSelectDialog (also in dependents) after` &&
-               ` preselecting the row matching the input value. The confirm/valueHelpClose toasts are simplified — selectedContexts / selectedItem are control references not transportable as event args (original` &&
-               ` composes the chosen product names / copies the selected title into the input). CORRECTED 2026-08-21: the value-help close is reproduced 1:1. The event carries ``${$parameters>/selectedItem} ?` &&
-               ` ${$parameters>/selectedItem}.getCells()[0].getTitle() : ''`` - the probe-measured indexed-access-into-an-array-valued-getter shape - and the backend writes it into the two-way bound productInput, so` &&
-               ` picking a row lands its name in the field and closing without a selection clears it (setValue / resetProperty). The preselection compares against that same bound value instead of the seed literal,` &&
-               ` which is what _configValueHelpDialog does. The earlier claim that selectedItem is 'not transportable as an event arg' was wrong: an arg is a FULL UI5 expression and may call methods on the event's`.
-    lv_text1 = lv_text1 && ` controls. // NOTE: The per-button dialog configuration, the client-side search filter, multi-select confirm and the value-help selection copy-back need an in-system check; machine gates only verify` &&
-               ` the views are valid. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the dialog opens with the full 123-row mock and the client-side Contains search filters to` &&
-               ` 'Gladiator MX'; multi-select confirm and the value-help copy-back remain unexercised. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_104.mjs). // POST-1.71:` &&
-               ` sap.m.TableSelectDialog.searchPlaceholder (since 1.110) is kept 1:1 on the value-help dialog; needs UI5 >= 1.110.`.
+               ` standard type path 'sap.ui.model.type.Currency' 1:1. The full 123-row /ProductCollection is inlined (ProductPicUrl is not needed — the table cells carry no icon; nor are TaxTarifCode, DateOfSale,`.
+    lv_text1 = lv_text1 && ` Status and UoM, which this sample's cells do not use either — the list was completed 2026-08-23). // NOTE: Search filters the dialog's items binding client-side via follow_up_action(` &&
+               ` cs_event-binding_call, filter NAME Contains ${$parameters>/value} ). The valueHelpRequest opens a second TableSelectDialog (also in dependents) after preselecting the row matching the input value.` &&
+               ` The confirm/valueHelpClose toasts are simplified — selectedContexts / selectedItem are control references not transportable as event args (original composes the chosen product names / copies the` &&
+               ` selected title into the input). CORRECTED 2026-08-21: the value-help close is reproduced 1:1. The event carries ``${$parameters>/selectedItem} ? ${$parameters>/selectedItem}.getCells()[0].getTitle()` &&
+               ` : ''`` - the probe-measured indexed-access-into-an-array-valued-getter shape - and the backend writes it into the two-way bound productInput, so picking a row lands its name in the field and closing` &&
+               ` without a selection clears it (setValue / resetProperty). The preselection compares against that same bound value instead of the seed literal, which is what _configValueHelpDialog does. The earlier`.
+    lv_text1 = lv_text1 && ` claim that selectedItem is 'not transportable as an event arg' was wrong: an arg is a FULL UI5 expression and may call methods on the event's controls. // NOTE: The per-button dialog configuration,` &&
+               ` the client-side search filter, multi-select confirm and the value-help selection copy-back need an in-system check; machine gates only verify the views are valid. **e2e-verified 2026-07-30**` &&
+               ` (transpiled-framework interaction, scripts/e2e-smoke.mjs): the dialog opens and the client-side Contains search finds 'Gladiator MX' - restated 2026-08-23: the module asserts one row is present` &&
+               ` before the search and that the searched row is present after it, never that the other 122 are gone, so nothing in it would fail if the filter did not apply; multi-select confirm and the value-help` &&
+               ` copy-back remain unexercised. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_104.mjs). // POST-1.71: sap.m.TableSelectDialog.searchPlaceholder (since 1.110)` &&
+               ` is kept 1:1 on the value-help dialog; needs UI5 >= 1.110. // IMPROVISED: handleClose's toast is not reproduced. The original names every chosen product - selectedContexts.map( getObject( ).Name`.
+    lv_text1 = lv_text1 && ` ).join( ', ' ) - and stays silent when nothing was chosen; the port toasts a constant 'Selection confirmed' on confirm AND on cancel, which the original does not do either. Declared properly` &&
+               ` 2026-08-23: the sidecar had covered it with "selectedContexts / selectedItem are control references not transportable as event args", a claim the same sidecar retracts a paragraph later. The real` &&
+               ` obstacles are different and specific: a binding CONTEXT is not a control, so the frontend projection does not marshal it and JSON.stringify would hit its circular model graph; selectedItems ARE` &&
+               ` controls but project to the ColumnListItem's own properties, not to the cell texts the names live in; and the two-way ``selected`` route app 490 uses is blocked here because both dialogs bind the` &&
+               ` SAME t_products and the value help already writes that field for its preselection, so it would need a second flag. The filter reset in the same handler IS reproduced since today.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.TableSelectDialog`               name = `TableSelectDialog`                             class = `z2ui5_cl_smpc_app_104` path = `src/02/01/z2ui5_cl_smpc_app_104.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         since = `1.16`
         is_post171 = abap_true
@@ -6699,8 +6750,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` byId('HiddenTP').openBy(getDomRef()) 1:1; the change toast is now roundtrip-free too (control_global MESSAGE_TOAST.show), so the app is init-only. // NOTE: the openBy was switched to roundtrip-free` &&
                ` follow_up_action on 2026-07-22 - re-verify each anchor opens the hidden TimePicker. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Open Time Picker'` &&
                ` anchor opens the hidden TimePicker popover; the remaining anchors are the identical wire. // NOTE: the change toast was switched to a roundtrip-free client-composed toast on 2026-07-22`.
-    lv_text1 = lv_text1 && ` (control_global MESSAGE_TOAST.show, template ``Time selected: {0}`` filled by ${$parameters>/value}; on_event dropped, init-only) - re-verify picking a time toasts "Time selected: <value>".` &&
-               ` **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_091.mjs).`.
+    lv_text1 = lv_text1 && ` (control_global MESSAGE_TOAST.show, template ``Time selected: {0}`` filled by ${$parameters>/value}; on_event dropped, init-only) - re-verify picking a time toasts "Time selected: <value>" - scope,` &&
+               ` added 2026-08-23: the interaction module covers the openBy half ONLY. It clicks the button and asserts the Popover appears; it never opens the clock, never picks a time and never looks at a toast, so` &&
+               ` the change wire could be deleted and the module would still pass. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_091.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.TimePicker`                      name = `TimePickerHidden`                              class = `z2ui5_cl_smpc_app_091` path = `src/02/01/z2ui5_cl_smpc_app_091.clas.abap`
         score = 4
@@ -7034,16 +7086,24 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         ui5_only = abap_true
         notes = lv_text1 ) ).
 
-    lv_text1 = `NOTE: Step validation (additionalInfoValidation) is reproduced in ABAP: on the ProductName/ProductWeight liveChange (and ProductInfoStep activate) the name-length>=6 / weight-numeric checks set the` &&
-               ` two valueStates and the ProductInfoStep validated property, which is bound two-way (step2_validated) instead of the original imperative validateStep/invalidateStep. The other steps keep their literal` &&
-               ` validated='true'. // NOTE: The step-1 SegmentedButton gets item keys (Mobile/Desktop/Other) and a two-way selectedKey binding so the chosen product type reaches the model directly; the original reads` &&
-               ` evt.getParameters().item.getText() in setProductTypeFromSegmented. selectionChange is still wired. The PricingStep activate/complete handlers (which only toggle the unused navApiEnabled flag) are` &&
-               ` wired for fidelity but do nothing. // NOTE: Navigation is 1:1 via follow_up_action( cs_event-control_by_id ): Wizard complete -> NavContainer 'to' the review page; each Edit link -> 'to' the content`.
-    lv_text1 = lv_text1 && ` page then Wizard 'goToStep' the target step (whitelisted). Cancel and Submit open a MessageBox (warning/confirm) with YES/NO; on YES the wizard resets via 'to' the content page + 'discardProgress'` &&
-               ` ProductTypeStep, matching _handleMessageBoxOpen. // NOTE: the cancel leg is closed: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the first` &&
-               ` wizard step renders and the footer Cancel really round-trips - message_box_display opens the MessageBox 'Are you sure you want to cancel your report?' with its YES/NO onclose action. Still needs an` &&
-               ` in-system check: step validation gating the Next button, the complete/edit navigation, the goToStep scroll and the submit/cancel reset itself. **e2e-verified 2026-08-04** (nightly e2e interaction,` &&
-               ` meta/interactions/z2ui5_cl_smpc_app_101.mjs).`.
+    lv_text1 = `NOTE: Step validation (additionalInfoValidation) is reproduced in ABAP: on the ProductName/ProductWeight liveChange (and ProductInfoStep activate) the name-length>=6 / weight checks (the weight one` &&
+               ` was NARROWER than the original until 2026-08-23: it required all digits, while the original tests parseInt( ) IS NaN, which skips leading blanks and a sign and stops at the first non-digit - so` &&
+               ` '12.5', '-5' and '12abc' are valid there and were rejected here, and the Input is type=Number, so a decimal is exactly what a user types). Both failing branches also call setCurrentStep(` &&
+               ` ProductInfoStep ), which the port had dropped and now issues as a frontend action set the two valueStates and the ProductInfoStep validated property, which is bound two-way (step2_validated) instead` &&
+               ` of the original imperative validateStep/invalidateStep. The other steps keep their literal validated='true'. // NOTE: The step-1 SegmentedButton gets item keys (Mobile/Desktop/Other) and a two-way` &&
+               ` selectedKey binding so the chosen product type reaches the model directly; the original reads evt.getParameters().item.getText() in setProductTypeFromSegmented. selectionChange is still wired. The`.
+    lv_text1 = lv_text1 && ` PricingStep activate/complete handlers (which only toggle the unused navApiEnabled flag) are wired for fidelity but do nothing. // NOTE: Navigation is via follow_up_action( cs_event-control_by_id ).` &&
+               ` Corrected 2026-08-23: it used to say 1:1 while using ``to`` for all three legs. Only the Wizard-complete leg is ``to`` in the original; the Edit and Cancel/Submit legs are backToPage, a REVERSE` &&
+               ` transition that unwinds the NavContainer stack rather than pushing onto it, and they now use it. The original's afterNavigate deferral - it attaches a listener and calls goToStep only inside it -` &&
+               ` stays dropped: Wizard complete -> NavContainer 'to' the review page; each Edit link -> 'to' the content page then Wizard 'goToStep' the target step (whitelisted). Cancel and Submit open a MessageBox` &&
+               ` (warning/confirm) with YES/NO; on YES the wizard resets via 'to' the content page + 'discardProgress' ProductTypeStep, matching _handleMessageBoxOpen. // NOTE: the cancel leg is closed:` &&
+               ` **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the first wizard step renders and the footer Cancel really round-trips - message_box_display opens`.
+    lv_text1 = lv_text1 && ` the MessageBox 'Are you sure you want to cancel your report?' with its question text (restated 2026-08-23: the module asserts the dialog text only; it never locates a YES or NO button and never` &&
+               ` exercises onclose, so that leg is not covered). Still needs an in-system check: step validation gating the Next button, the complete/edit navigation, the goToStep scroll and the submit/cancel reset` &&
+               ` itself. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_101.mjs). // NOTE: Two step body Texts had been TRUNCATED and are restored 2026-08-23:` &&
+               ` ProductInfoStep's ran 475 of the original's 955 characters and OptionalInfoStep's 385 of 575, each a clean prefix that stopped mid-paragraph. OptionalInfoStep had also silently corrected the` &&
+               ` original's own typo "Donec ppellentesque" to "pellentesque". Both now carry the full text; the original's trailing TAB is written as the single space XML attribute-value normalisation turns it into.` &&
+               ` No gate compares long text bodies, which is why this survived.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Wizard`                          name = `Wizard`                                        class = `z2ui5_cl_smpc_app_101` path = `src/01/01/z2ui5_cl_smpc_app_101.clas.abap`
         score = 5
