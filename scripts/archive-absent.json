@@ -1,5 +1,7 @@
 {
   "sap.ui.core/BasicThemeParameters/parameters.json": "the sample's own theme-parameter dump; not served by the demo-kit sample route and not in @openui5/sap.ui.core — the port reads the parameter names out of the view, which IS archived",
   "sap.ui.integration/LazyLoading/manifests/listManifestDescriptionTable.json": "one of 22 card manifests; the other 21 are archived and the port's cards are built from those — this one is referenced by the manifest list but was never served",
-  "sap.ui.layout/BlockLayoutCustomBackground/resources/Night_sky.jpg": "a binary asset; the corpus archives source, not images, and the port carries no background image"
+  "sap.ui.layout/BlockLayoutCustomBackground/resources/Night_sky.jpg": "a binary asset; the corpus archives source, not images, and the port carries no background image",
+  "sap.m/HeaderContainerVM/style.css": "declared through the OLD Component.js `includes` form, which the harvest never read, so the sheet was never fetched; it cannot be fetched from here (the network policy answers 403 for sdk.openui5.org and raw.githubusercontent.com). The loss is declared in meta/z2ui5_cl_smpc_app_157.json - drop this entry as soon as a harvest run brings the file in",
+  "sap.m/CookieSettingsDialogPattern/css/style.css": "declared under manifest sap.ui5.resources.css but never listed among the sample files, so the harvest passed it by; not fetchable from here (403). The port declares the consequence itself: meta/z2ui5_cl_smpc_app_013.json types the dropped toggleStyleClass('cookiesDetailedView') as IMPROVISED for exactly this reason - drop this entry as soon as a harvest run brings the file in"
 }

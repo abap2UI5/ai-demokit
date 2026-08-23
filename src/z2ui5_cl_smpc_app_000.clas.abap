@@ -2844,14 +2844,20 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` message_box_display with the same text and type. // NOTE: The eight NumericContent presses raising the alert are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction,` &&
                  ` meta/interactions/z2ui5_cl_smpc_app_477.mjs).` ) ).
 
+    lv_text1 = `NOTE: NumericContent presses show a client MessageToast ('Fire press', the original press handler's text - review fixed the earlier text copied from the NumericContentDifColors neighbour). Two` &&
+               ` vertical HeaderContainers — one of eight NumericContents, one of five TileContents (each wrapping a NumericContent) — reproduced 1:1. **e2e-verified 2026-07-30** (transpiled-framework interaction,` &&
+               ` scripts/e2e-smoke.mjs): pressing the first NumericContent toasts 'Fire press'; the other tiles are the identical wire. // IMPROVISED: The sample's own style.css is neither archived nor reproduced.` &&
+               ` HeaderContainerVM is the only sample in the 622 that declares its stylesheet through the OLD UIComponent form - Component.js metadata ``includes: "HeaderContainerVM/style.css"`` - instead of manifest` &&
+               ` sap.ui5.resources.css, so the harvest never read the declaration and the file was never fetched; it is not reachable from this environment either (the network policy answers 403 for the OpenUI5` &&
+               ` host). What the sheet does cannot be stated: the original view carries no author class at all, so its rules must target UI5's own render classes, and nothing offline says which. The first NOTE's`.
+    lv_text1 = lv_text1 && ` "reproduced 1:1" therefore covers the control tree, not the rendering. scripts/check-archive.mjs reads both declaration forms since 2026-08-23 and holds this file in scripts/archive-absent.json; the` &&
+               ` entry is to be dropped, and this deviation revisited, as soon as a harvest run brings the sheet in. Found by the reviewed re-read 2026-08-23.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.HeaderContainer`                 name = `HeaderContainerVM`                             class = `z2ui5_cl_smpc_app_157` path = `src/01/01/z2ui5_cl_smpc_app_157.clas.abap`
-        score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.44.0`
-        notes = `NOTE: NumericContent presses show a client MessageToast ('Fire press', the original press handler's text - review fixed the earlier text copied from the NumericContentDifColors neighbour). Two` &&
-                 ` vertical HeaderContainers — one of eight NumericContents, one of five TileContents (each wrapping a NumericContent) — reproduced 1:1. **e2e-verified 2026-07-30** (transpiled-framework interaction,` &&
-                 ` scripts/e2e-smoke.mjs): pressing the first NumericContent toasts 'Fire press'; the other tiles are the identical wire.` ) ).
+        notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: Thin frontend: onFilterSelect builds nested sap.ui.model.Filters and calls oBinding.filter() on the table's items binding; the port carries the selected tab key into on_event via` &&
                ` ${$parameters>/key} and filters the model table in ABAP instead. The controller's thresholds are reproduced exactly - the weight is normalised to grams, below 1000 g is Ok, 1000 to 5000 g is Heavy,` &&

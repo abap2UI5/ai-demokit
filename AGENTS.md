@@ -411,8 +411,10 @@ manifest-listed `../<OtherSample>/*.view.xml` paths, so archiving
 it then demands phantom controls (`layout:Grid`/`GridData`/`VerticalLayout`)
 from correct ports. So uxap block templates stay out of `ui5/`, and the
 BlockBase inlining is declared in each sidecar instead
-(apps 161/187/188/217/258–263). `scripts/check-archive.mjs` gates the rule and
-knows the exception: a file listed inside the sample's own folder and missing
+(apps 161/187/188/217/258–263). `scripts/check-archive.mjs` gates the rule — reading
+all THREE ways a sample declares a file (`sample.files`, `resources.css`, and
+the old Component.js `includes`, which exactly one sample still uses and whose
+stylesheet was missing because of it) — and knows the exception: a file listed inside the sample's own folder and missing
 from disk is an ERROR (with `scripts/archive-absent.json` for the handful that
 were never served), while a `../<Shared*>/` reference is counted and reported,
 never failed — so the size of this exception stays visible without anyone being

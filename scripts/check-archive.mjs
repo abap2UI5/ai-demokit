@@ -11,6 +11,16 @@
  * its controller's only dependency, `RevealGrid/RevealGrid.js`, was absent
  * while the sidecar claimed "closing the AGENTS section 4 archive gap".
  *
+ * Three things declare a file, and the gate has to read all three - the CSS of
+ * app 157's sample was missing for a month because only the first was checked:
+ *
+ *   manifest `sample.files`      the sample's own file list.
+ *   manifest `resources.css`     how a sample normally declares a stylesheet
+ *                                (60 of them do).
+ *   Component.js `includes`      the OLD form, a UIComponent metadata key.
+ *                                One sample in 622 still uses it, and that is
+ *                                exactly the one whose sheet went missing.
+ *
  * Two scopes, deliberately not the same severity:
  *
  *   inside the sample folder   an ERROR. This is the sample's own material;
@@ -64,6 +74,25 @@ for (const lib of fs.readdirSync(UI5)) {
 let listed = 0;
 const shared = new Map();   // relative path -> Set of samples referencing it
 
+/* the stylesheet declarations. `resources.css[].uri` resolves against the
+ * sample folder; a Component `includes` resolves against the LIBRARY root
+ * (the component's namespace), so "HeaderContainerVM/style.css" sits one level
+ * up - both are tried before a file counts as missing. */
+function declaredStyles(dir, libDir, manifest) {
+  const out = [];
+  for (const css of manifest?.['sap.ui5']?.resources?.css ?? []) {
+    if (css?.uri) out.push([css.uri, [path.resolve(dir, css.uri)]]);
+  }
+  const comp = path.join(dir, 'Component.js');
+  if (fs.existsSync(comp)) {
+    const m = /includes\s*:\s*(\[[^\]]*\]|["'][^"']*["'])/.exec(fs.readFileSync(comp, 'utf8'));
+    for (const rel of (m ? [...m[1].matchAll(/["']([^"']+)["']/g)].map((x) => x[1]) : [])) {
+      out.push([rel, [path.resolve(libDir, rel), path.resolve(dir, rel)]]);
+    }
+  }
+  return out;
+}
+
 for (const [lib, name, dir] of samples) {
   let manifest;
   try {
@@ -74,6 +103,14 @@ for (const [lib, name, dir] of samples) {
   }
   const files = manifest?.['sap.ui5']?.config?.sample?.files;
   if (!Array.isArray(files)) continue;
+
+  for (const [rel, candidates] of declaredStyles(dir, path.join(UI5, lib), manifest)) {
+    listed++;
+    if (candidates.some((c) => fs.existsSync(c))) continue;
+    const key = path.relative(UI5, candidates[0]).split(path.sep).join('/');
+    if (key in allow) { allowUsed.add(key); continue; }
+    err(`ui5/${lib}/${name} declares the stylesheet ${rel}, which is not archived — CAPABILITIES is explicit that an unarchived stylesheet is a gap to close, not a reason to drop the CSS`);
+  }
 
   for (const rel of files) {
     listed++;
