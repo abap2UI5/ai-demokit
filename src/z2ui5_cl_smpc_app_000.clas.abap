@@ -9598,27 +9598,28 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` context menus rely on. Newer than UI5 1.71; declared per the fidelity-first property-171 policy, so the app needs a UI5 release >= 1.121.` ) ).
 
     lv_text1 = `NOTE: Every filter of this sample is applied in ABAP and the Table binds the RESULT, so the controller's Filter objects and its binding.filter( ) calls become one server-side selection - the` &&
-               ` thin-frontend move. The global SearchField filter (Name OR Category contains the query), the availability toggle and the price band are ANDed exactly as _filter( ) combines them, and clearAllFilters` &&
-               ` resets all three. The Table's filter event carries the pressed column's filterProperty and the entered value (${$parameters>/column}.getFilterProperty() and ${$parameters>/value}) and vetoes the` &&
-               ` built-in filter for the PRICE COLUMN ONLY, through s_ctrl-prevent_default_expr - which is what the original does by returning from filterPrice before oEvent.preventDefault( ) for every other column.` &&
-               ` Until 2026-08-21 this was the boolean check_prevent_default, and that is baked per WIRE rather than per firing: it vetoed all five columns while the backend implemented only the price rule, so Name,` &&
-               ` Category, Available and Quantity filtered nothing at all and the enableCellFilter feature was inert everywhere but on Price. The four now keep the table's own client-side filtering, including`.
-    lv_text1 = lv_text1 && ` Category's defaultFilterOperator StartsWith and Available's EQ, which is the behaviour the original has and no gate can see. Worked precedent for the conditional form: app 247's columnResize. The` &&
-               ` price column keeps its special rule - a +/- 20 BAND around the entered value rather than an exact match, which is the point of the original's filterPrice. // NOTE: The named ``ui>`` model` &&
-               ` (globalFilter, availabilityFilterOn, cellFilterOn) is folded onto the one default model, prefix dropped and leaf names kept. cellFilterOn needs no handler at all - the ToggleButton's pressed and the` &&
-               ` Table's enableCellFilter bind the same field, which is what the original's two-way {ui>/cellFilterOn} binding already does. The availability ToggleButton keeps its pressed binding AND its press wire,` &&
-               ` because pressing it has to re-run the server-side selection. The filterProperty values are the ABAP (upper-cased) field names, since that is what the backend switches on. // NOTE: The full 123-row` &&
-               ` catalog is returned by a method rather than held in a public attribute: only the filtered rows are bound, so only they belong in the model that travels on every round-trip (the overview-app lesson in`.
-    lv_text1 = lv_text1 && ` AGENTS section 10). The controller's formatAvailableToObjectState is precomputed into the AVAILABLESTATE column, since business logic belongs in the backend, and the boolean Available is kept as its` &&
-               ` own column because the availability filter needs it. ProductPicUrl values point at the OpenUI5 host per the asset-URL rule; the mock carries them host-relative. // IMPROVISED: The footer` &&
-               ` OverflowToolbar stays empty: onInit lazily requires sap/ui/table/sample/TableExampleUtils and appends a ToolbarSpacer plus its createInfoButton( ) to it. That helper lives in the demo kit's own` &&
-               ` sample folder, not in any UI5 library, and only opens a popover pointing at the sample's source. Every sap.ui.table sample of this batch drops it the same way. // LIVE-TEST: Unverified in a running` &&
-               ` system: whether the price column's prevented default plus the server-side band show the expected rows, whether the other four columns still filter client-side through the conditional veto (the leg` &&
-               ` the 2026-08-21 review found broken), and whether the enableCellFilter binding lets a cell filter fire that same event. // NOTE: The sample's asset paths are host-absolutized. The demo kit serves them`.
-    lv_text1 = lv_text1 && ` relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own.` &&
-               ` Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the sentence used to claim the rewrite was 'declared by all 77 ports that do it', which had stopped being true as the corpus grew past` &&
-               ` that day's snapshot - 126 ports do it now, and 17 of them declared it nowhere. Those 17 carry the declaration since today, so the claim holds again; a stale absolute count is what made it wrong, so` &&
-               ` this wording names the date the count was taken.`.
+               ` thin-frontend move. The global SearchField filter (Name OR Category contains the query), the availability toggle and the price band are ANDed with them. (_filter( ) itself combines only the global` &&
+               ` and the price filter, both Application-type; the availability toggle goes through the COLUMN's filter( 'X' ) and the binding ANDs it as a Control filter. Same net result, different mechanism), and` &&
+               ` clearAllFilters resets all three. The Table's filter event carries the pressed column's filterProperty and the entered value (${$parameters>/column}.getFilterProperty() and ${$parameters>/value}) and` &&
+               ` vetoes the built-in filter for the PRICE COLUMN ONLY, through s_ctrl-prevent_default_expr - which is what the original does by returning from filterPrice before oEvent.preventDefault( ) for every` &&
+               ` other column. Until 2026-08-21 this was the boolean check_prevent_default, and that is baked per WIRE rather than per firing: it vetoed all five columns while the backend implemented only the price`.
+    lv_text1 = lv_text1 && ` rule, so Name, Category, Available and Quantity filtered nothing at all and the enableCellFilter feature was inert everywhere but on Price. The four now keep the table's own client-side filtering,` &&
+               ` including Category's defaultFilterOperator StartsWith and Available's EQ, which is the behaviour the original has and no gate can see. Worked precedent for the conditional form: app 247's` &&
+               ` columnResize. The price column keeps its special rule - a +/- 20 BAND around the entered value rather than an exact match, which is the point of the original's filterPrice. // NOTE: The named ``ui>``` &&
+               ` model (globalFilter, availabilityFilterOn, cellFilterOn) is folded onto the one default model, prefix dropped and leaf names kept. cellFilterOn needs no handler at all - the ToggleButton's pressed` &&
+               ` and the Table's enableCellFilter bind the same field, which is what the original's two-way {ui>/cellFilterOn} binding already does. The availability ToggleButton keeps its pressed binding AND its` &&
+               ` press wire, because pressing it has to re-run the server-side selection. The filterProperty values are the ABAP (upper-cased) field names, since that is what the backend switches on. // NOTE: The`.
+    lv_text1 = lv_text1 && ` full 123-row catalog is returned by a method rather than held in a public attribute: only the filtered rows are bound, so only they belong in the model that travels on every round-trip (the` &&
+               ` overview-app lesson in AGENTS section 10). The controller's formatAvailableToObjectState is precomputed into the AVAILABLESTATE column, since business logic belongs in the backend, and the boolean` &&
+               ` Available is kept as its own column because the availability filter needs it. ProductPicUrl values point at the OpenUI5 host per the asset-URL rule; the mock carries them host-relative. //` &&
+               ` IMPROVISED: The footer OverflowToolbar stays empty: onInit lazily requires sap/ui/table/sample/TableExampleUtils and appends a ToolbarSpacer plus its createInfoButton( ) to it. That helper lives in` &&
+               ` the demo kit's own sample folder, not in any UI5 library, and only opens a popover pointing at the sample's source. Every sap.ui.table sample of this batch drops it the same way. // LIVE-TEST:` &&
+               ` Unverified in a running system: whether the price column's prevented default plus the server-side band show the expected rows, whether the other four columns still filter client-side through the`.
+    lv_text1 = lv_text1 && ` conditional veto (the leg the 2026-08-21 review found broken), and whether the enableCellFilter binding lets a cell filter fire that same event. // NOTE: The sample's asset paths are` &&
+               ` host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The` &&
+               ` values are otherwise the mock's own. Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the sentence used to claim the rewrite was 'declared by all 77 ports that do it', which had` &&
+               ` stopped being true as the corpus grew past that day's snapshot - 126 ports do it now, and 17 of them declared it nowhere. Those 17 carry the declaration since today, so the claim holds again; a stale` &&
+               ` absolute count is what made it wrong, so this wording names the date the count was taken.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Filtering`                                     class = `z2ui5_cl_smpc_app_354` path = `src/01/02/z2ui5_cl_smpc_app_354.clas.abap`
         score = 5
@@ -9692,18 +9693,23 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` batches - and with it the dataRequested/dataReceived handlers that swap the noData BusyIndicator in and out; the noData BusyIndicator, threshold, scrollThreshold and enableBusyIndicator are all kept` &&
                ` 1:1 on the control. // IMPROVISED: onOperationModeChange re-binds the rows with the picked sap.ui.model.odata.OperationMode (Server / Client / Auto) - a binding parameter of an OData model, which has`.
     lv_text1 = lv_text1 && ` no counterpart when the rows come from an ABAP model. The SegmentedButton is kept 1:1 with its FOUR items - Default, Server, Client, Auto, the order the controller's for..in walks the enum. The` &&
-               ` Default entry was missing until 2026-08-21, and this text called the three-item set 1:1 and stays two-way bound, and picking a mode still re-reads the rows (which is the other half of what the` &&
-               ` handler does, via onModelRefresh), but the mode itself no longer changes how the data is fetched. onModelRefresh's binding.refresh( true ) is the plain re-read. // NOTE: The named ``ui>`` model` &&
-               ` (operationModes, selectedOperationMode) is folded onto the one default model, prefix dropped and leaf names kept. The six column labels are metadata bindings in the original` &&
-               ` ({/#Product/Name/@sap:label} and friends), which only an OData model can resolve; they are replaced by the literal sap:label texts from the sample's own metadata.xml (Product Name, Product ID, Prod.` &&
-               ` Cat., Company Name, Unit Price, Dimensions). sortProperty / filterProperty carry the ABAP (upper-cased) field names. The Price cell keeps the original's typed String binding and the dimensions cell`.
-    lv_text1 = lv_text1 && ` its {WIDTH}x{HEIGHT}x{DEPTH} {DIMUNIT} template; the numeric columns stay TYPE string so the mock's exact decimals survive. Two of the six header texts were the OData2 sample's labels, not this` &&
-               ` one's, until 2026-08-21: Category where this metadata.xml says "Prod. Cat.", and "Supplier Company Name" where it says "Company Name" - while this very deviation asserted the texts came from the` &&
-               ` sample's own metadata. Corrected against the archived file. // IMPROVISED: The footer's info button is dropped: onInit lazily requires sap/ui/table/sample/TableExampleUtils and appends a` &&
-               ` ToolbarSpacer plus its createInfoButton( ) to the toolbar that also carries the operation-mode SegmentedButton. That helper lives in the demo kit's own sample folder, not in any UI5 library, and only` &&
-               ` opens a popover pointing at the sample's source. Every sap.ui.table sample of this batch drops it the same way. // NOTE: Unverified in a running system: whether the 115-row model renders with the` &&
-               ` sample's threshold/scrollThreshold settings, and whether the refresh and operation-mode round-trips re-read the rows. **e2e-verified 2026-08-21** (nightly e2e interaction,`.
-    lv_text1 = lv_text1 && ` meta/interactions/z2ui5_cl_smpc_app_357.mjs).`.
+               ` Default entry was missing until 2026-08-21, while this very text called the three-item set 1:1. The selectedKey stays two-way bound, and picking a mode still re-reads the rows (the other half of what` &&
+               ` the handler does, via onModelRefresh), but the mode itself no longer changes how the data is fetched. One deliberate render divergence: the port preselects Server, the original renders Default. The` &&
+               ` original's ui model does hold selectedOperationMode: OperationMode.Server, but its view binds selectedKey="{ui>selectedOperationMode}" RELATIVELY - no leading slash, unlike` &&
+               ` items="{ui>/operationModes}" on the next line - so with no binding context on that model the path resolves to nothing, selectedKey falls back to "" and _selectDefaultButton picks the first item. The` &&
+               ` port follows the model's stated intent rather than that sample quirk, the same way the DynamicSideContentPosition port replaces the literal visible="getVisible()" on its hint Text. No gate can see`.
+    lv_text1 = lv_text1 && ` this: structural-diff skips binding-value comparison when the port side is an ABAP expression. onModelRefresh's binding.refresh( true ) is the plain re-read. // NOTE: The named ``ui>`` model` &&
+               ` (operationModes, selectedOperationMode) is folded onto the one default model and the prefix dropped. The leaf names are NOT all kept: selectedOperationMode becomes operation_mode, i.e.` &&
+               ` {/OPERATION_MODE}. (operationModes -> t_operationmodes is only the house t_ table prefix.) Nothing checks this - structural-diff compares binding values only for SIMPLE_BIND attributes, and both of` &&
+               ` these sit in complex binding-infos or ABAP expressions. The six column labels are metadata bindings in the original ({/#Product/Name/@sap:label} and friends), which only an OData model can resolve;` &&
+               ` they are replaced by the literal sap:label texts from the sample's own metadata.xml (Product Name, Product ID, Prod. Cat., Company Name, Unit Price, Dimensions). sortProperty / filterProperty carry` &&
+               ` the ABAP (upper-cased) field names. The Price cell keeps the original's typed String binding and the dimensions cell its {WIDTH}x{HEIGHT}x{DEPTH} {DIMUNIT} template; the numeric columns stay TYPE`.
+    lv_text1 = lv_text1 && ` string so the mock's exact decimals survive. Two of the six header texts were the OData2 sample's labels, not this one's, until 2026-08-21: Category where this metadata.xml says "Prod. Cat.", and` &&
+               ` "Supplier Company Name" where it says "Company Name" - while this very deviation asserted the texts came from the sample's own metadata. Corrected against the archived file. // IMPROVISED: The` &&
+               ` footer's info button is dropped: onInit lazily requires sap/ui/table/sample/TableExampleUtils and appends a ToolbarSpacer plus its createInfoButton( ) to the toolbar that also carries the` &&
+               ` operation-mode SegmentedButton. That helper lives in the demo kit's own sample folder, not in any UI5 library, and only opens a popover pointing at the sample's source. Every sap.ui.table sample of` &&
+               ` this batch drops it the same way. // NOTE: Unverified in a running system: whether the 115-row model renders with the sample's threshold/scrollThreshold settings, and whether the refresh and` &&
+               ` operation-mode round-trips re-read the rows. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_357.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `OData`                                         class = `z2ui5_cl_smpc_app_357` path = `src/02/02/z2ui5_cl_smpc_app_357.clas.abap`
         score = 5
@@ -9744,7 +9750,14 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` two values the original reads off the event, an event arg being a full UI5 expression. The named ``modes>`` model is folded onto the one default model, prefix dropped and leaf names kept. // NOTE:` &&
                ` The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined with the four columns the sample binds plus the derived Available flag the Navigation item's visible binding`.
     lv_text1 = lv_text1 && ` needs - the controller derives it the same way (Status === 'Available'). // LIVE-TEST: Unverified in a running system: whether the bound rowActionCount plus the per-item visible flags reproduce each` &&
-               ` mode's row actions, and whether the two-argument client-composed toast fills both placeholders.`.
+               ` mode's row actions, and whether the two-argument client-composed toast fills both placeholders. // NOTE: switchState always calls setRowActionTemplate BEFORE setRowActionCount, and that ordering is` &&
+               ` load-bearing: setRowActionTemplate ends in invalidateRowsAggregation( ), setRowActionCount only setProperty( ). A row's _rowAction is attached exclusively in _getRowClone( ), guarded by` &&
+               ` hasRowActions( ) which needs getRowActionCount( ) > 0 - so any row created while the count is 0 has NO _rowAction, and merely raising the count afterwards never re-creates the clones. The port drives` &&
+               ` only the count from the model and had no counterpart for that invalidation, which left a dead end reachable without anything exotic: pick 'No Actions', leave and come back, and check_on_navigated` &&
+               ` rebuilds the view with mode_key still 'None' - every row is then created actionless and no later mode switch brings the actions back. invalidateRowsAggregation( ) cannot be wired (the frontend action`.
+    lv_text1 = lv_text1 && ` allowlist denies the whole invalidate* prefix), so since 2026-08-24 a mode change that raises the count off 0 re-displays the slot instead, rebuilding the Table with the new count already set. Note` &&
+               ` the e2e module's 2026-08-21 experiment - setRowActionCount(2) + invalidate( ) direct on the table - did NOT rule the port out as that comment claimed: neither call re-creates a row clone, so it` &&
+               ` reproduced this very gap.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `RowAction`                                     class = `z2ui5_cl_smpc_app_359` path = `src/02/02/z2ui5_cl_smpc_app_359.clas.abap`
         score = 5
@@ -9826,7 +9839,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` header texts were the OData2 sample's labels, not this one's, until 2026-08-21: Category where this metadata.xml says "Prod. Cat.", and "Supplier Company Name" where it says "Company Name" - while` &&
                ` this very deviation asserted the texts came from the sample's own metadata. Corrected against the archived file. // NOTE: Unverified in a running system: whether the paste event delivers the pasted` &&
                ` data array to get_event_arg, and whether the bound selectionMode reaches the plugin without a round-trip. **e2e-verified 2026-08-21** (nightly e2e interaction,` &&
-               ` meta/interactions/z2ui5_cl_smpc_app_360.mjs).`.
+               ` meta/interactions/z2ui5_cl_smpc_app_360.mjs). // NOTE: The paste event's data parameter is typed string[][], so an array/object event argument reaches the app as serialized JSON - [["Pasted` &&
+               ` Name","Pasted Id"]]. The original builds its message as "..." + aData, and JS coerces the array to Pasted Name,Pasted Id. The port toasted the raw JSON until 2026-08-24, showing brackets and quotes` &&
+               ` the user never sees upstream; the brackets and quotes are now stripped, which reproduces the coercion - the same substitution the sibling port 361 already declares for its index array. The e2e module`.
+    lv_text1 = lv_text1 && ` could not see the difference: it asserts toContainText('Pasted Name'), which passes for both renderings.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `SelectCopyPaste`                               class = `z2ui5_cl_smpc_app_360` path = `src/02/02/z2ui5_cl_smpc_app_360.clas.abap`
         score = 5
