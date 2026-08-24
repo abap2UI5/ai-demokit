@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_smpc_app_528",
   "sample": "sap.f.sample.GridContainersNavigation",
   "entity": "sap.f.GridContainer",
-  "file": "src/01/04/z2ui5_cl_smpc_app_528.clas.abap",
+  "file": "src/02/04/z2ui5_cl_smpc_app_528.clas.abap",
   "batch": "b43",
   "audit": {
     "frontend_action": true,
@@ -11,6 +11,10 @@
   "status": "generated",
   "checked": null,
   "deviations": [
+    {
+      "type": "POST_171",
+      "what": "card:Header press is @since 1.86. sap.f.cards.Header is @1.64 and declares no events of its own; press lives on its base sap.f.cards.BaseHeader, which is @since 1.86 (BaseHeader.js:64, the event at :182) - the relocated-member blind spot the property gate cannot see, since it finds no member-level @since and passes. Same construct and same declaration as app 168. Below 1.86 the header renders but is not pressable, so the withAction card's navigation silently does nothing."
+    },
     {
       "type": "IMPROVISED",
       "what": "All SEVEN sap.ui.integration.widgets.Card children take their content from cardManifests.json through manifest=\"{manifests>/...}\". A Card manifest is either a JS OBJECT or a URL to a single manifest file (Card.createManifest), and the sample's seven manifests live inside ONE file under wrapper keys, so neither form is reachable from a declarative view. Each w:Card is therefore rebuilt as a declarative sap.f.Card carrying the manifest's own card:Header and its content: a sap.m.List of StandardListItems for the four List cards (orders, tasks, contacts, withAction), a sap.m.Table with three Columns and a ColumnListItem row for the Table card (employees), a sap.m.List of DisplayListItems for the Object card (contact, whose three Navigation actions become the URLHELPER tel:/mailto: wires the manifest spells out) and a VBox with the text and the Go-to-page Link for the AdaptiveCard (summary). Same seven cards in the same seven grid slots with the same content; structural-diff reports w:Card and Card.manifest as missing and every rebuilt control as extra. The two CardBadgeCustomData badges on the orders card go with the w:Card - sap.f.Card has no badge counterpart."
@@ -26,6 +30,14 @@
     {
       "type": "LIVE_TEST",
       "what": "The four grids, the seven rebuilt cards and the four border-reached toasts are unverified in a running system."
+    },
+    {
+      "type": "NOTE",
+      "what": "The URLHELPER TRIGGER_EMAIL action takes an OBJECT literal as its third argument - the frontend reads params.EMAIL/params.SUBJECT - so the argument must open with { to stay raw through get_t_arg. A bare string is wrapped in a JS string literal and params.EMAIL comes out undefined, opening a blank mailto:. The two TRIGGER_TEL wires on the same card already used the object form; the email one did not. The manifest's action is mailto:{email} with no subject, so only EMAIL travels."
+    },
+    {
+      "type": "NOTE",
+      "what": "The objectContent/contact manifest header carries \"icon\": { \"text\": \"DM\" }, an initials avatar. The rebuilt card:Header keeps title and subtitle only; sap.f.cards.Header.iconInitials is base-version and would have expressed it."
     }
   ]
 }

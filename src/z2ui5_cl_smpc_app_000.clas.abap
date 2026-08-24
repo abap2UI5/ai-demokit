@@ -1322,24 +1322,35 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.65`
         notes = lv_text1 ) ).
 
-    lv_text1 = `IMPROVISED: All SEVEN sap.ui.integration.widgets.Card children take their content from cardManifests.json through manifest="{manifests>/...}". A Card manifest is either a JS OBJECT or a URL to a` &&
-               ` single manifest file (Card.createManifest), and the sample's seven manifests live inside ONE file under wrapper keys, so neither form is reachable from a declarative view. Each w:Card is therefore` &&
-               ` rebuilt as a declarative sap.f.Card carrying the manifest's own card:Header and its content: a sap.m.List of StandardListItems for the four List cards (orders, tasks, contacts, withAction), a` &&
-               ` sap.m.Table with three Columns and a ColumnListItem row for the Table card (employees), a sap.m.List of DisplayListItems for the Object card (contact, whose three Navigation actions become the` &&
-               ` URLHELPER tel:/mailto: wires the manifest spells out) and a VBox with the text and the Go-to-page Link for the AdaptiveCard (summary). Same seven cards in the same seven grid slots with the same` &&
-               ` content; structural-diff reports w:Card and Card.manifest as missing and every rebuilt control as extra. The two CardBadgeCustomData badges on the orders card go with the w:Card - sap.f.Card has no`.
-    lv_text1 = lv_text1 && ` badge counterpart. // IMPROVISED: onBorderReached toasts '<panel header> border reached' and then hands the KEYBOARD FOCUS to the neighbouring grid, which it finds by comparing the four grids'` &&
-               ` bounding rectangles against the arrow key that was pressed. Geometry and focus are client facts a backend cannot reach, so the port keeps the toast - composed on the client, one per grid with that` &&
-               ` grid's own header text - and drops the focus hand-off. The four borderReached wires are therefore live but only announce the border. // IMPROVISED: RevealGrid is a sample-local JS helper module that` &&
-               ` draws a DOM overlay outlining all four grids. It has no declarative equivalent, so the ToggleButton is kept but its press wire is dropped (structural-diff reports ToggleButton.press as attr missing)` &&
-               ` - same treatment as app 168, which ships the same helper. // LIVE-TEST: The four grids, the seven rebuilt cards and the four border-reached toasts are unverified in a running system.`.
+    lv_text1 = `POST-1.71: card:Header press is @since 1.86. sap.f.cards.Header is @1.64 and declares no events of its own; press lives on its base sap.f.cards.BaseHeader, which is @since 1.86 (BaseHeader.js:64, the` &&
+               ` event at :182) - the relocated-member blind spot the property gate cannot see, since it finds no member-level @since and passes. Same construct and same declaration as app 168. Below 1.86 the header` &&
+               ` renders but is not pressable, so the withAction card's navigation silently does nothing. // IMPROVISED: All SEVEN sap.ui.integration.widgets.Card children take their content from cardManifests.json` &&
+               ` through manifest="{manifests>/...}". A Card manifest is either a JS OBJECT or a URL to a single manifest file (Card.createManifest), and the sample's seven manifests live inside ONE file under` &&
+               ` wrapper keys, so neither form is reachable from a declarative view. Each w:Card is therefore rebuilt as a declarative sap.f.Card carrying the manifest's own card:Header and its content: a sap.m.List` &&
+               ` of StandardListItems for the four List cards (orders, tasks, contacts, withAction), a sap.m.Table with three Columns and a ColumnListItem row for the Table card (employees), a sap.m.List of`.
+    lv_text1 = lv_text1 && ` DisplayListItems for the Object card (contact, whose three Navigation actions become the URLHELPER tel:/mailto: wires the manifest spells out) and a VBox with the text and the Go-to-page Link for the` &&
+               ` AdaptiveCard (summary). Same seven cards in the same seven grid slots with the same content; structural-diff reports w:Card and Card.manifest as missing and every rebuilt control as extra. The two` &&
+               ` CardBadgeCustomData badges on the orders card go with the w:Card - sap.f.Card has no badge counterpart. // IMPROVISED: onBorderReached toasts '<panel header> border reached' and then hands the` &&
+               ` KEYBOARD FOCUS to the neighbouring grid, which it finds by comparing the four grids' bounding rectangles against the arrow key that was pressed. Geometry and focus are client facts a backend cannot` &&
+               ` reach, so the port keeps the toast - composed on the client, one per grid with that grid's own header text - and drops the focus hand-off. The four borderReached wires are therefore live but only` &&
+               ` announce the border. // IMPROVISED: RevealGrid is a sample-local JS helper module that draws a DOM overlay outlining all four grids. It has no declarative equivalent, so the ToggleButton is kept but`.
+    lv_text1 = lv_text1 && ` its press wire is dropped (structural-diff reports ToggleButton.press as attr missing) - same treatment as app 168, which ships the same helper. // LIVE-TEST: The four grids, the seven rebuilt cards` &&
+               ` and the four border-reached toasts are unverified in a running system. // NOTE: The URLHELPER TRIGGER_EMAIL action takes an OBJECT literal as its third argument - the frontend reads` &&
+               ` params.EMAIL/params.SUBJECT - so the argument must open with { to stay raw through get_t_arg. A bare string is wrapped in a JS string literal and params.EMAIL comes out undefined, opening a blank` &&
+               ` mailto:. The two TRIGGER_TEL wires on the same card already used the object form; the email one did not. The manifest's action is mailto:{email} with no subject, so only EMAIL travels. // NOTE: The` &&
+               ` objectContent/contact manifest header carries "icon": { "text": "DM" }, an initials avatar. The rebuilt card:Header keeps title and subtitle only; sap.f.cards.Header.iconInitials is base-version and` &&
+               ` would have expressed it.`.
     result = VALUE #( BASE result
-      ( module = `sap.f`              control = `sap.f.GridContainer`                   name = `GridContainersNavigation`                      class = `z2ui5_cl_smpc_app_528` path = `src/01/04/z2ui5_cl_smpc_app_528.clas.abap`
+      ( module = `sap.f`              control = `sap.f.GridContainer`                   name = `GridContainersNavigation`                      class = `z2ui5_cl_smpc_app_528` path = `src/02/04/z2ui5_cl_smpc_app_528.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         since = `1.65`
-        notes = lv_text1 ) ).
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `card:Header press is @since 1.86. sap.f.cards.Header is @1.64 and declares no events of its own; press lives on its base sap.f.cards.BaseHeader, which is @since 1.86 (BaseHeader.js:64, the event at` &&
+                 ` :182) - the relocated-member blind spot the property gate cannot see, since it finds no member-level @since and passes. Same construct and same declaration as app 168. Below 1.86 the header renders` &&
+                 ` but is not pressable, so the withAction card's navigation silently does nothing.` ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListBasic`                                 class = `z2ui5_cl_smpc_app_111` path = `src/01/04/z2ui5_cl_smpc_app_111.clas.abap`
@@ -5131,7 +5142,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` toasts are kept. // IMPROVISED: handleAppointmentDragEnter calls oEvent.preventDefault() to VETO a drag that would overlap, while the pointer is still moving. A veto has to be decided synchronously` &&
                ` on the client and a backend round-trip cannot answer in time, so the appointmentDragEnter wire is dropped (structural-diff reports it as attr missing). The overlap rule itself survives on the resize` &&
                ` path, which is not synchronous. // NOTE: The row images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org. // LIVE-TEST: The three roles and their per-row enable flags, the` &&
-               ` drag-and-drop move and copy, the resize with its overlap refusal and the drag-create are unverified in a running system.`.
+               ` drag-and-drop move and copy, the resize with its overlap refusal and the drag-create are unverified in a running system. // NOTE: The drag-created appointment seeds type = 'None'. An ABAP field is`.
+    lv_text1 = lv_text1 && ` never absent, so an unset type reaches CalendarAppointment.type as the empty string, which is not a CalendarDayType member - validateProperty throws and the binding update takes the view down. The` &&
+               ` original pushes a JS object with no type key, which falls back to the property default.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.PlanningCalendar`                name = `PlanningCalendarDnD`                           class = `z2ui5_cl_smpc_app_546` path = `src/01/01/z2ui5_cl_smpc_app_546.clas.abap`
         score = 5
@@ -5168,7 +5181,11 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` so its select wire is dropped. // IMPROVISED: _handleGroupAppointments opens a Popover ANCHORED on the group's DOM node (openBy( document.getElementById( domRefId ) )), built in the controller. A`.
     lv_text1 = lv_text1 && ` backend cannot address a raw DOM node, so the port reports the same sentence as a toast instead of an anchored popover; the counting and the type comparison behind it are unchanged. // NOTE: The row` &&
                ` images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org. // LIVE-TEST: The details popover, the three dialog modes, the owner change, the interval-header routing, the date` &&
-               ` validation and the group report are unverified in a running system.`.
+               ` validation and the group report are unverified in a running system. // NOTE: A JS callback is not in the UI5 expression grammar - ExpressionParser has no ``function`` keyword and reads { as an object` &&
+               ` literal, so the whole handler string failed to parse and every argument was lost. The selection is read from the model instead: PlanningCalendarRow (and CalendarAppointment) declare a bindable` &&
+               ` ``selected``, so the flags travel with the rows and ABAP does the work. Here that also covers the "do the selected appointments differ in type" test, which the original computes with .some( ). //` &&
+               ` NOTE: The details popover is opened on the POPOVER slot, so it is closed with popover_destroy( ) - popup_destroy( ) tears down the separate POPUP slot and left the popover on screen. The EDIT branch`.
+    lv_text1 = lv_text1 && ` closes it before opening the dialog, which the original does explicitly ("The sap.m.Popover has to be closed before the sap.m.Dialog gets opened").`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.PlanningCalendar`                name = `PlanningCalendarModifyAppointments`            class = `z2ui5_cl_smpc_app_547` path = `src/02/01/z2ui5_cl_smpc_app_547.clas.abap`
         score = 5
@@ -5186,7 +5203,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` the event and ABAP composes both branches; the box is modal anyway, so the round-trip costs nothing. // NOTE: handleIntervalSelect pushes a 'new appointment' (Type09) into the row it hit, or - this` &&
                ` sample has singleSelection=false - into EVERY selected row. The row index and the selected-row indices travel with the event and ABAP does the same push. The interval's start and end travel as their`.
     lv_text1 = lv_text1 && ` LOCAL parts; a UTC toISOString( ) would shift the day. // NOTE: The two row images are the demo kit's own test-resources files (John_Miller.png, Donna_Moore.jpg), re-hosted on sdk.openui5.org. //` &&
-               ` LIVE-TEST: The multi-row selection, the appointment select and the interval-select push are unverified in a running system.`.
+               ` LIVE-TEST: The multi-row selection, the appointment select and the interval-select push are unverified in a running system. // NOTE: A JS callback is not in the UI5 expression grammar -` &&
+               ` ExpressionParser has no ``function`` keyword and reads { as an object literal, so the whole handler string failed to parse and every argument was lost. The selection is read from the model instead:` &&
+               ` PlanningCalendarRow (and CalendarAppointment) declare a bindable ``selected``, so the flags travel with the rows and ABAP does the work.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.PlanningCalendar`                name = `PlanningCalendarMulti`                         class = `z2ui5_cl_smpc_app_538` path = `src/02/01/z2ui5_cl_smpc_app_538.clas.abap`
         score = 5
@@ -5208,7 +5227,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` order for the default entry. Same visible order, different mechanism: the calendar keeps its default sorter and the model arrives pre-sorted, so an appointment ADDED after the switch is not re-sorted` &&
                ` until the Select is used again. // NOTE: handleIntervalSelect pushes a 'new appointment' (Type09) into the row it hit, or into every selected row; the indices travel with the event and ABAP does the` &&
                ` same push. The interval's start and end travel as their LOCAL parts; a UTC toISOString( ) would shift the day. // NOTE: The row images are the demo kit's own test-resources files, re-hosted on` &&
-               ` sdk.openui5.org. // LIVE-TEST: The multi-selection toggle with its badge, the alphabetical sort and the interval-select push are unverified in a running system.`.
+               ` sdk.openui5.org. // LIVE-TEST: The multi-selection toggle with its badge, the alphabetical sort and the interval-select push are unverified in a running system. // NOTE: A JS callback is not in the`.
+    lv_text1 = lv_text1 && ` UI5 expression grammar - ExpressionParser has no ``function`` keyword and reads { as an object literal, so the whole handler string failed to parse and every argument was lost. The selection is read` &&
+               ` from the model instead: PlanningCalendarRow (and CalendarAppointment) declare a bindable ``selected``, so the flags travel with the rows and ABAP does the work.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.PlanningCalendar`                name = `PlanningCalendarOneLine`                       class = `z2ui5_cl_smpc_app_539` path = `src/02/01/z2ui5_cl_smpc_app_539.clas.abap`
         score = 5
@@ -5306,7 +5327,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` nonWorkingDays / nonWorkingHours arrays are unverified in a running system. // NOTE: **e2e-caught 2026-08-22**: the sample's own data carries an upstream typo - UI5Date.getInstance(201, 2, 4, 13,` &&
                ` 30), a year of 201 where every neighbouring row says 2017 (Page.controller.js:110). In JavaScript that is a VALID date (4 March 201 AD); as the ISO string the port stores it became` &&
                ` '201-03-04T13:30:00', which new Date() cannot parse at all, so the appointment reached the calendar as an Invalid Date and CalendarUtils._checkJSDateObject took the whole app down. The year is now` &&
-               ` written '0201', which is the same absurd date the original produces and which parses. The typo itself is kept: it is the sample's data.`.
+               ` written '0201', which is the same absurd date the original produces and which parses. The typo itself is kept: it is the sample's data. // NOTE: A JS callback is not in the UI5 expression grammar -` &&
+               ` ExpressionParser has no ``function`` keyword and reads { as an object literal, so the whole handler string failed to parse and every argument was lost. The selection is read from the model instead:`.
+    lv_text1 = lv_text1 && ` PlanningCalendarRow (and CalendarAppointment) declare a bindable ``selected``, so the flags travel with the rows and ABAP does the work.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.PlanningCalendar`                name = `PlanningCalendarViews`                         class = `z2ui5_cl_smpc_app_537` path = `src/02/01/z2ui5_cl_smpc_app_537.clas.abap`
         score = 5
@@ -5348,7 +5371,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` dropped. // NOTE: The row images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org. // LIVE-TEST: The legend side content, the first-day-of-week Select and the view-dependent` &&
                ` standard items are unverified in a running system. // NOTE: **e2e-caught 2026-08-22**: one special-date row was still missing its secondarytype seed after the b46 sweep fixed the others - the` &&
                ` NonWorking range on Sophie Miller (2017-01-16 to 2017-01-18). A flat ABAP row serializes every field, so it sent an empty string into the CalendarDayType enum and UI5 terminated the app. It is seeded`.
-    lv_text1 = lv_text1 && ` 'None' like the rest. The lesson is the sweep's own: the fix has to cover EVERY row of the table, not the ones the first failure named.`.
+    lv_text1 = lv_text1 && ` 'None' like the rest. The lesson is the sweep's own: the fix has to cover EVERY row of the table, not the ones the first failure named. // NOTE: The three root-level aggregations (specialDates on the` &&
+               ` calendar, items and appointmentItems on the legend) are bound ABSOLUTELY via _bind( path = abap_true ). A bare 'T_X' path is relative and resolves against nothing outside a row context, and an` &&
+               ` unbound table is not serialized at all - either alone leaves the aggregation empty. App 553 carries the same two fixes; the row-level aggregations inside PlanningCalendarRow stay relative, which is` &&
+               ` correct there.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.PlanningCalendar`                name = `PlanningCalendarWithLegend`                    class = `z2ui5_cl_smpc_app_541` path = `src/02/01/z2ui5_cl_smpc_app_541.clas.abap`
         score = 5
@@ -5953,7 +5979,11 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` binds (the XML parser reads the value as a control id) nor has a whitelisted setter. // NOTE: The three fragments (Details popover, Modify dialog, Legend popover) are built in chains and shown with` &&
                ` popover_display / popup_display. handleViewChange's toast is composed on the client; handleStartDateChange names the new date and keeps its round-trip. The three date-validation helpers` &&
                ` (handleDateTimePickerChange, handleDatePickerChange, updateButtonEnabledState) guard the OK button against an empty or malformed picker value - the port relies on the pickers' own required flag` &&
-               ` instead and always accepts the dialog. // LIVE-TEST: The details popover, the create/edit dialog, the delete, the legend, the three drag actions and the more-link are unverified in a running system.`.
+               ` instead and always accepts the dialog. // LIVE-TEST: The details popover, the create/edit dialog, the delete, the legend, the three drag actions and the more-link are unverified in a running system.` &&
+               ` // NOTE: The three feature flags seed abap_true, as the original's setData does - drag-and-drop, resize and drag-create are the behaviours this sample exists to show, and the three ToggleButtons` &&
+               ` start pressed. They had been seeded false, and the e2e module asserted that wrong value, so the module had to be corrected with the port. // NOTE: The details popover is opened on the POPOVER slot,`.
+    lv_text1 = lv_text1 && ` so it is closed with popover_destroy( ) - popup_destroy( ) tears down the separate POPUP slot and left the popover on screen. The EDIT branch closes it before opening the dialog, which the original` &&
+               ` does explicitly ("The sap.m.Popover has to be closed before the sap.m.Dialog gets opened").`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.SinglePlanningCalendar`          name = `SinglePlanningCalendar`                        class = `z2ui5_cl_smpc_app_549` path = `src/02/01/z2ui5_cl_smpc_app_549.clas.abap`
         score = 5
@@ -6165,7 +6195,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` ToggleButton.pressed attribute the sample's view does not have. // NOTE: zoomIn and zoomOut step setScaleFactor up and down. The property is bindable, so the two presses do the same increment in ABAP`.
     lv_text1 = lv_text1 && ` and the calendar follows the bound field; scaleFactor is seeded at the control's own default of 1. // NOTE: The view binds specialDates to /specialDates, a path the sample's own model never fills` &&
                ` (its types array is empty), so the port seeds an empty table there - the same nothing the original renders. // NOTE: Some appointment rows carry a tentative flag the view never binds; the port seeds` &&
-               ` it the same way and leaves it unbound, so the data stays 1:1 with the mock. // LIVE-TEST: The zoom in/out steps, the full-day toggle and the legend side content are unverified in a running system.`.
+               ` it the same way and leaves it unbound, so the data stays 1:1 with the mock. // LIVE-TEST: The zoom in/out steps, the full-day toggle and the legend side content are unverified in a running system. //` &&
+               ` NOTE: The two legend aggregations are bound ABSOLUTELY via _bind( path = abap_true ). A bare 'T_X' path is relative and resolves against nothing outside a row context, and an unbound table never` &&
+               ` reaches the client model at all - the legend rendered empty on both counts. Same fix as app 553.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.SinglePlanningCalendar`          name = `SinglePlanningCalendarWithZoomInZoomOut`       class = `z2ui5_cl_smpc_app_554` path = `src/02/01/z2ui5_cl_smpc_app_554.clas.abap`
         score = 5
@@ -6408,7 +6440,8 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` Description, Price, CurrencyCode - the fields the two views bind). The ObjectHeader keeps the original sap.ui.model.type.Currency composite binding 1:1. // NOTE: the OverflowToolbarButton that opens` &&
                ` the add-item page is icon-only in the original (icon=sap-icon://add, no text and no tooltip). The port gives it tooltip="Add" so it is reachable with a screen reader - the one accessibility addition` &&
                ` in this port. // LIVE-TEST: not yet verified in a running system: the TabContainer built over a bound items aggregation, the visible-driven Display/Edit swap inside a tab, and the close-confirmation` &&
-               ` round trip that relies on the view being sent again.`.
+               ` round trip that relies on the view being sent again. // NOTE: onInit calls oModel.setSizeLimit(200) because the collection is 123 rows and the JSONModel caps a bound aggregation at 100. The port` &&
+               ` issues cs_event-set_size_limit for MAIN; without it the table stopped 23 rows short.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.TabContainer`                    name = `TabContainerMHC`                               class = `z2ui5_cl_smpc_app_558` path = `src/01/01/z2ui5_cl_smpc_app_558.clas.abap`
         score = 5
@@ -7398,13 +7431,14 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` follows the picked path. discardAndApplyPath's discardProgress and the Select reset are reproduced the same way. // NOTE: validateProdInfoStep reads the two Inputs imperatively and calls` &&
                ` setValidated; the port binds ProductInfoStep.validated and the two value states and recomputes all three in ABAP on the same change wires. The Linear view declares no validated attribute at all, so` &&
                ` the step starts VALIDATED here too - that is what lets currentStep="PricingStep" hold on startup. onActivate syncs the Select with the activated step, which the port does by sending each step's id` &&
-               ` with its activate wire (an added activate attribute on the steps the sample leaves unwired). // IMPROVISED: onBackgroundDesignChange sets backgroundDesign on both Wizards. sap.m.Wizard has no` &&
-               ` backgroundDesign property in the 1.71 metadata the gates check and no whitelisted setter, so the port keeps the Select and its two-way bound key but the design is not applied to the wizards. //`.
-    lv_text1 = lv_text1 && ` LIVE-TEST: The two showcases, the two current-step Selects, the three branching paths and the step-2 validation are unverified in a running system.`.
+               ` with its activate wire (an added activate attribute on the steps the sample leaves unwired). // NOTE: The Select drives the Wizard's backgroundDesign through a two-way binding. The property does` &&
+               ` exist and is base-version - sap.m.Wizard declares backgroundDesign with no @since (Wizard.js:156) and a real public setBackgroundDesign (:685) - so the earlier claim that it is absent from the 1.71`.
+    lv_text1 = lv_text1 && ` metadata and has no whitelisted setter was wrong on both halves. // LIVE-TEST: The two showcases, the two current-step Selects, the three branching paths and the step-2 validation are unverified in a` &&
+               ` running system.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Wizard`                          name = `WizardCurrentStep`                             class = `z2ui5_cl_smpc_app_534` path = `src/01/01/z2ui5_cl_smpc_app_534.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         since = `1.30`
         notes = lv_text1 ) ).

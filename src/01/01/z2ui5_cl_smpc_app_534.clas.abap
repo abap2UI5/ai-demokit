@@ -167,6 +167,7 @@ CLASS z2ui5_cl_smpc_app_534 IMPLEMENTATION.
                         " mvc:XMLView
                         )->ele( `Wizard`
                             )->a( n = `id`               v = `CreateProductWizard`
+                            )->a( n = `backgroundDesign`  v = client->_bind( selectedbackgrounddesign )
                             )->a( n = `finishButtonText` v = `Finish`
                             )->a( n = `currentStep`      v = `PricingStep`
                             )->a( n = `visible`          v = |\{= ${ client->_bind( selectedshowcase ) } === 'linear' \}|
@@ -412,6 +413,7 @@ CLASS z2ui5_cl_smpc_app_534 IMPLEMENTATION.
 
                         )->ele( `Wizard`
                             )->a( n = `id`              v = `BranchingWizard`
+                            )->a( n = `backgroundDesign` v = client->_bind( selectedbackgrounddesign )
                             )->a( n = `enableBranching` v = `true`
                             )->a( n = `visible`         v = |\{= ${ client->_bind( selectedshowcase ) } === 'branching' \}|
                             )->a( n = `class`           v = `sapUiResponsivePadding--header sapUiResponsivePadding--content`

@@ -42,6 +42,10 @@
     {
       "type": "LIVE_TEST",
       "what": "The multi-selection toggle with its badge, the alphabetical sort and the interval-select push are unverified in a running system."
+    },
+    {
+      "type": "NOTE",
+      "what": "A JS callback is not in the UI5 expression grammar - ExpressionParser has no `function` keyword and reads { as an object literal, so the whole handler string failed to parse and every argument was lost. The selection is read from the model instead: PlanningCalendarRow (and CalendarAppointment) declare a bindable `selected`, so the flags travel with the rows and ABAP does the work."
     }
   ]
 }

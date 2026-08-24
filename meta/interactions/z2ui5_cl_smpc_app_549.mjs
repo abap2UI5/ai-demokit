@@ -14,7 +14,7 @@ export default async (page, expect) => {
     'no appointment reached the calendar with a real start date');
   // the three toolbar toggles share their flag with the calendar
   await waitForUi5(page, () => ui5All().some((c) => c.getMetadata().getName() === 'sap.m.SinglePlanningCalendar'
-    && c.getEnableAppointmentsDragAndDrop() === false && c.getEnableAppointmentsResize() === false),
+    && c.getEnableAppointmentsDragAndDrop() === true && c.getEnableAppointmentsResize() === true),
     'the seeded action flags never reached the calendar');
   // the Create button sits in the calendar's own toolbar and may be in the
   // overflow area, so it is fired through the registry

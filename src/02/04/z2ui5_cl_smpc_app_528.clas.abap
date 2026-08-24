@@ -385,7 +385,7 @@ CLASS z2ui5_cl_smpc_app_528 IMPLEMENTATION.
                                         )->a( n = `value` v = `donna@peachvalley.com`
                                         )->a( n = `type`  v = `Active`
                                         )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-urlhelper
-                                                                                        t_arg = VALUE #( ( `TRIGGER_EMAIL` ) ( `donna@peachvalley.com` ) ) )
+                                                                                        t_arg = VALUE #( ( `TRIGGER_EMAIL` ) ( |\{ EMAIL: 'donna@peachvalley.com' \}| ) ) )
 
                                 )->end(
                             )->end(

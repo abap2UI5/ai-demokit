@@ -271,7 +271,13 @@ CLASS z2ui5_cl_smpc_app_546 IMPLEMENTATION.
 
         READ TABLE t_people INDEX new_row + 1 ASSIGNING FIELD-SYMBOL(<target>).
         IF sy-subrc = 0.
+          " type must be seeded: an ABAP field is never absent, so an unset type
+          " reaches CalendarAppointment.type as "" - not a CalendarDayType member,
+          " so validateProperty throws and the binding update takes the view down.
+          " The original pushes a JS object with no type key at all, which falls
+          " back to the property default.
           INSERT VALUE #( title    = `New Appointment`
+                          type     = `None`
                           start_at = new_start
                           end_at   = new_end ) INTO TABLE <target>-t_appointments.
           client->message_toast_display(
