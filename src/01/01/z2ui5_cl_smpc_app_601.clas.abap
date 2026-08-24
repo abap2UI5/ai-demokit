@@ -88,23 +88,28 @@ CLASS z2ui5_cl_smpc_app_601 IMPLEMENTATION.
                             )->a( n = `text` v = `Tree Nodes`
                         )->tag( `ToolbarSpacer`
 
-                        " expand / collapse take the selected INDICES; the resolved
-                        " array reaches the public methods through castArgAuto
-                        " untouched (app 248 idiom, e2e-verified there)
+                        " expandSelected / collapseSelected read the tree's own
+                        " selection frontend-side. sap.m.Tree exposes only
+                        " getSelectedItems( ) + indexOfItem( ), so mapping it to
+                        " the INDICES expand( )/collapse( ) take is a loop - and
+                        " a loop in an event argument needs a JS callback, which
+                        " UI5's ExpressionParser cannot parse at all (no
+                        " `function` keyword, `{` is the object-literal nud), so
+                        " it takes the whole handler down rather than just that
+                        " argument. app 248 works because sap.ui.table.TreeTable
+                        " has getSelectedIndices( ) and needs no loop.
                         )->tag( `Button`
                             )->a( n = `id`    v = `expandMulti`
                             )->a( n = `text`  v = `expand selected nodes`
                             )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                             t_arg = VALUE #( ( `Tree` )
-                                                                                             ( `expand` )
-                                                                                             ( `$event.oSource.getParent().getParent().getSelectedItems().map(function (o) { return $event.oSource.getParent().getParent().indexOfItem(o); })` ) ) )
+                                                                                             ( `expandSelected` ) ) )
                         )->tag( `Button`
                             )->a( n = `id`    v = `collapseMulti`
                             )->a( n = `text`  v = `collapse selected nodes`
                             )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                             t_arg = VALUE #( ( `Tree` )
-                                                                                             ( `collapse` )
-                                                                                             ( `$event.oSource.getParent().getParent().getSelectedItems().map(function (o) { return $event.oSource.getParent().getParent().indexOfItem(o); })` ) ) )
+                                                                                             ( `collapseSelected` ) ) )
 
                         )->ele( `MultiComboBox`
                             )->a( n = `id`           v = `idSticky`

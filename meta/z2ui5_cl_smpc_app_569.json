@@ -39,6 +39,10 @@
     {
       "type": "LIVE_TEST",
       "what": "not yet verified in a running system: the drag and drop across the two tables, the re-ordering inside the Selected one, and the four move buttons."
+    },
+    {
+      "type": "NOTE",
+      "what": "The drop guard tests the binding CONTEXT, not the method: every sap.ui.core.Element has getBindingContext, so `X.getBindingContext ? ...` was always truthy. When the drop target is the table rather than a row - which is what happens on the first drag, since the Selected table starts empty - getBindingContext() is undefined and the chained getProperty threw inside the handler, so nothing moved."
     }
   ]
 }

@@ -10,5 +10,10 @@
   },
   "status": "generated",
   "checked": null,
-  "deviations": []
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "onInit calls productInput.setFilterFunction( ) with a JavaScript callback - a case-insensitive 'string contains' filter on the item text, which is the sample's entire subject. An app-authored JS callback is the documented boundary and there is no bindable substitute here: the suggestion rows are core:Item, not core:ListItem, so filterSecondaryValues does not apply the way it does in the ComboBox ports 470/471. The port therefore ships UI5's default word-starts-with filtering and the contains-anywhere behaviour is lost."
+    }
+  ]
 }

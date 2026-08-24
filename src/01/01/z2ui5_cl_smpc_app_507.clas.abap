@@ -135,6 +135,12 @@ CLASS z2ui5_cl_smpc_app_507 IMPLEMENTATION.
                             )->a( n = `text` v = |\{ parts:[\{path:'PRICE'\}, \{path:'CURRENCYCODE'\}], type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: true\} \}| ).
 
     client->view_display( view->stringify( ) ).
+    " onInit: oModel.setSizeLimit(100000) - "the default limit of the model is set
+    " to 100. We want to show all the entries." Without it the bound suggestionItems
+    " and suggestionRows stop at 100 of the 123 products, and the descending
+    " SupplierName sorter makes the rows cut whole supplier groups
+    client->follow_up_action( val   = client->cs_event-set_size_limit
+                              t_arg = VALUE #( ( `100000` ) ( `MAIN` ) ) ).
 
   ENDMETHOD.
 

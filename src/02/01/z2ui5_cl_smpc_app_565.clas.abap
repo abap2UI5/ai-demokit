@@ -188,12 +188,12 @@ CLASS z2ui5_cl_smpc_app_565 IMPLEMENTATION.
           d_description   = <product>-description.
         ENDIF.
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  view  = client->cs_view-popup
+                                  view  = client->cs_view-popover
                                   t_arg = VALUE #( ( `navCon` ) ( `to` ) ( `detail` ) ) ).
 
       WHEN `NAV_BACK`.
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  view  = client->cs_view-popup
+                                  view  = client->cs_view-popover
                                   t_arg = VALUE #( ( `navCon` ) ( `back` ) ) ).
 
     ENDCASE.

@@ -159,6 +159,13 @@ CLASS z2ui5_cl_smpc_app_613 IMPLEMENTATION.
 
     client->view_display( view->stringify( ) ).
 
+    " onInit: oModel.setSizeLimit(1000000) - "the default limit of the model is set
+    " to 100. We want to show all the entries." A size limit caps a BOUND
+    " aggregation, not the transport, so shipping all 123 rows with the view does
+    " not make it moot: both suggestion aggregations stop at 100 without this
+    client->follow_up_action( val   = client->cs_event-set_size_limit
+                              t_arg = VALUE #( ( `1000000` ) ( `MAIN` ) ) ).
+
   ENDMETHOD.
 
 

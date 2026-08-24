@@ -12,8 +12,8 @@
   "checked": null,
   "deviations": [
     {
-      "type": "NOTE",
-      "what": "handleLiveChange sets the TextArea valueState from the current length. The first TextArea's valueState is already an expression binding over the same bound value in the ORIGINAL view, so the port keeps that expression and drops the liveChange attribute - the state follows the value without a round-trip. The second TextArea keeps its static Warning state as the sample sets it."
+      "type": "IMPROVISED",
+      "what": "handleLiveChange recomputes each TextArea's valueState from the current length on every keystroke, and the original wires it on TWO of them. On the first, valueState is already an expression binding over the same bound value in the original view, so the port keeps that expression and drops the attribute - the state follows the value, only at change granularity rather than per keystroke, because valueLiveUpdate is false. On the SECOND the value is a view literal with a static valueState=\"Warning\", so dropping liveChange leaves nothing behind: its Warning state is frozen and shortening the text below 40 characters no longer clears it, where the original clears it live. Binding that value would contradict the sample's own \"without data binding\" label and a per-keystroke round-trip is lossy, so the port keeps the literal and accepts the loss."
     },
     {
       "type": "NOTE",

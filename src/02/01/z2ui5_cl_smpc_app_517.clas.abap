@@ -1,4 +1,4 @@
-" @keywords generictile generic tile sap.m generictileaslaunchtile simpleform label input button tilecontent imagecontent
+" @keywords generictile generic tile sap.m generictileaslaunchtile simpleform label input button html tilecontent imagecontent
 " @summary Shows Launch Tile samples that can contain header, subheader, image content, unit, and a footer.
 CLASS z2ui5_cl_smpc_app_517 DEFINITION PUBLIC.
 
@@ -42,6 +42,7 @@ CLASS z2ui5_cl_smpc_app_517 IMPLEMENTATION.
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:form` v = `sap.ui.layout.form`
+        )->a( n = `xmlns:core` v = `sap.ui.core`
 
         )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `editable` v = `true`
@@ -65,6 +66,12 @@ CLASS z2ui5_cl_smpc_app_517 IMPLEMENTATION.
                 )->a( n = `press` v = client->_event( `START_LOADING` )
 
         )->end(
+
+        )->tag( n = `HTML` ns = `core`
+            " the sample's own style.css (one rule: .tileLayout floats left) - literal
+            " braces escaped \{ \} because the XMLView binding parser reads an
+            " unescaped brace as a binding (the app-028 form)
+            )->a( n = `content` v = `<style>.tileLayout\{float:left\}</style>`
 
         )->ele( `GenericTile`
             )->a( n = `class` v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`

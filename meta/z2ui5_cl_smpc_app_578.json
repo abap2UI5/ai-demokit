@@ -63,6 +63,10 @@
     {
       "type": "NOTE",
       "what": "mvc:View displayBlock=\"true\" has no counterpart: it is a Component-app setting that makes the view fill the page when it is the root of a Component, and abap2UI5 owns the view container itself. FlexibleColumnLayout stateChange is wired in the sample only to rewrite the URL through the router after a navigation arrow was used; there is no URL to rewrite here, so the port drops it."
+    },
+    {
+      "type": "NOTE",
+      "what": "Component.js raises the model size limit; the port issues cs_event-set_size_limit for MAIN. The collection is 123 rows and the JSONModel caps a bound aggregation at 100, so without it the table stopped 23 rows short of the count its own title reports."
     }
   ]
 }

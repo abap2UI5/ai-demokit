@@ -13,11 +13,11 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "onValueHelpRequest loads ValueHelpDialog.fragment.xml, pre-filters it by the Input's value and opens it; the port builds the same SelectDialog with popup_display, applies the same pre-filter through binding_call and writes the picked title back into the two-way bound value."
+      "what": "onValueHelpDialogClose reads the selected item's DESCRIPTION - which the fragment binds to {ProductId} - and writes it to BOTH setSelectedKey on the Input and setText on the indicator. The port transports getDescription( ) and binds selectedKey rather than writing value: a property-binding update calls the control's own setSelectedKey (ManagedObjectBindingSupport), so textFormatMode=\"KeyValue\" renders `(HT-1000) Notebook Basic 15` from the key alone - which is what this sample is named after - and the state survives a view rebuild, which a control call would not. One field drives the Input and the indicator, because the original always sets both to the same value."
     },
     {
       "type": "NOTE",
-      "what": "onSuggestionItemSelected reads the Input's selectedKey; the key travels straight from the selected suggestion item (${$parameters>/selectedItem}.getKey()) and is shown in the bound Text."
+      "what": "onInit raises the model size limit to 100000 because the JSONModel caps a bound aggregation at 100 and the mock carries 123 products. The port issues cs_event-set_size_limit twice - once for MAIN (the Input's suggestionItems) and once for POPUP, because a popup slot keeps its own model and its own limit."
     },
     {
       "type": "LIVE_TEST",

@@ -21,7 +21,7 @@
     },
     {
       "type": "NOTE",
-      "what": "The three sample images (the SAP logo tile image and the profile picture) are the sample's own test-resources files, re-hosted on sdk.openui5.org."
+      "what": "The two sample images (the SAP logo tile image and the profile picture) are the sample's own test-resources files, re-hosted on sdk.openui5.org."
     },
     {
       "type": "POST_171",
@@ -30,6 +30,10 @@
     {
       "type": "LIVE_TEST",
       "what": "The loading-state timer and the eleven tile presses are unverified in a running system."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's manifest loads a style.css whose single rule is `.tileLayout { float: left; }`, and all eleven tiles carry that class. The port injects the rule through a core:HTML style leaf (the app-028 form) - without it the class resolves to nothing and the launch tiles stack vertically instead of floating into a tile wall."
     }
   ]
 }

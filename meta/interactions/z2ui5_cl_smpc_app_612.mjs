@@ -46,9 +46,10 @@ export default async (page, expect) => {
       && c.getProperty('MultiInputId') === id);
     const mi = ui5All().find((c) => c.getId().endsWith(id));
     const token = ext.tokenFromRow(mi.getSuggestionRows()[0]);
-    // row 0 of the mock is Notebook Basic 15 / HT-1000 / … / 956 EUR
+    // row 0 of the mock is Notebook Basic 15 / HT-1000 / … / 956 EUR;
+    // the Currency type renders it with the currency's two decimals
     return token && token.getKey() === 'Notebook Basic 15'
-      && token.getText() === 'Notebook Basic 15(956 EUR)';
+      && token.getText() === 'Notebook Basic 15(956.00 EUR)';
   }), 'the companion did not build the sample\'s token from a suggestion row');
   // the tokens are client-side now: nothing is bound, so the aggregation is
   // empty until somebody picks - which is what the original does too

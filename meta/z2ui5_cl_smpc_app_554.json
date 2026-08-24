@@ -42,6 +42,10 @@
     {
       "type": "LIVE_TEST",
       "what": "The zoom in/out steps, the full-day toggle and the legend side content are unverified in a running system."
+    },
+    {
+      "type": "NOTE",
+      "what": "The two legend aggregations are bound ABSOLUTELY via _bind( path = abap_true ). A bare 'T_X' path is relative and resolves against nothing outside a row context, and an unbound table never reaches the client model at all - the legend rendered empty on both counts. Same fix as app 553."
     }
   ]
 }

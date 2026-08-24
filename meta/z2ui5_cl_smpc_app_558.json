@@ -63,6 +63,10 @@
     {
       "type": "LIVE_TEST",
       "what": "not yet verified in a running system: the TabContainer built over a bound items aggregation, the visible-driven Display/Edit swap inside a tab, and the close-confirmation round trip that relies on the view being sent again."
+    },
+    {
+      "type": "NOTE",
+      "what": "onInit calls oModel.setSizeLimit(200) because the collection is 123 rows and the JSONModel caps a bound aggregation at 100. The port issues cs_event-set_size_limit for MAIN; without it the table stopped 23 rows short."
     }
   ]
 }

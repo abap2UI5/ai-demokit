@@ -203,7 +203,8 @@ CLASS z2ui5_cl_smpc_app_607 IMPLEMENTATION.
                 )->tag( `Text`
                     )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIMUNIT}`
                 )->tag( `ObjectNumber`
-                    )->a( n = `number` v = `{PRICE}`
+                    )->a( n = `number` v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCYCODE'\}],| &&
+                                          | type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
                     )->a( n = `unit`   v = `{CURRENCYCODE}`
             )->end(
         )->end(

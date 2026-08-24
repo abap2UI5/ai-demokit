@@ -187,7 +187,7 @@ CLASS z2ui5_cl_smpc_app_577 IMPLEMENTATION.
 
       WHEN `TO_DETAIL`.
         " toDetail: navTo('detail') with the helper's next layout for level 1
-        layout = `TwoColumnsMidExpanded`.
+        layout = `MidColumnFullScreen`.
 
       WHEN `CLOSE_COLUMN`.
         " handleClose: navTo('list') with the helper's closeColumn layout

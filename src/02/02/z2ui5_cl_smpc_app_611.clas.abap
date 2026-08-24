@@ -122,7 +122,10 @@ CLASS z2ui5_cl_smpc_app_611 IMPLEMENTATION.
 
     " the event carries the day as epoch milliseconds; back to an ABAP date
     DATA(days) = CONV i( millis(0) ).
-    days     = CONV i( millis ) / 86400000.
+    " epoch milliseconds are ~1.8e12 and ABAP's i tops out at 2,147,483,647, so
+    " CONV i( ) raises CX_SY_CONVERSION_OVERFLOW on a real stack (the transpiled
+    " backend represents i as a JS number, which is why CI never saw it)
+    days     = CONV decfloat34( millis ) / 86400000.
     selected = CONV d( '19700101' ) + days.
 
     LOOP AT t_special INTO DATA(range).

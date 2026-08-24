@@ -62,7 +62,7 @@ CLASS z2ui5_cl_smpc_app_490 IMPLEMENTATION.
                 " composed on the client from the two event parameters
                 )->a( n = `selectionChange` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                           t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` )
-                                                                                           ( `Event 'selectionChange': \{0?Selected:Deselected\} '\{1\}'` )
+                                                                                           ( `Event 'selectionChange': {0?Selected:Deselected} '{1}'` )
                                                                                            ( `${$parameters>/selected}` )
                                                                                            ( `${$parameters>/changedItem}.getText()` ) ) )
                 " handleSelectionFinish lists every selected item; a UI5 expression has
@@ -86,19 +86,20 @@ CLASS z2ui5_cl_smpc_app_490 IMPLEMENTATION.
 
     IF client->get_event( ) = `SELECTION_FINISH`.
 
-      " "Event 'selectionFinished': ['A','B']" - the texts of the selected keys,
-      " in the order the items are bound
+      " "Event 'selectionFinished': ['A','B']" - the texts of the selected keys in
+      " SELECTION order: the original reads the selectedItems event parameter, which
+      " MultiComboBox fills by addAssociation per pick, so looping the bound keys
+      " (not the product table) is what reproduces it - the app-281 form
       DATA(list) = ``.
-      LOOP AT t_products INTO DATA(product).
-        IF line_exists( t_selected_key[ table_line = product-productid ] ).
-          IF list IS NOT INITIAL.
-            list = list && `,`.
-          ENDIF.
-          list = list && |'{ product-name }'|.
+      LOOP AT t_selected_key INTO DATA(key).
+        IF list IS NOT INITIAL.
+          list = list && `,`.
         ENDIF.
+        list = list && |'{ VALUE #( t_products[ productid = key ]-name OPTIONAL ) }'|.
       ENDLOOP.
 
-      client->message_toast_display( |Event 'selectionFinished': [{ list }]| ).
+      client->message_toast_display( text  = |Event 'selectionFinished': [{ list }]|
+                                     width = `auto` ).
 
     ENDIF.
 

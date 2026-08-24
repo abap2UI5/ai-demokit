@@ -162,7 +162,10 @@ CLASS z2ui5_cl_smpc_app_541 IMPLEMENTATION.
                     " legend reads it through an expression
                     )->a( n = `viewKey`                   v = client->_bind( view_key )
                     )->a( n = `legend`                    v = `PlanningCalendarLegend`
-                    )->a( n = `specialDates`              v = `{path: 'T_SPECIAL_DATES', templateShareable: false}`
+                    " ROOT-level aggregation - a bare 'T_' path is RELATIVE and resolves
+                    " against nothing outside a row context, and an unbound table is not
+                    " serialized at all (app 553 has the same two fixes)
+                    )->a( n = `specialDates`              v = |\{ path: '{ client->_bind( val = t_special_dates path = abap_true ) }', templateShareable: false \}|
 
                     )->ele( `toolbarContent`
                         )->tag( `ToggleButton`
@@ -227,8 +230,11 @@ CLASS z2ui5_cl_smpc_app_541 IMPLEMENTATION.
 
                 )->ele( `PlanningCalendarLegend`
                     )->a( n = `id`               v = `PlanningCalendarLegend`
-                    )->a( n = `items`            v = `{path: 'T_LEGEND_ITEMS', templateShareable: true}`
-                    )->a( n = `appointmentItems` v = `{path: 'T_LEGEND_APPT_ITEMS', templateShareable: true}`
+                    " ROOT-level aggregations - a bare 'T_' path is RELATIVE and resolves
+                    " against nothing outside a row context, and an unbound table is not
+                    " serialized at all (app 553 has the same two fixes)
+                    )->a( n = `items`            v = |\{ path: '{ client->_bind( val = t_legend_items path = abap_true ) }', templateShareable: true \}|
+                    )->a( n = `appointmentItems` v = |\{ path: '{ client->_bind( val = t_legend_appt_items path = abap_true ) }', templateShareable: true \}|
                     " changeStandardItemsPerView swaps Selected for WorkingDay off the
                     " OneMonth view; the property is bindable, so the expression over
                     " the shared view key carries the same switch

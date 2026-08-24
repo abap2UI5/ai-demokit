@@ -83,12 +83,10 @@ CLASS z2ui5_cl_smpc_app_473 IMPLEMENTATION.
       " for an empty term) and applies it to the suggestionItems BINDING - the
       " same declarative filter, the model untouched
       DATA(term) = client->get_event_arg( ).
-      DATA(filter) = COND string( WHEN term IS INITIAL
-                                  THEN `[]`
-                                  ELSE |[\{"path":"NAME","operator":"StartsWith","value1":"{ term }"\}]| ).
 
       client->follow_up_action( val   = client->cs_event-binding_call
-                                t_arg = VALUE #( ( `productInput` ) ( `suggestionItems` ) ( `filter` ) ( filter ) ) ).
+                                t_arg = VALUE #( ( `productInput` ) ( `suggestionItems` ) ( `filter` )
+                                                 ( `NAME` ) ( `StartsWith` ) ( term ) ) ).
 
     ENDIF.
 

@@ -479,7 +479,7 @@ CLASS z2ui5_cl_smpc_app_549 IMPLEMENTATION.
         " appointment, and closes it again when the appointment is deselected
         DATA(path) = client->get_event_arg( ).
         IF path IS INITIAL OR client->get_event_arg( 2 ) <> abap_true.
-          client->popup_destroy( ).
+          client->popover_destroy( ).
         ELSE.
           SPLIT path AT `/` INTO TABLE DATA(parts).
           DELETE parts WHERE table_line IS INITIAL.
@@ -500,7 +500,10 @@ CLASS z2ui5_cl_smpc_app_549 IMPLEMENTATION.
         ENDIF.
 
       WHEN `EDIT`.
-        " handleEditButton closes the popover and opens the dialog on the same row
+        " handleEditButton closes the popover and opens the dialog on the same row -
+        " the original comments that the Popover HAS to be closed before the Dialog
+        " opens, so the close is not optional
+        client->popover_destroy( ).
         dialog_title = `Edit appointment`.
         popup_modify_display( ).
 
@@ -509,7 +512,7 @@ CLASS z2ui5_cl_smpc_app_549 IMPLEMENTATION.
         IF sel_index >= 0 AND sel_index < lines( t_appointments ).
           DELETE t_appointments INDEX sel_index + 1.
         ENDIF.
-        client->popup_destroy( ).
+        client->popover_destroy( ).
 
       WHEN `APPT_CREATE` OR `HEADER_DATE`.
         " _createInitialDialogValues seeds the dialog at the default 9 - 10 hours
@@ -606,7 +609,11 @@ CLASS z2ui5_cl_smpc_app_549 IMPLEMENTATION.
         ENDIF.
 
       WHEN `APPT_CREATE_DND`.
+        " type must be seeded: an unset ABAP field reaches CalendarDayType as
+        " "", which is not a member - validateProperty throws and the binding
+        " update takes the view down (found by the new linter rule)
         INSERT VALUE #( title    = `New Appointment`
+                        type     = `Type01`
                         start_at = iso_of( 1 )
                         end_at   = iso_of( 6 ) ) INTO TABLE t_appointments.
         client->message_toast_display( |Appointment with title \n'New Appointment'\n has been created| ).
@@ -641,9 +648,11 @@ CLASS z2ui5_cl_smpc_app_549 IMPLEMENTATION.
 
     start_date  = `2018-07-09T00:00:00`.
     sticky_mode = `None`.
-    enable_dnd  = abap_false.
-    enable_new  = abap_false.
-    enable_size = abap_false.
+    " the original seeds all three true (Page.controller.js:323) - these are the
+    " behaviours the sample exists to show, and the three ToggleButtons start pressed
+    enable_dnd  = abap_true.
+    enable_new  = abap_true.
+    enable_size = abap_true.
     all_day     = abap_false.
     sel_index   = -1.
 

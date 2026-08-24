@@ -17,11 +17,15 @@
     },
     {
       "type": "NOTE",
-      "what": "handleSelectionFinish lists the TEXTS of every selected item. A UI5 expression argument cannot MAP an array of controls itself - the grammar has no loop - though since the frontend learned to project a control-valued event parameter (Lib.normalizeEventArgs) the array would travel whole and could be read here, the item texts being plain strings that survive the projection intact. The port keeps the bound route anyway: it binds selectedKeys two-way and composes the same 'Event 'selectionFinished': [...]' line in ABAP on a round-trip; the order follows the bound item order, which is the sorted order the picker shows."
+      "what": "handleSelectionFinish lists every selected item. A UI5 expression has no loop, so the selection travels as the bound selectedKeys and ABAP rebuilds the line - looping the KEYS, not the product table, because the original reads the selectedItems event parameter and MultiComboBox fills that by addAssociation per pick, i.e. in selection order. Both toasts pass width = `auto` as the original's MessageToast.show options do; on the client-composed selectionChange leg that option cannot travel, which is the boundary app 281 also records."
     },
     {
       "type": "LIVE_TEST",
       "what": "Both wires (the client-composed selectionChange toast and the selectionFinish round-trip) are unverified in a running system."
+    },
+    {
+      "type": "NOTE",
+      "what": "The client-composed toast template is written with BARE {0}/{1} placeholders. It had carried \\{0\\}, which is wrong in a backtick literal: only |...| templates treat \\{ as an escape, so the backslashes were real characters and formatTemplate's /\\{(\\d+)...\\}/ never matched - the placeholders rendered verbatim. The escape is not needed at all on this path: the value lands in an EVENT attribute, which XMLTemplateProcessor routes through EventHandlerResolver without a BindingParser pass. An ordinary attribute is the opposite case and still needs \\{ (see app 523's app:template)."
     }
   ]
 }

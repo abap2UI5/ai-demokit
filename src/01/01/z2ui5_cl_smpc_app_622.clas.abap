@@ -108,7 +108,7 @@ CLASS z2ui5_cl_smpc_app_622 IMPLEMENTATION.
           client->message_toast_display( `The input is validated. Your form has been submitted.` ).
         ELSE.
           client->message_box_display( text = `A validation error has occurred. Complete your input first.`
-                                       type = `information` ).
+                                       type = `alert` ).
         ENDIF.
 
     ENDCASE.

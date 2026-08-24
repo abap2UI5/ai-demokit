@@ -42,6 +42,10 @@
     {
       "type": "NOTE",
       "what": "**e2e-caught 2026-08-22**: one special-date row was still missing its secondarytype seed after the b46 sweep fixed the others - the NonWorking range on Sophie Miller (2017-01-16 to 2017-01-18). A flat ABAP row serializes every field, so it sent an empty string into the CalendarDayType enum and UI5 terminated the app. It is seeded 'None' like the rest. The lesson is the sweep's own: the fix has to cover EVERY row of the table, not the ones the first failure named."
+    },
+    {
+      "type": "NOTE",
+      "what": "The three root-level aggregations (specialDates on the calendar, items and appointmentItems on the legend) are bound ABSOLUTELY via _bind( path = abap_true ). A bare 'T_X' path is relative and resolves against nothing outside a row context, and an unbound table is not serialized at all - either alone leaves the aggregation empty. App 553 carries the same two fixes; the row-level aggregations inside PlanningCalendarRow stay relative, which is correct there."
     }
   ]
 }

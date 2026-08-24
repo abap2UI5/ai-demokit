@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "handleValueStateLinkPress only logs in the original; the two FormattedText value-state links raise a constant client-composed toast here so the wire is not dead."
+      "what": "handleValueStateLinkPress raises MessageToast.show(\"Link in value state pressed\") in the original; the two FormattedText value-state links raise a constant client-composed toast here so the wire is not dead."
     },
     {
       "type": "POST_171",

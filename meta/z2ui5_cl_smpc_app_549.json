@@ -46,6 +46,14 @@
     {
       "type": "LIVE_TEST",
       "what": "The details popover, the create/edit dialog, the delete, the legend, the three drag actions and the more-link are unverified in a running system."
+    },
+    {
+      "type": "NOTE",
+      "what": "The three feature flags seed abap_true, as the original's setData does - drag-and-drop, resize and drag-create are the behaviours this sample exists to show, and the three ToggleButtons start pressed. They had been seeded false, and the e2e module asserted that wrong value, so the module had to be corrected with the port."
+    },
+    {
+      "type": "NOTE",
+      "what": "The details popover is opened on the POPOVER slot, so it is closed with popover_destroy( ) - popup_destroy( ) tears down the separate POPUP slot and left the popover on screen. The EDIT branch closes it before opening the dialog, which the original does explicitly (\"The sap.m.Popover has to be closed before the sap.m.Dialog gets opened\")."
     }
   ]
 }

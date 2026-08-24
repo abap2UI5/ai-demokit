@@ -42,6 +42,10 @@
     {
       "type": "LIVE_TEST",
       "what": "not yet verified in a running system: that selecting day 5, one of days 10-12 or day 20 opens the popover with the matching type, and that a plain day opens nothing."
+    },
+    {
+      "type": "NOTE",
+      "what": "The epoch milliseconds arriving from getTime( ) are converted through decfloat34, not i. ABAP's i tops out at 2,147,483,647 and a 2026 timestamp is ~1.8e12, so CONV i( ) raises CX_SY_CONVERSION_OVERFLOW and the whole round-trip dumps on a real stack. CI never saw it because the transpiled backend represents i as a JS number."
     }
   ]
 }

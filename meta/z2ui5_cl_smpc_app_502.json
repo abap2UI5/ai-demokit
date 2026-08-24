@@ -22,6 +22,10 @@
     {
       "type": "LIVE_TEST",
       "what": "The anchored popover, the row selection moving the header and the close follow-up are unverified in a running system."
+    },
+    {
+      "type": "NOTE",
+      "what": "The selected row is transported as its title and resolved with READ TABLE ... WITH KEY name. Name is NOT unique in ui5/mock/products.json: `Jet Scan Professional` is HT-1082 and HT-1083, `Tablet Pouch` is HT-9995 and HT-9996. Picking the second of either pair shows the first one's price and dimensions. The original moves the row's own binding context, so it is always the right record; transporting an index or the context path would reproduce that."
     }
   ]
 }
