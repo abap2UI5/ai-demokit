@@ -609,7 +609,11 @@ CLASS z2ui5_cl_smpc_app_549 IMPLEMENTATION.
         ENDIF.
 
       WHEN `APPT_CREATE_DND`.
+        " type must be seeded: an unset ABAP field reaches CalendarDayType as
+        " "", which is not a member - validateProperty throws and the binding
+        " update takes the view down (found by the new linter rule)
         INSERT VALUE #( title    = `New Appointment`
+                        type     = `Type01`
                         start_at = iso_of( 1 )
                         end_at   = iso_of( 6 ) ) INTO TABLE t_appointments.
         client->message_toast_display( |Appointment with title \n'New Appointment'\n has been created| ).
