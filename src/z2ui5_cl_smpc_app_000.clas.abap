@@ -8572,11 +8572,16 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` Residual (nothing headless can assert): that toggle() then really swaps main and side content visually, and the Slider's device-model visible flag on a real phone. // NOTE: The sample's own style.css` &&
                ` is injected since 2026-08-23 through an added core:HTML style leaf (no counterpart in the original view, which loads the sheet through its manifest). Both rules of the sheet apply here:` &&
                ` sapUiDSCRightText sits on the side-content Text and sapUiDSCExplored on the DynamicSideContent. The port carried the class names with nothing behind them until then - the gap CAPABILITIES names as` &&
-               ` one of the two most common generation mistakes, and the same one the 2026-08-21 sweep closed in apps 122/124/133/138/145. \{ \} escaped: the XMLView parser reads an unescaped brace as a binding.`.
+               ` one of the two most common generation mistakes, and the same one the 2026-08-21 sweep closed in apps 122/124/133/138/145. \{ \} escaped: the XMLView parser reads an unescaped brace as a binding. //`.
+    lv_text1 = lv_text1 && ` NOTE: Residual, recorded 2026-08-23: the Toggle button's INITIAL enablement is not reproduced. _updateToggleButtonState has two call sites upstream - handleBreakpointChanged and onAfterRendering -` &&
+               ` and only the first is wired. DynamicSideContent fires breakpointChanged from _setBreakpointFromWidth only when the new breakpoint differs from the previous one, and _currentBreakpoint is undefined on` &&
+               ` the first determination, so the event never fires for the initial layout. An app opened at breakpoint S therefore starts with the Toggle button disabled - the one breakpoint where toggle( ) does` &&
+               ` anything - until the container crosses a breakpoint and comes back. There is no declarative substitute: S is the CONTAINER's breakpoint (containerQuery), not a device media range. Same residual as` &&
+               ` app 138.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.DynamicSideContent`      name = `DynamicSideContentEqualSplit`                  class = `z2ui5_cl_smpc_app_267` path = `src/01/02/z2ui5_cl_smpc_app_267.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30`
         notes = lv_text1 ) ).
 
@@ -8617,14 +8622,20 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` written, so a client-side toggle leaves the model unchanged and the next redraw restores the pre-toggle state. The bound show_side_content therefore reflects the two backend press handlers and` &&
                ` nothing else - this entry claimed the opposite until 2026-08-21. // IMPROVISED: updateShowSideContentButtonVisibility is reproduced only by its breakpoint half. The original computes !(breakpoint ===`.
     lv_text1 = lv_text1 && ` 'S' || oDSC.isSideContentVisible()), i.e. it also hides the 'Open Side Content' button whenever the side content happens to be visible; isSideContentVisible() is client state the backend cannot read.` &&
-               ` The port keeps the button's visibility bound to the breakpoint (visible unless 'S') and flips the same flag in the two press handlers (hide -> button shows, show -> button hides), which matches the` &&
-               ` original in every path the sample offers - but a side-content visibility change caused by anything else (e.g. the Toggle button) does not update it. // NOTE: **e2e-verified 2026-08-01**` &&
-               ` (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the feed list renders all four feed.json rows, the side content's Close button hides the side content through the` &&
-               ` SIDE_CONTENT_HIDE round-trip that flips the two-way-bound showSideContent (setShowSideContent false), the Open Side Content button then shows (its visible flag comes from the breakpointChanged` &&
-               ` round-trip) and brings it back through SIDE_CONTENT_SHOW. Residual (nothing headless can assert): the FeedListItem layout with its remote author pictures, and toggle() on a real S-breakpoint device.`.
-    lv_text1 = lv_text1 && ` // NOTE: The sample's own style.css is injected since 2026-08-23 through an added core:HTML style leaf (no counterpart in the original view, which loads the sheet through its manifest). The view` &&
+               ` The port keeps the button's visibility bound to the breakpoint (visible unless 'S') and flips the same flag in the two press handlers (hide -> button shows, show -> button hides), which now matches` &&
+               ` the original in every path the sample offers - but a side-content visibility change caused by anything else (e.g. the Toggle button) does not update it. Its handleSideContentHide half was wrong until` &&
+               ` 2026-08-23: the port set the button visible unconditionally, where updateShowSideContentButtonVisibility computes !(breakpoint === 'S' || isSideContentVisible( )) and therefore leaves it HIDDEN at S.` &&
+               ` The breakpoint the control last reported is kept in a field now, because the original reads getCurrentBreakpoint( ) at every call site, not only in the event handler. // NOTE: **e2e-verified` &&
+               ` 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the feed list renders all four feed.json rows, the side content's Close button hides the side content through the`.
+    lv_text1 = lv_text1 && ` SIDE_CONTENT_HIDE round-trip that flips the two-way-bound showSideContent (setShowSideContent false), the Open Side Content button then shows (its visible flag comes from the breakpointChanged` &&
+               ` round-trip) and brings it back through SIDE_CONTENT_SHOW. Residual (nothing headless can assert): the FeedListItem layout with its remote author pictures, and toggle() on a real S-breakpoint device.` &&
+               ` // NOTE: The sample's own style.css is injected since 2026-08-23 through an added core:HTML style leaf (no counterpart in the original view, which loads the sheet through its manifest). The view` &&
                ` carries sapUiDSCExplored and the rule behind it has to come with it. The port carried the class names with nothing behind them until then - the gap CAPABILITIES names as one of the two most common` &&
-               ` generation mistakes, and the same one the 2026-08-21 sweep closed in apps 122/124/133/138/145. \{ \} escaped: the XMLView parser reads an unescaped brace as a binding.`.
+               ` generation mistakes, and the same one the 2026-08-21 sweep closed in apps 122/124/133/138/145. \{ \} escaped: the XMLView parser reads an unescaped brace as a binding. // NOTE: Residual, recorded` &&
+               ` 2026-08-23: the Toggle button's INITIAL enablement is not reproduced. _updateToggleButtonState has two call sites upstream - handleBreakpointChanged and onAfterRendering - and only the first is`.
+    lv_text1 = lv_text1 && ` wired. DynamicSideContent fires breakpointChanged from _setBreakpointFromWidth only when the new breakpoint differs from the previous one, and _currentBreakpoint is undefined on the first` &&
+               ` determination, so the event never fires for the initial layout. An app opened at breakpoint S therefore starts with the Toggle button disabled - the one breakpoint where toggle( ) does anything -` &&
+               ` until the container crosses a breakpoint and comes back. There is no declarative substitute: S is the CONTAINER's breakpoint (containerQuery), not a device media range. Same residual as app 138.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.DynamicSideContent`      name = `DynamicSideContentProduct`                     class = `z2ui5_cl_smpc_app_269` path = `src/01/02/z2ui5_cl_smpc_app_269.clas.abap`
         score = 5
@@ -10383,28 +10394,31 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.26`
         notes = lv_text1 ) ).
 
-    lv_text1 = `NOTE: Block->content inlining (app 161/178 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks aggregations hold SharedBlocks BlockBase controls -` &&
+    lv_text1 = `IMPROVISED: Block->content inlining (app 161/178 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks aggregations hold SharedBlocks BlockBase controls -` &&
                ` blockcolor:BlockBlue (7 times) and blockcolor:BlockBlueWithInfo (once), xmlns:blockcolor='sap.uxap.sample.SharedBlocks'. A BlockBase is only a lazy-loading wrapper around a static view: BlockBlue's` &&
                ` view is a single coloured div (html:div style='height:4em; background-color: #A9EAFF ;'), BlockBlueWithInfo's view is a coloured div wrapping an html:a 'ShowSubsectionMore = true', an html:br and an` &&
                ` empty m:Text id='moreContentText'. Since ObjectPageSubSection.blocks accepts any sap.ui.core.Control, each block is inlined as a core:HTML leaf carrying the decoded div markup in its content` &&
                ` attribute, plus one m:Text leaf for the WithInfo block. Absent as a result: the seven blockcolor:BlockBlue controls with their columnLayout attributes ('auto'/'1'/'1'/'2'/'3'/'3'/'3'), the` &&
                ` blockcolor:BlockBlueWithInfo control with its showSubSectionMore='true' and columnLayout='2' attributes, and the block views' own mvc:View roots (they carry only xmlns declarations and their`.
-    lv_text1 = lv_text1 && ` controllerName - no width/height attributes). Present in their place: eight core:HTML controls (content attribute) and one m:Text (id attribute). // IMPROVISED: The BlockBase-specific behaviours are` &&
-               ` lost with the dropped block controls: (a) columnLayout ('auto'/'1'/'2'/'3') is a BlockBase property telling the ObjectPageSubSection grid how many columns a block spans - core:HTML has no such` &&
-               ` property, so the three subsections render every inlined block at the default column span instead of the 1/2/3-column arrangements their titles describe; (b) showSubSectionMore='true' on` &&
-               ` blockcolor:BlockBlueWithInfo (the subsection's 'See more' toggle switching the block into its Expanded view) is dropped, and with it the BlockBase view-mode machinery: the block controller's` &&
-               ` onAfterRendering fills m:Text id='moreContentText' with '...More Content' only in Expanded mode, so the port's m:Text stays permanently empty (the original's initial Collapsed state) and sits as a` &&
-               ` sibling after its core:HTML div instead of inside it - a control cannot be wrapped by core:HTML markup, which carries markup in a string attribute only (app 239 precedent). // NOTE: Named-model`.
-    lv_text1 = lv_text1 && ` prefix-drop (app 230/261 precedent): the controller's ConfigModel (JSONModel {subSectionLayout: 'TitleOnTop'}) is folded onto the one default model -` &&
-               ` subSectionLayout='{ConfigModel>/subSectionLayout}' becomes the two-way bound root field ({/SUBSECTIONLAYOUT}), seeded 'TitleOnTop' exactly as onInit does. Same leaf name, same data, renders` &&
-               ` identically. The controller's toggleTitle handler becomes the TOGGLE_TITLE event branch flipping the field between TitleOnTop and TitleOnLeft; the press='.toggleTitle' wire on the` &&
-               ` ObjectPageHeaderActionButton is client->_event('TOGGLE_TITLE'). // NOTE: Round-trip behaviour not verified in a running system: the 'toggle title' ObjectPageHeaderActionButton fires TOGGLE_TITLE, the` &&
-               ` backend flips subsectionlayout between TitleOnTop and TitleOnLeft and pushes it back on the round-trip - whether the bound subSectionLayout property re-layouts the subsection titles live, and the` &&
-               ` overall ObjectPage rendering of the eight inlined core:HTML blocks, remain to be checked. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_408.mjs).`.
+    lv_text1 = lv_text1 && ` controllerName - no width/height attributes). Present in their place: eight core:HTML controls (content attribute) and one m:Text (id attribute). Typed IMPROVISED since 2026-08-23. CAPABILITIES' own` &&
+               ` row says "Declare the block→content substitution (IMPROVISED)", and the recipe's refinement is explicit that removing a control the original declares - even a zero-visual-output one - is a loss` &&
+               ` regardless of a pixel-identical render. 26 of the 31 sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined` &&
+               ` form falls back to automatic column assignment, and the block ids and view roots go with it. // IMPROVISED: The BlockBase-specific behaviours are lost with the dropped block controls: (a)` &&
+               ` columnLayout ('auto'/'1'/'2'/'3') is a BlockBase property telling the ObjectPageSubSection grid how many columns a block spans - core:HTML has no such property, so the three subsections render every` &&
+               ` inlined block at the default column span instead of the 1/2/3-column arrangements their titles describe; (b) showSubSectionMore='true' on blockcolor:BlockBlueWithInfo (the subsection's 'See more'`.
+    lv_text1 = lv_text1 && ` toggle switching the block into its Expanded view) is dropped, and with it the BlockBase view-mode machinery: the block controller's onAfterRendering fills m:Text id='moreContentText' with '...More` &&
+               ` Content' only in Expanded mode, so the port's m:Text stays permanently empty (the original's initial Collapsed state) and sits as a sibling after its core:HTML div instead of inside it - a control` &&
+               ` cannot be wrapped by core:HTML markup, which carries markup in a string attribute only (app 239 precedent). // NOTE: Named-model prefix-drop (app 230/261 precedent): the controller's ConfigModel` &&
+               ` (JSONModel {subSectionLayout: 'TitleOnTop'}) is folded onto the one default model - subSectionLayout='{ConfigModel>/subSectionLayout}' becomes the two-way bound root field ({/SUBSECTIONLAYOUT}),` &&
+               ` seeded 'TitleOnTop' exactly as onInit does. Same leaf name, same data, renders identically. The controller's toggleTitle handler becomes the TOGGLE_TITLE event branch flipping the field between` &&
+               ` TitleOnTop and TitleOnLeft; the press='.toggleTitle' wire on the ObjectPageHeaderActionButton is client->_event('TOGGLE_TITLE'). // NOTE: Round-trip behaviour not verified in a running system: the`.
+    lv_text1 = lv_text1 && ` 'toggle title' ObjectPageHeaderActionButton fires TOGGLE_TITLE, the backend flips subsectionlayout between TitleOnTop and TitleOnLeft and pushes it back on the round-trip - whether the bound` &&
+               ` subSectionLayout property re-layouts the subsection titles live, and the overall ObjectPage rendering of the eight inlined core:HTML blocks, remain to be checked. **e2e-verified 2026-08-21** (nightly` &&
+               ` e2e interaction, meta/interactions/z2ui5_cl_smpc_app_408.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.BlockBase`                    name = `ObjectPageBlockBase`                           class = `z2ui5_cl_smpc_app_408` path = `src/01/03/z2ui5_cl_smpc_app_408.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
         notes = lv_text1 ) ).
 
@@ -10421,35 +10435,37 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         post171 = `sap.uxap.ObjectPageSubSection.showTitle (showTitle='false' on the 'Order Details' and 'Products' subsections) exists only since UI5 1.77 - kept 1:1 (fidelity wins), so the app needs a UI5 release >=` &&
                  ` 1.77 to render it. Also kept 1:1: the sap.m.Avatar control (since 1.73) with its displayShape (Square) and displaySize (L) properties, used in the snapped heading and header content.` ) ).
 
-    lv_text1 = `NOTE: Block->content inlining (app 188/217/261/402 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold SharedBlocks BlockBase` &&
-               ` controls - goals:GoalsBlock, personal:BlockPhoneNumber / BlockSocial / BlockAdresses / BlockMailing / PersonalBlockPart1 / PersonalBlockPart2, employment:BlockJobInfoPart1 / BlockJobInfoPart2 /` &&
-               ` BlockJobInfoPart3 / BlockEmpDetailPart1 / BlockEmpDetailPart2 / BlockEmpDetailPart3. Each BlockBase is only a lazy-loading wrapper around a static view (a forms:SimpleForm with core:Title / m:Label /` &&
-               ` m:Text, or a layout:HorizontalLayout / layout:VerticalLayout tree), so every block view is inlined 1:1 into its aggregation. Absent as a result: the 13 BlockBase controls with their ids and their` &&
-               ` columnLayout / class='sapUxAPObjectPageSubSectionAlignContent' properties, plus the block views' own mvc:View roots with their width='100%'. Present in their place: forms:SimpleForm, core:Title and` &&
-               ` the additional m:Label / m:Text / layout:VerticalLayout / layout:HorizontalLayout the block views contain. // NOTE: The QuickView fragment is rebuilt 1:1 and shown via client->popover_display( xml =`.
-    lv_text1 = lv_text1 && ` ..., by_id = ... ) anchored at the pressed link: handleTitleSelectorPress on the 'Created By:' (Julie Armstrong) and 'Changed By:' (John Miller) links round-trips TITLE_SELECTOR transporting` &&
-               ` $event.oSource.sId, and the backend opens the fragment at that control - the original's Fragment.load + oQuickView.openBy(oButton) (app 100 precedent). Dropped with that rewiring: the` &&
-               ` navigate='.onNavigate' attribute on the QuickView - the sample's controller defines no onNavigate handler at all, so the wire is dead code upstream and a dead event wire is not ported. The pages` &&
-               ` aggregation is bound via client->_bind (t_pages); the binding-info templateShareable: true is kept 1:1 on the relative groups / elements bindings and dropped on pages - each popover_display builds a` &&
-               ` fresh fragment, so no template outlives its binding. // NOTE: CompanyData.json is seeded verbatim (both /pages rows, all groups and elements). Elements without an elementType in the source JSON (the` &&
-               ` page-2 Address and Slogan rows) are filled with the QuickViewGroupElementType default 'text', and every element row seeds target '_blank' (the QuickViewGroupElement.target default) - absent JSON`.
-    lv_text1 = lv_text1 && ` properties must not serialize as empty strings, which would override the UI5 defaults (app 099/100 precedent). The page-2 titleUrl stays the empty string, which is the QuickViewPage.titleUrl default.` &&
-               ` // NOTE: The controller's two constant-text MessageToast handlers are wired as round-trip-free client toasts (follow_up_action cs_event-control_global MESSAGE_TOAST show, app 005/401 idiom):` &&
-               ` onExternalApplicationLinkPress ('Navigate to external application.') on the 'Robotech (234242343)' and 'Average User Rating' links, and onAnotherPageLinkPress ('Navigate to another page in the same` &&
-               ` application (List of delivery items)') on the 'Status' link. // NOTE: onOrderDetailsPress does oObjectPageLayout.setSelectedSection(byId('orderDetailsSection')).` &&
-               ` sap.uxap.ObjectPageLayout.selectedSection is an ASSOCIATION, so it cannot be data-bound (app 263 precedent); the 'Order Details' header link is wired round-trip-free via follow_up_action(` &&
-               ` control_by_id, ObjectPageLayout / setSelectedSection / orderDetailsSection ) - the controlIdOrNull argument kind resolves the section id to the control, exactly like the original's byId lookup.`.
-    lv_text1 = lv_text1 && ` Re-verified 2026-08-23: still true. An association cannot be data-bound at all, which is a UI5 fact rather than an abap2UI5 limit, and the frontend action is the reproduction rather than a` &&
-               ` workaround. // NOTE: The two avatar image paths are kept exactly as the original writes them - './test-resources/sap/uxap/images/imageID_275314.png' - matching apps 261/401/402 on the same asset. //` &&
-               ` POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample is in scope via its entity): the snappedHeading avatar and the headerContent avatar (displaySize='L'), plus the` &&
-               ` QuickView page avatar in the fragment. Needs a UI5 runtime >= 1.73. // POST-1.71: the avatar aggregation of sap.m.QuickViewPage (since UI5 1.92) is newer than 1.71 but kept for the 1:1 port - the` &&
-               ` fragment fills it with an Avatar bound to {ICON} / {DISPLAYSHAPE} exactly like the original. The app needs UI5 >= 1.92 to show the page icons. // POST-1.71: showTitle on sap.uxap.ObjectPageSubSection` &&
-               ` (since UI5 1.77) is newer than 1.71 but kept for the 1:1 port - the Order Details subsection hides its duplicate title with showTitle='false'. Needs UI5 >= 1.77 for the title to be hidden. //`.
-    lv_text1 = lv_text1 && ` POST-1.71: the content aggregation of sap.m.Title (since UI5 1.87) is newer than 1.71 but kept for the 1:1 port - the 'Order Details', 'Status' and 'Average User Rating' header titles each hold an` &&
-               ` m:Link child, exactly like the original (invisible to the property gate: a default aggregation never appears as an XML attribute). Needs UI5 >= 1.87. // NOTE: Round-trip behaviour not verified in a` &&
-               ` running system: the TITLE_SELECTOR event with its $event.oSource.sId anchor and the popover_display of the QuickView fragment at the pressed link (including the pageLink navigation to` &&
-               ` companyEmployeePageId inside the popover), the follow_up_action setSelectedSection frontend action on the 'Order Details' link, and the two client toasts. **e2e-verified 2026-08-21** (nightly e2e` &&
-               ` interaction, meta/interactions/z2ui5_cl_smpc_app_412.mjs).`.
+    lv_text1 = `IMPROVISED: Block->content inlining (app 188/217/261/402 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold SharedBlocks` &&
+               ` BlockBase controls - goals:GoalsBlock, personal:BlockPhoneNumber / BlockSocial / BlockAdresses / BlockMailing / PersonalBlockPart1 / PersonalBlockPart2, employment:BlockJobInfoPart1 /` &&
+               ` BlockJobInfoPart2 / BlockJobInfoPart3 / BlockEmpDetailPart1 / BlockEmpDetailPart2 / BlockEmpDetailPart3. Each BlockBase is only a lazy-loading wrapper around a static view (a forms:SimpleForm with` &&
+               ` core:Title / m:Label / m:Text, or a layout:HorizontalLayout / layout:VerticalLayout tree), so every block view is inlined 1:1 into its aggregation. Absent as a result: the 13 BlockBase controls with` &&
+               ` their ids and their columnLayout / class='sapUxAPObjectPageSubSectionAlignContent' properties, plus the block views' own mvc:View roots with their width='100%'. Present in their place:` &&
+               ` forms:SimpleForm, core:Title and the additional m:Label / m:Text / layout:VerticalLayout / layout:HorizontalLayout the block views contain. Typed IMPROVISED since 2026-08-23. CAPABILITIES' own row`.
+    lv_text1 = lv_text1 && ` says "Declare the block→content substitution (IMPROVISED)", and the recipe's refinement is explicit that removing a control the original declares - even a zero-visual-output one - is a loss` &&
+               ` regardless of a pixel-identical render. 26 of the 31 sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined` &&
+               ` form falls back to automatic column assignment, and the block ids and view roots go with it. // NOTE: The QuickView fragment is rebuilt 1:1 and shown via client->popover_display( xml = ..., by_id =` &&
+               ` ... ) anchored at the pressed link: handleTitleSelectorPress on the 'Created By:' (Julie Armstrong) and 'Changed By:' (John Miller) links round-trips TITLE_SELECTOR transporting $event.oSource.sId,` &&
+               ` and the backend opens the fragment at that control - the original's Fragment.load + oQuickView.openBy(oButton) (app 100 precedent). Dropped with that rewiring: the navigate='.onNavigate' attribute on` &&
+               ` the QuickView - the sample's controller defines no onNavigate handler at all, so the wire is dead code upstream and a dead event wire is not ported. The pages aggregation is bound via client->_bind`.
+    lv_text1 = lv_text1 && ` (t_pages); the binding-info templateShareable: true is kept 1:1 on the relative groups / elements bindings and dropped on pages - each popover_display builds a fresh fragment, so no template outlives` &&
+               ` its binding. // NOTE: CompanyData.json is seeded verbatim (both /pages rows, all groups and elements). Elements without an elementType in the source JSON (the page-2 Address and Slogan rows) are` &&
+               ` filled with the QuickViewGroupElementType default 'text', and every element row seeds target '_blank' (the QuickViewGroupElement.target default) - absent JSON properties must not serialize as empty` &&
+               ` strings, which would override the UI5 defaults (app 099/100 precedent). The page-2 titleUrl stays the empty string, which is the QuickViewPage.titleUrl default. // NOTE: The controller's two` &&
+               ` constant-text MessageToast handlers are wired as round-trip-free client toasts (follow_up_action cs_event-control_global MESSAGE_TOAST show, app 005/401 idiom): onExternalApplicationLinkPress` &&
+               ` ('Navigate to external application.') on the 'Robotech (234242343)' and 'Average User Rating' links, and onAnotherPageLinkPress ('Navigate to another page in the same application (List of delivery`.
+    lv_text1 = lv_text1 && ` items)') on the 'Status' link. // NOTE: onOrderDetailsPress does oObjectPageLayout.setSelectedSection(byId('orderDetailsSection')). sap.uxap.ObjectPageLayout.selectedSection is an ASSOCIATION, so it` &&
+               ` cannot be data-bound (app 263 precedent); the 'Order Details' header link is wired round-trip-free via follow_up_action( control_by_id, ObjectPageLayout / setSelectedSection / orderDetailsSection ) -` &&
+               ` the controlIdOrNull argument kind resolves the section id to the control, exactly like the original's byId lookup. Re-verified 2026-08-23: still true. An association cannot be data-bound at all,` &&
+               ` which is a UI5 fact rather than an abap2UI5 limit, and the frontend action is the reproduction rather than a workaround. // NOTE: The two avatar image paths are kept exactly as the original writes` &&
+               ` them - './test-resources/sap/uxap/images/imageID_275314.png' - matching apps 261/401/402 on the same asset. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample is` &&
+               ` in scope via its entity): the snappedHeading avatar and the headerContent avatar (displaySize='L'), plus the QuickView page avatar in the fragment. Needs a UI5 runtime >= 1.73. // POST-1.71: the`.
+    lv_text1 = lv_text1 && ` avatar aggregation of sap.m.QuickViewPage (since UI5 1.92) is newer than 1.71 but kept for the 1:1 port - the fragment fills it with an Avatar bound to {ICON} / {DISPLAYSHAPE} exactly like the` &&
+               ` original. The app needs UI5 >= 1.92 to show the page icons. // POST-1.71: showTitle on sap.uxap.ObjectPageSubSection (since UI5 1.77) is newer than 1.71 but kept for the 1:1 port - the Order Details` &&
+               ` subsection hides its duplicate title with showTitle='false'. Needs UI5 >= 1.77 for the title to be hidden. // POST-1.71: the content aggregation of sap.m.Title (since UI5 1.87) is newer than 1.71 but` &&
+               ` kept for the 1:1 port - the 'Order Details', 'Status' and 'Average User Rating' header titles each hold an m:Link child, exactly like the original (invisible to the property gate: a default` &&
+               ` aggregation never appears as an XML attribute). Needs UI5 >= 1.87. // NOTE: Round-trip behaviour not verified in a running system: the TITLE_SELECTOR event with its $event.oSource.sId anchor and the` &&
+               ` popover_display of the QuickView fragment at the pressed link (including the pageLink navigation to companyEmployeePageId inside the popover), the follow_up_action setSelectedSection frontend action`.
+    lv_text1 = lv_text1 && ` on the 'Order Details' link, and the two client toasts. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_412.mjs).`.
     lv_text2 = `sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample is in scope via its entity): the snappedHeading avatar and the headerContent avatar (displaySize='L'), plus the QuickView page` &&
                ` avatar in the fragment. Needs a UI5 runtime >= 1.73. // the avatar aggregation of sap.m.QuickViewPage (since UI5 1.92) is newer than 1.71 but kept for the 1:1 port - the fragment fills it with an` &&
                ` Avatar bound to {ICON} / {DISPLAYSHAPE} exactly like the original. The app needs UI5 >= 1.92 to show the page icons. // showTitle on sap.uxap.ObjectPageSubSection (since UI5 1.77) is newer than 1.71` &&
@@ -10459,7 +10475,7 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.HeaderFacetPattern`           name = `ObjectPageWithLinksAndObjectStatus`            class = `z2ui5_cl_smpc_app_412` path = `src/02/03/z2ui5_cl_smpc_app_412.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         ui5_only = abap_true
         is_post171 = abap_true
@@ -10544,66 +10560,75 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = lv_text1
         post171 = lv_text2 ) ).
 
-    lv_text1 = `NOTE: Block->content inlining (app 217/188/178/161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'). The original blocks/moreBlocks aggregations each hold a custom` &&
-               ` BlockBase control from the sample's SharedBlocks JS: goals:GoalsBlock (id goalsblock), personal:BlockPhoneNumber (id phone), personal:BlockSocial (id social), personal:BlockAdresses (id adresses),` &&
-               ` personal:BlockMailing (id mailing, columnLayout=1), personal:PersonalBlockPart1 (id part1, columnLayout=1) and personal:PersonalBlockPart2 (id part2, columnLayout=1). A BlockBase is only a` &&
+    lv_text1 = `IMPROVISED: Block->content inlining (app 217/188/178/161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'). The original blocks/moreBlocks aggregations each hold a` &&
+               ` custom BlockBase control from the sample's SharedBlocks JS: goals:GoalsBlock (id goalsblock), personal:BlockPhoneNumber (id phone), personal:BlockSocial (id social), personal:BlockAdresses (id` &&
+               ` adresses), personal:BlockMailing (id mailing, columnLayout=1), personal:PersonalBlockPart1 (id part1, columnLayout=1) and personal:PersonalBlockPart2 (id part2, columnLayout=1). A BlockBase is only a` &&
                ` lazy-loading wrapper around a view, and ObjectPageSubSection.blocks/moreBlocks accept any sap.ui.core.Control, so each block's rendered content (a sap.ui.layout.form.SimpleForm) is inlined directly` &&
                ` here as a form:SimpleForm holding its core:Title, m:Label and m:Text children. Consequently all seven block controls (GoalsBlock, BlockPhoneNumber, BlockSocial, BlockAdresses, BlockMailing,` &&
                ` PersonalBlockPart1, PersonalBlockPart2) are absent from the port and seven form:SimpleForm controls with their core:Title (6), m:Label and m:Text content are present in their place (the m:Label count`.
     lv_text1 = lv_text1 && ` rises from 2 to 14, the m:Text count from 1 to 13); the goals/personal xmlns prefixes drop with the blocks. The blocks carry no controller behaviour to port; the ObjectPageModel (SharedJSONData` &&
-               ` employee.json) the controller loads is never bound by the view or the inlined blocks, so no default model is seeded. // NOTE: Asset URLs: the sample's host-relative image paths -` &&
-               ` ObjectPageHeader.objectImageURI 'test-resources/sap/uxap/images/imageID_273624.png' and the two m:Image src values './test-resources/sap/uxap/images/twitterIcon.png' /` &&
-               ` './test-resources/sap/uxap/images/linkedInIcon.png' - are rewritten to the absolute OpenUI5 host ('https://sdk.openui5.org/test-resources/...') per the offline asset-URL rule (app 200 precedent).` &&
-               ` Same assets, literal src values only - structural-diff compares attribute names, not literal values. // NOTE: handlePress (the 'Public Profile' ObjectPageHeaderActionButton press): the original` &&
-               ` controller calls setShowHeaderContent(!getShowHeaderContent()) on the ObjectPageLayout. showHeaderContent is a bindable property (default true, no @since tag = base version), so the port two-way`.
-    lv_text1 = lv_text1 && ` binds it (showHeaderContent={/SHOW_HEADER_CONTENT}, seeded abap_true) and the TOGGLE_HEADER_CONTENT event flips the flag server-side - the prefer-a-bindable-property rule; the attribute is added` &&
-               ` versus the original view (extra attributes are not flagged by structural-diff). // NOTE: Popover anchoring: handleMarkChangesPress opens the PopoverUnsavedChanges fragment via` &&
-               ` oPopoverChanges.openBy(oEvent.getParameter('domRef')) - the markChangesPress event's domRef parameter, the DOM element of the pressed unsaved-changes marker icon. The port opens the same` &&
-               ` core:FragmentDefinition/ResponsivePopover via client->popover_display( xml = ... by_id = ... ) anchored at the event source transported as $event.oSource.sId, i.e. the ObjectPageHeader control rather` &&
+               ` employee.json) the controller loads is never bound by the view or the inlined blocks, so no default model is seeded. Typed IMPROVISED since 2026-08-23. CAPABILITIES' own row says "Declare the` &&
+               ` block→content substitution (IMPROVISED)", and the recipe's refinement is explicit that removing a control the original declares - even a zero-visual-output one - is a loss regardless of a` &&
+               ` pixel-identical render. 26 of the 31 sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to` &&
+               ` automatic column assignment, and the block ids and view roots go with it. // NOTE: Asset URLs: the sample's host-relative image paths - ObjectPageHeader.objectImageURI` &&
+               ` 'test-resources/sap/uxap/images/imageID_273624.png' and the two m:Image src values './test-resources/sap/uxap/images/twitterIcon.png' / './test-resources/sap/uxap/images/linkedInIcon.png' - are`.
+    lv_text1 = lv_text1 && ` rewritten to the absolute OpenUI5 host ('https://sdk.openui5.org/test-resources/...') per the offline asset-URL rule (app 200 precedent). Same assets, literal src values only - structural-diff` &&
+               ` compares attribute names, not literal values. // NOTE: handlePress (the 'Public Profile' ObjectPageHeaderActionButton press): the original controller calls` &&
+               ` setShowHeaderContent(!getShowHeaderContent()) on the ObjectPageLayout. showHeaderContent is a bindable property (default true, no @since tag = base version), so the port two-way binds it` &&
+               ` (showHeaderContent={/SHOW_HEADER_CONTENT}, seeded abap_true) and the TOGGLE_HEADER_CONTENT event flips the flag server-side - the prefer-a-bindable-property rule; the attribute is added versus the` &&
+               ` original view (extra attributes are not flagged by structural-diff). // NOTE: Popover anchoring: handleMarkChangesPress opens the PopoverUnsavedChanges fragment via` &&
+               ` oPopoverChanges.openBy(oEvent.getParameter('domRef')) - the markChangesPress event's domRef parameter, the DOM element of the pressed unsaved-changes marker icon. The port opens the same`.
+    lv_text1 = lv_text1 && ` core:FragmentDefinition/ResponsivePopover via client->popover_display( xml = ... by_id = ... ) anchored at the event source transported as $event.oSource.sId, i.e. the ObjectPageHeader control rather` &&
                ` than the marker icon's DOM node - the popover placement (Bottom) is preserved, only the exact anchor element differs. The controller's oPopoverChanges.setModel(oEvent.getSource().getModel()) folds` &&
-               ` away: abap2UI5 serves one default model and the fragment binds nothing. // NOTE: Round-trip behaviour unverified in a running system: the MARK_CHANGES_PRESS wire (markChangesPress -> popover_display`.
-    lv_text1 = lv_text1 && ` of the ResponsivePopover anchored by $event.oSource.sId) and the TOGGLE_HEADER_CONTENT wire (press -> xsdbool flip of the two-way bound showHeaderContent) have not been live-tested. **e2e-verified` &&
+               ` away: abap2UI5 serves one default model and the fragment binds nothing. // NOTE: Round-trip behaviour unverified in a running system: the MARK_CHANGES_PRESS wire (markChangesPress -> popover_display` &&
+               ` of the ResponsivePopover anchored by $event.oSource.sId) and the TOGGLE_HEADER_CONTENT wire (press -> xsdbool flip of the two-way bound showHeaderContent) have not been live-tested. **e2e-verified` &&
                ` 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_414.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeader`             name = `AlternativeProfileObjectPageHeader`            class = `z2ui5_cl_smpc_app_414` path = `src/01/03/z2ui5_cl_smpc_app_414.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
         notes = lv_text1 ) ).
 
-    lv_text1 = `NOTE: Block->content inlining (app 217/401/402 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'). The original blocks/moreBlocks aggregations each hold a custom` &&
+    lv_text1 = `IMPROVISED: Block->content inlining (app 217/401/402 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'). The original blocks/moreBlocks aggregations each hold a custom` &&
                ` BlockBase control from the sample's SharedBlocks JS: goals:GoalsBlock (id goalsblock), personal:BlockPhoneNumber (id phone), personal:BlockSocial (id social), personal:BlockAdresses (id adresses),` &&
                ` personal:BlockMailing (id mailing, columnLayout=1), personal:PersonalBlockPart1 (id part1, columnLayout=1) and personal:PersonalBlockPart2 (id part2, columnLayout=1). A BlockBase is only a` &&
                ` lazy-loading wrapper around a view, and ObjectPageSubSection.blocks/moreBlocks accept any sap.ui.core.Control, so each block's rendered content (a sap.ui.layout.form.SimpleForm) is inlined directly` &&
                ` here as a form:SimpleForm holding its core:Title, m:Label and m:Text children. Consequently all seven block controls (GoalsBlock, BlockPhoneNumber, BlockSocial, BlockAdresses, BlockMailing,` &&
                ` PersonalBlockPart1, PersonalBlockPart2) are absent from the port and seven form:SimpleForm controls with their core:Title, m:Label and m:Text content are present in their place. The blocks carry no`.
-    lv_text1 = lv_text1 && ` controller behaviour to port; the ObjectPageModel (employee.json) and the default products.json model the controller loads are never bound by the view, so neither is seeded. // NOTE: The controller's` &&
-               ` named 'buttons' JSONModel ({ text: 'working binding', icon: 'sap-icon://chain-link' }) is folded onto the one default model root (same-data prefix-drop): the fifth ObjectPageHeaderActionButton's` &&
-               ` text='{buttons>/text}' becomes the bound root field {/TEXT} seeded 'working binding', the sixth button's icon='{buttons>/icon}' becomes {/ICON} seeded 'sap-icon://chain-link' - same values, same leaf` &&
-               ` names, identical render. The sixth button's composite text binding {path:'/text', model:'buttons', formatter:'.onFormat'} runs the controller formatter .onFormat, which ignores its input and returns` &&
-               ` the constant 'formatted link'; per the thin-frontend rule that result is computed in model_init and bound as {/FORMATTED_TEXT} (apps 009/010/022/092 formatter precedent). // NOTE: The` &&
-               ` ObjectPageHeader objectImageURI points at the sdk.openui5.org host (https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png) per the offline asset-URL rule; the original uses the`.
-    lv_text1 = lv_text1 && ` relative ./test-resources path (apps 244/262/263 carry the same absolutization for the same image). Literal attribute values are not compared by structural-diff. // NOTE: Unverified in a running` &&
-               ` system: the breadcrumb m:Link press round-trip (event LINK2_PRESS) - the controller's handleLink2Press constant-text MessageToast is served via client->message_toast_display( 'Page 2 long link` &&
-               ` clicked' ) from on_event. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_416.mjs).`.
+    lv_text1 = lv_text1 && ` controller behaviour to port; the ObjectPageModel (employee.json) and the default products.json model the controller loads are never bound by the view, so neither is seeded. Typed IMPROVISED since` &&
+               ` 2026-08-23. CAPABILITIES' own row says "Declare the block→content substitution (IMPROVISED)", and the recipe's refinement is explicit that removing a control the original declares - even a` &&
+               ` zero-visual-output one - is a loss regardless of a pixel-identical render. 26 of the 31 sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real` &&
+               ` BlockBase instance, so an inlined form falls back to automatic column assignment, and the block ids and view roots go with it. // NOTE: The controller's named 'buttons' JSONModel ({ text: 'working` &&
+               ` binding', icon: 'sap-icon://chain-link' }) is folded onto the one default model root (same-data prefix-drop): the fifth ObjectPageHeaderActionButton's text='{buttons>/text}' becomes the bound root` &&
+               ` field {/TEXT} seeded 'working binding', the sixth button's icon='{buttons>/icon}' becomes {/ICON} seeded 'sap-icon://chain-link' - same values, same leaf names, identical render. The sixth button's`.
+    lv_text1 = lv_text1 && ` composite text binding {path:'/text', model:'buttons', formatter:'.onFormat'} runs the controller formatter .onFormat, which ignores its input and returns the constant 'formatted link'; per the` &&
+               ` thin-frontend rule that result is computed in model_init and bound as {/FORMATTED_TEXT} (apps 009/010/022/092 formatter precedent). // NOTE: The ObjectPageHeader objectImageURI points at the` &&
+               ` sdk.openui5.org host (https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png) per the offline asset-URL rule; the original uses the relative ./test-resources path (apps 244/262/263` &&
+               ` carry the same absolutization for the same image). Literal attribute values are not compared by structural-diff. // NOTE: Unverified in a running system: the breadcrumb m:Link press round-trip (event` &&
+               ` LINK2_PRESS) - the controller's handleLink2Press constant-text MessageToast is served via client->message_toast_display( 'Page 2 long link clicked' ) from on_event. **e2e-verified 2026-08-21**` &&
+               ` (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_416.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeader`             name = `ChildObjectPage`                               class = `z2ui5_cl_smpc_app_416` path = `src/01/03/z2ui5_cl_smpc_app_416.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
         notes = lv_text1 ) ).
 
-    lv_text1 = `NOTE: Block->content inlining (app 188/178/161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'). The original blocks/moreBlocks aggregations each hold a custom` &&
+    lv_text1 = `IMPROVISED: Block->content inlining (app 188/178/161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'). The original blocks/moreBlocks aggregations each hold a custom` &&
                ` BlockBase control from the sample's SharedBlocks JS: goals:GoalsBlock (id goalsblock), personal:BlockPhoneNumber (id phone), personal:BlockSocial (id social), personal:BlockAdresses (id adresses),` &&
                ` personal:BlockMailing (id mailing, columnLayout=1), personal:PersonalBlockPart1 (id part1, columnLayout=1) and personal:PersonalBlockPart2 (id part2, columnLayout=1). A BlockBase is only a` &&
                ` lazy-loading wrapper around a view, and ObjectPageSubSection.blocks/moreBlocks accept any sap.ui.core.Control, so each block's rendered content (a sap.ui.layout.form.SimpleForm) is inlined directly` &&
                ` here as a form:SimpleForm holding its core:Title, m:Label and m:Text children. Consequently all seven block controls (GoalsBlock, BlockPhoneNumber, BlockSocial, BlockAdresses, BlockMailing,` &&
                ` PersonalBlockPart1, PersonalBlockPart2) are absent from the port and seven form:SimpleForm controls with their core:Title, m:Label and m:Text content are present in their place (the m:Label count`.
-    lv_text1 = lv_text1 && ` rises from 3 to 15). The blocks carry no controller behaviour to port; the ObjectPageModel (employee.json) the controller loads is never bound by the view, so no default model is seeded.`.
+    lv_text1 = lv_text1 && ` rises from 3 to 15). The blocks carry no controller behaviour to port; the ObjectPageModel (employee.json) the controller loads is never bound by the view, so no default model is seeded. Typed` &&
+               ` IMPROVISED since 2026-08-23. CAPABILITIES' own row says "Declare the block→content substitution (IMPROVISED)", and the recipe's refinement is explicit that removing a control the original declares -` &&
+               ` even a zero-visual-output one - is a loss regardless of a pixel-identical render. 26 of the 31 sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a` &&
+               ` real BlockBase instance, so an inlined form falls back to automatic column assignment, and the block ids and view roots go with it.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeader`             name = `KPIObjectPageHeader`                           class = `z2ui5_cl_smpc_app_217` path = `src/01/03/z2ui5_cl_smpc_app_217.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
         notes = lv_text1 ) ).
 
@@ -10630,55 +10655,60 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.26`
         notes = lv_text1 ) ).
 
-    lv_text1 = `NOTE: Block->content inlining (app 217/188/161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'). The original blocks/moreBlocks aggregations each hold a custom` &&
+    lv_text1 = `IMPROVISED: Block->content inlining (app 217/188/161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'). The original blocks/moreBlocks aggregations each hold a custom` &&
                ` BlockBase control from the sample's SharedBlocks JS: goals:GoalsBlock (id goalsblock), personal:BlockPhoneNumber (id phone), personal:BlockSocial (id social), personal:BlockAdresses (id adresses),` &&
                ` personal:BlockMailing (id mailing, columnLayout=1), personal:PersonalBlockPart1 (id part1, columnLayout=1) and personal:PersonalBlockPart2 (id part2, columnLayout=1). A BlockBase is only a` &&
                ` lazy-loading wrapper around a view, and ObjectPageSubSection.blocks/moreBlocks accept any sap.ui.core.Control, so each block's rendered content (a sap.ui.layout.form.SimpleForm) is inlined directly` &&
                ` here as a form:SimpleForm holding its core:Title, m:Label and m:Text children. Consequently all seven block controls (GoalsBlock, BlockPhoneNumber, BlockSocial, BlockAdresses, BlockMailing,` &&
                ` PersonalBlockPart1, PersonalBlockPart2) and their columnLayout attribute are absent from the port and seven form:SimpleForm controls with their core:Title, m:Label and m:Text content are present in`.
     lv_text1 = lv_text1 && ` their place (the m:Label count rises from 4 to 16, the m:Text count from 1 to 13). The ObjectPageModel (SharedJSONData/employee.json) the controller loads is never bound by the view or the inlined` &&
-               ` blocks, so it is not reproduced. // NOTE: Named-model fold, pure prefix-drop rendering identically: the controller's inline 'buttons' JSONModel ({text: 'working binding', icon:` &&
-               ` 'sap-icon://chain-link'}) is flattened into the one default model - the fifth ObjectPageHeaderActionButton's text='{buttons>/text}' becomes the root binding {/TEXT} (value 'working binding') and the` &&
-               ` sixth one's icon='{buttons>/icon}' becomes {/ICON} (value 'sap-icon://chain-link'). The sixth button's text binding-info {path:'/text', model:'buttons', formatter:'.onFormat'} goes through the` &&
-               ` controller formatter .onFormat, which returns the constant 'formatted link' regardless of input; per the thin-frontend rule that result is computed in model_init and bound as {/FORMATTED_TEXT}. The` &&
-               ` controller's third model (SharedJSONData/products.json as the OneWay default model) is seeded verbatim as the productcollection table for the Popover fragment's List. // NOTE: Popover anchoring: the`.
-    lv_text1 = lv_text1 && ` original controller opens each ResponsivePopover fragment with oPopover.openBy(oEvent.getParameter('domRef')) - the DOM element of the pressed title-arrow (titleSelectorPress) resp. lock marker` &&
-               ` (markLockedPress) inside the ObjectPageHeader. abap2UI5's popover_display anchors by control id, so both wires transport the event source's control id via $event.oSource.sId and the popovers open by` &&
-               ` the ObjectPageHeader control (id headerForTest) instead of the exact icon DOM element - same placement='Bottom', slightly coarser anchor. The fragments themselves (Popover.fragment.xml,` &&
-               ` PopoverLock.fragment.xml) are rebuilt 1:1 as core:FragmentDefinition chains shown via popover_display. // NOTE: Round-trip behaviour unverified in a running system: the two anchored ResponsivePopover` &&
-               ` opens (TITLE_SELECTOR via titleSelectorPress, MARK_LOCKED via markLockedPress, both anchored at $event.oSource.sId), the ITEM_SELECT selectionChange round-trip that closes the popover via` &&
-               ` follow_up_action popover_close (the INTENT of handleItemSelect (selecting an item closes the popover). Not literally 1:1: the original's handler reads this._oPopover, which its controller never`.
-    lv_text1 = lv_text1 && ` assigns - it only ever sets _oPopoverPromise and _oPopoverLock - so upstream the handler throws a TypeError and the popover stays open. The port's behaviour is the intended one; the word '1:1' was` &&
-               ` wrong and is corrected 2026-08-21), and the LINK1/LINK2 breadcrumb Link press toasts ('Page 1 a very long link clicked' / 'Page 2 long link clicked'). **e2e-verified 2026-08-21** (nightly e2e` &&
-               ` interaction, meta/interactions/z2ui5_cl_smpc_app_415.mjs). // NOTE: The header's objectImageURI is re-hosted: the view carries the demo-kit-relative` &&
-               ` './test-resources/sap/uxap/images/imageID_275314.png', which an abap2UI5 app has no document root to resolve against, so the port serves it from` &&
-               ` https://sdk.openui5.org/test-resources/sap/uxap/images/. The sibling ports 413 and 417 declare exactly this and 415 did not - only an inline comment recorded it, and data-fidelity tolerates the` &&
-               ` absolutization, so nothing else would have said so. Added 2026-08-21.`.
+               ` blocks, so it is not reproduced. Typed IMPROVISED since 2026-08-23. CAPABILITIES' own row says "Declare the block→content substitution (IMPROVISED)", and the recipe's refinement is explicit that` &&
+               ` removing a control the original declares - even a zero-visual-output one - is a loss regardless of a pixel-identical render. 26 of the 31 sidecars citing that row carried NOTE, which hid a measurable` &&
+               ` loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column assignment, and the block ids and view roots go with it. // NOTE: Named-model` &&
+               ` fold, pure prefix-drop rendering identically: the controller's inline 'buttons' JSONModel ({text: 'working binding', icon: 'sap-icon://chain-link'}) is flattened into the one default model - the` &&
+               ` fifth ObjectPageHeaderActionButton's text='{buttons>/text}' becomes the root binding {/TEXT} (value 'working binding') and the sixth one's icon='{buttons>/icon}' becomes {/ICON} (value`.
+    lv_text1 = lv_text1 && ` 'sap-icon://chain-link'). The sixth button's text binding-info {path:'/text', model:'buttons', formatter:'.onFormat'} goes through the controller formatter .onFormat, which returns the constant` &&
+               ` 'formatted link' regardless of input; per the thin-frontend rule that result is computed in model_init and bound as {/FORMATTED_TEXT}. The controller's third model (SharedJSONData/products.json as` &&
+               ` the OneWay default model) is seeded verbatim as the productcollection table for the Popover fragment's List. // NOTE: Popover anchoring: the original controller opens each ResponsivePopover fragment` &&
+               ` with oPopover.openBy(oEvent.getParameter('domRef')) - the DOM element of the pressed title-arrow (titleSelectorPress) resp. lock marker (markLockedPress) inside the ObjectPageHeader. abap2UI5's` &&
+               ` popover_display anchors by control id, so both wires transport the event source's control id via $event.oSource.sId and the popovers open by the ObjectPageHeader control (id headerForTest) instead of` &&
+               ` the exact icon DOM element - same placement='Bottom', slightly coarser anchor. The fragments themselves (Popover.fragment.xml, PopoverLock.fragment.xml) are rebuilt 1:1 as core:FragmentDefinition`.
+    lv_text1 = lv_text1 && ` chains shown via popover_display. // NOTE: Round-trip behaviour unverified in a running system: the two anchored ResponsivePopover opens (TITLE_SELECTOR via titleSelectorPress, MARK_LOCKED via` &&
+               ` markLockedPress, both anchored at $event.oSource.sId), the ITEM_SELECT selectionChange round-trip that closes the popover via follow_up_action popover_close (the INTENT of handleItemSelect (selecting` &&
+               ` an item closes the popover). Not literally 1:1: the original's handler reads this._oPopover, which its controller never assigns - it only ever sets _oPopoverPromise and _oPopoverLock - so upstream` &&
+               ` the handler throws a TypeError and the popover stays open. The port's behaviour is the intended one; the word '1:1' was wrong and is corrected 2026-08-21), and the LINK1/LINK2 breadcrumb Link press` &&
+               ` toasts ('Page 1 a very long link clicked' / 'Page 2 long link clicked'). **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_415.mjs). // NOTE: The header's` &&
+               ` objectImageURI is re-hosted: the view carries the demo-kit-relative './test-resources/sap/uxap/images/imageID_275314.png', which an abap2UI5 app has no document root to resolve against, so the port`.
+    lv_text1 = lv_text1 && ` serves it from https://sdk.openui5.org/test-resources/sap/uxap/images/. The sibling ports 413 and 417 declare exactly this and 415 did not - only an inline comment recorded it, and data-fidelity` &&
+               ` tolerates the absolutization, so nothing else would have said so. Added 2026-08-21.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeader`             name = `ObjectPageHeaderWithAllControls`               class = `z2ui5_cl_smpc_app_415` path = `src/01/03/z2ui5_cl_smpc_app_415.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         since = `1.26`
         notes = lv_text1 ) ).
 
-    lv_text1 = `NOTE: Block->content inlining (app 217/188/161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'). The original blocks/moreBlocks aggregations each hold a custom` &&
+    lv_text1 = `IMPROVISED: Block->content inlining (app 217/188/161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'). The original blocks/moreBlocks aggregations each hold a custom` &&
                ` BlockBase control from the sample's SharedBlocks JS: goals:GoalsBlock (id goalsblock), personal:BlockPhoneNumber (id phone), personal:BlockSocial (id social), personal:BlockAdresses (id adresses),` &&
                ` personal:BlockMailing (id mailing, columnLayout=1), personal:PersonalBlockPart1 (id part1, columnLayout=1) and personal:PersonalBlockPart2 (id part2, columnLayout=1). A BlockBase is only a` &&
                ` lazy-loading wrapper around a view, and ObjectPageSubSection.blocks/moreBlocks accept any sap.ui.core.Control, so each block's rendered content (a sap.ui.layout.form.SimpleForm) is inlined directly` &&
                ` here as a form:SimpleForm holding its core:Title, m:Label and m:Text children. Consequently all seven block controls (GoalsBlock, BlockPhoneNumber, BlockSocial, BlockAdresses, BlockMailing,` &&
                ` PersonalBlockPart1, PersonalBlockPart2) are absent from the port and seven form:SimpleForm controls with their core:Title, m:Label and m:Text content are present in their place. The blocks carry no`.
     lv_text1 = lv_text1 && ` controller behaviour to port; the named ObjectPageModel (SharedJSONData/employee.json) the controller loads is never bound by the view or the blocks, so no default model is seeded and the port is` &&
-               ` init-only (no model_init, no on_event). // NOTE: The three social-icon image assets (linkedInIcon.png, facebookIcon.png, twitterIcon.png) use the sample's relative` &&
-               ` './test-resources/sap/uxap/images/...' src paths; rewritten to the absolute sdk.openui5.org host ('https://sdk.openui5.org/test-resources/sap/uxap/images/linkedInIcon.png' etc.) per the offline` &&
-               ` asset-URL rule (app 200/262 precedent). Same assets, literal src values only - structural-diff compares literal attribute names, not values. // NOTE: Rendering not yet verified in a running system:` &&
-               ` the port is init-only and fully static (no bindings, no events, no round-trip), so the open behaviours are render-time only - the ObjectPageHeader navigationBar Bar, the showPlaceholder=true Circle` &&
-               ` placeholder avatar (no objectImageURI is set), showTitleInHeaderContent=true and the always/snapped visibility flags (isObjectTitleAlwaysVisible/isObjectSubtitleAlwaysVisible=false,`.
-    lv_text1 = lv_text1 && ` isActionAreaAlwaysVisible=true) are unverified live. **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_413.mjs).`.
+               ` init-only (no model_init, no on_event). Typed IMPROVISED since 2026-08-23. CAPABILITIES' own row says "Declare the block→content substitution (IMPROVISED)", and the recipe's refinement is explicit` &&
+               ` that removing a control the original declares - even a zero-visual-output one - is a loss regardless of a pixel-identical render. 26 of the 31 sidecars citing that row carried NOTE, which hid a` &&
+               ` measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column assignment, and the block ids and view roots go with it. // NOTE: The` &&
+               ` three social-icon image assets (linkedInIcon.png, facebookIcon.png, twitterIcon.png) use the sample's relative './test-resources/sap/uxap/images/...' src paths; rewritten to the absolute` &&
+               ` sdk.openui5.org host ('https://sdk.openui5.org/test-resources/sap/uxap/images/linkedInIcon.png' etc.) per the offline asset-URL rule (app 200/262 precedent). Same assets, literal src values only -`.
+    lv_text1 = lv_text1 && ` structural-diff compares literal attribute names, not values. // NOTE: Rendering not yet verified in a running system: the port is init-only and fully static (no bindings, no events, no round-trip),` &&
+               ` so the open behaviours are render-time only - the ObjectPageHeader navigationBar Bar, the showPlaceholder=true Circle placeholder avatar (no objectImageURI is set), showTitleInHeaderContent=true and` &&
+               ` the always/snapped visibility flags (isObjectTitleAlwaysVisible/isObjectSubtitleAlwaysVisible=false, isActionAreaAlwaysVisible=true) are unverified live. **e2e-verified 2026-08-16** (nightly e2e` &&
+               ` interaction, meta/interactions/z2ui5_cl_smpc_app_413.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeader`             name = `ProfileObjectPageHeader`                       class = `z2ui5_cl_smpc_app_413` path = `src/01/03/z2ui5_cl_smpc_app_413.clas.abap`
-        score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
         notes = lv_text1 ) ).
 
@@ -10712,79 +10742,90 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` ObjectPageHeaderContent view.xml. The sample's controller loads sap/uxap/sample/SharedJSONData/employee.json into a named 'ObjectPageModel', but the view never binds a single field from it (all` &&
                  ` header content is hard-coded in the XML), so the port carries no model_init - omitting a dead model changes nothing in the rendered view.` ) ).
 
-    lv_text1 = `NOTE: Block->content inlining (app 178/161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the original blocks aggregations each hold a custom BlockBase control` &&
-               ` goals:GoalsBlock (from the sample's SharedBlocks JS, xmlns:goals='sap.uxap.sample.SharedBlocks.goals'), used 4 times in the four ObjectPageSubSection blocks aggregations. A BlockBase is only a` &&
-               ` lazy-loading wrapper around a view; GoalsBlock's rendered content is a sap.ui.layout.form.SimpleForm (editable='false' layout='ColumnLayout') holding three Label/Text goal pairs. Since` &&
+    lv_text1 = `IMPROVISED: Block->content inlining (app 178/161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the original blocks aggregations each hold a custom BlockBase` &&
+               ` control goals:GoalsBlock (from the sample's SharedBlocks JS, xmlns:goals='sap.uxap.sample.SharedBlocks.goals'), used 4 times in the four ObjectPageSubSection blocks aggregations. A BlockBase is only` &&
+               ` a lazy-loading wrapper around a view; GoalsBlock's rendered content is a sap.ui.layout.form.SimpleForm (editable='false' layout='ColumnLayout') holding three Label/Text goal pairs. Since` &&
                ` ObjectPageSubSection.blocks accepts any sap.ui.core.Control, each goals:GoalsBlock is inlined here as that SimpleForm (form:SimpleForm) with its m:Label/m:Text content - the whole ObjectPage renders` &&
                ` with the thin generic frontend, no custom JS control. Consequently all four goals:GoalsBlock controls are absent from the port and four form:SimpleForm controls (with their Label/Text children) are` &&
-               ` present in their place. GoalsBlock has no controller behaviour to port. // POST-1.71: the sap.m.Avatar control (since UI5 1.73) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5`.
-    lv_text1 = lv_text1 && ` release >= 1.73 to render it. @since verified in sap/m/Avatar.js:99 (control-level, which the member-level property gate never saw).`.
+               ` present in their place. GoalsBlock has no controller behaviour to port. Typed IMPROVISED since 2026-08-23. CAPABILITIES' own row says "Declare the block→content substitution (IMPROVISED)", and the`.
+    lv_text1 = lv_text1 && ` recipe's refinement is explicit that removing a control the original declares - even a zero-visual-output one - is a loss regardless of a pixel-identical render. 26 of the 31 sidecars citing that row` &&
+               ` carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column assignment, and the block ids and view roots` &&
+               ` go with it. // POST-1.71: the sap.m.Avatar control (since UI5 1.73) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.73 to render it. @since verified in` &&
+               ` sap/m/Avatar.js:99 (control-level, which the member-level property gate never saw).`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeaderContent`      name = `ObjectPageHeaderContentPriorities`             class = `z2ui5_cl_smpc_app_188` path = `src/02/03/z2ui5_cl_smpc_app_188.clas.abap`
-        score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30`
         is_post171 = abap_true
         notes = lv_text1
         post171 = `the sap.m.Avatar control (since UI5 1.73) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.73 to render it. @since verified in sap/m/Avatar.js:99 (control-level, which` &&
                  ` the member-level property gate never saw).` ) ).
 
-    lv_text1 = `NOTE: Block->content inlining (app 217/401/402/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'). All fifteen blocks aggregations hold one sample:mySimpleBlock each` &&
-               ` - a BlockBase wrapper whose only job is to lazy-load the static view/blocks/mySimpleBlock.view.xml. That view is a forms:SimpleForm (maxContainerCols 2, ResponsiveGridLayout, editable false) with a` &&
-               ` Label 'Content' and a Text 'some content goes here...', and it is inlined into each of the fifteen. That is the whole missing/extra pairing: forms:SimpleForm 2 vs 15, Label / Text 2 vs 0 against` &&
-               ` m:Label / m:Text 0 vs 15 - the block view defaults to xmlns="sap.m" while the port's one view defaults to sap.uxap, so the same controls carry a prefix, and the archived-once template is emitted` &&
-               ` fifteen times. // NOTE: view/blocks/myBlock.view.xml is DEAD in this sample: AnchorBar.view.xml references only sample:mySimpleBlock, never sample:myBlock. Its core:Title 'my Block' is the whole` &&
-               ` core:Title 1 vs 0 line, and its own Label / Text are one of the two counted pairs. Nothing was dropped from the rendered page. // NOTE: mySimpleBlock.view.xml wraps its SimpleForm in an <html:div`.
-    lv_text1 = lv_text1 && ` style="font-size: 0.875rem;"> from the XHTML namespace. abap2UI5 serves sap.* controls, not raw XHTML, so the wrapper and its inline font-size go; the form itself renders identically. Each block view` &&
-               ` also carries width="100%" on its own mvc:View root (the View.width line) - the port has one view, and its root carries the sample's height="100%" instead. // NOTE: the sample's subject is what the` &&
-               ` anchor bar does with FIFTEEN sections: section 2 has no subsection at all (an anchor without a target), sections 1 has two, and nine of the fifteen give their single subsection the title " " - a` &&
-               ` single space, which is what keeps the subsection title row empty while the anchor still reads 'Section n'. All of that is carried literally, trailing blanks included ('Subsection 1.1 ', 'Subsection` &&
-               ` 4.1 '), because it is the point. Only the first seven sections and their subsections carry ids in the original; so do they here. // NOTE: the fifteen BlockBase ids (bbt1..bbt5, b1..b10) have no` &&
-               ` counterpart: they identify the wrapper control the port inlines away, and nothing in the sample addresses them.`.
+    lv_text1 = `IMPROVISED: Block->content inlining (app 217/401/402/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'). All fifteen blocks aggregations hold one` &&
+               ` sample:mySimpleBlock each - a BlockBase wrapper whose only job is to lazy-load the static view/blocks/mySimpleBlock.view.xml. That view is a forms:SimpleForm (maxContainerCols 2,` &&
+               ` ResponsiveGridLayout, editable false) with a Label 'Content' and a Text 'some content goes here...', and it is inlined into each of the fifteen. That is the whole missing/extra pairing:` &&
+               ` forms:SimpleForm 2 vs 15, Label / Text 2 vs 0 against m:Label / m:Text 0 vs 15 - the block view defaults to xmlns="sap.m" while the port's one view defaults to sap.uxap, so the same controls carry a` &&
+               ` prefix, and the archived-once template is emitted fifteen times. Typed IMPROVISED since 2026-08-23. CAPABILITIES' own row says "Declare the block→content substitution (IMPROVISED)", and the recipe's` &&
+               ` refinement is explicit that removing a control the original declares - even a zero-visual-output one - is a loss regardless of a pixel-identical render. 26 of the 31 sidecars citing that row carried`.
+    lv_text1 = lv_text1 && ` NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column assignment, and the block ids and view roots go with` &&
+               ` it. // NOTE: view/blocks/myBlock.view.xml is DEAD in this sample: AnchorBar.view.xml references only sample:mySimpleBlock, never sample:myBlock. Its core:Title 'my Block' is the whole core:Title 1 vs` &&
+               ` 0 line, and its own Label / Text are one of the two counted pairs. Nothing was dropped from the rendered page. // NOTE: mySimpleBlock.view.xml wraps its SimpleForm in an <html:div style="font-size:` &&
+               ` 0.875rem;"> from the XHTML namespace. abap2UI5 serves sap.* controls, not raw XHTML, so the wrapper and its inline font-size go; the form itself renders identically. Each block view also carries` &&
+               ` width="100%" on its own mvc:View root (the View.width line) - the port has one view, and its root carries the sample's height="100%" instead. // NOTE: the sample's subject is what the anchor bar does`.
+    lv_text1 = lv_text1 && ` with FIFTEEN sections: section 2 has no subsection at all (an anchor without a target), sections 1 has two, and nine of the fifteen give their single subsection the title " " - a single space, which` &&
+               ` is what keeps the subsection title row empty while the anchor still reads 'Section n'. All of that is carried literally, trailing blanks included ('Subsection 1.1 ', 'Subsection 4.1 '), because it is` &&
+               ` the point. Only the first seven sections and their subsections carry ids in the original; so do they here. // NOTE: the fifteen BlockBase ids (bbt1..bbt5, b1..b10) have no counterpart: they identify` &&
+               ` the wrapper control the port inlines away, and nothing in the sample addresses them.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `AnchorBar`                                     class = `z2ui5_cl_smpc_app_586` path = `src/01/03/z2ui5_cl_smpc_app_586.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
         notes = lv_text1 ) ).
 
-    lv_text1 = `NOTE: Block->content inlining (app 178/161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the original blocks aggregations each hold a custom BlockBase control` &&
-               ` blockcolor:BlockBlue (from the sample's SharedBlocks JS, xmlns:blockcolor='sap.uxap.sample.SharedBlocks'), used 4 times with the id attributes bbt1/bbt2/bbt3/bbt4. A BlockBase is only a lazy-loading` &&
-               ` wrapper around a view; BlockBlue's rendered content is a single coloured div (<html:div style='height:4em; background-color: #A9EAFF ;'/>). Since ObjectPageSubSection.blocks accepts any` &&
+    lv_text1 = `IMPROVISED: Block->content inlining (app 178/161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the original blocks aggregations each hold a custom BlockBase` &&
+               ` control blockcolor:BlockBlue (from the sample's SharedBlocks JS, xmlns:blockcolor='sap.uxap.sample.SharedBlocks'), used 4 times with the id attributes bbt1/bbt2/bbt3/bbt4. A BlockBase is only a` &&
+               ` lazy-loading wrapper around a view; BlockBlue's rendered content is a single coloured div (<html:div style='height:4em; background-color: #A9EAFF ;'/>). Since ObjectPageSubSection.blocks accepts any` &&
                ` sap.ui.core.Control, each blockcolor:BlockBlue is inlined as a core:HTML leaf carrying that div in its content attribute - the whole ObjectPage renders with the thin generic frontend, no custom JS` &&
                ` control. Consequently all four blockcolor:BlockBlue controls (and their id attributes bbt1/bbt2/bbt3/bbt4) are absent from the port and four core:HTML controls are present in their place. The empty` &&
-               ` BlockBlueCtrl controller (a no-op onParentBlockModeChange stub) carries no behaviour to port.`.
+               ` BlockBlueCtrl controller (a no-op onParentBlockModeChange stub) carries no behaviour to port. Typed IMPROVISED since 2026-08-23. CAPABILITIES' own row says "Declare the block→content substitution`.
+    lv_text1 = lv_text1 && ` (IMPROVISED)", and the recipe's refinement is explicit that removing a control the original declares - even a zero-visual-output one - is a loss regardless of a pixel-identical render. 26 of the 31` &&
+               ` sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column assignment, and the` &&
+               ` block ids and view roots go with it.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `AnchorBarNoPopover`                            class = `z2ui5_cl_smpc_app_187` path = `src/01/03/z2ui5_cl_smpc_app_187.clas.abap`
-        score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
         notes = lv_text1 ) ).
 
-    lv_text1 = `NOTE: Block->content inlining (app 401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold the SAME fourteen SharedBlocks` &&
-               ` BlockBase controls app 401 carries - goals:GoalsBlock, personal:BlockAdresses / BlockPhoneNumber / BlockSocial / BlockMailing / PersonalBlockPart1 / PersonalBlockPart2, employment:BlockJobInfoPart1 /` &&
-               ` BlockJobInfoPart2 / BlockJobInfoPart3 / BlockEmpDetailPart1 / BlockEmpDetailPart2 / BlockEmpDetailPart3 / EmploymentBlockJob. Each is only a lazy-loading wrapper around a static view (a` &&
-               ` forms:SimpleForm with core:Title / m:Label / m:Text, or a layout:Grid / layout:VerticalLayout / layout:HorizontalLayout tree), so every block view is inlined 1:1 into its aggregation. Absent as a` &&
-               ` result: the fourteen BlockBase controls with their ids and their columnLayout / showSubSectionMore properties, plus the block views' own mvc:View roots. Present in their place: forms:SimpleForm 12,` &&
-               ` core:Title 7, layout:Grid 3, layout:GridData 3 and the additional m:Label / m:Text / layout:VerticalLayout / layout:HorizontalLayout those views contain. The block content itself is byte-for-byte`.
-    lv_text1 = lv_text1 && ` what app 401 inlines - the two samples share the SharedBlocks folder. // IMPROVISED: EmploymentBlockJob is a two-view BlockBase (Collapsed / Expanded, selected by the block mode, with` &&
-               ` showSubSectionMore='true' offering the toggle) whose views bind six internal named models emp1>..emp6> that six uxap:ModelMapping elements map onto ObjectPageModel>/Employee/0..5. abap2UI5 serves one` &&
-               ` default model and has no BlockBase mode toggle, so the Collapsed view (the block's initial state, two employees) is inlined and emp1>/emp2> are folded onto default-model root fields bound via` &&
-               ` client->_bind (app 230/261/401 precedent). Lost: the six ModelMapping config controls (the ModelMapping 6 vs 0 line), the Expanded view with employees 3-6, the more/less toggle behind` &&
-               ` showSubSectionMore, and the mapping indirection - the two records resolve statically to HRData.json /Employee/0 (Michael Adams, Scrum Master) and /Employee/1 (John Miller, Product Owner). //` &&
-               ` POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar`.
-    lv_text1 = lv_text1 && ` (displaySize='L'), both on sap-icon://picture rather than an image file here. Needs a UI5 runtime >= 1.73. // NOTE: what this sample adds over app 401 (same blocks, same data) is the anchor-bar` &&
-               ` NUMBERS: two of the three section titles end in a parenthesised count - 'Personal (2)' and 'Employment (3)' - which is how the sample shows that the anchor bar simply renders the title it is given,` &&
-               ` subsection count included, rather than computing anything. Both are carried literally. Its ObjectPageLayout also sets subSectionLayout='TitleOnLeft' where app 401 leaves the default, and neither` &&
-               ` section carries the heading MessageStrip or the importance levels app 401's sample writes. // NOTE: in the Connect subsection the four personal blocks are DIRECT children of the ObjectPageSubSection` &&
-               ` rather than nested in a <blocks> element - blocks is that control's default aggregation, so the two forms are identical. The port writes the aggregation explicitly, and keeps the sample's own order` &&
-               ` (Adresses, PhoneNumber, Social, Mailing), which differs from app 401's. // NOTE: the two asset paths (linkedin.png and Twitter.png) are kept exactly as the original writes them -`.
-    lv_text1 = lv_text1 && ` './test-resources/sap/uxap/images/...' - matching apps 261 and 401, which carry the same relative form for the same two images. // LIVE-TEST: not yet verified in a running system: that the anchor bar` &&
-               ` lists the three section titles with their numbers and scrolls to each section.`.
+    lv_text1 = `IMPROVISED: Block->content inlining (app 401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold the SAME fourteen` &&
+               ` SharedBlocks BlockBase controls app 401 carries - goals:GoalsBlock, personal:BlockAdresses / BlockPhoneNumber / BlockSocial / BlockMailing / PersonalBlockPart1 / PersonalBlockPart2,` &&
+               ` employment:BlockJobInfoPart1 / BlockJobInfoPart2 / BlockJobInfoPart3 / BlockEmpDetailPart1 / BlockEmpDetailPart2 / BlockEmpDetailPart3 / EmploymentBlockJob. Each is only a lazy-loading wrapper around` &&
+               ` a static view (a forms:SimpleForm with core:Title / m:Label / m:Text, or a layout:Grid / layout:VerticalLayout / layout:HorizontalLayout tree), so every block view is inlined 1:1 into its` &&
+               ` aggregation. Absent as a result: the fourteen BlockBase controls with their ids and their columnLayout / showSubSectionMore properties, plus the block views' own mvc:View roots. Present in their` &&
+               ` place: forms:SimpleForm 12, core:Title 7, layout:Grid 3, layout:GridData 3 and the additional m:Label / m:Text / layout:VerticalLayout / layout:HorizontalLayout those views contain. The block content`.
+    lv_text1 = lv_text1 && ` itself is byte-for-byte what app 401 inlines - the two samples share the SharedBlocks folder. Typed IMPROVISED since 2026-08-23. CAPABILITIES' own row says "Declare the block→content substitution` &&
+               ` (IMPROVISED)", and the recipe's refinement is explicit that removing a control the original declares - even a zero-visual-output one - is a loss regardless of a pixel-identical render. 26 of the 31` &&
+               ` sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column assignment, and the` &&
+               ` block ids and view roots go with it. // IMPROVISED: EmploymentBlockJob is a two-view BlockBase (Collapsed / Expanded, selected by the block mode, with showSubSectionMore='true' offering the toggle)` &&
+               ` whose views bind six internal named models emp1>..emp6> that six uxap:ModelMapping elements map onto ObjectPageModel>/Employee/0..5. abap2UI5 serves one default model and has no BlockBase mode` &&
+               ` toggle, so the Collapsed view (the block's initial state, two employees) is inlined and emp1>/emp2> are folded onto default-model root fields bound via client->_bind (app 230/261/401 precedent).`.
+    lv_text1 = lv_text1 && ` Lost: the six ModelMapping config controls (the ModelMapping 6 vs 0 line), the Expanded view with employees 3-6, the more/less toggle behind showSubSectionMore, and the mapping indirection - the two` &&
+               ` records resolve statically to HRData.json /Employee/0 (Michael Adams, Scrum Master) and /Employee/1 (John Miller, Product Owner). // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1` &&
+               ` fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'), both on sap-icon://picture rather than an image file` &&
+               ` here. Needs a UI5 runtime >= 1.73. // NOTE: what this sample adds over app 401 (same blocks, same data) is the anchor-bar NUMBERS: two of the three section titles end in a parenthesised count -` &&
+               ` 'Personal (2)' and 'Employment (3)' - which is how the sample shows that the anchor bar simply renders the title it is given, subsection count included, rather than computing anything. Both are` &&
+               ` carried literally. Its ObjectPageLayout also sets subSectionLayout='TitleOnLeft' where app 401 leaves the default, and neither section carries the heading MessageStrip or the importance levels app`.
+    lv_text1 = lv_text1 && ` 401's sample writes. // NOTE: in the Connect subsection the four personal blocks are DIRECT children of the ObjectPageSubSection rather than nested in a <blocks> element - blocks is that control's` &&
+               ` default aggregation, so the two forms are identical. The port writes the aggregation explicitly, and keeps the sample's own order (Adresses, PhoneNumber, Social, Mailing), which differs from app` &&
+               ` 401's. // NOTE: the two asset paths (linkedin.png and Twitter.png) are kept exactly as the original writes them - './test-resources/sap/uxap/images/...' - matching apps 261 and 401, which carry the` &&
+               ` same relative form for the same two images. // LIVE-TEST: not yet verified in a running system: that the anchor bar lists the three section titles with their numbers and scrolls to each section.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `AnchorBarWithNumbers`                          class = `z2ui5_cl_smpc_app_587` path = `src/02/03/z2ui5_cl_smpc_app_587.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         since = `1.26`
         is_post171 = abap_true
@@ -10792,35 +10833,37 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         post171 = `sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'), both` &&
                  ` on sap-icon://picture rather than an image file here. Needs a UI5 runtime >= 1.73.` ) ).
 
-    lv_text1 = `NOTE: Block->content inlining (app 263/401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold fifteen SharedBlocks` &&
+    lv_text1 = `IMPROVISED: Block->content inlining (app 263/401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold fifteen SharedBlocks` &&
                ` BlockBase controls - goals:GoalsBlock, personal:BlockPhoneNumber / BlockSocial / BlockAdresses / BlockMailing / PersonalBlockPart1 / PersonalBlockPart2, employment:BlockJobInfoPart1 /` &&
                ` BlockJobInfoPart2 / BlockJobInfoPart3 / BlockEmpDetailPart1 / BlockEmpDetailPart2 / BlockEmpDetailPart3 / EmploymentBlockJob and connections:ConnectionsBlock. Each is only a lazy-loading wrapper` &&
                ` around a static view, so every block view is inlined 1:1 into its aggregation (forms:SimpleForm with core:Title / m:Label / m:Text, the layout:VerticalLayout / layout:HorizontalLayout trees of the` &&
                ` personal blocks, the layout:Grid / layout:GridData tree of EmploymentBlockJobCollapsed, and the six m:Panel / m:VBox / m:Image of ConnectionsBlock). Absent as a result: the fifteen BlockBase controls` &&
                ` with their ids and their columnLayout / showSubSectionMore properties, plus the block views' own mvc:View roots. This sample's section tree is IDENTICAL to app 263's - same fifteen blocks, same`.
-    lv_text1 = lv_text1 && ` section and subsection ids, same titles - so the two ports carry the same inlined content. // IMPROVISED: Named-model fold (app 230/263 precedent): EmploymentBlockJob and ConnectionsBlock each carry` &&
-               ` six uxap:ModelMapping elements mapping ObjectPageModel>/Employee/0..5 onto the internal models emp1>..emp6>. abap2UI5 serves one default model, so the twelve ModelMapping config controls are gone` &&
-               ` (the ModelMapping 12 vs 0 line) and the six employee records are seeded as default-model root fields (emp1_name/_job/_picture .. emp6_*) bound via client->_bind. EmploymentBlockJob is additionally a` &&
-               ` two-view BlockBase (Collapsed / Expanded with showSubSectionMore='true'); only the Collapsed view (employees 1-2) is inlined - the Expanded view with employees 3-6 and the more/less toggle are lost.` &&
-               ` // POST-1.71: sap.uxap.ObjectPageLayout.beforeNavigate is @since 1.118 - newer than the 1.71 floor but kept for the 1:1 port, since the event IS this sample. The app needs a UI5 release >= 1.118 for` &&
-               ` the guard to fire at all; below it the anchor bar simply navigates. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in`.
-    lv_text1 = lv_text1 && ` scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs a UI5 runtime >= 1.73. // NOTE: onBeforeNavigate calls oEvent.preventDefault() whenever the page is in edit` &&
-               ` mode. That veto is expressible: the wire carries s_ctrl-check_prevent_default (app 241 idiom), which is baked per WIRE at RENDER time - and here that is exactly right, because the flag it needs is` &&
-               ` bEditMode, which the backend owns. onEdit therefore redraws the view, so every fresh beforeNavigate wire carries the veto that matches the mode the toast just announced. The event is still sent when` &&
-               ` vetoed, so the backend stays in charge of what happens instead, which is the sample's whole point. // NOTE: the controller keeps oSelectedSection / oPreviousSelectedSection as CONTROL references and` &&
-               ` compares them by identity; the port keeps the two section IDs instead and compares those - ${$parameters>/section}.getId() is what travels with the event. The OK button's` &&
-               ` oOPL.setSelectedSection(oSelectedSection) becomes follow_up_action( control_by_id, ObjectPageLayout / setSelectedSection / <section id> ), the controlIdOrNull argument kind resolving the id back to`.
-    lv_text1 = lv_text1 && ` the control exactly like the original's reference (app 263 precedent). Cancel reverts the remembered id, as the original reverts the reference. // NOTE: the confirm Dialog is built imperatively by` &&
-               ` the controller (new Dialog({title, content, beginButton, endButton}), added as a view dependent and reused on every later veto). The port expresses it as a core:FragmentDefinition shown through` &&
-               ` client->popup_display (app 300 idiom) and destroyed on either button. Its attachAfterClose handler - oSelectedSection.getDomRef().focus() - has no counterpart: it reaches into the section's DOM node,` &&
-               ` which a thin frontend never holds. // NOTE: the four asset paths (the imageID_275314.png avatar twice, linkedin.png, Twitter.png) and HRData.json's person.png point at the sdk.openui5.org host per` &&
-               ` the offline asset-URL rule, matching app 263 which carries the same view; the original writes them relative as './test-resources/sap/uxap/images/...'. // LIVE-TEST: not yet verified in a running` &&
-               ` system: that Edit toasts the mode and re-bakes the veto, that an icon-tab press in edit mode is cancelled and raises the dialog, and that OK then navigates through setSelectedSection while Cancel`.
-    lv_text1 = lv_text1 && ` leaves the page where it was.`.
+    lv_text1 = lv_text1 && ` section and subsection ids, same titles - so the two ports carry the same inlined content. Typed IMPROVISED since 2026-08-23. CAPABILITIES' own row says "Declare the block→content substitution` &&
+               ` (IMPROVISED)", and the recipe's refinement is explicit that removing a control the original declares - even a zero-visual-output one - is a loss regardless of a pixel-identical render. 26 of the 31` &&
+               ` sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column assignment, and the` &&
+               ` block ids and view roots go with it. // IMPROVISED: Named-model fold (app 230/263 precedent): EmploymentBlockJob and ConnectionsBlock each carry six uxap:ModelMapping elements mapping` &&
+               ` ObjectPageModel>/Employee/0..5 onto the internal models emp1>..emp6>. abap2UI5 serves one default model, so the twelve ModelMapping config controls are gone (the ModelMapping 12 vs 0 line) and the` &&
+               ` six employee records are seeded as default-model root fields (emp1_name/_job/_picture .. emp6_*) bound via client->_bind. EmploymentBlockJob is additionally a two-view BlockBase (Collapsed / Expanded`.
+    lv_text1 = lv_text1 && ` with showSubSectionMore='true'); only the Collapsed view (employees 1-2) is inlined - the Expanded view with employees 3-6 and the more/less toggle are lost. // POST-1.71:` &&
+               ` sap.uxap.ObjectPageLayout.beforeNavigate is @since 1.118 - newer than the 1.71 floor but kept for the 1:1 port, since the event IS this sample. The app needs a UI5 release >= 1.118 for the guard to` &&
+               ` fire at all; below it the anchor bar simply navigates. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the` &&
+               ` snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs a UI5 runtime >= 1.73. // NOTE: onBeforeNavigate calls oEvent.preventDefault() whenever the page is in edit mode. That veto` &&
+               ` is expressible: the wire carries s_ctrl-check_prevent_default (app 241 idiom), which is baked per WIRE at RENDER time - and here that is exactly right, because the flag it needs is bEditMode, which` &&
+               ` the backend owns. onEdit therefore redraws the view, so every fresh beforeNavigate wire carries the veto that matches the mode the toast just announced. The event is still sent when vetoed, so the`.
+    lv_text1 = lv_text1 && ` backend stays in charge of what happens instead, which is the sample's whole point. // NOTE: the controller keeps oSelectedSection / oPreviousSelectedSection as CONTROL references and compares them` &&
+               ` by identity; the port keeps the two section IDs instead and compares those - ${$parameters>/section}.getId() is what travels with the event. The OK button's oOPL.setSelectedSection(oSelectedSection)` &&
+               ` becomes follow_up_action( control_by_id, ObjectPageLayout / setSelectedSection / <section id> ), the controlIdOrNull argument kind resolving the id back to the control exactly like the original's` &&
+               ` reference (app 263 precedent). Cancel reverts the remembered id, as the original reverts the reference. // NOTE: the confirm Dialog is built imperatively by the controller (new Dialog({title,` &&
+               ` content, beginButton, endButton}), added as a view dependent and reused on every later veto). The port expresses it as a core:FragmentDefinition shown through client->popup_display (app 300 idiom)` &&
+               ` and destroyed on either button. Its attachAfterClose handler - oSelectedSection.getDomRef().focus() - has no counterpart: it reaches into the section's DOM node, which a thin frontend never holds. //`.
+    lv_text1 = lv_text1 && ` NOTE: the four asset paths (the imageID_275314.png avatar twice, linkedin.png, Twitter.png) and HRData.json's person.png point at the sdk.openui5.org host per the offline asset-URL rule, matching app` &&
+               ` 263 which carries the same view; the original writes them relative as './test-resources/sap/uxap/images/...'. // LIVE-TEST: not yet verified in a running system: that Edit toasts the mode and` &&
+               ` re-bakes the veto, that an icon-tab press in edit mode is cancelled and raises the dialog, and that OK then navigates through setSelectedSection while Cancel leaves the page where it was.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageBeforeNavigate`                      class = `z2ui5_cl_smpc_app_588` path = `src/02/03/z2ui5_cl_smpc_app_588.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         since = `1.26`
         is_post171 = abap_true
@@ -10887,24 +10930,26 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         post171 = `sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs` &&
                  ` a UI5 runtime >= 1.73.` ) ).
 
-    lv_text1 = `NOTE: Block->content inlining (app 401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the two subsections hold ten BlockBase controls between them -` &&
+    lv_text1 = `IMPROVISED: Block->content inlining (app 401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the two subsections hold ten BlockBase controls between them -` &&
                ` personal:PersonalFormBlock (columnLayout='3'), employment:BlockJobInfo (columnLayout='3') and eight blockcolor:BlockBlue fillers. Each is only a lazy-loading wrapper around a static view, so every` &&
                ` block view is inlined 1:1: PersonalFormBlock's forms:Form with its ColumnLayout, two FormContainers and seven FormElements, BlockJobInfo's forms:SimpleForm with core:Title 'General' and three Label /` &&
                ` Input pairs. Absent as a result: the ten BlockBase controls with their ids and columnLayout properties, plus the block views' own mvc:View roots. The Label / Input / Text 3 / 3 / 7 vs 0 lines against` &&
-               ` m:Label / m:Input / m:Text are the same controls: the block views default to xmlns="sap.m" while the port's one view defaults to sap.uxap, so each carries the m: prefix here. // NOTE: the eight` &&
-               ` blockcolor:BlockBlue blocks are one view whose entire body is <html:div style="height:4em; background-color: #A9EAFF ; padding: 1rem">Arbitrary block content...</html:div>. abap2UI5 serves sap.*`.
-    lv_text1 = lv_text1 && ` controls, not raw XHTML, so the div and its inline style go and the sentence it shows is carried as an m:Text, eight times (app 590 carries the identical block six times). They are filler that makes` &&
-               ` the form share its subsection with something - what the sample is about is the two form layouts. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity` &&
-               ` sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs a UI5 runtime >= 1.73. // NOTE: the sample declares three namespace prefixes -` &&
-               ` personal:, employment: and blockcolor: - that all resolve to the SAME package, sap.uxap.sample.ObjectPageFormLayout.controller.blocks. They are naming, not structure; the port names each inlined` &&
-               ` block in a comment instead. // NOTE: the two breadcrumb Links call handleLink1Press / handleLink2Press, both constant-text MessageToasts, so they are wired round-trip-free as follow_up_action(` &&
-               ` control_global, MESSAGE_TOAST show ) (app 005/401 idiom). The four header action buttons (Edit, Delete, Copy, Share) carry no handler in the sample either. // NOTE: the four asset paths (the`.
-    lv_text1 = lv_text1 && ` imageID_275314.png avatar twice, linkedin.png and Twitter.png) point at the sdk.openui5.org host per the offline asset-URL rule; the original writes them relative as` &&
-               ` './test-resources/sap/uxap/images/...'.`.
+               ` m:Label / m:Input / m:Text are the same controls: the block views default to xmlns="sap.m" while the port's one view defaults to sap.uxap, so each carries the m: prefix here. Typed IMPROVISED since` &&
+               ` 2026-08-23. CAPABILITIES' own row says "Declare the block→content substitution (IMPROVISED)", and the recipe's refinement is explicit that removing a control the original declares - even a`.
+    lv_text1 = lv_text1 && ` zero-visual-output one - is a loss regardless of a pixel-identical render. 26 of the 31 sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real` &&
+               ` BlockBase instance, so an inlined form falls back to automatic column assignment, and the block ids and view roots go with it. // NOTE: the eight blockcolor:BlockBlue blocks are one view whose entire` &&
+               ` body is <html:div style="height:4em; background-color: #A9EAFF ; padding: 1rem">Arbitrary block content...</html:div>. abap2UI5 serves sap.* controls, not raw XHTML, so the div and its inline style` &&
+               ` go and the sentence it shows is carried as an m:Text, eight times (app 590 carries the identical block six times). They are filler that makes the form share its subsection with something - what the` &&
+               ` sample is about is the two form layouts. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading` &&
+               ` avatar and the headerContent avatar (displaySize='L'). Needs a UI5 runtime >= 1.73. // NOTE: the sample declares three namespace prefixes - personal:, employment: and blockcolor: - that all resolve`.
+    lv_text1 = lv_text1 && ` to the SAME package, sap.uxap.sample.ObjectPageFormLayout.controller.blocks. They are naming, not structure; the port names each inlined block in a comment instead. // NOTE: the two breadcrumb Links` &&
+               ` call handleLink1Press / handleLink2Press, both constant-text MessageToasts, so they are wired round-trip-free as follow_up_action( control_global, MESSAGE_TOAST show ) (app 005/401 idiom). The four` &&
+               ` header action buttons (Edit, Delete, Copy, Share) carry no handler in the sample either. // NOTE: the four asset paths (the imageID_275314.png avatar twice, linkedin.png and Twitter.png) point at the` &&
+               ` sdk.openui5.org host per the offline asset-URL rule; the original writes them relative as './test-resources/sap/uxap/images/...'.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageFormLayout`                          class = `z2ui5_cl_smpc_app_591` path = `src/02/03/z2ui5_cl_smpc_app_591.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         since = `1.26`
         is_post171 = abap_true
@@ -10912,22 +10957,24 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         post171 = `sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs` &&
                  ` a UI5 runtime >= 1.73.` ) ).
 
-    lv_text1 = `NOTE: Block->content inlining (app 188/217 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold the SharedBlocks BlockBase` &&
+    lv_text1 = `IMPROVISED: Block->content inlining (app 188/217 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold the SharedBlocks BlockBase` &&
                ` controls goals:GoalsBlock, personal:BlockPhoneNumber / BlockSocial / BlockAdresses / BlockMailing / PersonalBlockPart1 / PersonalBlockPart2. A BlockBase is only a lazy-loading wrapper around a view` &&
                ` and each of those views is a static forms:SimpleForm with core:Title / Label / Text children, so each block view is inlined 1:1 into its aggregation. Absent as a result: the seven BlockBase controls` &&
                ` with their ids (goalsblock, phone, social, adresses, mailing, part1, part2), the BlockBase columnLayout='1' of BlockMailing, PersonalBlockPart1 AND PersonalBlockPart2, and the block views' own` &&
                ` mvc:View roots. Corrected 2026-08-21: the list named only BlockMailing's columnLayout while the original sets it on three blocks, and an enumeration that reads as exhaustive is worse than none - app` &&
                ` 217, the precedent this cites, declares all three. Corrected 2026-08-21: the phrase used to add "with their width='100%'", which no SharedBlocks view supports - none carries a width on its mvc:View`.
-    lv_text1 = lv_text1 && ` root; that width belongs to the inner SimpleForm and the port reproduces it. // NOTE: The controller's three JSONModels (SharedJSONData/employee.json as 'ObjectPageModel', an inline 'buttons' model` &&
-               ` with text/icon, SharedJSONData/products.json as the default OneWay model) are not reproduced: no control in this sample's view or in any of its inlined block views binds against them - every text is` &&
-               ` a literal. The port therefore has no model at all (no model_init), which renders identically. // NOTE: preserveHeaderStateOnScroll='true' (@since 1.52) is the whole point of the sample - the header` &&
-               ` content staying expanded while scrolling on desktop. The property is passed through 1:1 but the scroll behaviour was not verified in a running system. **e2e-verified 2026-07-31**` &&
-               ` (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): after scrolling the ObjectPage wrapper to 1500px the header content ('Cost Center') is still visible - that IS` &&
-               ` preserveHeaderStateOnScroll; without it the header snaps away.`.
+    lv_text1 = lv_text1 && ` root; that width belongs to the inner SimpleForm and the port reproduces it. Typed IMPROVISED since 2026-08-23. CAPABILITIES' own row says "Declare the block→content substitution (IMPROVISED)", and` &&
+               ` the recipe's refinement is explicit that removing a control the original declares - even a zero-visual-output one - is a loss regardless of a pixel-identical render. 26 of the 31 sidecars citing that` &&
+               ` row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column assignment, and the block ids and view` &&
+               ` roots go with it. // NOTE: The controller's three JSONModels (SharedJSONData/employee.json as 'ObjectPageModel', an inline 'buttons' model with text/icon, SharedJSONData/products.json as the default` &&
+               ` OneWay model) are not reproduced: no control in this sample's view or in any of its inlined block views binds against them - every text is a literal. The port therefore has no model at all (no` &&
+               ` model_init), which renders identically. // NOTE: preserveHeaderStateOnScroll='true' (@since 1.52) is the whole point of the sample - the header content staying expanded while scrolling on desktop.`.
+    lv_text1 = lv_text1 && ` The property is passed through 1:1 but the scroll behaviour was not verified in a running system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser):` &&
+               ` after scrolling the ObjectPage wrapper to 1500px the header content ('Cost Center') is still visible - that IS preserveHeaderStateOnScroll; without it the header snaps away.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageHeaderExpanded`                      class = `z2ui5_cl_smpc_app_260` path = `src/01/03/z2ui5_cl_smpc_app_260.clas.abap`
-        score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
         notes = lv_text1 ) ).
 
@@ -10946,32 +10993,35 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.26`
         notes = lv_text1 ) ).
 
-    lv_text1 = `NOTE: Block->content inlining (app 188/217/261 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold SharedBlocks BlockBase` &&
+    lv_text1 = `IMPROVISED: Block->content inlining (app 188/217/261 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold SharedBlocks BlockBase` &&
                ` controls - goals:GoalsBlock, personal:BlockPhoneNumber / BlockSocial / BlockAdresses / BlockMailing / PersonalBlockPart1 / PersonalBlockPart2, employment:BlockJobInfoPart1 / BlockJobInfoPart2 /` &&
                ` BlockJobInfoPart3 / BlockEmpDetailPart1 / BlockEmpDetailPart2 / BlockEmpDetailPart3 / EmploymentBlockJob. Each BlockBase is only a lazy-loading wrapper around a static view (a forms:SimpleForm with` &&
                ` core:Title / m:Label / m:Text, or a layout:HorizontalLayout / layout:VerticalLayout tree), so every block view is inlined 1:1 into its aggregation. Absent as a result: the 14 BlockBase controls with` &&
                ` their ids and their columnLayout / showSubSectionMore properties, plus the block views' own mvc:View roots with their width='100%'. Present in their place: forms:SimpleForm, core:Title and the` &&
-               ` additional m:Label / m:Text / layout:VerticalLayout / layout:HorizontalLayout the block views contain. // IMPROVISED: EmploymentBlockJob is a two-view BlockBase (Collapsed / Expanded, selected by the`.
-    lv_text1 = lv_text1 && ` block mode, with showSubSectionMore='true' offering the toggle) whose views bind six internal named models emp1>..emp6> that six uxap:ModelMapping elements map onto ObjectPageModel>/Employee/0..5.` &&
-               ` abap2UI5 serves one default model and has no BlockBase mode toggle, so: the Collapsed view (the block's initial state, two employees - a layout:Grid / layout:VerticalLayout tree with layout:GridData` &&
-               ` layoutData) is inlined, and emp1>/emp2> are folded onto default-model root fields bound via client->_bind (app 230/261 precedent). Lost: the six ModelMapping config controls, the Expanded view with` &&
-               ` employees 3-6, the more/less toggle behind showSubSectionMore, and the mapping indirection - the two records are resolved statically to HRData.json /Employee/0 (Michael Adams, Scrum Master) and` &&
-               ` /Employee/1 (John Miller, Product Owner). // POST-1.71: headerContentPinned on sap.uxap.ObjectPageLayout (since UI5 1.93) is newer than 1.71 but kept for the 1:1 port - the sample opens with a pinned` &&
-               ` header content. The app needs a UI5 release >= 1.93 for it to take effect. // POST-1.71: the heading aggregation of sap.uxap.ObjectPageSection (since UI5 1.106) is newer than 1.71 but kept for the`.
-    lv_text1 = lv_text1 && ` 1:1 port - the Goals and Personal sections each carry an m:MessageStrip in it. The app needs a UI5 release >= 1.106 to show those two strips. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept` &&
-               ` for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'), both on the sample's own imageID_275314.png.` &&
-               ` Needs a UI5 runtime >= 1.73. // NOTE: The controller's three constant-text MessageToast handlers (handleLink1Press, handleLink2Press, handleEditBtnPress) are wired as round-trip-free client toasts` &&
-               ` (follow_up_action cs_event-control_global MESSAGE_TOAST.show, app 005 idiom), so the two breadcrumb Links and the edit-header button behave exactly as in the original without a backend round-trip. //` &&
-               ` NOTE: toggleFooter does oObjectPageLayout.setShowFooter(!getShowFooter()). showFooter IS a bindable property, so the port binds it two-way (client->_bind on the abap_bool flag; the first draft wrote` &&
-               ` a static as_bool literal the round-trip could never reach, caught by the e2e interaction before its first run) and flips the ABAP flag in on_event instead of calling the setter through a frontend`.
-    lv_text1 = lv_text1 && ` action - the bindable-property-beats-frontend-action rule. The showFooter attribute is therefore present in the port where the original view does not write it, and the footer starts hidden as it does` &&
+               ` additional m:Label / m:Text / layout:VerticalLayout / layout:HorizontalLayout the block views contain. Typed IMPROVISED since 2026-08-23. CAPABILITIES' own row says "Declare the block→content`.
+    lv_text1 = lv_text1 && ` substitution (IMPROVISED)", and the recipe's refinement is explicit that removing a control the original declares - even a zero-visual-output one - is a loss regardless of a pixel-identical render.` &&
+               ` 26 of the 31 sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column` &&
+               ` assignment, and the block ids and view roots go with it. // IMPROVISED: EmploymentBlockJob is a two-view BlockBase (Collapsed / Expanded, selected by the block mode, with showSubSectionMore='true'` &&
+               ` offering the toggle) whose views bind six internal named models emp1>..emp6> that six uxap:ModelMapping elements map onto ObjectPageModel>/Employee/0..5. abap2UI5 serves one default model and has no` &&
+               ` BlockBase mode toggle, so: the Collapsed view (the block's initial state, two employees - a layout:Grid / layout:VerticalLayout tree with layout:GridData layoutData) is inlined, and emp1>/emp2> are` &&
+               ` folded onto default-model root fields bound via client->_bind (app 230/261 precedent). Lost: the six ModelMapping config controls, the Expanded view with employees 3-6, the more/less toggle behind`.
+    lv_text1 = lv_text1 && ` showSubSectionMore, and the mapping indirection - the two records are resolved statically to HRData.json /Employee/0 (Michael Adams, Scrum Master) and /Employee/1 (John Miller, Product Owner). //` &&
+               ` POST-1.71: headerContentPinned on sap.uxap.ObjectPageLayout (since UI5 1.93) is newer than 1.71 but kept for the 1:1 port - the sample opens with a pinned header content. The app needs a UI5 release` &&
+               ` >= 1.93 for it to take effect. // POST-1.71: the heading aggregation of sap.uxap.ObjectPageSection (since UI5 1.106) is newer than 1.71 but kept for the 1:1 port - the Goals and Personal sections` &&
+               ` each carry an m:MessageStrip in it. The app needs a UI5 release >= 1.106 to show those two strips. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity` &&
+               ` sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'), both on the sample's own imageID_275314.png. Needs a UI5 runtime >= 1.73. // NOTE:` &&
+               ` The controller's three constant-text MessageToast handlers (handleLink1Press, handleLink2Press, handleEditBtnPress) are wired as round-trip-free client toasts (follow_up_action`.
+    lv_text1 = lv_text1 && ` cs_event-control_global MESSAGE_TOAST.show, app 005 idiom), so the two breadcrumb Links and the edit-header button behave exactly as in the original without a backend round-trip. // NOTE:` &&
+               ` toggleFooter does oObjectPageLayout.setShowFooter(!getShowFooter()). showFooter IS a bindable property, so the port binds it two-way (client->_bind on the abap_bool flag; the first draft wrote a` &&
+               ` static as_bool literal the round-trip could never reach, caught by the e2e interaction before its first run) and flips the ABAP flag in on_event instead of calling the setter through a frontend` &&
+               ` action - the bindable-property-beats-frontend-action rule. The showFooter attribute is therefore present in the port where the original view does not write it, and the footer starts hidden as it does` &&
                ` in the original. The round-trip toggle itself is not verified in a running system yet. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_401.mjs). // NOTE: The` &&
-               ` four asset paths (the imageID_275314.png avatar twice, linkedin.png and Twitter.png) are kept exactly as the original writes them - './test-resources/sap/uxap/images/...' - matching app 261, which` &&
-               ` carries the same relative form for the same two images.`.
+               ` four asset paths (the imageID_275314.png avatar twice, linkedin.png and Twitter.png) are kept exactly as the original writes them - './test-resources/sap/uxap/images/...' - matching app 261, which`.
+    lv_text1 = lv_text1 && ` carries the same relative form for the same two images.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageOnJSON`                              class = `z2ui5_cl_smpc_app_401` path = `src/02/03/z2ui5_cl_smpc_app_401.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         since = `1.26`
         is_post171 = abap_true
@@ -10981,54 +11031,59 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` m:MessageStrip in it. The app needs a UI5 release >= 1.106 to show those two strips. // sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in` &&
                  ` scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'), both on the sample's own imageID_275314.png. Needs a UI5 runtime >= 1.73.` ) ).
 
-    lv_text1 = `NOTE: Block->content inlining (app 401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): all eleven sections hold the SAME employment:EmploymentBlockJob, a` &&
+    lv_text1 = `IMPROVISED: Block->content inlining (app 401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): all eleven sections hold the SAME employment:EmploymentBlockJob, a` &&
                ` lazy-loading BlockBase wrapper around a static view, so that view is inlined into each of the eleven (the layout:Grid / layout:VerticalLayout / layout:HorizontalLayout tree with its layout:GridData` &&
                ` layoutData and the four m:Label the two employee cards show). Absent as a result: the eleven BlockBase controls with their ids, and the block view's own mvc:View root. Eleven copies of one heavy` &&
-               ` block is the sample: a page long enough that enableLazyLoading is worth watching. // IMPROVISED: Named-model fold (app 230/401 precedent): each of the eleven blocks carries six uxap:ModelMapping` &&
-               ` elements mapping ObjectPageModel>/Employee/0..5 onto the internal models emp1>..emp6> - sixty-six config controls in all, none of which has a counterpart, because abap2UI5 serves one default model.` &&
-               ` EmploymentBlockJob is also a two-view BlockBase (Collapsed / Expanded): the Collapsed view is the initial one and the only one inlined, so employees 1 and 2 are seeded as default-model root fields`.
-    lv_text1 = lv_text1 && ` bound via client->_bind and employees 3-6, together with the more/less toggle, are lost. // POST-1.71: sap.uxap.ObjectPageLayout.headerContentPinned is @since 1.93 - newer than the 1.71 floor but` &&
-               ` kept for the 1:1 port; the sample opens with a pinned header content. The app needs a UI5 release >= 1.93 for it to take effect. // NOTE: the ids the sample gives its eleven blocks run` &&
-               ` employmentblockjob1, 2, 4, 5, 6, 7, 8, 9, 10, 11 and then 3 - the numbering skips 3 in place and picks it up at the end, an upstream slip with no effect. The port inlines the blocks away, so no id` &&
-               ` travels.`.
+               ` block is the sample: a page long enough that enableLazyLoading is worth watching. Typed IMPROVISED since 2026-08-23. CAPABILITIES' own row says "Declare the block→content substitution (IMPROVISED)",` &&
+               ` and the recipe's refinement is explicit that removing a control the original declares - even a zero-visual-output one - is a loss regardless of a pixel-identical render. 26 of the 31 sidecars citing` &&
+               ` that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column assignment, and the block ids and`.
+    lv_text1 = lv_text1 && ` view roots go with it. // IMPROVISED: Named-model fold (app 230/401 precedent): each of the eleven blocks carries six uxap:ModelMapping elements mapping ObjectPageModel>/Employee/0..5 onto the` &&
+               ` internal models emp1>..emp6> - sixty-six config controls in all, none of which has a counterpart, because abap2UI5 serves one default model. EmploymentBlockJob is also a two-view BlockBase (Collapsed` &&
+               ` / Expanded): the Collapsed view is the initial one and the only one inlined, so employees 1 and 2 are seeded as default-model root fields bound via client->_bind and employees 3-6, together with the` &&
+               ` more/less toggle, are lost. // POST-1.71: sap.uxap.ObjectPageLayout.headerContentPinned is @since 1.93 - newer than the 1.71 floor but kept for the 1:1 port; the sample opens with a pinned header` &&
+               ` content. The app needs a UI5 release >= 1.93 for it to take effect. // NOTE: the ids the sample gives its eleven blocks run employmentblockjob1, 2, 4, 5, 6, 7, 8, 9, 10, 11 and then 3 - the numbering` &&
+               ` skips 3 in place and picks it up at the end, an upstream slip with no effect. The port inlines the blocks away, so no id travels.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageOnJSONWithLazyLoading`               class = `z2ui5_cl_smpc_app_593` path = `src/02/03/z2ui5_cl_smpc_app_593.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
         is_post171 = abap_true
         notes = lv_text1
         post171 = `sap.uxap.ObjectPageLayout.headerContentPinned is @since 1.93 - newer than the 1.71 floor but kept for the 1:1 port; the sample opens with a pinned header content. The app needs a UI5 release >= 1.93` &&
                  ` for it to take effect.` ) ).
 
-    lv_text1 = `NOTE: Block->content inlining (app 188/217 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold SharedBlocks BlockBase controls` &&
-               ` - goals:GoalsBlock, personal:BlockPhoneNumber / BlockSocial / BlockAdresses / BlockMailing / PersonalBlockPart1 / PersonalBlockPart2, employment:BlockJobInfoPart1 / BlockJobInfoPart2 /` &&
+    lv_text1 = `IMPROVISED: Block->content inlining (app 188/217 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold SharedBlocks BlockBase` &&
+               ` controls - goals:GoalsBlock, personal:BlockPhoneNumber / BlockSocial / BlockAdresses / BlockMailing / PersonalBlockPart1 / PersonalBlockPart2, employment:BlockJobInfoPart1 / BlockJobInfoPart2 /` &&
                ` BlockJobInfoPart3 / BlockEmpDetailPart1 / BlockEmpDetailPart2 / BlockEmpDetailPart3 / EmploymentBlockJob, connections:ConnectionsBlock. Each is only a lazy-loading wrapper around a view, so every` &&
                ` block view is inlined 1:1 into its aggregation (forms:SimpleForm with core:Title / Label / Text, a layout:HorizontalLayout / layout:VerticalLayout tree, the layout:Grid / layout:GridData tree of` &&
                ` EmploymentBlockJobCollapsed, and the six m:Panel / m:VBox / m:Image of ConnectionsBlock). Absent as a result: the 15 BlockBase controls with their ids and their BlockBase columnLayout='1' properties,` &&
-               ` and the block views' own mvc:View roots. Corrected 2026-08-21: the count said 14 while the list and the original both carry 15 - the same reuse-without-re-deriving that got 261 wrong. // IMPROVISED:`.
-    lv_text1 = lv_text1 && ` Named-model fold (app 230 precedent): EmploymentBlockJob and ConnectionsBlock each carry six uxap:ModelMapping elements mapping an external model onto the internal models emp1>..emp6>` &&
-               ` (/Employee/0..5). abap2UI5 serves one default model, so the twelve ModelMapping config controls are gone and the six employee records are seeded as default-model root fields (emp1_name/_job/_picture` &&
-               ` .. emp6_*) bound via client->_bind. EmploymentBlockJob is additionally a two-view BlockBase (Collapsed / Expanded with showSubSectionMore='true'); only the Collapsed view (employees 1-2) is inlined -` &&
-               ` the Expanded view with employees 3-6 and the more/less toggle are lost. // NOTE: The ModelMapping elements in this sample name externalModelName='data' while the controller registers the JSONModel as` &&
-               ` 'ObjectPageModel' - upstream those block labels therefore resolve to nothing. The port seeds the evidently intended SharedJSONData/HRData.json /Employee rows (Michael Adams / Scrum Master, John` &&
-               ` Miller / Product Owner, Richard Wilson / Ux Designer, Julie Armstrong / Quality Engineer, Denise Smith / Team Member, Richard Adams / Team Member) and the person.png picture, i.e. it renders the data`.
-    lv_text1 = lv_text1 && ` the sample means rather than the empty labels the name mismatch produces. // NOTE: onNavigate's setSelectedSection(null): sap.uxap.ObjectPageLayout.selectedSection is an ASSOCIATION, so it cannot be` &&
-               ` data-bound and the reset must go through the frontend action. Since 2026-08-05 an EMPTY argument reaches the setter as null (the controlIdOrNull argument kind, pr/control-method-null-arg; the` &&
-               ` framework pads a trailing empty argument for that kind, because the wire drops trailing empties), so the NAVIGATE round-trip - the NavContainer's navigate event, transporting ${$parameters>/toId} -` &&
-               ` issues follow_up_action( control_by_id, ObjectPageLayout / setSelectedSection / ```` ) and clears the association exactly like the original. The earlier substitute (naming the first section 'goals',` &&
-               ` which is what UI5's _adjustSelectedSectionByUXRules falls back to) is gone. The checkbox that guards the reset is two-way bound ({/RESET_CHECK}, seeded true like the original selected='true'), so the` &&
-               ` backend can read it without touching the DOM. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading`.
-    lv_text1 = lv_text1 && ` avatar and the headerContent avatar (displaySize='L'). Needs a UI5 runtime >= 1.73. // NOTE: The page navigation is roundtrip-free follow_up_action( control_by_id, navigationContainer / to /` &&
-               ` page1|page2 ) - the client-side equivalent of the controller's _navTo (oNavContainer.to(oPage)); 'to' is whitelisted in CONTROL_METHODS. Neither the navigation, the NAVIGATE round-trip nor the` &&
-               ` setSelectedSection follow-up was verified in a running system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the 'To ObjectPage' list item` &&
-               ` navigates to page 2 (NavContainer.to via follow_up_action control_by_id, ObjectPage with 'Denise Smith' renders) and the nav-back button returns to page 1. Residual: the setSelectedSection reset` &&
-               ` itself (NAVIGATE round-trip with the checkbox ticked) is not asserted - the page has no icon tab bar, so the selected section has no stable DOM marker. // NOTE: The Avatar / Image src values point at` &&
-               ` the sdk.openui5.org host (imageID_275314.png, linkedin.png, Twitter.png, person.png) per the offline asset-URL rule; the original and HRData.json use the relative ./test-resources path.`.
+               ` and the block views' own mvc:View roots. Corrected 2026-08-21: the count said 14 while the list and the original both carry 15 - the same reuse-without-re-deriving that got 261 wrong. Typed`.
+    lv_text1 = lv_text1 && ` IMPROVISED since 2026-08-23. CAPABILITIES' own row says "Declare the block→content substitution (IMPROVISED)", and the recipe's refinement is explicit that removing a control the original declares -` &&
+               ` even a zero-visual-output one - is a loss regardless of a pixel-identical render. 26 of the 31 sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a` &&
+               ` real BlockBase instance, so an inlined form falls back to automatic column assignment, and the block ids and view roots go with it. // IMPROVISED: Named-model fold (app 230 precedent):` &&
+               ` EmploymentBlockJob and ConnectionsBlock each carry six uxap:ModelMapping elements mapping an external model onto the internal models emp1>..emp6> (/Employee/0..5). abap2UI5 serves one default model,` &&
+               ` so the twelve ModelMapping config controls are gone and the six employee records are seeded as default-model root fields (emp1_name/_job/_picture .. emp6_*) bound via client->_bind.` &&
+               ` EmploymentBlockJob is additionally a two-view BlockBase (Collapsed / Expanded with showSubSectionMore='true'); only the Collapsed view (employees 1-2) is inlined - the Expanded view with employees`.
+    lv_text1 = lv_text1 && ` 3-6 and the more/less toggle are lost. // NOTE: The ModelMapping elements in this sample name externalModelName='data' while the controller registers the JSONModel as 'ObjectPageModel' - upstream` &&
+               ` those block labels therefore resolve to nothing. The port seeds the evidently intended SharedJSONData/HRData.json /Employee rows (Michael Adams / Scrum Master, John Miller / Product Owner, Richard` &&
+               ` Wilson / Ux Designer, Julie Armstrong / Quality Engineer, Denise Smith / Team Member, Richard Adams / Team Member) and the person.png picture, i.e. it renders the data the sample means rather than` &&
+               ` the empty labels the name mismatch produces. // NOTE: onNavigate's setSelectedSection(null): sap.uxap.ObjectPageLayout.selectedSection is an ASSOCIATION, so it cannot be data-bound and the reset must` &&
+               ` go through the frontend action. Since 2026-08-05 an EMPTY argument reaches the setter as null (the controlIdOrNull argument kind, pr/control-method-null-arg; the framework pads a trailing empty` &&
+               ` argument for that kind, because the wire drops trailing empties), so the NAVIGATE round-trip - the NavContainer's navigate event, transporting ${$parameters>/toId} - issues follow_up_action(`.
+    lv_text1 = lv_text1 && ` control_by_id, ObjectPageLayout / setSelectedSection / ```` ) and clears the association exactly like the original. The earlier substitute (naming the first section 'goals', which is what UI5's` &&
+               ` _adjustSelectedSectionByUXRules falls back to) is gone. The checkbox that guards the reset is two-way bound ({/RESET_CHECK}, seeded true like the original selected='true'), so the backend can read it` &&
+               ` without touching the DOM. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the` &&
+               ` headerContent avatar (displaySize='L'). Needs a UI5 runtime >= 1.73. // NOTE: The page navigation is roundtrip-free follow_up_action( control_by_id, navigationContainer / to / page1|page2 ) - the` &&
+               ` client-side equivalent of the controller's _navTo (oNavContainer.to(oPage)); 'to' is whitelisted in CONTROL_METHODS. Neither the navigation, the NAVIGATE round-trip nor the setSelectedSection` &&
+               ` follow-up was verified in a running system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the 'To ObjectPage' list item navigates to page 2`.
+    lv_text1 = lv_text1 && ` (NavContainer.to via follow_up_action control_by_id, ObjectPage with 'Denise Smith' renders) and the nav-back button returns to page 1. Residual: the setSelectedSection reset itself (NAVIGATE` &&
+               ` round-trip with the checkbox ticked) is not asserted - the page has no icon tab bar, so the selected section has no stable DOM marker. // NOTE: The Avatar / Image src values point at the` &&
+               ` sdk.openui5.org host (imageID_275314.png, linkedin.png, Twitter.png, person.png) per the offline asset-URL rule; the original and HRData.json use the relative ./test-resources path.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageResetSelectedSection`                class = `z2ui5_cl_smpc_app_263` path = `src/02/03/z2ui5_cl_smpc_app_263.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         since = `1.26`
         is_post171 = abap_true
@@ -11071,59 +11126,64 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = lv_text1
         post171 = lv_text2 ) ).
 
-    lv_text1 = `NOTE: Block->content inlining (app 263/401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold fifteen SharedBlocks` &&
+    lv_text1 = `IMPROVISED: Block->content inlining (app 263/401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold fifteen SharedBlocks` &&
                ` BlockBase controls - goals:GoalsBlock, personal:BlockPhoneNumber / BlockSocial / BlockAdresses / BlockMailing / PersonalBlockPart1 / PersonalBlockPart2, employment:BlockJobInfoPart1 /` &&
                ` BlockJobInfoPart2 / BlockJobInfoPart3 / BlockEmpDetailPart1 / BlockEmpDetailPart2 / BlockEmpDetailPart3 / EmploymentBlockJob and connections:ConnectionsBlock. Each is only a lazy-loading wrapper` &&
                ` around a static view, so every block view is inlined 1:1 into its aggregation (forms:SimpleForm with core:Title / m:Label / m:Text, the layout:VerticalLayout / layout:HorizontalLayout trees of the` &&
                ` personal blocks, the layout:Grid / layout:GridData tree of EmploymentBlockJobCollapsed, and the six m:Panel / m:VBox / m:Image of ConnectionsBlock). Absent as a result: the fifteen BlockBase controls` &&
                ` with their ids and their columnLayout / showSubSectionMore properties, plus the block views' own mvc:View roots. This sample's section tree is IDENTICAL to apps 263 and 588 - same fifteen blocks,`.
-    lv_text1 = lv_text1 && ` same section and subsection ids, same titles - so the three ports carry the same inlined content. // IMPROVISED: Named-model fold (app 230/263 precedent): EmploymentBlockJob and ConnectionsBlock each` &&
-               ` carry six uxap:ModelMapping elements mapping ObjectPageModel>/Employee/0..5 onto the internal models emp1>..emp6>. abap2UI5 serves one default model, so the twelve ModelMapping config controls are` &&
-               ` gone (the ModelMapping 12 vs 0 line) and the six employee records are seeded as default-model root fields (emp1_name/_job/_picture .. emp6_*) bound via client->_bind. EmploymentBlockJob is` &&
-               ` additionally a two-view BlockBase (Collapsed / Expanded with showSubSectionMore='true'); only the Collapsed view (employees 1-2) is inlined - the Expanded view with employees 3-6 and the more/less` &&
-               ` toggle are lost. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent` &&
-               ` avatar (displaySize='L'). Needs a UI5 runtime >= 1.73. // NOTE: what this sample adds over apps 263 and 588, which carry the identical section tree, is one attribute: selectedSection='personal'. With`.
-    lv_text1 = lv_text1 && ` useIconTabBar='true' the page therefore opens on the SECOND tab rather than the first. selectedSection is an ASSOCIATION, so it cannot be data-bound - but it CAN be set statically by id in the view,` &&
-               ` which is exactly what the sample does and what the port carries. (App 263 needed the frontend action only because it RESETS the association at runtime.) // NOTE: the four asset paths (the` &&
-               ` imageID_275314.png avatar twice, linkedin.png, Twitter.png) and HRData.json's person.png point at the sdk.openui5.org host per the offline asset-URL rule, matching apps 263 and 588 which carry the` &&
-               ` same view; the original writes them relative.`.
+    lv_text1 = lv_text1 && ` same section and subsection ids, same titles - so the three ports carry the same inlined content. Typed IMPROVISED since 2026-08-23. CAPABILITIES' own row says "Declare the block→content substitution` &&
+               ` (IMPROVISED)", and the recipe's refinement is explicit that removing a control the original declares - even a zero-visual-output one - is a loss regardless of a pixel-identical render. 26 of the 31` &&
+               ` sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column assignment, and the` &&
+               ` block ids and view roots go with it. // IMPROVISED: Named-model fold (app 230/263 precedent): EmploymentBlockJob and ConnectionsBlock each carry six uxap:ModelMapping elements mapping` &&
+               ` ObjectPageModel>/Employee/0..5 onto the internal models emp1>..emp6>. abap2UI5 serves one default model, so the twelve ModelMapping config controls are gone (the ModelMapping 12 vs 0 line) and the` &&
+               ` six employee records are seeded as default-model root fields (emp1_name/_job/_picture .. emp6_*) bound via client->_bind. EmploymentBlockJob is additionally a two-view BlockBase (Collapsed / Expanded`.
+    lv_text1 = lv_text1 && ` with showSubSectionMore='true'); only the Collapsed view (employees 1-2) is inlined - the Expanded view with employees 3-6 and the more/less toggle are lost. // POST-1.71: sap.m.Avatar is a control` &&
+               ` @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs a UI5 runtime >= 1.73. //` &&
+               ` NOTE: what this sample adds over apps 263 and 588, which carry the identical section tree, is one attribute: selectedSection='personal'. With useIconTabBar='true' the page therefore opens on the` &&
+               ` SECOND tab rather than the first. selectedSection is an ASSOCIATION, so it cannot be data-bound - but it CAN be set statically by id in the view, which is exactly what the sample does and what the` &&
+               ` port carries. (App 263 needed the frontend action only because it RESETS the association at runtime.) // NOTE: the four asset paths (the imageID_275314.png avatar twice, linkedin.png, Twitter.png)` &&
+               ` and HRData.json's person.png point at the sdk.openui5.org host per the offline asset-URL rule, matching apps 263 and 588 which carry the same view; the original writes them relative.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageSelectedSection`                     class = `z2ui5_cl_smpc_app_594` path = `src/02/03/z2ui5_cl_smpc_app_594.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
         is_post171 = abap_true
         notes = lv_text1
         post171 = `sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs` &&
                  ` a UI5 runtime >= 1.73.` ) ).
 
-    lv_text1 = `NOTE: Block->content inlining (app 263/401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the first three sections hold fourteen SharedBlocks BlockBase controls` &&
-               ` - goals:GoalsBlock, personal:BlockPhoneNumber / BlockSocial / BlockAdresses / BlockMailing / PersonalBlockPart1 / PersonalBlockPart2 and employment:BlockJobInfoPart1 / BlockJobInfoPart2 /` &&
+    lv_text1 = `IMPROVISED: Block->content inlining (app 263/401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the first three sections hold fourteen SharedBlocks BlockBase` &&
+               ` controls - goals:GoalsBlock, personal:BlockPhoneNumber / BlockSocial / BlockAdresses / BlockMailing / PersonalBlockPart1 / PersonalBlockPart2 and employment:BlockJobInfoPart1 / BlockJobInfoPart2 /` &&
                ` BlockJobInfoPart3 / BlockEmpDetailPart1 / BlockEmpDetailPart2 / BlockEmpDetailPart3 / EmploymentBlockJob. Each is only a lazy-loading wrapper around a static view, so every block view is inlined 1:1` &&
                ` into its aggregation (forms:SimpleForm with core:Title / m:Label / m:Text, the layout:VerticalLayout / layout:HorizontalLayout trees of the personal blocks and the layout:Grid / layout:GridData tree` &&
                ` of EmploymentBlockJobCollapsed). Absent as a result: the fourteen BlockBase controls with their ids and their columnLayout / showSubSectionMore properties, plus the block views' own mvc:View roots.` &&
-               ` Apps 263, 588 and 594 carry the same blocks. // IMPROVISED: Named-model fold (app 230/263 precedent): EmploymentBlockJob and ConnectionsBlock each carry six uxap:ModelMapping elements mapping`.
-    lv_text1 = lv_text1 && ` ObjectPageModel>/Employee/0..5 onto the internal models emp1>..emp6>. abap2UI5 serves one default model, so the twelve ModelMapping config controls are gone (the ModelMapping 12 vs 0 line) and the` &&
-               ` six employee records are seeded as default-model root fields (emp1_name/_job/_picture .. emp6_*) bound via client->_bind. EmploymentBlockJob is additionally a two-view BlockBase (Collapsed / Expanded` &&
-               ` with showSubSectionMore='true'); only the Collapsed view (employees 1-2) is inlined - the Expanded view with employees 3-6 and the more/less toggle are lost. // POST-1.71: sap.m.Avatar is a control` &&
-               ` @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs a UI5 runtime >= 1.73. //` &&
-               ` POST-1.71: the rowMode aggregation of sap.ui.table.Table and the control sap.ui.table.rowmodes.Auto in it are both @since 1.119 - newer than the 1.71 floor but kept for the 1:1 port, since the sample`.
-    lv_text1 = lv_text1 && ` writes exactly <ui:rowMode><uirm:Auto minRowCount="2"/></ui:rowMode>. The app needs a UI5 release >= 1.119: below it the lowercase rowMode tag resolves as a control class and the 404 takes the whole` &&
-               ` view down, which is why this is an error rather than a warning. // IMPROVISED: onSectionVisibilityChanged is attached in JS (attachEvent('subSectionVisibilityChange')) rather than in the view, and it` &&
-               ` reads the event's visibleSubSections MAP: when exactly one subsection is visible it adds sapUxAPObjectPageSubSectionFitContainer to it, otherwise it removes the class from all of them. Neither half` &&
-               ` travels - the parameter is a map of live control instances keyed by id, and the decision is per render, not per round trip. addStyleClass IS whitelisted in CONTROL_METHODS, but there is nothing to` &&
-               ` key it on without the map, so the wire is dropped: the page renders identically, only the fit-container class never toggles as the user scrolls. // NOTE: selectedSection='paymentSubSection' names a` &&
-               ` SUBSECTION id, not a section id, and is carried as written - the association resolves it to the owning section, which is how the sample opens on Personal with the Payment information subsection`.
-    lv_text1 = lv_text1 && ` expanded (mode='Expanded' on that subsection is the second half of it). This is the port's whole subject and needs no round trip: the association is set statically in the view. // NOTE: the` &&
-               ` ui:Table's rows binding carries a sorter on 'Name'. A thin frontend sorts the data it sends (app 298 idiom), so the 123 rows of sap/ui/demo/mock/products.json are seeded verbatim in the file's own` &&
-               ` order, SORTed BY name in model_init and the sorter itself is gone. Name is carried as a fifth field for exactly that reason, although no column shows it; the four the sample does show are ProductId,` &&
-               ` SupplierName, Category and Price. The TableModel> prefix folds onto the default model (same-data prefix-drop). // NOTE: this sample has no Connections section, where apps 263, 588 and 594 do; its` &&
-               ` fourth section is the ui:Table one instead. Its sections and subsections carry no ids either, apart from the paymentSubSection the selectedSection association needs. // NOTE: the four asset paths` &&
-               ` (the imageID_275314.png avatar twice, linkedin.png, Twitter.png) and HRData.json's person.png point at the sdk.openui5.org host per the offline asset-URL rule; the original writes them relative.`.
+               ` Apps 263, 588 and 594 carry the same blocks. Typed IMPROVISED since 2026-08-23. CAPABILITIES' own row says "Declare the block→content substitution (IMPROVISED)", and the recipe's refinement is`.
+    lv_text1 = lv_text1 && ` explicit that removing a control the original declares - even a zero-visual-output one - is a loss regardless of a pixel-identical render. 26 of the 31 sidecars citing that row carried NOTE, which` &&
+               ` hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column assignment, and the block ids and view roots go with it. //` &&
+               ` IMPROVISED: Named-model fold (app 230/263 precedent): EmploymentBlockJob and ConnectionsBlock each carry six uxap:ModelMapping elements mapping ObjectPageModel>/Employee/0..5 onto the internal models` &&
+               ` emp1>..emp6>. abap2UI5 serves one default model, so the twelve ModelMapping config controls are gone (the ModelMapping 12 vs 0 line) and the six employee records are seeded as default-model root` &&
+               ` fields (emp1_name/_job/_picture .. emp6_*) bound via client->_bind. EmploymentBlockJob is additionally a two-view BlockBase (Collapsed / Expanded with showSubSectionMore='true'); only the Collapsed` &&
+               ` view (employees 1-2) is inlined - the Expanded view with employees 3-6 and the more/less toggle are lost. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity`.
+    lv_text1 = lv_text1 && ` sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs a UI5 runtime >= 1.73. // POST-1.71: the rowMode aggregation of` &&
+               ` sap.ui.table.Table and the control sap.ui.table.rowmodes.Auto in it are both @since 1.119 - newer than the 1.71 floor but kept for the 1:1 port, since the sample writes exactly <ui:rowMode><uirm:Auto` &&
+               ` minRowCount="2"/></ui:rowMode>. The app needs a UI5 release >= 1.119: below it the lowercase rowMode tag resolves as a control class and the 404 takes the whole view down, which is why this is an` &&
+               ` error rather than a warning. // IMPROVISED: onSectionVisibilityChanged is attached in JS (attachEvent('subSectionVisibilityChange')) rather than in the view, and it reads the event's` &&
+               ` visibleSubSections MAP: when exactly one subsection is visible it adds sapUxAPObjectPageSubSectionFitContainer to it, otherwise it removes the class from all of them. Neither half travels - the` &&
+               ` parameter is a map of live control instances keyed by id, and the decision is per render, not per round trip. addStyleClass IS whitelisted in CONTROL_METHODS, but there is nothing to key it on`.
+    lv_text1 = lv_text1 && ` without the map, so the wire is dropped: the page renders identically, only the fit-container class never toggles as the user scrolls. // NOTE: selectedSection='paymentSubSection' names a SUBSECTION` &&
+               ` id, not a section id, and is carried as written - the association resolves it to the owning section, which is how the sample opens on Personal with the Payment information subsection expanded` &&
+               ` (mode='Expanded' on that subsection is the second half of it). This is the port's whole subject and needs no round trip: the association is set statically in the view. // NOTE: the ui:Table's rows` &&
+               ` binding carries a sorter on 'Name'. A thin frontend sorts the data it sends (app 298 idiom), so the 123 rows of sap/ui/demo/mock/products.json are seeded verbatim in the file's own order, SORTed BY` &&
+               ` name in model_init and the sorter itself is gone. Name is carried as a fifth field for exactly that reason, although no column shows it; the four the sample does show are ProductId, SupplierName,` &&
+               ` Category and Price. The TableModel> prefix folds onto the default model (same-data prefix-drop). // NOTE: this sample has no Connections section, where apps 263, 588 and 594 do; its fourth section is`.
+    lv_text1 = lv_text1 && ` the ui:Table one instead. Its sections and subsections carry no ids either, apart from the paymentSubSection the selectedSection association needs. // NOTE: the four asset paths (the` &&
+               ` imageID_275314.png avatar twice, linkedin.png, Twitter.png) and HRData.json's person.png point at the sdk.openui5.org host per the offline asset-URL rule; the original writes them relative.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageState`                               class = `z2ui5_cl_smpc_app_595` path = `src/02/03/z2ui5_cl_smpc_app_595.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
         is_post171 = abap_true
         notes = lv_text1
@@ -11148,75 +11208,84 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.26`
         notes = lv_text1 ) ).
 
-    lv_text1 = `NOTE: Block->content inlining (app 263/401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold fifteen SharedBlocks` &&
+    lv_text1 = `IMPROVISED: Block->content inlining (app 263/401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold fifteen SharedBlocks` &&
                ` BlockBase controls - goals:GoalsBlock, personal:BlockPhoneNumber / BlockSocial / BlockAdresses / BlockMailing / PersonalBlockPart1 / PersonalBlockPart2, employment:BlockJobInfoPart1 /` &&
                ` BlockJobInfoPart2 / BlockJobInfoPart3 / BlockEmpDetailPart1 / BlockEmpDetailPart2 / BlockEmpDetailPart3 / EmploymentBlockJob and connections:ConnectionsBlock. Each is only a lazy-loading wrapper` &&
                ` around a static view, so every block view is inlined 1:1 into its aggregation (forms:SimpleForm with core:Title / m:Label / m:Text, the layout:VerticalLayout / layout:HorizontalLayout trees of the` &&
                ` personal blocks, the layout:Grid / layout:GridData tree of EmploymentBlockJobCollapsed, and the six m:Panel / m:VBox / m:Image of ConnectionsBlock). Absent as a result: the fifteen BlockBase controls` &&
                ` with their ids and their columnLayout / showSubSectionMore properties, plus the block views' own mvc:View roots. This sample's section tree is IDENTICAL to apps 263, 588 and 594 - same fifteen`.
-    lv_text1 = lv_text1 && ` blocks, same section and subsection ids, same titles - so the four ports carry the same inlined content. // IMPROVISED: Named-model fold (app 230/263 precedent): EmploymentBlockJob and` &&
-               ` ConnectionsBlock each carry six uxap:ModelMapping elements mapping ObjectPageModel>/Employee/0..5 onto the internal models emp1>..emp6>. abap2UI5 serves one default model, so the twelve ModelMapping` &&
-               ` config controls are gone (the ModelMapping 12 vs 0 line) and the six employee records are seeded as default-model root fields (emp1_name/_job/_picture .. emp6_*) bound via client->_bind.` &&
-               ` EmploymentBlockJob is additionally a two-view BlockBase (Collapsed / Expanded with showSubSectionMore='true'); only the Collapsed view (employees 1-2) is inlined - the Expanded view with employees` &&
-               ` 3-6 and the more/less toggle are lost. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar` &&
-               ` and the headerContent avatar (displaySize='L'). Needs a UI5 runtime >= 1.73. // NOTE: this sample and app 594 share one view: same fifteen blocks, same section and subsection ids, same titles, same`.
-    lv_text1 = lv_text1 && ` header. The single difference is that app 594's ObjectPageLayout also sets selectedSection='personal' and this one does not - so this page opens on the FIRST tab and shows what useIconTabBar='true'` &&
-               ` alone does, which is the point of 'tab navigation mode'. Apps 263 and 588 carry the same section tree again. // NOTE: the four asset paths (the imageID_275314.png avatar twice, linkedin.png,` &&
-               ` Twitter.png) and HRData.json's person.png point at the sdk.openui5.org host per the offline asset-URL rule, matching apps 263 and 588 which carry the same view; the original writes them relative.`.
+    lv_text1 = lv_text1 && ` blocks, same section and subsection ids, same titles - so the four ports carry the same inlined content. Typed IMPROVISED since 2026-08-23. CAPABILITIES' own row says "Declare the block→content` &&
+               ` substitution (IMPROVISED)", and the recipe's refinement is explicit that removing a control the original declares - even a zero-visual-output one - is a loss regardless of a pixel-identical render.` &&
+               ` 26 of the 31 sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column` &&
+               ` assignment, and the block ids and view roots go with it. // IMPROVISED: Named-model fold (app 230/263 precedent): EmploymentBlockJob and ConnectionsBlock each carry six uxap:ModelMapping elements` &&
+               ` mapping ObjectPageModel>/Employee/0..5 onto the internal models emp1>..emp6>. abap2UI5 serves one default model, so the twelve ModelMapping config controls are gone (the ModelMapping 12 vs 0 line)` &&
+               ` and the six employee records are seeded as default-model root fields (emp1_name/_job/_picture .. emp6_*) bound via client->_bind. EmploymentBlockJob is additionally a two-view BlockBase (Collapsed /`.
+    lv_text1 = lv_text1 && ` Expanded with showSubSectionMore='true'); only the Collapsed view (employees 1-2) is inlined - the Expanded view with employees 3-6 and the more/less toggle are lost. // POST-1.71: sap.m.Avatar is a` &&
+               ` control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs a UI5 runtime >=` &&
+               ` 1.73. // NOTE: this sample and app 594 share one view: same fifteen blocks, same section and subsection ids, same titles, same header. The single difference is that app 594's ObjectPageLayout also` &&
+               ` sets selectedSection='personal' and this one does not - so this page opens on the FIRST tab and shows what useIconTabBar='true' alone does, which is the point of 'tab navigation mode'. Apps 263 and` &&
+               ` 588 carry the same section tree again. // NOTE: the four asset paths (the imageID_275314.png avatar twice, linkedin.png, Twitter.png) and HRData.json's person.png point at the sdk.openui5.org host` &&
+               ` per the offline asset-URL rule, matching apps 263 and 588 which carry the same view; the original writes them relative.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageTabNavigationMode`                   class = `z2ui5_cl_smpc_app_596` path = `src/02/03/z2ui5_cl_smpc_app_596.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
         is_post171 = abap_true
         notes = lv_text1
         post171 = `sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs` &&
                  ` a UI5 runtime >= 1.73.` ) ).
 
-    lv_text1 = `NOTE: Block->content inlining (app 188/217 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold SharedBlocks BlockBase controls` &&
-               ` - goals:GoalsBlock, personal:BlockAdresses / BlockPhoneNumber / BlockSocial / BlockMailing / PersonalBlockPart1 / PersonalBlockPart2, employment:BlockJobInfoPart1 / BlockJobInfoPart2 /` &&
+    lv_text1 = `IMPROVISED: Block->content inlining (app 188/217 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold SharedBlocks BlockBase` &&
+               ` controls - goals:GoalsBlock, personal:BlockAdresses / BlockPhoneNumber / BlockSocial / BlockMailing / PersonalBlockPart1 / PersonalBlockPart2, employment:BlockJobInfoPart1 / BlockJobInfoPart2 /` &&
                ` BlockJobInfoPart3 / BlockEmpDetailPart1 / BlockEmpDetailPart2 / BlockEmpDetailPart3 / EmploymentBlockJob. Each BlockBase is only a lazy-loading wrapper around a static view (forms:SimpleForm with` &&
                ` core:Title / Label / Text, or a layout:HorizontalLayout / layout:VerticalLayout tree), so every block view is inlined 1:1 into its aggregation. Absent as a result: the 14 BlockBase controls with` &&
                ` their ids, and the BlockBase columnLayout='1' of BlockEmpDetailPart1, BlockEmpDetailPart2 and BlockEmpDetailPart3, and the block views' own mvc:View roots. Corrected 2026-08-21: this text was reused` &&
                ` from app 259 and never re-derived for this sample. It said 13 while listing 14 (259 really has 13), and the columnLayout clause 259 carries had been dropped - columnLayout='1' forces those blocks`.
     lv_text1 = lv_text1 && ` into a single subsection column, so the loss is visible. Corrected 2026-08-21: the phrase used to add "with their width='100%'", which no SharedBlocks view supports - none carries a width on its` &&
-               ` mvc:View root; that width belongs to the inner SimpleForm and the port reproduces it. // IMPROVISED: EmploymentBlockJob is a two-view BlockBase (Collapsed / Expanded, selected by the block mode, with` &&
-               ` showSubSectionMore='true' offering the toggle) whose views bind six internal named models emp1>..emp6> that six uxap:ModelMapping elements map onto ObjectPageModel>/Employee/0..5. abap2UI5 serves one` &&
-               ` default model and has no BlockBase mode toggle, so: the Collapsed view (the block's initial state, two employees - a layout:Grid / layout:VerticalLayout tree with layout:GridData layoutData) is` &&
-               ` inlined, and emp1>/emp2> are folded onto default-model root fields bound via client->_bind (app 230 precedent). Lost: the six ModelMapping config controls, the Expanded view with employees 3-6, the` &&
-               ` more/less toggle behind showSubSectionMore, and the mapping indirection - the two records are resolved statically to HRData.json /Employee/0 (Michael Adams, Scrum Master) and /Employee/1 (John`.
-    lv_text1 = lv_text1 && ` Miller, Product Owner). // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): src='sap-icon://picture' in the` &&
-               ` snappedHeading and in the headerContent (displaySize='L'). Needs a UI5 runtime >= 1.73. // NOTE: The controller's three MessageToast handlers (handleLink1Press, handleLink2Press, handleEditBtnPress)` &&
-               ` are dead code in this sample - the view wires no press event and sets no showEditHeaderButton, so nothing can reach them. The port therefore has no on_event method, which is behaviour-identical. //` &&
-               ` NOTE: subSectionLayout='TitleOnLeft' is the point of the sample (subsection titles rendered in a left column instead of above the content). The property is passed through 1:1 but the resulting layout` &&
-               ` was not verified in a running system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the ObjectPage renders and the folded emp1>/emp2>` &&
-               ` ModelMapping records show ('Michael Adams'), and the Job Relationship subsection title is there. The TitleOnLeft layout itself stays a human check: measured in the source, subSectionLayout only`.
-    lv_text1 = lv_text1 && ` changes the subsection's grid column math (ObjectPageSubSection._calculateLayoutConfiguration) - it emits no own CSS class an assertion could hook onto. **e2e-verified 2026-08-04** (nightly e2e` &&
-               ` interaction, meta/interactions/z2ui5_cl_smpc_app_261.mjs). // NOTE: The two social images (linkedin.png, Twitter.png) are host-absolutized to https://sdk.openui5.org/... since 2026-08-23. The demo` &&
-               ` kit serves them as ./test-resources/..., which an abap2UI5 app has no document root to resolve against, so both icons rendered broken. The sibling ports 262/263 rewrite the same two files and declare` &&
-               ` it; this port kept the relative form and declared nothing.`.
+               ` mvc:View root; that width belongs to the inner SimpleForm and the port reproduces it. Typed IMPROVISED since 2026-08-23. CAPABILITIES' own row says "Declare the block→content substitution` &&
+               ` (IMPROVISED)", and the recipe's refinement is explicit that removing a control the original declares - even a zero-visual-output one - is a loss regardless of a pixel-identical render. 26 of the 31` &&
+               ` sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column assignment, and the` &&
+               ` block ids and view roots go with it. // IMPROVISED: EmploymentBlockJob is a two-view BlockBase (Collapsed / Expanded, selected by the block mode, with showSubSectionMore='true' offering the toggle)` &&
+               ` whose views bind six internal named models emp1>..emp6> that six uxap:ModelMapping elements map onto ObjectPageModel>/Employee/0..5. abap2UI5 serves one default model and has no BlockBase mode`.
+    lv_text1 = lv_text1 && ` toggle, so: the Collapsed view (the block's initial state, two employees - a layout:Grid / layout:VerticalLayout tree with layout:GridData layoutData) is inlined, and emp1>/emp2> are folded onto` &&
+               ` default-model root fields bound via client->_bind (app 230 precedent). Lost: the six ModelMapping config controls, the Expanded view with employees 3-6, the more/less toggle behind` &&
+               ` showSubSectionMore, and the mapping indirection - the two records are resolved statically to HRData.json /Employee/0 (Michael Adams, Scrum Master) and /Employee/1 (John Miller, Product Owner). //` &&
+               ` POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): src='sap-icon://picture' in the snappedHeading and in the` &&
+               ` headerContent (displaySize='L'). Needs a UI5 runtime >= 1.73. // NOTE: The controller's three MessageToast handlers (handleLink1Press, handleLink2Press, handleEditBtnPress) are dead code in this` &&
+               ` sample - the view wires no press event and sets no showEditHeaderButton, so nothing can reach them. The port therefore has no on_event method, which is behaviour-identical. // NOTE:`.
+    lv_text1 = lv_text1 && ` subSectionLayout='TitleOnLeft' is the point of the sample (subsection titles rendered in a left column instead of above the content). The property is passed through 1:1 but the resulting layout was` &&
+               ` not verified in a running system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the ObjectPage renders and the folded emp1>/emp2> ModelMapping` &&
+               ` records show ('Michael Adams'), and the Job Relationship subsection title is there. The TitleOnLeft layout itself stays a human check: measured in the source, subSectionLayout only changes the` &&
+               ` subsection's grid column math (ObjectPageSubSection._calculateLayoutConfiguration) - it emits no own CSS class an assertion could hook onto. **e2e-verified 2026-08-04** (nightly e2e interaction,` &&
+               ` meta/interactions/z2ui5_cl_smpc_app_261.mjs). // NOTE: The two social images (linkedin.png, Twitter.png) are host-absolutized to https://sdk.openui5.org/... since 2026-08-23. The demo kit serves them` &&
+               ` as ./test-resources/..., which an abap2UI5 app has no document root to resolve against, so both icons rendered broken. The sibling ports 262/263 rewrite the same two files and declare it; this port`.
+    lv_text1 = lv_text1 && ` kept the relative form and declared nothing.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageTitleOnLeft`                         class = `z2ui5_cl_smpc_app_261` path = `src/02/03/z2ui5_cl_smpc_app_261.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
         is_post171 = abap_true
         notes = lv_text1
         post171 = `sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): src='sap-icon://picture' in the snappedHeading and in the headerContent` &&
                  ` (displaySize='L'). Needs a UI5 runtime >= 1.73.` ) ).
 
-    lv_text1 = `NOTE: Block->content inlining (app 188/217/261 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold SharedBlocks BlockBase` &&
+    lv_text1 = `IMPROVISED: Block->content inlining (app 188/217/261 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold SharedBlocks BlockBase` &&
                ` controls - goals:GoalsBlock, personal:BlockPhoneNumber / BlockSocial / BlockAdresses / BlockMailing / PersonalBlockPart1 / PersonalBlockPart2, employment:BlockJobInfoPart1 / BlockJobInfoPart2 /` &&
                ` BlockJobInfoPart3 / BlockEmpDetailPart1 / BlockEmpDetailPart2 / BlockEmpDetailPart3. Each BlockBase is only a lazy-loading wrapper around a static view (a forms:SimpleForm with core:Title / m:Label /` &&
                ` m:Text, or a layout:HorizontalLayout / layout:VerticalLayout tree), so every block view is inlined 1:1 into its aggregation. Absent as a result: the 13 BlockBase controls with their ids and their` &&
                ` columnLayout / class='sapUxAPObjectPageSubSectionAlignContent' properties, plus the block views' own mvc:View roots with their width='100%'. Present in their place: forms:SimpleForm, core:Title and` &&
-               ` the additional m:Label / m:Text / layout:VerticalLayout / layout:HorizontalLayout the block views contain. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample`.
-    lv_text1 = lv_text1 && ` entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the HeaderContainer avatar (displaySize='L'), both on the sample's own imageID_275314.png. Needs a UI5 runtime >= 1.73. //` &&
-               ` NOTE: The sample has no controller at all - no model, no event handlers - so the port is init-only with neither model_init nor on_event, which is behaviour-identical. The two avatar/image paths are` &&
-               ` kept exactly as the original writes them ('./test-resources/sap/uxap/images/imageID_275314.png'), matching app 261 on the same asset. // POST-1.71: the content aggregation of sap.m.Title (since UI5` &&
-               ` 1.87) is newer than 1.71 but kept for the 1:1 port - the 'Order Details', 'Status' and 'Average User Rating' header titles each hold an m:Link child, exactly like the original (invisible to the` &&
-               ` property gate: a default aggregation never appears as an XML attribute). Needs UI5 >= 1.87. Added 2026-08-21: the sibling ports 079, 259 and 412 - 412 for these very three header titles - all` &&
-               ` declared it and this one did not, so its stated runtime floor read 1.73 (the Avatar) when it is really 1.87.`.
+               ` the additional m:Label / m:Text / layout:VerticalLayout / layout:HorizontalLayout the block views contain. Typed IMPROVISED since 2026-08-23. CAPABILITIES' own row says "Declare the block→content`.
+    lv_text1 = lv_text1 && ` substitution (IMPROVISED)", and the recipe's refinement is explicit that removing a control the original declares - even a zero-visual-output one - is a loss regardless of a pixel-identical render.` &&
+               ` 26 of the 31 sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column` &&
+               ` assignment, and the block ids and view roots go with it. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the` &&
+               ` snappedHeading avatar and the HeaderContainer avatar (displaySize='L'), both on the sample's own imageID_275314.png. Needs a UI5 runtime >= 1.73. // NOTE: The sample has no controller at all - no` &&
+               ` model, no event handlers - so the port is init-only with neither model_init nor on_event, which is behaviour-identical. The two avatar/image paths are kept exactly as the original writes them` &&
+               ` ('./test-resources/sap/uxap/images/imageID_275314.png'), matching app 261 on the same asset. // POST-1.71: the content aggregation of sap.m.Title (since UI5 1.87) is newer than 1.71 but kept for the`.
+    lv_text1 = lv_text1 && ` 1:1 port - the 'Order Details', 'Status' and 'Average User Rating' header titles each hold an m:Link child, exactly like the original (invisible to the property gate: a default aggregation never` &&
+               ` appears as an XML attribute). Needs UI5 >= 1.87. Added 2026-08-21: the sibling ports 079, 259 and 412 - 412 for these very three header titles - all declared it and this one did not, so its stated` &&
+               ` runtime floor read 1.73 (the Avatar) when it is really 1.87.`.
     lv_text2 = `sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the HeaderContainer avatar (displaySize='L'), both` &&
                ` on the sample's own imageID_275314.png. Needs a UI5 runtime >= 1.73. // the content aggregation of sap.m.Title (since UI5 1.87) is newer than 1.71 but kept for the 1:1 port - the 'Order Details',` &&
                ` 'Status' and 'Average User Rating' header titles each hold an m:Link child, exactly like the original (invisible to the property gate: a default aggregation never appears as an XML attribute). Needs` &&
@@ -11224,8 +11293,8 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` when it is really 1.87.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageWithHeaderContainer`                 class = `z2ui5_cl_smpc_app_402` path = `src/02/03/z2ui5_cl_smpc_app_402.clas.abap`
-        score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
         is_post171 = abap_true
         notes = lv_text1
@@ -11270,18 +11339,20 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` around a view; its content (a single coloured div) is inlined here as core:HTML, since ObjectPageSubSection.blocks accepts any sap.ui.core.Control. This removes the need for a custom JS control - the` &&
                  ` whole uxap ObjectPage renders with the thin generic frontend. The blockcolor:BlockBlue control is therefore absent and a core:HTML is present in its place.` ) ).
 
-    lv_text1 = `NOTE: Block->content inlining (app 178/161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the original blocks aggregations each hold a custom BlockBase control` &&
-               ` (blockcolor:BlockBlueT1, blockcolor:BlockBlueT2, blockcolor:BlockBlueT3, blockcolor:BlockBlueT4, blockcolor:BlockBlueT5, from the sample's SharedBlocks JS,` &&
+    lv_text1 = `IMPROVISED: Block->content inlining (app 178/161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the original blocks aggregations each hold a custom BlockBase` &&
+               ` control (blockcolor:BlockBlueT1, blockcolor:BlockBlueT2, blockcolor:BlockBlueT3, blockcolor:BlockBlueT4, blockcolor:BlockBlueT5, from the sample's SharedBlocks JS,` &&
                ` xmlns:blockcolor='sap.uxap.sample.SharedBlocks'), used once each with ids bbt1/bbt2/bbt3/bbt4/bbt5. A BlockBase is only a lazy-loading wrapper around a view; each BlockBlueTn's rendered content is a` &&
                ` single coloured div (<html:div style='height:auto;min-height:4em; background-color: #A9EAFF ;line-height: 4em;'>...explanatory text...</html:div>). Since ObjectPageSubSection.blocks accepts any` &&
                ` sap.ui.core.Control, each blockcolor:BlockBlueTn is inlined as a core:HTML leaf carrying that div in its content attribute - the whole ObjectPage renders with the thin generic frontend, no custom JS` &&
                ` control. Consequently all five blockcolor:BlockBlueT1..T5 controls (and their id attributes) are absent from the port and five core:HTML controls are present in their place; the`.
     lv_text1 = lv_text1 && ` xmlns:blockcolor='sap.uxap.sample.SharedBlocks' declaration is dropped and xmlns:core='sap.ui.core' added. The block sources are not archived into ui5/ (matching the scaffolder), read from the` &&
-               ` checkout's SharedBlocks/BlockBlueTn.view.xml.`.
+               ` checkout's SharedBlocks/BlockBlueTn.view.xml. Typed IMPROVISED since 2026-08-23. CAPABILITIES' own row says "Declare the block→content substitution (IMPROVISED)", and the recipe's refinement is` &&
+               ` explicit that removing a control the original declares - even a zero-visual-output one - is a loss regardless of a pixel-identical render. 26 of the 31 sidecars citing that row carried NOTE, which` &&
+               ` hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column assignment, and the block ids and view roots go with it.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageSection`            name = `ObjectPageSection`                             class = `z2ui5_cl_smpc_app_184` path = `src/01/03/z2ui5_cl_smpc_app_184.clas.abap`
-        score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
         notes = lv_text1 ) ).
 
@@ -11304,54 +11375,62 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.26`
         notes = lv_text1 ) ).
 
-    lv_text1 = `NOTE: Block->content inlining (app 401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): all twenty-one blocks are the SAME BlockBase, sample:BlockEmpty, whose` &&
-               ` Collapsed and Expanded views are both view/blocks/BlockEmpty.view.xml - a forms:SimpleForm with maxContainerCols='2', title=' ' (one blank), editable='false', ResponsiveGridLayout and NO content at` &&
-               ` all. It is inlined into each of the twenty-one aggregations, which is the whole missing/extra pairing: sample:BlockEmpty 21 vs 0 against forms:SimpleForm 1 vs 21 (the block view is archived once, the` &&
-               ` port emits it twenty-one times). Absent as a result: the twenty-one BlockBase controls with their ids, and the block view's own mvc:View root. // NOTE: the six subsections hold 1, 2, 3, 4, 5 and 6` &&
-               ` empty blocks - which is the sample: it shows how the ObjectPageSubSection lays blocks out by itself when none of them declares a size. Its own subsection titles say so ('1 block', '2 blocks' ... '6` &&
-               ` blocks'), and the section that holds them sets showTitle='false' so only the subsection titles show. All carried 1:1. The sample's own id numbering skips a step (multiview11, 21/22, 41..43, 51..54,`.
-    lv_text1 = lv_text1 && ` 61..65, 71..76 - there is no multiview3x), an upstream slip with no effect; the port inlines the blocks away, so no id travels. // 1.71: the controller's only method is onAfterRendering, which does` &&
-               ` $('.sapUiSimpleForm').css('backgroundColor', 'green') - a jQuery reach into the rendered DOM, marked '//demokit specific' in the sample itself. It paints the empty forms green so their layout is` &&
-               ` visible in the demo kit. There is no control behind it (no SimpleForm property carries a background colour), so it is dropped: the port's forms are laid out identically and simply not tinted.`.
+    lv_text1 = `IMPROVISED: Block->content inlining (app 401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): all twenty-one blocks are the SAME BlockBase, sample:BlockEmpty,` &&
+               ` whose Collapsed and Expanded views are both view/blocks/BlockEmpty.view.xml - a forms:SimpleForm with maxContainerCols='2', title=' ' (one blank), editable='false', ResponsiveGridLayout and NO` &&
+               ` content at all. It is inlined into each of the twenty-one aggregations, which is the whole missing/extra pairing: sample:BlockEmpty 21 vs 0 against forms:SimpleForm 1 vs 21 (the block view is` &&
+               ` archived once, the port emits it twenty-one times). Absent as a result: the twenty-one BlockBase controls with their ids, and the block view's own mvc:View root. Typed IMPROVISED since 2026-08-23.` &&
+               ` CAPABILITIES' own row says "Declare the block→content substitution (IMPROVISED)", and the recipe's refinement is explicit that removing a control the original declares - even a zero-visual-output one` &&
+               ` - is a loss regardless of a pixel-identical render. 26 of the 31 sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an`.
+    lv_text1 = lv_text1 && ` inlined form falls back to automatic column assignment, and the block ids and view roots go with it. // NOTE: the six subsections hold 1, 2, 3, 4, 5 and 6 empty blocks - which is the sample: it shows` &&
+               ` how the ObjectPageSubSection lays blocks out by itself when none of them declares a size. Its own subsection titles say so ('1 block', '2 blocks' ... '6 blocks'), and the section that holds them sets` &&
+               ` showTitle='false' so only the subsection titles show. All carried 1:1. The sample's own id numbering skips a step (multiview11, 21/22, 41..43, 51..54, 61..65, 71..76 - there is no multiview3x), an` &&
+               ` upstream slip with no effect; the port inlines the blocks away, so no id travels. // 1.71: the controller's only method is onAfterRendering, which does $('.sapUiSimpleForm').css('backgroundColor',` &&
+               ` 'green') - a jQuery reach into the rendered DOM, marked '//demokit specific' in the sample itself. It paints the empty forms green so their layout is visible in the demo kit. There is no control` &&
+               ` behind it (no SimpleForm property carries a background colour), so it is dropped: the port's forms are laid out identically and simply not tinted.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageSubSection`         name = `ObjectPageSubSectionMultiView`                 class = `z2ui5_cl_smpc_app_598` path = `src/01/03/z2ui5_cl_smpc_app_598.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
         notes = lv_text1 ) ).
 
-    lv_text1 = `NOTE: Block->content inlining (app 401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): all 359 blocks are the SAME BlockBase, sample:InfoButton, around` &&
+    lv_text1 = `IMPROVISED: Block->content inlining (app 401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): all 359 blocks are the SAME BlockBase, sample:InfoButton, around` &&
                ` view/blocks/InfoButton.view.xml - a single m:Button (width='100%', text='infoButton', type='Emphasized'). It is inlined into each of the 359 aggregations, which is the missing/extra pairing:` &&
                ` sample:InfoButton 359 vs 0 and Button 1 vs 0 against m:Button 0 vs 359 (the block view defaults to xmlns="sap.m" and is archived once; the port's one view defaults to sap.uxap, so each carries the m:` &&
-               ` prefix, 359 times). The block view's own mvc:View root with its width='100%' is the View.width line. // IMPROVISED: this sample is ABOUT sap.uxap.BlockBase.columnLayout: the ten sections walk every` &&
-               ` arrangement of 'auto' and 1..4 across 2, 3, 4, 5 and 6 blocks, and the last five sections put one fixed width on all of them. columnLayout is a property of the BlockBase WRAPPER, read by` &&
-               ` ObjectPageSubSection when it lays its blocks out - and the wrapper is exactly what the inlining removes, so the property has nowhere to go: an m:Button in a blocks aggregation is laid out as 'auto'.`.
-    lv_text1 = lv_text1 && ` What survives is the structure the sample walks - the ten sections, the 86 subsections, their titles ('a-1', '2 -a', '1-a-a-a-1' ... which spell out the very layouts) and the right number of buttons` &&
-               ` in each - so the page reads as the same matrix, with every row laid out automatically instead of as its title says. Each inlined button carries a comment naming the columnLayout it had. // NOTE: the` &&
-               ` ConfigModel the controller seeds ({subSectionLayout: 'TitleOnTop', useTwoColumnsForLargeScreen: false}) folds onto two root fields (same-data prefix-drop). Both ObjectPageLayout properties ARE` &&
-               ` bindable and the sample already binds them, so the two ToggleButtons keep working exactly as upstream: toggleTitle flips subSectionLayout between TitleOnTop and TitleOnLeft, toggleUseTwoColumns flips` &&
-               ` useTwoColumnsForLargeScreen, and the port flips the same fields in on_event - a round trip where the original writes the model directly, but the same two properties and the same two values. // NOTE:` &&
-               ` the ToggleButtons' pressed state is not bound in the sample either (the controller keeps isTitleOnTop / bUseTwoColumns of its own), so the port does not bind it: the button's own toggle and the`.
-    lv_text1 = lv_text1 && ` backend flag start in step and stay in step, one press each. // LIVE-TEST: not yet verified in a running system: that the two toggles switch the subsection layout to TitleOnLeft and the page into` &&
-               ` two-column mode.`.
+               ` prefix, 359 times). The block view's own mvc:View root with its width='100%' is the View.width line. Typed IMPROVISED since 2026-08-23. CAPABILITIES' own row says "Declare the block→content` &&
+               ` substitution (IMPROVISED)", and the recipe's refinement is explicit that removing a control the original declares - even a zero-visual-output one - is a loss regardless of a pixel-identical render.` &&
+               ` 26 of the 31 sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column`.
+    lv_text1 = lv_text1 && ` assignment, and the block ids and view roots go with it. // IMPROVISED: this sample is ABOUT sap.uxap.BlockBase.columnLayout: the ten sections walk every arrangement of 'auto' and 1..4 across 2, 3,` &&
+               ` 4, 5 and 6 blocks, and the last five sections put one fixed width on all of them. columnLayout is a property of the BlockBase WRAPPER, read by ObjectPageSubSection when it lays its blocks out - and` &&
+               ` the wrapper is exactly what the inlining removes, so the property has nowhere to go: an m:Button in a blocks aggregation is laid out as 'auto'. What survives is the structure the sample walks - the` &&
+               ` ten sections, the 86 subsections, their titles ('a-1', '2 -a', '1-a-a-a-1' ... which spell out the very layouts) and the right number of buttons in each - so the page reads as the same matrix, with` &&
+               ` every row laid out automatically instead of as its title says. Each inlined button carries a comment naming the columnLayout it had. // NOTE: the ConfigModel the controller seeds ({subSectionLayout:` &&
+               ` 'TitleOnTop', useTwoColumnsForLargeScreen: false}) folds onto two root fields (same-data prefix-drop). Both ObjectPageLayout properties ARE bindable and the sample already binds them, so the two`.
+    lv_text1 = lv_text1 && ` ToggleButtons keep working exactly as upstream: toggleTitle flips subSectionLayout between TitleOnTop and TitleOnLeft, toggleUseTwoColumns flips useTwoColumnsForLargeScreen, and the port flips the` &&
+               ` same fields in on_event - a round trip where the original writes the model directly, but the same two properties and the same two values. // NOTE: the ToggleButtons' pressed state is not bound in the` &&
+               ` sample either (the controller keeps isTitleOnTop / bUseTwoColumns of its own), so the port does not bind it: the button's own toggle and the backend flag start in step and stay in step, one press` &&
+               ` each. // LIVE-TEST: not yet verified in a running system: that the two toggles switch the subsection layout to TitleOnLeft and the page into two-column mode.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageSubSection`         name = `ObjectPageSubSectionSized`                     class = `z2ui5_cl_smpc_app_599` path = `src/01/03/z2ui5_cl_smpc_app_599.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         since = `1.26`
         notes = lv_text1 ) ).
 
-    lv_text1 = `NOTE: Block->content inlining (app 161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the original blocks aggregations each hold a custom BlockBase control` &&
+    lv_text1 = `IMPROVISED: Block->content inlining (app 161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the original blocks aggregations each hold a custom BlockBase control` &&
                ` blockcolor:BlockBlue (from the sample's SharedBlocks JS, xmlns:blockcolor='sap.uxap.sample.SharedBlocks'), used 3 times (ids b1/b2/b3). A BlockBase is only a lazy-loading wrapper around a view;` &&
                ` BlockBlue's rendered content is a single coloured div (<html:div style='height:4em; background-color: #A9EAFF ;'/>). Since ObjectPageSubSection.blocks accepts any sap.ui.core.Control, each` &&
                ` blockcolor:BlockBlue is inlined as a core:HTML leaf carrying that div in its content attribute - the whole ObjectPage renders with the thin generic frontend, no custom JS control. Consequently all` &&
                ` three blockcolor:BlockBlue controls (and their id attributes) are absent from the port and three core:HTML controls are present in their place. The empty BlockBlueCtrl controller (a no-op` &&
-               ` onParentBlockModeChange stub) carries no behaviour to port.`.
+               ` onParentBlockModeChange stub) carries no behaviour to port. Typed IMPROVISED since 2026-08-23. CAPABILITIES' own row says "Declare the block→content substitution (IMPROVISED)", and the recipe's`.
+    lv_text1 = lv_text1 && ` refinement is explicit that removing a control the original declares - even a zero-visual-output one - is a loss regardless of a pixel-identical render. 26 of the 31 sidecars citing that row carried` &&
+               ` NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column assignment, and the block ids and view roots go with` &&
+               ` it.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageSubSection`         name = `ObjectPageSubSectionWithActions`               class = `z2ui5_cl_smpc_app_178` path = `src/01/03/z2ui5_cl_smpc_app_178.clas.abap`
-        score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
         notes = lv_text1 ) ).
 
