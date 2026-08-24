@@ -175,7 +175,7 @@ Overall **617 / 617** portable demo kit samples ported (100.0 %).
 **In scope**: samples whose control exists since **UI5 1.71** and is **not deprecated** (legacy-free ready).
 Out of scope: 113 of 742 samples — 21 on deprecated controls, 52 on controls newer than 1.71, 37 that are not app views (UI5 test infrastructure, Component routing, view-templating demos — see `ui5/scope-nonapp.json`), 3 demo apps without an owning control.
 Plus **5** ported samples outside that scope — maintainer-decided exceptions (`ui5/scope-exceptions.json`, listed in [STATUS.md](STATUS.md)); they are not counted as coverage of the in-scope backlog.
-Control metadata from OpenUI5 **1.152.0**.
+Control metadata from OpenUI5 **1.153.0**.
 
 | Module | Samples | In scope | Reserved | To port | Ported | Coverage | |
 |--------|--------:|---------:|---------:|--------:|-------:|---------:|---|
@@ -216,4 +216,4 @@ For bug reports or feature requests, please open an issue in the [abap2UI5 repos
 
 ---
 
-_Last generated: <!-- last-run -->2026-08-17 03:53 UTC<!-- /last-run -->_
+_Last generated: <!-- last-run -->2026-08-24 03:59 UTC<!-- /last-run -->_

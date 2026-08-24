@@ -20,7 +20,7 @@ that keep members newer than UI5 1.71 for 1:1 fidelity (declared as
 POST_171 in the sidecar) — they need a correspondingly recent UI5.
 See the [README](README.md#coverage) for the per-module coverage summary.
 
-_Control metadata (Since, deprecation) from the OpenUI5 **1.152.0** `api.json`._
+_Control metadata (Since, deprecation) from the OpenUI5 **1.153.0** `api.json`._
 
 | Module | Control | Since | Deprecated | Sample | ABAP |
 |--------|---------|:-----:|------------|--------|:----:|

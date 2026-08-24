@@ -21,7 +21,7 @@
     "LIVE_TEST": "an interaction still to be confirmed in a running system",
     "NOTE": "a documented difference from the original"
   },
-  "ui5Snapshot": "1.152.0",
+  "ui5Snapshot": "1.153.0",
   "counts": {
     "entries": 636,
     "byStatus": {
