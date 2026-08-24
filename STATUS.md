@@ -482,6 +482,53 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
     cross-checks the entity's library against the universe).
   **What is left: 255 `reviewed` and 206 `generated` ports above 147.**
 
+  **Blocks 5-7 (2026-08-23) read ports 148-271** — 124 ports in three waves of
+  parallel readers. The pattern of the whole sweep changed here: fewer dead
+  wires per port, and more claims that did not survive being checked against the
+  sources. Wires that could not work:
+  - **A raw-argument rule, found the hard way.** `get_t_arg` leaves a `t_arg`
+    entry unquoted only when it starts with `$` or `{` (or is an `.eB`/`.eF`
+    call); everything else becomes a single-quoted JS string. App 250's
+    `liveChange` composed `'rgba(' + ${…}` and handed it to the `css` setter,
+    where CSSOM dropped the text — the icon never changed colour. The
+    value-help pre-filter added to app 233 *earlier in this same sweep* had the
+    identical shape and was corrected before it could ship as a fix that fixed
+    nothing.
+  - **165** wrote its URLHELPER payload in a backtick literal, where `\{` is a
+    real backslash: the expression never evaluated and the user got "Invalid
+    redirect URL" instead of the redirect.
+  - **168** gave `class=` an expression binding. `XMLTemplateProcessor`
+    intercepts `class` before the property branch and hands the raw string to
+    `addStyleClass`, which drops any value containing a quote — so the control
+    got no class at all, losing the original's static one too.
+  - **252** bound an int property to a field the Input writes back as a string;
+    every keystroke threw out of the binding. The binding carries a type now,
+    which is where the original's `Number( )` went.
+  - **241** left the nested `items` aggregation unbound on a row template, so
+    one row's children never rendered and every row grew a spurious child.
+  - **167** computed `false` where the original's expression THROWS and UI5
+    falls back to the declared default `true` — one whole page was unreachable.
+  - **163** froze five media flags at their desktop values, which left the
+    overflow button permanently invisible and its ActionSheet branch dead code,
+    in the sample about device-dependent toolbars.
+  - **246** cleared a bound field beside `clear( )`: the model push runs before
+    the queued follow-up actions, so `upload( )` posted an empty form.
+  - **148** hit ABAP's `INSERT … INDEX` where JS `splice` clamps — dropping the
+    last card onto itself lost the row on a real system.
+  Two sweeps of one defect across ports: mixed-case `sortProperty`/
+  `filterProperty` against upper-cased model paths (164/174/247/353, after 137),
+  and the `.sap-phone .sapUiCal` rule dropped as "not used by the view" in six
+  calendar ports — it is written by the renderer, not the author.
+  The **framework** fix of the day came out of app 196: `CONTROL_GLOBAL
+  FORMATTING` asked for `sap/ui/core/Formatting`, a module UI5 does not have,
+  and both unit tests stubbed the same wrong id. The gate that should have
+  caught it read only `sap.ui.define` arrays; it checks probed ids now.
+  Documentation: 26 uxap sidecars typed the block substitution `NOTE` where
+  CAPABILITIES and the recipe both say `IMPROVISED`, ten e2e stamps claimed
+  more than their modules assert, and a dozen justifications named framework
+  limitations that do not exist.
+  **What is left: 136 `reviewed` and 206 `generated` ports above 271.**
+
 - [x] **CAPABILITIES.md's stale class citations — DONE.** Both halves of this
   are closed, and neither closed the way the entry predicted. The shared
   script's `PROSE` list now carries `CAPABILITIES.md` (and `E2E.md`) outright,
