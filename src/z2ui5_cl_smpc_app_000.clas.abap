@@ -8316,7 +8316,8 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` CLIENT issues to a foreign host, and stubbing a UI5 private module from the backend is exactly the frontend logic the thin-frontend principle forbids. The 'Time for requesting the card data' Input is` &&
                ` kept 1:1 (the original view gives it no value either) but nothing reads it; the loading placeholders are still visible for as long as the real request takes. // NOTE: Unverified in a running system:` &&
                ` whether the bound items aggregation instantiates the Cards with their per-row manifest URL, columns and dataMode, and whether the number-of-cards Input round-trip rebuilds the container as the` &&
-               ` original's destroyItems/addItem loop does. **e2e-verified 2026-08-17** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_342.mjs).`.
+               ` original's destroyItems/addItem loop does. The module counts the rendered Cards against the entered number and no more, so only the COUNT half is covered: a wrong manifest base URL, a dropped columns` &&
+               ` or an inverted dataMode renders the same number of (error) cards and passes it. **e2e-verified 2026-08-17** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_342.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.integration` control = `sap.ui.integration.widgets.Card`       name = `LazyLoading`                                   class = `z2ui5_cl_smpc_app_342` path = `src/01/02/z2ui5_cl_smpc_app_342.clas.abap`
         score = 4
@@ -8345,14 +8346,19 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
 
     lv_text1 = `NOTE: The six core:Fragment references (sap.ui.layout.sample.BlockLayoutCustomBackgroundPerCell.ColorSelect) are inlined: abap2UI5 serves one view per round-trip, so a fragmentName has no file to` &&
                ` resolve. The fragment's content (VBox with the two Labels and the two Selects over eleven ColorSet and six ColorShade core:Item entries) is written into each of the six cells verbatim, so the` &&
-               ` rendered result is identical; the dropped core:Fragment elements are what structural-diff reports. // NOTE: Each cell keeps its own element binding: binding="{/cellN}" is built from client->_bind(` &&
-               ` val = cellN path = abap_true ) rather than a hard-coded path, and the model carries one nested structure per cell (colorset/colorshade) so the fragment's relative {COLORSET}/{COLORSHADE} bindings` &&
-               ` resolve against the cell context exactly as in the original - no flattening to the model root was needed, and the two Selects write back into their own cell. // NOTE: resources/sample.css is injected` &&
-               ` through a core:HTML <style> leaf (abap2UI5 ships no separate stylesheet), so the port adds one core:HTML control the original view does not have. The CSS braces are escaped \{ \} in a backtick`.
-    lv_text1 = lv_text1 && ` literal so the XMLView parser does not read them as bindings, and the background-image url("Night_sky.jpg") is absolutized to the OpenUI5 host` &&
+               ` rendered result is identical. structural-diff reports SIX lines for this, not one: the dropped core:Fragment references (6 vs 0) plus the five-fold multiplication that inlining them into six cells` &&
+               ` produces - VBox 2 vs 7, Label 5 vs 15, Select 2 vs 12, core:Item 17 vs 102 - and separately the core:HTML style leaf below. All of them are this one substitution; the gate accepts them because the` &&
+               ` control names appear in this prose, so they are named here explicitly rather than left to a substring match. // NOTE: Each cell keeps its own element binding: binding="{/cellN}" is built from` &&
+               ` client->_bind( val = cellN path = abap_true ) rather than a hard-coded path, and the model carries one nested structure per cell (colorset/colorshade) so the fragment's relative`.
+    lv_text1 = lv_text1 && ` {COLORSET}/{COLORSHADE} bindings resolve against the cell context exactly as in the original - no flattening to the model root was needed, and the two Selects write back into their own cell. // NOTE:` &&
+               ` resources/sample.css is injected through a core:HTML <style> leaf (abap2UI5 ships no separate stylesheet), so the port adds one core:HTML control the original view does not have. The CSS braces are` &&
+               ` escaped \{ \} in a backtick literal so the XMLView parser does not read them as bindings, and the background-image url("Night_sky.jpg") is absolutized to the OpenUI5 host` &&
                ` (https://sdk.openui5.org/test-resources/sap/ui/layout/demokit/sample/BlockLayoutCustomBackgroundPerCell/resources/Night_sky.jpg) per the asset-URL rule - relative to the served app it would not` &&
                ` resolve. // NOTE: Unverified in a running system: whether the per-cell context binding round-trips (a Select changing its cell's colorSet/colorShade writes back into the nested ABAP structure) and` &&
-               ` whether the injected stylesheet paints the image cell. **e2e-verified 2026-08-17** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_343.mjs).`.
+               ` whether the injected stylesheet paints the image cell. **e2e-verified 2026-08-17** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_343.mjs) - but that run proved nothing: the module`.
+    lv_text1 = lv_text1 && ` picked ColorSet6, which model_init seeds into EVERY cell, so the pressed Select was asserted to hold the value it already had (true even with no binding at all, since SelectList sets the pressed item` &&
+               ` locally) and the neighbour was asserted unchanged when nothing had asked it to change. A port with a completely dead binding passed it. The module picks ColorSet3 since 2026-08-24, so the round-trip` &&
+               ` half is covered from that date; the stylesheet half is still only covered by the render.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.BlockLayout`             name = `BlockLayoutCustomBackgroundPerCell`            class = `z2ui5_cl_smpc_app_343` path = `src/01/02/z2ui5_cl_smpc_app_343.clas.abap`
         score = 4
@@ -8437,7 +8443,8 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` injected either since nothing renders those classes. // NOTE: css/main.css (.sapMFlexBox.demoBox, .demoBox .sapMText, .sapMText.message) is injected through an extra core:HTML <style> leaf, because` &&
                ` abap2UI5 ships no separate stylesheet - without the rules behind them the 26 demo boxes would render as unstyled text (the app-122/124 lesson). The CSS braces are escaped \{ \} in a backtick literal` &&
                ` so the XMLView parser does not read them as bindings; the view also declares xmlns:core for it, which the original does not need. // NOTE: Fully static port: the sample has no model and - once the`.
-    lv_text1 = lv_text1 && ` RevealGrid toggle is dropped - no event either, so the class is the app-051 shape (a bare check_on_init branch with view_display, no model_init, no on_event).`.
+    lv_text1 = lv_text1 && ` RevealGrid toggle is dropped - no event either, so the class is the app-051 shape (view_display on check_on_init and again on check_on_navigated (the house dispatcher shape), no model_init, no` &&
+               ` on_event).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `GridAutoRows`                                  class = `z2ui5_cl_smpc_app_346` path = `src/01/02/z2ui5_cl_smpc_app_346.clas.abap`
         score = 4
@@ -8634,22 +8641,28 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.30`
         notes = lv_text1 ) ).
 
-    lv_text1 = `NOTE: All three controller behaviours are reproduced. (a) breakpointChanged carries its own currentBreakpoint event parameter to the backend (t_arg ${$parameters>/currentBreakpoint}) and on_event` &&
-               ` enables the Toggle button exactly when it is 'S' - what _updateToggleButtonState does; the port therefore adds an enabled attribute to the Toggle Button, which the original sets from the controller.` &&
-               ` (b) handleToggleClick calls DynamicSideContent.toggle( ), which is driven directly through control_by_id ( DynamicSideContent / toggle ) since 2026-08-21. It was a bound showSideContent flipped in` &&
-               ` on_event until then, on the claim that showSideContent is the property toggle( ) writes - and that is the wrong way round, so the button changed nothing on screen. sap/ui/layout/DynamicSideContent.js` &&
-               ` shows toggle( ) leaving showSideContent alone while it is at its true default and swapping the private _MCVisible/_SCVisible pair instead; setShowSideContent, conversely, re-derives those flags` &&
-               ` through _setResizeData( S ) and ends with _MCVisible = true, so the flip could never reveal the side content on the one breakpoint where the button is enabled. An unlisted public method is callable`.
-    lv_text1 = lv_text1 && ` through the wire (the denylist covers teardown, model/binding swaps, event-handler tampering and the render lifecycle), and toggle( ) takes no argument, so nothing can be lost in the cast. (c)` &&
-               ` handleSliderChange resizes the containing Page through jQuery - this.byId('sideContentContainer').$().width(iValue + '%') - and sap.m.Page has no width property to bind, so the port uses the ``css``` &&
-               ` control method roundtrip-free: follow_up_action( control_by_id, sideContentContainer / css / width / ${$parameters>/value} + '%' ). Same wiring as app 138, which ports the plain DynamicSideContent` &&
-               ` sample; what this sample adds is sideContentPosition="Begin", kept 1:1. // NOTE: style.css (.sapUiDSC.sapUiDSCExplored h1 { font-size: 1.5rem }) is injected through a core:HTML <style> leaf, so the` &&
-               ` port adds one core:HTML control the original view does not have - abap2UI5 ships no separate stylesheet. The CSS braces are escaped \{ \} in a backtick literal so the XMLView parser does not read` &&
-               ` them as bindings. // NOTE: onBeforeRendering hides the width Slider and the hint Text on a phone (Device.system.phone). Both are bound to the shared device model instead - visible="{=`.
-    lv_text1 = lv_text1 && ` !${device>/system/phone} }" - which is the live equivalent and needs no round-trip; the original's literal visible="getVisible()" on the hint Text (a sample quirk that evaluates to nothing) is` &&
-               ` replaced by that binding. The two body texts are the sample's full Lorem paragraphs verbatim, with the XML attribute's line breaks normalized to single spaces as an XML parser would. // NOTE:` &&
-               ` Unverified in a running system: the breakpointChanged round-trip enabling the Toggle button on S, the Toggle press reaching the control's own toggle( ), and the Slider's css width write on the` &&
-               ` container Page. The same three wires are live-verified on app 138 (the plain DynamicSideContent sample), which uses them identically. **e2e-verified 2026-08-17** (nightly e2e interaction,` &&
+    lv_text1 = `NOTE: All three controller behaviours are reproduced. (a) _updateToggleButtonState has TWO call sites, and both are covered. breakpointChanged carries its own currentBreakpoint event parameter to the` &&
+               ` backend (t_arg ${$parameters>/currentBreakpoint}) and on_event enables the Toggle button exactly when it is 'S'. But onAfterRendering calls it a second time, seeding the state from` &&
+               ` getCurrentBreakpoint( ) at LOAD, and the round-trip cannot cover that: _setBreakpointFromWidth guards the fire with ``if (sCurrentBreakpoint !== undefined)`` and _currentBreakpoint is undefined until` &&
+               ` that very call, so breakpointChanged provably never fires on the first render. Binding TOGGLE_ENABLED alone therefore left the button disabled on load - permanently so on a narrow viewport, which is` &&
+               ` breakpoint S, exactly where the toggle is the only way to reach the side content (corrected 2026-08-24). The enabled attribute is now an expression ORing the flag with ${device>/resize/width} <= 720,` &&
+               ` the control's own S_M_BREAKPOINT. That is sound in both directions: containerQuery measures the CONTAINER, which can never exceed the window, so window <= 720 implies breakpoint S; the converse case`.
+    lv_text1 = lv_text1 && ` - a wide window whose container the Slider shrank below 720 - is what the breakpointChanged round-trip still handles, which is why that wire stays; the port therefore adds an enabled attribute to the` &&
+               ` Toggle Button, which the original sets from the controller. (b) handleToggleClick calls DynamicSideContent.toggle( ), which is driven directly through control_by_id ( DynamicSideContent / toggle )` &&
+               ` since 2026-08-21. It was a bound showSideContent flipped in on_event until then, on the claim that showSideContent is the property toggle( ) writes - and that is the wrong way round, so the button` &&
+               ` changed nothing on screen. sap/ui/layout/DynamicSideContent.js shows toggle( ) leaving showSideContent alone while it is at its true default and swapping the private _MCVisible/_SCVisible pair` &&
+               ` instead; setShowSideContent, conversely, re-derives those flags through _setResizeData( S ) and ends with _MCVisible = true, so the flip could never reveal the side content on the one breakpoint` &&
+               ` where the button is enabled. An unlisted public method is callable through the wire (the denylist covers teardown, model/binding swaps, event-handler tampering and the render lifecycle), and toggle(`.
+    lv_text1 = lv_text1 && ` ) takes no argument, so nothing can be lost in the cast. (c) handleSliderChange resizes the containing Page through jQuery - this.byId('sideContentContainer').$().width(iValue + '%') - and sap.m.Page` &&
+               ` has no width property to bind, so the port uses the ``css`` control method roundtrip-free: follow_up_action( control_by_id, sideContentContainer / css / width / ${$parameters>/value} + '%' ). Same` &&
+               ` wiring as app 138, which ports the plain DynamicSideContent sample; what this sample adds is sideContentPosition="Begin", kept 1:1. // NOTE: style.css (.sapUiDSC.sapUiDSCExplored h1 { font-size:` &&
+               ` 1.5rem }) is injected through a core:HTML <style> leaf, so the port adds one core:HTML control the original view does not have - abap2UI5 ships no separate stylesheet. The CSS braces are escaped \{` &&
+               ` \} in a backtick literal so the XMLView parser does not read them as bindings. // NOTE: onBeforeRendering hides the width Slider and the hint Text on a phone (Device.system.phone). Both are bound to` &&
+               ` the shared device model instead - visible="{= !${device>/system/phone} }" - which is the live equivalent and needs no round-trip; the original's literal visible="getVisible()" on the hint Text (a`.
+    lv_text1 = lv_text1 && ` sample quirk that evaluates to nothing) is replaced by that binding. The two body texts are the sample's full Lorem paragraphs verbatim, with the XML attribute's line breaks normalized to single` &&
+               ` spaces as an XML parser would. // NOTE: Unverified in a running system: the breakpointChanged round-trip enabling the Toggle button on S, the Toggle press reaching the control's own toggle( ), and` &&
+               ` the Slider's css width write on the container Page. The e2e module drives the first two only - it never touches the Slider, so the css wire stays uncovered by it; the same wire IS live-verified on` &&
+               ` app 138 below. The same three wires are live-verified on app 138 (the plain DynamicSideContent sample), which uses them identically. **e2e-verified 2026-08-17** (nightly e2e interaction,` &&
                ` meta/interactions/z2ui5_cl_smpc_app_344.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.DynamicSideContent`      name = `DynamicSideContentPosition`                    class = `z2ui5_cl_smpc_app_344` path = `src/01/02/z2ui5_cl_smpc_app_344.clas.abap`

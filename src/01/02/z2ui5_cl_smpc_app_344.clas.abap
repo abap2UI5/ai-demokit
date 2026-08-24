@@ -134,7 +134,23 @@ CLASS z2ui5_cl_smpc_app_344 IMPLEMENTATION.
                                   val   = client->cs_event-control_by_id
                                   t_arg = VALUE #( ( `DynamicSideContent` ) ( `toggle` ) ) )
                         )->a( n = `id`      v = `toggleButton`
-                        )->a( n = `enabled` v = client->_bind( toggle_enabled )
+                        " onAfterRendering ALSO calls _updateToggleButtonState, seeding the
+                        " state from getCurrentBreakpoint( ) at load. Binding TOGGLE_ENABLED
+                        " alone cannot reproduce that: breakpointChanged provably never fires
+                        " on the first render - _setBreakpointFromWidth guards the fire with
+                        " `if (sCurrentBreakpoint !== undefined)` and _currentBreakpoint is
+                        " undefined until that very call - so the button rendered PERMANENTLY
+                        " disabled on a narrow viewport, which is breakpoint S, exactly where
+                        " DynamicSideContent shows one area at a time and the toggle is the
+                        " only way to reach the side content.
+                        " The OR closes the load-time gap without a round trip. It is sound in
+                        " both directions: containerQuery measures the CONTAINER, which can
+                        " never be wider than the window, so window <= 720 implies breakpoint
+                        " S. The reverse case - a wide window whose container the Slider has
+                        " shrunk below 720 - is what the breakpointChanged round-trip still
+                        " handles, which is why that wire stays. 720 is the control's own
+                        " S_M_BREAKPOINT (DynamicSideContent.js).
+                        )->a( n = `enabled` v = |\{= ${ client->_bind( toggle_enabled ) } || $\{device>/resize/width\} <= 720 \}|
 
                     )->tag( `Slider`
                         )->a( n = `id`         v = `DSCWidthSlider`

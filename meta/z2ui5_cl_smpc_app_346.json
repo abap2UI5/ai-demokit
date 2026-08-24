@@ -21,7 +21,7 @@
     },
     {
       "type": "NOTE",
-      "what": "Fully static port: the sample has no model and - once the RevealGrid toggle is dropped - no event either, so the class is the app-051 shape (a bare check_on_init branch with view_display, no model_init, no on_event)."
+      "what": "Fully static port: the sample has no model and - once the RevealGrid toggle is dropped - no event either, so the class is the app-051 shape (view_display on check_on_init and again on check_on_navigated (the house dispatcher shape), no model_init, no on_event)."
     }
   ]
 }
