@@ -7194,17 +7194,18 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.42`
         notes = lv_text1 ) ).
 
-    lv_text1 = `NOTE: onExpandMultiPress and onCollapseMultiPress collect the selected items' INDICES (oTree.indexOfItem per selected item) and hand the array to oTree.expand / oTree.collapse. Both travel as` &&
-               ` round-trip-free follow_up_action( control_by_id, Tree / expand | collapse, <expression> ), the index array built by the same client expression the original computes:` &&
-               ` $event.oSource.getParent().getParent().getSelectedItems().map(...indexOfItem...). expand and collapse are not listed in CONTROL_METHODS, but the resolved array reaches those public methods through` &&
-               ` castArgAuto untouched - app 248 carries the identical pair and is e2e-verified on it. // NOTE: onInit does this.byId('Tree').expandToLevel(1). expandToLevel IS whitelisted, so it is issued once per` &&
-               ` render as a round-trip-free follow_up_action (app 248/365 idiom) - the tree comes up with its first level open, as upstream. // NOTE: onSelectionFinish maps the MultiComboBox's selected keys onto` &&
-               ` oTree.setSticky(). sticky IS a bindable property and selectedKeys is bindable too, so the two share ONE bound string table (app 508 precedent): picking a key writes the table, the table is the tree's`.
-    lv_text1 = lv_text1 && ` sticky value, and no round trip or setter call is needed. The selectionFinish wire is therefore absent - the binding does what the handler did. // NOTE: onToggleInfoToolbar does` &&
-               ` oTree.getInfoToolbar().setVisible(!oEvent.getParameter('pressed')). Both halves are bindable: the ToggleButton's pressed state is bound two-way to one flag and the info toolbar's visible is an` &&
-               ` expression over the same flag ({= !${...} }), so the toolbar hides the moment the button is pressed, in the browser. The press wire is therefore absent, and the toolbar starts visible with the button` &&
-               ` unpressed, exactly as upstream. // NOTE: Tree.json is the 44-node variant this sample and TreeExpandTo ship (six Node1-n branches, five levels deep), not the ten-node one TreeSelection / TreeDnD use.` &&
-               ` It is seeded verbatim into five nested ABAP structure levels - the depth of the data is the depth of the type (app 437 precedent).`.
+    lv_text1 = `NOTE: onExpandMultiPress and onCollapseMultiPress collect the selected items' INDICES (oTree.indexOfItem per selected item) and hand the array to oTree.expand / oTree.collapse. The port issues one` &&
+               ` round-trip-free follow_up_action( control_by_id, Tree, expandSelected | collapseSelected ) instead, and the frontend does that mapping. The original's spelling is not portable: an event argument is` &&
+               ` resolved by UI5's BindingParser, whose ExpressionParser has no ``function`` keyword and reads ``{`` as an object literal, so ``.getSelectedItems().map(function (o) { ... })`` does not fail on that` &&
+               ` one argument - the WHOLE handler fails to parse and every argument is lost. app 248 carries the same interaction on sap.ui.table.TreeTable, which has getSelectedIndices( ) and therefore needs no` &&
+               ` loop; sap.m.Tree has no callback-free equivalent, which is why abap2UI5 grew the two synthetic CONTROL_METHODS entries. // NOTE: onInit does this.byId('Tree').expandToLevel(1). expandToLevel IS` &&
+               ` whitelisted, so it is issued once per render as a round-trip-free follow_up_action (app 248/365 idiom) - the tree comes up with its first level open, as upstream. // NOTE: onSelectionFinish maps the`.
+    lv_text1 = lv_text1 && ` MultiComboBox's selected keys onto oTree.setSticky(). sticky IS a bindable property and selectedKeys is bindable too, so the two share ONE bound string table (app 508 precedent): picking a key writes` &&
+               ` the table, the table is the tree's sticky value, and no round trip or setter call is needed. The selectionFinish wire is therefore absent - the binding does what the handler did. // NOTE:` &&
+               ` onToggleInfoToolbar does oTree.getInfoToolbar().setVisible(!oEvent.getParameter('pressed')). Both halves are bindable: the ToggleButton's pressed state is bound two-way to one flag and the info` &&
+               ` toolbar's visible is an expression over the same flag ({= !${...} }), so the toolbar hides the moment the button is pressed, in the browser. The press wire is therefore absent, and the toolbar starts` &&
+               ` visible with the button unpressed, exactly as upstream. // NOTE: Tree.json is the 44-node variant this sample and TreeExpandTo ship (six Node1-n branches, five levels deep), not the ten-node one` &&
+               ` TreeSelection / TreeDnD use. It is seeded verbatim into five nested ABAP structure levels - the depth of the data is the depth of the type (app 437 precedent).`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Tree`                            name = `TreeExpandMulti`                               class = `z2ui5_cl_smpc_app_601` path = `src/01/01/z2ui5_cl_smpc_app_601.clas.abap`
         score = 4
