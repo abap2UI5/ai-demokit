@@ -7593,39 +7593,48 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` _createNavigationItem as a bound tnt:NavigationListItem template (nested {ITEMS} sub-template and sap.m.ObjectStatus tag with the original's visible="{= !!${TAGTEXT} }" expression, both levels). So` &&
                ` the port view carries extra controls the original view built at runtime - NavigationListGroup (2), NavigationListItem (Home plus the two-level template per group), ObjectStatus tags - and the main`.
     lv_text1 = lv_text1 && ` NavigationList drops the original's items/factory attribute in favour of the static skeleton. On the data side this means no single mock array corresponds to a port table: the group tables carry rows` &&
-               ` from NESTED levels of /navigation - t_group1_full's first two rows are Favorites' own children, 'My Accounts' and 'My Orders', which live at navigation[1].items[0].items[] in data.json. data-fidelity` &&
-               ` compares a block against the one best-matching FLAT array and picked /fixedNavigation for this one, so those two verbatim rows read as invented data; naming them here is what makes the declaration` &&
-               ` true rather than merely quiet. // IMPROVISED: The search keeps filtered fixed items in the fixedItem section. The original's _executeSearch merges navigation and fixedNavigation into ONE filtered` &&
-               ` array, sets it as /navigation and empties /fixedNavigation, so a matching fixed item is re-rendered inside the scrollable main list. The port filters each list in place instead: the group tables and` &&
-               ` the fixed table ({/T_FIXED} instead of {/fixedNavigation}) are reduced to the matching rows (title or tagText contains, case-insensitive; a matching parent keeps all children; empty groups and a`.
-    lv_text1 = lv_text1 && ` non-matching Home hide via bound visible flags). Same visible rows, but a matching fixed item stays pinned at the bottom instead of moving into the main list. // NOTE: Thin frontend: onLiveChange's` &&
-               ` _executeSearch and setHighlightedText become one LIVE_CHANGE round-trip that filters the tables in ABAP and updates the model - NavigationList.highlightedText is a bindable property, so it shares the` &&
-               ` search field's two-way bound value instead of the setter. onSearch's announceSearchMatchCount stays a control method (no bindable equivalent) and is invoked via follow_up_action( control_by_id,` &&
-               ` navigationList, announceSearchMatchCount, <count> ) with the count computed in ABAP like the original's recursive title-only _countItems. abap2UI5 serializes round-trips, so very fast typing can skip` &&
-               ` intermediate filter states (they converge on the next pause); the search field's value is two-way bound so the filter state survives the round-trip. // NOTE: onMenuTogglePress toggles` &&
-               ` ToolPage.sideExpanded imperatively; the property is bindable, so the port two-way binds it (sideExpanded, an attribute the original view does not declare) and flips it on the MENU_TOGGLE round-trip -`.
-    lv_text1 = lv_text1 && ` collapsing also clears the bound search value and restores the unfiltered lists, like the original's reset of the search field, the highlight and the model (app 302 precedent). // NOTE: onItemSelect` &&
-               ` does navContainer.to(createId(key)) guarded by getPage(); the port transports ${$parameters>/item}.getKey() and calls the same method through follow_up_action( control_by_id, navContainer, to, <key>` &&
-               ` ) guarded by the four page ids (home, myAccounts, myOrders, CustomerManagement) - the NavContainer has no bindable current-page property (app 302 precedent). onItemPress reads the pressed item's key` &&
+               ` from NESTED levels of /navigation - t_group1_full's first row is Favorites ITSELF, carrying 'My Accounts' and 'My Orders' in its nested items - those two live at navigation[1].items[0].items[] in` &&
+               ` data.json. (This sentence described them as t_group1_full's own first two rows until 2026-08-24, which is not the table's shape.) data-fidelity compares a block against the one best-matching FLAT` &&
+               ` array and picked /fixedNavigation for this one, so those two verbatim rows read as invented data; naming them here is what makes the declaration true rather than merely quiet. // IMPROVISED: The` &&
+               ` search keeps filtered fixed items in the fixedItem section. The original's _executeSearch merges navigation and fixedNavigation into ONE filtered array, sets it as /navigation and empties` &&
+               ` /fixedNavigation, so a matching fixed item is re-rendered inside the scrollable main list. The port filters each list in place instead: the group tables and the fixed table ({/T_FIXED} instead of`.
+    lv_text1 = lv_text1 && ` {/fixedNavigation}) are reduced to the matching rows (title or tagText contains, case-insensitive; a matching parent keeps all children; empty groups and a non-matching Home hide via bound visible` &&
+               ` flags). Same visible rows, but a matching fixed item stays pinned at the bottom instead of moving into the main list. // NOTE: Thin frontend: onLiveChange's _executeSearch and setHighlightedText` &&
+               ` become one LIVE_CHANGE round-trip that filters the tables in ABAP and updates the model - NavigationList.highlightedText is a bindable property, so it shares the search field's two-way bound value` &&
+               ` instead of the setter. onSearch's announceSearchMatchCount stays a control method (no bindable equivalent) and is invoked via follow_up_action( control_by_id, navigationList,` &&
+               ` announceSearchMatchCount, <count> ) with the count computed in ABAP like the original's recursive title-only _countItems. abap2UI5 serializes round-trips, so very fast typing can skip intermediate` &&
+               ` filter states (they converge on the next pause); the search field's value is two-way bound so the filter state survives the round-trip. // NOTE: onMenuTogglePress toggles ToolPage.sideExpanded`.
+    lv_text1 = lv_text1 && ` imperatively; the property is bindable, so the port two-way binds it (sideExpanded, an attribute the original view does not declare) and flips it on the MENU_TOGGLE round-trip - collapsing also` &&
+               ` clears the bound search value and restores the unfiltered lists, like the original's reset of the search field, the highlight and the model (app 302 precedent). // NOTE: onItemSelect does` &&
+               ` navContainer.to(createId(key)) guarded by getPage(); the port transports ${$parameters>/item}.getKey() and calls the same method through follow_up_action( control_by_id, navContainer, to, <key> )` &&
+               ` guarded by the four page ids (home, myAccounts, myOrders, CustomerManagement) - the NavContainer has no bindable current-page property (app 302 precedent). onItemPress reads the pressed item's key` &&
                ` from ${$source>/key} (the factory wires press on every created item, the port wires it on the Home item, both group templates, the nested sub-item template and the fixed template); only the` &&
-               ` quickCreate key acts, opening the controller-built Create Item Dialog 1:1 via popup_display (type Message, a content Text and two Button controls - the Emphasized Create and the Cancel - both just` &&
-               ` close, so the port view carries that extra Dialog/Text/Button set). // NOTE: The ENABLED, HASEXPANDER, EXPANDED, SELECTABLE, ARIAHASPOPUP, DESIGN and TAGSTATE fields the templates bind are partly`.
-    lv_text1 = lv_text1 && ` absent from model/data.json rows; every ABAP row carries the UI5 property default explicitly (true / true / true / true / None / Default / None) - a flat row would otherwise serialize an empty value,` &&
-               ` which UI5 rejects on the enum-typed properties and which would override the boolean defaults. The header Image keeps the original's relative src ./images/SAP_Logo.png verbatim (the sample folder` &&
-               ` itself ships no such file upstream). // POST-1.71: The sample's core feature is newer than the 1.71 floor and is kept 1:1: sap.tnt.SideNavigationSearchField (control @since 1.151), the` &&
-               ` SideNavigation.filterSection aggregation that hosts it (@since 1.151), NavigationList.highlightedText (@since 1.151), the NavigationList.announceSearchMatchCount control method (@since 1.151, invoked` &&
-               ` via follow_up_action - a method is invisible to the property gate, declared by policy) and the SearchField ariaControls association (@since 1.150). The app needs UI5 >= 1.151; the repo's @openui5` &&
-               ` runtime pin was raised from 1.150.0 to 1.151.0 with this port so the render and e2e gates exercise it. // POST-1.71: Kept 1:1 but newer than UI5 1.71 in the navigation tree:`.
-    lv_text1 = lv_text1 && ` sap.tnt.NavigationListGroup (control @since 1.121, the two group rows); NavigationListItem.selectable (@since 1.116); the tag aggregation (@since 1.149) with its sap.m.ObjectStatus and the` &&
-               ` IndicationColor enum values Indication15/16/17/18/20 (@since 1.120); design and ariaHasPopup (@since 1.133.0, incl. the design=Action / ariaHasPopup=Dialog values on the Quick Create row); expanded` &&
-               ` and hasExpander read as @since 1.121 because they live on the newer base class NavigationListItemBase - both predate 1.71 on NavigationListItem itself, declared per the relocated-member note. //` &&
-               ` NOTE: not yet run in a system: the LIVE_CHANGE filter round-trip (bound group tables, visible flags, highlightedText), the SEARCH announceSearchMatchCount frontend action, the to-page action (which` &&
-               ` arrives as ITEM_PRESS, see above), the quickCreate popup and the MENU_TOGGLE collapse-resets-search path. **e2e-verified 2026-08-21** (nightly e2e interaction,` &&
-               ` meta/interactions/z2ui5_cl_smpc_app_407.mjs). // NOTE: announceSearchMatchCount receives the match count as a STRING. It is not in the framework's CONTROL_METHODS, so no arg kinds are registered and`.
-    lv_text1 = lv_text1 && ` castArgAuto passes anything that is not X/true/false through unchanged. NavigationList._announceSearchMatchCount then does ``iCount === 1 ? SIDE_NAVIGATION_SEARCH_MATCH_FOUND :` &&
+               ` quickCreate key acts, opening the controller-built Create Item Dialog 1:1 via popup_display (type Message, a content Text and two Button controls - the Emphasized Create and the Cancel - both just`.
+    lv_text1 = lv_text1 && ` close, so the port view carries that extra Dialog/Text/Button set). // NOTE: The ENABLED, HASEXPANDER, EXPANDED, SELECTABLE, ARIAHASPOPUP, DESIGN and TAGSTATE fields the templates bind are partly` &&
+               ` absent from model/data.json rows; every ABAP row carries the UI5 property default explicitly (true / true / true / true / None / Default / None) - a flat row would otherwise serialize an empty value,` &&
+               ` which UI5 rejects on the genuinely enum-typed properties - ARIAHASPOPUP (sap.ui.core.aria.HasPopup) and DESIGN (sap.tnt.NavigationListItemDesign) - and which would override the boolean defaults.` &&
+               ` TAGSTATE is NOT one of them: sap.m.ObjectStatus.state is declared { type: 'string', defaultValue: ValueState.None }, so an empty value there would not be rejected. Seeding None is still right, the` &&
+               ` reason just does not extend to that field. The header Image keeps the original's relative src ./images/SAP_Logo.png verbatim (the sample folder itself ships no such file upstream). // POST-1.71: The` &&
+               ` sample's core feature is newer than the 1.71 floor and is kept 1:1: sap.tnt.SideNavigationSearchField (control @since 1.151), the SideNavigation.filterSection aggregation that hosts it (@since`.
+    lv_text1 = lv_text1 && ` 1.151), NavigationList.highlightedText (@since 1.151), the NavigationList.announceSearchMatchCount control method (@since 1.151, invoked via follow_up_action - a method is invisible to the property` &&
+               ` gate, declared by policy) and the SearchField ariaControls association (@since 1.150). The app needs UI5 >= 1.151; the repo's @openui5 runtime pin was raised from 1.150.0 to 1.151.0 with this port so` &&
+               ` the render and e2e gates exercise it. // POST-1.71: Kept 1:1 but newer than UI5 1.71 in the navigation tree: sap.tnt.NavigationListGroup (control @since 1.121, the two group rows);` &&
+               ` NavigationListItem.selectable (@since 1.116); the tag aggregation (@since 1.149) with its sap.m.ObjectStatus and the IndicationColor enum values Indication15/16/17/18/20 (@since 1.120); design and` &&
+               ` ariaHasPopup (@since 1.133.0, incl. the design=Action / ariaHasPopup=Dialog values on the Quick Create row); and the press EVENT (@since 1.133), wired 1:1 on all six item templates - it is not` &&
+               ` declared on NavigationListItem at all any more, it lives on the new base class NavigationListItemBase, which is the relocated-member shape no gate can see. That last one was named only inside NOTEs`.
+    lv_text1 = lv_text1 && ` until 2026-08-24, and a NOTE describing what a member DOES is not a declaration that it is too new - the sibling tnt ports 300 and 301 closed the same gap on 2026-08-23 and this port was missed.` &&
+               ` expanded also lives on that base class and reads as @since 1.121, predating 1.71 on NavigationListItem itself, declared per the relocated-member note. hasExpander is NOT in that group: it carries no` &&
+               ` @since tag at all on NavigationListItemBase, so it reads as base version - naming it here was an over-declaration (harmless, since the port's floor is already set by the members above, but wrong` &&
+               ` about the source). // NOTE: not yet run in a system: the LIVE_CHANGE filter round-trip (bound group tables, visible flags, highlightedText), the SEARCH announceSearchMatchCount frontend action, the` &&
+               ` to-page action (which arrives as ITEM_PRESS, see above), the quickCreate popup and the MENU_TOGGLE collapse-resets-search path. **e2e-verified 2026-08-21** (nightly e2e interaction,` &&
+               ` meta/interactions/z2ui5_cl_smpc_app_407.mjs) - with two halves NOT covered by that module. highlightedText is never asserted: it checks which rows survive the filter, never that any text is`.
+    lv_text1 = lv_text1 && ` emphasized, so deleting the highlightedText binding leaves it green. And the selectable guard is only covered positively: it clicks 'My Orders' (selectable, must navigate) and asserts the page` &&
+               ` appears, but never clicks 'Customer Management' (selectable:false) to assert that nothing happens - which is the whole reason that guard exists. Relaxing the ELSEIF on get_event_arg( 2 ) to an` &&
+               ` unconditional ELSE passes the module unchanged. // NOTE: announceSearchMatchCount receives the match count as a STRING. It is not in the framework's CONTROL_METHODS, so no arg kinds are registered` &&
+               ` and castArgAuto passes anything that is not X/true/false through unchanged. NavigationList._announceSearchMatchCount then does ``iCount === 1 ? SIDE_NAVIGATION_SEARCH_MATCH_FOUND :` &&
                ` SIDE_NAVIGATION_SEARCH_MATCHES_FOUND``, and "1" === 1 is false - so a single match is announced with the plural text where the original announces the singular. Closing this needs an ["int"] entry for` &&
-               ` the method upstream, the same shape as scrollToIndex; noted 2026-08-21. // NOTE: Each item's press wire carries ${$source>/selectable} beside its key, and ITEM_PRESS navigates only when it is true.` &&
-               ` NavigationListItem._selectItem fires ``select`` unconditionally but reaches the list's _selectItem - and so itemSelect, and so the original's navigation - only if getSelectable( ) is true, while` &&
+               ` the method upstream, the same shape as scrollToIndex; noted 2026-08-21. // NOTE: Each item's press wire carries ${$source>/selectable} beside its key, and ITEM_PRESS navigates only when it is true.`.
+    lv_text1 = lv_text1 && ` NavigationListItem._selectItem fires ``select`` unconditionally but reaches the list's _selectItem - and so itemSelect, and so the original's navigation - only if getSelectable( ) is true, while` &&
                ` ``press`` fires either way. Customer Management is selectable:false in the mock, so upstream it navigates nowhere; the port navigated it until 2026-08-21, making a page unreachable in the original` &&
                ` reachable here.`.
     lv_text2 = `The sample's core feature is newer than the 1.71 floor and is kept 1:1: sap.tnt.SideNavigationSearchField (control @since 1.151), the SideNavigation.filterSection aggregation that hosts it (@since` &&
@@ -7633,8 +7642,11 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` gate, declared by policy) and the SearchField ariaControls association (@since 1.150). The app needs UI5 >= 1.151; the repo's @openui5 runtime pin was raised from 1.150.0 to 1.151.0 with this port so` &&
                ` the render and e2e gates exercise it. // Kept 1:1 but newer than UI5 1.71 in the navigation tree: sap.tnt.NavigationListGroup (control @since 1.121, the two group rows); NavigationListItem.selectable` &&
                ` (@since 1.116); the tag aggregation (@since 1.149) with its sap.m.ObjectStatus and the IndicationColor enum values Indication15/16/17/18/20 (@since 1.120); design and ariaHasPopup (@since 1.133.0,` &&
-               ` incl. the design=Action / ariaHasPopup=Dialog values on the Quick Create row); expanded and hasExpander read as @since 1.121 because they live on the newer base class NavigationListItemBase - both`.
-    lv_text2 = lv_text2 && ` predate 1.71 on NavigationListItem itself, declared per the relocated-member note.`.
+               ` incl. the design=Action / ariaHasPopup=Dialog values on the Quick Create row); and the press EVENT (@since 1.133), wired 1:1 on all six item templates - it is not declared on NavigationListItem at`.
+    lv_text2 = lv_text2 && ` all any more, it lives on the new base class NavigationListItemBase, which is the relocated-member shape no gate can see. That last one was named only inside NOTEs until 2026-08-24, and a NOTE` &&
+               ` describing what a member DOES is not a declaration that it is too new - the sibling tnt ports 300 and 301 closed the same gap on 2026-08-23 and this port was missed. expanded also lives on that base` &&
+               ` class and reads as @since 1.121, predating 1.71 on NavigationListItem itself, declared per the relocated-member note. hasExpander is NOT in that group: it carries no @since tag at all on` &&
+               ` NavigationListItemBase, so it reads as base version - naming it here was an over-declaration (harmless, since the port's floor is already set by the members above, but wrong about the source).`.
     result = VALUE #( BASE result
       ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationSearch`                          class = `z2ui5_cl_smpc_app_407` path = `src/02/05/z2ui5_cl_smpc_app_407.clas.abap`
         score = 5
@@ -10637,8 +10649,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` seeded 'TitleOnTop' exactly as onInit does. Same leaf name, same data, renders identically. The controller's toggleTitle handler becomes the TOGGLE_TITLE event branch flipping the field between` &&
                ` TitleOnTop and TitleOnLeft; the press='.toggleTitle' wire on the ObjectPageHeaderActionButton is client->_event('TOGGLE_TITLE'). // NOTE: Round-trip behaviour not verified in a running system: the`.
     lv_text1 = lv_text1 && ` 'toggle title' ObjectPageHeaderActionButton fires TOGGLE_TITLE, the backend flips subsectionlayout between TitleOnTop and TitleOnLeft and pushes it back on the round-trip - whether the bound` &&
-               ` subSectionLayout property re-layouts the subsection titles live, and the overall ObjectPage rendering of the eight inlined core:HTML blocks, remain to be checked. **e2e-verified 2026-08-21** (nightly` &&
-               ` e2e interaction, meta/interactions/z2ui5_cl_smpc_app_408.mjs).`.
+               ` subSectionLayout property re-layouts the subsection titles live, and the overall ObjectPage rendering of the eight inlined core:HTML blocks, remain to be checked. The module asserts` &&
+               ` getSubSectionLayout( ) - the PROPERTY value - after each of two presses, which does cover the round-trip wire (a dead TOGGLE_TITLE or a one-legged COND fails it). The re-layout half is not asserted` &&
+               ` at all; the behaviour itself is real (ObjectPageSubSection re-reads getSubSectionLayout( ) on layout), only the claim is wider than the module. **e2e-verified 2026-08-21** (nightly e2e interaction,` &&
+               ` meta/interactions/z2ui5_cl_smpc_app_408.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.BlockBase`                    name = `ObjectPageBlockBase`                           class = `z2ui5_cl_smpc_app_408` path = `src/01/03/z2ui5_cl_smpc_app_408.clas.abap`
         score = 5
@@ -10681,18 +10695,21 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` cannot be data-bound (app 263 precedent); the 'Order Details' header link is wired round-trip-free via follow_up_action( control_by_id, ObjectPageLayout / setSelectedSection / orderDetailsSection ) -` &&
                ` the controlIdOrNull argument kind resolves the section id to the control, exactly like the original's byId lookup. Re-verified 2026-08-23: still true. An association cannot be data-bound at all,` &&
                ` which is a UI5 fact rather than an abap2UI5 limit, and the frontend action is the reproduction rather than a workaround. // NOTE: The two avatar image paths are absolutized to the sdk.openui5.org` &&
-               ` host per the offline asset-URL rule (corrected 2026-08-24). They were kept in the original's './test-resources/...' form, justified as "matching app 261" - which is false: 261 was rewritten to the` &&
-               ` absolute form on 2026-08-23 for exactly this reason, and its own sidecar records that both icons had rendered broken. A relative path resolves against the demo kit's document root; an abap2UI5 app is`.
-    lv_text1 = lv_text1 && ` served from the ABAP ICF node and has no such root, so the request 404s and the control falls back to its placeholder. No gate sees it - data-fidelity only rejects a non-OpenUI5 HOST, and a relative` &&
-               ` path has none. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample is in scope via its entity): the snappedHeading avatar and the headerContent avatar` &&
-               ` (displaySize='L'), plus the QuickView page avatar in the fragment. Needs a UI5 runtime >= 1.73. // POST-1.71: the avatar aggregation of sap.m.QuickViewPage (since UI5 1.92) is newer than 1.71 but` &&
-               ` kept for the 1:1 port - the fragment fills it with an Avatar bound to {ICON} / {DISPLAYSHAPE} exactly like the original. The app needs UI5 >= 1.92 to show the page icons. // POST-1.71: showTitle on` &&
-               ` sap.uxap.ObjectPageSubSection (since UI5 1.77) is newer than 1.71 but kept for the 1:1 port - the Order Details subsection hides its duplicate title with showTitle='false'. Needs UI5 >= 1.77 for the` &&
-               ` title to be hidden. // POST-1.71: the content aggregation of sap.m.Title (since UI5 1.87) is newer than 1.71 but kept for the 1:1 port - the 'Order Details', 'Status' and 'Average User Rating' header`.
-    lv_text1 = lv_text1 && ` titles each hold an m:Link child, exactly like the original (invisible to the property gate: a default aggregation never appears as an XML attribute). Needs UI5 >= 1.87. // NOTE: Round-trip behaviour` &&
-               ` not verified in a running system: the TITLE_SELECTOR event with its $event.oSource.sId anchor and the popover_display of the QuickView fragment at the pressed link (including the pageLink navigation` &&
-               ` to companyEmployeePageId inside the popover), the follow_up_action setSelectedSection frontend action on the 'Order Details' link, and the two client toasts. **e2e-verified 2026-08-21** (nightly e2e` &&
-               ` interaction, meta/interactions/z2ui5_cl_smpc_app_412.mjs).`.
+               ` host per the offline asset-URL rule (corrected 2026-08-24). They were kept in the original's './test-resources/...' form, justified as "matching app 261" - which is false in two ways: app 261 does` &&
+               ` not use that asset at all - both its avatars are sap-icon://picture, and it carries zero occurrences of imageID_275314.png - and the two icons it DOES share with the family (linkedin.png,`.
+    lv_text1 = lv_text1 && ` Twitter.png) were rewritten to the absolute form on 2026-08-23 for exactly this reason, its own sidecar recording that they had rendered broken until then. A relative path resolves against the demo` &&
+               ` kit's document root; an abap2UI5 app is served from the ABAP ICF node and has no such root, so the request 404s and the control falls back to its placeholder. No gate sees it - data-fidelity only` &&
+               ` rejects a non-OpenUI5 HOST, and a relative path has none. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample is in scope via its entity): the snappedHeading avatar` &&
+               ` and the headerContent avatar (displaySize='L'), plus the QuickView page avatar in the fragment. Needs a UI5 runtime >= 1.73. // POST-1.71: the avatar aggregation of sap.m.QuickViewPage (since UI5` &&
+               ` 1.92) is newer than 1.71 but kept for the 1:1 port - the fragment fills it with an Avatar bound to {ICON} / {DISPLAYSHAPE} exactly like the original. The app needs UI5 >= 1.92 to show the page icons.`.
+    lv_text1 = lv_text1 && ` // POST-1.71: showTitle on sap.uxap.ObjectPageSubSection (since UI5 1.77) is newer than 1.71 but kept for the 1:1 port - the Order Details subsection hides its duplicate title with showTitle='false'.` &&
+               ` Needs UI5 >= 1.77 for the title to be hidden. // POST-1.71: the content aggregation of sap.m.Title (since UI5 1.87) is newer than 1.71 but kept for the 1:1 port - the 'Order Details', 'Status' and` &&
+               ` 'Average User Rating' header titles each hold an m:Link child, exactly like the original (invisible to the property gate: a default aggregation never appears as an XML attribute). Needs UI5 >= 1.87.` &&
+               ` // NOTE: Round-trip behaviour not verified in a running system: the TITLE_SELECTOR event with its $event.oSource.sId anchor and the popover_display of the QuickView fragment at the pressed link` &&
+               ` (including the pageLink navigation to companyEmployeePageId inside the popover), the follow_up_action setSelectedSection frontend action on the 'Order Details' link, and the two client toasts. One` &&
+               ` leg of that is weaker than it reads: the Order Details check asserts the ObjectPageLayout CONTAINS '589946637'. enableLazyLoading defaults to false, so all four sections are in the DOM from load and`.
+    lv_text1 = lv_text1 && ` toContainText reads textContent, not visibility - a dead setSelectedSection follow-up passes it unchanged. The real check is the one app 595's module uses: resolve getSelectedSection( ) and assert` &&
+               ` its title. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_412.mjs).`.
     lv_text2 = `sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample is in scope via its entity): the snappedHeading avatar and the headerContent avatar (displaySize='L'), plus the QuickView page` &&
                ` avatar in the fragment. Needs a UI5 runtime >= 1.73. // the avatar aggregation of sap.m.QuickViewPage (since UI5 1.92) is newer than 1.71 but kept for the 1:1 port - the fragment fills it with an` &&
                ` Avatar bound to {ICON} / {DISPLAYSHAPE} exactly like the original. The app needs UI5 >= 1.92 to show the page icons. // showTitle on sap.uxap.ObjectPageSubSection (since UI5 1.77) is newer than 1.71` &&
@@ -10930,8 +10947,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` sdk.openui5.org host ('https://sdk.openui5.org/test-resources/sap/uxap/images/linkedInIcon.png' etc.) per the offline asset-URL rule (app 200/262 precedent). Same assets, literal src values only -`.
     lv_text1 = lv_text1 && ` structural-diff compares literal attribute names, not values. // NOTE: Rendering not yet verified in a running system: the port is init-only and fully static (no bindings, no events, no round-trip),` &&
                ` so the open behaviours are render-time only - the ObjectPageHeader navigationBar Bar, the showPlaceholder=true Circle placeholder avatar (no objectImageURI is set), showTitleInHeaderContent=true and` &&
-               ` the always/snapped visibility flags (isObjectTitleAlwaysVisible/isObjectSubtitleAlwaysVisible=false, isActionAreaAlwaysVisible=true) are unverified live. **e2e-verified 2026-08-16** (nightly e2e` &&
-               ` interaction, meta/interactions/z2ui5_cl_smpc_app_413.mjs).`.
+               ` the always/snapped visibility flags (isObjectTitleAlwaysVisible/isObjectSubtitleAlwaysVisible=false, isActionAreaAlwaysVisible=true) are unverified live. The module covers the boot-and-render half` &&
+               ` only - it asserts the layout is visible, the header title contains Rowan Atkinson, and the layout contains Bangalore, India and 2014 Goals Plan. None of the five header flags listed above is` &&
+               ` asserted, and it never touches the navigationBar Bar, the placeholder avatar or the two action buttons. **e2e-verified 2026-08-16** (nightly e2e interaction,` &&
+               ` meta/interactions/z2ui5_cl_smpc_app_413.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeader`             name = `ProfileObjectPageHeader`                       class = `z2ui5_cl_smpc_app_413` path = `src/01/03/z2ui5_cl_smpc_app_413.clas.abap`
         score = 4
@@ -11514,12 +11533,14 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` assignment, and the block ids and view roots go with it. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the` &&
                ` snappedHeading avatar and the HeaderContainer avatar (displaySize='L'), both on the sample's own imageID_275314.png. Needs a UI5 runtime >= 1.73. // NOTE: The sample has no controller at all - no` &&
                ` model, no event handlers - so the port is init-only with neither model_init nor on_event, which is behaviour-identical. The two avatar/image paths are absolutized to the sdk.openui5.org host per the` &&
-               ` offline asset-URL rule (corrected 2026-08-24). They were kept in the original's './test-resources/...' form, justified as "matching app 261" - which is false: 261 was rewritten to the absolute form`.
-    lv_text1 = lv_text1 && ` on 2026-08-23 for exactly this reason, and its own sidecar records that both icons had rendered broken. A relative path resolves against the demo kit's document root; an abap2UI5 app is served from` &&
-               ` the ABAP ICF node and has no such root, so the request 404s and the control falls back to its placeholder. No gate sees it - data-fidelity only rejects a non-OpenUI5 HOST, and a relative path has` &&
-               ` none. // POST-1.71: the content aggregation of sap.m.Title (since UI5 1.87) is newer than 1.71 but kept for the 1:1 port - the 'Order Details', 'Status' and 'Average User Rating' header titles each` &&
-               ` hold an m:Link child, exactly like the original (invisible to the property gate: a default aggregation never appears as an XML attribute). Needs UI5 >= 1.87. Added 2026-08-21: the sibling ports 079,` &&
-               ` 259 and 412 - 412 for these very three header titles - all declared it and this one did not, so its stated runtime floor read 1.73 (the Avatar) when it is really 1.87.`.
+               ` offline asset-URL rule (corrected 2026-08-24). They were kept in the original's './test-resources/...' form, justified as "matching app 261" - which is false in two ways: app 261 does not use that`.
+    lv_text1 = lv_text1 && ` asset at all - both its avatars are sap-icon://picture, and it carries zero occurrences of imageID_275314.png - and the two icons it DOES share with the family (linkedin.png, Twitter.png) were` &&
+               ` rewritten to the absolute form on 2026-08-23 for exactly this reason, its own sidecar recording that they had rendered broken until then. A relative path resolves against the demo kit's document` &&
+               ` root; an abap2UI5 app is served from the ABAP ICF node and has no such root, so the request 404s and the control falls back to its placeholder. No gate sees it - data-fidelity only rejects a` &&
+               ` non-OpenUI5 HOST, and a relative path has none. // POST-1.71: the content aggregation of sap.m.Title (since UI5 1.87) is newer than 1.71 but kept for the 1:1 port - the 'Order Details', 'Status' and` &&
+               ` 'Average User Rating' header titles each hold an m:Link child, exactly like the original (invisible to the property gate: a default aggregation never appears as an XML attribute). Needs UI5 >= 1.87.` &&
+               ` Added 2026-08-21: the sibling ports 079, 259 and 412 - 412 for these very three header titles - all declared it and this one did not, so its stated runtime floor read 1.73 (the Avatar) when it is` &&
+               ` really 1.87.`.
     lv_text2 = `sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the HeaderContainer avatar (displaySize='L'), both` &&
                ` on the sample's own imageID_275314.png. Needs a UI5 runtime >= 1.73. // the content aggregation of sap.m.Title (since UI5 1.87) is newer than 1.71 but kept for the 1:1 port - the 'Order Details',` &&
                ` 'Status' and 'Average User Rating' header titles each hold an m:Link child, exactly like the original (invisible to the property gate: a default aggregation never appears as an XML attribute). Needs` &&

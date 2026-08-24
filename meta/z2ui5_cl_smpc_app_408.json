@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "Round-trip behaviour not verified in a running system: the 'toggle title' ObjectPageHeaderActionButton fires TOGGLE_TITLE, the backend flips subsectionlayout between TitleOnTop and TitleOnLeft and pushes it back on the round-trip - whether the bound subSectionLayout property re-layouts the subsection titles live, and the overall ObjectPage rendering of the eight inlined core:HTML blocks, remain to be checked. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_408.mjs)."
+      "what": "Round-trip behaviour not verified in a running system: the 'toggle title' ObjectPageHeaderActionButton fires TOGGLE_TITLE, the backend flips subsectionlayout between TitleOnTop and TitleOnLeft and pushes it back on the round-trip - whether the bound subSectionLayout property re-layouts the subsection titles live, and the overall ObjectPage rendering of the eight inlined core:HTML blocks, remain to be checked. The module asserts getSubSectionLayout( ) - the PROPERTY value - after each of two presses, which does cover the round-trip wire (a dead TOGGLE_TITLE or a one-legged COND fails it). The re-layout half is not asserted at all; the behaviour itself is real (ObjectPageSubSection re-reads getSubSectionLayout( ) on layout), only the claim is wider than the module. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_408.mjs)."
     }
   ]
 }

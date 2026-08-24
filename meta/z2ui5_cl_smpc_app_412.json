@@ -33,7 +33,7 @@
     },
     {
       "type": "NOTE",
-      "what": "The two avatar image paths are absolutized to the sdk.openui5.org host per the offline asset-URL rule (corrected 2026-08-24). They were kept in the original's './test-resources/...' form, justified as \"matching app 261\" - which is false: 261 was rewritten to the absolute form on 2026-08-23 for exactly this reason, and its own sidecar records that both icons had rendered broken. A relative path resolves against the demo kit's document root; an abap2UI5 app is served from the ABAP ICF node and has no such root, so the request 404s and the control falls back to its placeholder. No gate sees it - data-fidelity only rejects a non-OpenUI5 HOST, and a relative path has none."
+      "what": "The two avatar image paths are absolutized to the sdk.openui5.org host per the offline asset-URL rule (corrected 2026-08-24). They were kept in the original's './test-resources/...' form, justified as \"matching app 261\" - which is false in two ways: app 261 does not use that asset at all - both its avatars are sap-icon://picture, and it carries zero occurrences of imageID_275314.png - and the two icons it DOES share with the family (linkedin.png, Twitter.png) were rewritten to the absolute form on 2026-08-23 for exactly this reason, its own sidecar recording that they had rendered broken until then. A relative path resolves against the demo kit's document root; an abap2UI5 app is served from the ABAP ICF node and has no such root, so the request 404s and the control falls back to its placeholder. No gate sees it - data-fidelity only rejects a non-OpenUI5 HOST, and a relative path has none."
     },
     {
       "type": "POST_171",
@@ -53,7 +53,7 @@
     },
     {
       "type": "NOTE",
-      "what": "Round-trip behaviour not verified in a running system: the TITLE_SELECTOR event with its $event.oSource.sId anchor and the popover_display of the QuickView fragment at the pressed link (including the pageLink navigation to companyEmployeePageId inside the popover), the follow_up_action setSelectedSection frontend action on the 'Order Details' link, and the two client toasts. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_412.mjs)."
+      "what": "Round-trip behaviour not verified in a running system: the TITLE_SELECTOR event with its $event.oSource.sId anchor and the popover_display of the QuickView fragment at the pressed link (including the pageLink navigation to companyEmployeePageId inside the popover), the follow_up_action setSelectedSection frontend action on the 'Order Details' link, and the two client toasts. One leg of that is weaker than it reads: the Order Details check asserts the ObjectPageLayout CONTAINS '589946637'. enableLazyLoading defaults to false, so all four sections are in the DOM from load and toContainText reads textContent, not visibility - a dead setSelectedSection follow-up passes it unchanged. The real check is the one app 595's module uses: resolve getSelectedSection( ) and assert its title. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_412.mjs)."
     }
   ]
 }

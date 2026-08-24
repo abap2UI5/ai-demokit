@@ -102,10 +102,26 @@ function clean(text) {
  * it; it is there so a future refresh cannot silently produce a stub. */
 const FLOOR = 60;
 
+/* A full stop BETWEEN TWO DIGITS is a decimal point, not a sentence end. Cutting
+ * there does not shorten the sentence, it reverses it: app 403's source reads
+ * "... to remove  0.5rem, 1rem, 2rem, or 3rem margin ...", and cutting at that
+ * dot yielded "... to remove 0." - the opposite of what the sample does. Two
+ * more ports ended "... 8px (0." the same way. Skip those candidates. */
+const lastSentenceEnd = (head) => {
+  let last = -1;
+  for (let i = 0; i < head.length; i++) {
+    const c = head[i];
+    if (c !== '.' && c !== '!' && c !== '?') continue;
+    if (c === '.' && /\d/.test(head[i - 1] ?? '') && /\d/.test(head[i + 1] ?? '')) continue;
+    last = i;
+  }
+  return last;
+};
+
 function fit(text, budget = BUDGET) {
   if (text.length <= budget) return text;
   const head = text.slice(0, budget);
-  const sentence = head.search(/[.!?](?=[^.!?]*$)/);   // last sentence end that fits
+  const sentence = lastSentenceEnd(head);              // last sentence end that fits
   if (sentence >= FLOOR) return head.slice(0, sentence + 1);
   const word = head.slice(0, budget - 3).lastIndexOf(' ');
   return `${head.slice(0, word)}...`;
