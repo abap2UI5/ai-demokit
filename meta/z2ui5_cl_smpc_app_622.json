@@ -35,6 +35,10 @@
     {
       "type": "LIVE_TEST",
       "what": "not yet verified in a running system: that a name over ten characters paints the Error state and that Submit distinguishes the two outcomes."
+    },
+    {
+      "type": "NOTE",
+      "what": "The confirmation uses message_box_display( type = 'alert' ). MessageBox.alert is not the information box - it renders icon NONE and the title \"Alert\" - and the frontend resolves the type by name on the MessageBox module, so 'alert' is the 1:1 form. 'information' painted a different icon and title."
     }
   ]
 }

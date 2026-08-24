@@ -43,6 +43,10 @@
     {
       "type": "LIVE_TEST",
       "what": "not yet verified in a running system: that each of the four weight tabs filters the table to its range and that the two RadioButtonGroups repaint the bar's background and its header."
+    },
+    {
+      "type": "NOTE",
+      "what": "The price cell keeps the original's composite sap.ui.model.type.Currency binding rather than binding the raw field. The type is not a pass-through: NumberFormat's currency instance applies grouping and the currency's own fraction digits, so EUR renders 956.00 / 1,249.00 where the bare field renders 956 / 1249. The earlier justification - that the fold is what the formatter renders because the mock's prices are plain numbers - was wrong on both halves."
     }
   ]
 }

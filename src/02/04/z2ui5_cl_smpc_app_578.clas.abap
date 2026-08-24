@@ -498,6 +498,11 @@ CLASS z2ui5_cl_smpc_app_578 IMPLEMENTATION.
     )->end( ).
 
     client->view_display( view->stringify( ) ).
+    " Component.js: oProductsModel.setSizeLimit(1000) - the collection is 123 rows
+    " and the JSONModel caps a bound aggregation at 100, so the table would stop 23
+    " rows short of the count its own title reports
+    client->follow_up_action( val   = client->cs_event-set_size_limit
+                              t_arg = VALUE #( ( `1000` ) ( `MAIN` ) ) ).
 
   ENDMETHOD.
 

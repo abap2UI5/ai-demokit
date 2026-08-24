@@ -47,6 +47,14 @@
     {
       "type": "LIVE_TEST",
       "what": "not yet verified in a running system: that Create opens the modify dialog, that an appointment click opens the details popover with its type, and that saving writes the row back into the calendar."
+    },
+    {
+      "type": "NOTE",
+      "what": "The details popover is opened on the POPOVER slot, so it is closed with popover_destroy( ) and addressed with cs_view-popover. popup_destroy( )/cs_view-popup target a different slot that this app never opens, so the close and the in-popover navigation were silent no-ops."
+    },
+    {
+      "type": "NOTE",
+      "what": "The row created at runtime seeds the enum-typed field explicitly. An ABAP field is never absent, so an unset one reaches the client as \"\" - not a member of the enum - and validateProperty throws, taking the binding update and the view down. The original pushes a JS object without the key at all, which falls back to the property default."
     }
   ]
 }

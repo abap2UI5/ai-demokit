@@ -171,11 +171,11 @@ CLASS z2ui5_cl_smpc_app_564 IMPLEMENTATION.
         back_visible = abap_false.
         popover_title = `Messages`.
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  view  = client->cs_view-popup
+                                  view  = client->cs_view-popover
                                   t_arg = VALUE #( ( `messageView` ) ( `navigateBack` ) ) ).
 
       WHEN `CLOSE`.
-        client->popup_destroy( ).
+        client->popover_destroy( ).
 
     ENDCASE.
 

@@ -47,6 +47,10 @@
     {
       "type": "LIVE_TEST",
       "what": "not yet verified in a running system: that Edit toasts the mode and re-bakes the veto, that an icon-tab press in edit mode is cancelled and raises the dialog, and that OK then navigates through setSelectedSection while Cancel leaves the page where it was."
+    },
+    {
+      "type": "NOTE",
+      "what": "The Connections subsection carries title=\"Connections\" as the original does. The port's ObjectPageLayout subtree was built from app 263, whose own sample has no title on that subsection, so the attribute was lost in the copy. structural-diff cannot see it: attribute presence is a union per control TYPE, and other ObjectPageSubSection instances do carry title."
     }
   ]
 }

@@ -198,7 +198,7 @@ CLASS z2ui5_cl_smpc_app_569 IMPLEMENTATION.
               )->a( n = `dropPosition`      v = `Between`
               )->a( n = `drop`              v = client->_event( val   = `DROP_SELECTED`
                                                                 t_arg = VALUE #( ( `${$parameters>/draggedControl}.getBindingContext().getProperty('NAME')` )
-                                                                                 ( `${$parameters>/droppedControl}.getBindingContext ? ${$parameters>/droppedControl}.getBindingContext().getProperty('NAME') : ''` )
+                                                                                 ( `${$parameters>/droppedControl}.getBindingContext() ? ${$parameters>/droppedControl}.getBindingContext().getProperty('NAME') : ''` )
                                                                                  ( `${$parameters>/dropPosition}` ) ) )
           )->tag( n = `DragDropInfo` ns = `dnd`
               )->a( n = `sourceAggregation` v = `items`
@@ -206,7 +206,7 @@ CLASS z2ui5_cl_smpc_app_569 IMPLEMENTATION.
               )->a( n = `dropPosition`      v = `Between`
               )->a( n = `drop`              v = client->_event( val   = `DROP_SELECTED`
                                                                 t_arg = VALUE #( ( `${$parameters>/draggedControl}.getBindingContext().getProperty('NAME')` )
-                                                                                 ( `${$parameters>/droppedControl}.getBindingContext ? ${$parameters>/droppedControl}.getBindingContext().getProperty('NAME') : ''` )
+                                                                                 ( `${$parameters>/droppedControl}.getBindingContext() ? ${$parameters>/droppedControl}.getBindingContext().getProperty('NAME') : ''` )
                                                                                  ( `${$parameters>/dropPosition}` ) ) ) ).
     ELSE.
       dnd->tag( n = `DragInfo` ns = `dnd`

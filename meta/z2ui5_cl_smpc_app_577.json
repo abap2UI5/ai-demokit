@@ -42,6 +42,10 @@
     {
       "type": "NOTE",
       "what": "mvc:View displayBlock=\"true\" has no counterpart: it is a Component-app setting that makes the view fill the page when it is the root of a Component, and abap2UI5 owns the view container itself."
+    },
+    {
+      "type": "NOTE",
+      "what": "toDetail sets MidColumnFullScreen, not TwoColumnsMidExpanded. This sample builds its semantic helper with maxColumnsCount: 1, and getNextUIState short-circuits to MidColumnFullScreen in that case - which is what hides the begin column and makes the return to OneColumn a begin-column resize from zero width, the event the sample exists to demonstrate."
     }
   ]
 }

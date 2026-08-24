@@ -156,7 +156,7 @@ CLASS z2ui5_cl_smpc_app_579 IMPLEMENTATION.
                     )->a( n = `inset` v = `false`
                     )->a( n = `class` v = `sapFDynamicPageAlignContent`
                     )->a( n = `width` v = `auto`
-                    )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_rows path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                    )->a( n = `items` v = client->_bind( t_rows )
                     )->a( n = `itemPress` v = client->_event( val   = `LIST_ITEM`
                                                               t_arg = VALUE #( ( `${$parameters>/listItem}.getBindingContext().getProperty('PRODUCTID')` ) ) )
 
@@ -513,6 +513,11 @@ CLASS z2ui5_cl_smpc_app_579 IMPLEMENTATION.
     )->end( ).
 
     client->view_display( view->stringify( ) ).
+    " Component.js: oProductsModel.setSizeLimit(1000) - the collection is 123 rows
+    " and the JSONModel caps a bound aggregation at 100, so the table would stop 23
+    " rows short of the count its own title reports
+    client->follow_up_action( val   = client->cs_event-set_size_limit
+                              t_arg = VALUE #( ( `1000` ) ( `MAIN` ) ) ).
 
   ENDMETHOD.
 

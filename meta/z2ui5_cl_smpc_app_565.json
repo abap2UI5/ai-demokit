@@ -39,6 +39,10 @@
     {
       "type": "LIVE_TEST",
       "what": "not yet verified in a running system: the anchored popover with a NavContainer inside it and the to/back frontend actions on the popup view."
+    },
+    {
+      "type": "NOTE",
+      "what": "The details popover is opened on the POPOVER slot, so it is closed with popover_destroy( ) and addressed with cs_view-popover. popup_destroy( )/cs_view-popup target a different slot that this app never opens, so the close and the in-popover navigation were silent no-ops."
     }
   ]
 }

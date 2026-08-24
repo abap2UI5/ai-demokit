@@ -1009,7 +1009,8 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` control of this view binds, is carried along as the mock has it. // NOTE: the close Button in the detail page's navigationActions is icon-only in the sample. The port gives it tooltip="Close column"` &&
                ` so it is reachable with a screen reader - the one accessibility addition in this port. // LIVE-TEST: not yet verified in a running system: the two-column open and close and the bound sections` &&
                ` aggregation. // NOTE: mvc:View displayBlock="true" has no counterpart: it is a Component-app setting that makes the view fill the page when it is the root of a Component, and abap2UI5 owns the view` &&
-               ` container itself.`.
+               ` container itself. // NOTE: toDetail sets MidColumnFullScreen, not TwoColumnsMidExpanded. This sample builds its semantic helper with maxColumnsCount: 1, and getNextUIState short-circuits to` &&
+               ` MidColumnFullScreen in that case - which is what hides the begin column and makes the return to OneColumn a begin-column resize from zero width, the event the sample exists to demonstrate.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.FlexibleColumnLayout`            name = `FlexibleColumnLayoutColumnResize`              class = `z2ui5_cl_smpc_app_577` path = `src/02/04/z2ui5_cl_smpc_app_577.clas.abap`
         score = 5
@@ -1110,7 +1111,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` actions is tooltip-less in the sample, and so are the add and sort buttons of the list toolbar. The port gives all three a tooltip so they are reachable with a screen reader - the accessibility` &&
                ` additions in this port. // LIVE-TEST: not yet verified in a running system: the three-column navigation, the six full-screen / close actions and the bound column-distribution sizes. // NOTE: mvc:View` &&
                ` displayBlock="true" has no counterpart: it is a Component-app setting that makes the view fill the page when it is the root of a Component, and abap2UI5 owns the view container itself.` &&
-               ` FlexibleColumnLayout stateChange is wired in the sample only to rewrite the URL through the router after a navigation arrow was used; there is no URL to rewrite here, so the port drops it.`.
+               ` FlexibleColumnLayout stateChange is wired in the sample only to rewrite the URL through the router after a navigation arrow was used; there is no URL to rewrite here, so the port drops it. // NOTE:`.
+    lv_text1 = lv_text1 && ` Component.js raises the model size limit; the port issues cs_event-set_size_limit for MAIN. The collection is 123 rows and the JSONModel caps a bound aggregation at 100, so without it the table` &&
+               ` stopped 23 rows short of the count its own title reports.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.FlexibleColumnLayout`            name = `FlexibleColumnLayoutWithFullscreenPage`        class = `z2ui5_cl_smpc_app_578` path = `src/02/04/z2ui5_cl_smpc_app_578.clas.abap`
         score = 5
@@ -1150,7 +1153,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` add and sort buttons of the list toolbar. The port gives all three a tooltip so they are reachable with a screen reader - the accessibility additions in this port. // LIVE-TEST: not yet verified in a` &&
                ` running system: the three-column navigation, the six full-screen / close actions and the bound column-distribution sizes. // NOTE: mvc:View displayBlock="true" has no counterpart: it is a` &&
                ` Component-app setting that makes the view fill the page when it is the root of a Component, and abap2UI5 owns the view container itself. FlexibleColumnLayout stateChange is wired in the sample only` &&
-               ` to rewrite the URL through the router after a navigation arrow was used; there is no URL to rewrite here, so the port drops it.`.
+               ` to rewrite the URL through the router after a navigation arrow was used; there is no URL to rewrite here, so the port drops it. // NOTE: Component.js raises the model size limit; the port issues`.
+    lv_text1 = lv_text1 && ` cs_event-set_size_limit for MAIN. The collection is 123 rows and the JSONModel caps a bound aggregation at 100, so without it the table stopped 23 rows short of the count its own title reports. //` &&
+               ` NOTE: The items binding carries no client-side sorter. It used to keep the original's sorter: { path: 'NAME' }, which ClientListBinding re-applies on every model change - so the ABAP sort was undone` &&
+               ` immediately and the Sort button round-tripped without changing anything. The original replaces the declared sorter through oBinding.sort( ); here the backend owns the order.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.FlexibleColumnLayout`            name = `FlexibleColumnLayoutWithOneColumnStart`        class = `z2ui5_cl_smpc_app_579` path = `src/02/04/z2ui5_cl_smpc_app_579.clas.abap`
         score = 5
@@ -1190,7 +1196,11 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` actions is tooltip-less in the sample, and so are the add and sort buttons of the list toolbar. The port gives all three a tooltip so they are reachable with a screen reader - the accessibility` &&
                ` additions in this port. // LIVE-TEST: not yet verified in a running system: the three-column navigation, the six full-screen / close actions and the bound column-distribution sizes. // NOTE: mvc:View` &&
                ` displayBlock="true" has no counterpart: it is a Component-app setting that makes the view fill the page when it is the root of a Component, and abap2UI5 owns the view container itself.` &&
-               ` FlexibleColumnLayout stateChange is wired in the sample only to rewrite the URL through the router after a navigation arrow was used; there is no URL to rewrite here, so the port drops it.`.
+               ` FlexibleColumnLayout stateChange is wired in the sample only to rewrite the URL through the router after a navigation arrow was used; there is no URL to rewrite here, so the port drops it. // NOTE:` &&
+               ` Component.js raises the model size limit; the port issues cs_event-set_size_limit for MAIN. The collection is 123 rows and the JSONModel caps a bound aggregation at 100, so without it the table` &&
+               ` stopped 23 rows short of the count its own title reports. // NOTE: The items binding carries no client-side sorter. It used to keep the original's sorter: { path: 'NAME' }, which ClientListBinding`.
+    lv_text1 = lv_text1 && ` re-applies on every model change - so the ABAP sort was undone immediately and the Sort button round-tripped without changing anything. The original replaces the declared sorter through` &&
+               ` oBinding.sort( ); here the backend owns the order.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.FlexibleColumnLayout`            name = `FlexibleColumnLayoutWithTwoColumnStart`        class = `z2ui5_cl_smpc_app_580` path = `src/02/04/z2ui5_cl_smpc_app_580.clas.abap`
         score = 5
@@ -1230,7 +1240,11 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` actions is tooltip-less in the sample, and so are the add and sort buttons of the list toolbar. The port gives all three a tooltip so they are reachable with a screen reader - the accessibility` &&
                ` additions in this port. // LIVE-TEST: not yet verified in a running system: the three-column navigation, the six full-screen / close actions and the bound column-distribution sizes. // NOTE: mvc:View` &&
                ` displayBlock="true" has no counterpart: it is a Component-app setting that makes the view fill the page when it is the root of a Component, and abap2UI5 owns the view container itself.` &&
-               ` FlexibleColumnLayout stateChange is wired in the sample only to rewrite the URL through the router after a navigation arrow was used; there is no URL to rewrite here, so the port drops it.`.
+               ` FlexibleColumnLayout stateChange is wired in the sample only to rewrite the URL through the router after a navigation arrow was used; there is no URL to rewrite here, so the port drops it. // NOTE:` &&
+               ` Component.js raises the model size limit; the port issues cs_event-set_size_limit for MAIN. The collection is 123 rows and the JSONModel caps a bound aggregation at 100, so without it the table`.
+    lv_text1 = lv_text1 && ` stopped 23 rows short of the count its own title reports. // NOTE: The items binding carries no client-side sorter. It used to keep the original's sorter: { path: 'NAME' }, which ClientListBinding` &&
+               ` re-applies on every model change - so the ABAP sort was undone immediately and the Sort button round-tripped without changing anything. The original replaces the declared sorter through` &&
+               ` oBinding.sort( ); here the backend owns the order.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.FlexibleColumnLayout`            name = `ShellBarWithFlexibleColumnLayout`              class = `z2ui5_cl_smpc_app_584` path = `src/02/04/z2ui5_cl_smpc_app_584.clas.abap`
         score = 5
@@ -2985,7 +2999,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` (123 total, 53 Ok, 51 Heavy, 19 Overweight) and are carried verbatim - they are the mock's own numbers and do NOT match what the filters actually select (the port's own weightState classification` &&
                ` yields 57/45/21), which is true upstream too. // NOTE: the items binding carries a sorter on Name; a thin frontend sorts the data it sends, so the 123 rows are seeded verbatim in the mock's order and`.
     lv_text1 = lv_text1 && ` SORTed by name in model_init - never through SORT BY (field), which the transpiled backend drops (the 2026-08-22 e2e finding). // LIVE-TEST: not yet verified in a running system: that each of the` &&
-               ` four weight tabs filters the table to its range and that the two RadioButtonGroups repaint the bar's background and its header.`.
+               ` four weight tabs filters the table to its range and that the two RadioButtonGroups repaint the bar's background and its header. // NOTE: The price cell keeps the original's composite` &&
+               ` sap.ui.model.type.Currency binding rather than binding the raw field. The type is not a pass-through: NumberFormat's currency instance applies grouping and the currency's own fraction digits, so EUR` &&
+               ` renders 956.00 / 1,249.00 where the bare field renders 956 / 1249. The earlier justification - that the fold is what the formatter renders because the mock's prices are plain numbers - was wrong on` &&
+               ` both halves.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarBackgroundDesign`                    class = `z2ui5_cl_smpc_app_617` path = `src/01/01/z2ui5_cl_smpc_app_617.clas.abap`
         score = 5
@@ -3073,7 +3090,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` are plain numbers. // NOTE: the four tab counts come from /ProductCollectionStats/Counts (123 total, 53 Ok, 51 Heavy, 19 Overweight) and are carried verbatim - they are the mock's own numbers and do` &&
                ` NOT match what the filters actually select (the port's own weightState classification yields 57/45/21), which is true upstream too. // NOTE: the items binding carries a sorter on Name; a thin` &&
                ` frontend sorts the data it sends, so the 123 rows are seeded verbatim in the mock's order and SORTed by name in model_init - never through SORT BY (field), which the transpiled backend drops (the` &&
-               ` 2026-08-22 e2e finding). // LIVE-TEST: not yet verified in a running system: that each of the three process tabs filters the table to its weight range.`.
+               ` 2026-08-22 e2e finding). // LIVE-TEST: not yet verified in a running system: that each of the three process tabs filters the table to its weight range. // NOTE: The price cell keeps the original's`.
+    lv_text1 = lv_text1 && ` composite sap.ui.model.type.Currency binding rather than binding the raw field. The type is not a pass-through: NumberFormat's currency instance applies grouping and the currency's own fraction` &&
+               ` digits, so EUR renders 956.00 / 1,249.00 where the bare field renders 956 / 1249. The earlier justification - that the fold is what the formatter renders because the mock's prices are plain numbers -` &&
+               ` was wrong on both halves.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarProcess`                             class = `z2ui5_cl_smpc_app_618` path = `src/01/01/z2ui5_cl_smpc_app_618.clas.abap`
         score = 5
@@ -3091,7 +3111,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` currency binding in the sample (parts Price + CurrencyCode through sap.ui.model.type.Currency with showMeasure false). The port binds the two fields directly on the ObjectNumber's number and unit,` &&
                ` which is what the formatter renders, since the mock's prices are plain numbers. // NOTE: the items binding carries a sorter on Name; a thin frontend sorts the data it sends, so the 123 rows are` &&
                ` seeded verbatim in the mock's order and SORTed by name in model_init - never through SORT BY (field), which the transpiled backend drops (the 2026-08-22 e2e finding). // LIVE-TEST: not yet verified` &&
-               ` in a running system: that the All tab shows all 123 rows and that each of the three weight tabs filters the table to its range.`.
+               ` in a running system: that the All tab shows all 123 rows and that each of the three weight tabs filters the table to its range. // NOTE: The price cell keeps the original's composite` &&
+               ` sap.ui.model.type.Currency binding rather than binding the raw field. The type is not a pass-through: NumberFormat's currency instance applies grouping and the currency's own fraction digits, so EUR`.
+    lv_text1 = lv_text1 && ` renders 956.00 / 1,249.00 where the bare field renders 956 / 1249. The earlier justification - that the fold is what the formatter renders because the mock's prices are plain numbers - was wrong on` &&
+               ` both halves.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarResponsivePadding`                   class = `z2ui5_cl_smpc_app_619` path = `src/01/01/z2ui5_cl_smpc_app_619.clas.abap`
         score = 5
@@ -3293,11 +3316,14 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` enableTableAutoPopinMode, and a custom popin configuration (popinDisplay='Inline' with minScreenWidth='Large' and demandPopin on the last two columns). Every column property is carried 1:1, including` &&
                ` the widths the second and third set. // NOTE: the Price cell is a composite currency binding in the sample (parts Price + CurrencyCode through sap.ui.model.type.Currency with showMeasure TRUE, so the` &&
                ` unit is part of the text). The port binds the two fields as one composite text ('{PRICE} {CURRENCYCODE}'), which is what that formatter renders, since the mock's prices are plain numbers. // NOTE:`.
-    lv_text1 = lv_text1 && ` the sample has no handler at all - its controller only loads the mock - so the port raises no event either. Typing filters the suggestions in the BROWSER, over the rows the backend already sent.`.
+    lv_text1 = lv_text1 && ` the sample has no handler at all - its controller only loads the mock - so the port raises no event either. Typing filters the suggestions in the BROWSER, over the rows the backend already sent. //` &&
+               ` NOTE: The price cell keeps the original's composite sap.ui.model.type.Currency binding rather than binding the raw field. The type is not a pass-through: NumberFormat's currency instance applies` &&
+               ` grouping and the currency's own fraction digits, so EUR renders 956.00 / 1,249.00 where the bare field renders 956 / 1249. The earlier justification - that the fold is what the formatter renders` &&
+               ` because the mock's prices are plain numbers - was wrong on both halves.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Input`                           name = `InputAssistedTabularSuggestions`               class = `z2ui5_cl_smpc_app_621` path = `src/02/01/z2ui5_cl_smpc_app_621.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
         notes = lv_text1
         post171 = `sap.m.Input.enableTableAutoPopinMode is @since 1.89 - newer than the 1.71 floor but kept for the 1:1 port, since the second of the three Inputs exists to show exactly that. The app needs a UI5 release` &&
@@ -3318,7 +3344,8 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` sap.ui.core.Messaging (registerObject), which is what makes UI5 attach its own validation-error handling and paint the state on a failed parse. There is no counterpart for the registration itself;` &&
                ` what it produces - the Error state on an invalid value - the port writes explicitly. // NOTE: onSubmit's two outcomes are carried 1:1: a MessageToast on success and MessageBox.alert on failure` &&
                ` (message_box_display with the information type, which is what alert shows). // LIVE-TEST: not yet verified in a running system: that a name over ten characters paints the Error state and that Submit` &&
-               ` distinguishes the two outcomes.`.
+               ` distinguishes the two outcomes. // NOTE: The confirmation uses message_box_display( type = 'alert' ). MessageBox.alert is not the information box - it renders icon NONE and the title "Alert" - and` &&
+               ` the frontend resolves the type by name on the MessageBox module, so 'alert' is the 1:1 form. 'information' painted a different icon and title.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Input`                           name = `InputChecked`                                  class = `z2ui5_cl_smpc_app_622` path = `src/01/01/z2ui5_cl_smpc_app_622.clas.abap`
         score = 5
@@ -4072,7 +4099,8 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` on all five messages (the template binds it, the data never sets it), and the second message (Warning without description) has no subtitle and counter 0 - ListItemBaseRenderer.renderCounter only` &&
                ` renders a truthy counter, so 0 and 'absent' render identically. // NOTE: the nav-back Button is icon-only in the original (IconPool.getIconURI('nav-back'), no text and no tooltip). The port gives it` &&
                ` tooltip="Back" so it is reachable with a screen reader - the one accessibility addition in this port. // LIVE-TEST: not yet verified in a running system: the anchored popover with a MessageView` &&
-               ` inside it and the navigateBack frontend action on the popup view.`.
+               ` inside it and the navigateBack frontend action on the popup view. // NOTE: The details popover is opened on the POPOVER slot, so it is closed with popover_destroy( ) and addressed with` &&
+               ` cs_view-popover. popup_destroy( )/cs_view-popup target a different slot that this app never opens, so the close and the in-popover navigation were silent no-ops.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MessageView`                     name = `MessageViewInsidePopover`                      class = `z2ui5_cl_smpc_app_563` path = `src/02/01/z2ui5_cl_smpc_app_563.clas.abap`
         score = 5
@@ -4099,7 +4127,8 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` the data never sets it), and the second message (Warning without description) has no subtitle and counter 0 - ListItemBaseRenderer.renderCounter only renders a truthy counter, so 0 and 'absent'` &&
                ` render identically. // NOTE: the nav-back Button is icon-only in the original (IconPool.getIconURI('nav-back'), no text and no tooltip). The port gives it tooltip="Back" so it is reachable with a` &&
                ` screen reader - the one accessibility addition in this port. // LIVE-TEST: not yet verified in a running system: the anchored popover with a MessageView inside it and the navigateBack frontend action` &&
-               ` on the popup view.`.
+               ` on the popup view. // NOTE: The details popover is opened on the POPOVER slot, so it is closed with popover_destroy( ) and addressed with cs_view-popover. popup_destroy( )/cs_view-popup target a` &&
+               ` different slot that this app never opens, so the close and the in-popover navigation were silent no-ops.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MessageView`                     name = `MessageViewInsideResponsivePopover`            class = `z2ui5_cl_smpc_app_564` path = `src/02/01/z2ui5_cl_smpc_app_564.clas.abap`
         score = 5
@@ -4299,7 +4328,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` covers what this deviation used to name: the z2ui5.cc.MultiInputExt companions are asserted on both tabular MultiInputs with TokenKeyCell 0 and TokenTextCells 3, their tokenFromRow( ) builds the`.
     lv_text1 = lv_text1 && ` sample's token from a real bound suggestion row, the tokens aggregation is empty with no binding behind it, and the Link inside the value state message fires its preventDefault wire and raises the` &&
                ` toast (2026-08-23, headless). What stays unverified in a running system is the interaction a person performs: opening the suggestion popover and picking a row so that MultiInput itself calls the` &&
-               ` registered validator - the assertion reaches the validator's code through the companion rather than through the popup, which measures zero unthemed.`.
+               ` registered validator - the assertion reaches the validator's code through the companion rather than through the popup, which measures zero unthemed. // NOTE: The price cell keeps the original's` &&
+               ` composite sap.ui.model.type.Currency binding rather than binding the raw field. The type is not a pass-through: NumberFormat's currency instance applies grouping and the currency's own fraction` &&
+               ` digits, so EUR renders 956.00 / 1,249.00 where the bare field renders 956 / 1249. The earlier justification - that the fold is what the formatter renders because the mock's prices are plain numbers -` &&
+               ` was wrong on both halves.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputFilteringSuggestions`                class = `z2ui5_cl_smpc_app_612` path = `src/02/01/z2ui5_cl_smpc_app_612.clas.abap`
         score = 5
@@ -4322,11 +4354,13 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` what this deviation used to name: the grouping sorter is asserted through the sap.ui.core.SeparatorItem entries it produces in both suggestion aggregations, and the z2ui5.cc.MultiInputExt companion` &&
                ` is asserted on productMIWithTable with TokenKeyCell 0 and TokenTextCells 3, its tokenFromRow( ) building the sample's token from a real bound suggestion row with an empty, unbound tokens aggregation` &&
                ` behind it (2026-08-23, headless). What stays unverified in a running system is the interaction a person performs: opening either suggestion popover, seeing the grey supplier group headers rendered in`.
-    lv_text1 = lv_text1 && ` it, and picking a row so that MultiInput itself calls the registered validator.`.
+    lv_text1 = lv_text1 && ` it, and picking a row so that MultiInput itself calls the registered validator. // NOTE: The price cell keeps the original's composite sap.ui.model.type.Currency binding rather than binding the raw` &&
+               ` field. The type is not a pass-through: NumberFormat's currency instance applies grouping and the currency's own fraction digits, so EUR renders 956.00 / 1,249.00 where the bare field renders 956 /` &&
+               ` 1249. The earlier justification - that the fold is what the formatter renders because the mock's prices are plain numbers - was wrong on both halves.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputGrouping`                            class = `z2ui5_cl_smpc_app_613` path = `src/01/01/z2ui5_cl_smpc_app_613.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         notes = lv_text1 ) ).
 
@@ -4858,7 +4892,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` button's generated id plus Pressed / Unpressed - the port gives the button the explicit id 'toggleButton' and binds its pressed state, so the backend can name and read it. // NOTE: the Price cell is` &&
                ` a composite currency binding in the sample (parts Price + CurrencyCode through sap.ui.model.type.Currency with showMeasure false). The port binds the two fields directly on the ObjectNumber's number` &&
                ` and unit, which is what the formatter renders, since the mock's prices are plain integers. // LIVE-TEST: not yet verified in a running system: that the slider shrinks both toolbars into their` &&
-               ` overflow areas, and that Sort / Group / Reset and the Export menu behave as upstream.`.
+               ` overflow areas, and that Sort / Group / Reset and the Export menu behave as upstream. // NOTE: The price cell keeps the original's composite sap.ui.model.type.Currency binding rather than binding the` &&
+               ` raw field. The type is not a pass-through: NumberFormat's currency instance applies grouping and the currency's own fraction digits, so EUR renders 956.00 / 1,249.00 where the bare field renders 956`.
+    lv_text1 = lv_text1 && ` / 1249. The earlier justification - that the fold is what the formatter renders because the mock's prices are plain numbers - was wrong on both halves.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.OverflowToolbar`                 name = `OverflowToolbarFooter`                         class = `z2ui5_cl_smpc_app_607` path = `src/02/01/z2ui5_cl_smpc_app_607.clas.abap`
         score = 5
@@ -5459,7 +5495,8 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` so focus is not taken away, and a set_focus on an already-focused popup would be a no-op round trip. // NOTE: the popover keeps ariaLabelledBy="master-title" 1:1 even though no control with that id` &&
                ` exists in the fragment - the same dangling reference the original ships. // NOTE: the full mock /ProductCollection is seeded with the fields the two pages bind (ProductId, Name, ProductPicUrl,` &&
                ` WeightMeasure, WeightUnit, Width, Depth, Height, DimUnit, Description), all 123 rows. // LIVE-TEST: not yet verified in a running system: the anchored popover with a NavContainer inside it and the` &&
-               ` to/back frontend actions on the popup view.`.
+               ` to/back frontend actions on the popup view. // NOTE: The details popover is opened on the POPOVER slot, so it is closed with popover_destroy( ) and addressed with cs_view-popover. popup_destroy(`.
+    lv_text1 = lv_text1 && ` )/cs_view-popup target a different slot that this app never opens, so the close and the in-popover navigation were silent no-ops.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Popover`                         name = `PopoverNavCon`                                 class = `z2ui5_cl_smpc_app_565` path = `src/02/01/z2ui5_cl_smpc_app_565.clas.abap`
         score = 5
@@ -6010,7 +6047,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` (oEvent.getParameter('appointment')); a thin frontend has no such node, so it is anchored on the calendar by id. Everything the popover shows - title, additional info, the two formatted dates, the` &&
                ` all-day flag and the type - is composed by the backend from the row the path names. // NOTE: the 35 appointments and the 2018-07-09 start date are seeded verbatim from onInit. Several carry an` &&
                ` out-of-range minute (hour 7 minute 9, hour 9 minute 9, hour 13 minute 9) that JavaScript normalizes; the port stores the same values as ISO strings. // LIVE-TEST: not yet verified in a running` &&
-               ` system: that Create opens the modify dialog, that an appointment click opens the details popover with its type, and that saving writes the row back into the calendar.`.
+               ` system: that Create opens the modify dialog, that an appointment click opens the details popover with its type, and that saving writes the row back into the calendar. // NOTE: The details popover is` &&
+               ` opened on the POPOVER slot, so it is closed with popover_destroy( ) and addressed with cs_view-popover. popup_destroy( )/cs_view-popup target a different slot that this app never opens, so the close` &&
+               ` and the in-popover navigation were silent no-ops. // NOTE: The row created at runtime seeds the enum-typed field explicitly. An ABAP field is never absent, so an unset one reaches the client as "" -`.
+    lv_text1 = lv_text1 && ` not a member of the enum - and validateProperty throws, taking the binding update and the view down. The original pushes a JS object without the key at all, which falls back to the property default.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.SinglePlanningCalendar`          name = `SinglePlanningCalendarCreateApp`               class = `z2ui5_cl_smpc_app_609` path = `src/02/01/z2ui5_cl_smpc_app_609.clas.abap`
         score = 5
@@ -6078,7 +6118,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` which is what the sample's own two-way binding already does, without a handler. All three start on, as the model seeds them. // NOTE: the 36 appointments and the 2018-07-09 start date are seeded` &&
                ` verbatim from onInit's JSON. The mock builds its dates with UI5Date.getInstance('2018', '6', ...) - month 6 is July - and two of them carry an out-of-range minute (hour 7 minute 9, hour 9 minute 9)` &&
                ` that JavaScript normalizes; the port stores the same values as ISO strings. // LIVE-TEST: not yet verified in a running system: that dragging an appointment moves it and toasts, that Ctrl-dragging`.
-    lv_text1 = lv_text1 && ` copies it, that resizing rewrites its end and that dragging on empty space creates one.`.
+    lv_text1 = lv_text1 && ` copies it, that resizing rewrites its end and that dragging on empty space creates one. // NOTE: The row created at runtime seeds the enum-typed field explicitly. An ABAP field is never absent, so an` &&
+               ` unset one reaches the client as "" - not a member of the enum - and validateProperty throws, taking the binding update and the view down. The original pushes a JS object without the key at all, which` &&
+               ` falls back to the property default.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.SinglePlanningCalendar`          name = `SinglePlanningCalendarDND`                     class = `z2ui5_cl_smpc_app_610` path = `src/02/01/z2ui5_cl_smpc_app_610.clas.abap`
         score = 5
@@ -6568,7 +6610,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` handler that pairs with it: the plugin class does not exist on a 1.71 runtime, so keeping it would crash view creation there. Its only effect is that right-clicking a row also selects it before the` &&
                ` context menu opens; the context menus themselves are kept 1:1 and act on the selected row. // NOTE: the full mock /ProductCollection is seeded with the three fields the tables bind (Name, Category,`.
     lv_text1 = lv_text1 && ` Quantity) and the Rank the controller adds to every row (Initial = 0), so every product starts in the Available table. // LIVE-TEST: not yet verified in a running system: the drag and drop across the` &&
-               ` two tables, the re-ordering inside the Selected one, and the four move buttons.`.
+               ` two tables, the re-ordering inside the Selected one, and the four move buttons. // NOTE: The drop guard tests the binding CONTEXT, not the method: every sap.ui.core.Element has getBindingContext, so` &&
+               ` ``X.getBindingContext ? ...`` was always truthy. When the drop target is the table rather than a row - which is what happens on the first drag, since the Selected table starts empty -` &&
+               ` getBindingContext() is undefined and the chained getProperty threw inside the handler, so nothing moved.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Table`                           name = `TableDnD`                                      class = `z2ui5_cl_smpc_app_569` path = `src/01/01/z2ui5_cl_smpc_app_569.clas.abap`
         score = 5
@@ -10245,7 +10289,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` else survives: the selected day travels as epoch milliseconds, the backend finds the range that contains it among those carrying an ariaHasPopup, and composes the same two lines - the date label (a` &&
                ` range shows 'start – end') and 'Day type: <type>'. // NOTE: the date label the popover shows is formatted by sap.ui.core.format.DateFormat with style 'long' ('November 5, 2026'). A backend has no` &&
                ` access to the browser's locale, so the port composes the label from the same two dates in the ABAP model's own yyyymmdd form; the range case keeps the sample's en dash separator. // LIVE-TEST: not` &&
-               ` yet verified in a running system: that selecting day 5, one of days 10-12 or day 20 opens the popover with the matching type, and that a plain day opens nothing.`.
+               ` yet verified in a running system: that selecting day 5, one of days 10-12 or day 20 opens the popover with the matching type, and that a plain day opens nothing. // NOTE: The epoch milliseconds` &&
+               ` arriving from getTime( ) are converted through decfloat34, not i. ABAP's i tops out at 2,147,483,647 and a 2026 timestamp is ~1.8e12, so CONV i( ) raises CX_SY_CONVERSION_OVERFLOW and the whole`.
+    lv_text1 = lv_text1 && ` round-trip dumps on a real stack. CI never saw it because the transpiled backend represents i as a JS number.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarAriaHasPopup`                          class = `z2ui5_cl_smpc_app_611` path = `src/02/02/z2ui5_cl_smpc_app_611.clas.abap`
         score = 5
@@ -11284,7 +11330,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` and destroyed on either button. Its attachAfterClose handler - oSelectedSection.getDomRef().focus() - has no counterpart: it reaches into the section's DOM node, which a thin frontend never holds. //`.
     lv_text1 = lv_text1 && ` NOTE: the four asset paths (the imageID_275314.png avatar twice, linkedin.png, Twitter.png) and HRData.json's person.png point at the sdk.openui5.org host per the offline asset-URL rule, matching app` &&
                ` 263 which carries the same view; the original writes them relative as './test-resources/sap/uxap/images/...'. // LIVE-TEST: not yet verified in a running system: that Edit toasts the mode and` &&
-               ` re-bakes the veto, that an icon-tab press in edit mode is cancelled and raises the dialog, and that OK then navigates through setSelectedSection while Cancel leaves the page where it was.`.
+               ` re-bakes the veto, that an icon-tab press in edit mode is cancelled and raises the dialog, and that OK then navigates through setSelectedSection while Cancel leaves the page where it was. // NOTE:` &&
+               ` The Connections subsection carries title="Connections" as the original does. The port's ObjectPageLayout subtree was built from app 263, whose own sample has no title on that subsection, so the` &&
+               ` attribute was lost in the copy. structural-diff cannot see it: attribute presence is a union per control TYPE, and other ObjectPageSubSection instances do carry title.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageBeforeNavigate`                      class = `z2ui5_cl_smpc_app_588` path = `src/02/03/z2ui5_cl_smpc_app_588.clas.abap`
         score = 5
