@@ -1,4 +1,4 @@
-" @keywords dynamicsidecontent dynamic side content sap.ui.layout dynamicsidecontentequalsplit vbox title image text toolbar button
+" @keywords dynamicsidecontent dynamic side content sap.ui.layout dynamicsidecontentequalsplit html vbox title image text toolbar
 " @summary The side content and the main content take 50%/50% of the container on all screen sizes except on phone screens where there is a button implemented to toggle between each other.
 CLASS z2ui5_cl_smpc_app_267 DEFINITION PUBLIC.
 
@@ -56,6 +56,12 @@ CLASS z2ui5_cl_smpc_app_267 IMPLEMENTATION.
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:core` v = `sap.ui.core`
+        " the sample's own style.css - the view carries sapUiDSCExplored and sapUiDSCRightText and the
+        " rules behind them have to come with it (apps 122/124/133/138).
+        " \{ \} escaped: the XMLView parser reads an unescaped brace as a binding
+        )->tag( n = `HTML` ns = `core`
+            )->a( n = `content` v = `<style>.sapUiDSCRightText\{font-size:0.8rem\}.sapUiDSC.sapUiDSCExplored h1\{font-size:2rem\}</style>`
 
         )->ele( `Page`
             )->a( n = `showHeader`    v = `false`

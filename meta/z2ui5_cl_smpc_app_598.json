@@ -13,8 +13,8 @@
   "checked": null,
   "deviations": [
     {
-      "type": "NOTE",
-      "what": "Block->content inlining (app 401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): all twenty-one blocks are the SAME BlockBase, sample:BlockEmpty, whose Collapsed and Expanded views are both view/blocks/BlockEmpty.view.xml - a forms:SimpleForm with maxContainerCols='2', title=' ' (one blank), editable='false', ResponsiveGridLayout and NO content at all. It is inlined into each of the twenty-one aggregations, which is the whole missing/extra pairing: sample:BlockEmpty 21 vs 0 against forms:SimpleForm 1 vs 21 (the block view is archived once, the port emits it twenty-one times). Absent as a result: the twenty-one BlockBase controls with their ids, and the block view's own mvc:View root."
+      "type": "IMPROVISED",
+      "what": "Block->content inlining (app 401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): all twenty-one blocks are the SAME BlockBase, sample:BlockEmpty, whose Collapsed and Expanded views are both view/blocks/BlockEmpty.view.xml - a forms:SimpleForm with maxContainerCols='2', title=' ' (one blank), editable='false', ResponsiveGridLayout and NO content at all. It is inlined into each of the twenty-one aggregations, which is the whole missing/extra pairing: sample:BlockEmpty 21 vs 0 against forms:SimpleForm 1 vs 21 (the block view is archived once, the port emits it twenty-one times). Absent as a result: the twenty-one BlockBase controls with their ids, and the block view's own mvc:View root. Typed IMPROVISED since 2026-08-23. CAPABILITIES' own row says \"Declare the block→content substitution (IMPROVISED)\", and the recipe's refinement is explicit that removing a control the original declares - even a zero-visual-output one - is a loss regardless of a pixel-identical render. 26 of the 31 sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column assignment, and the block ids and view roots go with it."
     },
     {
       "type": "NOTE",

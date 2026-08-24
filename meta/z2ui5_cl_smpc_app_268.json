@@ -17,7 +17,7 @@
     },
     {
       "type": "IMPROVISED",
-      "what": "The Inputs' change handler is dropped: handleInputChange validates the typed text with sap.ui.core.CSSColor.isValid and sets the Input's valueState to Error for an invalid color. Colour-string validation is frontend logic with no ABAP equivalent that runs per keystroke, and abap2UI5's thin-frontend rule forbids reimplementing it in a formatter or expression binding; a round-trip per change would be a different behaviour. The Input.value stays two-way bound so the typed text reaches the backend, but an invalid entry is not flagged. handleChange's own valueState reset (ValueState.None after picking a colour) is therefore not needed either."
+      "what": "The Inputs' change handler is dropped: handleInputChange validates the typed text with sap.ui.core.CSSColor.isValid and sets the Input's valueState to Error for an invalid color. Colour-string validation is frontend logic with no ABAP equivalent that runs on focus-out or Enter, and abap2UI5's thin-frontend rule forbids reimplementing it in a formatter or expression binding; a round-trip per change would be a different behaviour. The Input.value stays two-way bound so the typed text reaches the backend, but an invalid entry is not flagged. handleChange's own valueState reset (ValueState.None after picking a colour) is therefore not needed either. (Corrected 2026-08-23: handleInputChange is wired to Input.change, and sap.m.InputBase fires change only on focus-out or Enter - liveChange is the per-keystroke event. A change round-trip would have had the original's exact cadence, so the drop is a choice, not a cadence problem.)"
     },
     {
       "type": "NOTE",

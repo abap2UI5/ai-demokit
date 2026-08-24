@@ -108,7 +108,7 @@ CLASS z2ui5_cl_smpc_app_401 IMPLEMENTATION.
                             )->a( n = `alignItems`   v = `Center`
 
                             )->tag( n = `Avatar` ns = `m`
-                                )->a( n = `src`   v = `./test-resources/sap/uxap/images/imageID_275314.png`
+                                )->a( n = `src`   v = `https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png`
                                 )->a( n = `class` v = `sapUiTinyMarginEnd`
                             )->tag( n = `Title` ns = `m`
                                 )->a( n = `text`     v = `Denise Smith`
@@ -171,7 +171,7 @@ CLASS z2ui5_cl_smpc_app_401 IMPLEMENTATION.
 
                     )->tag( n = `Avatar` ns = `m`
                         )->a( n = `class`       v = `sapUiSmallMarginEnd`
-                        )->a( n = `src`         v = `./test-resources/sap/uxap/images/imageID_275314.png`
+                        )->a( n = `src`         v = `https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png`
                         )->a( n = `displaySize` v = `L`
 
                     )->ele( n = `VerticalLayout` ns = `layout`
@@ -188,9 +188,9 @@ CLASS z2ui5_cl_smpc_app_401 IMPLEMENTATION.
                         )->a( n = `class` v = `sapUiSmallMarginBeginEnd`
 
                         )->tag( n = `Image` ns = `m`
-                            )->a( n = `src` v = `./test-resources/sap/uxap/images/linkedin.png`
+                            )->a( n = `src` v = `https://sdk.openui5.org/test-resources/sap/uxap/images/linkedin.png`
                         )->tag( n = `Image` ns = `m`
-                            )->a( n = `src`   v = `./test-resources/sap/uxap/images/Twitter.png`
+                            )->a( n = `src`   v = `https://sdk.openui5.org/test-resources/sap/uxap/images/Twitter.png`
                             )->a( n = `class` v = `sapUiSmallMarginBegin`
 
                     )->end(

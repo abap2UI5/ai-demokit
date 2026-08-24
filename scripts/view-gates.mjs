@@ -48,6 +48,35 @@ if (process.argv.includes('--only') && !ONLY) {
 /** The version floor every port is held to. */
 const MIN_UI5 = '1.71';
 
+/* The metadata snapshot the linter judges against, read here so a sidecar's
+ * CLAIM about a member's @since can be checked against the same source the
+ * gate itself uses. */
+const PROPS = JSON.parse(fs.readFileSync(
+  path.join(ROOT, 'node_modules', '@abap2ui5', 'linter', 'data', 'properties.json'), 'utf8'));
+
+/** The declared @since of one member, or null when the snapshot has no entry -
+ *  which is a metadata gap, never evidence about the member. */
+function memberSince(control, member) {
+  const c = PROPS.controls?.[control];
+  if (!c) return null;
+  for (const section of ['properties', 'aggregations', 'associations', 'events']) {
+    const since = c[section]?.[member]?.since;
+    if (since) return since;
+  }
+  return null;
+}
+
+/** Is `since` at or below the floor, i.e. NOT post-1.71? */
+function withinFloor(since) {
+  const a = String(since).split('.').map(Number);
+  const b = MIN_UI5.split('.').map(Number);
+  for (let i = 0; i < Math.max(a.length, b.length); i++) {
+    const x = a[i] || 0; const y = b[i] || 0;
+    if (x !== y) return x < y;
+  }
+  return true;
+}
+
 /* Version findings are the ones a deviation may excuse: using a member the
  * original sample uses is fidelity, and the porting policy allows it as long
  * as the sidecar names it. Everything else is a defect, not a choice. */
@@ -284,6 +313,49 @@ for (const r of results) {
     if (gateSkip && gateSkip.types.includes(f.type)) { skipUsed.add(f.type); continue; }
     if (severityOf(f) === 'hint') { advisory.push(f); continue; }
     violations.push(f);
+  }
+  /* A POST_171 whose claim the snapshot CONTRADICTS. The excuse check above
+   * runs in one direction only: a version finding is accepted when a POST_171
+   * names it, and nothing ever asked whether the POST_171 is true. That is not
+   * a harmless kind of wrong — per AGENTS §3 the first POST_171 is also what
+   * files the class under src/02/<lib>/ instead of src/01/<lib>/. App 443
+   * declared "sap.m.Text.renderWhitespace is @since 1.89"; it is @since 1.51
+   * (1.89 belongs to Link.emptyIndicatorMode), and on that the port sat in
+   * src/02 for two weeks with a wrong stated runtime floor.
+   *
+   * Deliberately narrow. It judges ONE shape — a deviation naming
+   * <Control>.<member> together with an @since — and only fires when the
+   * snapshot resolves that member and says it is NOT newer than the floor.
+   * Everything else stays silent, which matters because the most valuable
+   * POST_171s are the ones the property gate cannot see at all: an
+   * aggregation-level dependency (app 079), a formatOptions value inside a
+   * binding string (135), a core:require on the view root (139). "No finding
+   * fired" is therefore NOT evidence of a false declaration — that was the
+   * first cut of this check and it flagged 19 ports, nearly all of them
+   * correct. A member the snapshot does not carry is also left alone: that is
+   * the metadata gap, not a wrong claim. */
+  for (const d of (meta.deviations || []).filter((x) => x.type === 'POST_171')) {
+    const text = String(d.what || '');
+    /* The pair has to be ADJACENT and the claim has to be that the member is
+     * TOO NEW. Both halves are load-bearing. A good deviation names members it
+     * is NOT about: app 292 declares the enum VALUE
+     * sap.m.PanelBackgroundDesign.Contrast and mentions "backgroundDesign
+     * itself is @since 1.30" precisely to explain why the member-level check
+     * cannot see it. Matching the member anywhere in the prose flagged that;
+     * requiring the adjacent version AND requiring it to be above the floor
+     * separates "the sidecar asserts this is too new" from "the sidecar
+     * explains that it is not". */
+    for (const m of text.matchAll(/\b(sap(?:\.\w+)+)\.(\w+)\b[^.]{0,60}?@?since\s+(?:UI5\s+)?(?:version\s+)?(\d+\.\d+(?:\.\d+)?)/gi)) {
+      if (withinFloor(m[3])) continue;   // the sidecar is not claiming it is too new
+      const decl = memberSince(m[1], m[2]);
+      if (decl && withinFloor(decl)) {
+        violations.push({
+          type: 'unfounded-post171',
+          message: `POST_171 claims ${m[1]}.${m[2]} is @since ${m[3]}, but the metadata says @since ${decl} — not newer than the floor`
+            + ' — and a POST_171 is also what files the class under src/02',
+        });
+      }
+    }
   }
   if (gateSkip) {
     for (const t of gateSkip.types) {

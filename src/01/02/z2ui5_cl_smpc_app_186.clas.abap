@@ -73,8 +73,13 @@ CLASS z2ui5_cl_smpc_app_186 IMPLEMENTATION.
                 )->a( n = `resize` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                  t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                                                ( `show` )
-                                                                               ( `Root container is resized.` && |\n| && `Old panes sizes = [{0}]` && |\n| && `New panes sizes = [{1}]` )
-                                                                               ( `${$parameters>/oldSizes} ? ${$parameters>/oldSizes}.join(',') : ''` )
+                                                                               ( `Root container is resized.{0}` && |\n| && `New panes sizes = [{1}]` )
+                                                                               " the WHOLE 'Old panes sizes' line is conditional in the original
+                                                                               " (if (aOldSizes && aOldSizes.length)), not just its value - the first
+                                                                               " resize really does arrive with an empty array, since _sizeArraysDiffer
+                                                                               " compares [] against the new sizes. So the line is built inside the
+                                                                               " expression and the template carries only the placeholder
+                                                                               ( `${$parameters>/oldSizes} && ${$parameters>/oldSizes}.length ? '\nOld panes sizes = [' + ${$parameters>/oldSizes}.join(',') + ']' : ''` )
                                                                                ( `${$parameters>/newSizes} ? ${$parameters>/newSizes}.join(',') : ''` ) ) )
 
                 )->ele( n = `SplitPane` ns = `l`
@@ -111,8 +116,13 @@ CLASS z2ui5_cl_smpc_app_186 IMPLEMENTATION.
                     )->a( n = `resize`      v = client->follow_up_action( val   = client->cs_event-control_global
                                                                           t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                                                         ( `show` )
-                                                                                        ( `Inner container is resized.` && |\n| && `Old panes sizes = [{0}]` && |\n| && `New panes sizes = [{1}]` )
-                                                                                        ( `${$parameters>/oldSizes} ? ${$parameters>/oldSizes}.join(',') : ''` )
+                                                                                        ( `Inner container is resized.{0}` && |\n| && `New panes sizes = [{1}]` )
+                                                                                        " the WHOLE 'Old panes sizes' line is conditional in the original
+                                                                                        " (if (aOldSizes && aOldSizes.length)), not just its value - the first
+                                                                                        " resize really does arrive with an empty array, since _sizeArraysDiffer
+                                                                                        " compares [] against the new sizes. So the line is built inside the
+                                                                                        " expression and the template carries only the placeholder
+                                                                                        ( `${$parameters>/oldSizes} && ${$parameters>/oldSizes}.length ? '\nOld panes sizes = [' + ${$parameters>/oldSizes}.join(',') + ']' : ''` )
                                                                                         ( `${$parameters>/newSizes} ? ${$parameters>/newSizes}.join(',') : ''` ) ) )
 
                     )->ele( n = `SplitPane` ns = `l`

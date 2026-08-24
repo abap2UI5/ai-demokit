@@ -149,11 +149,18 @@ CLASS z2ui5_cl_smpc_app_148 IMPLEMENTATION.
         drop_pos = drop_pos - 1.
       ENDIF.
 
-      IF position = `Before`.
-        INSERT item INTO t_items INDEX drop_pos + 1.
-      ELSE.
-        INSERT item INTO t_items INDEX drop_pos + 2.
+      " the original is two Array.splice calls, and splice CLAMPS a start index
+      " past the end - it appends. ABAP does not: INSERT ... INDEX beyond
+      " lines + 1 sets sy-subrc = 4 and inserts nothing, so the row deleted a
+      " moment ago would be gone. Reachable: GridDragOver falls back to the LAST
+      " item with "After" when the pointer is over no item at all, which can be
+      " the dragged one, giving drag_pos = drop_pos = lines - 1
+      DATA(insert_at) = COND i( WHEN position = `Before` THEN drop_pos + 1
+                                                        ELSE drop_pos + 2 ).
+      IF insert_at > lines( t_items ) + 1.
+        insert_at = lines( t_items ) + 1.
       ENDIF.
+      INSERT item INTO t_items INDEX insert_at.
     ENDIF.
 
   ENDMETHOD.

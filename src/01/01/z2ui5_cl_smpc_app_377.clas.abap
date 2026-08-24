@@ -23,6 +23,14 @@ CLASS z2ui5_cl_smpc_app_377 DEFINITION PUBLIC.
     DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
 
     " /ProductCollectionStats/Counts of the shared mock, bound to the tab counts
+    " the IconTabBar's selected tab, bound to selectedKey. The original has no
+    " such attribute and needs none: a UI5 view is built once, so its tab state
+    " simply persists. This port rebuilds the view on check_on_navigated( ), and
+    " an UNBOUND selectedKey resets the bar to its first tab ("All") while
+    " t_products still holds whatever the last filter left - the bar would claim
+    " "All" over a filtered table. Binding the key makes the tab survive every
+    " rebuild, so tab and rows can no longer disagree.
+    DATA selected_tab TYPE string.
     DATA count_total      TYPE i.
     DATA count_ok         TYPE i.
     DATA count_heavy      TYPE i.
@@ -71,7 +79,8 @@ CLASS z2ui5_cl_smpc_app_377 IMPLEMENTATION.
         )->a( n = `xmlns`     v = `sap.m`
 
         )->ele( `IconTabBar`
-            )->a( n = `id`     v = `idIconTabBar`
+            )->a( n = `id`          v = `idIconTabBar`
+            )->a( n = `selectedKey` v = client->_bind( selected_tab )
             )->a( n = `select` v = client->_event( val   = `FILTER_SELECT`
                                                    t_arg = VALUE #( ( `${$parameters>/key}` ) ) )
             )->a( n = `class`  v = `sapUiResponsiveContentPadding`
@@ -207,6 +216,7 @@ CLASS z2ui5_cl_smpc_app_377 IMPLEMENTATION.
     " on a system it silently SKIPS the row after each deletion, on the
     " transpiled backend it raises TABLE_INVALID_INDEX (2026-08-17).
     CLEAR t_products.
+    selected_tab = key.
 
     LOOP AT t_all INTO DATA(row).
       DATA(keep) = abap_false.
@@ -514,7 +524,8 @@ CLASS z2ui5_cl_smpc_app_377 IMPLEMENTATION.
         weight_measure = '0.01' weight_unit = `KG` price = '0' currency_code = `EUR` width = '46' depth = '30' height = '3' dim_unit = `cm` ) ).
 
     weight_state_set( ).
-    t_products = t_all.
+    t_products   = t_all.
+    selected_tab = `All`.
 
   ENDMETHOD.
 

@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "onSemanticButtonPress toasts each action's class name, reproduced by passing the name as a t_arg literal. The SortSelect change toasts the two-way selectedKey (sort_key); PagingButton positionChange transports ${$parameters>/newPosition}; the custom footer / share buttons transport $event.oSource.sId."
+      "what": "onSemanticButtonPress toasts each action's class name, reproduced by passing the name as a t_arg literal. The SortSelect change toasts what the original composes: onSemanticSelectChange runs the SAME derivation as onSemanticButtonPress - getMetadata( ).getName( ) minus the LIBRARY, which for a sap.m.semantic.* control is 'sap.m' - and appends the selected item's text, so it prints 'Selected: semantic.SortSelect by <text>'. Corrected 2026-08-23 with the button literals: the port had toasted the bare selectedKey and lost the class-name half (the value half was always right, since the item key equals its text here); PagingButton positionChange transports ${$parameters>/newPosition}; the custom footer / share buttons transport $event.oSource.sId."
     },
     {
       "type": "NOTE",
@@ -21,7 +21,11 @@
     },
     {
       "type": "NOTE",
-      "what": "The SortSelect items are bound to a 2-row filter-type table reproducing /ProductCollectionStats/Filters (the two `type` values Category and SupplierName; the per-type `values` sub-arrays are unused by the Select). The binding keeps the original sorter { path: 'Name' } 1:1 \u2014 a no-op there too, since the Filters entries carry `type`, not `Name`."
+      "what": "The SortSelect items are bound to a 2-row filter-type table reproducing /ProductCollectionStats/Filters (the two `type` values Category and SupplierName; the per-type `values` sub-arrays are unused by the Select). The binding keeps the original sorter { path: 'Name' } 1:1 — a no-op there too, since the Filters entries carry `type`, not `Name`."
+    },
+    {
+      "type": "NOTE",
+      "what": "The semantic-action toast strings were corrected 2026-08-23, together with app 105's. The original derives the text as getMetadata().getName() minus the LIBRARY name, and the library of a sap.m.semantic.* control is 'sap.m' - so it prints 'Pressed: semantic.AddAction'. These ports had passed the bare action name, stripping the namespace as well, so every one of them differed from the original."
     }
   ]
 }

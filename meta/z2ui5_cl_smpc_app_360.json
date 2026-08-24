@@ -34,6 +34,10 @@
     {
       "type": "NOTE",
       "what": "Unverified in a running system: whether the paste event delivers the pasted data array to get_event_arg, and whether the bound selectionMode reaches the plugin without a round-trip. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_360.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The paste event's data parameter is typed string[][], so an array/object event argument reaches the app as serialized JSON - [[\"Pasted Name\",\"Pasted Id\"]]. The original builds its message as \"...\" + aData, and JS coerces the array to Pasted Name,Pasted Id. The port toasted the raw JSON until 2026-08-24, showing brackets and quotes the user never sees upstream; the brackets and quotes are now stripped, which reproduces the coercion - the same substitution the sibling port 361 already declares for its index array. The e2e module could not see the difference: it asserts toContainText('Pasted Name'), which passes for both renderings."
     }
   ]
 }

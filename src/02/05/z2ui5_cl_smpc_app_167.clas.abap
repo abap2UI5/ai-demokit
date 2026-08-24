@@ -384,7 +384,14 @@ CLASS z2ui5_cl_smpc_app_167 IMPLEMENTATION.
         items = VALUE #(
           ( title = `Child Item 1` key = `page1` enabled = abap_true )
           ( title = `Child Item 2` key = `page2` enabled = abap_true ) ) )
-      ( title = `Root Item 2` icon = `sap-icon://building` enabled = abap_true expanded = abap_false key = `root2` selectable = abap_false
+      " selectable = TRUE although this row has no children: the original's
+      " expression is selectable="{= ${items}.length > 3}" and this is the one
+      " data row that carries no items key at all, so the expression THROWS,
+      " ExpressionParser's tryCatch swallows it and returns undefined, and
+      " validateProperty falls back to the declared default - true. Computing
+      " 0 > 3 = false here made the root2 page unreachable (NavigationListItem
+      " only fires itemSelect when getSelectable( ) is true)
+      ( title = `Root Item 2` icon = `sap-icon://building` enabled = abap_true expanded = abap_false key = `root2` selectable = abap_true
         items = VALUE #( ) )
       ( title = `Root Item 3` icon = `sap-icon://card` enabled = abap_true expanded = abap_false key = `` selectable = abap_true
         items = VALUE #(

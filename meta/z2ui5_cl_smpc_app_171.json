@@ -16,7 +16,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "live-verified 2026-07-27: u:Currency binds a nested object path (value={transactionAmount/size}, currency={transactionAmount/currency}). Ported as a nested ABAP structure TRANSACTION_AMOUNT (fields SIZE/CURRENCY), bound {TRANSACTION_AMOUNT/SIZE} / {TRANSACTION_AMOUNT/CURRENCY}. CAPABILITIES.md documents nested TABLES/trees but not a nested single (non-array) structure within a row, so the nested-object serialization + relative sub-path binding needs a live render check."
+      "what": "live-verified 2026-07-27: u:Currency binds a nested object path (value={transactionAmount/size}, currency={transactionAmount/currency}). Ported as a nested ABAP structure TRANSACTION_AMOUNT (fields SIZE/CURRENCY), bound {TRANSACTION_AMOUNT/SIZE} / {TRANSACTION_AMOUNT/CURRENCY}. Corrected 2026-08-23: this used to end \"CAPABILITIES.md documents nested TABLES/trees but not a nested single (non-array) structure within a row, so the nested-object serialization + relative sub-path binding needs a live render check\". Both halves were stale. CAPABILITIES.md carries a dedicated row for the nested single (non-array) structure bound {OBJ/FIELD}, marked available, and it cites THIS port as its evidence; and the live check it asks for is the one this same deviation opens with and checked.note records."
     }
   ]
 }

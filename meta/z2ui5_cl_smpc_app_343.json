@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "The six core:Fragment references (sap.ui.layout.sample.BlockLayoutCustomBackgroundPerCell.ColorSelect) are inlined: abap2UI5 serves one view per round-trip, so a fragmentName has no file to resolve. The fragment's content (VBox with the two Labels and the two Selects over eleven ColorSet and six ColorShade core:Item entries) is written into each of the six cells verbatim, so the rendered result is identical; the dropped core:Fragment elements are what structural-diff reports."
+      "what": "The six core:Fragment references (sap.ui.layout.sample.BlockLayoutCustomBackgroundPerCell.ColorSelect) are inlined: abap2UI5 serves one view per round-trip, so a fragmentName has no file to resolve. The fragment's content (VBox with the two Labels and the two Selects over eleven ColorSet and six ColorShade core:Item entries) is written into each of the six cells verbatim, so the rendered result is identical. structural-diff reports SIX lines for this, not one: the dropped core:Fragment references (6 vs 0) plus the five-fold multiplication that inlining them into six cells produces - VBox 2 vs 7, Label 5 vs 15, Select 2 vs 12, core:Item 17 vs 102 - and separately the core:HTML style leaf below. All of them are this one substitution; the gate accepts them because the control names appear in this prose, so they are named here explicitly rather than left to a substring match."
     },
     {
       "type": "NOTE",
@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "Unverified in a running system: whether the per-cell context binding round-trips (a Select changing its cell's colorSet/colorShade writes back into the nested ABAP structure) and whether the injected stylesheet paints the image cell. **e2e-verified 2026-08-17** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_343.mjs)."
+      "what": "Unverified in a running system: whether the per-cell context binding round-trips (a Select changing its cell's colorSet/colorShade writes back into the nested ABAP structure) and whether the injected stylesheet paints the image cell. **e2e-verified 2026-08-17** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_343.mjs) - but that run proved nothing: the module picked ColorSet6, which model_init seeds into EVERY cell, so the pressed Select was asserted to hold the value it already had (true even with no binding at all, since SelectList sets the pressed item locally) and the neighbour was asserted unchanged when nothing had asked it to change. A port with a completely dead binding passed it. The module picks ColorSet3 since 2026-08-24, so the round-trip half is covered from that date; the stylesheet half is still only covered by the render."
     }
   ]
 }

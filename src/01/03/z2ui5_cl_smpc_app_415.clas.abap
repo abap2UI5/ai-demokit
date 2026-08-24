@@ -433,7 +433,11 @@ CLASS z2ui5_cl_smpc_app_415 IMPLEMENTATION.
       WHEN `MARK_LOCKED`.
         popover_lock_display( ).
       WHEN `ITEM_SELECT`.
-        " 1:1 with handleItemSelect - selecting an item only closes the popover
+        " Close to handleItemSelect - selecting an item only closes the popover.
+        " NOT literally 1:1: upstream the handler reads this._oPopover, which
+        " the controller never assigns, so it throws a TypeError and the popover
+        " stays open. The sidecar deviation corrected the words "1:1" on
+        " 2026-08-21; this comment kept them until 2026-08-24.
         client->follow_up_action( client->cs_event-popover_close ).
       WHEN `LINK1`.
         client->message_toast_display( `Page 1 a very long link clicked` ).

@@ -110,6 +110,16 @@ CLASS z2ui5_cl_smpc_app_444 IMPLEMENTATION.
 
       WHEN `LOAD_NOTIFICATIONS`.
         notifications_load( ).
+        " 400 rows is the whole point of this sample, and without this only 100
+        " of them render: sap.ui.model.Model's constructor sets iSizeLimit = 100
+        " and abap2UI5 leaves it there unless an app asks for more. The original
+        " never meets that limit because it does not use a model at all -
+        " onLoadNotificationsPress calls addItem( ) 400 times with real control
+        " instances, and a size limit applies to a bound aggregation, not to
+        " added children. Bound here, so the limit has to be raised explicitly
+        " (the app-252 / app-094 idiom).
+        client->follow_up_action( val   = client->cs_event-set_size_limit
+                                  t_arg = VALUE #( ( `400` ) ( `MAIN` ) ) ).
 
       WHEN `ITEM_CLOSE`.
         DATA(closed_id) = CONV i( client->get_event_arg( ) ).

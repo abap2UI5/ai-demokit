@@ -419,7 +419,14 @@ manifest-listed `../<OtherSample>/*.view.xml` paths, so archiving
 it then demands phantom controls (`layout:Grid`/`GridData`/`VerticalLayout`)
 from correct ports. So uxap block templates stay out of `ui5/`, and the
 BlockBase inlining is declared in each sidecar instead
-(apps 161/187/188/217/258–263).
+(apps 161/187/188/217/258–263). `scripts/check-archive.mjs` gates the rule — reading
+all THREE ways a sample declares a file (`sample.files`, `resources.css`, and
+the old Component.js `includes`, which exactly one sample still uses and whose
+stylesheet was missing because of it) — and knows the exception: a file listed inside the sample's own folder and missing
+from disk is an ERROR (with `scripts/archive-absent.json` for the handful that
+were never served), while a `../<Shared*>/` reference is counted and reported,
+never failed — so the size of this exception stays visible without anyone being
+told to backfill it.
 
 ---
 
@@ -698,7 +705,7 @@ The deterministic gates run on every PR, one workflow each; the heavy
 | `structural-diff.yaml` | `structural_diff` | port vs. archived original, binding values included |
 | `data-fidelity.yaml` | `data_fidelity` | seeded values vs. the archived sample mocks |
 | `view-gates.yaml` | `view_gates` | properties + structure + headless render — the three former view gates, now run from [abap2UI5-linter](https://github.com/abap2UI5/linter) with only the corpus policy kept here in `scripts/view-gates.mjs`; also `npm run check:collection` for `src/03`, and it publishes the two README badges |
-| `meta-valid.yaml` | `meta_valid` | sidecar schema + referential integrity, and that every generated artefact (overview app, `README.md`, `api.md`, `STATUS.md`, `SAMPLES.md`) is in sync |
+| `meta-valid.yaml` | `meta_valid` | sidecar schema + referential integrity, the archive the sidecars point at (`check-archive`, §4), and that every generated artefact (overview app, `README.md`, `api.md`, `STATUS.md`, `SAMPLES.md`) is in sync |
 | `tooling-tests.yaml` | `tooling_tests` | the gate/generator tooling's own fixture tests |
 | `check-prose-names.yaml` | `prose_names` | every `z2ui5_cl_*` class named in prose exists, here or in the repository that owns it |
 | `check-app-rules.yaml`, `check-keywords.yaml`, `check-summary.yaml` | same | the shared abaplint app rules, the `@keywords` and the `@summary` lines |
@@ -727,7 +734,8 @@ at the bump PR, where the debt decision belongs.
 npm run gates        # full offline gate set, fail-fast; needs NO node_modules and no network
 ```
 It chains: chain-format → check-prose-names → pattern-lint → check-pins →
-validate-meta → structural-diff → data-fidelity → check-mcp-contract →
+check-archive → validate-meta → structural-diff → data-fidelity →
+check-mcp-contract →
 regenerate overview/coverage/status/SAMPLES.md/catalogue.json →
 `git diff --exit-code -- src README.md api.md STATUS.md SAMPLES.md catalogue.json`
 (regenerated artefacts must leave the tree clean, exactly as the `meta_valid`
@@ -1000,6 +1008,39 @@ e2e gotchas in `e2e-debugging`, generator gotchas in `regenerate-artefacts`).
   replaced the one naming the dropped attribute). When you rewrite a
   deviation, keep the naming clause and run `structural-diff --strict` in the
   same change.
+- **A `POST_171` is checked in both directions now.** It always *excused* a
+  version finding; since 2026-08-24 `view-gates` also asks whether the claim is
+  true, and reports `unfounded-post171` when a deviation says
+  `<Control>.<member> is @since <N>` with N above the floor while the metadata
+  says the member is at or below it. That matters because the first `POST_171`
+  is also what files the class under `src/02/<lib>/` — app 443 declared
+  `Text.renderWhitespace` as @since 1.89 (it is @since 1.51; 1.89 belongs to
+  `Link.emptyIndicatorMode`) and sat in the wrong folder for two weeks with a
+  wrong stated runtime floor. The check is deliberately narrow: **"no version
+  finding fired" is not evidence of a false declaration**, because the most
+  valuable `POST_171`s are the ones the property gate cannot see at all — an
+  aggregation-level dependency (app 079), a `formatOptions` value inside a
+  binding string (135), a `core:require` on the view root (139). A first cut
+  that assumed otherwise flagged 19 ports, nearly all of them correct.
+- **What `structural-diff` cannot see — do not let a sidecar claim it did.**
+  The gate is the corpus' primary fidelity check and three of its blind spots
+  have each produced a false sidecar sentence:
+  1. **There is no `attr extra` kind.** The only kinds emitted are
+     `control missing` / `control extra`, `attr missing` and `binding value`.
+     The attribute pass iterates the *original's* attribute set and reports
+     what the port is **missing**; an attribute the port **adds** is never
+     looked at (apps 427 and 377 both claimed otherwise).
+  2. **Literal attribute values are compared only when the ORIGINAL's value is
+     a simple binding** (`SIMPLE_BIND`, `{path}`). If the original writes a
+     literal, the port's literal is never compared to it — so a swapped
+     `alignItems="Center"`/`"End"` across sibling instances, or a wrong enum
+     value, passes green.
+  3. **Attribute presence is a union per control TYPE, not per instance.** Nine
+     `FlexBox`es that differ only in their literal values collapse into one
+     attribute set, so a value moved from one instance to another is invisible.
+  A green `structural_diff` therefore proves the control *set* and the *bound*
+  attributes match. It is not evidence for literal values, for added
+  attributes, or for per-instance placement — those need reading both sides.
 - **abapGit pushes from a system can carry stale generated files** — a human
   who pulled before the latest repo change and pushes back from the system
   silently reverts it. After every human push: regenerate the overview

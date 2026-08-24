@@ -10,7 +10,9 @@ CLASS z2ui5_cl_smpc_app_364 DEFINITION PUBLIC.
     " assemble into a tree. abap2UI5 serves one JSON model, so the same nodes
     " are modelled NESTED here (one children table per level) and bound with
     " arrayNames - the JSON tree binding the framework does support. Every
-    " node keeps all four of its own fields, so the four columns are unchanged
+    " node keeps all FIVE of its own fields (NodeID, HierarchyLevel, Description,
+    " ParentNodeID, DrillState); four of them are rendered as columns, and the
+    " fifth - ParentNodeID - is what the nesting replaces, carried but not shown
     TYPES:
       BEGIN OF ty_s_node3,
         nodeid         TYPE i,

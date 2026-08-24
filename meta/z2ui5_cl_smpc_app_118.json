@@ -21,7 +21,7 @@
     },
     {
       "type": "NOTE",
-      "what": "The controller's three members are all resolved without a round-trip. resolveCardUrl is a formatter turning the component card's relative manifest path into a URL - computed in ABAP instead (thin-frontend rule). onAction toasts the navigation URL off the event, composed through control_global MESSAGE_TOAST with ${$parameters>/parameters}.url as the argument. onInit's date is DateFormat over UI5Date.getInstance(), a MOVING value, so it is anchored on a fixed date here (the corpus rule for now/random values, apps 164/181/289)."
+      "what": "The controller's three members are all resolved without a round-trip. resolveCardUrl is a formatter turning the component card's relative manifest path into a URL - computed in ABAP instead (thin-frontend rule). onAction toasts the navigation URL off the event, composed through control_global MESSAGE_TOAST. The original guards on the action TYPE and only toasts for Navigation; a view-wired client action always fires, so the port toasts for every CardActionType. That is reachable here - the Calendar card fires a DateChange action whose parameters carry a selectedDate and no url - and until 2026-08-23 it printed the literal 'URL: undefined' on every date click. The url argument is guarded now, so a non-Navigation action shows the prefix with an empty value instead; suppressing the toast entirely would need a per-firing veto the client action form does not have. onInit's date is DateFormat over UI5Date.getInstance(), a MOVING value, so it is anchored on a fixed date here (the corpus rule for now/random values, apps 164/181/289)."
     },
     {
       "type": "POST_171",
@@ -33,7 +33,11 @@
     },
     {
       "type": "NOTE",
-      "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency: this rewrite is now declared by all 77 ports that do it - before that day 64 declared it and thirteen did not, which left a real difference asserted nowhere and gave every review sweep the same thing to re-find."
+      "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the sentence used to claim the rewrite was 'declared by all 77 ports that do it', which had stopped being true as the corpus grew past that day's snapshot - 126 ports do it now, and 17 of them declared it nowhere. Those 17 carry the declaration since today, so the claim holds again; a stale absolute count is what made it wrong, so this wording names the date the count was taken."
+    },
+    {
+      "type": "NOTE",
+      "what": "The root mvc:View carries height=\"100%\", which this original does not set (unlike the neighbouring sap.ui.table / sap.uxap / sap.f samples, whose roots do). Declared 2026-08-23; structural_diff is skipped for this port, so no gate compares the root attributes."
     }
   ],
   "structural_diff": {

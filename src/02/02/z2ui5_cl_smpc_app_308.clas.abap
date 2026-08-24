@@ -79,7 +79,8 @@ CLASS z2ui5_cl_smpc_app_308 IMPLEMENTATION.
         " reads an unescaped brace as a binding
         )->tag( n = `HTML` ns = `core`
             )->a( n = `content` v = `<style>.viewPadding\{padding:1rem\}` &&
-                                    `.sap-phone .viewPadding\{padding:0rem\}</style>`
+                                    `.sap-phone .viewPadding\{padding:0rem\}` &&
+                                    `.sap-phone .sapUiCal\{position:relative\}</style>`
         )->ele( n = `VerticalLayout` ns = `l`
 
             )->ele( n = `Calendar` ns = `u`

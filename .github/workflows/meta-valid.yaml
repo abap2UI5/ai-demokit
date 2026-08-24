@@ -41,6 +41,11 @@ jobs:
     # generate-overview.mjs imports @abap2ui5/linter (scripts/lib/format-chain.mjs)
     - run: npm ci --no-audit --no-fund
     - run: node scripts/validate-meta.mjs
+    # the sidecars point at ui5/<lib>/<Sample>/, and a re-read is only worth
+    # anything if that folder is complete - check-archive compares every file a
+    # sample's manifest lists against what is on disk (app 145 was re-read
+    # against an archive missing its controller's only dependency)
+    - run: node scripts/check-archive.mjs
     - run: node scripts/generate-overview.mjs
     - run: node scripts/generate-coverage.mjs
     - run: node scripts/generate-status.mjs

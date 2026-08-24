@@ -34,6 +34,10 @@
     {
       "type": "NOTE",
       "what": "Unverified in a running system: the breakpointChanged round-trip transporting currentBreakpoint and recomputing the open button's bound visible flag, the showSideContent flip on the two press round-trips, and the SET_FOCUS follow-up on the openSideContentBtn / closeSideContentBtn ids. The breakpointChanged transport and the showSideContent flip use the same wiring that is e2e-verified on app 267 and live on apps 138/344. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_417.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "Both handleSCBtnPress and handleSideContentHide branch on the CURRENT breakpoint, and the port reproduced neither branch reliably until 2026-08-24. (a) breakpoint was written only in the BP_CHANGED round-trip, and that event provably never fires on the first measurement - _setBreakpointFromWidth guards the fire with `if (sCurrentBreakpoint !== undefined)` and _currentBreakpoint is undefined until that very call. An app OPENED at a small viewport (a phone, where nothing ever resizes) therefore kept breakpoint initial forever and took the non-S leg every time, which is exactly the dead end the S branch exists to avoid. at_breakpoint_s( ) now falls back to the server-side device mirror, client->get( )-s_device-resize-width <= 720, which is the control's own S_M_BREAKPOINT; containerQuery is true, so the control measures its CONTAINER, which can never be wider than the window - so window <= 720 implies S, and the converse is what breakpointChanged still reports. (b) handleSideContentHide's own S branch (toggle( ) rather than setShowSideContent( abap_false )) was dropped entirely. It matters past the close: toggle( ) reaches its swap through setShowSideContent( true, true ), leaving the PROPERTY true, while setShowSideContent( abap_false ) leaves it false - so after a close at S and a resize up to M/L the original's isSideContentVisible( ) still reports true and the side content returns, where the port left it hidden next to a re-shown open button."
     }
   ]
 }

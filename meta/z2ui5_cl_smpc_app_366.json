@@ -13,11 +13,11 @@
   "deviations": [
     {
       "type": "IMPROVISED",
-      "what": "The sample's rows come from an OData v2 tree binding over a mock service: the Nodes entity is a FLAT list carrying HierarchyLevel / NodeID / ParentNodeID / DrillState, and the service METADATA carries the same hierarchy annotations, which the ODataTreeBinding reads on its own. abap2UI5 serves one JSON model, so there is no ODataTreeBinding and no annotation to read: the same sixteen nodes are modelled NESTED instead (one children table per level) and bound with the arrayNames parameter - the JSON tree binding the framework does support (the app-248 idiom). The rendered tree is identical, every node keeps all four of its own fields and the four columns are unchanged; what is lost is the annotation-driven assembly itself, and with it the countMode: 'Inline' parameter, which is an OData request option. numberOfExpandedLevels: 1 IS kept as a binding parameter, so the first level opens like in the original."
+      "what": "The sample's rows come from an OData v2 tree binding over a mock service: the Nodes entity is a FLAT list carrying NodeID / HierarchyLevel / Description / ParentNodeID / DrillState, and the service METADATA carries the same hierarchy annotations, which the ODataTreeBinding reads on its own. abap2UI5 serves one JSON model, so there is no ODataTreeBinding and no annotation to read: the same sixteen nodes are modelled NESTED instead (one children table per level) and bound with the arrayNames parameter - the JSON tree binding the framework does support (the app-248 idiom). The rendered tree is identical, every node keeps all five of its own fields (NodeID, HierarchyLevel, Description, ParentNodeID, DrillState) and the four RENDERED columns are unchanged - the fifth field, ParentNodeID, is what the nesting replaces, so it is carried but not shown; what is lost is the annotation-driven assembly itself, and with it the countMode: 'Inline' parameter, which is an OData request option. numberOfExpandedLevels: 1 IS kept as a binding parameter, so the first level opens like in the original."
     },
     {
       "type": "NOTE",
-      "what": "This sample has no controller at all (the view names none); the port is correspondingly static - a bare check_on_init branch with model_init and view_display, no on_event."
+      "what": "This sample has no controller at all (the view names none); the port is correspondingly static - model_init plus view_display on check_on_init, view_display alone on check_on_navigated (the house dispatcher shape), and no on_event branch at all."
     },
     {
       "type": "NOTE",

@@ -136,9 +136,9 @@ CLASS z2ui5_cl_smpc_app_587 IMPLEMENTATION.
 
                         )->ele( n = `HorizontalLayout` ns = `layout`
                             )->tag( n = `Image` ns = `m`
-                                )->a( n = `src` v = `./test-resources/sap/uxap/images/linkedin.png`
+                                )->a( n = `src` v = `https://sdk.openui5.org/test-resources/sap/uxap/images/linkedin.png`
                             )->tag( n = `Image` ns = `m`
-                                )->a( n = `src`   v = `./test-resources/sap/uxap/images/Twitter.png`
+                                )->a( n = `src`   v = `https://sdk.openui5.org/test-resources/sap/uxap/images/Twitter.png`
                                 )->a( n = `class` v = `sapUiSmallMarginBegin`
                         )->end(
                     )->end(

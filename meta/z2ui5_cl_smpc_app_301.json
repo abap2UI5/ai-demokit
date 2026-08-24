@@ -37,7 +37,7 @@
     },
     {
       "type": "POST_171",
-      "what": "NavigationListItem.design=\"Action\" and NavigationListItem.ariaHasPopup=\"Dialog\" (both @since 1.133) are kept 1:1 on the Create item; SideNavigation.design=\"Plain\" (@since 1.132) is kept 1:1 on the popover's side navigation."
+      "what": "NavigationListItem.design=\"Action\" and NavigationListItem.ariaHasPopup=\"Dialog\" (both @since 1.133) are kept 1:1 on the Create item; SideNavigation.design=\"Plain\" (@since 1.134) is kept 1:1 on the popover's side navigation. (The 1.132 recorded here until 2026-08-23 understated the floor by two minors: both the property and the sap.tnt.SideNavigationDesign enum carry @since 1.134.)"
     },
     {
       "type": "NOTE",
@@ -54,6 +54,14 @@
     {
       "type": "POST_171",
       "what": "sap.tnt.NavigationListItem.expanded is kept 1:1 from the original view. The property PREDATES 1.71, but it now lives on sap.tnt.NavigationListItemBase and its JSDoc there carries @since 1.121, which is the version any scanner reads - the relocated-member residual limit AGENTS section 5 names. Declared by policy 2026-08-21 (scripts/probes/post171-blindspot-probe.mjs); no gate can raise it."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.tnt.NavigationListItem's press EVENT is @since 1.133 and is wired 1:1 from the original. It is not declared on NavigationListItem at all any more - it lives on the new base class NavigationListItemBase, which is the relocated-member shape no gate can see (the blind-spot probe has no row for it either). The sidecar declared design and ariaHasPopup on the same item and stopped there; the event that makes the item do anything was undeclared until 2026-08-23. The port already lives under src/02/05 for the other declarations."
+    },
+    {
+      "type": "NOTE",
+      "what": "The ResponsivePopover carries showHeader=\"{= ${device>/system/phone}}\", an attribute the original fragment does not declare - it reproduces the controller's setShowHeader( Device.system.phone ). ResponsivePopover.showHeader defaults to true, so binding it is what makes both arms behave like the original. Declared 2026-08-23; the sibling added attributes were declared, this one was not."
     }
   ]
 }

@@ -124,8 +124,8 @@ CLASS z2ui5_cl_smpc_app_174 IMPLEMENTATION.
 
                     )->ele( `columns`
                         )->ele( `Column`
-                            )->a( n = `sortProperty`   v = `Status`
-                            )->a( n = `filterProperty` v = `Status`
+                            )->a( n = `sortProperty`   v = `STATUS`
+                            )->a( n = `filterProperty` v = `STATUS`
                             )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Status`
                             )->ele( `template`

@@ -21,7 +21,15 @@
     },
     {
       "type": "POST_171",
-      "what": "REVIEW FINDING (out of scope, maintainer decision needed): the ported control sap.m.OverflowToolbarTokenizer itself is tagged @ui5-experimental-since 1.139 in the OpenUI5 source and carries NO plain @since tag, so scripts/scope-of.mjs misreads it as base-version (<= 1.71, 'no @since header') and the property gate cannot see it either. The sample is out of porting scope per AGENTS §1 (control must exist since UI5 1.71); the app needs a UI5 release >= 1.139 (experimental API) to render. Either drop the port or add a ui5/scope-exceptions.json entry; scope-of.mjs should also learn @ui5-experimental-since."
+      "what": "REVIEW FINDING (out of scope, maintainer decision needed): the ported control sap.m.OverflowToolbarTokenizer itself is tagged @ui5-experimental-since 1.139 in the OpenUI5 source and carries NO plain @since tag, so The control is @ui5-experimental-since 1.139 (OverflowToolbarTokenizer.js). The paragraph that stood here until 2026-08-23 - that scope-of.mjs misreads it as base-version, that the property gate cannot see it, and that a maintainer decision is still owed - was stale on all three counts: scope-of.mjs matches @ui5-experimental-since (and cites this very port in its own comment), the linter emits control-too-new for it off ui5/properties.json, and ui5/scope-exceptions.json carries the KEEP decision dated 2026-07-30."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.Tokenizer.tokenDelete is @since 1.82 and is wired on all four tokenizers, 1:1 with the original. Newer than the 1.71 floor, so the app needs UI5 >= 1.82 for the delete handlers to exist at all. Undeclared until 2026-08-23: the linter does raise member-too-new for it, and the view gate accepted the port only because its declares( ) check matches the deviation text as a SUBSTRING and the control's own name appears in the two POST_171 texts beside it - AGENTS section 5 requires a deviation naming the member."
+    },
+    {
+      "type": "NOTE",
+      "what": "onTokenDelete iterates aDeletedTokens: sap.m.Tokenizer fires tokenDelete with getSelectedTokens( ) when there is a selection and with the focused token otherwise, so several tokens really do arrive at once. Every wire read ${$parameters>/tokens}[0] until 2026-08-23, so selecting three tokens and pressing Delete removed and toasted one. The BOUND tokenizer now sends the whole array - the frontend marshals each control into its properties - and ABAP loops over it. The three tokenizers whose tokens are static controls still delete the first token only: their removal is a client-side control_by_id removeToken, and a client action cannot iterate an array. That residual is the price of keeping those three roundtrip-free, and it is now written down rather than implied."
     }
   ]
 }

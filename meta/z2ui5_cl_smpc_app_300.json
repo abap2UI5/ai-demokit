@@ -37,7 +37,7 @@
     },
     {
       "type": "NOTE",
-      "what": "not yet run in a system: the TOGGLE_EXPAND round-trip (collapse/expand of the 20rem side navigation) and the quick-create popup round-trip. **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_300.mjs)."
+      "what": "not yet run in a system: the TOGGLE_EXPAND round-trip (collapse/expand of the 20rem side navigation) and the quick-create popup round-trip - NOT covered by the interaction module (scope corrected 2026-08-23). **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_300.mjs)."
     },
     {
       "type": "POST_171",
@@ -46,6 +46,10 @@
     {
       "type": "POST_171",
       "what": "sap.tnt.NavigationListItem.expanded is kept 1:1 from the original view. The property PREDATES 1.71, but it now lives on sap.tnt.NavigationListItemBase and its JSDoc there carries @since 1.121, which is the version any scanner reads - the relocated-member residual limit AGENTS section 5 names. Declared by policy 2026-08-21 (scripts/probes/post171-blindspot-probe.mjs); no gate can raise it."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.tnt.NavigationListItem's press EVENT is @since 1.133 and is wired 1:1 from the original. It is not declared on NavigationListItem at all any more - it lives on the new base class NavigationListItemBase, which is the relocated-member shape no gate can see (the blind-spot probe has no row for it either). The sidecar declared design and ariaHasPopup on the same item and stopped there; the event that makes the item do anything was undeclared until 2026-08-23. The port already lives under src/02/05 for the other declarations."
     }
   ]
 }

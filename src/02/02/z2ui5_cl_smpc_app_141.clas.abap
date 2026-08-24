@@ -108,12 +108,21 @@ CLASS z2ui5_cl_smpc_app_141 IMPLEMENTATION.
     IF client->get_event( ) = `PRESS`.
       " original onPress: announces the pressed button's type+text to the
       " InvisibleMessage a11y service and echoes it into the status Text. The
-      " announce itself has no control_global entry and stays dropped, but the
-      " pressed button's identity IS read back - type and text ride along as
-      " event args and the sentence is composed here, exactly as the original
-      " concatenates it.
-      statustext = |A new message with text: "Button with type { client->get_event_arg( ) } | &&
-                   |and text { client->get_event_arg( 2 ) } is pressed" | &&
+      " pressed button's identity rides along as event args, the message is
+      " composed here exactly as the original concatenates it, and the
+      " announcement itself goes out through the INVISIBLE_MESSAGE global
+      " target - the singleton has no control id, so control_global is the
+      " only route to it (same wire as apps 289 and 435)
+      DATA(message) = |Button with type { client->get_event_arg( ) } | &&
+                      |and text { client->get_event_arg( 2 ) } is pressed|.
+
+      client->follow_up_action( val   = client->cs_event-control_global
+                                t_arg = VALUE #( ( `INVISIBLE_MESSAGE` )
+                                                 ( `announce` )
+                                                 ( message )
+                                                 ( `Assertive` ) ) ).
+
+      statustext = |A new message with text: "{ message }" | &&
                    |was sent to the invisible messaging service.|.
     ENDIF.
 

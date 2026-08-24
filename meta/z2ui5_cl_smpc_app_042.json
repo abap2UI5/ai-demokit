@@ -21,7 +21,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the active status press opens the controller-built Dialog 1:1 (core:FragmentDefinition + popup_display): the Dialog with its VBox, the two content Texts (one EXTRA Text vs the original view) and the Close Button are EXTRA controls vs the archived view.xml, which only holds the ObjectStatus rows. Confirmed working in the 2026-07-20 live check."
+      "what": "the active status press opens the controller-built Dialog 1:1 (core:FragmentDefinition + popup_display): the Dialog with its VBox, its one content Text (an EXTRA control vs the archived view.xml, which has no Dialog at all) and its OK Button are EXTRA controls vs the archived view.xml, which only holds the ObjectStatus rows. Confirmed working in the 2026-07-20 live check."
     },
     {
       "type": "POST_171",

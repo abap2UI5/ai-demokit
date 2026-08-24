@@ -8,9 +8,22 @@
 // action cells hold nothing but their navIndicator div, in Navigation mode and
 // in Multiple Actions mode alike, and calling `setRowActionCount(2)` plus
 // `invalidate()` DIRECTLY on the table through its own API (bypassing the port
-// entirely) still leaves every row without a `_rowAction`. That rules the port
-// out as the cause. A gesture cannot be aimed at a control that is not there,
-// so the toast leg stays with the human live run; see
+// entirely) still leaves every row without a `_rowAction`.
+//
+// That experiment was read as ruling the port out. It does not, and the reading
+// was withdrawn 2026-08-24: NEITHER of the two calls it makes re-creates a row
+// clone. `_rowAction` is attached only in `_getRowClone()`, guarded by
+// `hasRowActions()` (needs `getRowActionCount() > 0`), and the only things that
+// re-run it are `invalidateRowsAggregation()` — reached from
+// `setRowActionTemplate`, not from `setRowActionCount` — and a column-aggregation
+// change. Plain `invalidate()` is not one of them. So the experiment reproduces
+// the port's own gap rather than excluding it, and cannot tell "the rows never
+// got a `_rowAction`" apart from "the smoke cannot render the icons". The
+// discriminating call is `oTable.invalidateRowsAggregation()`, which is what the
+// original triggers on every switchState. The underlying gap is fixed in the
+// port as of 2026-08-24 (a mode change that raises the count off 0 re-displays
+// the slot); until this module is re-measured with that call, the toast leg
+// stays with the human live run — but NOT on the grounds stated above. See
 // meta/interactions/README.md "still open".
 import { waitForUi5, ui5All, UI5_ALL_SRC, revealInOverflow } from '../../scripts/lib-e2e.mjs';
 

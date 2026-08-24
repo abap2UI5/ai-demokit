@@ -17,11 +17,11 @@
     },
     {
       "type": "POST_171",
-      "what": "NavigationListItem.selectable (@since 1.116) is kept 1:1 from the original (selectable=false on the two 'External Link' fixedItem entries). Newer than UI5 1.71; declared per the property-171 policy. Was previously undeclared because the property gate is blind to sap.tnt (properties.json holds sap.m only); found and corrected by the app-172 cold-read probe 2026-07-24."
+      "what": "NavigationListItem.selectable (@since 1.116) is kept 1:1 from the original (selectable=false on the two 'External Link' fixedItem entries). Newer than UI5 1.71; declared per the property-171 policy. Was previously undeclared, and the reason recorded here until 2026-08-23 - \"the property gate is blind to sap.tnt (properties.json holds sap.m only)\" - was false: ui5/properties.json carries 11 sap.tnt controls and lists controls[\"sap.tnt.NavigationListItem\"].members.selectable = \"1.116\" itself, as does the linter's own copy. The gate does see it; that is exactly why the declaration is needed to excuse the view-gates finding."
     },
     {
       "type": "POST_171",
-      "what": "sap.tnt.NavigationListGroup (control @since 1.121) is used 1:1 for the 'New', 'Recently used' and 'Restricted' groups. Newer than UI5 1.71; declared per the property-171 policy (control-level, app 152 Avatar precedent - the gate only checks members), so the app needs UI5 >= 1.121 to render the groups. Found by the 2026-07-27 review sweep."
+      "what": "sap.tnt.NavigationListGroup (control @since 1.121) is used 1:1 for the 'New', 'Recently used' and 'Restricted' groups. Newer than UI5 1.71; declared per the property-171 policy (control-level, app 152 Avatar precedent; the gate checks controls as well as members - the linter emits control-too-new straight off the class @since, and view-gates lists that type first, so this is a declaration the gate reads, not a courtesy note), so the app needs UI5 >= 1.121 to render the groups. Found by the 2026-07-27 review sweep."
     },
     {
       "type": "POST_171",

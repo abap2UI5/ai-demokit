@@ -31,8 +31,8 @@
       "what": "live-verified on 2026-08-02 (maintainer live check): the splitter re-flow through contextualWidth works. NOT covered by that check: the phone-portrait branch of the MessageStrip, which needs a real device rotation - kept as the one open leg."
     },
     {
-      "type": "NOTE",
-      "what": "still unverified: the phone-portrait branch of the MessageStrip expression (!${device>/system/phone} || ${device>/orientation/landscape}) - it needs a real device rotation, which neither the desktop live check nor the headless harness performs. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_277.mjs)."
+      "type": "LIVE_TEST",
+      "what": "still unverified: the phone-portrait branch of the MessageStrip expression (!${device>/system/phone} || ${device>/orientation/landscape}) - it needs a real device rotation, which neither the desktop live check nor the headless harness performs. The 2026-08-04 close stamp that stood here is WITHDRAWN (2026-08-23) and the entry is a LIVE_TEST again: close-live-tests appends that stamp on the rule that the module drives exactly the wire the deviation names, and this module does the opposite - it asserts the strip is VISIBLE on a desktop viewport, with no rotation, no Device override and no viewport change, while e2e-smoke uses a plain desktop context where Device.system.phone is always false. So the phone-portrait branch is still open, exactly as the neighbouring deviation says, and it stays open until a module rotates or emulates a phone."
     }
   ]
 }

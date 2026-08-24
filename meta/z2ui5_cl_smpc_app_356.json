@@ -33,7 +33,7 @@
     },
     {
       "type": "NOTE",
-      "what": "Unverified in a running system: whether the plugin honours the bound limit / selectionMode / showHeaderSelector without a round-trip, and whether the selectionChange expression argument reports the selected count. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_356.mjs)."
+      "what": "Unverified in a running system: whether the plugin honours the bound limit / selectionMode / showHeaderSelector without a round-trip. Two of those three are genuinely covered - limit (seeded 20 against the plugin's own default of 200) and selectionMode (driven to 'Single' through the Select). showHeaderSelector is NOT: it is asserted only at seed time, and true is the plugin's own default, so a port that bound the ToggleButton and the plugin to different fields - or bound nothing - passes it. The ToggleButton is never pressed, so the no-round-trip leg is untested for that field. The binding itself is correct; the gap is in the coverage claim, and whether the selectionChange expression argument reports the selected count. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_356.mjs)."
     }
   ]
 }

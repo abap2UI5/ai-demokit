@@ -264,7 +264,26 @@ CLASS z2ui5_cl_smpc_app_359 IMPLEMENTATION.
     IF client->get_event( ) = `MODE_CHANGE`.
       " onBehaviourModeChange -> switchState: the picked mode decides the
       " row action count and which items are shown
+      DATA(lv_was_none) = xsdbool( row_action_count = 0 ).
       mode_apply( ).
+      " switchState always calls setRowActionTemplate BEFORE setRowActionCount,
+      " and that ordering is load-bearing: the template setter ends in an
+      " invalidateRowsAggregation call, the count setter in a plain setProperty.
+      " A row's _rowAction is attached exclusively in _getRowClone( ), guarded
+      " by hasRowActions( ) - which needs getRowActionCount( ) > 0 - so any row
+      " created while the count is 0 has NO _rowAction, and merely raising the
+      " count afterwards never re-creates the clones. The port drives only the
+      " count from the model, so it had no counterpart for that invalidation,
+      " and invalidateRowsAggregation( ) cannot be wired (the frontend action
+      " allowlist denies the whole invalidate* prefix - the render lifecycle is
+      " the framework's). Re-displaying the slot rebuilds the Table with the new
+      " count already set, so the rows are created WITH their actions.
+      " Reachable without anything exotic: pick "No Actions", leave and come
+      " back - check_on_navigated rebuilds the view with mode_key still 'None',
+      " so every row is created actionless and no later switch brings them back.
+      IF lv_was_none = abap_true AND row_action_count > 0.
+        view_display( ).
+      ENDIF.
     ENDIF.
 
 

@@ -63,7 +63,7 @@ CLASS z2ui5_cl_smpc_app_402 IMPLEMENTATION.
                         )->ele( n = `HBox` ns = `m`
                             )->ele( n = `VBox` ns = `m`
                                 )->tag( n = `Avatar` ns = `m`
-                                    )->a( n = `src`   v = `./test-resources/sap/uxap/images/imageID_275314.png`
+                                    )->a( n = `src`   v = `https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png`
                                     )->a( n = `class` v = `sapUiSmallMarginEnd`
 
                             )->end(
@@ -118,7 +118,7 @@ CLASS z2ui5_cl_smpc_app_402 IMPLEMENTATION.
                         )->a( n = `class` v = `sapUiSmallMarginEnd sapUiSmallMarginBottom`
 
                         )->tag( n = `Avatar` ns = `m`
-                            )->a( n = `src`         v = `./test-resources/sap/uxap/images/imageID_275314.png`
+                            )->a( n = `src`         v = `https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png`
                             )->a( n = `class`       v = `sapUiMediumMarginEnd`
                             )->a( n = `displaySize` v = `L`
 

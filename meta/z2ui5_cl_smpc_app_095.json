@@ -17,7 +17,7 @@
     },
     {
       "type": "NOTE",
-      "what": "The result text uses the static control id 'TPS2' because the original's runtime-generated oTP.getId() cannot be reproduced. The cosmetic collapseAll() on the sliders as the dialog closes is dropped (no visible effect on a closing dialog)."
+      "what": "The result text uses the static control id 'TPS2' because the original's runtime-generated oTP.getId() cannot be reproduced. The collapseAll( ) on the sliders as the dialog closes is dropped. Re-verified 2026-08-23: both halves still hold, with sharper reasons. The runtime id is oTP.getId( ) AFTER UI5 prefixes it with the view id assigned at runtime (__xmlview0--TPS2), which the backend never sees - the same boundary pr/aggregation-item-address had to resolve on the client - and the OK button's event reaches the Button, not the TimePickerSliders, so no expression addresses it either. collapseAll IS callable today (it is not on the frontend denylist, and app 365 calls exactly that method on a TreeTable); it is dropped because there is nothing for it to collapse: the original keeps ONE dialog instance as a view dependent and reopens it, so without the collapse the sliders would reopen expanded, while popup_display rebuilds the fragment on every open and the sliders are collapsed by construction."
     }
   ]
 }

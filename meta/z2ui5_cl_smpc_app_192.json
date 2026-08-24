@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "the controller's onPopinLayoutChanged (ComboBox change handler running a PopinLayout switch with a Block default) is expressed as bound properties instead of a round-trip (AGENTS 'prefer a bindable property', as app 009): the ComboBox's change attribute is dropped, its selectedKey is bound two-way, and the Table gains a popinLayout expression binding that reproduces the switch including its Block default."
+      "what": "the controller's onPopinLayoutChanged (ComboBox change handler running a PopinLayout switch with a Block default) is expressed as bound properties instead of a round-trip (the recipe's 'prefer a bindable property' rule (.claude/skills/port-a-sample/SKILL.md; the linter enforces it as settable-property-via-action), as app 009): the ComboBox's change attribute is dropped, its selectedKey is bound two-way, and the Table gains a popinLayout expression binding that reproduces the switch including its Block default. The ComboBox is NOT pre-selected, corrected 2026-08-23: the original carries a placeholder and no selectedKey, so the input starts empty; seeding popin_layout = 'Block' made setSelectedKey resolve the static item and write 'Block' into the input, suppressing the placeholder. The popinLayout expression already falls through to 'Block' for an empty value, and sap.m.Table.popinLayout defaults to Block anyway - app 009, the checked reference for this idiom, seeds nothing either."
     },
     {
       "type": "NOTE",

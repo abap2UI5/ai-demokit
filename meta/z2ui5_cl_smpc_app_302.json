@@ -37,7 +37,7 @@
     },
     {
       "type": "NOTE",
-      "what": "not yet run in a system: the IconTabHeader / SideNavigation select -> NavContainer 'to' frontend action, the two-way bound selectedKey and the SIDE_NAV_TOGGLE round-trip (sideExpanded plus the tooltip flip). **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_302.mjs)."
+      "what": "not yet run in a system: the IconTabHeader / SideNavigation select -> NavContainer 'to' frontend action, the two-way bound selectedKey - NOT covered by the interaction module (scope corrected 2026-08-23) and the SIDE_NAV_TOGGLE round-trip (sideExpanded plus the tooltip flip). **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_302.mjs)."
     },
     {
       "type": "POST_171",

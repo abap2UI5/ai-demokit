@@ -26,6 +26,8 @@ CLASS z2ui5_cl_smpc_app_121 DEFINITION PUBLIC.
              statuses     TYPE STANDARD TABLE OF ty_s_status WITH EMPTY KEY,
            END OF ty_s_item.
     DATA t_items TYPE STANDARD TABLE OF ty_s_item WITH EMPTY KEY.
+    " onSelectionChange enables the version button for exactly one selection
+    DATA version_enabled TYPE abap_bool.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -95,8 +97,10 @@ CLASS z2ui5_cl_smpc_app_121 IMPLEMENTATION.
                                                                                           ( `STATE` )
                                                                                           ( `ICON` ) ) )
                 )->a( n = `mode`          v = `MultiSelect`
-                )->a( n = `selectionChanged`  v = client->_event( `SELECTION` )
-                )->a( n = `afterItemRemoved`  v = client->_event( `REMOVED` )
+                )->a( n = `selectionChanged`  v = client->_event( val   = `SELECTION`
+                                                                  t_arg = VALUE #( ( `$event.oSource.getSelectedItems().length` ) ) )
+                )->a( n = `afterItemRemoved`  v = client->_event( val   = `REMOVED`
+                                                                  t_arg = VALUE #( ( `${$parameters>/item}.getFileName()` ) ) )
 
                 )->ele( n = `toolbar` ns = `upload`
                     )->ele( `OverflowToolbar`
@@ -111,7 +115,7 @@ CLASS z2ui5_cl_smpc_app_121 IMPLEMENTATION.
                             )->a( n = `press` v = client->_event( `DOWNLOAD` )
                         )->tag( `Button`
                             )->a( n = `id`      v = `versionButton`
-                            )->a( n = `enabled` v = `false`
+                            )->a( n = `enabled` v = client->_bind( version_enabled )
                             )->a( n = `text`    v = `Upload a new version`
                             )->a( n = `press`   v = client->_event( `VERSION` )
                         )->tag( n = `UploadSetToolbarPlaceholder` ns = `upload`
@@ -152,10 +156,15 @@ CLASS z2ui5_cl_smpc_app_121 IMPLEMENTATION.
     CASE client->get_event( ).
 
       WHEN `SELECTION`.
-        client->message_toast_display( `Selection changed` ).
+        " onSelectionChange enables the version button for exactly one selected
+        " item; the original raises no toast here
+        version_enabled = xsdbool( client->get_event_arg( ) = `1` ).
 
       WHEN `REMOVED`.
-        client->message_toast_display( `Item removed` ).
+        " onAfterItemRemoved splices the row out of the model. The sample matches
+        " on an id this row type does not carry, so the wire transports the file
+        " name, which is unique across the two rows
+        DELETE t_items WHERE filename = client->get_event_arg( ).
 
       WHEN `UPLOAD`.
         client->message_toast_display( `Upload selected pressed` ).
@@ -187,7 +196,6 @@ CLASS z2ui5_cl_smpc_app_121 IMPLEMENTATION.
                                ( title = `File Size` text = `25` active = abap_false )
                                ( title = `Document Info Record` text = `SSP/101010101` state = `Information` ) ) )
       ( filename     = `Picture of a woman.png`
-        mediatype    = `image/png`
         url          = `https://sdk.openui5.org/test-resources/sap/m/images/Woman_04.png`
         thumbnailurl = `https://sdk.openui5.org/test-resources/sap/m/images/Woman_04.png`
         uploadstate  = `Complete`

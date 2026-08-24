@@ -75,7 +75,6 @@ CLASS z2ui5_cl_smpc_app_449 IMPLEMENTATION.
                 )->ele( `Page`
                     )->a( n = `id`               v = `detailPage`
                     )->a( n = `title`            v = `Middle Column`
-                    )->a( n = `backgroundDesign` v = `Transparent`
 
                     )->ele( `VBox`
                         )->tag( `Button`

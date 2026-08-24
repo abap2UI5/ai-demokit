@@ -79,6 +79,12 @@ CLASS z2ui5_cl_smpc_app_067 IMPLEMENTATION.
                                 " controller and toasts after each async URL validation
                                 )->a( n = `urlValidated`     v = client->follow_up_action( val   = client->cs_event-control_global
                                                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `URL validation has been performed.` ) ) )
+                                " added wire (declared): the original attaches longtextLoaded in
+                                " the controller. MessageView fires it unconditionally on every
+                                " drill-down (_navigateToDetails), so it is NOT gated on a
+                                " longtextUrl the way setAsyncDescriptionHandler is
+                                )->a( n = `longtextLoaded`   v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                                           t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Description validation has been performed.` ) ) )
 
                                 )->ele( `MessageItem`
                                     )->a( n = `type`              v = `{TYPE}`

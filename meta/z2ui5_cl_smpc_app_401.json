@@ -12,8 +12,8 @@
   "checked": null,
   "deviations": [
     {
-      "type": "NOTE",
-      "what": "Block->content inlining (app 188/217/261 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold SharedBlocks BlockBase controls - goals:GoalsBlock, personal:BlockPhoneNumber / BlockSocial / BlockAdresses / BlockMailing / PersonalBlockPart1 / PersonalBlockPart2, employment:BlockJobInfoPart1 / BlockJobInfoPart2 / BlockJobInfoPart3 / BlockEmpDetailPart1 / BlockEmpDetailPart2 / BlockEmpDetailPart3 / EmploymentBlockJob. Each BlockBase is only a lazy-loading wrapper around a static view (a forms:SimpleForm with core:Title / m:Label / m:Text, or a layout:HorizontalLayout / layout:VerticalLayout tree), so every block view is inlined 1:1 into its aggregation. Absent as a result: the 14 BlockBase controls with their ids and their columnLayout / showSubSectionMore properties, plus the block views' own mvc:View roots with their width='100%'. Present in their place: forms:SimpleForm, core:Title and the additional m:Label / m:Text / layout:VerticalLayout / layout:HorizontalLayout the block views contain."
+      "type": "IMPROVISED",
+      "what": "Block->content inlining (app 188/217/261 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold SharedBlocks BlockBase controls - goals:GoalsBlock, personal:BlockPhoneNumber / BlockSocial / BlockAdresses / BlockMailing / PersonalBlockPart1 / PersonalBlockPart2, employment:BlockJobInfoPart1 / BlockJobInfoPart2 / BlockJobInfoPart3 / BlockEmpDetailPart1 / BlockEmpDetailPart2 / BlockEmpDetailPart3 / EmploymentBlockJob. Each BlockBase is only a lazy-loading wrapper around a static view (a forms:SimpleForm with core:Title / m:Label / m:Text, or a layout:HorizontalLayout / layout:VerticalLayout tree), so every block view is inlined 1:1 into its aggregation. Absent as a result: the 14 BlockBase controls with their ids and their columnLayout / showSubSectionMore properties, plus the block views' own mvc:View roots with their width='100%'. Present in their place: forms:SimpleForm, core:Title and the additional m:Label / m:Text / layout:VerticalLayout / layout:HorizontalLayout the block views contain. Typed IMPROVISED since 2026-08-23. CAPABILITIES' own row says \"Declare the block→content substitution (IMPROVISED)\", and the recipe's refinement is explicit that removing a control the original declares - even a zero-visual-output one - is a loss regardless of a pixel-identical render. 26 of the 31 sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column assignment, and the block ids and view roots go with it."
     },
     {
       "type": "IMPROVISED",
@@ -41,7 +41,7 @@
     },
     {
       "type": "NOTE",
-      "what": "The four asset paths (the imageID_275314.png avatar twice, linkedin.png and Twitter.png) are kept exactly as the original writes them - './test-resources/sap/uxap/images/...' - matching app 261, which carries the same relative form for the same two images."
+      "what": "The four asset paths (the imageID_275314.png avatar twice, linkedin.png and Twitter.png) are absolutized to the sdk.openui5.org host per the offline asset-URL rule (corrected 2026-08-24). They were kept in the original's './test-resources/...' form, justified as \"matching app 261\" - which is false: 261 was rewritten to the absolute form on 2026-08-23 for exactly this reason, and its own sidecar records that both icons had rendered broken. A relative path resolves against the demo kit's document root; an abap2UI5 app is served from the ABAP ICF node and has no such root, so the request 404s and the control falls back to its placeholder. No gate sees it - data-fidelity only rejects a non-OpenUI5 HOST, and a relative path has none."
     }
   ]
 }

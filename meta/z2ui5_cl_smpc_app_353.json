@@ -17,7 +17,7 @@
     },
     {
       "type": "NOTE",
-      "what": "The original keeps ONE collection and splits the two tables by a Rank filter (Rank = 0 available, Rank > 0 selected, sorted by Rank descending), moving a row by rewriting its Rank; the rank arithmetic (initialRank / defaultRank / the Before-Between-After algorithm) exists only to encode an ORDER inside one array. With abap2UI5's one default model the port keeps two model tables instead, so a move is an insert plus a delete and the row order IS the rank - same rendered result, no rank column. Consequently each Table's rows binding is a plain aggregation binding rather than the original's filters/sorter binding-info."
+      "what": "The original keeps ONE collection and splits the two tables by a Rank filter (Rank = 0 available, Rank > 0 selected, sorted by Rank descending), moving a row by rewriting its Rank; the rank arithmetic (initialRank / defaultRank / the Before-Between-After algorithm) exists only to encode an ORDER inside one array. With abap2UI5's one default model the port keeps two model tables instead, so a move is an insert plus a delete and the row order IS the rank - same rendered result, no rank column. Getting that equivalence right needs the insert POSITION to match, and until 2026-08-24 it did not: all three of the move-back call sites used `INSERT ... INTO TABLE`, which on a STANDARD TABLE WITH EMPTY KEY appends. The original does the opposite at both ends. Into table 2 it inserts as the FIRST row - `Before(firstRowRank)` with the table sorted descending by Rank, and the source even comments \"insert always as a first row\" - so the button now inserts at index 1. Back into table 1 the row must return to its ORIGINAL place, because that table binds `filters: Rank EQ 0` with NO sorter, so a row whose Rank goes back to 0 reappears where it sits in ProductCollection. Two tables throw that order away, so ty_s_product carries an ordinal (stamped after the seeded literals, which stay exactly the mock's) and available_restore( ) re-inserts by it. Consequently each Table's rows binding is a plain aggregation binding rather than the original's filters/sorter binding-info."
     },
     {
       "type": "NOTE",
@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "getSelectedRowContext reads the selected row off the control; the port mirrors it into the backend instead - each table's rowSelectionChange carries ${$parameters>/rowIndex}, and onBeforeOpenContextMenu (which the original uses to select the row under the cursor before opening the menu) carries the same parameter. The two arrow buttons and the context-menu items then work off that, with the original's 'Please select a row!' toast when nothing is selected. moveUp/moveDown become an index swap in the selected table, which is what the original's Between-rank arithmetic achieves."
+      "what": "getSelectedRowContext reads the selected row off the control; the port mirrors it into the backend instead - each table's rowSelectionChange carries ${$parameters>/rowIndex}, and onBeforeOpenContextMenu (which the original uses to select the row under the cursor before opening the menu) carries the same parameter. The two arrow buttons and the context-menu items then work off that, with the original's 'Please select a row!' toast when nothing is selected. moveUp/moveDown become an index swap in the selected table, which is what the original's Between-rank arithmetic achieves. What the mirror does NOT reproduce is the original's four setSelectedIndex( ) calls - moveToTable2 selects the inserted row, moveSelectedRow selects the sibling it swapped with, moveToTable1 steps the selection back when it removed the last row. The port updates only its own selected_1/selected_2, never the control, so after a Move up the highlight stays on the old index while the backend believes the moved row is selected, and a second Move up acts on a different row than the highlighted one. Binding it is not the fix either: sap.ui.table.Table.selectedIndex is @deprecated as of 1.69. Declared rather than improvised."
     },
     {
       "type": "IMPROVISED",
@@ -38,6 +38,14 @@
     {
       "type": "LIVE_TEST",
       "what": "Unverified in a running system: whether the drop wires deliver the row indices and drop position as expected, whether the internal-vs-external drag expression resolves, and whether the context menu's beforeOpenContextMenu round-trip arrives before the menu item press."
+    },
+    {
+      "type": "NOTE",
+      "what": "sortProperty/filterProperty carry the UPPER-CASED ABAP field names, not the original's mixed-case ones: abap2UI5 derives the model paths from the ABAP component names, which is why the cells on the same columns bind {NAME}/{CATEGORY} and friends. Copied verbatim from the original until 2026-08-23, and UI5 generates the column menu's sort and filter entries off the property merely being SET - so the entries were there and resolved to undefined on every row: sorting a no-op, filtering empty. Corpus convention, same sweep that fixed apps 137/164/174/247/353."
+    },
+    {
+      "type": "NOTE",
+      "what": "Every wire in this port transports a POSITIONAL index - ${$parameters>/rowIndex} and ${$parameters>/draggedControl}.getIndex() - which the backend maps straight onto an ABAP table index. rowIndex is oRow.getIndex(), the index in the BINDING, so it follows any sorter or filter the user applies. The port keeps sortProperty/filterProperty on table 1's columns (see the deviation below), which is exactly what makes UI5 offer the column-menu Sort and Filter entries - so once the user sorts or filters table 1, the index no longer addresses the same row in t_available and a move acts on the wrong product. The original is immune because it resolves the index through getContextByIndex( ) and then works on the CONTEXT, which no reordering invalidates. Carrying a context is not something the wire can do, so this is a boundary of the index-mirroring idiom rather than a fixable slip - recorded here because nothing else in the sidecar names it."
     }
   ]
 }

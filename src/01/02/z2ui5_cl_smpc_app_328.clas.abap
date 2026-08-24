@@ -41,14 +41,6 @@ CLASS z2ui5_cl_smpc_app_328 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
-      " onInit ends with oSplitContainer.toDetail( this.createId('page') ) -
-      " "to navigate to the page on phone and not show the split screen items".
-      " initialDetail names the detail page but does not put a PHONE into detail
-      " mode, so without this a phone opens on the master list where the sample
-      " opens on the form. toDetail is a listed control method taking a
-      " controlId, so the wire carries it as-is.
-      client->follow_up_action( val   = client->cs_event-control_by_id
-                                t_arg = VALUE #( ( `SimpleFormSplitscreen` ) ( `toDetail` ) ( `page` ) ) ).
     ELSEIF client->check_on_navigated( ).
       view_display( ).
     ELSEIF client->check_on_event( ).
@@ -259,6 +251,22 @@ CLASS z2ui5_cl_smpc_app_328 IMPLEMENTATION.
                                     )->a( n = `type`  v = `Inactive` ).
 
     client->view_display( view->stringify( ) ).
+
+    " onInit ends with oSplitContainer.toDetail( this.createId('page') ) -
+    " "to navigate to the page on phone and not show the split screen items".
+    " initialDetail names the detail page but does not put a PHONE into detail
+    " mode, so without this a phone opens on the master list where the sample
+    " opens on the form. toDetail is a listed control method taking a controlId,
+    " so the wire carries it as-is.
+    " It sits HERE, at the tail of view_display, and not in the on_init branch of
+    " main: view_display rebuilds the SplitContainer, so EVERY path that builds
+    " the view has to re-issue toDetail. check_on_navigated( ) reaches this method
+    " with check_on_init( ) false - a bookmarked draft restored into an already
+    " initialized container - and a phone would then re-render on the master list,
+    " the exact state this call exists to avoid. The invariant is "view built,
+    " toDetail follows", so the wire belongs to the builder, not to one branch.
+    client->follow_up_action( val   = client->cs_event-control_by_id
+                              t_arg = VALUE #( ( `SimpleFormSplitscreen` ) ( `toDetail` ) ( `page` ) ) ).
 
   ENDMETHOD.
 

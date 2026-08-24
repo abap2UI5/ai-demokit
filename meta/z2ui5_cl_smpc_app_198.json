@@ -14,7 +14,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "the list-item press was built as a roundtrip-free client-composed toast (control_global MESSAGE_TOAST.show, template `Pressed : {0}` filled by ${$source>/title}, reproducing the controller's MessageToast.show(\"Pressed : \" + oEvent.getSource().getTitle())) - re-verify pressing an item toasts \"Pressed : <title>\". **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): pressing the first ObjectListItem toasts 'Pressed : <title>' (the ${$source>/title} template resolves)."
+      "what": "the list-item press was built as a roundtrip-free client-composed toast (control_global MESSAGE_TOAST.show, template `Pressed : {0}` filled by ${$source>/title}, reproducing the controller's MessageToast.show(\"Pressed : \" + oEvent.getSource().getTitle())) - re-verify pressing an item toasts \"Pressed : <title>\". **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): pressing the first ObjectListItem toasts 'Pressed : <title>' (the ${$source>/title} template resolves). (Corrected 2026-08-23: the module asserts only 'Pressed :', which an unresolved template or an empty resolution would also satisfy - the template's resolution is NOT covered.)"
     }
   ]
 }

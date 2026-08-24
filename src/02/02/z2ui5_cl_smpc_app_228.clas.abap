@@ -9,6 +9,7 @@ CLASS z2ui5_cl_smpc_app_228 DEFINITION PUBLIC.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
+    METHODS on_event.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -23,6 +24,18 @@ CLASS z2ui5_cl_smpc_app_228 IMPLEMENTATION.
       view_display( ).
     ELSEIF client->check_on_navigated( ).
       view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
+    ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD on_event.
+
+    " handleMenuItemPress: a parent that only opens its submenu is skipped
+    IF client->get_event( ) = `ITEM_SELECT` AND client->get_event_arg( ) <> `SUB`.
+      client->message_toast_display( client->get_event_arg( 2 ) ).
     ENDIF.
 
   ENDMETHOD.
@@ -30,14 +43,18 @@ CLASS z2ui5_cl_smpc_app_228 IMPLEMENTATION.
 
   METHOD view_display.
 
-    " the item branch of handleMenuItemPress as ONE client expression: skip a
-    " parent that only opens its submenu, report a MenuTextFieldItem's VALUE and
-    " every other item's text - split over three lines only for the ABAP line limit
+    " the item branch of handleMenuItemPress. The message itself composes on the
+    " client (a MenuTextFieldItem reports its VALUE, everything else its text),
+    " but the SKIP cannot: the original returns before MessageToast.show for a
+    " parent that only opens its submenu, and a client action that composes an
+    " empty string still pops an empty toast - MessageToast.show('') has no
+    " early return. So the decision travels: the flag and the message are two
+    " event args and on_event toasts only when there is no submenu
     DATA(item) = `${$parameters>/item}`.
-    DATA(item_message) = |{ item }.getSubmenu() ? '' : (| &&
-                         |{ item }.getMetadata().getName() === 'sap.ui.unified.MenuTextFieldItem'| &&
+    DATA(has_submenu) = |{ item }.getSubmenu() ? 'SUB' : 'ITEM'|.
+    DATA(item_message) = |{ item }.getMetadata().getName() === 'sap.ui.unified.MenuTextFieldItem'| &&
                          | ? "'" + { item }.getValue() + "' entered"| &&
-                         | : "'" + { item }.getText() + "' pressed")|.
+                         | : "'" + { item }.getText() + "' pressed"|.
 
     DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
@@ -55,7 +72,10 @@ CLASS z2ui5_cl_smpc_app_228 IMPLEMENTATION.
                 )->a( n = `text`         v = `Open Menu`
                 )->a( n = `ariaHasPopup` v = `Menu`
                 " the sample opens the Menu anchored to the button via oMenu.open( kbd, button, ... );
-                " sap.ui.unified.Menu has no openBy and open cannot receive the anchor - see pr/ (no-op today)
+                " sap.ui.unified.Menu has no openBy of its own; the frontend's openBy
+                " falls back to open( false, anchor, 'begin top', 'begin bottom', anchor )
+                " for exactly this control (pr/unified-menu-open-anchored, 2026-07-27) -
+                " the "no-op today" this comment claimed until 2026-08-23 is long gone
                 )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                        t_arg = VALUE #( ( `theMenu` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
@@ -70,8 +90,8 @@ CLASS z2ui5_cl_smpc_app_228 IMPLEMENTATION.
                         " fit in ONE expression arg - measured with
                         " scripts/probes/event-arg-expression-probe.mjs, a class-name ternary
                         " resolves - so the toast text is composed on the client 1:1
-                        )->a( n = `itemSelect` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( item_message ) ) )
+                        )->a( n = `itemSelect` v = client->_event( val   = `ITEM_SELECT`
+                                                                   t_arg = VALUE #( ( has_submenu ) ( item_message ) ) )
 
                         )->tag( n = `MenuItem` ns = `u`
                             )->a( n = `text` v = `My 1st Item`

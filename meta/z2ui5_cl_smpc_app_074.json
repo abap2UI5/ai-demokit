@@ -18,7 +18,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the press toast was switched to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template `Pressed : {0}` filled by ${NAME}; on_event dropped, init-only) - re-verify pressing an item toasts \"Pressed : <name>\". **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): pressing the first ObjectListItem toasts 'Pressed : <name>'; the other rows are the identical template wire."
+      "what": "the press toast was switched to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template `Pressed : {0}` filled by ${NAME}; on_event dropped, init-only) - re-verify pressing an item toasts \"Pressed : <name>\". **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): pressing the first ObjectListItem toasts 'Pressed : <name>'; the other rows are the identical template wire. Tightened 2026-08-23: the module asserted only the 'Pressed :' prefix, so a broken ${NAME} - the one half that can silently fail - would have passed. It now asserts the whole composed 'Pressed : Notebook Basic 15'."
     }
   ]
 }

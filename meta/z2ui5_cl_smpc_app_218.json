@@ -17,7 +17,7 @@
     },
     {
       "type": "NOTE",
-      "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): typing into the ShellBar search fires the client-composed liveChange toast ('<id> liveChange event value is: <value>', the app-005 idiom over cs_event-control_global). The SearchManager renders collapsed in the ShellBar, so the interaction expands it through the Search button first. Residual: the search event's own toast and the suggest -> binding_call Contains filter round-trip with its effect on the suggestion list."
+      "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): typing into the ShellBar search fires the client-composed liveChange toast ('<id> liveChange event value is: <value>', the app-005 idiom over cs_event-control_global). The SearchManager renders collapsed in the ShellBar, so the interaction expands it through the Search button first. Residual: the search event's own toast and the suggest -> binding_call Contains filter round-trip with its effect on the suggestion list. (Corrected 2026-08-23: the module asserts the constant middle of the template only, so a failure to substitute either placeholder would still pass.)"
     },
     {
       "type": "NOTE",

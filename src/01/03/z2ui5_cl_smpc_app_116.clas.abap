@@ -32,7 +32,7 @@ CLASS z2ui5_cl_smpc_app_116 IMPLEMENTATION.
 
     DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    " The eight blocks are sample:MultiViewBlock instances - a BlockBase is only a
+    " The ten blocks (across blocks AND moreBlocks) are sample:MultiViewBlock instances - a BlockBase is only a
     " lazy-loading wrapper around a view, and ObjectPageSubSection.blocks takes any
     " control, so each block's view CONTENT is inlined (CAPABILITIES 'Custom
     " BlockBase blocks', apps 161/178/188). MultiViewBlock ships two views and picks

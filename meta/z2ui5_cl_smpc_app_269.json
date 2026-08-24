@@ -29,11 +29,19 @@
     },
     {
       "type": "IMPROVISED",
-      "what": "updateShowSideContentButtonVisibility is reproduced only by its breakpoint half. The original computes !(breakpoint === 'S' || oDSC.isSideContentVisible()), i.e. it also hides the 'Open Side Content' button whenever the side content happens to be visible; isSideContentVisible() is client state the backend cannot read. The port keeps the button's visibility bound to the breakpoint (visible unless 'S') and flips the same flag in the two press handlers (hide -> button shows, show -> button hides), which matches the original in every path the sample offers - but a side-content visibility change caused by anything else (e.g. the Toggle button) does not update it."
+      "what": "updateShowSideContentButtonVisibility is reproduced only by its breakpoint half. The original computes !(breakpoint === 'S' || oDSC.isSideContentVisible()), i.e. it also hides the 'Open Side Content' button whenever the side content happens to be visible; isSideContentVisible() is client state the backend cannot read. The port keeps the button's visibility bound to the breakpoint (visible unless 'S') and flips the same flag in the two press handlers (hide -> button shows, show -> button hides), which now matches the original in every path the sample offers - but a side-content visibility change caused by anything else (e.g. the Toggle button) does not update it. Its handleSideContentHide half was wrong until 2026-08-23: the port set the button visible unconditionally, where updateShowSideContentButtonVisibility computes !(breakpoint === 'S' || isSideContentVisible( )) and therefore leaves it HIDDEN at S. The breakpoint the control last reported is kept in a field now, because the original reads getCurrentBreakpoint( ) at every call site, not only in the event handler."
     },
     {
       "type": "NOTE",
       "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the feed list renders all four feed.json rows, the side content's Close button hides the side content through the SIDE_CONTENT_HIDE round-trip that flips the two-way-bound showSideContent (setShowSideContent false), the Open Side Content button then shows (its visible flag comes from the breakpointChanged round-trip) and brings it back through SIDE_CONTENT_SHOW. Residual (nothing headless can assert): the FeedListItem layout with its remote author pictures, and toggle() on a real S-breakpoint device."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's own style.css is injected since 2026-08-23 through an added core:HTML style leaf (no counterpart in the original view, which loads the sheet through its manifest). The view carries sapUiDSCExplored and the rule behind it has to come with it. The port carried the class names with nothing behind them until then - the gap CAPABILITIES names as one of the two most common generation mistakes, and the same one the 2026-08-21 sweep closed in apps 122/124/133/138/145. \\{ \\} escaped: the XMLView parser reads an unescaped brace as a binding."
+    },
+    {
+      "type": "NOTE",
+      "what": "Residual, recorded 2026-08-23: the Toggle button's INITIAL enablement is not reproduced. _updateToggleButtonState has two call sites upstream - handleBreakpointChanged and onAfterRendering - and only the first is wired. DynamicSideContent fires breakpointChanged from _setBreakpointFromWidth only when the new breakpoint differs from the previous one, and _currentBreakpoint is undefined on the first determination, so the event never fires for the initial layout. An app opened at breakpoint S therefore starts with the Toggle button disabled - the one breakpoint where toggle( ) does anything - until the container crosses a breakpoint and comes back. There is no declarative substitute: S is the CONTAINER's breakpoint (containerQuery), not a device media range. Same residual as app 138."
     }
   ]
 }

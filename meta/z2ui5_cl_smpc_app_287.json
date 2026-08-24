@@ -22,6 +22,10 @@
     {
       "type": "NOTE",
       "what": "onTabDensityModeSelect loops over all nine bars and calls setTabDensityMode(selectedButton.getText()). tabDensityMode is a bindable property, so every IconTabBar binds the one field TAB_DENSITY (added attribute, no structural diff) and only the RadioButtonGroup round-trips: its selectedIndex is bound two-way and the three values are derived server-side, per the prefer-a-bindable-property rule (linter rule settable-property-via-action)."
+    },
+    {
+      "type": "NOTE",
+      "what": "enableTabReordering stays true, 1:1 with the original, but a reorder no longer survives a round trip. The original adds the 30 filters imperatively, so the aggregation is unbound and IconTabBarDragAndDropUtil's removeAggregation/insertAggregation is permanent; the port binds items to the model (the 30 instances come from one template), and IconTabBar forwards that binding to its header, so the next model push re-assigns the contexts positionally and the tabs snap back. The app's one round-trip is the density RadioButtonGroup, so the sequence reorder-then-change-density loses the order. Recorded 2026-08-23."
     }
   ]
 }

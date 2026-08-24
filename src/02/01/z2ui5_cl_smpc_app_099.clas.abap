@@ -92,7 +92,10 @@ CLASS z2ui5_cl_smpc_app_099 IMPLEMENTATION.
                 )->ele( `QuickViewCard`
                     )->a( n = `id`            v = `quickViewCard`
                     )->a( n = `pages`         v = client->_bind( t_pages )
-                    )->a( n = `navigate`      v = client->_event( `NAVIGATE` )
+                    " onNavigate reads the navOrigin link and names it in the toast;
+                    " a BACK navigation has no navOrigin, which the ternary reproduces
+                    )->a( n = `navigate`      v = client->_event( val   = `NAVIGATE`
+                                                                  t_arg = VALUE #( ( `${$parameters>/navOrigin} ? ${$parameters>/navOrigin}.getText() : ''` ) ) )
                     )->a( n = `afterNavigate` v = client->_event( val = `AFTER_NAV` t_arg = VALUE #( ( `${$parameters>/isTopPage}` ) ) )
 
                     )->ele( `QuickViewPage`
@@ -142,7 +145,11 @@ CLASS z2ui5_cl_smpc_app_099 IMPLEMENTATION.
                                   t_arg = VALUE #( ( `quickViewCard` ) ( `navigateBack` ) ) ).
 
       WHEN `NAVIGATE`.
-        client->message_toast_display( `A QuickViewCard link was clicked` ).
+        " onNavigate: the clicked link's text, or the back button
+        DATA(origin) = client->get_event_arg( ).
+        client->message_toast_display( COND string( WHEN origin IS NOT INITIAL
+                                                    THEN |Link '{ origin }' was clicked|
+                                                    ELSE `Back button was clicked` ) ).
 
       WHEN `AFTER_NAV`.
         " enable the back button while the card is not on its top page (original afterNavigate isTopPage)

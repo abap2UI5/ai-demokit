@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "The Slider's `liveChange` attribute is dropped (the expression binding needs no event). **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): one keyboard step on the Slider moves the Panel width to 99% with no round-trip - the expression binding replaces onSliderMoved completely. Residual: which GridList breakpoint the resized panel then hits (a visual property)."
+      "what": "The Slider's `liveChange` attribute is dropped (the expression binding needs no event). **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): one keyboard step on the Slider moves the Panel width to 99% with no round-trip - the expression binding replaces onSliderMoved completely. Residual: none of that kind, corrected 2026-08-23 - GridResponsiveLayout.containerQuery defaults to false and the sample never sets it, so setActiveLayout measures window.innerWidth rather than the panel. Resizing the panel cannot change the breakpoint on either side."
     },
     {
       "type": "NOTE",

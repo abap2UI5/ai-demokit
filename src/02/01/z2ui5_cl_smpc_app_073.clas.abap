@@ -180,6 +180,7 @@ CLASS z2ui5_cl_smpc_app_073 IMPLEMENTATION.
                 )->ele( `endButton`
                     )->tag( `Button`
                         )->a( n = `text`  v = `Cancel`
+                        )->a( n = `type`  v = `Reject`
                         )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close )
 
                 )->end(
@@ -187,8 +188,17 @@ CLASS z2ui5_cl_smpc_app_073 IMPLEMENTATION.
         client->popup_display( popup->stringify( ) ).
 
       WHEN `SUBMIT`.
+        " the original toasts on the STILL-OPEN dialog and closes it from the
+        " toast's onClose, so the order is toast first, close after - only the
+        " 2s setBusy delay in front of it stays dropped
+        client->message_toast_display( text     = `Feedback sent.`
+                                       duration = `2000`
+                                       my       = `center center`
+                                       at       = `center center`
+                                       onclose  = `FEEDBACK_CLOSED` ).
+
+      WHEN `FEEDBACK_CLOSED`.
         client->popup_destroy( ).
-        client->message_toast_display( `Feedback sent.` ).
     ENDCASE.
 
   ENDMETHOD.

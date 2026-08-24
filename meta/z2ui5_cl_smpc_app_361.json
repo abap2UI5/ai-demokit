@@ -33,7 +33,7 @@
     },
     {
       "type": "NOTE",
-      "what": "Unverified in a running system: whether rowSelectionChange delivers the index array as JSON to get_event_arg, whether the two bound Selects drive selectionMode/selectionBehavior without a round-trip, and the control_by_id clearSelection wire. **e2e-verified 2026-08-17** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_361.mjs)."
+      "what": "Unverified in a running system: whether rowSelectionChange delivers the index array as JSON to get_event_arg, whether the two bound Selects drive selectionMode/selectionBehavior without a round-trip, and the control_by_id clearSelection wire. **e2e-verified 2026-08-17** - but that stamp predates the wire it certifies. On 2026-08-21 the t_arg was rewritten from ${$parameters>/rowIndices} to ${$source>}.getSelectedIndices( ) (see the deviation below), and the module was not changed: it selected exactly ONE row, the single case where the changed-rows parameter and the current selection coincide, so it kept passing across the rewrite without ever exercising either case that motivated it. The module selects a second row and checks both indices are reported since 2026-08-24 (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_361.mjs)."
     },
     {
       "type": "NOTE",
@@ -41,7 +41,7 @@
     },
     {
       "type": "NOTE",
-      "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency: this rewrite is now declared by all 77 ports that do it - before that day 64 declared it and thirteen did not, which left a real difference asserted nowhere and gave every review sweep the same thing to re-find."
+      "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the sentence used to claim the rewrite was 'declared by all 77 ports that do it', which had stopped being true as the corpus grew past that day's snapshot - 126 ports do it now, and 17 of them declared it nowhere. Those 17 carry the declaration since today, so the claim holds again; a stale absolute count is what made it wrong, so this wording names the date the count was taken."
     }
   ]
 }

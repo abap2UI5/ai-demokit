@@ -1,5 +1,5 @@
 /*
- * app 352 — sap.m.sample.FacetFilterSimple
+ * app 352 — sap.ui.table.sample.Aggregations
  *
  * Closes the LIVE_TEST: "whether the two-way bound FacetFilterItem selected
  * flags return with the listClose event and the server-side selection applies".

@@ -88,7 +88,7 @@ CLASS z2ui5_cl_smpc_app_164 IMPLEMENTATION.
 
                     )->ele( `columns`
                         )->ele( `Column`
-                            )->a( n = `filterProperty` v = `Name`
+                            )->a( n = `filterProperty` v = `NAME`
                             )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Product Name`
                             )->ele( `template`
@@ -100,7 +100,7 @@ CLASS z2ui5_cl_smpc_app_164 IMPLEMENTATION.
                         )->end(
 
                         )->ele( `Column`
-                            )->a( n = `filterProperty` v = `Category`
+                            )->a( n = `filterProperty` v = `CATEGORY`
                             )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Category`
                             )->ele( `template`

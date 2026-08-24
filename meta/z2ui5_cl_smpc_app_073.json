@@ -17,7 +17,7 @@
     },
     {
       "type": "NOTE",
-      "what": "handleSAPLinkPressed's URLHelper.redirect maps to the URLHELPER REDIRECT frontend action (cs_event-urlhelper); handleFeedbacklinkPressed's Dialog (a RatingIndicator + TextArea with Submit/Cancel Button) is rebuilt via popup_display, the Submit button's 2s setBusy delay dropped."
+      "what": "handleSAPLinkPressed's URLHelper.redirect maps to the URLHELPER REDIRECT frontend action (cs_event-urlhelper); handleFeedbacklinkPressed's Dialog (a RatingIndicator + TextArea with Submit/Cancel Button) is rebuilt via popup_display, the Submit button's 2s setBusy delay dropped. Corrected 2026-08-23 on two counts the sentence had passed over: the Cancel button now carries the original's type=Reject (Submit's Accept was already there, so the pair had been asymmetric and Cancel lost its red styling), and the toast is no longer a bare one-liner. The original shows it ON the still-open dialog with duration 2000 and center/center docking and closes the dialog from its onClose; the port had destroyed the popup first and toasted with every default. It now passes duration/my/at and names an onclose event that destroys the popup, so the ORDER matches too. Only `of` stays dropped - it takes a live control and the framework hands the option to MessageToast unresolved, so a control id cannot travel in it."
     },
     {
       "type": "POST_171",

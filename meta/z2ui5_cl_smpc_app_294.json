@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_smpc_app_294",
   "sample": "sap.m.sample.MessageViewWithGrouping",
   "entity": "sap.m.MessageView",
-  "file": "src/01/01/z2ui5_cl_smpc_app_294.clas.abap",
+  "file": "src/02/01/z2ui5_cl_smpc_app_294.clas.abap",
   "batch": "b23",
   "audit": {
     "frontend_action": true,
@@ -27,6 +27,10 @@
     {
       "type": "NOTE",
       "what": "the MessageItem template binds counter={COUNTER} 1:1, but no message in the sample sets a counter - a flat ABAP row serializes it as 0, which ListItemBaseRenderer renders exactly like an absent counter (it only renders a truthy one). The two ungrouped messages carry no groupName, which is what makes them appear outside the two Purchase Order groups."
+    },
+    {
+      "type": "POST_171",
+      "what": "The four sap.m.ButtonType values the highest-severity button carries - Negative, Critical, Success, Neutral - are all @since 1.73 (sap.m/library.js; the Default/Accept/Reject/Transparent/Emphasized members above them carry none). The port computes them in ABAP and binds them onto Button.type, exactly the values buttonTypeFormatter returns upstream, so no gate can see them: the value never appears in the view, it arrives through the model. Declared by policy, the same route the sibling MessagePopover ports 066/067 take - both of which live under src/02 for it. Undeclared until 2026-08-23; declaring it moves the port from src/01/01 to src/02/01."
     }
   ]
 }

@@ -26,6 +26,10 @@
     {
       "type": "NOTE",
       "what": "The three layout transitions (OneColumn, TwoColumnsMidExpanded, ThreeColumnsEndExpanded) driven by the bound layout property are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_450.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The middle column's Page carried backgroundDesign = 'Transparent', which its original does not have - only DetailDetail.view.xml sets it, and Detail.view.xml is a plain <Page id=\"detailPage\" title=\"Middle Column\">. Page.backgroundDesign defaults to Standard, so the middle column rendered a different background from the sample. Removed 2026-08-24. No gate saw it: structural-diff has no 'attr extra' kind, so an attribute a port ADDS is never compared."
     }
   ]
 }

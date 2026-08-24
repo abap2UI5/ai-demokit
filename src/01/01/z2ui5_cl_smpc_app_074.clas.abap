@@ -61,7 +61,7 @@ CLASS z2ui5_cl_smpc_app_074 IMPLEMENTATION.
             )->ele( `ObjectListItem`
                 )->a( n = `title`      v = `{NAME}`
                 )->a( n = `type`       v = `Active`
-                " client-composed toast, roundtrip-free - re-verify live (see sidecar LIVE_TEST)
+                " client-composed toast, roundtrip-free - e2e-covered (see the sidecar)
                 )->a( n = `press`      v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Pressed : {0}` ) ( `${NAME}` ) ) )
                 )->a( n = `number`     v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCY_CODE'\}], type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
                 )->a( n = `numberUnit` v = `{CURRENCY_CODE}`

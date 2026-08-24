@@ -128,13 +128,27 @@ CLASS z2ui5_cl_smpc_app_233 IMPLEMENTATION.
                             )->a( n = `autocomplete`    v = `false`
                             )->a( n = `showValueHelp`   v = `true`
                             )->a( n = `change`          v = client->_event( `CHANGE` )
-                            " opens unfiltered: the original pre-filters and calls open(sInputValue) - see meta deviation
-                            " _filterAndOpenValueHelpDialog opens the dialog with the
-                            " current input value: open( ) takes that search string
-                            )->a( n = `valueHelpRequest` v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                                       t_arg = VALUE #( ( `selectDialog` )
-                                                                                                     ( `open` )
-                                                                                                     ( `$event.oSource.getValue()` ) ) )
+                            " _filterAndOpenValueHelpDialog does TWO things: it applies the
+                            " combined filter to the dialog's binding and THEN opens it with
+                            " the current input value. SelectDialog.open( ) only seeds the
+                            " search field - it does not filter - so both are chained here
+                            )->a( n = `valueHelpRequest` v = client->follow_up_action(
+                                      val   = client->cs_event-binding_call
+                                      t_arg = VALUE #( ( `selectDialog` )
+                                                       ( `items` )
+                                                       ( `filter` )
+                                                       " the expression MUST begin with $ : get_t_arg only leaves an
+                                                       " argument raw when it starts with $ or { (or is an .eB/.eF
+                                                       " call) - anything else, a leading quote included, is wrapped
+                                                       " in a JS string literal and never evaluated. The leading
+                                                       " getValue( ) test is also the original's `if (sValue)` guard:
+                                                       " an empty input clears the filter instead of filtering on ''
+                                                       ( `$event.oSource.getValue() ? '[[["PURCHASEID","Contains","' + $event.oSource.getValue() + '"],["SUPPLIERNAME","Contains","' + $event.oSource.getValue() + '"]]]' : '[]'` ) ) ) && `; ` &&
+                                                  client->follow_up_action(
+                                      val   = client->cs_event-control_by_id
+                                      t_arg = VALUE #( ( `selectDialog` )
+                                                       ( `open` )
+                                                       ( `$event.oSource.getValue()` ) ) )
                             )->a( n = `suggestionItems` v = client->_bind( t_purchases )
                             )->a( n = `suggestionItemSelected` v = client->_event( val   = `SUGGEST`
                                                                                    t_arg = VALUE #( ( `${$parameters>/selectedItem}.getKey()` ) ) )
@@ -412,8 +426,9 @@ CLASS z2ui5_cl_smpc_app_233 IMPLEMENTATION.
         IF input_value IS NOT INITIAL.
           set_selection( input_value ).
         ELSE.
+          " the original sets /inputPopulated = false and nothing else - the
+          " ObjectPage keeps whatever was selected
           inputpopulated = abap_false.
-          has_selection  = abap_false.
         ENDIF.
         view_display( ).
 
@@ -455,11 +470,15 @@ CLASS z2ui5_cl_smpc_app_233 IMPLEMENTATION.
     " _setSelectedPurchaseAndUpdateInput: resolve the purchase by PurchaseID and
     " seed the flattened /selectedPurchase fields; if none is found, force "no
     " selection" so the IllustratedMessage "not found" state shows
-    input_value    = key.
     inputpopulated = abap_true.
 
     READ TABLE t_purchases INTO DATA(purchase) WITH KEY purchaseid = key.
     IF sy-subrc = 0.
+      " the original resolves the purchase with Input.setSelectedKey, and under
+      " textFormatMode="KeyValue" the input then shows "(<key>) <text>" - the
+      " same composition, since the port re-renders and would otherwise put the
+      " bare key back into the field
+      input_value        = |({ key }) { purchase-suppliername }|.
       has_selection      = abap_true.
       sel_category       = purchase-category.
       sel_subcategory    = purchase-subcategory.

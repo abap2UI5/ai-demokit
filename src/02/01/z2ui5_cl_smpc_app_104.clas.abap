@@ -393,6 +393,11 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
                                   t_arg = VALUE #( ( `valueHelpDialog` ) ( `open` ) ) ).
 
       WHEN `CONFIRM`.
+        " handleClose resets the search filter FIRST, on confirm and on cancel
+        " alike, so a reopen starts from the full list instead of the filtered
+        " one (open( ) clears the search FIELD but never the binding filter)
+        client->follow_up_action( val   = client->cs_event-binding_call
+                                  t_arg = VALUE #( ( `myDialog` ) ( `items` ) ( `filter` ) ) ).
         client->message_toast_display( `Selection confirmed` ).
 
       WHEN `VH_CLOSE`.

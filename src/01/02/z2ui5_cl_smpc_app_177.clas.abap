@@ -1,4 +1,4 @@
-" @keywords calendardateinterval calendar date interval sap.ui.unified calendardateintervalbasic html verticallayout button horizontallayout label text
+" @keywords calendardateinterval calendar date interval sap.ui.unified calendardateintervalbasic html verticallayout daterange button horizontallayout label
 " @summary CalendarDateInterval with 14 days and single day selection
 CLASS z2ui5_cl_smpc_app_177 DEFINITION PUBLIC.
 
@@ -6,6 +6,17 @@ CLASS z2ui5_cl_smpc_app_177 DEFINITION PUBLIC.
     INTERFACES z2ui5_if_app.
 
     DATA selected_date TYPE string.
+
+    " The calendar's OWN selection, as the model owns it (app 139's shape):
+    " selectedDates is a bindable aggregation of sap.ui.unified.DateRange, so
+    " both halves of the controller - the re-click that REMOVES the selection
+    " and Select Today's removeAllSelectedDates + addSelectedDate - are model
+    " writes rather than control calls
+    TYPES:
+      BEGIN OF ty_s_day,
+        start TYPE string,
+      END OF ty_s_day.
+    DATA t_selected TYPE STANDARD TABLE OF ty_s_day WITH EMPTY KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -46,6 +57,9 @@ CLASS z2ui5_cl_smpc_app_177 IMPLEMENTATION.
         )->a( n = `class`     v = `viewPadding`
 
         )->a( n = `xmlns:core` v = `sap.ui.core`
+        " the selectedDates formatter has to be loaded, or the XMLView parser
+        " rejects the binding with "formatter function ... not found"
+        )->a( n = `core:require` v = `{Formatter: 'z2ui5/model/formatter'}`
 
         " the sample's own ../style.css (shared by the sap.ui.unified samples and
         " listed in this sample's manifest) - the view carries the class and the
@@ -54,21 +68,36 @@ CLASS z2ui5_cl_smpc_app_177 IMPLEMENTATION.
         )->tag( n = `HTML` ns = `core`
             )->a( n = `content` v = `<style>.viewPadding\{padding:1rem\}` &&
                                     `.sap-phone .viewPadding\{padding:0rem\}` &&
+                                    `.sap-phone .sapUiCal\{position:relative\}` &&
                                     `.labelMarginLeft\{margin:1rem\}</style>`
         )->ele( n = `VerticalLayout` ns = `l`
-            )->tag( n = `CalendarDateInterval` ns = `u`
-                )->a( n = `id`     v = `calendar`
-                )->a( n = `width`  v = `320px`
+            )->ele( n = `CalendarDateInterval` ns = `u`
+                )->a( n = `id`            v = `calendar`
+                )->a( n = `width`         v = `320px`
+                )->a( n = `selectedDates` v = client->_bind( t_selected )
                 " the picked day is read out of the event as a UI5 EXPRESSION - indexed
                 " access and chained calls resolve there (measured with
                 " scripts/probes/event-arg-expression-probe.mjs). The LOCAL date parts
                 " travel, not toISOString( ), which would shift the day east of
-                " Greenwich; the length guard reproduces the deselect case
+                " Greenwich. The length guard is defensive only: in single-selection
+                " mode Month._selectDay never leaves selectedDates empty - the
+                " original's deselect is its CONTROLLER removing the DateRange, and
+                " that is reproduced in on_event against the bound aggregation
                 )->a( n = `select` v = client->_event( val   = `CAL_SELECT`
                                                        t_arg = VALUE #(
                                                          ( `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getFullYear() : 0` )
                                                          ( `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getMonth() + 1 : 0` )
                                                          ( `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getDate() : 0` ) ) )
+
+                )->ele( n = `selectedDates` ns = `u`
+                    )->tag( n = `DateRange` ns = `u`
+                        " ABAP DATS through the local-parts formatter, as apps 139/220
+                        " do - `new Date('yyyy-mm-dd')` is UTC midnight and would land
+                        " a day early west of Greenwich
+                        )->a( n = `startDate` v = |\{ path: 'START', formatter: 'Formatter.DateAbapDateToDateObject' \}|
+
+                )->end(
+            )->end(
 
             )->ele( n = `VerticalLayout` ns = `l`
                 )->tag( `Button`
@@ -95,23 +124,35 @@ CLASS z2ui5_cl_smpc_app_177 IMPLEMENTATION.
     CASE client->get_event( ).
 
       WHEN `CAL_SELECT`.
-        " handleCalendarSelect: format getSelectedDates()[0] as yyyy-MM-dd, and
-        " show 'No Date Selected' when the re-click removed the day again - the
-        " original's if/else over the selection length, reproduced 1:1 because
-        " the length guard travels in the wire (year 0 = nothing selected)
+        " handleCalendarSelect: the controller keeps the last picked day and
+        " REMOVES the DateRange again when the same day is clicked twice
+        " (single-selection mode never deselects by itself); _updateText then
+        " prints yyyy-MM-dd or 'No Date Selected'. Both halves are reproduced
+        " against the bound selectedDates aggregation
         DATA(year) = client->get_event_arg( ).
         IF year IS INITIAL OR year = `0`.
           selected_date = `No Date Selected`.
+          CLEAR t_selected.
         ELSE.
-          selected_date = |{ year }-{ CONV i( client->get_event_arg( 2 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
-                          |-{ CONV i( client->get_event_arg( 3 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }|.
+          DATA(month) = |{ CONV i( client->get_event_arg( 2 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }|.
+          DATA(day)   = |{ CONV i( client->get_event_arg( 3 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }|.
+          DATA(picked) = |{ year }-{ month }-{ day }|.
+          IF picked = selected_date.
+            " the same day again - the original's removeSelectedDate branch
+            selected_date = `No Date Selected`.
+            CLEAR t_selected.
+          ELSE.
+            selected_date = picked.
+            t_selected    = VALUE #( ( start = |{ year }{ month }{ day }| ) ).
+          ENDIF.
         ENDIF.
 
       WHEN `SELECT_TODAY`.
-        " handleSelectToday adds a DateRange(today) and reformats - the server
-        " date IS today, so the text matches; only the calendar's own highlight
-        " is not moved (addSelectedDate takes a DateRange CONTROL)
+        " handleSelectToday: removeAllSelectedDates + addSelectedDate( today ).
+        " Re-stating the bound aggregation with one row IS both calls, so the
+        " highlight really moves - the server date is today
         selected_date = |{ sy-datum+0(4) }-{ sy-datum+4(2) }-{ sy-datum+6(2) }|.
+        t_selected    = VALUE #( ( start = |{ sy-datum }| ) ).
 
     ENDCASE.
 
