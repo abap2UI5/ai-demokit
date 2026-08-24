@@ -64,9 +64,13 @@ CLASS z2ui5_cl_smpc_app_362 IMPLEMENTATION.
       " `"" is of type string, expected sap.ui.core.SortOrder`. The original
       " calls _resetSortingState for the same reason; sort_clear( ) is it.
       sort_clear( ).
-      " the original sorts by Product Name ascending in onInit
+      " the original sorts by Product Name ascending in onInit - and
+      " oTable.sort( ) pushes that column onto the sorted-column list, so the
+      " list starts with NAME in it rather than empty
       SORT t_products BY name ASCENDING.
       sort_name = `Ascending`.
+      APPEND VALUE #( field      = `NAME`
+                      descending = abap_false ) TO t_sortkeys.
       view_display( ).
     ELSEIF client->check_on_navigated( ).
       view_display( ).
@@ -144,7 +148,8 @@ CLASS z2ui5_cl_smpc_app_362 IMPLEMENTATION.
                             )->a( n = `id`           v = `name`
                             )->a( n = `width`        v = `11rem`
                             )->a( n = `sortProperty` v = `NAME`
-                            )->a( n = `sortOrder`    v = client->_bind( sort_name )
+                            )->a( n = `sortOrder`    v = |\{= ${ client->_bind( sort_name ) } === 'Descending' ? 'Descending' : 'Ascending' \}|
+                            )->a( n = `sorted`       v = |\{= ${ client->_bind( sort_name ) } !== 'None' \}|
 
                             )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Product Name`
@@ -161,7 +166,8 @@ CLASS z2ui5_cl_smpc_app_362 IMPLEMENTATION.
                             )->a( n = `width`             v = `11rem`
                             )->a( n = `showSortMenuEntry` v = `false`
                             )->a( n = `sortProperty`      v = `CATEGORY`
-                            )->a( n = `sortOrder`         v = client->_bind( sort_category )
+                            )->a( n = `sortOrder`         v = |\{= ${ client->_bind( sort_category ) } === 'Descending' ? 'Descending' : 'Ascending' \}|
+                            )->a( n = `sorted`            v = |\{= ${ client->_bind( sort_category ) } !== 'None' \}|
 
                             )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Category`
@@ -192,7 +198,8 @@ CLASS z2ui5_cl_smpc_app_362 IMPLEMENTATION.
                             )->a( n = `width`        v = `6rem`
                             )->a( n = `hAlign`       v = `End`
                             )->a( n = `sortProperty` v = `QUANTITY`
-                            )->a( n = `sortOrder`    v = client->_bind( sort_quantity )
+                            )->a( n = `sortOrder`    v = |\{= ${ client->_bind( sort_quantity ) } === 'Descending' ? 'Descending' : 'Ascending' \}|
+                            )->a( n = `sorted`       v = |\{= ${ client->_bind( sort_quantity ) } !== 'None' \}|
 
                             )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Quantity`
@@ -207,7 +214,8 @@ CLASS z2ui5_cl_smpc_app_362 IMPLEMENTATION.
                             )->a( n = `id`           v = `deliverydate`
                             )->a( n = `width`        v = `9rem`
                             )->a( n = `sortProperty` v = `DELIVERYDATESTR`
-                            )->a( n = `sortOrder`    v = client->_bind( sort_deliverydate )
+                            )->a( n = `sortOrder`    v = |\{= ${ client->_bind( sort_deliverydate ) } === 'Descending' ? 'Descending' : 'Ascending' \}|
+                            )->a( n = `sorted`       v = |\{= ${ client->_bind( sort_deliverydate ) } !== 'None' \}|
 
                             )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Delivery Date`
@@ -278,6 +286,18 @@ CLASS z2ui5_cl_smpc_app_362 IMPLEMENTATION.
               SORT t_products BY deliverydate DESCENDING.
             ENDIF.
         ENDCASE.
+
+        " Column._sort ends in oTable.pushSortedColumn( this ), so the column
+        " just sorted becomes the active sort key. sort_clear( ) above emptied
+        " the list and nothing put the pressed column back until 2026-08-24,
+        " which left t_sortkeys empty on this path - so a following
+        " "Sort Categories in addition to current sorting" had nothing to add
+        " to and ordered by Category ALONE, while sort_name still showed
+        " Ascending. Exactly the header-lies-about-the-rows defect the
+        " SORT_CATEGORIES branch below was fixed for on 2026-08-21, still live
+        " on the menu path.
+        APPEND VALUE #( field      = lv_property
+                        descending = xsdbool( lv_ascending = abap_false ) ) TO t_sortkeys.
 
       WHEN `SORT_CATEGORIES_AND_NAME`.
         " sortCategoriesAndName: Category ascending, then Name ascending
