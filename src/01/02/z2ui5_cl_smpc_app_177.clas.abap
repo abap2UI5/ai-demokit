@@ -1,4 +1,4 @@
-" @keywords calendardateinterval calendar date interval sap.ui.unified calendardateintervalbasic html verticallayout button horizontallayout label text
+" @keywords calendardateinterval calendar date interval sap.ui.unified calendardateintervalbasic html verticallayout daterange button horizontallayout label
 " @summary CalendarDateInterval with 14 days and single day selection
 CLASS z2ui5_cl_smpc_app_177 DEFINITION PUBLIC.
 

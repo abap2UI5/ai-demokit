@@ -1,4 +1,4 @@
-" @keywords dynamicsidecontent dynamic side content sap.ui.layout dynamicsidecontentequalsplit vbox title image text toolbar button
+" @keywords dynamicsidecontent dynamic side content sap.ui.layout dynamicsidecontentequalsplit html vbox title image text toolbar
 " @summary The side content and the main content take 50%/50% of the container on all screen sizes except on phone screens where there is a button implemented to toggle between each other.
 CLASS z2ui5_cl_smpc_app_267 DEFINITION PUBLIC.
 

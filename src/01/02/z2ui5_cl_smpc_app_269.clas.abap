@@ -1,4 +1,4 @@
-" @keywords dynamicsidecontent dynamic side content sap.ui.layout dynamicsidecontentproduct vbox title image text toolbar toolbarspacer
+" @keywords dynamicsidecontent dynamic side content sap.ui.layout dynamicsidecontentproduct html vbox title image text toolbar
 " @summary Product page with comments example.
 CLASS z2ui5_cl_smpc_app_269 DEFINITION PUBLIC.
 
