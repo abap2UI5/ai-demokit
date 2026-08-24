@@ -10680,16 +10680,19 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` items)') on the 'Status' link. // NOTE: onOrderDetailsPress does oObjectPageLayout.setSelectedSection(byId('orderDetailsSection')). sap.uxap.ObjectPageLayout.selectedSection is an ASSOCIATION, so it` &&
                ` cannot be data-bound (app 263 precedent); the 'Order Details' header link is wired round-trip-free via follow_up_action( control_by_id, ObjectPageLayout / setSelectedSection / orderDetailsSection ) -` &&
                ` the controlIdOrNull argument kind resolves the section id to the control, exactly like the original's byId lookup. Re-verified 2026-08-23: still true. An association cannot be data-bound at all,` &&
-               ` which is a UI5 fact rather than an abap2UI5 limit, and the frontend action is the reproduction rather than a workaround. // NOTE: The two avatar image paths are kept exactly as the original writes` &&
-               ` them - './test-resources/sap/uxap/images/imageID_275314.png' - matching apps 261/401/402 on the same asset. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample is` &&
-               ` in scope via its entity): the snappedHeading avatar and the headerContent avatar (displaySize='L'), plus the QuickView page avatar in the fragment. Needs a UI5 runtime >= 1.73. // POST-1.71: the`.
-    lv_text1 = lv_text1 && ` avatar aggregation of sap.m.QuickViewPage (since UI5 1.92) is newer than 1.71 but kept for the 1:1 port - the fragment fills it with an Avatar bound to {ICON} / {DISPLAYSHAPE} exactly like the` &&
-               ` original. The app needs UI5 >= 1.92 to show the page icons. // POST-1.71: showTitle on sap.uxap.ObjectPageSubSection (since UI5 1.77) is newer than 1.71 but kept for the 1:1 port - the Order Details` &&
-               ` subsection hides its duplicate title with showTitle='false'. Needs UI5 >= 1.77 for the title to be hidden. // POST-1.71: the content aggregation of sap.m.Title (since UI5 1.87) is newer than 1.71 but` &&
-               ` kept for the 1:1 port - the 'Order Details', 'Status' and 'Average User Rating' header titles each hold an m:Link child, exactly like the original (invisible to the property gate: a default` &&
-               ` aggregation never appears as an XML attribute). Needs UI5 >= 1.87. // NOTE: Round-trip behaviour not verified in a running system: the TITLE_SELECTOR event with its $event.oSource.sId anchor and the` &&
-               ` popover_display of the QuickView fragment at the pressed link (including the pageLink navigation to companyEmployeePageId inside the popover), the follow_up_action setSelectedSection frontend action`.
-    lv_text1 = lv_text1 && ` on the 'Order Details' link, and the two client toasts. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_412.mjs).`.
+               ` which is a UI5 fact rather than an abap2UI5 limit, and the frontend action is the reproduction rather than a workaround. // NOTE: The two avatar image paths are absolutized to the sdk.openui5.org` &&
+               ` host per the offline asset-URL rule (corrected 2026-08-24). They were kept in the original's './test-resources/...' form, justified as "matching app 261" - which is false: 261 was rewritten to the` &&
+               ` absolute form on 2026-08-23 for exactly this reason, and its own sidecar records that both icons had rendered broken. A relative path resolves against the demo kit's document root; an abap2UI5 app is`.
+    lv_text1 = lv_text1 && ` served from the ABAP ICF node and has no such root, so the request 404s and the control falls back to its placeholder. No gate sees it - data-fidelity only rejects a non-OpenUI5 HOST, and a relative` &&
+               ` path has none. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample is in scope via its entity): the snappedHeading avatar and the headerContent avatar` &&
+               ` (displaySize='L'), plus the QuickView page avatar in the fragment. Needs a UI5 runtime >= 1.73. // POST-1.71: the avatar aggregation of sap.m.QuickViewPage (since UI5 1.92) is newer than 1.71 but` &&
+               ` kept for the 1:1 port - the fragment fills it with an Avatar bound to {ICON} / {DISPLAYSHAPE} exactly like the original. The app needs UI5 >= 1.92 to show the page icons. // POST-1.71: showTitle on` &&
+               ` sap.uxap.ObjectPageSubSection (since UI5 1.77) is newer than 1.71 but kept for the 1:1 port - the Order Details subsection hides its duplicate title with showTitle='false'. Needs UI5 >= 1.77 for the` &&
+               ` title to be hidden. // POST-1.71: the content aggregation of sap.m.Title (since UI5 1.87) is newer than 1.71 but kept for the 1:1 port - the 'Order Details', 'Status' and 'Average User Rating' header`.
+    lv_text1 = lv_text1 && ` titles each hold an m:Link child, exactly like the original (invisible to the property gate: a default aggregation never appears as an XML attribute). Needs UI5 >= 1.87. // NOTE: Round-trip behaviour` &&
+               ` not verified in a running system: the TITLE_SELECTOR event with its $event.oSource.sId anchor and the popover_display of the QuickView fragment at the pressed link (including the pageLink navigation` &&
+               ` to companyEmployeePageId inside the popover), the follow_up_action setSelectedSection frontend action on the 'Order Details' link, and the two client toasts. **e2e-verified 2026-08-21** (nightly e2e` &&
+               ` interaction, meta/interactions/z2ui5_cl_smpc_app_412.mjs).`.
     lv_text2 = `sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample is in scope via its entity): the snappedHeading avatar and the headerContent avatar (displaySize='L'), plus the QuickView page` &&
                ` avatar in the fragment. Needs a UI5 runtime >= 1.73. // the avatar aggregation of sap.m.QuickViewPage (since UI5 1.92) is newer than 1.71 but kept for the 1:1 port - the fragment fills it with an` &&
                ` Avatar bound to {ICON} / {DISPLAYSHAPE} exactly like the original. The app needs UI5 >= 1.92 to show the page icons. // showTitle on sap.uxap.ObjectPageSubSection (since UI5 1.77) is newer than 1.71` &&
@@ -11044,8 +11047,11 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` carried literally. Its ObjectPageLayout also sets subSectionLayout='TitleOnLeft' where app 401 leaves the default, and neither section carries the heading MessageStrip or the importance levels app`.
     lv_text1 = lv_text1 && ` 401's sample writes. // NOTE: in the Connect subsection the four personal blocks are DIRECT children of the ObjectPageSubSection rather than nested in a <blocks> element - blocks is that control's` &&
                ` default aggregation, so the two forms are identical. The port writes the aggregation explicitly, and keeps the sample's own order (Adresses, PhoneNumber, Social, Mailing), which differs from app` &&
-               ` 401's. // NOTE: the two asset paths (linkedin.png and Twitter.png) are kept exactly as the original writes them - './test-resources/sap/uxap/images/...' - matching apps 261 and 401, which carry the` &&
-               ` same relative form for the same two images. // LIVE-TEST: not yet verified in a running system: that the anchor bar lists the three section titles with their numbers and scrolls to each section.`.
+               ` 401's. // NOTE: The two asset paths (linkedin.png and Twitter.png) are absolutized to the sdk.openui5.org host per the offline asset-URL rule (corrected 2026-08-24). They were kept in the original's` &&
+               ` './test-resources/...' form, justified as "matching app 261" - which is false: 261 was rewritten to the absolute form on 2026-08-23 for exactly this reason, and its own sidecar records that both` &&
+               ` icons had rendered broken. A relative path resolves against the demo kit's document root; an abap2UI5 app is served from the ABAP ICF node and has no such root, so the request 404s and the control` &&
+               ` falls back to its placeholder. No gate sees it - data-fidelity only rejects a non-OpenUI5 HOST, and a relative path has none. // LIVE-TEST: not yet verified in a running system: that the anchor bar`.
+    lv_text1 = lv_text1 && ` lists the three section titles with their numbers and scrolls to each section.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `AnchorBarWithNumbers`                          class = `z2ui5_cl_smpc_app_587` path = `src/02/03/z2ui5_cl_smpc_app_587.clas.abap`
         score = 5
@@ -11240,8 +11246,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` static as_bool literal the round-trip could never reach, caught by the e2e interaction before its first run) and flips the ABAP flag in on_event instead of calling the setter through a frontend` &&
                ` action - the bindable-property-beats-frontend-action rule. The showFooter attribute is therefore present in the port where the original view does not write it, and the footer starts hidden as it does` &&
                ` in the original. The round-trip toggle itself is not verified in a running system yet. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_401.mjs). // NOTE: The` &&
-               ` four asset paths (the imageID_275314.png avatar twice, linkedin.png and Twitter.png) are kept exactly as the original writes them - './test-resources/sap/uxap/images/...' - matching app 261, which`.
-    lv_text1 = lv_text1 && ` carries the same relative form for the same two images.`.
+               ` four asset paths (the imageID_275314.png avatar twice, linkedin.png and Twitter.png) are absolutized to the sdk.openui5.org host per the offline asset-URL rule (corrected 2026-08-24). They were kept`.
+    lv_text1 = lv_text1 && ` in the original's './test-resources/...' form, justified as "matching app 261" - which is false: 261 was rewritten to the absolute form on 2026-08-23 for exactly this reason, and its own sidecar` &&
+               ` records that both icons had rendered broken. A relative path resolves against the demo kit's document root; an abap2UI5 app is served from the ABAP ICF node and has no such root, so the request 404s` &&
+               ` and the control falls back to its placeholder. No gate sees it - data-fidelity only rejects a non-OpenUI5 HOST, and a relative path has none.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageOnJSON`                              class = `z2ui5_cl_smpc_app_401` path = `src/02/03/z2ui5_cl_smpc_app_401.clas.abap`
         score = 5
@@ -11505,11 +11513,13 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` 26 of the 31 sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column` &&
                ` assignment, and the block ids and view roots go with it. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the` &&
                ` snappedHeading avatar and the HeaderContainer avatar (displaySize='L'), both on the sample's own imageID_275314.png. Needs a UI5 runtime >= 1.73. // NOTE: The sample has no controller at all - no` &&
-               ` model, no event handlers - so the port is init-only with neither model_init nor on_event, which is behaviour-identical. The two avatar/image paths are kept exactly as the original writes them` &&
-               ` ('./test-resources/sap/uxap/images/imageID_275314.png'), matching app 261 on the same asset. // POST-1.71: the content aggregation of sap.m.Title (since UI5 1.87) is newer than 1.71 but kept for the`.
-    lv_text1 = lv_text1 && ` 1:1 port - the 'Order Details', 'Status' and 'Average User Rating' header titles each hold an m:Link child, exactly like the original (invisible to the property gate: a default aggregation never` &&
-               ` appears as an XML attribute). Needs UI5 >= 1.87. Added 2026-08-21: the sibling ports 079, 259 and 412 - 412 for these very three header titles - all declared it and this one did not, so its stated` &&
-               ` runtime floor read 1.73 (the Avatar) when it is really 1.87.`.
+               ` model, no event handlers - so the port is init-only with neither model_init nor on_event, which is behaviour-identical. The two avatar/image paths are absolutized to the sdk.openui5.org host per the` &&
+               ` offline asset-URL rule (corrected 2026-08-24). They were kept in the original's './test-resources/...' form, justified as "matching app 261" - which is false: 261 was rewritten to the absolute form`.
+    lv_text1 = lv_text1 && ` on 2026-08-23 for exactly this reason, and its own sidecar records that both icons had rendered broken. A relative path resolves against the demo kit's document root; an abap2UI5 app is served from` &&
+               ` the ABAP ICF node and has no such root, so the request 404s and the control falls back to its placeholder. No gate sees it - data-fidelity only rejects a non-OpenUI5 HOST, and a relative path has` &&
+               ` none. // POST-1.71: the content aggregation of sap.m.Title (since UI5 1.87) is newer than 1.71 but kept for the 1:1 port - the 'Order Details', 'Status' and 'Average User Rating' header titles each` &&
+               ` hold an m:Link child, exactly like the original (invisible to the property gate: a default aggregation never appears as an XML attribute). Needs UI5 >= 1.87. Added 2026-08-21: the sibling ports 079,` &&
+               ` 259 and 412 - 412 for these very three header titles - all declared it and this one did not, so its stated runtime floor read 1.73 (the Avatar) when it is really 1.87.`.
     lv_text2 = `sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the HeaderContainer avatar (displaySize='L'), both` &&
                ` on the sample's own imageID_275314.png. Needs a UI5 runtime >= 1.73. // the content aggregation of sap.m.Title (since UI5 1.87) is newer than 1.71 but kept for the 1:1 port - the 'Order Details',` &&
                ` 'Status' and 'Average User Rating' header titles each hold an m:Link child, exactly like the original (invisible to the property gate: a default aggregation never appears as an XML attribute). Needs` &&
