@@ -17,7 +17,7 @@
     },
     {
       "type": "NOTE",
-      "what": "onResizeCarouselContainer sets carousel.setWidth(value + '%') on every Slider liveChange. The port reproduces it roundtrip-free: the Slider value is two-way bound and the Carousel carries a width expression binding over the same field. The Slider.liveChange attribute is therefore dropped and Carousel.width is added (structural-diff reports attr missing Slider.liveChange and attr extra Carousel.width)."
+      "what": "onResizeCarouselContainer sets carousel.setWidth(value + '%') on every Slider liveChange. The port reproduces it roundtrip-free: the Slider value is two-way bound and the Carousel carries a width expression binding over the same field. The Slider.liveChange attribute is therefore dropped and Carousel.width is added (structural-diff reports attr missing Slider.liveChange)."
     },
     {
       "type": "NOTE",

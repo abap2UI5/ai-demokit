@@ -1776,8 +1776,8 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = `POST-1.71: sap.m.Carousel.ariaLabelledBy is @since 1.125; the original wires the Carousel to its Title through it, so the association is kept 1:1 and the port needs a UI5 runtime >= 1.125 for the` &&
                ` accessibility label. // NOTE: onResizeCarouselContainer sets carousel.setWidth(value + '%') on every Slider liveChange. The port reproduces it roundtrip-free: the Slider value is two-way bound and` &&
                ` the Carousel carries a width expression binding over the same field. The Slider.liveChange attribute is therefore dropped and Carousel.width is added (structural-diff reports attr missing` &&
-               ` Slider.liveChange and attr extra Carousel.width). // NOTE: The Slider value -> Carousel width expression binding is client-side model propagation and is unverified in a running system. **e2e-verified` &&
-               ` 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_427.mjs).`.
+               ` Slider.liveChange). // NOTE: The Slider value -> Carousel width expression binding is client-side model propagation and is unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e` &&
+               ` interaction, meta/interactions/z2ui5_cl_smpc_app_427.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Carousel`                        name = `CarouselEmptyMessages`                         class = `z2ui5_cl_smpc_app_427` path = `src/02/01/z2ui5_cl_smpc_app_427.clas.abap`
         score = 2
@@ -2922,8 +2922,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` "{WIDTH} x {DEPTH} x {HEIGHT} {DIM_UNIT}", so a fixed DECIMALS would render 30 as 30.0. // NOTE: The IconTabBar gains a selectedKey the original does not have (bound to selected_tab, seeded 'All',` &&
                ` set by table_filter). The original needs none: a UI5 view is built once, so the bar's own tab state simply persists across every filter. This port rebuilds the whole view on check_on_navigated( ),`.
     lv_text1 = lv_text1 && ` and selectedKey defaults to null - the bar would fall back to its FIRST tab while t_products still holds the last filter, showing 'All' over a filtered table, an inconsistency the original cannot` &&
-               ` reach. Binding the key is the house idiom (prefer the bindable property over a frontend action); IconTabBar.selectedKey is @since 1.15.0, so nothing post-1.71 is pulled in. structural-diff sees one` &&
-               ` added attribute, declared here.`.
+               ` reach. Binding the key is the house idiom (prefer the bindable property over a frontend action); IconTabBar.selectedKey is @since 1.15.0, so nothing post-1.71 is pulled in. Declared here rather than` &&
+               ` left to a gate: structural-diff does NOT see an added attribute at all - its attribute pass iterates the ORIGINAL's attrs and reports only what the port is missing, so there is no 'attr extra' kind.` &&
+               ` An attribute a port adds is invisible to it.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBar`                                    class = `z2ui5_cl_smpc_app_377` path = `src/01/01/z2ui5_cl_smpc_app_377.clas.abap`
         score = 4

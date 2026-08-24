@@ -1000,6 +1000,25 @@ e2e gotchas in `e2e-debugging`, generator gotchas in `regenerate-artefacts`).
   replaced the one naming the dropped attribute). When you rewrite a
   deviation, keep the naming clause and run `structural-diff --strict` in the
   same change.
+- **What `structural-diff` cannot see — do not let a sidecar claim it did.**
+  The gate is the corpus' primary fidelity check and three of its blind spots
+  have each produced a false sidecar sentence:
+  1. **There is no `attr extra` kind.** The only kinds emitted are
+     `control missing` / `control extra`, `attr missing` and `binding value`.
+     The attribute pass iterates the *original's* attribute set and reports
+     what the port is **missing**; an attribute the port **adds** is never
+     looked at (apps 427 and 377 both claimed otherwise).
+  2. **Literal attribute values are compared only when the ORIGINAL's value is
+     a simple binding** (`SIMPLE_BIND`, `{path}`). If the original writes a
+     literal, the port's literal is never compared to it — so a swapped
+     `alignItems="Center"`/`"End"` across sibling instances, or a wrong enum
+     value, passes green.
+  3. **Attribute presence is a union per control TYPE, not per instance.** Nine
+     `FlexBox`es that differ only in their literal values collapse into one
+     attribute set, so a value moved from one instance to another is invisible.
+  A green `structural_diff` therefore proves the control *set* and the *bound*
+  attributes match. It is not evidence for literal values, for added
+  attributes, or for per-instance placement — those need reading both sides.
 - **abapGit pushes from a system can carry stale generated files** — a human
   who pulled before the latest repo change and pushes back from the system
   silently reverts it. After every human push: regenerate the overview
