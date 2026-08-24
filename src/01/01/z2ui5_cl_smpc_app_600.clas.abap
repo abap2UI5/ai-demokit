@@ -96,6 +96,17 @@ CLASS z2ui5_cl_smpc_app_600 IMPLEMENTATION.
                 )->tag( n = `DragDropInfo` ns = `dnd`
                     )->a( n = `sourceAggregation` v = `items`
                     )->a( n = `targetAggregation` v = `items`
+                    " onDragStart vetoes a drag that starts on a row OUTSIDE the
+                    " current selection. The condition is known only at the moment
+                    " of the drag, so the per-WIRE check_prevent_default flag cannot
+                    " express it - prevent_default_expr can: a client expression
+                    " evaluated on each firing. The dragged item's parent IS the
+                    " Tree, so the selection is reachable inline
+                    )->a( n = `dragStart`         v = client->_event(
+                        val    = `DRAG_START`
+                        s_ctrl = VALUE #( prevent_default_expr =
+                            `${$parameters>/target}.getParent().getSelectedItems().length > 0 && ` &&
+                            `${$parameters>/target}.getParent().getSelectedItems().indexOf(${$parameters>/target}) === -1` ) )
                     " onDrop moves the dragged node under the dropped one; the two
                     " node texts are what travels (app 569 idiom)
                     )->a( n = `drop`              v = client->_event( val   = `DROP_NODE`
@@ -113,6 +124,9 @@ CLASS z2ui5_cl_smpc_app_600 IMPLEMENTATION.
 
   METHOD on_event.
 
+    " DRAG_START arrives too and is deliberately unhandled: its wire exists
+    " only to carry prevent_default_expr, and the veto has already been
+    " decided on the client by the time the event gets here
     IF client->get_event( ) = `DROP_NODE`.
       node_drop( ).
     ENDIF.

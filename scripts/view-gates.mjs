@@ -152,7 +152,17 @@ const ADVISORY_BUDGET = {
   // the 55 were never real. The ones above stay — they are the alt/tooltip-less
   // originals, kept 1:1
   'missing-accessibility': 37,
-  'event-without-handler': 4, // ratcheted down 2026-08-05: the four calendar ports wired their select handler
+  'event-without-handler': 5, // ratcheted down 2026-08-05: the four calendar ports wired their select handler
+  // raised 2026-08-23 (app 600 TreeDnD): a wire that exists ONLY to carry
+  // prevent_default_expr. The sample's onDragStart vetoes a drag starting
+  // outside the current selection - a condition known per firing, so
+  // check_prevent_default (baked per wire at render time) cannot express it and
+  // the wire was previously dropped. on_event deliberately ignores DRAG_START:
+  // the veto is already decided on the client by the time the event lands, and
+  // the round trip is what carrying the expression costs. "Dead control unless
+  // the roundtrip alone is intended" is exactly the case here, and the
+  // interaction module proves all three outcomes (no selection: drag allowed;
+  // outside the selection: vetoed; on the selected row: allowed)
   // raised 2026-08-21 (app 298, sap.m.table.columnmenu.QuickSort): the same
   // shape as 268, and here the metadata is not merely incomplete but WRONG.
   // QuickSort.change declares `key` and `sortOrder` and fires neither —

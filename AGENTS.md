@@ -71,6 +71,14 @@ computed per sample from `ui5/universe.json` by `generate-coverage.mjs`
 **never ported**; `node scripts/generate-coverage.mjs --backlog` prints the
 in-scope, unported samples for batch planning.
 
+An in-scope sample that is unported **on purpose** — a member of the hold-out
+set (`ui5/holdout.json`, §TRAINING.md) — is reported apart from the backlog:
+`api.md` marks it `⊘`, the README summary counts it in a **Reserved** column,
+and the coverage denominator is `in scope - reserved`. Coverage therefore
+measures what is left to port, not what is deliberately held back; a hold-out
+that gets spent as a measurement becomes an ordinary port and leaves the
+column by itself.
+
 **Second scope rule — the sample must be an app view** (maintainer decision).
 A control can be perfectly 1.71-clean while the sample is not a UI at all:
 UI5's own **test infrastructure** (`sap.ui.test.*` — OPA5, gherkin, matcher

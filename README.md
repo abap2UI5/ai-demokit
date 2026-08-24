@@ -80,7 +80,8 @@ controls are listed as out of scope. The pipeline:
    each batch copies its samples over from the OpenUI5 checkout.
 4. **Report** — regenerate the [coverage](#coverage) tables and the in-system
    overview app. In api.md, `—` marks an in-scope sample not yet ported (the
-   backlog) and `✗` an out-of-scope one (deprecated / newer than UI5 1.71).
+   backlog), `⊘` one reserved as hold-out (in scope, unported on purpose) and
+   `✗` an out-of-scope one (deprecated / newer than UI5 1.71).
 
 Nothing graduates out of here. Since 2026-08-12 this repository is the home of
 the demo kit rebuilds (AGENTS.md §1) — `checked` is the top rung of the quality
@@ -121,7 +122,7 @@ built from [`web/`](web) and published by `deploy-web`; see
 | [`STATUS.md`](STATUS.md) | Generated point-in-time state + the open findings backlog |
 | [`E2E.md`](E2E.md) | How to run and debug the Playwright e2e smoke against the real transpiled backend |
 | [`SAMPLES.md`](SAMPLES.md) | The catalogue: every port with what it shows, grouped by UI5 library — the same page shape as [samples](https://github.com/abap2UI5/samples/blob/main/SAMPLES.md) and [samples-stack](https://github.com/abap2UI5/samples-stack/blob/main/SAMPLES.md) |
-| [`api.md`](api.md) | One row per demo kit sample: ported, backlog or out of scope |
+| [`api.md`](api.md) | One row per demo kit sample: ported, backlog, reserved as hold-out, or out of scope |
 | [`meta/`](meta) | One sidecar per port — status, checked, typed deviations |
 | [`ui5/`](ui5) | The archived original demo kit template of every ported sample, plus the scope/universe snapshots the coverage is computed from |
 | [`scripts/`](scripts) | The generators and the gates — one script per CI job, plus `generation-prompt.txt`, the porting agent's prompt |
@@ -176,25 +177,27 @@ have an abap2UI5 port.
 
 <!-- coverage:start -->
 
-Overall **617 / 629** in-scope demo kit samples ported (98.1 %).
+Overall **617 / 617** portable demo kit samples ported (100.0 %).
 **In scope**: samples whose control exists since **UI5 1.71** and is **not deprecated** (legacy-free ready).
 Out of scope: 113 of 742 samples — 21 on deprecated controls, 52 on controls newer than 1.71, 37 that are not app views (UI5 test infrastructure, Component routing, view-templating demos — see `ui5/scope-nonapp.json`), 3 demo apps without an owning control.
 Plus **5** ported samples outside that scope — maintainer-decided exceptions (`ui5/scope-exceptions.json`, listed in [STATUS.md](STATUS.md)); they are not counted as coverage of the in-scope backlog.
 Control metadata from OpenUI5 **1.152.0**.
 
-| Module | Samples | In scope | Ported | Coverage | |
-|--------|--------:|---------:|-------:|---------:|---|
-| `sap.f` | 46 | 34 | 34 | 100.0 % | ██████████ |
-| `sap.tnt` | 17 | 17 | 17 | 100.0 % | ██████████ |
-| `sap.ui.codeeditor` | 2 | 2 | 2 | 100.0 % | ██████████ |
-| `sap.ui.core` | 63 | 20 | 20 | 100.0 % | ██████████ |
-| `sap.ui.integration` | 4 | 4 | 4 | 100.0 % | ██████████ |
-| `sap.ui.layout` | 61 | 61 | 61 | 100.0 % | ██████████ |
-| `sap.ui.table` | 21 | 21 | 21 | 100.0 % | ██████████ |
-| `sap.ui.unified` | 22 | 22 | 22 | 100.0 % | ██████████ |
-| `sap.uxap` | 45 | 45 | 45 | 100.0 % | ██████████ |
-| `sap.m` | 461 | 403 | 391 | 97.0 % | ██████████ |
-| **Total** | **742** | **629** | **617** | **98.1 %** | ██████████ |
+| Module | Samples | In scope | Reserved | To port | Ported | Coverage | |
+|--------|--------:|---------:|---------:|--------:|-------:|---------:|---|
+| `sap.f` | 46 | 34 |  | 34 | 34 | 100.0 % | ██████████ |
+| `sap.m` | 461 | 403 | 12 | 391 | 391 | 100.0 % | ██████████ |
+| `sap.tnt` | 17 | 17 |  | 17 | 17 | 100.0 % | ██████████ |
+| `sap.ui.codeeditor` | 2 | 2 |  | 2 | 2 | 100.0 % | ██████████ |
+| `sap.ui.core` | 63 | 20 |  | 20 | 20 | 100.0 % | ██████████ |
+| `sap.ui.integration` | 4 | 4 |  | 4 | 4 | 100.0 % | ██████████ |
+| `sap.ui.layout` | 61 | 61 |  | 61 | 61 | 100.0 % | ██████████ |
+| `sap.ui.table` | 21 | 21 |  | 21 | 21 | 100.0 % | ██████████ |
+| `sap.ui.unified` | 22 | 22 |  | 22 | 22 | 100.0 % | ██████████ |
+| `sap.uxap` | 45 | 45 |  | 45 | 45 | 100.0 % | ██████████ |
+| **Total** | **742** | **629** | **12** | **617** | **617** | **100.0 %** | ██████████ |
+
+**Reserved** — 12 in-scope samples are deliberately *not* ported. They are the hold-out set (`ui5/holdout.json`, see [TRAINING.md](TRAINING.md#measuring-progress)): never used as prompt references, kept out of batch planning, and regenerated from scratch to measure the generator itself — CI-green on the first try, structural-diff violations, review findings per app. Spending one as a measurement is what ports it, so they leave this column by being used, not by being worked off. They are excluded from the coverage denominator because they are not backlog. **The portable backlog is zero.**
 
 <!-- coverage:end -->
 
