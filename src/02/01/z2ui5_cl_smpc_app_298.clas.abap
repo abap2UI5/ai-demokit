@@ -471,23 +471,19 @@ CLASS z2ui5_cl_smpc_app_298 IMPLEMENTATION.
 
   METHOD weight_state_set.
 
-    " weightState is business logic (the KG normalisation plus the
-    " Success/Warning/Error thresholds), not presentation - abap2UI5 is a thin
+    " weightState is business logic, not presentation - abap2UI5 is a thin
     " frontend, so it is computed here rather than in a frontend formatter.
-    " The boundaries are KILOGRAMS (fMaxWeightSuccess = 1, fMaxWeightWarning =
-    " 5) and a G row is divided by 1000 first. Until 2026-08-21 this method
-    " compared the RAW measure against 1000 and 2000 instead, and since it runs
-    " LAST it overwrote the correct values model_init had just computed inline
-    " - so every KG row came out Success. Same body as the live-checked app
-    " 009; app 377 carried the identical defect and is fixed with it.
+    " THIS SAMPLE'S OWN Formatter.js takes ONE argument and compares the RAW
+    " measure: < 0 None, < 1000 Success, < 2000 Warning, else Error - and the
+    " view binds a single part (WeightMeasure), so the unit never reaches it.
+    " The KG rule with the 1/5 boundaries belongs to a DIFFERENT sample
+    " (sap.m.Table, app 009, whose formatter takes measure AND unit); it was
+    " imported here on 2026-08-21 and made 66 of the 123 rows disagree with the
+    " original, every one of which renders Success.
     LOOP AT t_products REFERENCE INTO DATA(lr_row).
-      DATA(weight_kg) = lr_row->weight_measure.
-      IF lr_row->weight_unit = `G`.
-        weight_kg = weight_kg / 1000.
-      ENDIF.
-      lr_row->weight_state = COND #( WHEN weight_kg < 0 THEN `None`
-                                     WHEN weight_kg < 1 THEN `Success`
-                                     WHEN weight_kg < 5 THEN `Warning`
+      lr_row->weight_state = COND #( WHEN lr_row->weight_measure < 0    THEN `None`
+                                     WHEN lr_row->weight_measure < 1000 THEN `Success`
+                                     WHEN lr_row->weight_measure < 2000 THEN `Warning`
                                      ELSE `Error` ).
     ENDLOOP.
 

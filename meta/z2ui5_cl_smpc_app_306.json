@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "not yet run in a system: the CAL_SELECT interval round-trip and the WEEK_SELECT branch (toast on every fifth week, labels otherwise). **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_306.mjs)."
+      "what": "not yet run in a system: the CAL_SELECT interval round-trip and the WEEK_SELECT branch (toast on every fifth week, labels otherwise) - still unexercised, since the interaction module clicks day cells only. **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_306.mjs)."
     },
     {
       "type": "NOTE",

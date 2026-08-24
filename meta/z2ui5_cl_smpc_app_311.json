@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "not yet run in a system: the anchored open of the unified Menu and the selectable item groups (single/multi select state). **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_311.mjs)."
+      "what": "not yet run in a system: the anchored open of the unified Menu and the selectable item groups (single/multi select state) - NOT covered by the interaction module (scope corrected 2026-08-23). **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_311.mjs)."
     }
   ]
 }

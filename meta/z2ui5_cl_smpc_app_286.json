@@ -14,7 +14,7 @@
   "deviations": [
     {
       "type": "POST_171",
-      "what": "the sample's whole point is the currentLocation aggregation of sap.m.Breadcrumbs (since UI5 1.123), which shows the current page as a Link instead of plain text - kept 1:1, so the app needs a UI5 release >= 1.123 to render it there (on an older release the Link falls into the default items aggregation)."
+      "what": "the sample's whole point is the currentLocation aggregation of sap.m.Breadcrumbs (since UI5 1.123), which shows the current page as a Link instead of plain text - kept 1:1, so the app needs a UI5 release >= 1.123 to render it there (on an older release the whole VIEW fails to load). (Corrected 2026-08-23: sap.m.Breadcrumbs has no items aggregation at all - its aggregations are links (@1.34, the default) and currentLocation (@1.123) - and XMLTemplateProcessor does not fall back to the default aggregation for an unknown named element: it tries to instantiate sap.m.currentLocation as a control and throws. The declared floor itself was right.)"
     },
     {
       "type": "NOTE",

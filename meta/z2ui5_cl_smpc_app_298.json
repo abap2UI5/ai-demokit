@@ -29,7 +29,7 @@
     },
     {
       "type": "NOTE",
-      "what": "Formatter.weightState is computed in ABAP and bound as a finished value (state=\"{WEIGHT_STATE}\"), the thin-frontend rule and the same treatment as apps 009 and 377 on this mock. Its thresholds are KILOGRAMS (fMaxWeightSuccess = 1, fMaxWeightWarning = 5) and a G row is divided by 1000 first. Until 2026-08-21 both this note and the code named 0/1000/2000 and skipped the unit normalisation, which is not the original's rule at all: every KG row falls below 1000, so 66 of the 123 rows rendered Success - HT-1000 at 4.2 KG should be Warning, HT-1030 at 21 KG should be Error. Here it was worse than wrong text: model_init computed the CORRECT values inline and then called weight_state_set( ), which overwrote all of them - so the right answer existed and lost. The inline copy is gone and the method carries the correct body. The Currency parts binding on the Price ObjectNumber is kept verbatim as a raw binding-info string."
+      "what": "weightState is computed in ABAP rather than in a frontend formatter (thin frontend). **Corrected 2026-08-23**: this sample's own Formatter.js takes ONE argument and compares the RAW WeightMeasure - < 0 None, < 1000 Success, < 2000 Warning, else Error - and the view binds a single part, so the unit never reaches it. On 2026-08-21 the KG rule of a DIFFERENT sample was imported here (sap.m.Table / app 009, whose formatter takes measure AND unit, with boundaries 1 and 5 KG). Every one of the 123 mock rows is below 1000, so the original renders 123x Success while the port rendered 57 Success / 45 Warning / 21 Error - 66 rows wrong, and the note that justified it had the truth inverted. App 377 keeps the KG rule and is right to: its sample's own model/formatter.js IS the two-argument KG one."
     },
     {
       "type": "NOTE",
@@ -61,7 +61,7 @@
     },
     {
       "type": "NOTE",
-      "what": "**e2e-caught 2026-08-22**: the sort ran but the table came back in its original order. The cause is the transpiled backend: `SORT <itab> BY (field)` - the DYNAMIC component form - loses its BY clause entirely (the emitted JS is `abap.statements.sort(t, {})`), so every sort was a no-op. The component is named statically per field now, in a CASE. Apps 298, 362 and 571 all carried the dynamic form and all three are fixed."
+      "what": "**e2e-caught 2026-08-22 on app 571 (this port has no interaction module of its own; the generic boot-and-render gate is all that runs for it)**: the sort ran but the table came back in its original order. The cause is the transpiled backend: `SORT <itab> BY (field)` - the DYNAMIC component form - loses its BY clause entirely (the emitted JS is `abap.statements.sort(t, {})`), so every sort was a no-op. The component is named statically per field now, in a CASE. Apps 298, 362 and 571 all carried the dynamic form and all three are fixed."
     }
   ]
 }

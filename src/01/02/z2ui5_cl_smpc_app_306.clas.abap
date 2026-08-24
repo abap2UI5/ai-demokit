@@ -75,17 +75,25 @@ CLASS z2ui5_cl_smpc_app_306 IMPLEMENTATION.
                                                                     ( `$event.oSource.getSelectedDates().length > 0 && $event.oSource.getSelectedDates()[0].getEndDate() ? $event.oSource.getSelectedDates()[0].getEndDate().getMonth() + 1 : 0` )
                                                                     ( `$event.oSource.getSelectedDates().length > 0 && $event.oSource.getSelectedDates()[0].getEndDate() ? $event.oSource.getSelectedDates()[0].getEndDate().getDate() : 0` ) ) )
                 )->a( n = `intervalSelection` v = `true`
-                " weekNumberSelect is @since 1.60 - the weekDays DateRange and the
-                " week number travel as expression args
+                " weekNumberSelect is @since 1.56 on Calendar (1.60 is the Month
+                " event of the same name) - the weekDays DateRange and the week
+                " number travel as expression args. Every date arg is guarded on
+                " weekDays ITSELF, not only on getStartDate( ): UI5 documents the
+                " parameter as null when the week is being DESELECTED, and with
+                " singleSelection + intervalSelection - this sample's wiring -
+                " _handleWeekSelectionBySingleInterval really passes null. An
+                " unguarded null.getStartDate( ) throws inside the expression, and
+                " EventHandlerResolver rethrows: no round trip, no label update,
+                " and the control's own deselect never runs either
                 )->a( n = `weekNumberSelect`  v = client->_event( val   = `WEEK_SELECT`
                                                                   t_arg = VALUE #(
                                                                     ( `${$parameters>/weekNumber}` )
-                                                                    ( `${$parameters>/weekDays}.getStartDate() ? ${$parameters>/weekDays}.getStartDate().getFullYear() : 0` )
-                                                                    ( `${$parameters>/weekDays}.getStartDate() ? ${$parameters>/weekDays}.getStartDate().getMonth() + 1 : 0` )
-                                                                    ( `${$parameters>/weekDays}.getStartDate() ? ${$parameters>/weekDays}.getStartDate().getDate() : 0` )
-                                                                    ( `${$parameters>/weekDays}.getEndDate() ? ${$parameters>/weekDays}.getEndDate().getFullYear() : 0` )
-                                                                    ( `${$parameters>/weekDays}.getEndDate() ? ${$parameters>/weekDays}.getEndDate().getMonth() + 1 : 0` )
-                                                                    ( `${$parameters>/weekDays}.getEndDate() ? ${$parameters>/weekDays}.getEndDate().getDate() : 0` ) )
+                                                                    ( `${$parameters>/weekDays} && ${$parameters>/weekDays}.getStartDate() ? ${$parameters>/weekDays}.getStartDate().getFullYear() : 0` )
+                                                                    ( `${$parameters>/weekDays} && ${$parameters>/weekDays}.getStartDate() ? ${$parameters>/weekDays}.getStartDate().getMonth() + 1 : 0` )
+                                                                    ( `${$parameters>/weekDays} && ${$parameters>/weekDays}.getStartDate() ? ${$parameters>/weekDays}.getStartDate().getDate() : 0` )
+                                                                    ( `${$parameters>/weekDays} && ${$parameters>/weekDays}.getEndDate() ? ${$parameters>/weekDays}.getEndDate().getFullYear() : 0` )
+                                                                    ( `${$parameters>/weekDays} && ${$parameters>/weekDays}.getEndDate() ? ${$parameters>/weekDays}.getEndDate().getMonth() + 1 : 0` )
+                                                                    ( `${$parameters>/weekDays} && ${$parameters>/weekDays}.getEndDate() ? ${$parameters>/weekDays}.getEndDate().getDate() : 0` ) )
                                                                   " handleWeekNumberSelect calls oEvent.preventDefault( )
                                                                   " for a week divisible by five, so the forbidden week
                                                                   " is not selected at all. The veto is CONDITIONAL, and

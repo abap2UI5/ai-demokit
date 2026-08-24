@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_smpc_app_293",
   "sample": "sap.uxap.sample.ObjectPageSubSectionBackground",
   "entity": "sap.uxap.ObjectPageSubSection",
-  "file": "src/01/03/z2ui5_cl_smpc_app_293.clas.abap",
+  "file": "src/02/03/z2ui5_cl_smpc_app_293.clas.abap",
   "batch": "b06",
   "audit": {
     "frontend_action": false,
@@ -10,5 +10,10 @@
   },
   "status": "reviewed",
   "checked": null,
-  "deviations": []
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sapUxAPObjectPageSubSectionTransparentBackground is @since 1.122 - ObjectPageSubSection's own JSDoc says \"As of version 1.122, applications can set transparent background to subsections by adding the … class\", and the rule behind it lives in themes/base/ObjectPageSubSection.less. The class IS the subject of this sample, kept 1:1 from the view. Below 1.122 it resolves to no rule at all: both subsections render identically and the sample demonstrates nothing - silently, since a CSS class is invisible to every gate. Undeclared until 2026-08-23; declaring it moves the port from src/01/03 to src/02/03."
+    }
+  ]
 }

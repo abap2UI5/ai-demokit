@@ -20,7 +20,7 @@
     },
     {
       "type": "NOTE",
-      "what": "DateTypeRange.startDate/endDate are typed 'object' and demand a real JS Date; the model carries ISO strings and Formatter.DateCreateObject (the curated formatter pack) converts them at the point of use via core:require. endDate is set on exactly one range, so its conversion is guarded with an expression binding - an unguarded new Date('') is an Invalid Date, which is truthy and takes the whole view down. Rows without color/secondaryType/tooltip bind through omit_initial_paths so the UI5 default applies instead of an empty string."
+      "what": "DateTypeRange.startDate/endDate are typed 'object' and demand a real JS Date; the model carries ISO strings and Formatter.DateAbapDateToDateObject (the curated formatter pack) converts them at the point of use via core:require. endDate is set on exactly one range, so its conversion needs no guard - an unguarded new Date('') is an Invalid Date, which is truthy and takes the whole view down. Rows without color/secondaryType/tooltip bind through omit_initial_paths so the UI5 default applies instead of an empty string. (Corrected 2026-08-23: DateAbapDateToDateObject returns null for anything that is not an 8-digit ABAP date, so the plain { path, formatter } binding handles the one range that has no endDate - the ternary guard was removed when the formatter changed and this sentence was not carried along.)"
     },
     {
       "type": "POST_171",

@@ -21,7 +21,7 @@
     },
     {
       "type": "IMPROVISED",
-      "what": "onInit does byId('calendar').displayDate(UI5Date.getInstance(2021, 6, 1)) to open the calendar on July 2021. Calendar exposes no bindable property for the displayed month and displayDate() takes a JS Date argument, which the frontend-action wire cannot carry (CONTROL_METHODS casts only string/int/bool/controlId/anchor kinds), so the port opens on the current month."
+      "what": "onInit does byId('calendar').displayDate(UI5Date.getInstance(2021, 6, 1)) to open the calendar on July 2021. Calendar exposes no bindable property for the displayed month and displayDate() takes a JS Date argument, which the frontend-action wire cannot carry (CONTROL_METHODS casts string/int/bool/controlId/controlIdOrNull/within/object/anchor kinds), so the port opens on the current month. (List completed 2026-08-23; the conclusion is unchanged - none of them can carry a JS Date.)"
     },
     {
       "type": "POST_171",

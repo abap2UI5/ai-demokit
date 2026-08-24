@@ -110,6 +110,15 @@ CLASS z2ui5_cl_smpc_app_289 IMPLEMENTATION.
                                                  ( `announce` )
                                                  ( |New Information Bar of type { strip_type } { strip_text }| )
                                                  ( `Assertive` ) ) ).
+
+      " showMsgStrip DESTROYS the old strip and creates a new one, so a strip
+      " the user closed always comes back. Rebinding cannot do that on its own:
+      " MessageStrip.close( ) calls setVisible( false ) on the CONTROL, and the
+      " model still holds abap_true - an unchanged value fires no binding
+      " update, so the strip would stay invisible for the rest of the session
+      " while text and type kept changing behind it. Re-rendering the view is
+      " the destroy-and-create the original does
+      view_display( ).
     ENDIF.
 
   ENDMETHOD.
