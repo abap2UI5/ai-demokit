@@ -436,7 +436,6 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
   ENDMETHOD.
 
 
-
   METHOD available_restore.
 
     " the first row that belongs AFTER this one is the insert point; if there is

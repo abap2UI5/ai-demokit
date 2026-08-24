@@ -267,8 +267,8 @@ CLASS z2ui5_cl_smpc_app_359 IMPLEMENTATION.
       DATA(lv_was_none) = xsdbool( row_action_count = 0 ).
       mode_apply( ).
       " switchState always calls setRowActionTemplate BEFORE setRowActionCount,
-      " and that ordering is load-bearing: setRowActionTemplate ends in
-      " invalidateRowsAggregation( ), setRowActionCount only setProperty( ).
+      " and that ordering is load-bearing: the template setter ends in an
+      " invalidateRowsAggregation call, the count setter in a plain setProperty.
       " A row's _rowAction is attached exclusively in _getRowClone( ), guarded
       " by hasRowActions( ) - which needs getRowActionCount( ) > 0 - so any row
       " created while the count is 0 has NO _rowAction, and merely raising the

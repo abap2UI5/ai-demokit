@@ -150,7 +150,7 @@ CLASS z2ui5_cl_smpc_app_344 IMPLEMENTATION.
                         " shrunk below 720 - is what the breakpointChanged round-trip still
                         " handles, which is why that wire stays. 720 is the control's own
                         " S_M_BREAKPOINT (DynamicSideContent.js).
-                        )->a( n = `enabled` v = |\{= ${ client->_bind( toggle_enabled ) } || $\{device>/resize/width\} <= 720 \}|
+                        )->a( n = `enabled` v = |\{= ${ client->_bind( toggle_enabled ) } \|\| $\{device>/resize/width\} <= 720 \}|
 
                     )->tag( `Slider`
                         )->a( n = `id`         v = `DSCWidthSlider`
