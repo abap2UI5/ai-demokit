@@ -190,11 +190,17 @@ CLASS z2ui5_cl_smpc_app_351 IMPLEMENTATION.
         ENDIF.
 
       WHEN `INVALIDATE`.
-        " btnInvalidateSplitter forces a re-render without changing a
-        " property. invalidate( ) itself is denied by the frontend action
-        " allowlist (the render lifecycle is the framework's), and it is not
-        " needed: the round-trip this event already is ends in the automatic
-        " model push, which re-renders the slot
+        " btnInvalidateSplitter forces a re-render without changing a property.
+        " invalidate( ) itself is denied by the frontend action allowlist (the
+        " render lifecycle is the framework's), so the slot is re-displayed
+        " instead - which IS a re-render, and the sizes come back off the model.
+        " This branch was empty until 2026-08-24, on the reasoning that "the
+        " round-trip this event already is ends in the automatic model push".
+        " It does not: main_end sends a model only when a slot displayed XML or
+        " when main( ) actually CHANGED the model, and this branch changed
+        " nothing, so the response carried an empty model and the button did
+        " nothing at all.
+        view_display( ).
 
       WHEN `CHANGE_ORIENTATION`.
         " btnChangeOrientation flips Splitter.orientation, which IS a bindable

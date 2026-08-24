@@ -9408,17 +9408,20 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` parseInt(oEvent.getParameter('value')). No row index has to travel: the whole table returns two-way, so the handler re-parses every row. Size and Resizable need no event at all - they are plain` &&
                ` two-way bindings shared by the Input/CheckBox and the layout data. // NOTE: btnChangeOrientation flips Splitter.orientation, which IS a bindable property, so the port binds it and flips the model` &&
                ` field instead of calling the setter (the prefer-a-bindable-property rule). btnInvalidateSplitter has no bindable equivalent either - invalidate( ) forces a re-render without changing a property - and`.
-    lv_text1 = lv_text1 && ` it needs none: invalidate is denied by the frontend action allowlist (the render lifecycle belongs to the framework, CONTROL_METHOD_DENY_PREFIXES), and the round-trip the button already makes` &&
-               ` re-renders the slot by itself. So the button keeps its wire and its effect, with no control method called. The Splitter's resize event is wired to the backend, which increments the counter and writes` &&
-               ` the timestamped 'Resize # n' text the original's handler writes. // IMPROVISED: createExampleContent randomizes the added area (Math.random for size 'auto' vs 50-350px and for maxSize), which the` &&
-               ` corpus does not reproduce - the port alternates deterministically between 'auto' and '150px' so it renders the same every run. Its maxSize is dropped entirely for a different reason:` &&
-               ` sap.ui.layout.SplitterLayoutData has NO maxSize property (the original's object literal sets a key the control ignores), and writing it makes XMLView.create reject the view. Its height="100%" is` &&
-               ` dropped too - the bound Button template is shared with the three declared areas, which set only width. // NOTE: css/splitter.css (.options, .options .paddingRight, .optionTitle) is injected through`.
-    lv_text1 = lv_text1 && ` an extra core:HTML <style> leaf, since abap2UI5 ships no separate stylesheet; the class names are on the controls the original also puts them on. The eventStatus Text keeps its 'Nothing happened so` &&
-               ` far...' initial label, and the resize timestamp uses the ABAP system date/time in the user's format where the original uses UI5Date.getInstance().toLocaleString() - a real event timestamp, not an` &&
-               ` anchored one. // NOTE: Unverified in a running system: whether inserting/deleting a row re-renders the bound contentAreas aggregation, whether the shared table keeps the option row and the layout` &&
-               ` data in sync while dragging a splitter bar, and whether the Invalidate button's plain round-trip re-renders the Splitter the way the original's invalidate( ) does. **e2e-verified 2026-08-21**` &&
-               ` (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_351.mjs).`.
+    lv_text1 = lv_text1 && ` it needs none: invalidate is denied by the frontend action allowlist (the render lifecycle belongs to the framework, CONTROL_METHOD_DENY_PREFIXES), and the slot is re-displayed instead, which IS a` &&
+               ` re-render and restores the sizes off the model. Until 2026-08-24 the branch was EMPTY, on the reasoning that the round-trip the button already makes re-renders the slot by itself - it does not:` &&
+               ` main_end sends a model only when a slot displayed XML or when main( ) actually changed the model, and an empty branch changes nothing, so the response carried an empty model and the button was a` &&
+               ` strict no-op. So the button keeps its wire and its effect, with no control method called. The Splitter's resize event is wired to the backend, which increments the counter and writes the timestamped` &&
+               ` 'Resize # n' text the original's handler writes. // IMPROVISED: createExampleContent randomizes the added area (Math.random for size 'auto' vs 50-350px and for maxSize), which the corpus does not` &&
+               ` reproduce - the port alternates deterministically between 'auto' and '150px' so it renders the same every run. Its maxSize is dropped entirely for a different reason: sap.ui.layout.SplitterLayoutData`.
+    lv_text1 = lv_text1 && ` has NO maxSize property (the original's object literal sets a key the control ignores), and writing it makes XMLView.create reject the view. Its height="100%" is dropped too - the bound Button` &&
+               ` template is shared with the three declared areas, which set only width. // NOTE: css/splitter.css (.options, .options .paddingRight, .optionTitle) is injected through an extra core:HTML <style> leaf,` &&
+               ` since abap2UI5 ships no separate stylesheet; the class names are on the controls the original also puts them on. The eventStatus Text keeps its 'Nothing happened so far...' initial label, and the` &&
+               ` resize timestamp uses the ABAP system date/time in the user's format where the original uses UI5Date.getInstance().toLocaleString() - a real event timestamp, not an anchored one. // NOTE: Unverified` &&
+               ` in a running system: whether inserting/deleting a row re-renders the bound contentAreas aggregation, whether the shared table keeps the option row and the layout data in sync while dragging a` &&
+               ` splitter bar, and whether the Invalidate button's plain round-trip re-renders the Splitter the way the original's invalidate( ) does. **e2e-verified 2026-08-21** for the FIRST clause only - the`.
+    lv_text1 = lv_text1 && ` module drives Add/Remove and really does watch getContentAreas().length move. It says itself that it cannot drive a splitter-bar drag, and its Invalidate check is only ``count() !== 3``, i.e. "the` &&
+               ` areas survived", which the no-op above also passed. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_351.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.Splitter`                name = `Splitter`                                      class = `z2ui5_cl_smpc_app_351` path = `src/01/02/z2ui5_cl_smpc_app_351.clas.abap`
         score = 5
@@ -9554,24 +9557,36 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` sample's two context menus rely on. Newer than UI5 1.71; declared per the fidelity-first property-171 policy, so the app needs a UI5 release >= 1.121. // NOTE: The original keeps ONE collection and` &&
                ` splits the two tables by a Rank filter (Rank = 0 available, Rank > 0 selected, sorted by Rank descending), moving a row by rewriting its Rank; the rank arithmetic (initialRank / defaultRank / the` &&
                ` Before-Between-After algorithm) exists only to encode an ORDER inside one array. With abap2UI5's one default model the port keeps two model tables instead, so a move is an insert plus a delete and` &&
-               ` the row order IS the rank - same rendered result, no rank column. Consequently each Table's rows binding is a plain aggregation binding rather than the original's filters/sorter binding-info. //` &&
-               ` NOTE: Both DragInfo/DragDropInfo lose their dragStart attribute: onDragStart only stashes the dragged row's binding context in the drag session so the drop handler can find it again, which is a`.
-    lv_text1 = lv_text1 && ` client-side workaround for something the drop event already carries. The port ships it on the drop instead - ${$parameters>/draggedControl}.getIndex(), plus ${$parameters>/droppedControl}.getIndex()` &&
-               ` and ${$parameters>/dropPosition} for table 2 - and does the move/reorder arithmetic in ABAP (the app-148 idiom). A fourth argument tells the two cases apart, because table 2 receives both an incoming` &&
-               ` move and an internal reorder through the same handler: ${$parameters>/draggedControl}.getParent().getId().indexOf('table2') >= 0, an event arg being a full UI5 expression. Client indices are 0-based` &&
-               ` and ABAP rows 1-based, and every index is range-checked before it is used as a table index - a nonsense index splices harmlessly in JS but dumps in ABAP (the app-148 lesson). // NOTE:` &&
-               ` getSelectedRowContext reads the selected row off the control; the port mirrors it into the backend instead - each table's rowSelectionChange carries ${$parameters>/rowIndex}, and` &&
-               ` onBeforeOpenContextMenu (which the original uses to select the row under the cursor before opening the menu) carries the same parameter. The two arrow buttons and the context-menu items then work off`.
-    lv_text1 = lv_text1 && ` that, with the original's 'Please select a row!' toast when nothing is selected. moveUp/moveDown become an index swap in the selected table, which is what the original's Between-rank arithmetic` &&
-               ` achieves. // IMPROVISED: The footer info button is dropped: onInit lazily requires sap/ui/table/sample/TableExampleUtils and appends a ToolbarSpacer plus its createInfoButton( ) to the toolbar. That` &&
-               ` helper lives in the demo kit's own sample folder, not in any UI5 library, and only opens a popover pointing at the sample's source. Every sap.ui.table sample of this batch drops it the same way. //` &&
-               ` NOTE: The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined with the three columns both tables bind; every product starts in the available table, which is exactly what` &&
-               ` the original's initialRank = 0 means. The Quantity columns keep the original's typed complex binding with the path switched to the ABAP field. // LIVE-TEST: Unverified in a running system: whether` &&
-               ` the drop wires deliver the row indices and drop position as expected, whether the internal-vs-external drag expression resolves, and whether the context menu's beforeOpenContextMenu round-trip`.
-    lv_text1 = lv_text1 && ` arrives before the menu item press. // NOTE: sortProperty/filterProperty carry the UPPER-CASED ABAP field names, not the original's mixed-case ones: abap2UI5 derives the model paths from the ABAP` &&
-               ` component names, which is why the cells on the same columns bind {NAME}/{CATEGORY} and friends. Copied verbatim from the original until 2026-08-23, and UI5 generates the column menu's sort and filter` &&
-               ` entries off the property merely being SET - so the entries were there and resolved to undefined on every row: sorting a no-op, filtering empty. Corpus convention, same sweep that fixed apps` &&
-               ` 137/164/174/247/353.`.
+               ` the row order IS the rank - same rendered result, no rank column. Getting that equivalence right needs the insert POSITION to match, and until 2026-08-24 it did not: all three of the move-back call` &&
+               ` sites used ``INSERT ... INTO TABLE``, which on a STANDARD TABLE WITH EMPTY KEY appends. The original does the opposite at both ends. Into table 2 it inserts as the FIRST row -`.
+    lv_text1 = lv_text1 && ` ``Before(firstRowRank)`` with the table sorted descending by Rank, and the source even comments "insert always as a first row" - so the button now inserts at index 1. Back into table 1 the row must` &&
+               ` return to its ORIGINAL place, because that table binds ``filters: Rank EQ 0`` with NO sorter, so a row whose Rank goes back to 0 reappears where it sits in ProductCollection. Two tables throw that` &&
+               ` order away, so ty_s_product carries an ordinal (stamped after the seeded literals, which stay exactly the mock's) and available_restore( ) re-inserts by it. Consequently each Table's rows binding is` &&
+               ` a plain aggregation binding rather than the original's filters/sorter binding-info. // NOTE: Both DragInfo/DragDropInfo lose their dragStart attribute: onDragStart only stashes the dragged row's` &&
+               ` binding context in the drag session so the drop handler can find it again, which is a client-side workaround for something the drop event already carries. The port ships it on the drop instead -` &&
+               ` ${$parameters>/draggedControl}.getIndex(), plus ${$parameters>/droppedControl}.getIndex() and ${$parameters>/dropPosition} for table 2 - and does the move/reorder arithmetic in ABAP (the app-148`.
+    lv_text1 = lv_text1 && ` idiom). A fourth argument tells the two cases apart, because table 2 receives both an incoming move and an internal reorder through the same handler:` &&
+               ` ${$parameters>/draggedControl}.getParent().getId().indexOf('table2') >= 0, an event arg being a full UI5 expression. Client indices are 0-based and ABAP rows 1-based, and every index is range-checked` &&
+               ` before it is used as a table index - a nonsense index splices harmlessly in JS but dumps in ABAP (the app-148 lesson). // NOTE: getSelectedRowContext reads the selected row off the control; the port` &&
+               ` mirrors it into the backend instead - each table's rowSelectionChange carries ${$parameters>/rowIndex}, and onBeforeOpenContextMenu (which the original uses to select the row under the cursor before` &&
+               ` opening the menu) carries the same parameter. The two arrow buttons and the context-menu items then work off that, with the original's 'Please select a row!' toast when nothing is selected.` &&
+               ` moveUp/moveDown become an index swap in the selected table, which is what the original's Between-rank arithmetic achieves. What the mirror does NOT reproduce is the original's four setSelectedIndex(`.
+    lv_text1 = lv_text1 && ` ) calls - moveToTable2 selects the inserted row, moveSelectedRow selects the sibling it swapped with, moveToTable1 steps the selection back when it removed the last row. The port updates only its own` &&
+               ` selected_1/selected_2, never the control, so after a Move up the highlight stays on the old index while the backend believes the moved row is selected, and a second Move up acts on a different row` &&
+               ` than the highlighted one. Binding it is not the fix either: sap.ui.table.Table.selectedIndex is @deprecated as of 1.69. Declared rather than improvised. // IMPROVISED: The footer info button is` &&
+               ` dropped: onInit lazily requires sap/ui/table/sample/TableExampleUtils and appends a ToolbarSpacer plus its createInfoButton( ) to the toolbar. That helper lives in the demo kit's own sample folder,` &&
+               ` not in any UI5 library, and only opens a popover pointing at the sample's source. Every sap.ui.table sample of this batch drops it the same way. // NOTE: The shared 123-row demo ProductCollection` &&
+               ` (sap/ui/demo/mock/products.json) is inlined with the three columns both tables bind; every product starts in the available table, which is exactly what the original's initialRank = 0 means. The`.
+    lv_text1 = lv_text1 && ` Quantity columns keep the original's typed complex binding with the path switched to the ABAP field. // LIVE-TEST: Unverified in a running system: whether the drop wires deliver the row indices and` &&
+               ` drop position as expected, whether the internal-vs-external drag expression resolves, and whether the context menu's beforeOpenContextMenu round-trip arrives before the menu item press. // NOTE:` &&
+               ` sortProperty/filterProperty carry the UPPER-CASED ABAP field names, not the original's mixed-case ones: abap2UI5 derives the model paths from the ABAP component names, which is why the cells on the` &&
+               ` same columns bind {NAME}/{CATEGORY} and friends. Copied verbatim from the original until 2026-08-23, and UI5 generates the column menu's sort and filter entries off the property merely being SET - so` &&
+               ` the entries were there and resolved to undefined on every row: sorting a no-op, filtering empty. Corpus convention, same sweep that fixed apps 137/164/174/247/353. // NOTE: Every wire in this port` &&
+               ` transports a POSITIONAL index - ${$parameters>/rowIndex} and ${$parameters>/draggedControl}.getIndex() - which the backend maps straight onto an ABAP table index. rowIndex is oRow.getIndex(), the`.
+    lv_text1 = lv_text1 && ` index in the BINDING, so it follows any sorter or filter the user applies. The port keeps sortProperty/filterProperty on table 1's columns (see the deviation below), which is exactly what makes UI5` &&
+               ` offer the column-menu Sort and Filter entries - so once the user sorts or filters table 1, the index no longer addresses the same row in t_available and a move acts on the wrong product. The original` &&
+               ` is immune because it resolves the index through getContextByIndex( ) and then works on the CONTEXT, which no reordering invalidates. Carrying a context is not something the wire can do, so this is a` &&
+               ` boundary of the index-mirroring idiom rather than a fixable slip - recorded here because nothing else in the sidecar names it.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `DnD`                                           class = `z2ui5_cl_smpc_app_353` path = `src/02/02/z2ui5_cl_smpc_app_353.clas.abap`
         score = 5
@@ -9915,7 +9930,12 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise` &&
                ` the mock's own. Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the sentence used to claim the rewrite was 'declared by all 77 ports that do it', which had stopped being true as the` &&
                ` corpus grew past that day's snapshot - 126 ports do it now, and 17 of them declared it nowhere. Those 17 carry the declaration since today, so the claim holds again; a stale absolute count is what` &&
-               ` made it wrong, so this wording names the date the count was taken.`.
+               ` made it wrong, so this wording names the date the count was taken. // NOTE: Two corrections to the Apply handler, both 2026-08-24. (a) The port treated an EMPTY Input like a non-numeric one and kept` &&
+               ` the previous count, which left no way to UN-freeze: the original reads ``getValue() || 0``, so a cleared Input parseInts to 0 and Apply sets the count to 0. count_read( ) now separates the two -` &&
+               ` empty is 0, a clean number is that number, and only a non-empty non-numeric entry keeps the last value, which is where the original would hand the setter a NaN. (b) The corrected numbers were written`.
+    lv_text1 = lv_text1 && ` back into all three Inputs unconditionally; the original calls setValue( ) only INSIDE its two clamp branches. So the first Apply on a freshly loaded app - all three Inputs legitimately empty,` &&
+               ` nothing clamped - stamped '0' into each and dropped all three placeholders, re-introducing on the first press exactly the defect the initial render already avoids. The write-backs now sit inside the` &&
+               ` branches, as in the original. Neither is visible to the e2e module, which always fill( )s before pressing Apply.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `TableFreeze`                                   class = `z2ui5_cl_smpc_app_363` path = `src/02/02/z2ui5_cl_smpc_app_363.clas.abap`
         score = 5

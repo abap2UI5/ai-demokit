@@ -10,6 +10,13 @@ CLASS z2ui5_cl_smpc_app_353 DEFINITION PUBLIC.
         name     TYPE string,
         category TYPE string,
         quantity TYPE i,
+        " the row's index in the original ProductCollection. The original does not
+        " need one: it keeps ONE collection and a Rank per row, table 1 binds it
+        " with `filters: Rank EQ 0` and NO sorter, so a row whose Rank goes back
+        " to 0 reappears exactly where it sits in ProductCollection. This port
+        " carves the collection into two tables instead, which throws that order
+        " away - so the position has to be carried explicitly to restore it.
+        ordinal  TYPE i,
       END OF ty_s_product,
       ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
 
@@ -31,6 +38,10 @@ CLASS z2ui5_cl_smpc_app_353 DEFINITION PUBLIC.
 
     METHODS view_display.
     METHODS on_event.
+    " re-insert a row into the available table at its ORIGINAL place, which is
+    " what the original's `Rank = 0` + unsorted, filtered binding does
+    METHODS available_restore
+      IMPORTING row TYPE ty_s_product.
     METHODS model_init.
 
   PRIVATE SECTION.
@@ -336,7 +347,11 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
         IF selected_1 < 1 OR selected_1 > lines( t_available ).
           client->message_toast_display( `Please select a row!` ).
         ELSE.
-          INSERT t_available[ selected_1 ] INTO TABLE t_selected.
+          " "insert always as a first row" - the original gives the row a Rank
+          " Before( ) the current first one and table 2 is sorted descending by
+          " Rank, so it lands at the TOP. INSERT ... INTO TABLE on a STANDARD
+          " TABLE WITH EMPTY KEY appends, which put it at the bottom instead.
+          INSERT t_available[ selected_1 ] INTO t_selected INDEX 1.
           DELETE t_available INDEX selected_1.
           selected_1 = 0.
         ENDIF.
@@ -347,7 +362,7 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
         IF selected_2 < 1 OR selected_2 > lines( t_selected ).
           client->message_toast_display( `Please select a row!` ).
         ELSE.
-          INSERT t_selected[ selected_2 ] INTO TABLE t_available.
+          available_restore( t_selected[ selected_2 ] ).
           DELETE t_selected INDEX selected_2.
           selected_2 = 0.
         ENDIF.
@@ -373,7 +388,7 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
         " back to the available one
         DATA(lv_from) = CONV i( client->get_event_arg( ) ) + 1.
         IF lv_from >= 1 AND lv_from <= lines( t_selected ).
-          INSERT t_selected[ lv_from ] INTO TABLE t_available.
+          available_restore( t_selected[ lv_from ] ).
           DELETE t_selected INDEX lv_from.
         ENDIF.
 
@@ -417,6 +432,21 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
 
     ENDCASE.
 
+
+  ENDMETHOD.
+
+
+
+  METHOD available_restore.
+
+    " the first row that belongs AFTER this one is the insert point; if there is
+    " none the row goes last, which is the same rule as ProductCollection order
+    LOOP AT t_available TRANSPORTING NO FIELDS WHERE ordinal > row-ordinal.
+      INSERT row INTO t_available INDEX sy-tabix.
+      RETURN.
+    ENDLOOP.
+
+    APPEND row TO t_available.
 
   ENDMETHOD.
 
@@ -552,6 +582,13 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
       ( name = `Flyer` category = `Accessories` quantity = 33 )
       ).
 
+    " stamped after the literals rather than written into them, so the seeded
+    " values stay exactly the mock's
+    LOOP AT t_available ASSIGNING FIELD-SYMBOL(<seed>).
+      <seed>-ordinal = sy-tabix.
+    ENDLOOP.
+
   ENDMETHOD.
+
 
 ENDCLASS.
