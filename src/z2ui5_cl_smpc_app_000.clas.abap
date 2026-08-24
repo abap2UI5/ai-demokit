@@ -9909,14 +9909,15 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         post171 = `sap.ui.table.Table.rowMode (aggregation, @since 1.119) and the control sap.ui.table.rowmodes.Fixed it holds are used 1:1 - the sample declares them in its view and the freeze demo drives the row` &&
                  ` mode's fixedTopRowCount / fixedBottomRowCount. Both are newer than UI5 1.71; declared per the fidelity-first property-171 policy, so the app needs a UI5 release >= 1.119.` ) ).
 
-    lv_text1 = `IMPROVISED: The sample's rows come from an OData v2 tree binding over a mock service: the Nodes entity is a FLAT list carrying HierarchyLevel / NodeID / ParentNodeID / DrillState, and the binding's` &&
-               ` treeAnnotationProperties (hierarchyLevelFor, hierarchyNodeFor, hierarchyParentNodeFor, hierarchyDrillStateFor) tell the ODataTreeBinding how to assemble it into a tree. abap2UI5 serves one JSON` &&
-               ` model, so there is no ODataTreeBinding and no annotation to read: the same sixteen nodes are modelled NESTED instead (one children table per level) and bound with the arrayNames parameter - the JSON` &&
-               ` tree binding the framework does support (the app-248 idiom). The rendered tree is identical, every node keeps all four of its own fields and the four columns are unchanged; what is lost is the` &&
-               ` annotation-driven assembly itself, and with it the countMode: 'Inline' parameter, which is an OData request option. // NOTE: localService/mockdata/Nodes.json is inlined in full - all sixteen nodes` &&
-               ` with the mock's own ids, levels, descriptions, parent ids and drill states; the root nodes' ParentNodeID is null in the JSON and becomes the empty string in the flat ABAP row type. The mock server`.
-    lv_text1 = lv_text1 && ` itself (localService/mockserver.js over localService/metadata.xml) has no counterpart in an abap2UI5 app, whose backend IS the service. // NOTE: Unverified in a running system: whether the nested` &&
-               ` model plus arrayNames renders the same expandable tree the OData tree binding produces. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_364.mjs).`.
+    lv_text1 = `IMPROVISED: The sample's rows come from an OData v2 tree binding over a mock service: the Nodes entity is a FLAT list carrying NodeID / HierarchyLevel / Description / ParentNodeID / DrillState, and` &&
+               ` the binding's treeAnnotationProperties (hierarchyLevelFor, hierarchyNodeFor, hierarchyParentNodeFor, hierarchyDrillStateFor) tell the ODataTreeBinding how to assemble it into a tree. abap2UI5 serves` &&
+               ` one JSON model, so there is no ODataTreeBinding and no annotation to read: the same sixteen nodes are modelled NESTED instead (one children table per level) and bound with the arrayNames parameter -` &&
+               ` the JSON tree binding the framework does support (the app-248 idiom). The rendered tree is identical, every node keeps all five of its own fields (NodeID, HierarchyLevel, Description, ParentNodeID,` &&
+               ` DrillState) and the four RENDERED columns are unchanged - the fifth field, ParentNodeID, is what the nesting replaces, so it is carried but not shown; what is lost is the annotation-driven assembly` &&
+               ` itself, and with it the countMode: 'Inline' parameter, which is an OData request option. // NOTE: localService/mockdata/Nodes.json is inlined in full - all sixteen nodes with the mock's own ids,`.
+    lv_text1 = lv_text1 && ` levels, descriptions, parent ids and drill states; the root nodes' ParentNodeID is null in the JSON and becomes the empty string in the flat ABAP row type. The mock server itself` &&
+               ` (localService/mockserver.js over localService/metadata.xml) has no counterpart in an abap2UI5 app, whose backend IS the service. // NOTE: Unverified in a running system: whether the nested model plus` &&
+               ` arrayNames renders the same expandable tree the OData tree binding produces. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_364.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.TreeTable`                name = `TreeTable.BasicODataTreeBinding`               class = `z2ui5_cl_smpc_app_364` path = `src/01/02/z2ui5_cl_smpc_app_364.clas.abap`
         score = 3
@@ -9966,16 +9967,17 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
-    lv_text1 = `IMPROVISED: The sample's rows come from an OData v2 tree binding over a mock service: the Nodes entity is a FLAT list carrying HierarchyLevel / NodeID / ParentNodeID / DrillState, and the service` &&
-               ` METADATA carries the same hierarchy annotations, which the ODataTreeBinding reads on its own. abap2UI5 serves one JSON model, so there is no ODataTreeBinding and no annotation to read: the same` &&
-               ` sixteen nodes are modelled NESTED instead (one children table per level) and bound with the arrayNames parameter - the JSON tree binding the framework does support (the app-248 idiom). The rendered` &&
-               ` tree is identical, every node keeps all four of its own fields and the four columns are unchanged; what is lost is the annotation-driven assembly itself, and with it the countMode: 'Inline'` &&
-               ` parameter, which is an OData request option. numberOfExpandedLevels: 1 IS kept as a binding parameter, so the first level opens like in the original. // NOTE: This sample has no controller at all` &&
-               ` (the view names none); the port is correspondingly static - a bare check_on_init branch with model_init and view_display, no on_event. // NOTE: localService/mockdata/Nodes.json is inlined in full -`.
-    lv_text1 = lv_text1 && ` all sixteen nodes with the mock's own ids, levels, descriptions, parent ids and drill states; the root nodes' ParentNodeID is null in the JSON and becomes the empty string in the flat ABAP row type.` &&
-               ` The mock server itself (localService/mockserver.js over localService/metadata.xml) has no counterpart in an abap2UI5 app, whose backend IS the service. // NOTE: Unverified in a running system:` &&
-               ` whether the nested model plus arrayNames renders the same expandable tree the OData tree binding produces. **e2e-verified 2026-08-21** (nightly e2e interaction,` &&
-               ` meta/interactions/z2ui5_cl_smpc_app_366.mjs).`.
+    lv_text1 = `IMPROVISED: The sample's rows come from an OData v2 tree binding over a mock service: the Nodes entity is a FLAT list carrying NodeID / HierarchyLevel / Description / ParentNodeID / DrillState, and` &&
+               ` the service METADATA carries the same hierarchy annotations, which the ODataTreeBinding reads on its own. abap2UI5 serves one JSON model, so there is no ODataTreeBinding and no annotation to read:` &&
+               ` the same sixteen nodes are modelled NESTED instead (one children table per level) and bound with the arrayNames parameter - the JSON tree binding the framework does support (the app-248 idiom). The` &&
+               ` rendered tree is identical, every node keeps all five of its own fields (NodeID, HierarchyLevel, Description, ParentNodeID, DrillState) and the four RENDERED columns are unchanged - the fifth field,` &&
+               ` ParentNodeID, is what the nesting replaces, so it is carried but not shown; what is lost is the annotation-driven assembly itself, and with it the countMode: 'Inline' parameter, which is an OData` &&
+               ` request option. numberOfExpandedLevels: 1 IS kept as a binding parameter, so the first level opens like in the original. // NOTE: This sample has no controller at all (the view names none); the port`.
+    lv_text1 = lv_text1 && ` is correspondingly static - model_init plus view_display on check_on_init, view_display alone on check_on_navigated (the house dispatcher shape), and no on_event branch at all. // NOTE:` &&
+               ` localService/mockdata/Nodes.json is inlined in full - all sixteen nodes with the mock's own ids, levels, descriptions, parent ids and drill states; the root nodes' ParentNodeID is null in the JSON` &&
+               ` and becomes the empty string in the flat ABAP row type. The mock server itself (localService/mockserver.js over localService/metadata.xml) has no counterpart in an abap2UI5 app, whose backend IS the` &&
+               ` service. // NOTE: Unverified in a running system: whether the nested model plus arrayNames renders the same expandable tree the OData tree binding produces. **e2e-verified 2026-08-21** (nightly e2e` &&
+               ` interaction, meta/interactions/z2ui5_cl_smpc_app_366.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.TreeTable`                name = `TreeTable.ODataAnnotationsTreeBinding`         class = `z2ui5_cl_smpc_app_366` path = `src/01/02/z2ui5_cl_smpc_app_366.clas.abap`
         score = 4
