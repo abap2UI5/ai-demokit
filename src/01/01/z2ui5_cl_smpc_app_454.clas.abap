@@ -108,7 +108,9 @@ CLASS z2ui5_cl_smpc_app_454 IMPLEMENTATION.
                                   t_arg = VALUE #( ( `myDialog` )
                                                    ( `items` )
                                                    ( `filter` )
-                                                   ( |[\{"path":"NAME","operator":"Contains","value1":"{ client->get_event_arg( ) }"\}]| ) ) ).
+                                                   ( `NAME` )
+                                                   ( `Contains` )
+                                                   ( client->get_event_arg( ) ) ) ).
 
     ENDCASE.
 

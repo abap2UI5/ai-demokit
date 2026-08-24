@@ -116,16 +116,14 @@ CLASS z2ui5_cl_smpc_app_515 IMPLEMENTATION.
         IF value IS NOT INITIAL.
           client->follow_up_action( val   = client->cs_event-binding_call
                                     t_arg = VALUE #( ( `selectDialog` ) ( `items` ) ( `filter` )
-                                                     ( |[\{"path":"NAME","operator":"Contains","value1":"{ value }"\}]| ) ) ).
+                                                     ( `NAME` ) ( `Contains` ) ( value ) ) ).
         ENDIF.
 
       WHEN `VALUE_HELP_SEARCH`.
         DATA(term) = client->get_event_arg( ).
-        DATA(filter) = COND string( WHEN term IS INITIAL
-                                    THEN `[]`
-                                    ELSE |[\{"path":"NAME","operator":"Contains","value1":"{ term }"\}]| ).
         client->follow_up_action( val   = client->cs_event-binding_call
-                                  t_arg = VALUE #( ( `selectDialog` ) ( `items` ) ( `filter` ) ( filter ) ) ).
+                                  t_arg = VALUE #( ( `selectDialog` ) ( `items` ) ( `filter` )
+                                                   ( `NAME` ) ( `Contains` ) ( term ) ) ).
 
       WHEN `VALUE_HELP_CLOSE`.
         " onValueHelpClose writes the picked title into the first Input
