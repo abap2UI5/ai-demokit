@@ -1000,6 +1000,20 @@ e2e gotchas in `e2e-debugging`, generator gotchas in `regenerate-artefacts`).
   replaced the one naming the dropped attribute). When you rewrite a
   deviation, keep the naming clause and run `structural-diff --strict` in the
   same change.
+- **A `POST_171` is checked in both directions now.** It always *excused* a
+  version finding; since 2026-08-24 `view-gates` also asks whether the claim is
+  true, and reports `unfounded-post171` when a deviation says
+  `<Control>.<member> is @since <N>` with N above the floor while the metadata
+  says the member is at or below it. That matters because the first `POST_171`
+  is also what files the class under `src/02/<lib>/` — app 443 declared
+  `Text.renderWhitespace` as @since 1.89 (it is @since 1.51; 1.89 belongs to
+  `Link.emptyIndicatorMode`) and sat in the wrong folder for two weeks with a
+  wrong stated runtime floor. The check is deliberately narrow: **"no version
+  finding fired" is not evidence of a false declaration**, because the most
+  valuable `POST_171`s are the ones the property gate cannot see at all — an
+  aggregation-level dependency (app 079), a `formatOptions` value inside a
+  binding string (135), a `core:require` on the view root (139). A first cut
+  that assumed otherwise flagged 19 ports, nearly all of them correct.
 - **What `structural-diff` cannot see — do not let a sidecar claim it did.**
   The gate is the corpus' primary fidelity check and three of its blind spots
   have each produced a false sidecar sentence:
