@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "IMPROVISED",
-      "what": "onInit calls combobox1.setFilterFunction( ) with a JavaScript callback that matches the search term case-insensitively ANYWHERE in the item text OR in its key. A JS filter callback has no bindable or backend equivalent (app-authored JS functions are the documented boundary), so the port ships the ComboBox with UI5's DEFAULT filtering - starts-with on the text - and the contains-and-key behaviour the sample demonstrates is lost."
+      "what": "onInit calls combobox1.setFilterFunction( ) with a JavaScript callback matching the search term case-insensitively ANYWHERE in the item text OR in its key. An app-authored JS callback is the documented boundary, so the port ships UI5's built-in filtering instead. The key half IS recoverable and is taken: filterSecondaryValues (@since 1.46, under the 1.71 floor) makes the default filter test additionalText, which this port binds to {KEY}. What remains lost is only the CONTAINS half - UI5's default matches at a word start, so 'many' no longer finds 'Germany' the way the sample's regex does."
     }
   ]
 }

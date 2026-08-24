@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_smpc_app_454",
   "sample": "sap.m.sample.TableSelectDialogGrowing",
   "entity": "sap.m.TableSelectDialog",
-  "file": "src/01/01/z2ui5_cl_smpc_app_454.clas.abap",
+  "file": "src/02/01/z2ui5_cl_smpc_app_454.clas.abap",
   "batch": "b35",
   "audit": {
     "frontend_action": true,
@@ -11,6 +11,10 @@
   "status": "generated",
   "checked": null,
   "deviations": [
+    {
+      "type": "POST_171",
+      "what": "initialFocus is @since 1.117.0 - it is not TableSelectDialog's own property but is inherited from sap.m.SelectDialogBase (SelectDialogBase.js:56), which is why it reads as a plain TableSelectDialog attribute. The sample sets it to SearchField on the growing variant, so the port needs UI5 >= 1.117. No gate reported it: the value is a COND #( ), and the linter's view reconstructor drops a variable-valued attribute entirely, so member-too-new never saw it."
+    },
     {
       "type": "NOTE",
       "what": "The fragment wires confirm=\".handleClose\" and cancel=\".handleClose\", but the controller defines no handleClose at all - both handlers resolve to nothing in the original, and the dialog closes itself either way. The port drops both attributes rather than inventing a behaviour (structural-diff reports attr missing TableSelectDialog.confirm and .cancel)."

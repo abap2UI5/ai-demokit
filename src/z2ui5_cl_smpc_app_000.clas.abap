@@ -2010,15 +2010,18 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22`
-        notes = `IMPROVISED: onInit calls combobox1.setFilterFunction( ) with a JavaScript callback that matches the search term case-insensitively ANYWHERE in the item text OR in its key. A JS filter callback has no` &&
-                 ` bindable or backend equivalent (app-authored JS functions are the documented boundary), so the port ships the ComboBox with UI5's DEFAULT filtering - starts-with on the text - and the` &&
-                 ` contains-and-key behaviour the sample demonstrates is lost.` )
+        notes = `IMPROVISED: onInit calls combobox1.setFilterFunction( ) with a JavaScript callback matching the search term case-insensitively ANYWHERE in the item text OR in its key. An app-authored JS callback is` &&
+                 ` the documented boundary, so the port ships UI5's built-in filtering instead. The key half IS recoverable and is taken: filterSecondaryValues (@since 1.46, under the 1.71 floor) makes the default` &&
+                 ` filter test additionalText, which this port binds to {KEY}. What remains lost is only the CONTAINS half - UI5's default matches at a word start, so 'many' no longer finds 'Germany' the way the` &&
+                 ` sample's regex does.` )
       ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxFilteringStartsWith`                   class = `z2ui5_cl_smpc_app_471` path = `src/01/01/z2ui5_cl_smpc_app_471.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22`
-        notes = `IMPROVISED: onInit calls combobox1.setFilterFunction( ) with a JavaScript callback matching the term case-insensitively at the START of the item text OR of its key. UI5's default filtering already` &&
-                 ` covers the starts-with-on-text half; the key half has no bindable or backend equivalent (app-authored JS functions are the documented boundary) and is lost.` )
+        notes = `IMPROVISED: onInit calls combobox1.setFilterFunction( ) with a JavaScript callback matching the search term case-insensitively at the START of the item text OR of its key. An app-authored JS callback` &&
+                 ` is the documented boundary, so the port ships UI5's built-in filtering, plus filterSecondaryValues (@since 1.46, under the 1.71 floor) so the default filter also tests additionalText, which this port` &&
+                 ` binds to {KEY} - that is the sample's or-key half. One residual difference stays: UI5's wordStartsWithValue anchors at ANY word start, the sample's regex only at the string start, so 'Herzegovina'` &&
+                 ` matches 'Bosnia and Herzegovina' here and does not in the original.` )
       ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxGrouping`                              class = `z2ui5_cl_smpc_app_199` path = `src/01/01/z2ui5_cl_smpc_app_199.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2049,14 +2052,19 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.22`
         notes = `NOTE: fnFormatter joins the ComboBox value and key into 'text (key)' (or whichever one is set). A formatter is business logic, so the text is composed in ABAP and bound; the port adds a change wire on` &&
                  ` the ComboBox to tell the backend when to recompute it, which the original does not need because its formatter re-evaluates on every model change. // NOTE: The change wire and the composed text are` &&
-                 ` unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_479.mjs).` )
+                 ` unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_479.mjs).` ) ).
+
+    lv_text1 = `NOTE: handleChange validates the entry (a typed value with no matching key is an error) and calls setValueState / setValueStateText. Validation is business logic, so the port keeps the change wire,` &&
+               ` binds selectedKey, value, valueState and valueStateText, and decides the state in ABAP - the same two branches with the same message. // NOTE: The change wire and the bound valueState Error branch` &&
+               ` are e2e-verified 2026-08-22 (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_475.mjs): the module types an unknown country and asserts getValueState( ) === 'Error'. Three things it does` &&
+               ` NOT cover and which stay unverified in a running system: valueStateText (never read), the recovery branch (the module never corrects the entry, so a dead ELSE that leaves the state at Error would` &&
+               ` pass), and the selectedKey binding (drop it and selected_key stays initial, the error branch still fires and the assertion still passes).`.
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxValidation`                            class = `z2ui5_cl_smpc_app_475` path = `src/01/01/z2ui5_cl_smpc_app_475.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22`
-        notes = `NOTE: handleChange validates the entry (a typed value with no matching key is an error) and calls setValueState / setValueStateText. Validation is business logic, so the port keeps the change wire,` &&
-                 ` binds selectedKey, value, valueState and valueStateText, and decides the state in ABAP - the same two branches with the same message. // NOTE: The change wire and the two bound value-state properties` &&
-                 ` are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_475.mjs).` ) ).
+        notes = lv_text1 ) ).
 
     lv_text1 = `POST-1.71: the formattedValueStateText aggregation of sap.m.ComboBox is @since 1.78 - newer than the 1.71 floor but kept for the 1:1 port, since two of the six ComboBoxes exist to show exactly that (a` &&
                ` value-state message carrying one link, and one carrying two). The app needs a UI5 release >= 1.78; below it the lowercase tag resolves as a control class and the 404 takes the whole view down, which` &&
@@ -3367,27 +3375,32 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
 
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Input`                           name = `InputSuggestionsCustomFilter`                  class = `z2ui5_cl_smpc_app_460` path = `src/01/01/z2ui5_cl_smpc_app_460.clas.abap`
-        score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `IMPROVISED: onInit calls productInput.setFilterFunction( ) with a JavaScript callback - a case-insensitive 'string contains' filter on the item text, which is the sample's entire subject. An` &&
+                 ` app-authored JS callback is the documented boundary and there is no bindable substitute here: the suggestion rows are core:Item, not core:ListItem, so filterSecondaryValues does not apply the way it` &&
+                 ` does in the ComboBox ports 470/471. The port therefore ships UI5's default word-starts-with filtering and the contains-anywhere behaviour is lost.` )
       ( module = `sap.m`              control = `sap.m.Input`                           name = `InputSuggestionsDynamic`                       class = `z2ui5_cl_smpc_app_473` path = `src/01/01/z2ui5_cl_smpc_app_473.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: onSuggest builds a StartsWith filter on Name from the typed term (or an empty filter list) and applies it to the suggestionItems BINDING. Reproduced 1:1 through follow_up_action binding_call on` &&
                  ` that aggregation, so the model stays untouched (app 022 precedent). The suggest event round-trips per keystroke, which is what the sample is about; abap2UI5 serializes round-trips, so an event fired` &&
                  ` while one is in flight is dropped and the list catches up when typing pauses. // NOTE: The suggest wire and its binding_call filter are unverified in a running system. **e2e-verified 2026-08-22**` &&
-                 ` (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_473.mjs).` )
+                 ` (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_473.mjs).` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Input`                           name = `InputSuggestionsOpenSearch`                    class = `z2ui5_cl_smpc_app_509` path = `src/01/01/z2ui5_cl_smpc_app_509.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: onSuggest asks an OpenSearchProvider that points at a local MockServer and replaces the Input's suggestion items with the answer. abap2UI5 has neither, so the same search runs in ABAP over the` &&
                  ` product names and fills the bound suggestionItems aggregation - which also means the port declares one core:Item template the original's view does not have (structural-diff reports control extra` &&
-                 ` core:Item). // LIVE-TEST: The suggest round-trip and the backend search are unverified in a running system.` ) ).
-
-    result = VALUE #( BASE result
+                 ` core:Item). // LIVE-TEST: The suggest round-trip and the backend search are unverified in a running system.` )
       ( module = `sap.m`              control = `sap.m.Input`                           name = `InputTypes`                                    class = `z2ui5_cl_smpc_app_159` path = `src/01/01/z2ui5_cl_smpc_app_159.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        notes = `NOTE: Five Inputs demonstrating the input types Text / Email / Tel / Number / Url with labelFor Labels, reproduced 1:1.` )
+        notes = `NOTE: Five Inputs demonstrating the input types Text / Email / Tel / Number / Url with labelFor Labels, reproduced 1:1.` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Input`                           name = `InputValueState`                               class = `z2ui5_cl_smpc_app_032` path = `src/02/01/z2ui5_cl_smpc_app_032.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -6236,8 +6249,8 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         post171 = `sap.m.StandardListItem.navigated is @since 1.72 and is the subject of this sample, so it is kept 1:1 and the port needs a UI5 runtime >= 1.72.` ) ).
 
     lv_text1 = `NOTE: onInit calls list.bindElement('/ProductCollection'), which is why the four items address their records as {0/...} .. {3/...}. The port keeps that element binding on the List (binding attribute` &&
-               ` over the bound table), so the relative indexed paths resolve exactly as in the original - including the third item's empty description and the fourth's missing one, both reproduced verbatim. // NOTE:` &&
-               ` The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at` &&
+               ` over the bound table), so the relative indexed paths resolve exactly as in the original - including the second item's empty description and the fourth's missing one, both reproduced verbatim. //` &&
+               ` NOTE: The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at` &&
                ` https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Added 2026-08-23: this port did the rewrite without declaring it, one of 17 found by re-counting the corpus-wide claim` &&
                ` that every port doing it had a declaration.`.
     result = VALUE #( BASE result
@@ -6789,23 +6802,29 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         notes = lv_text1
         post171 = `sap.m.TableSelectDialog.searchPlaceholder (since 1.110) is kept 1:1 on the value-help dialog; needs UI5 >= 1.110.` ) ).
 
-    lv_text1 = `NOTE: The fragment wires confirm=".handleClose" and cancel=".handleClose", but the controller defines no handleClose at all - both handlers resolve to nothing in the original, and the dialog closes` &&
-               ` itself either way. The port drops both attributes rather than inventing a behaviour (structural-diff reports attr missing TableSelectDialog.confirm and .cancel). // NOTE: The fragment's core:require` &&
-               ` pulls the Currency type and the sample's Formatter module. The port writes the type's full name in the binding-info (sap.ui.model.type.Currency) and computes Formatter.weightState in ABAP, so the` &&
-               ` core:require attribute is dropped (structural-diff reports attr missing TableSelectDialog.core:require). // NOTE: Formatter.weightState of THIS sample compares the RAW measure (<0 None, <1000` &&
-               ` Success, <2000 Warning, else Error - no unit conversion, unlike the shared demo kit formatter). It is business logic, so the state is computed per row in model_init and bound as a plain field. //` &&
-               ` NOTE: handleTableSelectDialogPress reads the growing flag off the pressed button's CustomData and sets growing plus initialFocus (SearchField when growing, List otherwise) before open( ). The port`.
-    lv_text1 = lv_text1 && ` keeps the CustomData on the first button 1:1 but raises two events instead, and builds the same fragment with those two properties set - one popup, two values, everything else identical. // NOTE:` &&
-               ` handleSearch filters the dialog's items binding with a Contains filter on Name. Reproduced 1:1 through follow_up_action binding_call on the dialog's items aggregation, so the model stays untouched` &&
-               ` (app 022 precedent). // NOTE: Both dialog variants (growing on/off with their initialFocus) and the binding_call search filter are unverified in a running system. **e2e-verified 2026-08-22** (nightly` &&
-               ` e2e interaction, meta/interactions/z2ui5_cl_smpc_app_454.mjs).`.
+    lv_text1 = `POST-1.71: initialFocus is @since 1.117.0 - it is not TableSelectDialog's own property but is inherited from sap.m.SelectDialogBase (SelectDialogBase.js:56), which is why it reads as a plain` &&
+               ` TableSelectDialog attribute. The sample sets it to SearchField on the growing variant, so the port needs UI5 >= 1.117. No gate reported it: the value is a COND #( ), and the linter's view` &&
+               ` reconstructor drops a variable-valued attribute entirely, so member-too-new never saw it. // NOTE: The fragment wires confirm=".handleClose" and cancel=".handleClose", but the controller defines no` &&
+               ` handleClose at all - both handlers resolve to nothing in the original, and the dialog closes itself either way. The port drops both attributes rather than inventing a behaviour (structural-diff` &&
+               ` reports attr missing TableSelectDialog.confirm and .cancel). // NOTE: The fragment's core:require pulls the Currency type and the sample's Formatter module. The port writes the type's full name in` &&
+               ` the binding-info (sap.ui.model.type.Currency) and computes Formatter.weightState in ABAP, so the core:require attribute is dropped (structural-diff reports attr missing`.
+    lv_text1 = lv_text1 && ` TableSelectDialog.core:require). // NOTE: Formatter.weightState of THIS sample compares the RAW measure (<0 None, <1000 Success, <2000 Warning, else Error - no unit conversion, unlike the shared demo` &&
+               ` kit formatter). It is business logic, so the state is computed per row in model_init and bound as a plain field. // NOTE: handleTableSelectDialogPress reads the growing flag off the pressed button's` &&
+               ` CustomData and sets growing plus initialFocus (SearchField when growing, List otherwise) before open( ). The port keeps the CustomData on the first button 1:1 but raises two events instead, and` &&
+               ` builds the same fragment with those two properties set - one popup, two values, everything else identical. // NOTE: handleSearch filters the dialog's items binding with a Contains filter on Name.` &&
+               ` Reproduced 1:1 through follow_up_action binding_call on the dialog's items aggregation, so the model stays untouched (app 022 precedent). // NOTE: Both dialog variants (growing on/off with their` &&
+               ` initialFocus) and the binding_call search filter are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_454.mjs).`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.TableSelectDialog`               name = `TableSelectDialogGrowing`                      class = `z2ui5_cl_smpc_app_454` path = `src/01/01/z2ui5_cl_smpc_app_454.clas.abap`
+      ( module = `sap.m`              control = `sap.m.TableSelectDialog`               name = `TableSelectDialogGrowing`                      class = `z2ui5_cl_smpc_app_454` path = `src/02/01/z2ui5_cl_smpc_app_454.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         since = `1.16`
-        notes = lv_text1 ) ).
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `initialFocus is @since 1.117.0 - it is not TableSelectDialog's own property but is inherited from sap.m.SelectDialogBase (SelectDialogBase.js:56), which is why it reads as a plain TableSelectDialog` &&
+                 ` attribute. The sample sets it to SearchField on the growing variant, so the port needs UI5 >= 1.117. No gate reported it: the value is a COND #( ), and the linter's view reconstructor drops a` &&
+                 ` variable-valued attribute entirely, so member-too-new never saw it.` ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Text`                            name = `Text`                                          class = `z2ui5_cl_smpc_app_051` path = `src/01/01/z2ui5_cl_smpc_app_051.clas.abap`
@@ -6856,15 +6875,22 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.TextArea`                        name = `TextAreaGrowing`                               class = `z2ui5_cl_smpc_app_370` path = `src/01/01/z2ui5_cl_smpc_app_370.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        since = `1.9.0` )
+        since = `1.9.0` ) ).
+
+    lv_text1 = `IMPROVISED: handleLiveChange recomputes each TextArea's valueState from the current length on every keystroke, and the original wires it on TWO of them. On the first, valueState is already an` &&
+               ` expression binding over the same bound value in the original view, so the port keeps that expression and drops the attribute - the state follows the value, only at change granularity rather than per` &&
+               ` keystroke, because valueLiveUpdate is false. On the SECOND the value is a view literal with a static valueState="Warning", so dropping liveChange leaves nothing behind: its Warning state is frozen` &&
+               ` and shortening the text below 40 characters no longer clears it, where the original clears it live. Binding that value would contradict the sample's own "without data binding" label and a` &&
+               ` per-keystroke round-trip is lossy, so the port keeps the literal and accepts the loss. // NOTE: The second and third TextAreas carry their value as a literal in the view, exactly as the original does` &&
+               ` (only the first one is model-bound); structural-diff reports the literal against the first TextArea's {/value} because it compares the attribute across all three.`.
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.TextArea`                        name = `TextAreaMaxLength`                             class = `z2ui5_cl_smpc_app_485` path = `src/01/01/z2ui5_cl_smpc_app_485.clas.abap`
-        score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.9.0`
-        notes = `NOTE: handleLiveChange sets the TextArea valueState from the current length. The first TextArea's valueState is already an expression binding over the same bound value in the ORIGINAL view, so the` &&
-                 ` port keeps that expression and drops the liveChange attribute - the state follows the value without a round-trip. The second TextArea keeps its static Warning state as the sample sets it. // NOTE:` &&
-                 ` The second and third TextAreas carry their value as a literal in the view, exactly as the original does (only the first one is model-bound); structural-diff reports the literal against the first` &&
-                 ` TextArea's {/value} because it compares the attribute across all three.` )
+        notes = lv_text1 ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.TextArea`                        name = `TextAreaValueStates`                           class = `z2ui5_cl_smpc_app_371` path = `src/01/01/z2ui5_cl_smpc_app_371.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`

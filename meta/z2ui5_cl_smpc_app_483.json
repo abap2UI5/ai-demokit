@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "onInit calls list.bindElement('/ProductCollection'), which is why the four items address their records as {0/...} .. {3/...}. The port keeps that element binding on the List (binding attribute over the bound table), so the relative indexed paths resolve exactly as in the original - including the third item's empty description and the fourth's missing one, both reproduced verbatim."
+      "what": "onInit calls list.bindElement('/ProductCollection'), which is why the four items address their records as {0/...} .. {3/...}. The port keeps that element binding on the List (binding attribute over the bound table), so the relative indexed paths resolve exactly as in the original - including the second item's empty description and the fourth's missing one, both reproduced verbatim."
     },
     {
       "type": "NOTE",
