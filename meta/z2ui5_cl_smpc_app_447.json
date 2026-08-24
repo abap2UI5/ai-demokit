@@ -26,6 +26,10 @@
     {
       "type": "NOTE",
       "what": "All four message_box_display calls (text, markup, JSON and the formerly async details) are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_447.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "Three corrections to the details payloads, 2026-08-24. (a) The JSON details string was written as a BACKTICK literal with escaped braces, `\\{\"glossary\"...`. Backticks pass the backslash through as an ordinary character - only |...| templates treat \\{ as an escape - and this value never reaches the XMLView parser at all: message_box_display ships it as an ajson option object in a frontend-action payload. So the dialog literally displayed the backslashes. Escaping removed. (b) The two information boxes now pin actions = ( 'OK' ). The framework remaps the information type onto MessageBox.show, whose default action set WITH a details option is [OK, CANCEL], while MessageBox.information - which the original calls - pins OK; the port's boxes had grown a Cancel button the sample has not got. The two error boxes are unaffected, since type = 'error' dispatches to MessageBox.error, which pins CLOSE. (c) Still NOT reproduced, and named here rather than left quiet: MessageBox._formatDetails wraps an OBJECT in <pre> with JSON.stringify(v, null, '\\t') and returns a STRING verbatim, so the original renders a tab-indented monospace block where the port renders one unindented line; and every details string passes Lib.sanitizeMessageDetails, which - when the markup contains any <li> - returns only a <ul> of the top-level items' textContent, so the FormattedText box loses its two <p> paragraphs and its <em>."
     }
   ]
 }

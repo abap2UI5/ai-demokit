@@ -80,6 +80,15 @@ CLASS z2ui5_cl_smpc_app_447 IMPLEMENTATION.
       WHEN `TEXT_INFO`.
         client->message_box_display( text         = `Information`
                                      type         = `information`
+                                     " pinned because the framework remaps the
+                                     " information type onto MessageBox.show,
+                                     " whose default action set WITH a details
+                                     " option is [OK, CANCEL] - while
+                                     " MessageBox.information, which the
+                                     " original calls, pins OK. Without this the
+                                     " box grew a Cancel button the sample has
+                                     " not got.
+                                     actions      = VALUE #( ( `OK` ) )
                                      title        = `Information`
                                      details      = `Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, ` &&
                                     `eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam ` &&
@@ -112,7 +121,7 @@ CLASS z2ui5_cl_smpc_app_447 IMPLEMENTATION.
         client->message_box_display( text         = `Error message`
                                      type         = `error`
                                      title        = `Error`
-                                     details      = `\{"glossary":\{"title":"example glossary"\}\}`
+                                     details      = `{"glossary":{"title":"example glossary"}}`
                                      contentwidth = `100px`
                                      styleclass   = c_padding ).
 
@@ -121,6 +130,15 @@ CLASS z2ui5_cl_smpc_app_447 IMPLEMENTATION.
         " the backend has the text right away and passes it as it is
         client->message_box_display( text         = `Information`
                                      type         = `information`
+                                     " pinned because the framework remaps the
+                                     " information type onto MessageBox.show,
+                                     " whose default action set WITH a details
+                                     " option is [OK, CANCEL] - while
+                                     " MessageBox.information, which the
+                                     " original calls, pins OK. Without this the
+                                     " box grew a Cancel button the sample has
+                                     " not got.
+                                     actions      = VALUE #( ( `OK` ) )
                                      title        = `Information`
                                      details      = `Asynchronously fetched details`
                                      contentwidth = `100px`

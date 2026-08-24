@@ -5,7 +5,7 @@
   "file": "src/01/01/z2ui5_cl_smpc_app_444.clas.abap",
   "batch": "b34",
   "audit": {
-    "frontend_action": false,
+    "frontend_action": true,
     "event_t_arg": true
   },
   "status": "generated",
@@ -26,6 +26,10 @@
     {
       "type": "NOTE",
       "what": "The load wire (400 rows into the bound aggregation), the per-item close and the group close are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_444.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "400 rows is the sample's whole subject, and only 100 of them rendered. sap.ui.model.Model's constructor sets iSizeLimit = 100 and abap2UI5 leaves it there unless the app raises it. The original never meets that limit because it uses no model at all - onLoadNotificationsPress calls addItem( ) 400 times with real control instances, and a size limit applies to a BOUND aggregation, not to added children. The load branch now issues cs_event-set_size_limit with 400 (the app-252 / app-094 idiom). Nothing could have caught this: the e2e module asserts only that some .sapMNLI rendered, which a 100-row render passes just as happily."
     }
   ]
 }

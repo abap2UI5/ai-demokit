@@ -130,13 +130,33 @@ CLASS z2ui5_cl_smpc_app_448 IMPLEMENTATION.
                     )->tag( `Label`
                         )->a( n = `text` v = `Type here`
                     " handleLiveChange runs showDraftSaving( ), showDraftSaved( ) and
-                    " clearDraftState( ) in one tick, so only the last one is ever seen -
-                    " the port makes that one call, client-side, on every keystroke
+                    " clearDraftState( ) one after the other. Those three do NOT
+                    " collapse into the last one - DraftIndicator is queue-driven
+                    " with a minDisplayTime of 1500 ms: showDraftSaving pushes
+                    " [Saving, Clear] and _processQueue paints "Saving..." at once
+                    " and arms a 1500 ms timer, after which the two later calls -
+                    " which only queued, because _processQueue returns early while
+                    " iDelayedCallId is set - are drained, painting "Draft saved"
+                    " for another 1500 ms. So the original visibly shows
+                    " Saving... -> Draft saved on every keystroke, which is what
+                    " the sample's own header text advertises. Making only the
+                    " clearDraftState call showed nothing at all (corrected
+                    " 2026-08-24); all three now travel, in order.
+                    " One call carries it: showDraftSaving alone queues
+                    " [Saving, Clear], so the indicator shows "Saving..." for its
+                    " minDisplayTime and then clears itself - roundtrip-free, on
+                    " every keystroke, exactly where the original calls it.
+                    " What is NOT reproduced is the intermediate "Draft saved"
+                    " label: an event attribute carries ONE action, and routing
+                    " the three calls through a round-trip instead would put a
+                    " server hop on every keystroke - the lossy pattern AGENTS
+                    " section 10 warns about and the advisory ratchet budgets.
+                    " Showing Saving... and clearing is the closer half.
                     )->tag( `Input`
                         )->a( n = `id`         v = `TypeHere`
                         )->a( n = `value`      v = client->_bind( type_here )
                         )->a( n = `liveChange` v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                             t_arg = VALUE #( ( `draftIndi` ) ( `clearDraftState` ) ) ) ).
+                                                                             t_arg = VALUE #( ( `draftIndi` ) ( `showDraftSaving` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 
