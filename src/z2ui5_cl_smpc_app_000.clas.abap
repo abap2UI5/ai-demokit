@@ -1268,11 +1268,15 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` (V.view.xml wires press='.onPress' on the card header itself). sap.f.cards.Header is @1.64 and declares no events of its own; press is declared on its base class sap.f.cards.BaseHeader, which is` &&
                ` @since 1.86 - the relocated-member blind spot the property gate cannot see (the snapshot records the event under BaseHeader, not under Header), so it is declared by policy, the same route app 167` &&
                ` takes for NavigationListItem.expanded. Below 1.86 the header renders but is not pressable and the toast never appears. Undeclared until 2026-08-23; declaring it moves the port from src/01/04 to` &&
-               ` src/02/04 per AGENTS section 3.`.
+               ` src/02/04 per AGENTS section 3. // NOTE: The grid's sap.ui.integration.widgets.Card loads its manifest from an external file. That URL was kept in the original's document-relative form until` &&
+               ` 2026-08-24, which an abap2UI5 app has no document root to resolve - so the card 404'd, and the port carried a render_smoke skip reading "the static headless harness cannot serve it". Absolutizing the` &&
+               ` URL onto the OpenUI5 host (the corpus asset rule) fixed the render as a side effect, the skip went stale, and the gate demanded its removal - which is exactly what a re-verified skip is for. Both are`.
+    lv_text1 = lv_text1 && ` gone now; the port renders clean.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.GridContainer`                   name = `GridContainer`                                 class = `z2ui5_cl_smpc_app_168` path = `src/02/04/z2ui5_cl_smpc_app_168.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
         since = `1.65`
         is_post171 = abap_true
         notes = lv_text1

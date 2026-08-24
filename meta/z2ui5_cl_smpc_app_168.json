@@ -10,10 +10,6 @@
   },
   "status": "reviewed",
   "checked": null,
-  "render_smoke": {
-    "skip": true,
-    "reason": "The grid contains a sap.ui.integration.widgets.Card whose manifest is an external file (test-resources/.../cardManifest.json) that the static headless harness cannot serve - 'resource could not be loaded ... Not Found'. Verified against the render each run: the skip is honoured only while it still errors. The view renders in a real browser and passes the e2e gate."
-  },
   "deviations": [
     {
       "type": "NOTE",
@@ -30,6 +26,10 @@
     {
       "type": "POST_171",
       "what": "card:Header press is @since 1.86 and is kept 1:1 from the original (V.view.xml wires press='.onPress' on the card header itself). sap.f.cards.Header is @1.64 and declares no events of its own; press is declared on its base class sap.f.cards.BaseHeader, which is @since 1.86 - the relocated-member blind spot the property gate cannot see (the snapshot records the event under BaseHeader, not under Header), so it is declared by policy, the same route app 167 takes for NavigationListItem.expanded. Below 1.86 the header renders but is not pressable and the toast never appears. Undeclared until 2026-08-23; declaring it moves the port from src/01/04 to src/02/04 per AGENTS section 3."
+    },
+    {
+      "type": "NOTE",
+      "what": "The grid's sap.ui.integration.widgets.Card loads its manifest from an external file. That URL was kept in the original's document-relative form until 2026-08-24, which an abap2UI5 app has no document root to resolve - so the card 404'd, and the port carried a render_smoke skip reading \"the static headless harness cannot serve it\". Absolutizing the URL onto the OpenUI5 host (the corpus asset rule) fixed the render as a side effect, the skip went stale, and the gate demanded its removal - which is exactly what a re-verified skip is for. Both are gone now; the port renders clean."
     }
   ]
 }
