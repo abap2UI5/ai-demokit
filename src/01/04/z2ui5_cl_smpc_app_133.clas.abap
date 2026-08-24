@@ -186,27 +186,27 @@ CLASS z2ui5_cl_smpc_app_133 IMPLEMENTATION.
     " (both render identically to the original's undefined fields).
     t_products = VALUE #(
       ( name = `Notebook Basic 15` description = `Notebook Basic 15 with 2,80 GHz quad core, 15" LCD, 4 GB DDR3 RAM, 500 GB Hard Disc, Windows 8 Pro`
-        productpicurl = `test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg` status = `Information` type = `DetailAndActive` quantity = 24 )
+        productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg` status = `Information` type = `DetailAndActive` quantity = 24 )
       ( name = `Notebook Basic 17` description = `Notebook Basic 17 with 2,80 GHz quad core, 17" LCD, 4 GB DDR3 RAM, 500 GB Hard Disc, Windows 8 Pro`
-        productpicurl = `test-resources/sap/ui/documentation/sdk/images/HT-1001.jpg` status = `Success` type = `DetailAndActive` quantity = 14 )
+        productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1001.jpg` status = `Success` type = `DetailAndActive` quantity = 14 )
       ( name = `Notebook Basic 18` description = `Notebook Basic 18 with 2,80 GHz quad core, 18" LCD, 8 GB DDR3 RAM, 1000 GB Hard Disc, Windows 8 Pro`
-        productpicurl = `test-resources/sap/ui/documentation/sdk/images/HT-1002.jpg` status = `Success` type = `Inactive` quantity = 37 )
+        productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1002.jpg` status = `Success` type = `Inactive` quantity = 37 )
       ( name = `Notebook Basic 19` description = `Notebook Basic 19 with 2,80 GHz quad core, 19" LCD, 8 GB DDR3 RAM, 1000 GB Hard Disc, Windows 8 Pro`
-        productpicurl = `test-resources/sap/ui/documentation/sdk/images/HT-1003.jpg` status = `Warning` type = `Inactive` quantity = 2 )
+        productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1003.jpg` status = `Warning` type = `Inactive` quantity = 2 )
       ( name = `ITelO Vault` description = `Digital Organizer with State-of-the-Art Storage Encryption`
-        productpicurl = `test-resources/sap/ui/documentation/sdk/images/HT-1007.jpg` status = `Error` type = `Inactive` quantity = 0 )
+        productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1007.jpg` status = `Error` type = `Inactive` quantity = 0 )
       ( name = `Notebook Professional 15` description = `Notebook Professional 15 with 2,80 GHz quad core, 15" Multitouch LCD, 8 GB DDR3 RAM, 500 GB SSD - DVD-Writer (DVD-R/+R/-RW/-RAM),Windows 8 Pro`
-        productpicurl = `test-resources/sap/ui/documentation/sdk/images/HT-1010.jpg` status = `None` type = `Inactive` quantity = 22 )
+        productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1010.jpg` status = `None` type = `Inactive` quantity = 22 )
       ( name = `Notebook Professional 17` description = `Notebook Professional 17 with 2,80 GHz quad core, 17" Multitouch LCD, 8 GB DDR3 RAM, 500 GB SSD - DVD-Writer (DVD-R/+R/-RW/-RAM),Windows 8 Pro`
-        productpicurl = `test-resources/sap/ui/documentation/sdk/images/HT-1011.jpg` status = `None` type = `Inactive` quantity = 31 )
+        productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1011.jpg` status = `None` type = `Inactive` quantity = 31 )
       ( name = `ITelO Vault Net` description = `Digital Organizer with State-of-the-Art Encryption for Storage and Network Communications`
-        productpicurl = `test-resources/sap/ui/documentation/sdk/images/HT-1020.jpg` status = `None` type = `Inactive` quantity = 14 )
+        productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1020.jpg` status = `None` type = `Inactive` quantity = 14 )
       ( name = `ITelO Vault SAT` description = `Digital Organizer with State-of-the-Art Encryption for Storage and Secure Stellite Link`
-        productpicurl = `test-resources/sap/ui/documentation/sdk/images/HT-1021.jpg` status = `None` type = `Inactive` quantity = 50 )
+        productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1021.jpg` status = `None` type = `Inactive` quantity = 50 )
       ( name = `Comfort Easy` description = `32 GB Digital Assistant with high-resolution color screen`
-        productpicurl = `test-resources/sap/ui/documentation/sdk/images/HT-1022.jpg` status = `None` type = `Inactive` quantity = 30 )
+        productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1022.jpg` status = `None` type = `Inactive` quantity = 30 )
       ( name = `Ultra Jet Super Highspeed` description = `4800 dpi x 1200 dpi - up to 35 ppm (mono) / up to 34 ppm (color) - capacity: 250 sheets - Hi-Speed USB2.0, Ethernet`
-        productpicurl = `test-resources/sap/ui/documentation/sdk/images/HT-1065.jpg` status = `None` type = `Navigation` quantity = 25 onlyimage = abap_true ) ).
+        productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1065.jpg` status = `None` type = `Navigation` quantity = 25 onlyimage = abap_true ) ).
 
   ENDMETHOD.
 

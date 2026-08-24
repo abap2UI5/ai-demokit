@@ -36,7 +36,7 @@ CLASS z2ui5_cl_smpc_app_059 IMPLEMENTATION.
                   `Pellentesque non mauris consectetur, tristique arcu id, aliquet tortor.`.
 
     " original demokit sdk asset paths kept 1:1 - not served by abap2UI5 (see sidecar)
-    DATA(base) = `test-resources/sap/ui/documentation/sdk/images/`.
+    DATA(base) = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/`.
 
     DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 

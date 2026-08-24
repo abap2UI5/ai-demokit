@@ -210,7 +210,7 @@ CLASS z2ui5_cl_smpc_app_168 IMPLEMENTATION.
                 )->end(
 
                 )->ele( n = `Card` ns = `w`
-                    )->a( n = `manifest` v = `test-resources/sap/f/demokit/sample/GridContainer/cardManifest.json`
+                    )->a( n = `manifest` v = `https://sdk.openui5.org/test-resources/sap/f/demokit/sample/GridContainer/cardManifest.json`
                     )->ele( n = `layoutData` ns = `w`
                         )->tag( n = `GridContainerItemLayoutData` ns = `f`
                             )->a( n = `minRows` v = `3`
