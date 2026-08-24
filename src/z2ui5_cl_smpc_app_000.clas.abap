@@ -8575,11 +8575,12 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` sap-icon://SAP-icons-TNT/... URI in Group2.fragment.xml resolvable. An abap2UI5 app has no Component of its own to run that in, and no wire reaches IconPool (it is a module-level singleton, not a` &&
                ` control, so control_by_id cannot address it and no global target exists for it). The port keeps the icon URI verbatim, so the first Frequent Operations tile renders without its glyph - in a real` &&
                ` system as well as in the harness, since neither sap.tnt's library.js nor abap2UI5 registers the collection (both grepped 2026-08-21, zero hits). The render_smoke skip beside this used to call the` &&
-               ` missing icon a harness artefact; it now says what this says. Closing it needs an upstream registerFont-style global target, filed the same way as pr/card-manifest-object. // NOTE: The sample's asset` &&
-               ` paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/...` &&
-               ` instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the sentence used to claim the rewrite was 'declared by all 77 ports that do it',`.
-    lv_text1 = lv_text1 && ` which had stopped being true as the corpus grew past that day's snapshot - 126 ports do it now, and 17 of them declared it nowhere. Those 17 carry the declaration since today, so the claim holds` &&
-               ` again; a stale absolute count is what made it wrong, so this wording names the date the count was taken.`.
+               ` missing icon a harness artefact; it now says what this says. Closing it needs an upstream registerFont-style global target. That is now filed as abap2UI5 backlog/items/icon-pool-register-font.md -` &&
+               ` this sentence claimed it had been filed the same way as pr/card-manifest-object while no such item existed (12 items in backlog/items/, none mentioning registerFont or IconPool). // NOTE: The` &&
+               ` sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at`.
+    lv_text1 = lv_text1 && ` https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the sentence used to claim the rewrite was 'declared by` &&
+               ` all 77 ports that do it', which had stopped being true as the corpus grew past that day's snapshot - 126 ports do it now, and 17 of them declared it nowhere. Those 17 carry the declaration since` &&
+               ` today, so the claim holds again; a stale absolute count is what made it wrong, so this wording names the date the count was taken.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `ProductHomeLayout`                             class = `z2ui5_cl_smpc_app_350` path = `src/02/02/z2ui5_cl_smpc_app_350.clas.abap`
         score = 5
