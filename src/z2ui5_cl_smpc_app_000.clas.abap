@@ -4139,20 +4139,17 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` 2026-08-23; declaring it moves the port from src/01/01 to src/02/01.` ) ).
 
     lv_text1 = `NOTE: handleSelectionChange toasts the changed item and whether it was selected - composed on the client from ${$parameters>/selected} and ${$parameters>/changedItem}.getText(), so it needs no` &&
-               ` round-trip. // NOTE: handleSelectionFinish lists every selected item. A UI5 expression has no loop, so the selection travels as the bound selectedKeys and ABAP rebuilds the line. The emitted order is` &&
-               ` the ABAP table order - the mock's ProductId order - which is neither the picker's sorted order nor the original's: the original reads the selectedItems event parameter, which MultiComboBox fills by` &&
-               ` addAssociation per pick, i.e. in SELECTION order. App 281 loops the selected keys instead and reproduces that; this port does not. // LIVE-TEST: Both wires (the client-composed selectionChange toast` &&
-               ` and the selectionFinish round-trip) are unverified in a running system. // NOTE: The client-composed toast template is written with BARE {0}/{1} placeholders. It had carried \{0\}, which is wrong in` &&
-               ` a backtick literal: only |...| templates treat \{ as an escape, so the backslashes were real characters and formatTemplate's /\{(\d+)...\}/ never matched - the placeholders rendered verbatim. The`.
-    lv_text1 = lv_text1 && ` escape is not needed at all on this path: the value lands in an EVENT attribute, which XMLTemplateProcessor routes through EventHandlerResolver without a BindingParser pass. An ordinary attribute is` &&
-               ` the opposite case and still needs \{ (see app 523's app:template). // NOTE: Both original handlers pass MessageToast.show(text, { width: "auto" }). The round-trip toast could carry it` &&
-               ` (message_toast_display has a width parameter, and app 281 passes width = ``auto``), and this port does not - that line renders in the default 15em toast and wraps. For the client-composed leg the` &&
-               ` option genuinely cannot travel, which is the boundary app 281's sidecar also records.`.
+               ` round-trip. // NOTE: handleSelectionFinish lists every selected item. A UI5 expression has no loop, so the selection travels as the bound selectedKeys and ABAP rebuilds the line - looping the KEYS,` &&
+               ` not the product table, because the original reads the selectedItems event parameter and MultiComboBox fills that by addAssociation per pick, i.e. in selection order. Both toasts pass width = ``auto``` &&
+               ` as the original's MessageToast.show options do; on the client-composed selectionChange leg that option cannot travel, which is the boundary app 281 also records. // LIVE-TEST: Both wires (the` &&
+               ` client-composed selectionChange toast and the selectionFinish round-trip) are unverified in a running system. // NOTE: The client-composed toast template is written with BARE {0}/{1} placeholders. It` &&
+               ` had carried \{0\}, which is wrong in a backtick literal: only |...| templates treat \{ as an escape, so the backslashes were real characters and formatTemplate's /\{(\d+)...\}/ never matched - the`.
+    lv_text1 = lv_text1 && ` placeholders rendered verbatim. The escape is not needed at all on this path: the value lands in an EVENT attribute, which XMLTemplateProcessor routes through EventHandlerResolver without a` &&
+               ` BindingParser pass. An ordinary attribute is the opposite case and still needs \{ (see app 523's app:template).`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MultiComboBox`                   name = `MultiComboBox`                                 class = `z2ui5_cl_smpc_app_490` path = `src/01/01/z2ui5_cl_smpc_app_490.clas.abap`
-        score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
         notes = lv_text1 ) ).
 
@@ -4162,14 +4159,11 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` LIVE-TEST: Both wires and the clear icon are unverified in a running system. // NOTE: The client-composed toast template is written with BARE {0}/{1} placeholders. It had carried \{0\}, which is` &&
                ` wrong in a backtick literal: only |...| templates treat \{ as an escape, so the backslashes were real characters and formatTemplate's /\{(\d+)...\}/ never matched - the placeholders rendered` &&
                ` verbatim. The escape is not needed at all on this path: the value lands in an EVENT attribute, which XMLTemplateProcessor routes through EventHandlerResolver without a BindingParser pass. An ordinary`.
-    lv_text1 = lv_text1 && ` attribute is the opposite case and still needs \{ (see app 523's app:template). // NOTE: Both original handlers pass MessageToast.show(text, { width: "auto" }). The round-trip toast could carry it` &&
-               ` (message_toast_display has a width parameter, and app 281 passes width = ``auto``), and this port does not - that line renders in the default 15em toast and wraps. For the client-composed leg the` &&
-               ` option genuinely cannot travel, which is the boundary app 281's sidecar also records.`.
+    lv_text1 = lv_text1 && ` attribute is the opposite case and still needs \{ (see app 523's app:template).`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MultiComboBox`                   name = `MultiComboBoxClearIcon`                        class = `z2ui5_cl_smpc_app_491` path = `src/02/01/z2ui5_cl_smpc_app_491.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
         is_post171 = abap_true
         notes = lv_text1
