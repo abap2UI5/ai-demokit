@@ -21,7 +21,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the original loads sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street} {HouseNumber} keep their composite form with the absolute paths."
+      "what": "the original loads sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); the record is a FIXED index, so the house idiom seeds those row-0 fields at the default-model root and binds them ABSOLUTELY (client->_bind( suppliername ) etc.) rather than keeping the fragments' relative {SupplierName} - with no element binding on the view a relative path has no context, JSONModel._getObject returns undefined and the control renders EMPTY (linter rule relative-binding-without-context). abap2UI5 does have element binding (client->cs_event-bind_element, live in app 094); it is reserved for the per-row case where the index arrives from the event, not for a fixed index. Composite texts such as {Street} {HouseNumber} keep their composite form with the absolute paths."
     },
     {
       "type": "NOTE",
@@ -29,7 +29,7 @@
     },
     {
       "type": "NOTE",
-      "what": "not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore). **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_327.mjs)."
+      "what": "not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore). **e2e-verified 2026-08-16** for the POSITIVE half only - that run's module asserted merely that Save/the Inputs/the restored Text appear, which a port whose negated flag was dead (both forms rendered at once) also passes. The module was widened 2026-08-24 to assert what must be GONE in each phase; that half awaits the next nightly (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_327.mjs)."
     }
   ]
 }

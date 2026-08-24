@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "The ObjectHeader binds the fixed record {/ProductCollection/0}. The port seeds exactly those row-0 fields at the default-model root and binds them absolutely (there is no element binding to resolve a relative {Field} against), so intro, number, numberUnit, the ObjectAttribute text, the tab count, the Image src and the dimension text all read the same mock values."
+      "what": "The ObjectHeader binds the fixed record {/ProductCollection/0}. The port seeds exactly those row-0 fields at the default-model root and binds them absolutely - the record is a fixed index, so no bind_element follow-up is needed (abap2UI5 has one, cs_event-bind_element, for the per-row case); the relative {Field} form is NOT kept, because without an element binding on the view it would resolve against nothing and render empty, so intro, number, numberUnit, the ObjectAttribute text, the tab count, the Image src and the dimension text all read the same mock values."
     },
     {
       "type": "NOTE",
