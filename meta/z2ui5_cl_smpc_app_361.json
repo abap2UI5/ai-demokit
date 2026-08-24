@@ -33,7 +33,7 @@
     },
     {
       "type": "NOTE",
-      "what": "Unverified in a running system: whether rowSelectionChange delivers the index array as JSON to get_event_arg, whether the two bound Selects drive selectionMode/selectionBehavior without a round-trip, and the control_by_id clearSelection wire. **e2e-verified 2026-08-17** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_361.mjs)."
+      "what": "Unverified in a running system: whether rowSelectionChange delivers the index array as JSON to get_event_arg, whether the two bound Selects drive selectionMode/selectionBehavior without a round-trip, and the control_by_id clearSelection wire. **e2e-verified 2026-08-17** - but that stamp predates the wire it certifies. On 2026-08-21 the t_arg was rewritten from ${$parameters>/rowIndices} to ${$source>}.getSelectedIndices( ) (see the deviation below), and the module was not changed: it selected exactly ONE row, the single case where the changed-rows parameter and the current selection coincide, so it kept passing across the rewrite without ever exercising either case that motivated it. The module selects a second row and checks both indices are reported since 2026-08-24 (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_361.mjs)."
     },
     {
       "type": "NOTE",

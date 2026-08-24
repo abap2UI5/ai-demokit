@@ -21,6 +21,14 @@
  * selectionBehavior without a round-trip — is verified by the DOM rather than
  * by pressing anything: the table element carries `sapUiTableSelModeMultiToggle`,
  * which is the bound value rendered.
+ *
+ * Two rows, not one (2026-08-24). On 2026-08-21 the wire was rewritten from
+ * `${$parameters>/rowIndices}` to `${$source>}.getSelectedIndices()`, because
+ * the event parameter reports the rows whose selection CHANGED, not the rows
+ * currently selected. This module selected exactly one row, which is the single
+ * case where the two coincide — so it went on passing across the rewrite and
+ * neither of the cases that motivated it was ever exercised. Select a second
+ * row (expect two indices) and then deselect both (expect the empty report).
  */
 export default async (page) => {
   const openOverflow = async () => {
@@ -41,7 +49,11 @@ export default async (page) => {
     throw new Error(`bound selectionMode did not reach the table: ${mode}`);
   }
 
-  await page.locator('.sapUiTableRowSelectionCell').first().click();
+  const cells = page.locator('.sapUiTableRowSelectionCell');
+  await cells.nth(0).click();
+  await page.waitForTimeout(1500);
+  // MultiToggle: a second plain click ADDS the row rather than replacing it
+  await cells.nth(1).click();
   await page.waitForTimeout(1500);
 
   await press('show indices of selected items');
@@ -51,7 +63,13 @@ export default async (page) => {
   if (!/\d/.test(reported.join(' '))) {
     throw new Error(`the index array did not arrive: ${JSON.stringify(reported)}`);
   }
-  console.log(`  indices: ${JSON.stringify(reported[reported.length - 1])}`);
+  const last = reported[reported.length - 1];
+  // the discriminating half: BOTH selected rows have to be in the report. The
+  // changed-rows parameter would have carried only the second one.
+  if (!/0/.test(last) || !/1/.test(last)) {
+    throw new Error(`only part of the selection was reported: ${JSON.stringify(last)}`);
+  }
+  console.log(`  indices: ${JSON.stringify(last)}`);
 
   await press('clear selection');
   const selected = await page.locator('.sapUiTableRowSel').count();

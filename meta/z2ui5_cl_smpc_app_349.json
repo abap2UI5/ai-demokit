@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "Unverified in a running system: whether a ComboBox free-text entry (the original reads the change event's value, not the selected key) round-trips into the bound field and re-templates the grid. **e2e-verified 2026-08-17** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_349.mjs)."
+      "what": "Unverified in a running system: whether a ComboBox free-text entry (the original reads the change event's value, not the selected key) reaches the bound field and re-templates the grid. Note there is no round TRIP: this port has no event wire at all, so the effect is pure client-side two-way binding on the ComboBox value with the CSSGrid's gridTemplateRows bound to the same field. **e2e-verified 2026-08-17** - but that run settled nothing: the module asserted box.inputValue( ), the DOM input's own value that Playwright had just typed (true with no binding at all), plus that some element carrying a sapUiLayoutCSSGrid class is visible (true for any rendered grid). Neither read gridTemplateRows. The module reads it off the control since 2026-08-24 (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_349.mjs)."
     }
   ]
 }

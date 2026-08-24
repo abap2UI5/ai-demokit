@@ -8523,8 +8523,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` gridTemplateRows keeps "1fr 2fr 1fr", which is both the view literal and the rFr item text. The ComboBoxes keep their selectedKey attributes 1:1. // NOTE: css/main.css (.sapMFlexBox.demoBox and the`.
     lv_text1 = lv_text1 && ` white .sapMTitle/.sapMText inside it) is injected through an extra core:HTML <style> leaf - abap2UI5 ships no separate stylesheet, and without the rules the six demo boxes render unstyled. The CSS` &&
                ` braces are escaped \{ \} in a backtick literal so the XMLView parser does not read them as bindings. // NOTE: Unverified in a running system: whether a ComboBox free-text entry (the original reads` &&
-               ` the change event's value, not the selected key) round-trips into the bound field and re-templates the grid. **e2e-verified 2026-08-17** (nightly e2e interaction,` &&
-               ` meta/interactions/z2ui5_cl_smpc_app_349.mjs).`.
+               ` the change event's value, not the selected key) reaches the bound field and re-templates the grid. Note there is no round TRIP: this port has no event wire at all, so the effect is pure client-side` &&
+               ` two-way binding on the ComboBox value with the CSSGrid's gridTemplateRows bound to the same field. **e2e-verified 2026-08-17** - but that run settled nothing: the module asserted box.inputValue( ),` &&
+               ` the DOM input's own value that Playwright had just typed (true with no binding at all), plus that some element carrying a sapUiLayoutCSSGrid class is visible (true for any rendered grid). Neither` &&
+               ` read gridTemplateRows. The module reads it off the control since 2026-08-24 (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_349.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `GridTemplateRows`                              class = `z2ui5_cl_smpc_app_349` path = `src/01/02/z2ui5_cl_smpc_app_349.clas.abap`
         score = 4
@@ -8552,30 +8554,32 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` sap.ui.layout.cssgrid.ResponsiveColumnLayout and sap.ui.layout.cssgrid.ResponsiveColumnItemLayoutData are @since 1.72 (with the layout's layoutChange event and its layout parameter), sap.m.Avatar is` &&
                ` @since 1.73, and sap.f.GridContainer's columnsChange event carries its columns parameter. All are kept 1:1 - the sample's owning control sap.ui.layout.cssgrid.CSSGrid is in scope and the layout is` &&
                ` what the sample is about; declared per the fidelity-first property-171 policy, so the app needs a UI5 release >= 1.73. // NOTE: The named ``home>`` model (model/home.json) is folded onto the one`.
-    lv_text1 = lv_text1 && ` default model: homeIconSrc, user/iconSrc, currentBreakpoint and /layout/groupN/columns/current become fields with the same leaf names. The per-breakpoint column table is NOT shipped to the frontend -` &&
-               ` onLayoutChangeMain's lookup ('the value for this breakpoint, else default') is arithmetic, so it lives in ABAP (columns_apply) and only the four resulting column counts are bound, per the` &&
-               ` thin-frontend principle. onColumnsChange is the same move: the grid's columns parameter reaches the backend, which decides 4 vs 5 columns for the usersCard/upfCard exactly as the original's` &&
-               ` ``iGridColumns < 14 ? 4 : 5``. // NOTE: /layout/<group>/columns/current is null in model/home.json and the original only fills it on the first layoutChange; the port seeds each group with its own` &&
-               ` ``default`` value (10/4/7/4) instead, so the grid has a valid column count on the very first render rather than an unset one. The formatSrc formatter (sap.ui.require.toUrl over the sample folder) is` &&
-               ` resolved in ABAP - the two images and the two card manifest URLs are absolutized to the OpenUI5 host per the asset-URL rule. // NOTE: The two sap.ui.integration widgets:Card instances (usersCard,`.
-    lv_text1 = lv_text1 && ` logonRequestsCard) get their manifest as a bound URL, which is the shape Card.createManifest reads a string manifest as - the original does exactly the same in onInit` &&
-               ` (setManifest(this.formatSrc('cards/UsersCard/manifest.json'))). Unlike app 341's bundled manifests this needs no framework change; see pr/card-manifest-object for the case that does. // IMPROVISED:` &&
-               ` The two 'Reveal Grid' ToggleButtons keep their labels but lose their press attributes: onRevealGridMain/onRevealGridGroups call RevealGrid.toggle from the sample-local module` &&
-               ` RevealGrid/RevealGrid.js, which measures the rendered grid and draws an absolutely positioned outline overlay over every grid cell. That is a sample-only JS helper with its own CSS (the manifest's` &&
-               ` only resources/css entry), not a control, property or whitelisted control method - the same drop as apps 145/222/271/346/348, and RevealGrid.css is not injected either since nothing renders those` &&
-               ` classes. onExit's RevealGrid.destroy goes with it. // NOTE: The Avatar.press and Link.press attributes of the five 'Frequent Operations' tiles are dropped: the original wires them all to onTilePress,`.
-    lv_text1 = lv_text1 && ` which is an EMPTY function. Keeping them would mean a backend round-trip that does nothing (the dead-event-wire class), so the attributes go away rather than being wired to a no-op. // LIVE-TEST:` &&
-               ` Unverified in a running system: the layoutChange and columnsChange round-trips re-laying out the four groups and widening the two group-1 cards, and whether the two card manifest URLs load from the` &&
-               ` OpenUI5 host (their images are relative to the manifest, which is what an absolute manifest URL makes resolvable). // IMPROVISED: The original's Component.js init calls IconPool.registerFont({` &&
-               ` fontFamily: 'SAP-icons-TNT', fontURI: sap.ui.require.toUrl('sap/tnt/themes/base/fonts/') }), and that registration is the only thing that makes the sap-icon://SAP-icons-TNT/... URI in` &&
-               ` Group2.fragment.xml resolvable. An abap2UI5 app has no Component of its own to run that in, and no wire reaches IconPool (it is a module-level singleton, not a control, so control_by_id cannot` &&
-               ` address it and no global target exists for it). The port keeps the icon URI verbatim, so the first Frequent Operations tile renders without its glyph - in a real system as well as in the harness,`.
-    lv_text1 = lv_text1 && ` since neither sap.tnt's library.js nor abap2UI5 registers the collection (both grepped 2026-08-21, zero hits). The render_smoke skip beside this used to call the missing icon a harness artefact; it` &&
-               ` now says what this says. Closing it needs an upstream registerFont-style global target, filed the same way as pr/card-manifest-object. // NOTE: The sample's asset paths are host-absolutized. The demo` &&
-               ` kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the` &&
-               ` mock's own. Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the sentence used to claim the rewrite was 'declared by all 77 ports that do it', which had stopped being true as the` &&
-               ` corpus grew past that day's snapshot - 126 ports do it now, and 17 of them declared it nowhere. Those 17 carry the declaration since today, so the claim holds again; a stale absolute count is what` &&
-               ` made it wrong, so this wording names the date the count was taken.`.
+    lv_text1 = lv_text1 && ` default model: homeIconSrc, user/iconSrc, currentBreakpoint and /layout/groupN/columns/current become fields, two of them with the same leaf names and two NOT: home>/user/iconSrc becomes USER_ICONSRC` &&
+               ` (the leaf alone would be ICONSRC) and /layout/groupN/columns/current becomes GROUP1_COLUMNS..GROUP4_COLUMNS (the leaf alone would be CURRENT); homeiconsrc and currentbreakpoint do keep theirs.` &&
+               ` structural-diff is not confirming this either way - the originals are complex binding-infos ({path:'home>/user/iconSrc', formatter:'.formatSrc'}), which SIMPLE_BIND excludes, so the gate skips them` &&
+               ` rather than matching them. The per-breakpoint column table is NOT shipped to the frontend - onLayoutChangeMain's lookup ('the value for this breakpoint, else default') is arithmetic, so it lives in` &&
+               ` ABAP (columns_apply) and only the four resulting column counts are bound, per the thin-frontend principle. onColumnsChange is the same move: the grid's columns parameter reaches the backend, which` &&
+               ` decides 4 vs 5 columns for the usersCard/upfCard exactly as the original's ``iGridColumns < 14 ? 4 : 5``. // NOTE: /layout/<group>/columns/current is null in model/home.json and the original only`.
+    lv_text1 = lv_text1 && ` fills it on the first layoutChange; the port seeds each group with its own ``default`` value (10/4/7/4) instead, so the grid has a valid column count on the very first render rather than an unset` &&
+               ` one. The formatSrc formatter (sap.ui.require.toUrl over the sample folder) is resolved in ABAP - the two images and the two card manifest URLs are absolutized to the OpenUI5 host per the asset-URL` &&
+               ` rule. // NOTE: The two sap.ui.integration widgets:Card instances (usersCard, logonRequestsCard) get their manifest as a bound URL, which is the shape Card.createManifest reads a string manifest as -` &&
+               ` the original does exactly the same in onInit (setManifest(this.formatSrc('cards/UsersCard/manifest.json'))). Unlike app 341's bundled manifests this needs no framework change; see` &&
+               ` pr/card-manifest-object for the case that does. // IMPROVISED: The two 'Reveal Grid' ToggleButtons keep their labels but lose their press attributes: onRevealGridMain/onRevealGridGroups call` &&
+               ` RevealGrid.toggle from the sample-local module RevealGrid/RevealGrid.js, which measures the rendered grid and draws an absolutely positioned outline overlay over every grid cell. That is a`.
+    lv_text1 = lv_text1 && ` sample-only JS helper with its own CSS (the manifest's only resources/css entry), not a control, property or whitelisted control method - the same drop as apps 145/222/271/346/348, and RevealGrid.css` &&
+               ` is not injected either since nothing renders those classes. onExit's RevealGrid.destroy goes with it. // NOTE: The Avatar.press and Link.press attributes of the five 'Frequent Operations' tiles are` &&
+               ` dropped: the original wires them all to onTilePress, which is an EMPTY function. Keeping them would mean a backend round-trip that does nothing (the dead-event-wire class), so the attributes go away` &&
+               ` rather than being wired to a no-op. // LIVE-TEST: Unverified in a running system: the layoutChange and columnsChange round-trips re-laying out the four groups and widening the two group-1 cards, and` &&
+               ` whether the two card manifest URLs load from the OpenUI5 host (their images are relative to the manifest, which is what an absolute manifest URL makes resolvable). // IMPROVISED: The original's` &&
+               ` Component.js init calls IconPool.registerFont({ fontFamily: 'SAP-icons-TNT', fontURI: sap.ui.require.toUrl('sap/tnt/themes/base/fonts/') }), and that registration is the only thing that makes the`.
+    lv_text1 = lv_text1 && ` sap-icon://SAP-icons-TNT/... URI in Group2.fragment.xml resolvable. An abap2UI5 app has no Component of its own to run that in, and no wire reaches IconPool (it is a module-level singleton, not a` &&
+               ` control, so control_by_id cannot address it and no global target exists for it). The port keeps the icon URI verbatim, so the first Frequent Operations tile renders without its glyph - in a real` &&
+               ` system as well as in the harness, since neither sap.tnt's library.js nor abap2UI5 registers the collection (both grepped 2026-08-21, zero hits). The render_smoke skip beside this used to call the` &&
+               ` missing icon a harness artefact; it now says what this says. Closing it needs an upstream registerFont-style global target, filed the same way as pr/card-manifest-object. // NOTE: The sample's asset` &&
+               ` paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/...` &&
+               ` instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the sentence used to claim the rewrite was 'declared by all 77 ports that do it',`.
+    lv_text1 = lv_text1 && ` which had stopped being true as the corpus grew past that day's snapshot - 126 ports do it now, and 17 of them declared it nowhere. Those 17 carry the declaration since today, so the claim holds` &&
+               ` again; a stale absolute count is what made it wrong, so this wording names the date the count was taken.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `ProductHomeLayout`                             class = `z2ui5_cl_smpc_app_350` path = `src/02/02/z2ui5_cl_smpc_app_350.clas.abap`
         score = 5
@@ -9480,7 +9484,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` OverflowToolbar stays empty: onInit lazily requires sap/ui/table/sample/TableExampleUtils and appends a ToolbarSpacer plus its createInfoButton( ) to it. That helper lives in the demo kit's own` &&
                ` sample folder, not in any UI5 library, and only opens a popover pointing at the sample's source. Every sap.ui.table sample of this batch drops it the same way. // NOTE: Unverified in a running`.
     lv_text1 = lv_text1 && ` system: whether the two-way bound FacetFilterItem selected flags return with the listClose round-trip and produce the expected server-side selection, and whether the noData Link appears when the` &&
-               ` filters leave no rows. **e2e-verified 2026-08-17** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_352.mjs).`.
+               ` filters leave no rows - that second half is NOT covered by the module and cannot be: it treats an empty result as a FAILURE (``the filtered table is empty``), so the noData path can never be reached` &&
+               ` there. Closing it would be easy - the Category facet carries 'Graphics Card' and 'Telekommunikation', neither of which matches any product's Category ('Graphic Cards' / 'Telecommunications'), so` &&
+               ` either selection yields zero rows. **e2e-verified 2026-08-17** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_352.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Aggregations`                                  class = `z2ui5_cl_smpc_app_352` path = `src/01/02/z2ui5_cl_smpc_app_352.clas.abap`
         score = 5
@@ -9678,8 +9684,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` stands. enableNotification IS @1.71, which is the floor itself, not above it - the linter's withinFloor accepts v <= floor. And selectionMode carries no @since at all (MultiSelectionPlugin.js, and` &&
                ` ui5/properties.json lists a since only for enableNotification), so the 'needs UI5 >= 1.100' conclusion had nothing behind it. The plugin itself is @1.64. Every other member the view uses resolves at`.
     lv_text1 = lv_text1 && ` or below 1.71, so the class now sits in src/01/02 where the scope rule puts it. // NOTE: Unverified in a running system: whether the plugin honours the bound limit / selectionMode /` &&
-               ` showHeaderSelector without a round-trip, and whether the selectionChange expression argument reports the selected count. **e2e-verified 2026-08-21** (nightly e2e interaction,` &&
-               ` meta/interactions/z2ui5_cl_smpc_app_356.mjs).`.
+               ` showHeaderSelector without a round-trip. Two of those three are genuinely covered - limit (seeded 20 against the plugin's own default of 200) and selectionMode (driven to 'Single' through the` &&
+               ` Select). showHeaderSelector is NOT: it is asserted only at seed time, and true is the plugin's own default, so a port that bound the ToggleButton and the plugin to different fields - or bound nothing` &&
+               ` - passes it. The ToggleButton is never pressed, so the no-round-trip leg is untested for that field. The binding itself is correct; the gap is in the coverage claim, and whether the selectionChange` &&
+               ` expression argument reports the selected count. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_356.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `MultiSelectionPlugin`                          class = `z2ui5_cl_smpc_app_356` path = `src/01/02/z2ui5_cl_smpc_app_356.clas.abap`
         score = 4
@@ -9873,16 +9881,18 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` pointed at the ABAP field. // NOTE: The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined with the columns the twelve table columns bind. The original computes` &&
                ` DeliveryDate from Date.now() with an i-mod-10 offset in 4-day steps; a fixed base date (2026-07-23) is used here so the port is deterministic - the corpus convention of app 164. ProductPicUrl values`.
     lv_text1 = lv_text1 && ` point at the OpenUI5 host per the asset-URL rule; the mock carries them host-relative. // NOTE: Unverified in a running system: whether rowSelectionChange delivers the index array as JSON to` &&
-               ` get_event_arg, whether the two bound Selects drive selectionMode/selectionBehavior without a round-trip, and the control_by_id clearSelection wire. **e2e-verified 2026-08-17** (nightly e2e` &&
-               ` interaction, meta/interactions/z2ui5_cl_smpc_app_361.mjs). // NOTE: The three buttons read the table's CURRENT selection, so rowSelectionChange transports ${$source>}.getSelectedIndices() and` &&
-               ` ${$source>}.getSelectedIndex() - what the original's getSelectedIndices( ) and getContextByIndex( ) ask the control for. Until 2026-08-21 the wire carried ${$parameters>/rowIndices} instead, and that` &&
-               ` parameter is documented as "array of row indices which selection has been CHANGED (either selected or deselected)": ctrl-clicking a second row reported [1] where the original reports [0,1], and` &&
-               ` deselecting the only selected row reported [0] where the original says "no item selected". The interaction module selected exactly one row, the single case where the two sets coincide, so the nightly`.
-    lv_text1 = lv_text1 && ` saw nothing. The toast also strips the JSON brackets now - MessageToast coerces the original's array to "0,1". // NOTE: The sample's asset paths are host-absolutized. The demo kit serves them` &&
-               ` relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own.` &&
-               ` Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the sentence used to claim the rewrite was 'declared by all 77 ports that do it', which had stopped being true as the corpus grew past` &&
-               ` that day's snapshot - 126 ports do it now, and 17 of them declared it nowhere. Those 17 carry the declaration since today, so the claim holds again; a stale absolute count is what made it wrong, so` &&
-               ` this wording names the date the count was taken.`.
+               ` get_event_arg, whether the two bound Selects drive selectionMode/selectionBehavior without a round-trip, and the control_by_id clearSelection wire. **e2e-verified 2026-08-17** - but that stamp` &&
+               ` predates the wire it certifies. On 2026-08-21 the t_arg was rewritten from ${$parameters>/rowIndices} to ${$source>}.getSelectedIndices( ) (see the deviation below), and the module was not changed:` &&
+               ` it selected exactly ONE row, the single case where the changed-rows parameter and the current selection coincide, so it kept passing across the rewrite without ever exercising either case that` &&
+               ` motivated it. The module selects a second row and checks both indices are reported since 2026-08-24 (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_361.mjs). // NOTE: The three buttons` &&
+               ` read the table's CURRENT selection, so rowSelectionChange transports ${$source>}.getSelectedIndices() and ${$source>}.getSelectedIndex() - what the original's getSelectedIndices( ) and`.
+    lv_text1 = lv_text1 && ` getContextByIndex( ) ask the control for. Until 2026-08-21 the wire carried ${$parameters>/rowIndices} instead, and that parameter is documented as "array of row indices which selection has been` &&
+               ` CHANGED (either selected or deselected)": ctrl-clicking a second row reported [1] where the original reports [0,1], and deselecting the only selected row reported [0] where the original says "no item` &&
+               ` selected". The interaction module selected exactly one row, the single case where the two sets coincide, so the nightly saw nothing. The toast also strips the JSON brackets now - MessageToast coerces` &&
+               ` the original's array to "0,1". // NOTE: The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve` &&
+               ` against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the sentence used to claim` &&
+               ` the rewrite was 'declared by all 77 ports that do it', which had stopped being true as the corpus grew past that day's snapshot - 126 ports do it now, and 17 of them declared it nowhere. Those 17`.
+    lv_text1 = lv_text1 && ` carry the declaration since today, so the claim holds again; a stale absolute count is what made it wrong, so this wording names the date the count was taken.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Selection`                                     class = `z2ui5_cl_smpc_app_361` path = `src/01/02/z2ui5_cl_smpc_app_361.clas.abap`
         score = 5
