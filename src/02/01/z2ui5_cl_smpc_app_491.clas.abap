@@ -62,7 +62,7 @@ CLASS z2ui5_cl_smpc_app_491 IMPLEMENTATION.
                 " composed on the client from the two event parameters
                 )->a( n = `selectionChange` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                           t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` )
-                                                                                           ( `Event 'selectionChange': \{0?Selected:Deselected\} '\{1\}'` )
+                                                                                           ( `Event 'selectionChange': {0?Selected:Deselected} '{1}'` )
                                                                                            ( `${$parameters>/selected}` )
                                                                                            ( `${$parameters>/changedItem}.getText()` ) ) )
                 " handleSelectionFinish lists every selected item; a UI5 expression has

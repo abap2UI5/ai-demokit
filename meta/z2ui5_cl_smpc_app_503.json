@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "IMPROVISED",
-      "what": "onInit registers a JavaScript suggestionRowValidator that turns the selected row into an Item(key = second cell, text = first cell) - that is what fills the Input's selectedKey. abap2UI5 cannot register such a callback, so the port takes the key straight from the selected row (${$parameters>/selectedRow}.getCells()[1].getText()) and shows it; the Input's own getSelectedKey( ) therefore stays empty, which is invisible in this sample but is the behaviour that is lost."
+      "what": "The original sets a suggestionRowValidator, which is what makes Input.setSelectionRow build an item and route it through _getDisplayText - with textFormatMode=\"ValueKey\" the field then reads `Notebook Basic 15 (HT-1000)`. Without the validator UI5 falls back to _DEFAULTRESULT_TABULAR (the first text cell), so the port's field reads `Notebook Basic 15` and the ` (HT-1000)` suffix is lost. This is visible, not invisible: textFormatMode=\"ValueKey\" is kept for fidelity with the original view but is dead in the port, because nothing here can reach _getDisplayText. The selected-key readout Text below is still correct - it is fed from the transported cell."
     },
     {
       "type": "LIVE_TEST",

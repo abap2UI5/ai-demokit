@@ -5,10 +5,15 @@
   "file": "src/01/01/z2ui5_cl_smpc_app_507.clas.abap",
   "batch": "b41",
   "audit": {
-    "frontend_action": false,
-    "event_t_arg": false
+    "frontend_action": true,
+    "event_t_arg": true
   },
   "status": "generated",
   "checked": null,
-  "deviations": []
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onInit raises the model size limit to 100000 (\"the default limit of the model is set to 100. We want to show all the entries.\"). Without it the bound suggestionItems and suggestionRows stop at 100 of the 123 products, and with the declared descending SupplierName sorter the rows cut are whole supplier groups - so the grouping this sample exists to show would render 9 of its 12 groups."
+    }
+  ]
 }

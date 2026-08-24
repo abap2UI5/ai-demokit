@@ -26,6 +26,10 @@
     {
       "type": "NOTE",
       "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Added 2026-08-23: this port did the rewrite without declaring it, one of 17 found by re-counting the corpus-wide claim that every port doing it had a declaration."
+    },
+    {
+      "type": "NOTE",
+      "what": "onInit raises the model size limit to 100000 (\"The default limit of the model is set to 100. We want to show all the entries.\"). The port issues cs_event-set_size_limit for MAIN; without it both Inputs' bound suggestionItems would stop at 100 of the 123 products. The SelectDialog's own list grows by paging, so it does not need the popup half."
     }
   ]
 }

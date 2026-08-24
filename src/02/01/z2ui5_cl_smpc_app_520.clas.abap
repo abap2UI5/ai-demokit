@@ -106,6 +106,9 @@ CLASS z2ui5_cl_smpc_app_520 IMPLEMENTATION.
 
           )->tag( `NotificationListItem`
               )->a( n = `title`           v = `{TITLE}`
+              " _addItemsToGroup creates each item with unread: true; ListItemBase
+              " defaults it to false, so without this every notification renders read
+              )->a( n = `unread`          v = `true`
               )->a( n = `showCloseButton` v = `true`
               )->a( n = `datetime`        v = `{DATETIME}`
               )->a( n = `priority`        v = `{PRIORITY}`

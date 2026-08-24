@@ -26,6 +26,10 @@
     {
       "type": "NOTE",
       "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Added 2026-08-23: this port did the rewrite without declaring it, one of 17 found by re-counting the corpus-wide claim that every port doing it had a declaration."
+    },
+    {
+      "type": "NOTE",
+      "what": "ListBase._onSwipe fires the swipe event synchronously BEFORE rendering the swipe content (\"fire event earlier to let the user change swipeContent according to list item\"), so upstream the button's text and type are already correct the instant it appears. Here they follow a round-trip, so for its duration the button still shows the previous direction's text - which is also why swipe_text/swipe_type are seeded rather than left initial (an empty string on the ButtonType-typed property would need omit_initial_paths). The original's Button carries neither text nor type; both are added here to carry the bound values."
     }
   ]
 }

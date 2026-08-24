@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "POST_171",
-      "what": "sap.m.List.itemActionCount and the sap.m.ListItemAction control are both @since 1.137 - they are the subject of this sample, so they are kept 1:1 and the port needs a UI5 runtime >= 1.137."
+      "what": "sap.m.List.itemActionCount and the sap.m.ListItemAction control are both @since 1.137 - they are the subject of this sample, so they are kept 1:1 and the port needs a UI5 runtime >= 1.137. Also sap.m.List.itemActionPress, @since 1.137 (ListBase.js:602) - the port wires it, and view-gates only excused it by an accidental substring match on the control name."
     },
     {
       "type": "NOTE",

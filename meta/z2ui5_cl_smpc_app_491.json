@@ -26,6 +26,14 @@
     {
       "type": "LIVE_TEST",
       "what": "Both wires and the clear icon are unverified in a running system."
+    },
+    {
+      "type": "NOTE",
+      "what": "The client-composed toast template is written with BARE {0}/{1} placeholders. It had carried \\{0\\}, which is wrong in a backtick literal: only |...| templates treat \\{ as an escape, so the backslashes were real characters and formatTemplate's /\\{(\\d+)...\\}/ never matched - the placeholders rendered verbatim. The escape is not needed at all on this path: the value lands in an EVENT attribute, which XMLTemplateProcessor routes through EventHandlerResolver without a BindingParser pass. An ordinary attribute is the opposite case and still needs \\{ (see app 523's app:template)."
+    },
+    {
+      "type": "NOTE",
+      "what": "Both original handlers pass MessageToast.show(text, { width: \"auto\" }). The round-trip toast could carry it (message_toast_display has a width parameter, and app 281 passes width = `auto`), and this port does not - that line renders in the default 15em toast and wraps. For the client-composed leg the option genuinely cannot travel, which is the boundary app 281's sidecar also records."
     }
   ]
 }

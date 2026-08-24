@@ -67,6 +67,11 @@ CLASS z2ui5_cl_smpc_app_521 IMPLEMENTATION.
             )->ele( `Input`
                 )->a( n = `id`                     v = `productInput`
                 )->a( n = `textFormatMode`         v = `KeyValue`
+                " selectedKey is bindable, and a property-binding update calls the
+                " control's own setSelectedKey (ManagedObjectBindingSupport), so the
+                " KeyValue rendering `(HT-1000) Notebook Basic 15` comes out of the
+                " model - and survives a view rebuild, which a control call would not
+                )->a( n = `selectedKey`            v = client->_bind( selected_key )
                 )->a( n = `placeholder`            v = `Enter product`
                 )->a( n = `showSuggestion`         v = `true`
                 )->a( n = `showValueHelp`          v = `true`
@@ -95,6 +100,12 @@ CLASS z2ui5_cl_smpc_app_521 IMPLEMENTATION.
 
     client->view_display( view->stringify( ) ).
 
+    " onInit: oModel.setSizeLimit(100000) - without it the JSONModel caps a bound
+    " aggregation at 100 and the last 23 of the 123 products never reach the
+    " suggestion list (the app-252 / app-444 idiom)
+    client->follow_up_action( val   = client->cs_event-set_size_limit
+                              t_arg = VALUE #( ( `100000` ) ( `MAIN` ) ) ).
+
   ENDMETHOD.
 
 
@@ -121,10 +132,14 @@ CLASS z2ui5_cl_smpc_app_521 IMPLEMENTATION.
         selected_key = client->get_event_arg( ).
 
       WHEN `VALUE_HELP_CLOSE`.
-        " onValueHelpClose writes the picked title into the first Input
-        DATA(title) = client->get_event_arg( ).
-        IF title IS NOT INITIAL.
-          value = title.
+        " onValueHelpDialogClose reads the item's DESCRIPTION - the ProductId - and
+        " writes it to BOTH setSelectedKey on the Input and setText on the indicator
+        DATA(picked_key) = client->get_event_arg( ).
+        IF picked_key IS NOT INITIAL.
+          " one field drives both: the Input's selectedKey (which renders the
+          " `(key) text` form) and the indicator Text - the original sets both to
+          " the same description, and a suggestion pick lands on the same value
+          selected_key = picked_key.
         ENDIF.
         client->popup_destroy( ).
 
@@ -148,7 +163,7 @@ CLASS z2ui5_cl_smpc_app_521 IMPLEMENTATION.
             )->a( n = `search`  v = client->_event( val   = `VALUE_HELP_SEARCH`
                                                     t_arg = VALUE #( ( `${$parameters>/value}` ) ) )
             )->a( n = `confirm` v = client->_event( val   = `VALUE_HELP_CLOSE`
-                                                    t_arg = VALUE #( ( `${$parameters>/selectedItem}.getTitle()` ) ) )
+                                                    t_arg = VALUE #( ( `${$parameters>/selectedItem}.getDescription()` ) ) )
             )->a( n = `cancel`  v = client->_event( `VALUE_HELP_CLOSE` )
 
             )->tag( `StandardListItem`
@@ -159,6 +174,11 @@ CLASS z2ui5_cl_smpc_app_521 IMPLEMENTATION.
                 )->a( n = `description`      v = `{PRODUCTID}` ).
 
     client->popup_display( popup->stringify( ) ).
+
+    " the popup slot keeps its own model, so the raised limit has to be repeated
+    " for it or the dialog itself stops at 100 rows
+    client->follow_up_action( val   = client->cs_event-set_size_limit
+                              t_arg = VALUE #( ( `100000` ) ( `POPUP` ) ) ).
 
   ENDMETHOD.
 
