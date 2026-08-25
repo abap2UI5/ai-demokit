@@ -22,10 +22,6 @@
     },
     {
       "type": "NOTE",
-      "what": "the Price cell is a composite currency binding in the sample (parts Price + CurrencyCode through sap.ui.model.type.Currency with showMeasure TRUE, so the unit is part of the text). The port binds the two fields as one composite text ('{PRICE} {CURRENCYCODE}'), which is what that formatter renders, since the mock's prices are plain numbers."
-    },
-    {
-      "type": "NOTE",
       "what": "the controller's oModel.setSizeLimit(1000000) has no counterpart: the port ships all 123 rows of sap/ui/demo/mock/products.json /ProductCollection to the client in one model, so the 100-entry default limit the call works around never applies."
     },
     {

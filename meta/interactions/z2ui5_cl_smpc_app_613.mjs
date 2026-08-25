@@ -1,11 +1,14 @@
 // the two grouped MultiInputs and the grouping sorter that reaches both bindings
 //
-// NOTE on the counts: the binding holds all 123 mock rows, a JSONModel's
-// default sizeLimit instantiates 100 of them, and the GROUPING sorter adds one
-// separator per group on top — measured 100 sap.ui.core.Item + 11
-// sap.ui.core.SeparatorItem. The separators are the point: they exist only
-// because `group: true` survived into the binding, so they are asserted rather
-// than counted around (2026-08-22).
+// NOTE on the counts: the binding holds all 123 mock rows and the port raises
+// the model's size limit the way the sample's controller does
+// (setSizeLimit(1000000) -> follow_up_action SET_SIZE_LIMIT, which also
+// refreshes the model), so the aggregation instantiates ALL 123 — it stopped
+// at the JSONModel's default 100 until that call was added (2026-08-25).
+// The GROUPING sorter adds one separator per rendered group on top. The
+// separators are the point: they exist only because `group: true` survived
+// into the binding, so they are asserted rather than counted around
+// (2026-08-22).
 import { waitForUi5, ui5All } from '../../scripts/lib-e2e.mjs';
 
 export default async (page, expect) => {
@@ -16,7 +19,7 @@ export default async (page, expect) => {
     const plain = items.filter((i) => i.getMetadata().getName() === 'sap.ui.core.Item').length;
     const seps = items.filter((i) => i.getMetadata().getName() === 'sap.ui.core.SeparatorItem').length;
     const b = list.getBinding('suggestionItems');
-    return plain === 100 && seps > 1 && b && b.getLength() === 123;
+    return plain === 123 && seps > 1 && b && b.getLength() === 123;
   }, 'the grouped core:Item suggestions never reached productMIWithList');
   await waitForUi5(page, () => {
     const t = ui5All().find((c) => c.getId().endsWith('productMIWithTable'));
@@ -24,7 +27,7 @@ export default async (page, expect) => {
     const rows = t.getSuggestionRows();
     const plain = rows.filter((i) => i.getMetadata().getName() === 'sap.m.ColumnListItem').length;
     const b = t.getBinding('suggestionRows');
-    return plain === 100 && rows.length > plain && t.getSuggestionColumns().length === 4
+    return plain === 123 && rows.length > plain && t.getSuggestionColumns().length === 4
       && b && b.getLength() === 123;
   }, 'the grouped suggestion rows and four columns never reached productMIWithTable');
   // The separator/header items above are the assertion that the grouping

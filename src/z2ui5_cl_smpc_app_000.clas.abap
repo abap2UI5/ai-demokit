@@ -4327,19 +4327,17 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` and multiInput3: picking a suggestion row builds a Token whose key is the row's first cell (Name) and whose text is 'key(price cell)'. The bundled z2ui5.cc.MultiInputExt companion installs exactly` &&
                ` that validator, so each tabular MultiInput carries one alongside it with TokenKeyCell 0 (Name) and TokenTextCells 3 (the Price cell), and the token is built on the client with the same key and` &&
                ` 'Name(Price Currency)' text as the original. The two companion tags are the only addition vs the original view.xml, and the tokens stay client-side exactly as they do there. multiInput4 has no` &&
-               ` validator in the sample either - a core:Item suggestion becomes a token by itself. // NOTE: the Price cell is a composite currency binding in the sample (parts Price + CurrencyCode through`.
-    lv_text1 = lv_text1 && ` sap.ui.model.type.Currency with showMeasure TRUE, so the unit is part of the text). The port binds the two fields as one composite text ('{PRICE} {CURRENCYCODE}'), which is what that formatter` &&
-               ` renders, since the mock's prices are plain numbers. // NOTE: handleFormattedTextLinkPress calls oEvent.preventDefault( ) and then MessageToast.show with my/at = Popup.Dock.CenterCenter. The veto` &&
-               ` rides along on the wire as s_ctrl-check_prevent_default (baked per wire at render time), the toast is composed on the way back through follow_up_action control_global MESSAGE_TOAST show. The` &&
-               ` CenterCenter placement is not reachable through that global target, so the toast keeps its default bottom placement. // NOTE: the first MultiInput's binding-info carries the sample's sorter { path:` &&
-               ` 'Name' } 1:1 as sorter { path: 'NAME' } over the backend table; the sorted 123 rows come from sap/ui/documentation/sdk/products.json /ProductCollection. // LIVE-TEST: the e2e interaction module now` &&
-               ` covers what this deviation used to name: the z2ui5.cc.MultiInputExt companions are asserted on both tabular MultiInputs with TokenKeyCell 0 and TokenTextCells 3, their tokenFromRow( ) builds the`.
-    lv_text1 = lv_text1 && ` sample's token from a real bound suggestion row, the tokens aggregation is empty with no binding behind it, and the Link inside the value state message fires its preventDefault wire and raises the` &&
-               ` toast (2026-08-23, headless). What stays unverified in a running system is the interaction a person performs: opening the suggestion popover and picking a row so that MultiInput itself calls the` &&
-               ` registered validator - the assertion reaches the validator's code through the companion rather than through the popup, which measures zero unthemed. // NOTE: The price cell keeps the original's` &&
-               ` composite sap.ui.model.type.Currency binding rather than binding the raw field. The type is not a pass-through: NumberFormat's currency instance applies grouping and the currency's own fraction` &&
-               ` digits, so EUR renders 956.00 / 1,249.00 where the bare field renders 956 / 1249. The earlier justification - that the fold is what the formatter renders because the mock's prices are plain numbers -` &&
-               ` was wrong on both halves.`.
+               ` validator in the sample either - a core:Item suggestion becomes a token by itself. // NOTE: handleFormattedTextLinkPress calls oEvent.preventDefault( ) and then MessageToast.show with my/at =`.
+    lv_text1 = lv_text1 && ` Popup.Dock.CenterCenter. The veto rides along on the wire as s_ctrl-check_prevent_default (baked per wire at render time), the toast is composed on the way back through follow_up_action` &&
+               ` control_global MESSAGE_TOAST show. The CenterCenter placement is not reachable through that global target, so the toast keeps its default bottom placement. // NOTE: the first MultiInput's` &&
+               ` binding-info carries the sample's sorter { path: 'Name' } 1:1 as sorter { path: 'NAME' } over the backend table; the sorted 123 rows come from sap/ui/documentation/sdk/products.json` &&
+               ` /ProductCollection. // LIVE-TEST: the e2e interaction module now covers what this deviation used to name: the z2ui5.cc.MultiInputExt companions are asserted on both tabular MultiInputs with` &&
+               ` TokenKeyCell 0 and TokenTextCells 3, their tokenFromRow( ) builds the sample's token from a real bound suggestion row, the tokens aggregation is empty with no binding behind it, and the Link inside` &&
+               ` the value state message fires its preventDefault wire and raises the toast (2026-08-23, headless). What stays unverified in a running system is the interaction a person performs: opening the`.
+    lv_text1 = lv_text1 && ` suggestion popover and picking a row so that MultiInput itself calls the registered validator - the assertion reaches the validator's code through the companion rather than through the popup, which` &&
+               ` measures zero unthemed. // NOTE: The price cell keeps the original's composite sap.ui.model.type.Currency binding rather than binding the raw field. The type is not a pass-through: NumberFormat's` &&
+               ` currency instance applies grouping and the currency's own fraction digits, so EUR renders 956.00 / 1,249.00 where the bare field renders 956 / 1249. The earlier justification - that the fold is what` &&
+               ` the formatter renders because the mock's prices are plain numbers - was wrong on both halves.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputFilteringSuggestions`                class = `z2ui5_cl_smpc_app_612` path = `src/02/01/z2ui5_cl_smpc_app_612.clas.abap`
         score = 5
@@ -4355,20 +4353,18 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` validator with MultiInput.addValidator( ) on productMIWithTable: picking a suggestion row builds a Token whose key is the row's first cell (Name) and whose text is 'key(price cell)'. The bundled` &&
                ` z2ui5.cc.MultiInputExt companion installs exactly that validator, so the MultiInput carries one alongside it with TokenKeyCell 0 (Name) and TokenTextCells 3 (the Price cell), and the token is built` &&
                ` on the client with the same key and 'Name(Price Currency)' text as the original. That companion tag is the only addition vs the original view.xml, and the tokens stay client-side exactly as they do` &&
-               ` there. productMIWithList has no validator in the sample either - a core:Item suggestion becomes a token by itself. // NOTE: the Price cell is a composite currency binding in the sample (parts Price +`.
-    lv_text1 = lv_text1 && ` CurrencyCode through sap.ui.model.type.Currency with showMeasure TRUE, so the unit is part of the text). The port binds the two fields as one composite text ('{PRICE} {CURRENCYCODE}'), which is what` &&
-               ` that formatter renders, since the mock's prices are plain numbers. // NOTE: the controller's oModel.setSizeLimit(1000000) has no counterpart: the port ships all 123 rows of` &&
-               ` sap/ui/demo/mock/products.json /ProductCollection to the client in one model, so the 100-entry default limit the call works around never applies. // LIVE-TEST: the e2e interaction module now covers` &&
-               ` what this deviation used to name: the grouping sorter is asserted through the sap.ui.core.SeparatorItem entries it produces in both suggestion aggregations, and the z2ui5.cc.MultiInputExt companion` &&
-               ` is asserted on productMIWithTable with TokenKeyCell 0 and TokenTextCells 3, its tokenFromRow( ) building the sample's token from a real bound suggestion row with an empty, unbound tokens aggregation` &&
-               ` behind it (2026-08-23, headless). What stays unverified in a running system is the interaction a person performs: opening either suggestion popover, seeing the grey supplier group headers rendered in`.
-    lv_text1 = lv_text1 && ` it, and picking a row so that MultiInput itself calls the registered validator. // NOTE: The price cell keeps the original's composite sap.ui.model.type.Currency binding rather than binding the raw` &&
-               ` field. The type is not a pass-through: NumberFormat's currency instance applies grouping and the currency's own fraction digits, so EUR renders 956.00 / 1,249.00 where the bare field renders 956 /` &&
-               ` 1249. The earlier justification - that the fold is what the formatter renders because the mock's prices are plain numbers - was wrong on both halves.`.
+               ` there. productMIWithList has no validator in the sample either - a core:Item suggestion becomes a token by itself. // NOTE: the controller's oModel.setSizeLimit(1000000) has no counterpart: the port`.
+    lv_text1 = lv_text1 && ` ships all 123 rows of sap/ui/demo/mock/products.json /ProductCollection to the client in one model, so the 100-entry default limit the call works around never applies. // LIVE-TEST: the e2e` &&
+               ` interaction module now covers what this deviation used to name: the grouping sorter is asserted through the sap.ui.core.SeparatorItem entries it produces in both suggestion aggregations, and the` &&
+               ` z2ui5.cc.MultiInputExt companion is asserted on productMIWithTable with TokenKeyCell 0 and TokenTextCells 3, its tokenFromRow( ) building the sample's token from a real bound suggestion row with an` &&
+               ` empty, unbound tokens aggregation behind it (2026-08-23, headless). What stays unverified in a running system is the interaction a person performs: opening either suggestion popover, seeing the grey` &&
+               ` supplier group headers rendered in it, and picking a row so that MultiInput itself calls the registered validator. // NOTE: The price cell keeps the original's composite sap.ui.model.type.Currency` &&
+               ` binding rather than binding the raw field. The type is not a pass-through: NumberFormat's currency instance applies grouping and the currency's own fraction digits, so EUR renders 956.00 / 1,249.00`.
+    lv_text1 = lv_text1 && ` where the bare field renders 956 / 1249. The earlier justification - that the fold is what the formatter renders because the mock's prices are plain numbers - was wrong on both halves.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputGrouping`                            class = `z2ui5_cl_smpc_app_613` path = `src/01/01/z2ui5_cl_smpc_app_613.clas.abap`
-        score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         notes = lv_text1 ) ).
 
@@ -10148,23 +10144,26 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` OpenUI5 host per the asset-URL rule; the mock carries them host-relative. The Quantity and Delivery Date columns keep the original's typed complex bindings 1:1, with their path switched to the ABAP` &&
                ` field name. // IMPROVISED: The footer OverflowToolbar stays empty: onInit lazily requires sap/ui/table/sample/TableExampleUtils and appends a ToolbarSpacer plus its createInfoButton( ) to it. That` &&
                ` helper lives in the demo kit's own sample folder, not in any UI5 library, and only opens a popover pointing at the sample's source - there is nothing to port it to. Every sap.ui.table sample of this` &&
-               ` batch drops it the same way. // LIVE-TEST: Unverified in a running system: whether the sort event's prevented default plus the server-side SORT produce the expected order for each column, and whether`.
-    lv_text1 = lv_text1 && ` the bound Column.sorted/sortOrder pair renders the header indicator (the module asserts getSortOrder( ) === 'Ascending', i.e. the property value, never the rendered sapUiTableColSorted class - which` &&
-               ` is the half that was actually broken). (Reopened 2026-08-21: this had been closed as live-verified, but the interaction module only presses the three toolbar buttons - it never opens a column header` &&
-               ` menu, so the sort event and its prevented default were never fired. The toolbar legs it does drive are genuinely covered.) // NOTE: sortCategories passes bAdd = true to oTable.sort( ), and` &&
-               ` Table.pushSortedColumn appends the column to the active sorter list rather than replacing it - so whatever was already sorting keeps precedence and Category is added behind it. The port keeps that` &&
-               ` list as ordered model state (the equivalent of _aSortedColumns) - on every path that sorts, which until 2026-08-24 was only the toolbar one. Column._sort ends in oTable.pushSortedColumn( this ), and` &&
-               ` onInit's oTable.sort( ) pushes Name, so both the column-header menu and the initial sort put a column on that list. The port's sort_clear( ) emptied it and neither path put anything back, so a "Sort`.
-    lv_text1 = lv_text1 && ` Categories in addition to current sorting" press straight after load, or after any column-menu sort, ordered by Category ALONE while sort_name still displayed Ascending - the same` &&
-               ` header-lies-about-the-rows defect this deviation records as fixed for the toolbar path, still live on the other two. Both now append their column and applies it from the last key to the first with` &&
-               ` SORT ... STABLE, since one ABAP SORT expresses one key. Until 2026-08-21 the handler issued a fresh single-key SORT, which reordered the whole table while leaving the other columns' bound sortOrder` &&
-               ` indicators standing: the header claimed Name-ascending while the rows were Category-ascending, and the button's own tooltip - "Sort Categories in addition to current sorting" - was kept while the` &&
-               ` behaviour was not. // NOTE: The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so` &&
-               ` the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the sentence used to claim the rewrite`.
-    lv_text1 = lv_text1 && ` was 'declared by all 77 ports that do it', which had stopped being true as the corpus grew past that day's snapshot - 126 ports do it now, and 17 of them declared it nowhere. Those 17 carry the` &&
-               ` declaration since today, so the claim holds again; a stale absolute count is what made it wrong, so this wording names the date the count was taken. // NOTE: **e2e-caught 2026-08-22**: the sort ran` &&
-               ` but the table came back in its original order. The cause is the transpiled backend: ``SORT <itab> BY (field)`` - the DYNAMIC component form - loses its BY clause entirely (the emitted JS is` &&
-               ` ``abap.statements.sort(t, {})``), so every sort was a no-op. The component is named statically per field now, in a CASE. Apps 298, 362 and 571 all carried the dynamic form and all three are fixed.`.
+               ` batch drops it the same way. // LIVE-TEST: Unverified in a running system: whether the sort event's prevented default plus the server-side SORT produce the expected order for each column, and whether` &&
+               ` the bound Column.sorted/sortOrder pair renders the header indicator. (Reopened 2026-08-21: this had been closed as live-verified, but the interaction module only presses the three toolbar buttons -`.
+    lv_text1 = lv_text1 && ` it never fired the column sort event, so its prevented default was never exercised, and it asserted getSortOrder( ) rather than the rendered sapUiTableColSorted class, which is the half that was` &&
+               ` actually broken. The toolbar legs it does drive are genuinely covered.) Both gaps are closed in the module since 2026-08-25: every indicator assertion reads sapUiTableColSorted / sapUiTableColSortedD` &&
+               ` off the column's own header cell, and the last leg calls Column._sort( ) - the method the header menu's Sort entry calls, which ends in oTable.fireSort( ) and returns before setSortOrder when a` &&
+               ` handler vetoes - so the check_prevent_default wire and both event args are driven exactly as a menu press drives them. Pending one green nightly run. // NOTE: sortCategories passes bAdd = true to` &&
+               ` oTable.sort( ), and Table.pushSortedColumn appends the column to the active sorter list rather than replacing it - so whatever was already sorting keeps precedence and Category is added behind it.` &&
+               ` The port keeps that list as ordered model state (the equivalent of _aSortedColumns) - on every path that sorts, which until 2026-08-24 was only the toolbar one. Column._sort ends in`.
+    lv_text1 = lv_text1 && ` oTable.pushSortedColumn( this ), and onInit's oTable.sort( ) pushes Name, so both the column-header menu and the initial sort put a column on that list. The port's sort_clear( ) emptied it and` &&
+               ` neither path put anything back, so a "Sort Categories in addition to current sorting" press straight after load, or after any column-menu sort, ordered by Category ALONE while sort_name still` &&
+               ` displayed Ascending - the same header-lies-about-the-rows defect this deviation records as fixed for the toolbar path, still live on the other two. Both now append their column and applies it from` &&
+               ` the last key to the first with SORT ... STABLE, since one ABAP SORT expresses one key. Until 2026-08-21 the handler issued a fresh single-key SORT, which reordered the whole table while leaving the` &&
+               ` other columns' bound sortOrder indicators standing: the header claimed Name-ascending while the rows were Category-ascending, and the button's own tooltip - "Sort Categories in addition to current` &&
+               ` sorting" - was kept while the behaviour was not. // NOTE: The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document`.
+    lv_text1 = lv_text1 && ` root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the` &&
+               ` sentence used to claim the rewrite was 'declared by all 77 ports that do it', which had stopped being true as the corpus grew past that day's snapshot - 126 ports do it now, and 17 of them declared` &&
+               ` it nowhere. Those 17 carry the declaration since today, so the claim holds again; a stale absolute count is what made it wrong, so this wording names the date the count was taken. // NOTE:` &&
+               ` **e2e-caught 2026-08-22**: the sort ran but the table came back in its original order. The cause is the transpiled backend: ``SORT <itab> BY (field)`` - the DYNAMIC component form - loses its BY` &&
+               ` clause entirely (the emitted JS is ``abap.statements.sort(t, {})``), so every sort was a no-op. The component is named statically per field now, in a CASE. Apps 298, 362 and 571 all carried the` &&
+               ` dynamic form and all three are fixed.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Sorting`                                       class = `z2ui5_cl_smpc_app_362` path = `src/01/02/z2ui5_cl_smpc_app_362.clas.abap`
         score = 5

@@ -45,11 +45,20 @@ export default async (page, expect) => {
     const ext = ui5All().find((c) => c.getMetadata().getName() === 'z2ui5.cc.MultiInputExt'
       && c.getProperty('MultiInputId') === id);
     const mi = ui5All().find((c) => c.getId().endsWith(id));
-    const token = ext.tokenFromRow(mi.getSuggestionRows()[0]);
-    // row 0 of the mock is Notebook Basic 15 / HT-1000 / … / 956 EUR;
-    // the Currency type renders it with the currency's two decimals
+    const row = mi.getSuggestionRows()[0];
+    const token = ext.tokenFromRow(row);
+    // row 0 of the mock is Notebook Basic 15 / HT-1000 / … / 956 EUR, and the
+    // price cell is the sample's composite sap.ui.model.type.Currency binding:
+    // NumberFormat gives it the currency's two decimals AND separates the code
+    // with a NO-BREAK space (trailingCurrencyCode defaults true, so the pattern
+    // is `sap-standard-alphaNextToNumber` = `#,##0.00\u00a0¤`). `\s` matches that
+    // space as well as a plain one, and the token text is composed from the
+    // cell itself rather than spelled out a second time — a formatted currency
+    // string is the browser's, not the port's (same rule as app 196).
+    const price = row.getCells()[3].getText();
     return token && token.getKey() === 'Notebook Basic 15'
-      && token.getText() === 'Notebook Basic 15(956.00 EUR)';
+      && /^956\.00\sEUR$/.test(price)
+      && token.getText() === `Notebook Basic 15(${price})`;
   }), 'the companion did not build the sample\'s token from a suggestion row');
   // the tokens are client-side now: nothing is bound, so the aggregation is
   // empty until somebody picks - which is what the original does too

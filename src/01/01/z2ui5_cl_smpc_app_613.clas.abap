@@ -142,7 +142,8 @@ CLASS z2ui5_cl_smpc_app_613 IMPLEMENTATION.
                     )->tag( `Label`
                         )->a( n = `text` v = `{SUPPLIERNAME}`
                     )->tag( `Label`
-                        )->a( n = `text` v = `{PRICE} {CURRENCYCODE}`
+                        )->a( n = `text` v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCYCODE'\}],| &&
+                                                 | type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: true\} \}|
 
                 )->end(
             )->end(
