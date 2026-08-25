@@ -172,6 +172,26 @@ the per-port modules here):
     quickCreate popup, the LIVE_CHANGE filter, announceSearchMatchCount read
     off the static area's polite aria-live node, and MENU_TOGGLE resetting the
     search
+  the URLHELPER frontend action, read off sap.m.URLHelper's own public
+    `redirect` event (2026-08-25): 084 - all four legs (TRIGGER_TEL,
+    TRIGGER_SMS, TRIGGER_EMAIL, REDIRECT) assert the FINISHED URI, so a
+    { TEL: '...' } object-literal t_arg that does not arrive shows up as a
+    bare `tel:`/`sms:` - the exact defect the retired 2026-07-27 live note
+    could not see. Nothing round-trips: follow_up_action( ) wired in the view
+    IS the client event, so there is no POST to wait for and the redirect
+    event (fired before the browser is handed the URI) is the only observable
+    end of the chain
+  PlanningCalendar appointment/interval wires (2026-08-25): 108 (both
+    handleAppointmentSelect MessageBox legs - message_box_display, NOT a
+    toast, which is what retired the port's 2026-07-27 live check; the
+    appointment leg driven by a real focus+Enter selection on a rendered
+    appointment so the calendar's own selection and getSelectedAppointments()
+    run, the no-appointment leg fired with the `appointments` array UI5 only
+    ever passes for a GROUP appointment; the showDayNamesLine ToggleButton
+    moving the calendar's property through the shared two-way bound field with
+    no round-trip; and intervalSelect inserting the sample's 'new appointment'
+    at the LOCAL parts of the selected interval, asserted against the
+    parameters the calendar actually delivered)
   still open: 353's four drag & drop wires (HTML5 dnd, which Playwright's
     dragTo cannot produce for sap.ui.table's pointer extension - dispatching
     the DataTransfer events by hand would test the harness), 354's
@@ -182,4 +202,16 @@ the per-port modules here):
     calling setRowActionCount(2) + invalidate() DIRECTLY on the table through
     its own API - bypassing the port - still leaves every row without a
     _rowAction, which rules the port out. 359's module therefore closes only
-    the bound-rowActionCount half and its LIVE_TEST stays OPEN
+    the bound-rowActionCount half and its LIVE_TEST stays OPEN.
+    Two more from 2026-08-25: 084's OS hand-off - headless Chromium registers
+    no external-protocol handler, so tel:/sms:/mailto: are dropped AFTER the
+    redirect event has fired and no dialer, SMS or mail client can be seen
+    opening, and its Website leg's actual LOAD of http://www.sap.com is
+    aborted at a context route (no egress, and a foreign page inside the run
+    is what a redirect check must not do); and 108's selected/deselected WORD,
+    which rides on a boolean t_arg the transpiled runtime hands the backend as
+    the string 'true' where `= abap_true` cannot match - so the harness always
+    reads "deselected" while a real system reads "selected". Asserting the
+    word would fail a correct port, so that half stays with the human live
+    run, as does the group-appointment path that alone produces the
+    no-appointment leg from a gesture
