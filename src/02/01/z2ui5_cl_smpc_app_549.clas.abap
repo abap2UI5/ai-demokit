@@ -553,6 +553,7 @@ CLASS z2ui5_cl_smpc_app_549 IMPLEMENTATION.
           INSERT VALUE #( title    = sel_title
                           text     = sel_text
                           type     = sel_type
+                          aria     = `None`
                           start_at = sel_start
                           end_at   = sel_end ) INTO TABLE t_appointments.
         ENDIF.
@@ -614,6 +615,7 @@ CLASS z2ui5_cl_smpc_app_549 IMPLEMENTATION.
         " update takes the view down (found by the new linter rule)
         INSERT VALUE #( title    = `New Appointment`
                         type     = `Type01`
+                        aria     = `None`
                         start_at = iso_of( 1 )
                         end_at   = iso_of( 6 ) ) INTO TABLE t_appointments.
         client->message_toast_display( |Appointment with title \n'New Appointment'\n has been created| ).

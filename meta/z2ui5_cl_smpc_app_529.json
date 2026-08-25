@@ -17,7 +17,7 @@
     },
     {
       "type": "NOTE",
-      "what": "onMessagesButtonPress builds a MessagePopover over the message> model in the controller and toggles it at the button. The port declares the same MessagePopover in the MessagesIndicator's dependents and toggles it roundtrip-free through control_by_id, which is why structural-diff reports MessagePopover and MessageItem as control extra - the original's view declares neither. The Messaging registration of the single Error message is seeded as a message row instead."
+      "what": "onMessagesButtonPress builds a MessagePopover over the message> model in the controller and toggles it at the button. The port declares the same MessagePopover in the MessagesIndicator's dependents and toggles it roundtrip-free through control_by_id, which is why structural-diff reports MessagePopover and MessageItem as control extra - the original's view declares neither. The controller's onInit Messaging.addMessages seed (one Error 'Something wrong happened') goes through the z2ui5.cc.MessageManager companion control (app 065/166 idiom), which is the third control reported extra. That bridge is what feeds the message> model at all: this note used to say the message was 'seeded as a message row instead', but seeding t_messages without binding it left the model empty, and sap.f.semantic.SemanticConfiguration binds MessagesIndicator.visible to a formatter over message>/ - so the indicator did not render and its popover could never be opened."
     },
     {
       "type": "NOTE",

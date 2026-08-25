@@ -74,6 +74,7 @@ CLASS z2ui5_cl_smpc_app_529 IMPLEMENTATION.
         )->a( n = `xmlns`          v = `sap.m`
         )->a( n = `xmlns:layout`   v = `sap.ui.layout`
         )->a( n = `xmlns:semantic` v = `sap.f.semantic`
+        )->a( n = `xmlns:z2ui5`    v = `z2ui5.cc`
 
         )->ele( n = `SemanticPage` ns = `semantic`
             )->a( n = `id`                          v = `mySemanticPage`
@@ -154,6 +155,19 @@ CLASS z2ui5_cl_smpc_app_529 IMPLEMENTATION.
 
                     )->end(
                 )->end(
+            )->end(
+
+            " onInit: Messaging.addMessages( new Message({ message: 'Something wrong
+            " happened', type: Error }) ) - the app-authored message goes through the
+            " z2ui5.cc.MessageManager companion control (app 065/166 idiom). Without
+            " it nothing ever feeds the message> model, and SemanticConfiguration
+            " binds MessagesIndicator.visible to a formatter over message>/ - so the
+            " indicator does not render at all and its MessagePopover cannot be
+            " opened. It renders nothing itself, so it lives in dependents
+            )->ele( n = `dependents` ns = `semantic`
+                )->tag( n = `MessageManager` ns = `z2ui5`
+                    )->a( n = `items` v = client->_bind( t_messages )
+
             )->end(
 
             )->ele( n = `content` ns = `semantic`

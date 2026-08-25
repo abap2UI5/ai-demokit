@@ -200,8 +200,8 @@ CLASS z2ui5_cl_smpc_app_531 IMPLEMENTATION.
           ( heading  = `Company`
             elements = VALUE #(
               ( label = `Name`    value = `Adventure Company` url = `http://sap.com` elementtype = `link` target = `_blank` )
-              ( label = `Address` value = `Sofia, Boris III, 136A` target = `_blank` )
-              ( label = `Slogan`  value = `Innovation through technology` target = `_blank` ) ) )
+              ( label = `Address` value = `Sofia, Boris III, 136A` elementtype = `text` target = `_blank` )
+              ( label = `Slogan`  value = `Innovation through technology` elementtype = `text` target = `_blank` ) ) )
           ( heading  = `Other`
             elements = VALUE #(
               ( label = `Email` value = `john.doe@sap.com` emailsubject = `Subject` elementtype = `email` target = `_blank` )

@@ -1549,12 +1549,15 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` nested paths are folded to flat fields with the identical last segment - the same fold app 166 makes for the sibling sample. titleSnappedContent/text carries literal braces ('Filtered by {Name,` &&
                ` Price, Category}'); it is DATA, not a binding, so the port seeds it in model_init with the braces escaped. // NOTE: onMessagesButtonPress builds a MessagePopover over the message> model in the` &&
                ` controller and toggles it at the button. The port declares the same MessagePopover in the MessagesIndicator's dependents and toggles it roundtrip-free through control_by_id, which is why` &&
-               ` structural-diff reports MessagePopover and MessageItem as control extra - the original's view declares neither. The Messaging registration of the single Error message is seeded as a message row` &&
-               ` instead. // NOTE: notMobile is Device.system.phone negated, set on the model in onInit. The device model carries the same fact to the client, so the two full-screen actions bind the expression {=`.
-    lv_text1 = lv_text1 && ` !${device>/system/phone} } rather than a backend field. // NOTE: showFooter is static true in the view and the ToggleFooter button flips it with setShowFooter in the controller. The port binds` &&
-               ` showFooter to a flag and the button's press flips that flag in ABAP - same toggle, one round-trip. The two footerCustomActions Buttons (Save, Cancel) are pressless in the view itself, so they stay` &&
-               ` pressless here. // NOTE: The titleContent KPI placeholder image is the sample's own test-resources file (sap/f/images/KPI.png), re-hosted on sdk.openui5.org. // NOTE: The footer toggle, the messages` &&
-               ` popover and the semantic action bar are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_529.mjs).`.
+               ` structural-diff reports MessagePopover and MessageItem as control extra - the original's view declares neither. The controller's onInit Messaging.addMessages seed (one Error 'Something wrong` &&
+               ` happened') goes through the z2ui5.cc.MessageManager companion control (app 065/166 idiom), which is the third control reported extra. That bridge is what feeds the message> model at all: this note`.
+    lv_text1 = lv_text1 && ` used to say the message was 'seeded as a message row instead', but seeding t_messages without binding it left the model empty, and sap.f.semantic.SemanticConfiguration binds MessagesIndicator.visible` &&
+               ` to a formatter over message>/ - so the indicator did not render and its popover could never be opened. // NOTE: notMobile is Device.system.phone negated, set on the model in onInit. The device model` &&
+               ` carries the same fact to the client, so the two full-screen actions bind the expression {= !${device>/system/phone} } rather than a backend field. // NOTE: showFooter is static true in the view and` &&
+               ` the ToggleFooter button flips it with setShowFooter in the controller. The port binds showFooter to a flag and the button's press flips that flag in ABAP - same toggle, one round-trip. The two` &&
+               ` footerCustomActions Buttons (Save, Cancel) are pressless in the view itself, so they stay pressless here. // NOTE: The titleContent KPI placeholder image is the sample's own test-resources file` &&
+               ` (sap/f/images/KPI.png), re-hosted on sdk.openui5.org. // NOTE: The footer toggle, the messages popover and the semantic action bar are unverified in a running system. **e2e-verified 2026-08-25**`.
+    lv_text1 = lv_text1 && ` (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_529.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.semantic.SemanticPage`           name = `SemanticPageFreeStyle`                         class = `z2ui5_cl_smpc_app_529` path = `src/01/04/z2ui5_cl_smpc_app_529.clas.abap`
         score = 5

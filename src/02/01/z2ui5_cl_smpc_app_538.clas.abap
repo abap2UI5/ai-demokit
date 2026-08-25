@@ -168,7 +168,8 @@ CLASS z2ui5_cl_smpc_app_538 IMPLEMENTATION.
         DATA(appointment) = VALUE ty_s_appointment( start_at = iso_start
                                                     end_at   = iso_end
                                                     title    = `new appointment`
-                                                    type     = `Type09` ).
+                                                    type     = `Type09`
+                                                    aria     = `None` ).
         DATA(row_index) = CONV i( client->get_event_arg( 11 ) ).
         " the selected rows are read from the model, not transported: PlanningCalendarRow
         " has a bindable `selected`, and a JS callback (getSelectedRows().map(function...))
@@ -243,7 +244,7 @@ CLASS z2ui5_cl_smpc_app_538 IMPLEMENTATION.
           ( start_at = `2017-01-20T00:00:00` end_at = `2017-01-20T23:59:00` title = `Vacation` info = `out of office` type = `Type04` tentative = abap_false aria = `Dialog` )
           ( start_at = `2017-01-22T07:00:00` end_at = `2017-01-27T17:30:00` title = `Discussion with clients` info = `out of office` type = `Type02` tentative = abap_false aria = `Dialog` )
           ( start_at = `2017-02-15T10:00:00` end_at = `2017-03-25T12:00:00` title = `Team collaboration` info = `room 1` type = `Type01` pic = `sap-icon://sap-ui5` tentative = abap_false aria = `Dialog` )
-          ( start_at = `2017-03-13T09:00:00` end_at = `2017-04-09T10:00:00` title = `Reminder` type = `Type06` )
+          ( start_at = `2017-03-13T09:00:00` end_at = `2017-04-09T10:00:00` title = `Reminder` type = `Type06` aria = `None` )
           ( start_at = `2017-04-10T00:00:00` end_at = `2017-06-16T23:59:00` title = `Vacation` info = `out of office` type = `Type04` tentative = abap_false aria = `Dialog` )
           ( start_at = `2017-08-01T00:00:00` end_at = `2017-10-31T23:59:00` title = `New quarter` type = `Type10` tentative = abap_false aria = `Dialog` )
         )

@@ -453,12 +453,14 @@ CLASS z2ui5_cl_smpc_app_547 IMPLEMENTATION.
               IF d_interval = abap_true.
                 INSERT VALUE #( title    = d_title
                                 start_at = d_start
-                                end_at   = d_end ) INTO TABLE <target>-t_headers.
+                                end_at   = d_end
+                                type     = `Type01` ) INTO TABLE <target>-t_headers.
               ELSE.
                 INSERT VALUE #( title    = d_title
                                 info     = d_info
                                 start_at = d_start
                                 end_at   = d_end
+                                type     = `Type01`
                                 aria     = `Dialog` ) INTO TABLE <target>-t_appointments.
               ENDIF.
             ENDIF.
