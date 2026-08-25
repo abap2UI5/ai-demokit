@@ -20,8 +20,8 @@
       "what": "The view declares a core:CommandExecution in mvc:dependents and the Share button presses it with press=\"cmd:Share\". abap2UI5 has no controller to hold a command, so the CommandExecution is dropped (structural-diff reports it missing) and the Share button's press carries the shareAction toast itself. The toast text is the sample's 'Share action' once instead of repeated 42 times."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The slider-driven resize of the ten toolbars, the overflow priorities and the Share toast are unverified in a running system."
+      "type": "NOTE",
+      "what": "The slider-driven resize of the ten toolbars, the overflow priorities and the Share toast are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_530.mjs)."
     }
   ]
 }

@@ -41,8 +41,8 @@
       "what": "the sample writes itemActionPress=\"onItemActionPress\" without the leading dot, which is not a controller-method reference in a modern XML view; the port wires the event properly, so the delete action works here."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the row actions, the multi-select mode switch, the extended title view and the search round trip."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the row actions, the multi-select mode switch, the extended title view and the search round trip. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_574.mjs)."
     }
   ]
 }

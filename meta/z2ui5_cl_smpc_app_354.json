@@ -28,8 +28,8 @@
       "what": "The footer OverflowToolbar stays empty: onInit lazily requires sap/ui/table/sample/TableExampleUtils and appends a ToolbarSpacer plus its createInfoButton( ) to it. That helper lives in the demo kit's own sample folder, not in any UI5 library, and only opens a popover pointing at the sample's source. Every sap.ui.table sample of this batch drops it the same way."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Unverified in a running system: whether the price column's prevented default plus the server-side band show the expected rows, whether the other four columns still filter client-side through the conditional veto (the leg the 2026-08-21 review found broken), and whether the enableCellFilter binding lets a cell filter fire that same event."
+      "type": "NOTE",
+      "what": "Unverified in a running system: whether the price column's prevented default plus the server-side band show the expected rows, whether the other four columns still filter client-side through the conditional veto (the leg the 2026-08-21 review found broken), and whether the enableCellFilter binding lets a cell filter fire that same event. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_354.mjs)."
     },
     {
       "type": "NOTE",

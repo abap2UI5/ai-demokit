@@ -57,8 +57,8 @@
       "what": "the icon-only share Button in the detail page's actions is tooltip-less in the sample, and so are the add and sort buttons of the list toolbar. The port gives all three a tooltip so they are reachable with a screen reader - the accessibility additions in this port."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the three-column navigation, the six full-screen / close actions and the bound column-distribution sizes."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the three-column navigation, the six full-screen / close actions and the bound column-distribution sizes. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_584.mjs)."
     },
     {
       "type": "NOTE",

@@ -41,8 +41,8 @@
       "what": "the nav-back Button is icon-only in the original (IconPool.getIconURI('nav-back'), no text and no tooltip). The port gives it tooltip=\"Back\" so it is reachable with a screen reader - the one accessibility addition in this port."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the anchored popover with a MessageView inside it and the navigateBack frontend action on the popup view."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the anchored popover with a MessageView inside it and the navigateBack frontend action on the popup view. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_563.mjs)."
     },
     {
       "type": "NOTE",

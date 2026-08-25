@@ -24,8 +24,8 @@
       "what": "onMaxNestingLevelChange calls iconTabBar.setMaxNestingLevel(value). The StepInput value and the IconTabBar's maxNestingLevel are the same two-way bound field here, so the StepInput.change attribute is dropped and the property follows without a round-trip."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The shared nesting-level field and the reordering-enabled tab bar are unverified in a running system."
+      "type": "NOTE",
+      "what": "The shared nesting-level field and the reordering-enabled tab bar are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_506.mjs)."
     }
   ]
 }

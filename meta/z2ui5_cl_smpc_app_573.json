@@ -24,8 +24,8 @@
       "what": "the full mock /ProductCollection is seeded with the fields this view binds (ProductId, Name, SupplierName, Width, Depth, Height, DimUnit, WeightMeasure, WeightUnit, Price, CurrencyCode); the price column keeps the original sap.ui.model.type.Currency composite binding 1:1."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the cell merging across the three mergeDuplicates columns."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the cell merging across the three mergeDuplicates columns. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_573.mjs)."
     }
   ]
 }

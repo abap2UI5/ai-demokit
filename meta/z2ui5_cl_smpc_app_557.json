@@ -53,8 +53,8 @@
       "what": "the original derives the ObjectNumber weight state in the demo table's frontend Formatter.js (weightState: KG conversion + Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin frontend - it is computed in ABAP model_init into a WEIGHT_STATE field and bound state=\"{WEIGHT_STATE}\", not via a frontend formatter."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the two-level lists/{VALUES} binding (a nested table inside a bound aggregation row) and the search round-trip."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the two-level lists/{VALUES} binding (a nested table inside a bound aggregation row) and the search round-trip. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_557.mjs)."
     }
   ]
 }

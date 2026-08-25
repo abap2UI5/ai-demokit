@@ -20,8 +20,8 @@
       "what": "The first Input's value is two-way bound so the backend knows what to pre-filter by and can write the picked title back - the original reads and writes it imperatively. The second Input (autocomplete off) shares the same value help, as in the original, but the write-back always targets the first Input, exactly as onValueHelpClose does."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The value help, its pre-filter, the search and the value write-back are unverified in a running system."
+      "type": "NOTE",
+      "what": "The value help, its pre-filter, the search and the value write-back are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_515.mjs)."
     },
     {
       "type": "NOTE",

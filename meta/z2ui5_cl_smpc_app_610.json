@@ -33,8 +33,8 @@
       "what": "the 36 appointments and the 2018-07-09 start date are seeded verbatim from onInit's JSON. The mock builds its dates with UI5Date.getInstance('2018', '6', ...) - month 6 is July - and two of them carry an out-of-range minute (hour 7 minute 9, hour 9 minute 9) that JavaScript normalizes; the port stores the same values as ISO strings."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: that dragging an appointment moves it and toasts, that Ctrl-dragging copies it, that resizing rewrites its end and that dragging on empty space creates one."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: that dragging an appointment moves it and toasts, that Ctrl-dragging copies it, that resizing rewrites its end and that dragging on empty space creates one. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_610.mjs)."
     },
     {
       "type": "NOTE",

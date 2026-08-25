@@ -32,8 +32,8 @@
       "what": "The row images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The four appointment sizes, the two rounding widths and the alphabetical sort are unverified in a running system."
+      "type": "NOTE",
+      "what": "The four appointment sizes, the two rounding widths and the alphabetical sort are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_543.mjs)."
     }
   ]
 }

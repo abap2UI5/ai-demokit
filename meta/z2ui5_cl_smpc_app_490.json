@@ -20,8 +20,8 @@
       "what": "handleSelectionFinish lists every selected item. A UI5 expression has no loop, so the selection travels as the bound selectedKeys and ABAP rebuilds the line - looping the KEYS, not the product table, because the original reads the selectedItems event parameter and MultiComboBox fills that by addAssociation per pick, i.e. in selection order. Both toasts pass width = `auto` as the original's MessageToast.show options do; on the client-composed selectionChange leg that option cannot travel, which is the boundary app 281 also records."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Both wires (the client-composed selectionChange toast and the selectionFinish round-trip) are unverified in a running system."
+      "type": "NOTE",
+      "what": "Both wires (the client-composed selectionChange toast and the selectionFinish round-trip) are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_490.mjs)."
     },
     {
       "type": "NOTE",

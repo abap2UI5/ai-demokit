@@ -16,8 +16,8 @@
       "what": "handleDelete sends an OData remove for the row's binding path. The port deletes the row from the bound table (the ProductId travels as an event arg), which is the same disappearance; the focus handling the original attaches to updateFinished has no equivalent and is dropped."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The delete wire is unverified in a running system."
+      "type": "NOTE",
+      "what": "The delete wire is unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_524.mjs)."
     },
     {
       "type": "NOTE",

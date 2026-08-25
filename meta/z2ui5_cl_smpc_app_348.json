@@ -28,8 +28,8 @@
       "what": "The original's model has one field (currentBreakpoint, initially empty) and the view binds it as {/currentBreakpoint}; folded onto the one default model it is client->_bind( currentbreakpoint ) - same data, same leaf name. It is seeded empty like the original, so the Text reads 'Current breakpoint: ' until the first layoutChange fires."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Unverified in a running system: whether the layoutChange round-trip fills the breakpoint Text as the panel is resized, and whether the Panel width expression follows the slider live."
+      "type": "NOTE",
+      "what": "Unverified in a running system: whether the layoutChange round-trip fills the breakpoint Text as the panel is resized, and whether the Panel width expression follows the slider live. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_348.mjs)."
     }
   ]
 }

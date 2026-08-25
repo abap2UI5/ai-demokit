@@ -20,8 +20,8 @@
       "what": "handleReject removes the swiped item from the aggregation and calls swipeOut( ). The port deletes the row the swipe is on - the index travels through indexOfItem(getSwipedItem()) on the List - so the bound aggregation loses the same entry; the explicit swipeOut( ) is implicit here, the re-rendered list closes the swipe."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The swipe wire (both directions) and the row removal are unverified in a running system - a swipe gesture is also outside what the e2e harness can drive."
+      "type": "NOTE",
+      "what": "The swipe wire (both directions) and the row removal are unverified in a running system - a swipe gesture is also outside what the e2e harness can drive. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_497.mjs)."
     },
     {
       "type": "NOTE",

@@ -29,8 +29,8 @@
       "what": "the IconTabBar in the headerContainer is carried 1:1: four IconTabFilters (info / attachments / notes / people) with their sap-icon:// icons, the counts 3 and 12 and a Text in each, under selectedKey='key3' and upperCase='true'. selectedKey names a key none of the four filters carries in the original either, so the bar opens on its first tab."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "the Currency-typed number binding, the title press opening the popover anchored to the title, and the fullScreenOptimized='true' layout are unverified in a running system."
+      "type": "NOTE",
+      "what": "the Currency-typed number binding, the title press opening the popover anchored to the title, and the fullScreenOptimized='true' layout are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_614.mjs)."
     }
   ]
 }

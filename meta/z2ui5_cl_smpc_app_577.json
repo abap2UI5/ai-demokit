@@ -17,7 +17,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the sample is a Component with a ROUTER and three views (FlexibleColumnLayout, List, Detail). abap2UI5 serves one view, so the three become one: the FCL declares its begin and mid column pages inline and the routing collapses to the FCL's own layout property - toDetail opens the mid column (TwoColumnsMidExpanded) and handleClose closes it (OneColumn), which is what navTo(layout) does. The URL the router also writes has no counterpart, and neither has the sample's own actionButtonsInfo helper state - the close button is the only navigation action and it is always the right one to show while the mid column is open. Same fold as app 575."
+      "what": "the sample is a Component with a ROUTER and three views (FlexibleColumnLayout, List, Detail). abap2UI5 serves one view, so the three become one: the FCL declares its begin and mid column pages inline and the routing collapses to the FCL's own layout property - toDetail opens the mid column (MidColumnFullScreen - see the maxColumnsCount note below) and handleClose closes it (OneColumn), which is what navTo(layout) does. The URL the router also writes has no counterpart, and neither has the sample's own actionButtonsInfo helper state - the close button is the only navigation action and it is always the right one to show while the mid column is open. Same fold as app 575."
     },
     {
       "type": "NOTE",
@@ -37,7 +37,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the two-column open and close and the bound sections aggregation."
+      "what": "not yet verified in a running system: the mid-column open and close and the bound sections aggregation."
     },
     {
       "type": "NOTE",

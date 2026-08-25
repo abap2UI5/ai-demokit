@@ -24,8 +24,8 @@
       "what": "The port's node ladder is typed to tree level 5, so it stops two levels short of the original, which reaches level 7 - expanding a level-5 item there yields level-6 children whose second node carries a level-7 `Last node` child. In the port `is_last` can never become true (level is at most 4) and the WHEN 5 branch emits no dummy child, so its deepest node is not expandable and the `Last node` string is unreachable. A faithful depth would need two more nested row types."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The toggle wire (path parsing, the appended nodes and the three-value toast) is unverified in a running system."
+      "type": "NOTE",
+      "what": "The toggle wire (path parsing, the appended nodes and the three-value toast) is unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_496.mjs)."
     },
     {
       "type": "NOTE",

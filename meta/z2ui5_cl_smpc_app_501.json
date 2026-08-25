@@ -20,8 +20,8 @@
       "what": "The three MultiInputs get a bound tokens aggregation with a Token template each (structural-diff reports control extra Token: 0 vs 3) - the original creates its Tokens in JavaScript, so its view declares none."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "All three token-creation paths, including the confirm round-trip of the second field, are unverified in a running system."
+      "type": "NOTE",
+      "what": "All three token-creation paths, including the confirm round-trip of the second field, are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_501.mjs)."
     }
   ]
 }

@@ -20,8 +20,8 @@
       "what": "The number binding keeps its parts/type/formatOptions structure 1:1 with the paths switched to the ABAP field names, and the dimensions Text keeps the original's shape as one composed template over the four bound fields. The picture URL is the mock's own, re-hosted on sdk.openui5.org."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The Currency-typed number binding, the bound tab count and the Attachment link's MessageBox.alert are unverified in a running system."
+      "type": "NOTE",
+      "what": "The Currency-typed number binding, the bound tab count and the Attachment link's MessageBox.alert are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_513.mjs)."
     }
   ]
 }

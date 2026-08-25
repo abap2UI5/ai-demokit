@@ -28,8 +28,8 @@
       "what": "onReset (which would put the untouched oData back into the columns model) is wired to nothing in the view - the sample declares the handler and never calls it - so it has no counterpart here either."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the bound columns aggregation on both tables and the Strict-layout switch."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the bound columns aggregation on both tables and the Strict-layout switch. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_567.mjs)."
     }
   ]
 }

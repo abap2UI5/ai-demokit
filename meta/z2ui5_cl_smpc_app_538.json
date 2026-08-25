@@ -32,8 +32,8 @@
       "what": "The two row images are the demo kit's own test-resources files (John_Miller.png, Donna_Moore.jpg), re-hosted on sdk.openui5.org."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The multi-row selection, the appointment select and the interval-select push are unverified in a running system."
+      "type": "NOTE",
+      "what": "The multi-row selection, the appointment select and the interval-select push are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_538.mjs)."
     },
     {
       "type": "NOTE",

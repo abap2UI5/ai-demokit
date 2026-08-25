@@ -29,8 +29,8 @@
       "what": "model/data.json is seeded verbatim - all fourteen entries with their src and title, and the subtitle on the seven rows that carry one. The fragment also binds targetSrc and target, which the mock never sets: they are undefined there and empty here, which renders the same."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the product-switch popover anchored on the ShellBar's switcher button and the change toast."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the product-switch popover anchored on the ShellBar's switcher button and the change toast. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_583.mjs)."
     }
   ]
 }

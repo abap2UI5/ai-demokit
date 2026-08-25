@@ -24,8 +24,8 @@
       "what": "onItemActionPress toasts '<action> action is pressed for the Product <name>' where the action is its text or, for the typed actions, its type. Both values travel with the event (getText() || getType() and the item's title) and ABAP composes the same line."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The slider-driven action count and the item-action toast are unverified in a running system."
+      "type": "NOTE",
+      "what": "The slider-driven action count and the item-action toast are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_498.mjs)."
     },
     {
       "type": "NOTE",

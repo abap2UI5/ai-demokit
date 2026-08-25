@@ -41,8 +41,8 @@
       "what": "the four background images come from the sample's own images folder and point at the sdk.openui5.org host per the offline asset-URL rule; the mock writes them relative as 'test-resources/sap/m/demokit/sample/GenericTileLineMode/images/...'. The LinkTileContent hrefs stay the sample's own http://www.sap.com."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the LineMode row of tiles, the two auto-advancing SlideTiles, the scope switch and the Remove-action toast."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the LineMode row of tiles, the two auto-advancing SlideTiles, the scope switch and the Remove-action toast. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_606.mjs)."
     }
   ]
 }

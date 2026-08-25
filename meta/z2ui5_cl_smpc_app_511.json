@@ -20,8 +20,8 @@
       "what": "onChange and onLiveChange only toast the ids of the involved items. Both are composed on the client from ${$parameters>/selectedItem}.getId() and ${$parameters>/previousSelectedItem}.getId(), so neither needs a round-trip and the texts stay the original's."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Both client-composed toasts are unverified in a running system."
+      "type": "NOTE",
+      "what": "Both client-composed toasts are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_511.mjs)."
     },
     {
       "type": "NOTE",

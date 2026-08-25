@@ -16,8 +16,8 @@
       "what": "handleOpenDialog loads Dialog.fragment.xml lazily and opens it; the port builds the same ViewSettingsDialog in its own chain and shows it with popup_display. handleConfirm toasts the dialog's filterString, which travels as an event arg, so the toast text is the dialog's own."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The ViewSettingsDialog and the filterString toast are unverified in a running system."
+      "type": "NOTE",
+      "what": "The ViewSettingsDialog and the filterString toast are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_516.mjs)."
     }
   ]
 }

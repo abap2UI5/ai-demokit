@@ -20,8 +20,8 @@
       "what": "onToggleContextMenu creates a sap.m.Menu with two MenuItems in JavaScript on press and destroys it again. The port declares the same Menu in the List's contextMenu aggregation and rebuilds the view on the toggle, so the subtree is emitted only while the button is pressed (app 436 precedent); structural-diff therefore reports the Menu and both MenuItems as control extra."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The context-menu toggle and the grouped list are unverified in a running system."
+      "type": "NOTE",
+      "what": "The context-menu toggle and the grouped list are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_492.mjs)."
     },
     {
       "type": "NOTE",

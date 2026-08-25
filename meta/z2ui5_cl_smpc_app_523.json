@@ -24,8 +24,8 @@
       "what": "onVisibleChange / onEnabledChange / onSparseChange call three setters on the CopyProvider. The three CheckBoxes are two-way bound to three flags here instead, so the three CheckBox.select attributes are dropped; with the plugin gone the flags drive nothing, but the toolbar the sample shows is unchanged. The copy BUTTON the controller takes from the plugin and adds to the toolbar goes with it."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The CellSelector and the three CheckBoxes are unverified in a running system."
+      "type": "NOTE",
+      "what": "The CellSelector and the three CheckBoxes are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_523.mjs)."
     }
   ]
 }

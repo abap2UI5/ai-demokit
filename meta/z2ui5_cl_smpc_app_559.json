@@ -41,8 +41,8 @@
       "what": "the icon-only share Button in the title's actions is text-less and tooltip-less in the sample. The port gives it tooltip=\"Share\" so it is reachable with a screen reader - the one accessibility addition in this port."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the DynamicPage with a sap.ui.table.Table in fitContent mode and the card popover anchored on the GenericTag."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the DynamicPage with a sap.ui.table.Table in fitContent mode and the card popover anchored on the GenericTag. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_559.mjs)."
     },
     {
       "type": "NOTE",

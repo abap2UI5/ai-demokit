@@ -28,8 +28,8 @@
       "what": "The sap.m.NotificationList container is @since 1.90 - newer than the 1.71 floor. The sample's two groups live in it, so it is kept and the port is filed under src/02."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The lazy fill on expand, the per-item close, the count toast and the group close are unverified in a running system."
+      "type": "NOTE",
+      "what": "The lazy fill on expand, the per-item close, the count toast and the group close are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_520.mjs)."
     },
     {
       "type": "NOTE",
