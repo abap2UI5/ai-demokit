@@ -207,7 +207,20 @@ the per-port modules here):
     dragTo cannot produce for sap.ui.table's pointer extension - dispatching
     the DataTransfer events by hand would test the harness), 354's
     column-filter leg (see above), 233's confirm leg (neither click nor Enter on a dialog row
-    reaches the SelectDialog's confirm headless), the hidden-picker
+    reaches the SelectDialog's confirm headless), and 233's F4 -> SelectDialog
+    leg with it: the wire is LIVE (measured 2026-08-25 both offline against the
+    real core/actions/ControlCall and in ~15 harness runs), but this port boots
+    in ~100 s against ~2 s for its neighbours - the heaviest view in the corpus,
+    unthemed and unbundled - and in that state the smoke shows two failures that
+    are not the port's. The dialog opens with its title on screen and is GONE
+    before the assertion (diagnosed with valueHelpRequestHandlers = 2, i.e. the
+    chain fully attached), and the Chromium process itself dies on the view (4
+    in ~25 runs). The module therefore asserts the chain STATICALLY - two
+    handlers on valueHelpRequest, the bound dependent SelectDialog titled
+    Purchases with rows in its items binding, the IllustratedMessage state - and
+    leaves the gesture to the human live run. A waitForFunction over
+    Element.registry.all() is itself part of the load on a view this heavy and
+    must not be used as its readiness check, the hidden-picker
     openBy class (016/256/257, Popover.onfocusin recursion), and 359's
     row-action press: the row actions never render in the smoke at all, and
     calling setRowActionCount(2) + invalidate() DIRECTLY on the table through
