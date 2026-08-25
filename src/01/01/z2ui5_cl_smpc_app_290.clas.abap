@@ -118,6 +118,15 @@ CLASS z2ui5_cl_smpc_app_290 IMPLEMENTATION.
 
     client->view_display( view->stringify( ) ).
 
+    " onInit: oModel.setSizeLimit(1000000) - the ABAP table travels in full, but
+    " the CLIENT-side JSONModel still caps a bound aggregation at 100, and
+    " Input.updateSuggestionItems goes through updateAggregation with no explicit
+    " length, so the last 23 of the 123 products never reach suggestionItems.
+    " The SelectDialog beside it needs nothing: SelectDialog.growing defaults
+    " true and growing always passes a length, which skips the cap
+    client->follow_up_action( val   = client->cs_event-set_size_limit
+                              t_arg = VALUE #( ( `1000000` ) ( `MAIN` ) ) ).
+
   ENDMETHOD.
 
 

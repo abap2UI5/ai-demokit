@@ -4417,11 +4417,14 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` gains a selected={SELECTED} binding (an added attribute) and the handler loops the rows, appends a token per selected row and clears the flag again. The MultiInput's tokens aggregation is bound to`.
     lv_text1 = lv_text1 && ` that token table, so the Token in the view is a template the original does not have (it builds Tokens in the controller) - one control more than the original view.xml. // NOTE: the suggestionItems` &&
                ` binding keeps the original's { path, sorter: { path: 'Name' } } shape 1:1 as a raw binding-info string, with the path from client->_bind and the sorter path switched to the ABAP field NAME. The` &&
-               ` Component's oModel.setSizeLimit(1000000) has no counterpart: an abap2UI5 model carries whatever the ABAP table holds, so all 123 rows are bound without a limit to raise. // NOTE: The sample's asset` &&
-               ` paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/...` &&
-               ` instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the sentence used to claim the rewrite was 'declared by all 77 ports that do it',` &&
-               ` which had stopped being true as the corpus grew past that day's snapshot - 126 ports do it now, and 17 of them declared it nowhere. Those 17 carry the declaration since today, so the claim holds`.
-    lv_text1 = lv_text1 && ` again; a stale absolute count is what made it wrong, so this wording names the date the count was taken.`.
+               ` Component's oModel.setSizeLimit(1000000) is ported as a cs_event-set_size_limit for MAIN. It is NOT without a counterpart, which is what this note used to claim: the ABAP table does travel in full,` &&
+               ` but the client-side JSONModel caps a BINDING at 100 independently of that, and Input.updateSuggestionItems reaches updateAggregation with no explicit length - so without the call the last 23 of the` &&
+               ` 123 products never render as suggestions. The SelectDialog on the same view needs no second call: SelectDialog.growing defaults true and GrowingEnablement always passes a length, and` &&
+               ` ClientListBinding applies the size limit only when the length is falsy. // NOTE: The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an`.
+    lv_text1 = lv_text1 && ` abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency, and` &&
+               ` RE-COUNTED 2026-08-23: the sentence used to claim the rewrite was 'declared by all 77 ports that do it', which had stopped being true as the corpus grew past that day's snapshot - 126 ports do it` &&
+               ` now, and 17 of them declared it nowhere. Those 17 carry the declaration since today, so the claim holds again; a stale absolute count is what made it wrong, so this wording names the date the count` &&
+               ` was taken.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputValueHelp`                           class = `z2ui5_cl_smpc_app_290` path = `src/01/01/z2ui5_cl_smpc_app_290.clas.abap`
         score = 4

@@ -148,7 +148,10 @@ CLASS z2ui5_cl_smpc_app_342 IMPLEMENTATION.
     DATA(lv_base) = `https://sdk.openui5.org/test-resources/sap/ui/integration/demokit/sample/LazyLoading/manifests/`.
 
     t_cards = VALUE #( ).
+    " the length term, not just the character one - `99999999999` is all
+    " digits and overflows CONV i
     DATA(lv_count) = COND i( WHEN numberofcards CO ` 0123456789` AND numberofcards IS NOT INITIAL
+                             AND strlen( condense( numberofcards ) ) <= 9
                              THEN CONV i( numberofcards ) ).
 
     DO lv_count TIMES.

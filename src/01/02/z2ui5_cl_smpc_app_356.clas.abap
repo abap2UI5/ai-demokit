@@ -260,7 +260,10 @@ CLASS z2ui5_cl_smpc_app_356 IMPLEMENTATION.
       WHEN `LIMIT_CHANGE`.
         " onLimitChange: only a positive integer is accepted, 0 disables the
         " limit, anything else snaps the Input back to the current value
-        IF limit_text CO ` 0123456789` AND limit_text IS NOT INITIAL.
+        " the length term guards the implicit conversion below: `99999999999`
+        " is all digits and overflows the TYPE i target
+        IF limit_text CO ` 0123456789` AND limit_text IS NOT INITIAL
+           AND strlen( condense( limit_text ) ) <= 9.
           limit = limit_text.
           client->message_toast_display( COND #( WHEN limit = 0
                                                  THEN `Limit disabled`

@@ -649,7 +649,13 @@ CLASS z2ui5_cl_smpc_app_548 IMPLEMENTATION.
                                                         type     = c_type ).
         IF c_rec_type IS NOT INITIAL.
           new_appointment-recurrencetype    = c_rec_type.
-          new_appointment-recurrencepattern = COND i( WHEN c_rec_pattern IS INITIAL THEN 1 ELSE CONV i( c_rec_pattern ) ).
+          " guarded on characters AND length: c_rec_pattern comes straight from a
+          " free-entry Input, so an unguarded CONV i can raise NO_NUMBER or
+          " OVERFLOW; an unusable entry falls back to the sample's default
+          new_appointment-recurrencepattern = COND i( WHEN c_rec_pattern CO `0123456789` AND c_rec_pattern IS NOT INITIAL
+                                                      AND strlen( c_rec_pattern ) <= 9
+                                                      THEN CONV i( c_rec_pattern )
+                                                      ELSE 1 ).
           new_appointment-recurrenceenddate = c_rec_end.
           IF c_rec_type = `Weekly` AND c_rec_days IS NOT INITIAL.
             new_appointment-t_recurrence_day = c_rec_days.
@@ -657,7 +663,11 @@ CLASS z2ui5_cl_smpc_app_548 IMPLEMENTATION.
           IF c_rec_type = `Monthly` OR c_rec_type = `Yearly`.
             new_appointment-ruletype = c_rule_type.
             IF c_rule_type = `DayOfMonth`.
-              new_appointment-ruledayofmonth = COND i( WHEN c_rule_dom IS INITIAL THEN 0 ELSE CONV i( c_rule_dom ) ).
+              " same guard as recurrencepattern above - c_rule_dom is free entry too
+              new_appointment-ruledayofmonth = COND i( WHEN c_rule_dom CO `0123456789` AND c_rule_dom IS NOT INITIAL
+                                                       AND strlen( c_rule_dom ) <= 9
+                                                       THEN CONV i( c_rule_dom )
+                                                       ELSE 0 ).
             ELSE.
               new_appointment-ruleweekofmonth = c_rule_wom.
               new_appointment-ruledayofweek   = CONV i( c_rule_dow ).
