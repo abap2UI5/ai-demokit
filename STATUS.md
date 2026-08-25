@@ -36,7 +36,15 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   harness learned the two properties in `@abap2ui5/linter` 0.3.0 (its
   companion-control mirrors moved into `lib/cc-controls.mjs` and
   `check-upstream` compares them against `app/webapp/cc/<Name>.js`, so they
-  cannot rot again), and the pin here follows. Both ports drop the `tokens`
+  cannot rot again). The pin here does NOT automatically follow, and that is
+  the one thing this entry used to get wrong: `A2UI5_PIN` moves only when
+  `bump-a2ui5.yaml` runs and its full-corpus e2e is green, so between the
+  upstream landing and that run the reproducible builds — and any local
+  checkout — still resolve a framework without the two properties, where these
+  two ports can produce nothing but `Property "TokenKeyCell" does not exist`.
+  That is why both still carry an open `LIVE_TEST` while everything else about
+  them is closed; the nightly, which runs main tip as the upstream canary by
+  design, gets past it. Both ports drop the `tokens`
   binding, the `tokens` aggregation and the `suggestionItemSelected` wire, and
   carry one `MultiInputExt` per tabular input (`TokenKeyCell="0"`,
   `TokenTextCells="3"` — Name and the Price cell, the `Name(Price Currency)`
