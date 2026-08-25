@@ -45,8 +45,8 @@
       "what": "the 35 appointments and the 2018-07-09 start date are seeded verbatim from onInit. Several carry an out-of-range minute (hour 7 minute 9, hour 9 minute 9, hour 13 minute 9) that JavaScript normalizes; the port stores the same values as ISO strings."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: that Create opens the modify dialog, that an appointment click opens the details popover with its type, and that saving writes the row back into the calendar."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: that Create opens the modify dialog, that an appointment click opens the details popover with its type, and that saving writes the row back into the calendar. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_609.mjs)."
     },
     {
       "type": "NOTE",

@@ -40,8 +40,8 @@
       "what": "Some appointment rows carry a tentative flag the view never binds; the port seeds it the same way and leaves it unbound, so the data stays 1:1 with the mock."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The zoom in/out steps, the full-day toggle and the legend side content are unverified in a running system."
+      "type": "NOTE",
+      "what": "The zoom in/out steps, the full-day toggle and the legend side content are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_554.mjs)."
     },
     {
       "type": "NOTE",

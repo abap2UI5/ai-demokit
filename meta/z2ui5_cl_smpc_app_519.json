@@ -20,8 +20,8 @@
       "what": "MultiComboBox has no formattedValueStateText aggregation before 1.78 - newer than the 1.71 floor. The two FormattedText value states with their links are the point of the sample, so the aggregation is kept and the port is filed under src/02."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The six value states and the two FormattedText value-state texts with their links are unverified in a running system."
+      "type": "NOTE",
+      "what": "The six value states and the two FormattedText value-state texts with their links are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_519.mjs)."
     }
   ]
 }

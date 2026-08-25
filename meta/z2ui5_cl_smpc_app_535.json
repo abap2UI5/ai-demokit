@@ -40,8 +40,8 @@
       "what": "The five product images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The three payment branches, the delivery-address branch, the discard confirmations, the per-step validation and the review page's six Edit links are unverified in a running system."
+      "type": "NOTE",
+      "what": "The three payment branches, the delivery-address branch, the discard confirmations, the per-step validation and the review page's six Edit links are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_535.mjs)."
     }
   ]
 }

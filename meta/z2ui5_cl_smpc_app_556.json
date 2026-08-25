@@ -28,8 +28,8 @@
       "what": "setSizeLimit( 10 ) caps the bound rows at the first ten of the mock collection, so the port seeds exactly those ten. The original binds them through a named products> model; abap2UI5 keeps one default model, so the prefix is dropped and the last path segment is identical."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The multi-select, the date dialog and the mass date change are unverified in a running system."
+      "type": "NOTE",
+      "what": "The multi-select, the date dialog and the mass date change are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_556.mjs)."
     }
   ]
 }

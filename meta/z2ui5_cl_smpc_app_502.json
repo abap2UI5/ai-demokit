@@ -20,8 +20,8 @@
       "what": "handleTitleSelectorPress loads Popover.fragment.xml and opens it by the selector's domRef; the port declares the same ResponsivePopover with its List in the header's dependents and opens it anchored to the pressed control (control_by_id / openBy). The close( ) the select handler performs is a control_by_id follow-up in the same round-trip."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The anchored popover, the row selection moving the header and the close follow-up are unverified in a running system."
+      "type": "NOTE",
+      "what": "The anchored popover, the row selection moving the header and the close follow-up are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_502.mjs)."
     },
     {
       "type": "NOTE",

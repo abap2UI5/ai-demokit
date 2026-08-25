@@ -45,8 +45,8 @@
       "what": "the four asset paths (the imageID_275314.png avatar twice, linkedin.png, Twitter.png) and HRData.json's person.png point at the sdk.openui5.org host per the offline asset-URL rule, matching app 263 which carries the same view; the original writes them relative as './test-resources/sap/uxap/images/...'."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: that Edit toasts the mode and re-bakes the veto, that an icon-tab press in edit mode is cancelled and raises the dialog, and that OK then navigates through setSelectedSection while Cancel leaves the page where it was."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: that Edit toasts the mode and re-bakes the veto, that an icon-tab press in edit mode is cancelled and raises the dialog, and that OK then navigates through setSelectedSection while Cancel leaves the page where it was. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_588.mjs)."
     },
     {
       "type": "NOTE",

@@ -32,8 +32,8 @@
       "what": "The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined with the four columns the sample binds plus the derived Available flag the Navigation item's visible binding needs - the controller derives it the same way (Status === 'Available')."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Unverified in a running system: whether the bound rowActionCount plus the per-item visible flags reproduce each mode's row actions, and whether the two-argument client-composed toast fills both placeholders."
+      "type": "NOTE",
+      "what": "Unverified in a running system: whether the bound rowActionCount plus the per-item visible flags reproduce each mode's row actions, and whether the two-argument client-composed toast fills both placeholders. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_359.mjs)."
     },
     {
       "type": "NOTE",

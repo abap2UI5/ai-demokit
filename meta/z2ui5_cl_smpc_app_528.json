@@ -28,8 +28,8 @@
       "what": "RevealGrid is a sample-local JS helper module that draws a DOM overlay outlining all four grids. It has no declarative equivalent, so the ToggleButton is kept but its press wire is dropped (structural-diff reports ToggleButton.press as attr missing) - same treatment as app 168, which ships the same helper."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The four grids, the seven rebuilt cards and the four border-reached toasts are unverified in a running system."
+      "type": "NOTE",
+      "what": "The four grids, the seven rebuilt cards and the four border-reached toasts are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_528.mjs)."
     },
     {
       "type": "NOTE",

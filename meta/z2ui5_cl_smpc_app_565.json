@@ -37,8 +37,8 @@
       "what": "the full mock /ProductCollection is seeded with the fields the two pages bind (ProductId, Name, ProductPicUrl, WeightMeasure, WeightUnit, Width, Depth, Height, DimUnit, Description), all 123 rows."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the anchored popover with a NavContainer inside it and the to/back frontend actions on the popup view."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the anchored popover with a NavContainer inside it and the to/back frontend actions on the popup view. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_565.mjs)."
     },
     {
       "type": "NOTE",

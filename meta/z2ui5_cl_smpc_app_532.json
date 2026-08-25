@@ -28,8 +28,8 @@
       "what": "handleQuickViewBtnPress loads the fragment and calls openBy( button ); the port builds the same fragment in a chain and opens it with popover_display anchored on the button id. onAfterRendering's imperative aria-haspopup attribute is the declarative Button.ariaHasPopup the view already sets."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The QuickView popover and the navOrigin page swap are unverified in a running system."
+      "type": "NOTE",
+      "what": "The QuickView popover and the navOrigin page swap are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_532.mjs)."
     }
   ]
 }

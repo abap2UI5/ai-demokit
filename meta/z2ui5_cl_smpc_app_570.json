@@ -33,8 +33,8 @@
       "what": "the full mock /ProductCollection is seeded with the fields the two templates bind (ProductId, Name, Quantity, UoM, WeightMeasure, WeightUnit, Price, CurrencyCode); the price column keeps the original sap.ui.model.type.Currency composite binding and the quantity column its sap.ui.model.type.String one."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the Edit/Save/Cancel template swap and the Cancel rollback."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the Edit/Save/Cancel template swap and the Cancel rollback. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_570.mjs)."
     }
   ]
 }

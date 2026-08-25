@@ -32,8 +32,8 @@
       "what": "The titleContent KPI placeholder image is the sample's own test-resources file (sap/f/images/KPI.png), re-hosted on sdk.openui5.org."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The footer toggle, the messages popover and the semantic action bar are unverified in a running system."
+      "type": "NOTE",
+      "what": "The footer toggle, the messages popover and the semantic action bar are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_529.mjs)."
     }
   ]
 }

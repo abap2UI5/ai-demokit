@@ -37,8 +37,8 @@
       "what": "the four asset paths (the imageID_275314.png avatar twice, linkedin.png and Twitter.png) point at the sdk.openui5.org host per the offline asset-URL rule; the original writes them relative as './test-resources/sap/uxap/images/...'."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: that the Focus button moves the caret into the Employment form's Name field."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: that the Focus button moves the caret into the Employment form's Name field. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_590.mjs)."
     }
   ]
 }

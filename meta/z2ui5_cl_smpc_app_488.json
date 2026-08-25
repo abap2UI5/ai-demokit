@@ -20,8 +20,8 @@
       "what": "The navigated flag comes from the .isNavigated formatter comparing the settings model's navigatedItem with each row's ProductId. A formatter is business logic, so the port binds a plain navigated field per row and the press wire (carrying ${PRODUCTID}) sets it in ABAP - exactly one row navigated at a time, like the original (app 482 precedent)."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The press wire setting the navigated row is unverified in a running system."
+      "type": "NOTE",
+      "what": "The press wire setting the navigated row is unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_488.mjs)."
     }
   ]
 }

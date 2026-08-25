@@ -41,8 +41,8 @@
       "what": "the Price cell is a composite currency binding in the sample (parts Price + CurrencyCode through sap.ui.model.type.Currency with showMeasure false). The port binds the two fields directly on the ObjectNumber's number and unit, which is what the formatter renders, since the mock's prices are plain integers."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: that the slider shrinks both toolbars into their overflow areas, and that Sort / Group / Reset and the Export menu behave as upstream."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: that the slider shrinks both toolbars into their overflow areas, and that Sort / Group / Reset and the Export menu behave as upstream. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_607.mjs)."
     },
     {
       "type": "NOTE",

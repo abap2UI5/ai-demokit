@@ -37,8 +37,8 @@
       "what": "the full mock /ProductCollection is seeded with the three fields the tables bind (Name, Category, Quantity) and the Rank the controller adds to every row (Initial = 0), so every product starts in the Available table."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the drag and drop across the two tables, the re-ordering inside the Selected one, and the four move buttons."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the drag and drop across the two tables, the re-ordering inside the Selected one, and the four move buttons. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_569.mjs)."
     },
     {
       "type": "NOTE",

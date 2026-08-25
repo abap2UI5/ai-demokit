@@ -40,8 +40,8 @@
       "what": "the date label the popover shows is formatted by sap.ui.core.format.DateFormat with style 'long' ('November 5, 2026'). A backend has no access to the browser's locale, so the port composes the label from the same two dates in the ABAP model's own yyyymmdd form; the range case keeps the sample's en dash separator."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: that selecting day 5, one of days 10-12 or day 20 opens the popover with the matching type, and that a plain day opens nothing."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: that selecting day 5, one of days 10-12 or day 20 opens the popover with the matching type, and that a plain day opens nothing. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_611.mjs)."
     },
     {
       "type": "NOTE",

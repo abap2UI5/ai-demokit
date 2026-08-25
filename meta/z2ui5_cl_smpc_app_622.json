@@ -33,8 +33,8 @@
       "what": "onSubmit's two outcomes are carried 1:1: a MessageToast on success and MessageBox.alert on failure (message_box_display with the information type, which is what alert shows)."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: that a name over ten characters paints the Error state and that Submit distinguishes the two outcomes."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: that a name over ten characters paints the Error state and that Submit distinguishes the two outcomes. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_622.mjs)."
     },
     {
       "type": "NOTE",

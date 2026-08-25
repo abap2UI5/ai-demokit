@@ -40,8 +40,8 @@
       "what": "The Avatar.press and Link.press attributes of the five 'Frequent Operations' tiles are dropped: the original wires them all to onTilePress, which is an EMPTY function. Keeping them would mean a backend round-trip that does nothing (the dead-event-wire class), so the attributes go away rather than being wired to a no-op."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Unverified in a running system: the layoutChange and columnsChange round-trips re-laying out the four groups and widening the two group-1 cards, and whether the two card manifest URLs load from the OpenUI5 host (their images are relative to the manifest, which is what an absolute manifest URL makes resolvable)."
+      "type": "NOTE",
+      "what": "Unverified in a running system: the layoutChange and columnsChange round-trips re-laying out the four groups and widening the two group-1 cards, and whether the two card manifest URLs load from the OpenUI5 host (their images are relative to the manifest, which is what an absolute manifest URL makes resolvable). **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_350.mjs)."
     },
     {
       "type": "IMPROVISED",

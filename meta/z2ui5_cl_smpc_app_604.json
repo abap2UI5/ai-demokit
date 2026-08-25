@@ -41,8 +41,8 @@
       "what": "the nine image paths come from sap/ui/demo/mock/img.json /images and point at the sdk.openui5.org host per the offline asset-URL rule; the mock writes them relative as 'test-resources/sap/ui/documentation/sdk/images/...'."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: that each of the five radio groups repaints the carousel, that the slider resizes its container and that the image-count input rebuilds the pages."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: that each of the five radio groups repaints the carousel, that the slider resizes its container and that the image-count input rebuilds the pages. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_604.mjs)."
     }
   ]
 }

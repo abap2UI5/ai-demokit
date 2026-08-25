@@ -36,8 +36,8 @@
       "what": "The two row images are the demo kit's own test-resources files (John_Miller.png, Donna_Moore.jpg), re-hosted on sdk.openui5.org."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The two calendar-type Selects, the built-in views box, the appointment select and the row header press are unverified in a running system."
+      "type": "NOTE",
+      "what": "The two calendar-type Selects, the built-in views box, the appointment select and the row header press are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_536.mjs)."
     }
   ]
 }

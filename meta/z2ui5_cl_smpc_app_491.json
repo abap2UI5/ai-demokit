@@ -24,8 +24,8 @@
       "what": "handleSelectionFinish lists the TEXTS of every selected item. A UI5 expression argument cannot map an array of controls, so the port binds selectedKeys two-way and composes the same line in ABAP on a round-trip."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Both wires and the clear icon are unverified in a running system."
+      "type": "NOTE",
+      "what": "Both wires and the clear icon are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_491.mjs)."
     },
     {
       "type": "NOTE",

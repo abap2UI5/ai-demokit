@@ -33,8 +33,8 @@
       "what": "the second page's Text carries the sample's own multi-paragraph lorem ipsum. An XML attribute value normalizes its line breaks and indentation to single spaces before the control ever sees it, so the port stores that normalized string - the same text the browser renders."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the side navigation with its nested items, the menu-button toggle and the page switch."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the side navigation with its nested items, the menu-button toggle and the page switch. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_585.mjs)."
     }
   ]
 }

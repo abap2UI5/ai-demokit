@@ -37,8 +37,8 @@
       "what": "The two asset paths (linkedin.png and Twitter.png) are absolutized to the sdk.openui5.org host per the offline asset-URL rule (corrected 2026-08-24). They were kept in the original's './test-resources/...' form, justified as \"matching app 261\" - which is false: 261 was rewritten to the absolute form on 2026-08-23 for exactly this reason, and its own sidecar records that both icons had rendered broken. A relative path resolves against the demo kit's document root; an abap2UI5 app is served from the ABAP ICF node and has no such root, so the request 404s and the control falls back to its placeholder. No gate sees it - data-fidelity only rejects a non-OpenUI5 HOST, and a relative path has none."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: that the anchor bar lists the three section titles with their numbers and scrolls to each section."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: that the anchor bar lists the three section titles with their numbers and scrolls to each section. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_587.mjs)."
     }
   ]
 }

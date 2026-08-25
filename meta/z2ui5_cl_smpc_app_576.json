@@ -24,8 +24,8 @@
       "what": "the items binding keeps its sorter on Name 1:1 (raw binding-info string over the bound table), so the rows are seeded in the mock's own order and the frontend sorts them. The full mock /ProductCollection is seeded with the fields this view binds (ProductId, Name, Quantity, UoM, WeightMeasure, WeightUnit, Price, CurrencyCode); the price column keeps the original sap.ui.model.type.Currency composite binding."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the vAlign=\"Middle\" row alignment with the Input in a cell."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the vAlign=\"Middle\" row alignment with the Input in a cell. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_576.mjs)."
     }
   ]
 }

@@ -36,8 +36,8 @@
       "what": "The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined with the three columns both tables bind; every product starts in the available table, which is exactly what the original's initialRank = 0 means. The Quantity columns keep the original's typed complex binding with the path switched to the ABAP field."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Unverified in a running system: whether the drop wires deliver the row indices and drop position as expected, whether the internal-vs-external drag expression resolves, and whether the context menu's beforeOpenContextMenu round-trip arrives before the menu item press."
+      "type": "NOTE",
+      "what": "Unverified in a running system: whether the drop wires deliver the row indices and drop position as expected, whether the internal-vs-external drag expression resolves, and whether the context menu's beforeOpenContextMenu round-trip arrives before the menu item press. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_353.mjs)."
     },
     {
       "type": "NOTE",

@@ -36,8 +36,8 @@
       "what": "The fragment wires QuickView.navigate to .onNavigate, but the sample's controller declares no onNavigate method - the wire is dead in the original. The port drops it rather than inventing behaviour for it (structural-diff reports QuickView.navigate as attr missing)."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The QuickView popover, its page-link navigation and the avatar press are unverified in a running system."
+      "type": "NOTE",
+      "what": "The QuickView popover, its page-link navigation and the avatar press are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_531.mjs)."
     }
   ]
 }

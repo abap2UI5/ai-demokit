@@ -32,8 +32,8 @@
       "what": "The Select drives the Wizard's backgroundDesign through a two-way binding. The property does exist and is base-version - sap.m.Wizard declares backgroundDesign with no @since (Wizard.js:156) and a real public setBackgroundDesign (:685) - so the earlier claim that it is absent from the 1.71 metadata and has no whitelisted setter was wrong on both halves."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The two showcases, the two current-step Selects, the three branching paths and the step-2 validation are unverified in a running system."
+      "type": "NOTE",
+      "what": "The two showcases, the two current-step Selects, the three branching paths and the step-2 validation are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_534.mjs)."
     }
   ],
   "render_smoke": {

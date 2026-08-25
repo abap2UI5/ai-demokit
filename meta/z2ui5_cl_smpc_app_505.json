@@ -24,8 +24,8 @@
       "what": "weightState is business logic (a KG conversion plus Success/Warning/Error thresholds), so the port computes it in model_init rather than in a frontend formatter. TableOutdated reuses the sap.m.sample.Table COMPONENT, so the rule is that sample's Formatter.js - thresholds 1 KG and 5 KG with G converted - and NOT the 1000/2000 raw thresholds the TableSelectDialog family's own Formatter.js uses. The two families look interchangeable and are not: seeding all-Success is correct under the 1000/2000 rule and wrong under this one for 66 of the 123 rows."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The three toolbar wires (change -> overlay, Filter, Reset) are unverified in a running system."
+      "type": "NOTE",
+      "what": "The three toolbar wires (change -> overlay, Filter, Reset) are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_505.mjs)."
     },
     {
       "type": "NOTE",

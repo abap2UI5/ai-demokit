@@ -29,8 +29,8 @@
       "what": "the ToggleButtons' pressed state is not bound in the sample either (the controller keeps isTitleOnTop / bUseTwoColumns of its own), so the port does not bind it: the button's own toggle and the backend flag start in step and stay in step, one press each."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: that the two toggles switch the subsection layout to TitleOnLeft and the page into two-column mode."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: that the two toggles switch the subsection layout to TitleOnLeft and the page into two-column mode. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_599.mjs)."
     }
   ]
 }

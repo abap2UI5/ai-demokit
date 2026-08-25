@@ -33,8 +33,8 @@
       "what": "the other seven bars are written out literally, with everything the sample sets on them: enableTabReordering on idIconTabBar0, headerMode='Inline' on idIconTabBar6, the four icon-only filters of idIconTabBar4, the four iconColor values and three icon-carrying IconTabSeparators of idIconTabBar1 (one of which carries icon=\"\" - an empty icon the sample writes and the port keeps), the Horizontal process design of idIconTabBar2 and the showAll tab of idIconTabBar5."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: that the three density buttons resize the eight bars and leave the ninth alone."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: that the three density buttons resize the eight bars and leave the ninth alone. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_620.mjs)."
     }
   ]
 }

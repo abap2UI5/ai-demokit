@@ -20,8 +20,8 @@
       "what": "handleTitlePress loads Popover.fragment.xml and opens it by the title's domRef. The port declares the same ResponsivePopover in the ObjectHeader's dependents and opens it anchored to the pressed control through follow_up_action control_by_id / openBy with $event.oSource.sId - roundtrip-free, and the separate core:FragmentDefinition is dropped."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The anchored popover open on the active title is unverified in a running system."
+      "type": "NOTE",
+      "what": "The anchored popover open on the active title is unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_486.mjs)."
     }
   ]
 }

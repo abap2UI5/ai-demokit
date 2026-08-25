@@ -24,8 +24,8 @@
       "what": "both tables keep their items binding with the Name sorter 1:1 (raw binding-info string over the bound table), so the rows are seeded in the mock's own order and the frontend sorts them. The full mock /ProductCollection is seeded with the four fields the two views bind (ProductId, Name, SupplierName, Description)."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the fixedLayout toggle on each of the two tables and the dialog round trip."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the fixedLayout toggle on each of the two tables and the dialog round trip. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_572.mjs)."
     }
   ]
 }

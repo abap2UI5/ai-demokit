@@ -45,8 +45,8 @@
       "what": "showEditHeaderButton='true' is set but editHeaderButtonPress is NOT wired in this sample's view, even though the controller defines handleEditBtnPress - upstream the edit-header button therefore does nothing. The port carries the same: the property is set, no handler is attached."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the four sections in the anchor bar, the three block buttons and the footer toggle."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the four sections in the anchor bar, the three block buttons and the footer toggle. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_589.mjs)."
     }
   ]
 }

@@ -20,8 +20,8 @@
       "what": "The original registers an app-authored addValidator callback. abap2UI5 does ship a validator - the bundled companion control z2ui5.cc.MultiInputExt installs addValidator(({text}) => new Token({key:text, text})) and mirrors added/removed tokens back through addedTokens/removedTokens (CAPABILITIES.md marks it fine, and apps 040/612/613 use it). What it cannot do is run THIS sample's per-field logic, which is what is improvised here: the bundled validator is fixed, so the port rebuilds the accept/reject decision in ABAP over a change round-trip instead."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The validator switch, both timers and the tokenUpdate toast are unverified in a running system."
+      "type": "NOTE",
+      "what": "The validator switch, both timers and the tokenUpdate toast are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_504.mjs)."
     }
   ]
 }

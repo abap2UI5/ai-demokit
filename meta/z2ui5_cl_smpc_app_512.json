@@ -24,8 +24,8 @@
       "what": "_textFormatter and _keyFormatter only prefix the two values with 'text: ' and 'key: '. A formatter is business logic, so both strings are computed in model state and bound as plain fields."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Adding a token and removing it again (with the List following) is unverified in a running system."
+      "type": "NOTE",
+      "what": "Adding a token and removing it again (with the List following) is unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_512.mjs)."
     }
   ]
 }

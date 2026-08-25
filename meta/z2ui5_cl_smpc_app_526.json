@@ -32,8 +32,8 @@
       "what": "attachLayoutChange swaps sapUiSmallMargin for sapUiTinyMargin on the XS and S layouts. The port keeps the sapUiSmallMargin the view declares; the layoutChange wire has no counterpart and the two GridContainerSettings the view declares (layout and layoutXS) already carry the responsive sizing."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The drag-and-drop reorder of the ten grid items and the three rebuilt cards are unverified in a running system."
+      "type": "NOTE",
+      "what": "The drag-and-drop reorder of the ten grid items and the three rebuilt cards are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_526.mjs)."
     }
   ]
 }

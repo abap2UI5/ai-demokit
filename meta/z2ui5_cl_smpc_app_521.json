@@ -20,8 +20,8 @@
       "what": "onInit raises the model size limit to 100000 because the JSONModel caps a bound aggregation at 100 and the mock carries 123 products. The port issues cs_event-set_size_limit twice - once for MAIN (the Input's suggestionItems) and once for POPUP, because a popup slot keeps its own model and its own limit."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The KeyValue suggestions, the value help and the selected-key readout are unverified in a running system."
+      "type": "NOTE",
+      "what": "The KeyValue suggestions, the value help and the selected-key readout are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_521.mjs)."
     },
     {
       "type": "NOTE",

@@ -61,8 +61,8 @@
       "what": "the OverflowToolbarButton that opens the add-item page is icon-only in the original (icon=sap-icon://add, no text and no tooltip). The port gives it tooltip=\"Add\" so it is reachable with a screen reader - the one accessibility addition in this port."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the TabContainer built over a bound items aggregation, the visible-driven Display/Edit swap inside a tab, and the close-confirmation round trip that relies on the view being sent again."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the TabContainer built over a bound items aggregation, the visible-driven Display/Edit swap inside a tab, and the close-confirmation round trip that relies on the view being sent again. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_558.mjs)."
     },
     {
       "type": "NOTE",
