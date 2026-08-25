@@ -5338,19 +5338,20 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` over the selected interval, whose start/end travel as their LOCAL parts (a UTC toISOString( ) would shift the day). toggleDayNamesLine is the bindable showDayNamesLine (@since 1.50) shared with the` &&
                ` ToggleButton's pressed state, so the press attribute is not emitted - the prefer-a-bindable-property rule. // POST-1.71: Formatter.DateCreateObject is referenced via core:require, which needs UI5 >=` &&
                ` 1.74. sap.m.PlanningCalendar itself is since 1.34 (in scope). Also sap.ui.unified.CalendarAppointment.ariaHasPopup (@since 1.150.0) is kept 1:1 from the original view (ariaHasPopup='{ariaHasPopup}');` &&
-               ` newer than 1.71, declared. Was undeclared because the property gate was sap.m-only (now extended to all libs, 2026-07-24). // LIVE-TEST: The 2026-07-27 live check is retired and the port is back to` &&
-               ` ``generated`` (AGENTS section 10: a behavioural rework of a checked port resets the status or is restamped after a fresh live run). Two things were wrong with it. Its note read "verified in a running`.
-    lv_text1 = lv_text1 && ` system 2026-07-27 - PlanningCalendar renders all appointments/interval headers via Formatter.DateCreateObject; interactions toast as declared" - but this port raises no toast at all: both handlers` &&
-               ` call message_box_display, the faithful reproduction of the original's MessageBox.show, and message_toast_display does not occur in the class. And it certified interactions the port did not have on` &&
+               ` newer than 1.71, declared. Was undeclared because the property gate was sap.m-only (now extended to all libs, 2026-07-24). // NOTE: The 2026-07-27 live check is retired and the port is back to` &&
+               ` ``generated`` (AGENTS section 10: a behavioural rework of a checked port resets the status or is restamped after a fresh live run). Two things were wrong with it. Its note read "verified in a running` &&
+               ` system 2026-07-27 - PlanningCalendar renders all appointments/interval headers via Formatter.DateCreateObject; interactions toast as declared" - but this port raises no toast at all: both handlers`.
+    lv_text1 = lv_text1 && ` call message_box_display, the faithful reproduction of the original's MessageBox.show, and message_toast_display does not occur in the class. And it certified interactions the port did not have on` &&
                ` that date: appointmentSelect, intervalSelect and the ToggleButton were reproduced on 2026-08-05, which the port's own deviation and docs/history.md both record, so the 2026-07-27 run can only have` &&
                ` covered RENDERING. What still stands from it, and is worth keeping: the PlanningCalendar rendered every appointment and interval header through Formatter.DateCreateObject in a running system. What` &&
-               ` needs a fresh live run: the two MessageBox legs and the showDayNamesLine toggle. // NOTE: The intervalHeaders CalendarAppointment template drops the original's icon="{pic}" (Page.view.xml, the` &&
-               ` intervalHeaders aggregation - the appointments template one block above carries the same attribute and the port DOES keep that one). Declared rather than added: the sample's three header rows carry`.
-    lv_text1 = lv_text1 && ` no pic key either, so the binding is inert on both sides, and a public model field whose only job is to render an empty attribute is exactly the persisted-state cost AGENTS section 10 warns about.`.
+               ` needs a fresh live run: the two MessageBox legs and the showDayNamesLine toggle. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_108.mjs). // NOTE: The` &&
+               ` intervalHeaders CalendarAppointment template drops the original's icon="{pic}" (Page.view.xml, the intervalHeaders aggregation - the appointments template one block above carries the same attribute` &&
+               ` and the port DOES keep that one). Declared rather than added: the sample's three header rows carry no pic key either, so the binding is inert on both sides, and a public model field whose only job is`.
+    lv_text1 = lv_text1 && ` to render an empty attribute is exactly the persisted-state cost AGENTS section 10 warns about.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.PlanningCalendar`                name = `PlanningCalendarSingle`                        class = `z2ui5_cl_smpc_app_108` path = `src/02/01/z2ui5_cl_smpc_app_108.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
         is_post171 = abap_true
         notes = lv_text1

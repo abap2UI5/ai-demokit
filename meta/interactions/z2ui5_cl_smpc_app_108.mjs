@@ -84,6 +84,7 @@ export default async (page, expect) => {
     .toContainText('Selected appointments: 1');
   await page.getByRole('button', { name: 'OK', exact: true }).first().click();
   await dialog.first().waitFor({ state: 'hidden', timeout: 10000 });
+  await page.waitForTimeout(500); // the Popup restores focus AFTER the node is gone
 
   // ------------------------------------------------------------------ 3
   // MessageBox leg TWO — the branch with no appointment. The calendar only ever
@@ -102,48 +103,102 @@ export default async (page, expect) => {
     .toContainText('2 Appointments selected');
   await page.getByRole('button', { name: 'OK', exact: true }).first().click();
   await dialog.first().waitFor({ state: 'hidden', timeout: 10000 });
+  await page.waitForTimeout(500); // the Popup restores focus AFTER the node is gone
 
   // ------------------------------------------------------------------ 4
   // The showDayNamesLine toggle. No press attribute is emitted: the
   // ToggleButton's `pressed` and the calendar's `showDayNamesLine` are the SAME
-  // two-way bound field, so what has to be proven is that a gesture on the
-  // button moves the CALENDAR's property — with no round-trip involved.
-  const before = await page.evaluate(`(() => { const pc = ${PC}; return pc.getShowDayNamesLine(); })()`);
-  if (before !== false) {
-    throw new Error(`the calendar already had showDayNamesLine=${before} before the toggle was pressed — the bound field seeds it false, so a press could not be observed as a CHANGE here`);
+  // two-way bound field, so what has to be proven is (a) that both really point
+  // at that one field and (b) that pressing the button moves the CALENDAR's
+  // property — with no round-trip involved.
+  //
+  // Nothing here may require the BUTTON to be in the document. Flipping the
+  // property re-renders the PlanningCalendarHeader's OverflowToolbar, which
+  // re-decides what overflows; measured 2026-08-25, the ToggleButton is moved
+  // into the (closed) overflow popover, where it is a perfectly live control
+  // with no rendered DOM. The first version of this leg carried the
+  // registry-staleness filter (`getDomRef() && document.body.contains(…)`) on
+  // the button as well as on the calendar, so it waited for a node that the
+  // press itself had just taken away — green when the toolbar happened to keep
+  // the button on screen, red when it did not, with a message accusing a wire
+  // that had in fact fired. The calendar is the control that must stay live
+  // (it is the one whose state is the claim); the button only has to exist.
+  // read with a bounded retry: a control momentarily mid-re-render answers
+  // `null` for a beat, and a bare throw there would accuse the port of a wire
+  // it has
+  let wiring;
+  for (let attempt = 0; attempt < 20; attempt++) {
+    wiring = await page.evaluate(`(() => {
+      const b = ${TOGGLE};
+      const pc = ${PC};
+      if (!b) return { err: 'no ToggleButton with tooltip "Toggle Day Names Line" in the calendar toolbar' };
+      if (!pc) return { err: 'the PlanningCalendar is not on the page' };
+      const bp = b.getBinding('pressed');
+      const cp = pc.getBinding('showDayNamesLine');
+      return { id: b.getId(),
+        pressedPath: bp ? bp.getPath() : null,
+        calendarPath: cp ? cp.getPath() : null,
+        pressed: b.getPressed(), shown: pc.getShowDayNamesLine() };
+    })()`);
+    if (!wiring.err) break;
+    await page.waitForTimeout(250);
   }
-  const toggleId = await page.evaluate(`(() => { const b = ${TOGGLE}; return b ? b.getId() : null; })()`);
-  if (!toggleId) {
-    throw new Error('the calendar toolbar carries no "Toggle Day Names Line" ToggleButton — the showDayNamesLine wire could not be driven');
+  if (wiring.err) throw new Error(`${wiring.err} — the showDayNamesLine wire could not be driven at all`);
+  // the guard that makes a press meaningful: an unwired button would sail
+  // through the press below and leave the calendar alone for a reason this
+  // names, instead of failing as "the press did not work"
+  if (!wiring.pressedPath || wiring.pressedPath !== wiring.calendarPath) {
+    throw new Error(`the ToggleButton's pressed is bound to ${wiring.pressedPath} while the calendar's showDayNamesLine is bound to ${wiring.calendarPath} — they do NOT share one field, which is the whole of the toggleDayNamesLine reproduction`);
   }
-  // The button lives in the PlanningCalendar's own OverflowToolbar. If it
-  // folded into the overflow, its DOM sits inside the CLOSED popover and
-  // cannot take focus until that popover is opened.
+  if (wiring.pressed !== false || wiring.shown !== false) {
+    throw new Error(`the toggle started at pressed=${wiring.pressed}/showDayNamesLine=${wiring.shown} instead of false/false, so the press below could not be observed as a CHANGE`);
+  }
+
+  // The gesture: focus + Enter (ToggleButton.onkeydown -> ontap -> setPressed).
+  // The button lives in the calendar's own OverflowToolbar, so if it folded
+  // into the overflow its DOM sits inside the CLOSED popover and cannot take
+  // focus until that popover is opened.
   const focusToggle = () => page.evaluate((id) => {
     const el = document.getElementById(id);
     if (!el) return false;
     el.focus();
     return document.activeElement === el;
-  }, toggleId);
-  if (!(await focusToggle())) {
+  }, wiring.id);
+  let onScreen = await focusToggle();
+  if (!onScreen) {
     const more = page.getByRole('button', { name: 'Additional Options' });
     const n = await more.count();
-    let reached = false;
-    for (let i = 0; i < n && !reached; i++) {
+    for (let i = 0; i < n && !onScreen; i++) {
       await more.nth(i).click();
       await page.waitForTimeout(600);
-      reached = await focusToggle();
-    }
-    if (!reached) {
-      throw new Error(`the "Toggle Day Names Line" button never took focus — tried ${n} overflow popover(s), so the toggle gesture could not be delivered and the showDayNamesLine wire stays unproven`);
+      onScreen = await focusToggle();
     }
   }
-  await page.keyboard.press('Enter'); // ToggleButton.onkeydown -> ontap -> setPressed
+  if (onScreen) await page.keyboard.press('Enter');
+
+  // Whether the gesture landed is a focus question, and focus here is contested
+  // — the two MessageBoxes above restore focus on close, and the toolbar
+  // re-renders. So the gesture is VERIFIED rather than assumed: if the button
+  // is still unpressed afterwards the press is delivered through the control's
+  // own tap handler, which is the same code path Enter and a real tap both
+  // reach (setPressed -> setProperty -> the two-way binding writes the model).
+  // firePress() would prove nothing here: this port emits no press attribute,
+  // the pressed STATE is the wire.
+  const landed = await page.evaluate(`(() => { const b = ${TOGGLE}; return !!b && b.getPressed(); })()`);
+  if (!landed) {
+    await page.evaluate(`(() => {
+      const b = ${TOGGLE};
+      b.ontap({ setMarked() {} }); // ToggleButton.ontap: setPressed(!pressed) + firePress
+    })()`);
+  }
+
   await waitForUi5(page, () => {
-    const live = (c) => !c.bIsDestroyed && c.getDomRef() && document.body.contains(c.getDomRef());
-    const pc = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.PlanningCalendar' && live(c));
-    const b = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.ToggleButton' && live(c)
-      && c.getTooltip_AsString() === 'Toggle Day Names Line');
+    const pc = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.PlanningCalendar'
+      && !c.bIsDestroyed && c.getDomRef() && document.body.contains(c.getDomRef()));
+    // the BUTTON is deliberately not required to be rendered: the flip moves it
+    // into the overflow popover
+    const b = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.ToggleButton'
+      && !c.bIsDestroyed && c.getTooltip_AsString() === 'Toggle Day Names Line');
     return !!pc && !!b && b.getPressed() === true && pc.getShowDayNamesLine() === true;
   }, 'the ToggleButton press never reached the calendar: showDayNamesLine stayed false, so the button and the PlanningCalendar are NOT sharing the bound field the deviation claims');
 

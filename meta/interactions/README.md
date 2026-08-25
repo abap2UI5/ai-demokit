@@ -192,7 +192,17 @@ the per-port modules here):
     moving the calendar's property through the shared two-way bound field with
     no round-trip; and intervalSelect inserting the sample's 'new appointment'
     at the LOCAL parts of the selected interval, asserted against the
-    parameters the calendar actually delivered)
+    parameters the calendar actually delivered). Its ToggleButton leg carries a
+    lesson worth the space: the registry-staleness filter
+    (!bIsDestroyed && getDomRef() && document.body.contains(...)) belongs on the
+    control whose STATE is the claim, never on every control the predicate
+    touches. Flipping showDayNamesLine re-renders the header's OverflowToolbar
+    and re-decides what overflows, so the ToggleButton moves into the CLOSED
+    overflow popover - a perfectly live control with no rendered DOM. Requiring
+    it to be in the document made the predicate unsatisfiable exactly when the
+    toolbar re-laid out that way, which is a timing decision: the leg passed and
+    failed on alternate runs while the gesture, the calendar and the model were
+    all correct every time
   still open: 353's four drag & drop wires (HTML5 dnd, which Playwright's
     dragTo cannot produce for sap.ui.table's pointer extension - dispatching
     the DataTransfer events by hand would test the harness), 354's
