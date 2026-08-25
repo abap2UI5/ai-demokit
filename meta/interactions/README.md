@@ -180,7 +180,8 @@ the per-port modules here):
     could not see. Nothing round-trips: follow_up_action( ) wired in the view
     IS the client event, so there is no POST to wait for and the redirect
     event (fired before the browser is handed the URI) is the only observable
-    end of the chain
+    end of the chain. ONE leg is driven by a real click and the other three by
+    the item's own firePress( ) - see the still-open note below
   PlanningCalendar appointment/interval wires (2026-08-25): 108 (both
     handleAppointmentSelect MessageBox legs - message_box_display, NOT a
     toast, which is what retired the port's 2026-07-27 live check; the
@@ -203,12 +204,22 @@ the per-port modules here):
     its own API - bypassing the port - still leaves every row without a
     _rowAction, which rules the port out. 359's module therefore closes only
     the bound-rowActionCount half and its LIVE_TEST stays OPEN.
-    Two more from 2026-08-25: 084's OS hand-off - headless Chromium registers
-    no external-protocol handler, so tel:/sms:/mailto: are dropped AFTER the
+    Two more from 2026-08-25: 084's URLHelper hand-off, in two parts - the OS
+    half is unobservable anywhere (headless Chromium registers no
+    external-protocol handler, so tel:/sms:/mailto: are dropped AFTER the
     redirect event has fired and no dialer, SMS or mail client can be seen
     opening, and its Website leg's actual LOAD of http://www.sap.com is
-    aborted at a context route (no egress, and a foreign page inside the run
-    is what a redirect check must not do); and 108's selected/deselected WORD,
+    aborted at a context route - no egress, and a foreign page inside the run
+    is what a redirect check must not do), and the GESTURE half is a harness
+    limit MEASURED on 2026-08-25: the first press really assigns
+    window.location.href, Chromium never commits that navigation and never
+    delivers another input event to the tab - a later .click( ) reports
+    success with no mousedown/click reaching the DOM at all, focus+Enter is
+    swallowed the same way, and even a page.goto( ) reload does not bring
+    input back, so exactly ONE URLHelper leg per tab can be given a real
+    gesture (084 spends it on Telephone and fires the other three on the
+    control's own press event, asserting the item is Active and HAS that one
+    view-wired listener first); and 108's selected/deselected WORD,
     which rides on a boolean t_arg the transpiled runtime hands the backend as
     the string 'true' where `= abap_true` cannot match - so the harness always
     reads "deselected" while a real system reads "selected". Asserting the
