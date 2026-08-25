@@ -1006,16 +1006,15 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` instance or its id) and the ids of a bound sections aggregation are generated at runtime, so a backend cannot name one; there is no URL to keep the index in either. The port therefore keeps the two`.
     lv_text1 = lv_text1 && ` columns and the layout switch and lets the object page hold its own scroll position, which is what it does anyway when nothing re-selects a section. // NOTE: webapp/data/sections.json is seeded` &&
                ` verbatim - all twelve sections with their sectionName; tableName, which no control of this view binds, is carried along as the mock has it. // NOTE: the close Button in the detail page's` &&
-               ` navigationActions is icon-only in the sample. The port gives it tooltip="Close column" so it is reachable with a screen reader - the one accessibility addition in this port. // LIVE-TEST: not yet` &&
-               ` verified in a running system: the mid-column open and close and the bound sections aggregation. // NOTE: mvc:View displayBlock="true" has no counterpart: it is a Component-app setting that makes the` &&
-               ` view fill the page when it is the root of a Component, and abap2UI5 owns the view container itself. // NOTE: toDetail sets MidColumnFullScreen, not TwoColumnsMidExpanded. This sample builds its` &&
-               ` semantic helper with maxColumnsCount: 1, and getNextUIState short-circuits to MidColumnFullScreen in that case - which is what hides the begin column and makes the return to OneColumn a begin-column`.
-    lv_text1 = lv_text1 && ` resize from zero width, the event the sample exists to demonstrate.`.
+               ` navigationActions is icon-only in the sample. The port gives it tooltip="Close column" so it is reachable with a screen reader - the one accessibility addition in this port. // NOTE: not yet verified` &&
+               ` in a running system: the mid-column open and close and the bound sections aggregation. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_577.mjs). // NOTE:` &&
+               ` mvc:View displayBlock="true" has no counterpart: it is a Component-app setting that makes the view fill the page when it is the root of a Component, and abap2UI5 owns the view container itself. //` &&
+               ` NOTE: toDetail sets MidColumnFullScreen, not TwoColumnsMidExpanded. This sample builds its semantic helper with maxColumnsCount: 1, and getNextUIState short-circuits to MidColumnFullScreen in that`.
+    lv_text1 = lv_text1 && ` case - which is what hides the begin column and makes the return to OneColumn a begin-column resize from zero width, the event the sample exists to demonstrate.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.FlexibleColumnLayout`            name = `FlexibleColumnLayoutColumnResize`              class = `z2ui5_cl_smpc_app_577` path = `src/02/04/z2ui5_cl_smpc_app_577.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.46`
         is_post171 = abap_true
         notes = lv_text1
@@ -3385,13 +3384,15 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` textFormatMode="KeyValue" renders ``(HT-1000) Notebook Basic 15`` from the key alone - which is what this sample is named after - and the state survives a view rebuild, which a control call would` &&
                ` not. One field drives the Input and the indicator, because the original always sets both to the same value. // NOTE: onInit raises the model size limit to 100000 because the JSONModel caps a bound` &&
                ` aggregation at 100 and the mock carries 123 products. The port issues cs_event-set_size_limit twice - once for MAIN (the Input's suggestionItems) and once for POPUP, because a popup slot keeps its` &&
-               ` own model and its own limit. // LIVE-TEST: The KeyValue suggestions, the value help and the selected-key readout are unverified in a running system. // NOTE: The sample's asset paths are`.
-    lv_text1 = lv_text1 && ` host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The` &&
-               ` values are otherwise the mock's own. Added 2026-08-23: this port did the rewrite without declaring it, one of 17 found by re-counting the corpus-wide claim that every port doing it had a declaration.`.
+               ` own model and its own limit. // NOTE: The KeyValue suggestions, the value help and the selected-key readout are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction,`.
+    lv_text1 = lv_text1 && ` meta/interactions/z2ui5_cl_smpc_app_521.mjs). // NOTE: The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document` &&
+               ` root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Added 2026-08-23: this port did the rewrite without declaring it, one of` &&
+               ` 17 found by re-counting the corpus-wide claim that every port doing it had a declaration.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Input`                           name = `InputKeyValue`                                 class = `z2ui5_cl_smpc_app_521` path = `src/01/01/z2ui5_cl_smpc_app_521.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
         notes = lv_text1 ) ).
 
     lv_text1 = `IMPROVISED: The original sets a suggestionRowValidator, which is what makes Input.setSelectionRow build an item and route it through _getDisplayText - with textFormatMode="ValueKey" the field then` &&
@@ -7325,15 +7326,15 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` action (cs_event-urlhelper): TRIGGER_TEL/TRIGGER_SMS take a { TEL: '...' } object-literal t_arg like the other two (corrected 2026-08-23 - this said 'take the number as a plain string param', and the` &&
                ` port was wired that way, so BOTH fired with no number at all: evUrlHelper reads args[2] as an OBJECT and takes params.TEL, so a primitive string yields undefined, URLHelper.formatTel returns '' for a` &&
                ` non-string, and the item navigated to a bare tel:/sms:. Note the key for SMS is TEL as well, not SMS - the handler reads params.TEL for both), TRIGGER_EMAIL/REDIRECT take a { EMAIL/URL, ... }` &&
-               ` object-literal t_arg (get_t_arg emits {-prefixed args raw as UI5 event-handler object literals). open_new_tab is NOT used - it is same-origin-only (isValidRedirectURL). // LIVE-TEST: The 2026-07-27` &&
-               ` live check is retired and the port is back to ``generated`` (AGENTS section 10: a behavioural rework of a checked port resets the status or is restamped after a fresh live run). Its note read`.
-    lv_text1 = lv_text1 && ` "verified in a running system 2026-07-27 - URLHelper tel/sms/email triggers and REDIRECT all fire correctly" - but tel and sms could not have fired with a number on that code: both were wired with a` &&
-               ` primitive string where evUrlHelper reads params.TEL off an object, so URLHelper received undefined and formatTel returned the empty string. The email and redirect halves of that run stand; the tel` &&
-               ` and sms halves need a fresh one now that the wires carry { TEL: '...' }.`.
+               ` object-literal t_arg (get_t_arg emits {-prefixed args raw as UI5 event-handler object literals). open_new_tab is NOT used - it is same-origin-only (isValidRedirectURL). // NOTE: The 2026-07-27 live`.
+    lv_text1 = lv_text1 && ` check is retired and the port is back to ``generated`` (AGENTS section 10: a behavioural rework of a checked port resets the status or is restamped after a fresh live run). Its note read "verified in` &&
+               ` a running system 2026-07-27 - URLHelper tel/sms/email triggers and REDIRECT all fire correctly" - but tel and sms could not have fired with a number on that code: both were wired with a primitive` &&
+               ` string where evUrlHelper reads params.TEL off an object, so URLHelper received undefined and formatTel returned the empty string. The email and redirect halves of that run stand; the tel and sms` &&
+               ` halves need a fresh one now that the wires carry { TEL: '...' }. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_084.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.URLHelper`                       name = `UrlHelper`                                     class = `z2ui5_cl_smpc_app_084` path = `src/01/01/z2ui5_cl_smpc_app_084.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.10`
         notes = lv_text1 ) ).
 
@@ -10144,31 +10145,30 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` OpenUI5 host per the asset-URL rule; the mock carries them host-relative. The Quantity and Delivery Date columns keep the original's typed complex bindings 1:1, with their path switched to the ABAP` &&
                ` field name. // IMPROVISED: The footer OverflowToolbar stays empty: onInit lazily requires sap/ui/table/sample/TableExampleUtils and appends a ToolbarSpacer plus its createInfoButton( ) to it. That` &&
                ` helper lives in the demo kit's own sample folder, not in any UI5 library, and only opens a popover pointing at the sample's source - there is nothing to port it to. Every sap.ui.table sample of this` &&
-               ` batch drops it the same way. // LIVE-TEST: Unverified in a running system: whether the sort event's prevented default plus the server-side SORT produce the expected order for each column, and whether` &&
-               ` the bound Column.sorted/sortOrder pair renders the header indicator. (Reopened 2026-08-21: this had been closed as live-verified, but the interaction module only presses the three toolbar buttons -`.
-    lv_text1 = lv_text1 && ` it never fired the column sort event, so its prevented default was never exercised, and it asserted getSortOrder( ) rather than the rendered sapUiTableColSorted class, which is the half that was` &&
+               ` batch drops it the same way. // NOTE: Unverified in a running system: whether the sort event's prevented default plus the server-side SORT produce the expected order for each column, and whether the` &&
+               ` bound Column.sorted/sortOrder pair renders the header indicator. (Reopened 2026-08-21: this had been closed as live-verified, but the interaction module only presses the three toolbar buttons - it`.
+    lv_text1 = lv_text1 && ` never fired the column sort event, so its prevented default was never exercised, and it asserted getSortOrder( ) rather than the rendered sapUiTableColSorted class, which is the half that was` &&
                ` actually broken. The toolbar legs it does drive are genuinely covered.) Both gaps are closed in the module since 2026-08-25: every indicator assertion reads sapUiTableColSorted / sapUiTableColSortedD` &&
                ` off the column's own header cell, and the last leg calls Column._sort( ) - the method the header menu's Sort entry calls, which ends in oTable.fireSort( ) and returns before setSortOrder when a` &&
-               ` handler vetoes - so the check_prevent_default wire and both event args are driven exactly as a menu press drives them. Pending one green nightly run. // NOTE: sortCategories passes bAdd = true to` &&
-               ` oTable.sort( ), and Table.pushSortedColumn appends the column to the active sorter list rather than replacing it - so whatever was already sorting keeps precedence and Category is added behind it.` &&
-               ` The port keeps that list as ordered model state (the equivalent of _aSortedColumns) - on every path that sorts, which until 2026-08-24 was only the toolbar one. Column._sort ends in`.
-    lv_text1 = lv_text1 && ` oTable.pushSortedColumn( this ), and onInit's oTable.sort( ) pushes Name, so both the column-header menu and the initial sort put a column on that list. The port's sort_clear( ) emptied it and` &&
-               ` neither path put anything back, so a "Sort Categories in addition to current sorting" press straight after load, or after any column-menu sort, ordered by Category ALONE while sort_name still` &&
-               ` displayed Ascending - the same header-lies-about-the-rows defect this deviation records as fixed for the toolbar path, still live on the other two. Both now append their column and applies it from` &&
-               ` the last key to the first with SORT ... STABLE, since one ABAP SORT expresses one key. Until 2026-08-21 the handler issued a fresh single-key SORT, which reordered the whole table while leaving the` &&
-               ` other columns' bound sortOrder indicators standing: the header claimed Name-ascending while the rows were Category-ascending, and the button's own tooltip - "Sort Categories in addition to current` &&
-               ` sorting" - was kept while the behaviour was not. // NOTE: The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document`.
-    lv_text1 = lv_text1 && ` root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the` &&
-               ` sentence used to claim the rewrite was 'declared by all 77 ports that do it', which had stopped being true as the corpus grew past that day's snapshot - 126 ports do it now, and 17 of them declared` &&
-               ` it nowhere. Those 17 carry the declaration since today, so the claim holds again; a stale absolute count is what made it wrong, so this wording names the date the count was taken. // NOTE:` &&
-               ` **e2e-caught 2026-08-22**: the sort ran but the table came back in its original order. The cause is the transpiled backend: ``SORT <itab> BY (field)`` - the DYNAMIC component form - loses its BY` &&
-               ` clause entirely (the emitted JS is ``abap.statements.sort(t, {})``), so every sort was a no-op. The component is named statically per field now, in a CASE. Apps 298, 362 and 571 all carried the` &&
-               ` dynamic form and all three are fixed.`.
+               ` handler vetoes - so the check_prevent_default wire and both event args are driven exactly as a menu press drives them. Pending one green nightly run. **e2e-verified 2026-08-25** (nightly e2e` &&
+               ` interaction, meta/interactions/z2ui5_cl_smpc_app_362.mjs). // NOTE: sortCategories passes bAdd = true to oTable.sort( ), and Table.pushSortedColumn appends the column to the active sorter list rather` &&
+               ` than replacing it - so whatever was already sorting keeps precedence and Category is added behind it. The port keeps that list as ordered model state (the equivalent of _aSortedColumns) - on every`.
+    lv_text1 = lv_text1 && ` path that sorts, which until 2026-08-24 was only the toolbar one. Column._sort ends in oTable.pushSortedColumn( this ), and onInit's oTable.sort( ) pushes Name, so both the column-header menu and the` &&
+               ` initial sort put a column on that list. The port's sort_clear( ) emptied it and neither path put anything back, so a "Sort Categories in addition to current sorting" press straight after load, or` &&
+               ` after any column-menu sort, ordered by Category ALONE while sort_name still displayed Ascending - the same header-lies-about-the-rows defect this deviation records as fixed for the toolbar path,` &&
+               ` still live on the other two. Both now append their column and applies it from the last key to the first with SORT ... STABLE, since one ABAP SORT expresses one key. Until 2026-08-21 the handler` &&
+               ` issued a fresh single-key SORT, which reordered the whole table while leaving the other columns' bound sortOrder indicators standing: the header claimed Name-ascending while the rows were` &&
+               ` Category-ascending, and the button's own tooltip - "Sort Categories in addition to current sorting" - was kept while the behaviour was not. // NOTE: The sample's asset paths are host-absolutized. The`.
+    lv_text1 = lv_text1 && ` demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise` &&
+               ` the mock's own. Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the sentence used to claim the rewrite was 'declared by all 77 ports that do it', which had stopped being true as the` &&
+               ` corpus grew past that day's snapshot - 126 ports do it now, and 17 of them declared it nowhere. Those 17 carry the declaration since today, so the claim holds again; a stale absolute count is what` &&
+               ` made it wrong, so this wording names the date the count was taken. // NOTE: **e2e-caught 2026-08-22**: the sort ran but the table came back in its original order. The cause is the transpiled backend:` &&
+               ` ``SORT <itab> BY (field)`` - the DYNAMIC component form - loses its BY clause entirely (the emitted JS is ``abap.statements.sort(t, {})``), so every sort was a no-op. The component is named` &&
+               ` statically per field now, in a CASE. Apps 298, 362 and 571 all carried the dynamic form and all three are fixed.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Sorting`                                       class = `z2ui5_cl_smpc_app_362` path = `src/01/02/z2ui5_cl_smpc_app_362.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
     lv_text1 = `POST-1.71: sap.ui.table.Table.rowMode (aggregation, @since 1.119) and the control sap.ui.table.rowmodes.Fixed it holds are used 1:1 - the sample declares them in its view and the freeze demo drives` &&

@@ -36,8 +36,8 @@
       "what": "the close Button in the detail page's navigationActions is icon-only in the sample. The port gives it tooltip=\"Close column\" so it is reachable with a screen reader - the one accessibility addition in this port."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the mid-column open and close and the bound sections aggregation."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the mid-column open and close and the bound sections aggregation. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_577.mjs)."
     },
     {
       "type": "NOTE",

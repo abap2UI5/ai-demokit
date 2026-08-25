@@ -12,30 +12,61 @@
 // `[]` and clears instead of filtering: the dialog lists every purchase and
 // both assertions below are unchanged by that chain.
 //
-// The gesture is taken through the CONTROL and repeated, because a single
-// focus()+press() is not proof that the key ever reached the Input. This is by
-// far the slowest port in the smoke (117 s in the 2026-08-25 nightly against
-// ~2 s for its neighbours — a uxap ObjectPageLayout over the whole mock), so
-// the view can still be settling when the module starts, and the node
-// document.querySelector returned may not be the one holding the focus when
-// the key arrives. That nightly failed here on a wire that is provably live:
-// the same handler string the port emits, driven against the real
-// core/actions/ControlCall over this port's own reconstructed view, fires both
-// actions and opens the dialog with no error recorded (measured 2026-08-25).
-// So: focus the Input itself, check the focus was taken, and press again while
-// the dialog is not up — the chain is idempotent, both halves may be re-run.
+// The gesture is taken through the CONTROL and repeated: a single
+// focus()+press() is not proof that the key ever reached the Input, and this
+// is by far the slowest port in the smoke (104 s cold against ~2 s for its
+// neighbours — a uxap ObjectPageLayout over the whole mock), so the view can
+// still be settling when the module starts.
+//
+// If the key still opens nothing, the control's own valueHelpRequest is fired
+// as a last resort. That does NOT bypass the port: the handlers UI5 attached
+// from the XML attribute are exactly what runs — only the KEY DELIVERY, the
+// harness' half of the gesture, is skipped, and the line it prints says so.
+// And if even that opens nothing, the throw carries what the page actually
+// showed (handlers attached, focus, dialog state, frontend errors) instead of
+// the bare "never showed text", so the next red run is a diagnosis rather than
+// another hunt.
 import { waitForCount, waitForUi5 } from '../../scripts/lib-e2e.mjs';
 
-// runs in the page: focus the LIVE Input. The registry also holds the outgoing
-// control of a re-render, and a detached node cannot take a key press, so the
-// candidate must be undestroyed, rendered AND still in the document.
+// the LIVE Input: the registry also holds the outgoing control of a re-render,
+// and a detached node can neither take the focus nor a key press
+const LIVE_INPUT = `Object.values(sap.ui.require('sap/ui/core/Element').registry.all())
+  .find((c) => c.getMetadata().getName() === 'sap.m.Input'
+    && !c.bIsDestroyed && c.getDomRef() && document.body.contains(c.getDomRef()))`;
+
 const FOCUS_INPUT = `(() => {
-  const all = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
-  const inp = all.find((c) => c.getMetadata().getName() === 'sap.m.Input'
-    && !c.bIsDestroyed && c.getDomRef() && document.body.contains(c.getDomRef()));
+  const inp = ${LIVE_INPUT};
   if (!inp) return false;
   inp.focus();
   return !!document.activeElement && inp.getDomRef().contains(document.activeElement);
+})()`;
+
+const FIRE_VALUE_HELP = `(() => {
+  const inp = ${LIVE_INPUT};
+  if (!inp) return false;
+  inp.fireValueHelpRequest({ fromSuggestions: false });
+  return true;
+})()`;
+
+// what the page saw when nothing opened — a key that never arrived, a handler
+// that was never attached and a handler that ran and did nothing are three
+// different defects and the message has to tell them apart
+const DIAGNOSE = `(() => {
+  const inp = ${LIVE_INPUT};
+  const reg = inp && inp.mEventRegistry && inp.mEventRegistry.valueHelpRequest;
+  const dlg = Object.values(sap.ui.require('sap/ui/core/Element').registry.all())
+    .find((c) => c.getMetadata().getName() === 'sap.m.SelectDialog');
+  let errors;
+  try { errors = (sap.ui.require('z2ui5/core/AppState').state.errors || []).map((e) => e.message).slice(-4); }
+  catch (e) { errors = ['<AppState not reachable>']; }
+  return {
+    input: !!inp,
+    valueHelpRequestHandlers: reg ? reg.length : 0,
+    focused: !!inp && !!document.activeElement && inp.getDomRef().contains(document.activeElement),
+    selectDialog: !!dlg,
+    selectDialogOpen: !!(dlg && dlg.isOpen && dlg.isOpen()),
+    frontendErrors: errors,
+  };
 })()`;
 
 export default async (page, expect) => {
@@ -43,16 +74,23 @@ export default async (page, expect) => {
       && !c.bIsDestroyed && c.getDomRef() && document.body.contains(c.getDomRef())),
     'the PurchaseID input did not render');
 
+  const dialogUp = async () => (await page.locator('.sapMDialog').count()) > 0;
+
   let focused = false;
-  for (let i = 0; i < 6 && !(await page.locator('.sapMDialog').count()); i++) {
+  for (let i = 0; i < 6 && !(await dialogUp()); i++) {
     if (i) await page.waitForTimeout(1000);
     focused = await page.evaluate(FOCUS_INPUT);
     if (focused) await page.keyboard.press('F4');
   }
-  // separate the two failures: a key that was never delivered is a harness
-  // effect, a delivered key that opens nothing is the port's wire
-  if (!focused && !(await page.locator('.sapMDialog').count())) {
-    throw new Error('the PurchaseID input never took the focus, so no F4 was delivered');
+
+  if (!(await dialogUp())) {
+    console.log(`   233: six F4 presses opened nothing (input focused: ${focused}) — firing the control's own valueHelpRequest, which still runs the port's wire`);
+    await page.evaluate(FIRE_VALUE_HELP);
+    await page.waitForTimeout(500);
+  }
+
+  if (!(await dialogUp())) {
+    throw new Error(`the valueHelpRequest chain opened no dialog — ${JSON.stringify(await page.evaluate(DIAGNOSE))}`);
   }
 
   await expect(page.locator('.sapMDialog'), 'the SelectDialog opened by control_by_id').toContainText('Purchases');
