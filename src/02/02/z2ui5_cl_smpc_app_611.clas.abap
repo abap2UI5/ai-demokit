@@ -111,20 +111,22 @@ CLASS z2ui5_cl_smpc_app_611 IMPLEMENTATION.
 
   METHOD popover_show.
 
+    DATA days     TYPE i.
+    DATA selected TYPE d.
+
     " onDateSelect looks the selected day up among the special dates that carry
     " an ariaHasPopup and, if it lands inside one, fills the popover and opens it
-    DATA(millis)   = client->get_event_arg( ).
-    DATA(selected) = CONV d( |{ millis }| ).
+    DATA(millis) = client->get_event_arg( ).
 
     IF millis IS INITIAL.
       RETURN.
     ENDIF.
 
-    " the event carries the day as epoch milliseconds; back to an ABAP date
-    DATA(days) = CONV i( millis(0) ).
-    " epoch milliseconds are ~1.8e12 and ABAP's i tops out at 2,147,483,647, so
-    " CONV i( ) raises CX_SY_CONVERSION_OVERFLOW on a real stack (the transpiled
-    " backend represents i as a JS number, which is why CI never saw it)
+    " the event carries the day as epoch milliseconds; back to an ABAP date.
+    " decfloat34, not i: epoch milliseconds are ~1.8e12 and ABAP's i tops out at
+    " 2,147,483,647, so CONV i( millis ) raises CX_SY_CONVERSION_OVERFLOW on a
+    " real stack (the transpiled backend represents i as a JS number, which is
+    " why CI never saw it). The quotient is ~20700 days and fits i
     days     = CONV decfloat34( millis ) / 86400000.
     selected = CONV d( '19700101' ) + days.
 

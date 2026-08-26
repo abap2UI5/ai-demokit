@@ -5,9 +5,20 @@ CLASS z2ui5_cl_smpc_app_249 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
-    DATA badgemin       TYPE i.
-    DATA badgemax       TYPE i.
-    DATA badgecurrent   TYPE i.
+    " p LENGTH 8, not i: all three are two-way bound to a FREE-ENTRY control
+    " (two Inputs of type Number, one StepInput), and the write-back is a bare
+    " ABAP assignment inside ajson's value_to_abap - so whatever the user types
+    " is converted with no CONV to guard. `<input type="number">` accepts any
+    " valid floating-point literal, so eleven digits overflow i and the
+    " round-trip dies with JSON_PARSING_ERROR - attribute 'BADGEMIN' before
+    " on_event ever runs, which is what made the accepted-range check below
+    " (1 <= min <= max <= 9999) unreachable for exactly the entries it exists
+    " to reject. p keeps the JSON node numeric, which the model-serializes-real-
+    " numbers rule this port rests on requires - the string-mirror idiom (app
+    " 363) would break it. Same type and reason as apps 180 and 247
+    DATA badgemin       TYPE p LENGTH 8 DECIMALS 0.
+    DATA badgemax       TYPE p LENGTH 8 DECIMALS 0.
+    DATA badgecurrent   TYPE p LENGTH 8 DECIMALS 0.
     DATA buttontext     TYPE string.
     DATA buttonicon     TYPE string.
     DATA buttontype     TYPE string.

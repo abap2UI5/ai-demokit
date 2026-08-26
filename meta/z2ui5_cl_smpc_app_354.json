@@ -29,6 +29,10 @@
     },
     {
       "type": "NOTE",
+      "what": "The price band's guard tests the SHAPE of the entered text, not only which characters it contains (2026-08-26). `price_filter CO ` 0123456789.`` admitted `.`, `12.`, `1.2.3` and `1 2`, none of which is valid ABAP numeric text, so CONV decfloat34 raised CX_SY_CONVERSION_NO_NUMBER and the round-trip died with no way back but a reload. They are one Enter away: sap.ui.table.Column.filter( ) fires the table's filter event with the RAW value BEFORE it parses anything (Column.js:914), and the price column declares no filterType, so the column menu's text field submits whatever was typed and nothing on the client validates it. The guard now SPLITs the condensed text at the point and requires digits on each side with at least one digit present, which decides the shape completely. For `.`, `..`, `1 2` and an empty entry that is the original's own NaN branch - clear( ), i.e. no price filter. It DEVIATES from the original for mid-string garbage: JS parseFloat('1.2.3') is 1.2 and parseFloat('12abc') is 12, so upstream bands around the prefix where the port now leaves the rows unfiltered. Rebuilding parseFloat's prefix parse in ABAP is not worth it for an entry the sample has no meaning for, and the CO guard already carried that same deviation for '12abc'."
+    },
+    {
+      "type": "NOTE",
       "what": "Unverified in a running system: whether the price column's prevented default plus the server-side band show the expected rows, whether the other four columns still filter client-side through the conditional veto (the leg the 2026-08-21 review found broken), and whether the enableCellFilter binding lets a cell filter fire that same event. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_354.mjs)."
     },
     {

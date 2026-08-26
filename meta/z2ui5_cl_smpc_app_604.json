@@ -42,6 +42,10 @@
     },
     {
       "type": "NOTE",
+      "what": "num_images, visible_pages and min_page_width are TYPE p LENGTH 8 DECIMALS 0, not i (widened 2026-08-26). Each is two-way bound to a FREE-ENTRY Input of type Number and ajson's value_to_abap writes the typed text back with a bare ABAP assignment - there is no CONV to guard - so an eleven-digit entry overflowed i and killed the round-trip with JSON_PARSING_ERROR - attribute 'NUM_IMAGES' before on_event ran. That made pages_rebuild's own 1..9 guard unreachable for exactly the entries it rejects, and visible_pages / min_page_width have no guard at all, so nothing at all stood between the keyboard and the conversion for those two. p keeps the JSON node numeric (ajson classes packed as numeric), so the bound int properties visiblePagesCount and minPageWidth see the same wire as before. Same fix and same type as apps 180, 247 and 249."
+    },
+    {
+      "type": "NOTE",
       "what": "not yet verified in a running system: that each of the five radio groups repaints the carousel, that the slider resizes its container and that the image-count input rebuilds the pages. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_604.mjs)."
     }
   ]

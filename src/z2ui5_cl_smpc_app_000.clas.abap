@@ -1783,14 +1783,18 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` literal, and its empty visible literal resolves to FALSE. (b) minChangeHandler/maxChangeHandler run server-side (business logic in ABAP): the two-way bound min/max round-trip on change, the`.
     lv_text1 = lv_text1 && ` accepted-range check (1 <= min <= max <= 9999) mirrors the original incl. resetting the field to the last accepted value on an invalid entry, and the accepted value reaches the button via` &&
                ` follow_up_action control_by_id setBadgeMin/MaxValue (public BadgeEnabler methods via the generalized allowlist). Not copied: the original maxChangeHandler's quirk of calling setBadgeMaxValue once` &&
-               ` BEFORE validating - the accepted path is identical. (c) onInit's initial currentChangeHandler() call is unnecessary - the binding seeds the badge. (d) badgeMin/badgeMax are TYPE i - the original` &&
-               ` model carries them as strings, but the bound values are numeric-only and the numeric-bound-as-string lint (app-053 lesson) wants the model to serialize real numbers; Input.value coerces either way.` &&
-               ` (Corrected 2026-08-23: DataType's boolean parseValue is sValue == "true", so visible="" is false, while BadgeCustomData's declared default is true. The badge nevertheless appears in the original` &&
-               ` because Button.badgeValueFormatter switches visible back on once the value reaches _badgeMinValue, triggered by onInit's currentChangeHandler. Same rendered result, different mechanism - and the`.
-    lv_text1 = lv_text1 && ` mechanism is what this deviation rests on.) // NOTE: unverified in a running system: (a) the shared /BADGECURRENT binding driving badge and StepInput; (b) the icon/text expression bindings over` &&
-               ` /BUTTONWITHICON//BUTTONWITHTEXT; (c) the MIN_CHANGE/MAX_CHANGE validation round-trips incl. the reset-on-invalid path and the setBadgeMin/MaxValue follow-ups. **e2e-verified 2026-07-30**` &&
-               ` (transpiled-framework interaction, scripts/e2e-smoke.mjs): (a) is covered - the badge renders data-badge 1 and follows the StepInput to 2 after ArrowUp+Enter (the change event carries the two-way` &&
-               ` write); the MIN/MAX validation round-trips remain unexercised. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_249.mjs).`.
+               ` BEFORE validating - the accepted path is identical. (c) onInit's initial currentChangeHandler() call is unnecessary - the binding seeds the badge. (d) badgeMin/badgeMax/badgeCurrent are TYPE p LENGTH` &&
+               ` 8 DECIMALS 0 - the original model carries min/max as strings, but the bound values are numeric-only and the numeric-bound-as-string lint (app-053 lesson) wants the model to serialize real numbers,` &&
+               ` which p does exactly as i did; Input.value coerces either way. They were TYPE i until 2026-08-26, and that was a defect: all three are two-way bound to a FREE-ENTRY control (two Inputs of type` &&
+               ` Number, one StepInput), ajson's value_to_abap writes the typed text back with a bare ABAP assignment, and <input type="number"> accepts any valid floating-point literal - so an eleven-digit entry`.
+    lv_text1 = lv_text1 && ` overflowed i and killed the round-trip with JSON_PARSING_ERROR - attribute 'BADGEMIN' BEFORE on_event could apply the accepted-range check in (b), i.e. that check was unreachable for exactly the` &&
+               ` entries it exists to reject. The string-mirror idiom (app 363) is ruled out here by the same app-053 rule this deviation rests on - a mirror would serialize the model value as a string - so widening` &&
+               ` is the fix, the type apps 180 and 247 use. (Corrected 2026-08-23: DataType's boolean parseValue is sValue == "true", so visible="" is false, while BadgeCustomData's declared default is true. The` &&
+               ` badge nevertheless appears in the original because Button.badgeValueFormatter switches visible back on once the value reaches _badgeMinValue, triggered by onInit's currentChangeHandler. Same rendered` &&
+               ` result, different mechanism - and the mechanism is what this deviation rests on.) // NOTE: unverified in a running system: (a) the shared /BADGECURRENT binding driving badge and StepInput; (b) the` &&
+               ` icon/text expression bindings over /BUTTONWITHICON//BUTTONWITHTEXT; (c) the MIN_CHANGE/MAX_CHANGE validation round-trips incl. the reset-on-invalid path and the setBadgeMin/MaxValue follow-ups.`.
+    lv_text1 = lv_text1 && ` **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): (a) is covered - the badge renders data-badge 1 and follows the StepInput to 2 after ArrowUp+Enter (the change` &&
+               ` event carries the two-way write); the MIN/MAX validation round-trips remain unexercised. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_249.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Button`                          name = `ButtonWithBadge`                               class = `z2ui5_cl_smpc_app_249` path = `src/02/01/z2ui5_cl_smpc_app_249.clas.abap`
         score = 4
@@ -1859,8 +1863,13 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` controls, each bound to img>/images/<i>. An aggregation cannot be rebuilt control-by-control from a backend, so pages is BOUND to a table and the Number input's change (not liveChange - the final` &&
                ` value, per the prefer-a-bindable-property rule) rebuilds it from the nine mock images, keeping the sample's own 1..9 guard. The nine Images carry the alt text addPage composes ('Example picture <n>')` &&
                ` and the same densityAware / decorative flags. // NOTE: the nine image paths come from sap/ui/demo/mock/img.json /images and point at the sdk.openui5.org host per the offline asset-URL rule; the mock` &&
-               ` writes them relative as 'test-resources/sap/ui/documentation/sdk/images/...'. // NOTE: not yet verified in a running system: that each of the five radio groups repaints the carousel, that the slider`.
-    lv_text1 = lv_text1 && ` resizes its container and that the image-count input rebuilds the pages. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_604.mjs).`.
+               ` writes them relative as 'test-resources/sap/ui/documentation/sdk/images/...'. // NOTE: num_images, visible_pages and min_page_width are TYPE p LENGTH 8 DECIMALS 0, not i (widened 2026-08-26). Each is`.
+    lv_text1 = lv_text1 && ` two-way bound to a FREE-ENTRY Input of type Number and ajson's value_to_abap writes the typed text back with a bare ABAP assignment - there is no CONV to guard - so an eleven-digit entry overflowed i` &&
+               ` and killed the round-trip with JSON_PARSING_ERROR - attribute 'NUM_IMAGES' before on_event ran. That made pages_rebuild's own 1..9 guard unreachable for exactly the entries it rejects, and` &&
+               ` visible_pages / min_page_width have no guard at all, so nothing at all stood between the keyboard and the conversion for those two. p keeps the JSON node numeric (ajson classes packed as numeric), so` &&
+               ` the bound int properties visiblePagesCount and minPageWidth see the same wire as before. Same fix and same type as apps 180, 247 and 249. // NOTE: not yet verified in a running system: that each of` &&
+               ` the five radio groups repaints the carousel, that the slider resizes its container and that the image-count input rebuilds the pages. **e2e-verified 2026-08-25** (nightly e2e interaction,` &&
+               ` meta/interactions/z2ui5_cl_smpc_app_604.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Carousel`                        name = `CarouselWithDisplayOptions`                    class = `z2ui5_cl_smpc_app_604` path = `src/02/01/z2ui5_cl_smpc_app_604.clas.abap`
         score = 5
@@ -1885,10 +1894,14 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` page count never changed. The Input's value now carries type: 'IntegerType' (core:require), which is where the original's Number( sVisiblePageCount ) went. // NOTE: unverified in a running system:` &&
                ` the set_size_limit(10, MAIN) follow-up capping the pages binding, the shared /PAGES_COUNT driving Input and visiblePagesCount, and the scrollMode expression flip. **e2e-verified 2026-07-30**` &&
                ` (transpiled-framework interaction, scripts/e2e-smoke.mjs): exactly 10 carousel items render from the 123 bound rows (the set_size_limit(10, MAIN) follow-up caps the binding) with the first product` &&
-               ` card visible; the pages-count input and scrollMode flip remain unexercised but are the proven 007/128 client-side class. // NOTE: onInit's device branch is resolved SERVER-SIDE since 2026-08-21:` &&
-               ` pages_count comes from client->get( )-s_device-system (desktop 4 / tablet 2 / else 1), the mirror apps 012/173/302 already read. It was hard-coded to the desktop leg with a NOTE calling that` &&
-               ` 'resolved statically' - but CAPABILITIES marks the device model ✅ and the branch is expressible, so declaring it did not make it right. The original seeds the value once in onInit and so does the` &&
-               ` port.`.
+               ` card visible; the pages-count input and scrollMode flip remain unexercised but are the proven 007/128 client-side class. // NOTE: /PAGES_COUNT is TYPE i behind a free-entry Input and its two-way` &&
+               ` write-back never reaches ABAP - by construction, not by luck, so the widening apps 249/604 took on 2026-08-26 is not needed here. This port wires NO event at all: main handles check_on_init and` &&
+               ` check_on_navigated only, there is no client->_event( ) anywhere, and the single follow_up_action is the set_size_limit seed that rides on the initial response. The frontend attaches the model delta`.
+    lv_text1 = lv_text1 && ` to a request in exactly one place - the eB( ) event round-trip in the app's view module - so with no wired event there is no request carrying MODEL, and the typed value stays in the browser. An` &&
+               ` out-of-range count is therefore a client-side concern only (the carousel is asked for that many pages); note that the type: 'IntegerType' on the Input keeps the node numeric but does not bound it -` &&
+               ` Integer.parseValue rejects NaN and nothing else (Integer.js:101-110). // NOTE: onInit's device branch is resolved SERVER-SIDE since 2026-08-21: pages_count comes from client->get( )-s_device-system` &&
+               ` (desktop 4 / tablet 2 / else 1), the mirror apps 012/173/302 already read. It was hard-coded to the desktop leg with a NOTE calling that 'resolved statically' - but CAPABILITIES marks the device` &&
+               ` model ✅ and the branch is expressible, so declaring it did not make it right. The original seeds the value once in onInit and so does the port.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Carousel`                        name = `CarouselWithMorePages`                         class = `z2ui5_cl_smpc_app_252` path = `src/02/01/z2ui5_cl_smpc_app_252.clas.abap`
         score = 4
@@ -9888,13 +9901,20 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` overview-app lesson in AGENTS section 10). The controller's formatAvailableToObjectState is precomputed into the AVAILABLESTATE column, since business logic belongs in the backend, and the boolean` &&
                ` Available is kept as its own column because the availability filter needs it. ProductPicUrl values point at the OpenUI5 host per the asset-URL rule; the mock carries them host-relative. //` &&
                ` IMPROVISED: The footer OverflowToolbar stays empty: onInit lazily requires sap/ui/table/sample/TableExampleUtils and appends a ToolbarSpacer plus its createInfoButton( ) to it. That helper lives in` &&
-               ` the demo kit's own sample folder, not in any UI5 library, and only opens a popover pointing at the sample's source. Every sap.ui.table sample of this batch drops it the same way. // NOTE: Unverified` &&
-               ` in a running system: whether the price column's prevented default plus the server-side band show the expected rows, whether the other four columns still filter client-side through the conditional`.
-    lv_text1 = lv_text1 && ` veto (the leg the 2026-08-21 review found broken), and whether the enableCellFilter binding lets a cell filter fire that same event. **e2e-verified 2026-08-25** (nightly e2e interaction,` &&
-               ` meta/interactions/z2ui5_cl_smpc_app_354.mjs). // NOTE: The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document` &&
-               ` root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the` &&
-               ` sentence used to claim the rewrite was 'declared by all 77 ports that do it', which had stopped being true as the corpus grew past that day's snapshot - 126 ports do it now, and 17 of them declared` &&
-               ` it nowhere. Those 17 carry the declaration since today, so the claim holds again; a stale absolute count is what made it wrong, so this wording names the date the count was taken.`.
+               ` the demo kit's own sample folder, not in any UI5 library, and only opens a popover pointing at the sample's source. Every sap.ui.table sample of this batch drops it the same way. // NOTE: The price` &&
+               ` band's guard tests the SHAPE of the entered text, not only which characters it contains (2026-08-26). ``price_filter CO `` 0123456789.```` admitted ``.``, ``12.``, ``1.2.3`` and ``1 2``, none of`.
+    lv_text1 = lv_text1 && ` which is valid ABAP numeric text, so CONV decfloat34 raised CX_SY_CONVERSION_NO_NUMBER and the round-trip died with no way back but a reload. They are one Enter away: sap.ui.table.Column.filter( )` &&
+               ` fires the table's filter event with the RAW value BEFORE it parses anything (Column.js:914), and the price column declares no filterType, so the column menu's text field submits whatever was typed` &&
+               ` and nothing on the client validates it. The guard now SPLITs the condensed text at the point and requires digits on each side with at least one digit present, which decides the shape completely. For` &&
+               ` ``.``, ``..``, ``1 2`` and an empty entry that is the original's own NaN branch - clear( ), i.e. no price filter. It DEVIATES from the original for mid-string garbage: JS parseFloat('1.2.3') is 1.2` &&
+               ` and parseFloat('12abc') is 12, so upstream bands around the prefix where the port now leaves the rows unfiltered. Rebuilding parseFloat's prefix parse in ABAP is not worth it for an entry the sample` &&
+               ` has no meaning for, and the CO guard already carried that same deviation for '12abc'. // NOTE: Unverified in a running system: whether the price column's prevented default plus the server-side band`.
+    lv_text1 = lv_text1 && ` show the expected rows, whether the other four columns still filter client-side through the conditional veto (the leg the 2026-08-21 review found broken), and whether the enableCellFilter binding` &&
+               ` lets a cell filter fire that same event. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_354.mjs). // NOTE: The sample's asset paths are host-absolutized.` &&
+               ` The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are` &&
+               ` otherwise the mock's own. Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the sentence used to claim the rewrite was 'declared by all 77 ports that do it', which had stopped being` &&
+               ` true as the corpus grew past that day's snapshot - 126 ports do it now, and 17 of them declared it nowhere. Those 17 carry the declaration since today, so the claim holds again; a stale absolute` &&
+               ` count is what made it wrong, so this wording names the date the count was taken.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Filtering`                                     class = `z2ui5_cl_smpc_app_354` path = `src/01/02/z2ui5_cl_smpc_app_354.clas.abap`
         score = 5

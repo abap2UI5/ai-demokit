@@ -13,7 +13,17 @@ CLASS z2ui5_cl_smpc_app_604 DEFINITION PUBLIC.
 
     " the pages the Carousel shows - rebuilt when the count changes
     DATA t_pages    TYPE ty_t_image.
-    DATA num_images TYPE i VALUE 3.
+    " p LENGTH 8, not i: num_images, visible_pages and min_page_width below are
+    " each two-way bound to a FREE-ENTRY Input of type Number, and the
+    " write-back is a bare ABAP assignment inside ajson's value_to_abap - the
+    " typed text is converted with no CONV to guard. `<input type="number">`
+    " accepts any valid floating-point literal, so eleven digits overflow i and
+    " the round-trip dies with JSON_PARSING_ERROR - attribute 'NUM_IMAGES'
+    " before on_event runs, which is what made pages_rebuild's own 1..9 guard
+    " unreachable for exactly the entries it exists to reject. p keeps the JSON
+    " node numeric, so the bound int properties (visiblePagesCount, minPageWidth)
+    " see no change. Same type and reason as apps 180, 247 and 249
+    DATA num_images TYPE p LENGTH 8 DECIMALS 0 VALUE 3.
 
     " every option below is a BINDABLE property of the Carousel, its
     " CarouselLayout or the Panel, so each control writes it directly
@@ -24,10 +34,10 @@ CLASS z2ui5_cl_smpc_app_604 DEFINITION PUBLIC.
     DATA show_page_indicator   TYPE abap_bool VALUE abap_true.
     DATA ind_background_idx    TYPE i VALUE 0.
     DATA ind_border_idx        TYPE i VALUE 0.
-    DATA visible_pages         TYPE i VALUE 1.
+    DATA visible_pages         TYPE p LENGTH 8 DECIMALS 0 VALUE 1.
     DATA scroll_visible_pages  TYPE abap_bool.
     DATA responsive            TYPE abap_bool.
-    DATA min_page_width        TYPE i VALUE 148.
+    DATA min_page_width        TYPE p LENGTH 8 DECIMALS 0 VALUE 148.
 
     " the enum values the four RadioButtonGroups and the scroll-mode Switch pick;
     " the controls write their INDEX, options_apply turns it into the enum name
