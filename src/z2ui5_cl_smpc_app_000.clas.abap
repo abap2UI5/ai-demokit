@@ -4335,13 +4335,15 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` Popup.Dock.CenterCenter. The veto rides along on the wire as s_ctrl-check_prevent_default (baked per wire at render time), the toast is composed on the way back through follow_up_action` &&
                ` control_global MESSAGE_TOAST show. The CenterCenter placement is not reachable through that global target, so the toast keeps its default bottom placement. // NOTE: the first MultiInput's` &&
                ` binding-info carries the sample's sorter { path: 'Name' } 1:1 as sorter { path: 'NAME' } over the backend table; the sorted 123 rows come from sap/ui/documentation/sdk/products.json` &&
-               ` /ProductCollection. // LIVE-TEST: the e2e interaction module now covers what this deviation used to name: the z2ui5.cc.MultiInputExt companions are asserted on both tabular MultiInputs with` &&
-               ` TokenKeyCell 0 and TokenTextCells 3, their tokenFromRow( ) builds the sample's token from a real bound suggestion row, the tokens aggregation is empty with no binding behind it, and the Link inside` &&
-               ` the value state message fires its preventDefault wire and raises the toast (2026-08-23, headless). What stays unverified in a running system is the interaction a person performs: opening the`.
-    lv_text1 = lv_text1 && ` suggestion popover and picking a row so that MultiInput itself calls the registered validator - the assertion reaches the validator's code through the companion rather than through the popup, which` &&
-               ` measures zero unthemed. // NOTE: The price cell keeps the original's composite sap.ui.model.type.Currency binding rather than binding the raw field. The type is not a pass-through: NumberFormat's` &&
-               ` currency instance applies grouping and the currency's own fraction digits, so EUR renders 956.00 / 1,249.00 where the bare field renders 956 / 1249. The earlier justification - that the fold is what` &&
-               ` the formatter renders because the mock's prices are plain numbers - was wrong on both halves.`.
+               ` /ProductCollection. // NOTE: the e2e interaction module now covers what this deviation used to name: the z2ui5.cc.MultiInputExt companions are asserted on both tabular MultiInputs with TokenKeyCell 0` &&
+               ` and TokenTextCells 3, their tokenFromRow( ) builds the sample's token from a real bound suggestion row, the tokens aggregation is empty with no binding behind it, and the Link inside the value state` &&
+               ` message fires its preventDefault wire and raises the toast (2026-08-23, headless). What stays unverified in a running system is the interaction a person performs: opening the suggestion popover and`.
+    lv_text1 = lv_text1 && ` picking a row so that MultiInput itself calls the registered validator - the assertion reaches the validator's code through the companion rather than through the popup, which measures zero unthemed.` &&
+               ` **e2e-verified 2026-08-26** (meta/interactions/z2ui5_cl_smpc_app_612.mjs, four consecutive green runs against a backend built from abap2UI5 main tip ddbdd13 via A2UI5_BRANCH=main - the canary path` &&
+               ` the nightly uses, not the A2UI5_PIN one, because the pinned framework predates the TokenKeyCell/TokenTextCells properties this port needs). // NOTE: The price cell keeps the original's composite` &&
+               ` sap.ui.model.type.Currency binding rather than binding the raw field. The type is not a pass-through: NumberFormat's currency instance applies grouping and the currency's own fraction digits, so EUR` &&
+               ` renders 956.00 / 1,249.00 where the bare field renders 956 / 1249. The earlier justification - that the fold is what the formatter renders because the mock's prices are plain numbers - was wrong on` &&
+               ` both halves.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputFilteringSuggestions`                class = `z2ui5_cl_smpc_app_612` path = `src/02/01/z2ui5_cl_smpc_app_612.clas.abap`
         score = 5
@@ -4358,18 +4360,19 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` z2ui5.cc.MultiInputExt companion installs exactly that validator, so the MultiInput carries one alongside it with TokenKeyCell 0 (Name) and TokenTextCells 3 (the Price cell), and the token is built` &&
                ` on the client with the same key and 'Name(Price Currency)' text as the original. That companion tag is the only addition vs the original view.xml, and the tokens stay client-side exactly as they do` &&
                ` there. productMIWithList has no validator in the sample either - a core:Item suggestion becomes a token by itself. // NOTE: the controller's oModel.setSizeLimit(1000000) has no counterpart: the port`.
-    lv_text1 = lv_text1 && ` ships all 123 rows of sap/ui/demo/mock/products.json /ProductCollection to the client in one model, so the 100-entry default limit the call works around never applies. // LIVE-TEST: the e2e` &&
-               ` interaction module now covers what this deviation used to name: the grouping sorter is asserted through the sap.ui.core.SeparatorItem entries it produces in both suggestion aggregations, and the` &&
+    lv_text1 = lv_text1 && ` ships all 123 rows of sap/ui/demo/mock/products.json /ProductCollection to the client in one model, so the 100-entry default limit the call works around never applies. // NOTE: the e2e interaction` &&
+               ` module now covers what this deviation used to name: the grouping sorter is asserted through the sap.ui.core.SeparatorItem entries it produces in both suggestion aggregations, and the` &&
                ` z2ui5.cc.MultiInputExt companion is asserted on productMIWithTable with TokenKeyCell 0 and TokenTextCells 3, its tokenFromRow( ) building the sample's token from a real bound suggestion row with an` &&
                ` empty, unbound tokens aggregation behind it (2026-08-23, headless). What stays unverified in a running system is the interaction a person performs: opening either suggestion popover, seeing the grey` &&
-               ` supplier group headers rendered in it, and picking a row so that MultiInput itself calls the registered validator. // NOTE: The price cell keeps the original's composite sap.ui.model.type.Currency` &&
-               ` binding rather than binding the raw field. The type is not a pass-through: NumberFormat's currency instance applies grouping and the currency's own fraction digits, so EUR renders 956.00 / 1,249.00`.
-    lv_text1 = lv_text1 && ` where the bare field renders 956 / 1249. The earlier justification - that the fold is what the formatter renders because the mock's prices are plain numbers - was wrong on both halves.`.
+               ` supplier group headers rendered in it, and picking a row so that MultiInput itself calls the registered validator. **e2e-verified 2026-08-26** (meta/interactions/z2ui5_cl_smpc_app_613.mjs, four` &&
+               ` consecutive green runs against a backend built from abap2UI5 main tip ddbdd13 via A2UI5_BRANCH=main - the canary path the nightly uses, not the A2UI5_PIN one, because the pinned framework predates`.
+    lv_text1 = lv_text1 && ` the TokenKeyCell/TokenTextCells properties this port needs). // NOTE: The price cell keeps the original's composite sap.ui.model.type.Currency binding rather than binding the raw field. The type is` &&
+               ` not a pass-through: NumberFormat's currency instance applies grouping and the currency's own fraction digits, so EUR renders 956.00 / 1,249.00 where the bare field renders 956 / 1249. The earlier` &&
+               ` justification - that the fold is what the formatter renders because the mock's prices are plain numbers - was wrong on both halves.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputGrouping`                            class = `z2ui5_cl_smpc_app_613` path = `src/01/01/z2ui5_cl_smpc_app_613.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
