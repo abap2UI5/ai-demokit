@@ -11,7 +11,7 @@
   "status": "checked",
   "checked": {
     "date": "2026-07-20",
-    "note": "verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)"
+    "note": "verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed) (The focus moves were NOT among the checks: they could not have passed - see the SET_FOCUS deviation below, measured 2026-08-26.)"
   },
   "deviations": [
     {
@@ -33,6 +33,10 @@
     {
       "type": "NOTE",
       "what": "the controller's lazy Fragment.load + cached-instance open()/close() lifecycle maps to client->popup_display (the fragment XML is rebuilt per open, forcing showCookieDetails=false like the original's openCookieSettingsDialog) and client->popup_destroy in the close handlers; the original's empty 'insert your ... logic here' placeholders remain as backend event branches (ACCEPT_ALL_COOKIES/REJECT_ALL_COOKIES/SAVE_COOKIES) that only close the dialog."
+    },
+    {
+      "type": "NOTE",
+      "what": "The original's three focus moves are follow_up_action( cs_event-set_focus ), NOT a control_by_id 'focus' - corrected 2026-08-26, all three were the latter and none of them could land. CONTROL_METHODS.focus is a bare control.focus(), and sap.ui.core.Element.focus returns immediately when getFocusDomRef() is null; the two buttons it aims at are INVISIBLE at that moment (their visible is bound to show_cookie_details, which the very same roundtrip flips), an invisible control renders through InvisibleRenderer as a sap-ui-invisible- placeholder, so the id has no DOM node and the call is a silent no-op. SET_FOCUS wraps Lib.whenRendered plus a post-re-render re-apply delegate, which is exactly the original's own _focusButton helper ('focus now if the button has a domRef, else add an onAfterRendering delegate and focus once it has'); it resolves the id through ViewSlots.resolveById, which searches every open slot, so the view = cs_view-popup argument goes with the change. Measured in the headless e2e 2026-08-26, with the port's follow-ups rewritten on the wire at the exact same point of the custom-action phase: with 'focus' the focus after Set Preferences stayed on the dialog content div and after Cancel on the footer's overflow-button clone; with SET_FOCUS it lands on actionSavePreferences and stays there (the leg in meta/interactions/z2ui5_cl_smpc_app_013.mjs asserts exactly that). The other two land as well but are then overridden by UI5 itself and are therefore not asserted: on OPEN the dialog's own initial focus takes over right afterwards (the original escapes that only because its handler sits in attachAfterOpen, i.e. AFTER the dialog set its initial focus, and abap2UI5 has no afterOpen hook for a popup_display fragment), and after CANCEL_PRESS the footer OverflowToolbar's focus restore, which UI5 runs after every onAfterRendering delegate, takes it back - the original's _focusButton loses it to the same restore."
     }
   ]
 }

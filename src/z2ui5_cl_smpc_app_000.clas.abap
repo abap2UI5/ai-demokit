@@ -1789,25 +1789,35 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` button press toasts 'Pressed' (the $event.oSource.sId template resolves); the other buttons are the identical wire.` ) ).
 
     lv_text1 = `POST-1.71: The badge API is newer than 1.71 and kept 1:1 per the fidelity-first member policy: sap.m.BadgeCustomData (control @since 1.80, secondary control - sap.m.Button is the in-scope headline` &&
-               ` entity, the app-244 Avatar precedent), Button.badgeStyle (@since 1.132) and sap.m.Button's own setBadgeMinValue/setBadgeMaxValue (they are on Button.prototype, not in BadgeEnabler)` &&
-               ` setBadgeMinValue/setBadgeMaxValue driven via control_by_id. The app needs a UI5 release >= 1.132 to render the badgeStyle; the badge itself needs >= 1.80. // NOTE: Thin-frontend rewires, all` &&
-               ` declared: (a) the StepInput's change='.currentChangeHandler' attribute is DROPPED - StepInput.value and BadgeCustomData.value are two-way bound to the same /BADGECURRENT field, so the badge follows` &&
-               ` the stepper client-side (the 007/128 pattern; the original copied the value imperatively via getBadgeCustomData().setValue()); BadgeCustomData.value is that binding instead of the original's empty` &&
-               ` literal, and its empty visible literal resolves to FALSE. (b) minChangeHandler/maxChangeHandler run server-side (business logic in ABAP): the two-way bound min/max round-trip on change, the`.
-    lv_text1 = lv_text1 && ` accepted-range check (1 <= min <= max <= 9999) mirrors the original incl. resetting the field to the last accepted value on an invalid entry, and the accepted value reaches the button via` &&
-               ` follow_up_action control_by_id setBadgeMin/MaxValue (public BadgeEnabler methods via the generalized allowlist). Not copied: the original maxChangeHandler's quirk of calling setBadgeMaxValue once` &&
-               ` BEFORE validating - the accepted path is identical. (c) onInit's initial currentChangeHandler() call is unnecessary - the binding seeds the badge. (d) badgeMin/badgeMax/badgeCurrent are TYPE p LENGTH` &&
-               ` 8 DECIMALS 0 - the original model carries min/max as strings, but the bound values are numeric-only and the numeric-bound-as-string lint (app-053 lesson) wants the model to serialize real numbers,` &&
-               ` which p does exactly as i did; Input.value coerces either way. They were TYPE i until 2026-08-26, and that was a defect: all three are two-way bound to a FREE-ENTRY control (two Inputs of type` &&
-               ` Number, one StepInput), ajson's value_to_abap writes the typed text back with a bare ABAP assignment, and <input type="number"> accepts any valid floating-point literal - so an eleven-digit entry`.
-    lv_text1 = lv_text1 && ` overflowed i and killed the round-trip with JSON_PARSING_ERROR - attribute 'BADGEMIN' BEFORE on_event could apply the accepted-range check in (b), i.e. that check was unreachable for exactly the` &&
-               ` entries it exists to reject. The string-mirror idiom (app 363) is ruled out here by the same app-053 rule this deviation rests on - a mirror would serialize the model value as a string - so widening` &&
-               ` is the fix, the type apps 180 and 247 use. (Corrected 2026-08-23: DataType's boolean parseValue is sValue == "true", so visible="" is false, while BadgeCustomData's declared default is true. The` &&
-               ` badge nevertheless appears in the original because Button.badgeValueFormatter switches visible back on once the value reaches _badgeMinValue, triggered by onInit's currentChangeHandler. Same rendered` &&
-               ` result, different mechanism - and the mechanism is what this deviation rests on.) // NOTE: unverified in a running system: (a) the shared /BADGECURRENT binding driving badge and StepInput; (b) the` &&
-               ` icon/text expression bindings over /BUTTONWITHICON//BUTTONWITHTEXT; (c) the MIN_CHANGE/MAX_CHANGE validation round-trips incl. the reset-on-invalid path and the setBadgeMin/MaxValue follow-ups.`.
-    lv_text1 = lv_text1 && ` **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): (a) is covered - the badge renders data-badge 1 and follows the StepInput to 2 after ArrowUp+Enter (the change` &&
-               ` event carries the two-way write); the MIN/MAX validation round-trips remain unexercised. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_249.mjs).`.
+               ` entity, the app-244 Avatar precedent), Button.badgeStyle (@since 1.132) and sap.m.Button's own setBadgeMinValue/setBadgeMaxValue (they are on Button.prototype, not in BadgeEnabler) driven via` &&
+               ` control_by_id. Neither is a PROPERTY: Button declares exactly one badge property, badgeStyle (measured 2026-08-26 off the live control metadata), and the two bounds live in the private` &&
+               ` _badgeMinValue/_badgeMaxValue - so a binding is not available for them and a control call is the only wire there is. The app needs a UI5 release >= 1.132 to render the badgeStyle; the badge itself` &&
+               ` needs >= 1.80. // NOTE: Thin-frontend rewires, all declared: (a) the StepInput's change='.currentChangeHandler' attribute is DROPPED - StepInput.value and BadgeCustomData.value are two-way bound to` &&
+               ` the same /BADGECURRENT field, so the badge follows the stepper client-side (the 007/128 pattern; the original copied the value imperatively via getBadgeCustomData().setValue()); BadgeCustomData.value`.
+    lv_text1 = lv_text1 && ` is that binding instead of the original's empty literal, and its empty visible literal resolves to FALSE. (b) minChangeHandler/maxChangeHandler run server-side (business logic in ABAP): the two-way` &&
+               ` bound min/max round-trip on change, the accepted-range check (1 <= min <= max <= 9999) mirrors the original incl. resetting the field to the last accepted value on an invalid entry, and the accepted` &&
+               ` value reaches the button via follow_up_action control_by_id setBadgeMin/MaxValue (public Button.prototype methods via the generalized allowlist). Both setters are ALSO re-issued at the end of` &&
+               ` view_display, min first, from min_accepted/max_accepted - added 2026-08-26. A control call does not survive a view rebuild the way a binding does: displaying MAIN destroys the slot and XMLView.create` &&
+               ` builds a NEW Button whose init resets _badgeMinValue/_badgeMaxValue to 1/9999, while badgemin/badgemax (bound) and min_accepted/max_accepted (class state) come back untouched - so without the` &&
+               ` re-issue the app returned from a draft restore showed min 5 / max 50 in the two Inputs over a Button that was back at 1/9999, badge included (measured 2026-08-26 in the headless e2e). A value equal`.
+    lv_text1 = lv_text1 && ` to the Button's own default is skipped, because the setter rejects an unchanged value and logs it as invalid. Order note measured with it: the wire carries the value as a STRING (castArgs infers, and` &&
+               ` a numeric string stays a string for a method outside CONTROL_METHODS), and each guard compares it against whatever the other bound already holds - so a pair whose decimal lengths differ, min 9 with` &&
+               ` max 50, compares lexicographically and is rejected. That is the pre-existing behaviour of the live MIN_CHANGE/MAX_CHANGE wire too, not something the re-issue introduces. Not copied: the original` &&
+               ` maxChangeHandler's quirk of calling setBadgeMaxValue once BEFORE validating - the accepted path is identical. (c) onInit's initial currentChangeHandler() call is unnecessary - the binding seeds the` &&
+               ` badge. (d) badgeMin/badgeMax/badgeCurrent are TYPE p LENGTH 8 DECIMALS 0 - the original model carries min/max as strings, but the bound values are numeric-only and the numeric-bound-as-string lint` &&
+               ` (app-053 lesson) wants the model to serialize real numbers, which p does exactly as i did; Input.value coerces either way. They were TYPE i until 2026-08-26, and that was a defect: all three are`.
+    lv_text1 = lv_text1 && ` two-way bound to a FREE-ENTRY control (two Inputs of type Number, one StepInput), ajson's value_to_abap writes the typed text back with a bare ABAP assignment, and <input type="number"> accepts any` &&
+               ` valid floating-point literal - so an eleven-digit entry overflowed i and killed the round-trip with JSON_PARSING_ERROR - attribute 'BADGEMIN' BEFORE on_event could apply the accepted-range check in` &&
+               ` (b), i.e. that check was unreachable for exactly the entries it exists to reject. The string-mirror idiom (app 363) is ruled out here by the same app-053 rule this deviation rests on - a mirror would` &&
+               ` serialize the model value as a string - so widening is the fix, the type apps 180 and 247 use. (Corrected 2026-08-23: DataType's boolean parseValue is sValue == "true", so visible="" is false, while` &&
+               ` BadgeCustomData's declared default is true. The badge nevertheless appears in the original because Button.badgeValueFormatter switches visible back on once the value reaches _badgeMinValue, triggered`.
+    lv_text1 = lv_text1 && ` by onInit's currentChangeHandler. Same rendered result, different mechanism - and the mechanism is what this deviation rests on.) // NOTE: unverified in a running system: (a) the shared /BADGECURRENT` &&
+               ` binding driving badge and StepInput; (b) the icon/text expression bindings over /BUTTONWITHICON//BUTTONWITHTEXT; (c) the MIN_CHANGE/MAX_CHANGE validation round-trips incl. the reset-on-invalid path` &&
+               ` and the setBadgeMin/MaxValue follow-ups. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): (a) is covered - the badge renders data-badge 1 and follows the` &&
+               ` StepInput to 2 after ArrowUp+Enter (the change event carries the two-way write); the MIN/MAX validation round-trips remain unexercised. **e2e-verified 2026-08-04** (nightly e2e interaction,` &&
+               ` meta/interactions/z2ui5_cl_smpc_app_249.mjs). **e2e-verified 2026-08-26** (meta/interactions/z2ui5_cl_smpc_app_249.mjs): MIN_CHANGE/MAX_CHANGE are now exercised - min 5 hides the badge over the` &&
+               ` current value 2 (proof that setBadgeMinValue landed), max 50 reaches _badgeMaxValue - and the module then restores the saved draft through the app-state hash (#/z2ui5-xapp-state=), the framework's`.
+    lv_text1 = lv_text1 && ` come-back-to-this-app path, and asserts that the rebuilt Button still carries 5/50.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Button`                          name = `ButtonWithBadge`                               class = `z2ui5_cl_smpc_app_249` path = `src/02/01/z2ui5_cl_smpc_app_249.clas.abap`
         score = 4
@@ -1815,8 +1825,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         is_post171 = abap_true
         notes = lv_text1
         post171 = `The badge API is newer than 1.71 and kept 1:1 per the fidelity-first member policy: sap.m.BadgeCustomData (control @since 1.80, secondary control - sap.m.Button is the in-scope headline entity, the` &&
-                 ` app-244 Avatar precedent), Button.badgeStyle (@since 1.132) and sap.m.Button's own setBadgeMinValue/setBadgeMaxValue (they are on Button.prototype, not in BadgeEnabler)` &&
-                 ` setBadgeMinValue/setBadgeMaxValue driven via control_by_id. The app needs a UI5 release >= 1.132 to render the badgeStyle; the badge itself needs >= 1.80.` ) ).
+                 ` app-244 Avatar precedent), Button.badgeStyle (@since 1.132) and sap.m.Button's own setBadgeMinValue/setBadgeMaxValue (they are on Button.prototype, not in BadgeEnabler) driven via control_by_id.` &&
+                 ` Neither is a PROPERTY: Button declares exactly one badge property, badgeStyle (measured 2026-08-26 off the live control metadata), and the two bounds live in the private _badgeMinValue/_badgeMaxValue` &&
+                 ` - so a binding is not available for them and a control call is the only wire there is. The app needs a UI5 release >= 1.132 to render the badgeStyle; the badge itself needs >= 1.80.` ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Carousel`                        name = `Carousel`                                      class = `z2ui5_cl_smpc_app_398` path = `src/02/01/z2ui5_cl_smpc_app_398.clas.abap`
@@ -2197,14 +2208,25 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` 2026-07-22 add/remove/toggleStyleClass ARE whitelisted in CONTROL_METHODS (pr/style-class-toggle), so the toggle could be wired via follow_up_action( cs_event-control_by_id, toggleStyleClass ) once` &&
                ` the CSS is present; it stays dropped here only for the missing CSS. // NOTE: the controller's lazy Fragment.load + cached-instance open()/close() lifecycle maps to client->popup_display (the fragment` &&
                ` XML is rebuilt per open, forcing showCookieDetails=false like the original's openCookieSettingsDialog) and client->popup_destroy in the close handlers; the original's empty 'insert your ... logic` &&
-               ` here' placeholders remain as backend event branches (ACCEPT_ALL_COOKIES/REJECT_ALL_COOKIES/SAVE_COOKIES) that only close the dialog.`.
+               ` here' placeholders remain as backend event branches (ACCEPT_ALL_COOKIES/REJECT_ALL_COOKIES/SAVE_COOKIES) that only close the dialog. // NOTE: The original's three focus moves are follow_up_action(` &&
+               ` cs_event-set_focus ), NOT a control_by_id 'focus' - corrected 2026-08-26, all three were the latter and none of them could land. CONTROL_METHODS.focus is a bare control.focus(), and` &&
+               ` sap.ui.core.Element.focus returns immediately when getFocusDomRef() is null; the two buttons it aims at are INVISIBLE at that moment (their visible is bound to show_cookie_details, which the very`.
+    lv_text1 = lv_text1 && ` same roundtrip flips), an invisible control renders through InvisibleRenderer as a sap-ui-invisible- placeholder, so the id has no DOM node and the call is a silent no-op. SET_FOCUS wraps` &&
+               ` Lib.whenRendered plus a post-re-render re-apply delegate, which is exactly the original's own _focusButton helper ('focus now if the button has a domRef, else add an onAfterRendering delegate and` &&
+               ` focus once it has'); it resolves the id through ViewSlots.resolveById, which searches every open slot, so the view = cs_view-popup argument goes with the change. Measured in the headless e2e` &&
+               ` 2026-08-26, with the port's follow-ups rewritten on the wire at the exact same point of the custom-action phase: with 'focus' the focus after Set Preferences stayed on the dialog content div and` &&
+               ` after Cancel on the footer's overflow-button clone; with SET_FOCUS it lands on actionSavePreferences and stays there (the leg in meta/interactions/z2ui5_cl_smpc_app_013.mjs asserts exactly that). The` &&
+               ` other two land as well but are then overridden by UI5 itself and are therefore not asserted: on OPEN the dialog's own initial focus takes over right afterwards (the original escapes that only because`.
+    lv_text1 = lv_text1 && ` its handler sits in attachAfterOpen, i.e. AFTER the dialog set its initial focus, and abap2UI5 has no afterOpen hook for a popup_display fragment), and after CANCEL_PRESS the footer OverflowToolbar's` &&
+               ` focus restore, which UI5 runs after every onAfterRendering delegate, takes it back - the original's _focusButton loses it to the same restore.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.CookieSettingsDialogPattern`     name = `CookieSettingsDialogPattern`                   class = `z2ui5_cl_smpc_app_013` path = `src/01/01/z2ui5_cl_smpc_app_013.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 reworked, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth` &&
                  ` a close look.`
         ui5_only = abap_true
-        checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`
+        checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed) (The focus moves were NOT among the checks: they could` &&
+                 ` not have passed - see the SET_FOCUS deviation below, measured 2026-08-26.)`
         notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: the shared mock model /ProductCollection (ui5/mock/products.json) is flattened into the default model with only the three bound columns (ProductId, Name, ProductPicUrl); all unbound columns are` &&

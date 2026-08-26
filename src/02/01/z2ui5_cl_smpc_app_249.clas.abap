@@ -259,6 +259,24 @@ CLASS z2ui5_cl_smpc_app_249 IMPLEMENTATION.
 
     client->view_display( view->stringify( ) ).
 
+    " A rebuilt view is a NEW Button, and the accepted badge bounds do not
+    " travel with it: badgeMinValue/badgeMaxValue are no properties at all
+    " (badgeStyle is the only badge property Button declares), they live in
+    " the private _badgeMinValue/_badgeMaxValue that Button.init resets to
+    " 1/9999. badgemin/badgemax and min_accepted/max_accepted survive as
+    " class state, so re-issue the two setters here - min first, so the max
+    " setter's lower guard already sees the restored minimum. A value equal
+    " to the Button's own default needs no call: the setter rejects an
+    " unchanged value and logs it as invalid
+    IF min_accepted > 1.
+      client->follow_up_action( val   = client->cs_event-control_by_id
+                                t_arg = VALUE #( ( `BadgedButton` ) ( `setBadgeMinValue` ) ( |{ min_accepted }| ) ) ).
+    ENDIF.
+    IF max_accepted < 9999.
+      client->follow_up_action( val   = client->cs_event-control_by_id
+                                t_arg = VALUE #( ( `BadgedButton` ) ( `setBadgeMaxValue` ) ( |{ max_accepted }| ) ) ).
+    ENDIF.
+
   ENDMETHOD.
 
 
