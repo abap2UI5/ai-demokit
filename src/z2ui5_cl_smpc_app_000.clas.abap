@@ -5343,16 +5343,19 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` those fields before the popup opens. // NOTE: handleDialogSaveButton keeps every branch: an edit rewrites the row in place and moves it to the picked owner when the Select changed` &&
                ` (_appointmentOwnerChange), a create appends to that person's appointments, and the Interval-appointment checkbox routes the new row to their interval HEADERS instead (_convertToHeader).` &&
                ` handleDeleteAppointment removes the appointment behind the popover. // NOTE: _validateDateTimePicker refuses an end date at or before the start and blocks the Save; the port binds the start picker's` &&
-               ` valueState and applies the same rule on the change round-trip, and the save is skipped while the state is Error. handleAppointmentTypeChange only re-reads the checkbox, which is bound two-way here,` &&
-               ` so its select wire is dropped. // IMPROVISED: _handleGroupAppointments opens a Popover ANCHORED on the group's DOM node (openBy( document.getElementById( domRefId ) )), built in the controller. A`.
-    lv_text1 = lv_text1 && ` backend cannot address a raw DOM node, so the port reports the same sentence as a toast instead of an anchored popover; the counting and the type comparison behind it are unchanged. // NOTE: The row` &&
-               ` images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org. // NOTE: The details popover, the three dialog modes, the owner change, the interval-header routing, the date` &&
-               ` validation and the group report are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_547.mjs). // NOTE: A JS callback is not` &&
-               ` in the UI5 expression grammar - ExpressionParser has no ``function`` keyword and reads { as an object literal, so the whole handler string failed to parse and every argument was lost. The selection` &&
-               ` is read from the model instead: PlanningCalendarRow (and CalendarAppointment) declare a bindable ``selected``, so the flags travel with the rows and ABAP does the work. Here that also covers the "do` &&
-               ` the selected appointments differ in type" test, which the original computes with .some( ). // NOTE: The details popover is opened on the POPOVER slot, so it is closed with popover_destroy( ) -`.
-    lv_text1 = lv_text1 && ` popup_destroy( ) tears down the separate POPUP slot and left the popover on screen. The EDIT branch closes it before opening the dialog, which the original does explicitly ("The sap.m.Popover has to` &&
-               ` be closed before the sap.m.Dialog gets opened").`.
+               ` valueState and applies the same rule on the change round-trip, and the save is skipped while the state is Error. That rule compares the two bound STRINGS (``d_end <= d_start``), so it only holds` &&
+               ` while both stay lexicographically sortable ISO - and until 2026-08-26 it did not: the pickers carried no valueFormat, so the first edit wrote a locale string back ('Jan 10, 2017, 8:00:00 AM'`.
+    lv_text1 = lv_text1 && ` measured) and the comparison silently stopped firing, letting an appointment save with its end five days before its start. Both pickers now pin valueFormat="yyyy-MM-dd'T'HH:mm:ss". Note the ORIGINAL` &&
+               ` binds no value at all - it works in Date objects through setDateValue/getDateValue - so the string binding, and the format contract it owes, are the port's own. handleAppointmentTypeChange only` &&
+               ` re-reads the checkbox, which is bound two-way here, so its select wire is dropped. // IMPROVISED: _handleGroupAppointments opens a Popover ANCHORED on the group's DOM node (openBy(` &&
+               ` document.getElementById( domRefId ) )), built in the controller. A backend cannot address a raw DOM node, so the port reports the same sentence as a toast instead of an anchored popover; the counting` &&
+               ` and the type comparison behind it are unchanged. // NOTE: The row images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org. // NOTE: The details popover, the three dialog` &&
+               ` modes, the owner change, the interval-header routing, the date validation and the group report are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction,`.
+    lv_text1 = lv_text1 && ` meta/interactions/z2ui5_cl_smpc_app_547.mjs). // NOTE: A JS callback is not in the UI5 expression grammar - ExpressionParser has no ``function`` keyword and reads { as an object literal, so the whole` &&
+               ` handler string failed to parse and every argument was lost. The selection is read from the model instead: PlanningCalendarRow (and CalendarAppointment) declare a bindable ``selected``, so the flags` &&
+               ` travel with the rows and ABAP does the work. Here that also covers the "do the selected appointments differ in type" test, which the original computes with .some( ). // NOTE: The details popover is` &&
+               ` opened on the POPOVER slot, so it is closed with popover_destroy( ) - popup_destroy( ) tears down the separate POPUP slot and left the popover on screen. The EDIT branch closes it before opening the` &&
+               ` dialog, which the original does explicitly ("The sap.m.Popover has to be closed before the sap.m.Dialog gets opened").`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.PlanningCalendar`                name = `PlanningCalendarModifyAppointments`            class = `z2ui5_cl_smpc_app_547` path = `src/02/01/z2ui5_cl_smpc_app_547.clas.abap`
         score = 5
@@ -5423,7 +5426,12 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` (UI5Date.getInstance() with minutes zeroed). A backend has no client clock, so the port seeds the SERVER's local date and next full hour instead. Same shape, a different clock - which matters only if` &&
                ` the two are in different time zones. // NOTE: The row images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org. // NOTE: The recurring appointments and non-working periods,` &&
                ` the create dialog with its recurrence branches, the drag-create and the drop's copy / move / reschedule branches are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e` &&
-               ` interaction, meta/interactions/z2ui5_cl_smpc_app_548.mjs).`.
+               ` interaction, meta/interactions/z2ui5_cl_smpc_app_548.mjs). // NOTE: The two DateTimePickers and the recurrence DatePicker bind their value UNTYPED, where the original binds them with type` &&
+               ` sap.ui.model.type.DateTime / sap.ui.model.type.Date and formatOptions { pattern: 'yyyy-MM-dd HH:mm' } / { pattern: 'yyyy-MM-dd' } (CreateAppointmentDialog.fragment.xml:34,40,118). The port keeps the` &&
+               ` path and carries the pattern as valueFormat + displayFormat instead, which is not a cosmetic choice: a typed binding with a source pattern raises on the EMPTY value the recurrence picker seeds with`.
+    lv_text1 = lv_text1 && ` and a cleared picker sends, which is why apps 549 and 609 settled on the same form. Until 2026-08-26 the port declared neither, and that was a real defect rather than a simplification - an` &&
+               ` unformatted picker writes a LOCALE string back through the two-way binding. Measured in de-DE: picking 4 March 2025 stored '04.03.2025, 10:15:00', which Formatter.DateCreateObject's new Date( ) reads` &&
+               ` month-first, so the appointment was drawn on 3 April. structural-diff cannot see this class at all - the port HAS a value attribute, so nothing reads as missing.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.PlanningCalendar`                name = `PlanningCalendarRecurringItem`                 class = `z2ui5_cl_smpc_app_548` path = `src/02/01/z2ui5_cl_smpc_app_548.clas.abap`
         score = 5
@@ -6308,7 +6316,13 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` seeds the dialog with the CLIENT's next full hour and the hour after it (UI5Date.getInstance() with minutes zeroed). A backend has no client clock, so the port seeds the SERVER's local date and next` &&
                ` full hour instead. Same shape, a different clock - which matters only if the two are in different time zones. // NOTE: handleViewChange toasts a constant text; the toast is composed on the client, so` &&
                ` the view change needs no round-trip. // NOTE: The nine recurring appointments with their rules, the eleven recurring non-working periods, and the create dialog with its recurrence branches are`.
-    lv_text1 = lv_text1 && ` unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_555.mjs).`.
+    lv_text1 = lv_text1 && ` unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_555.mjs). // NOTE: The two DateTimePickers and the recurrence DatePicker bind` &&
+               ` their value UNTYPED, where the original binds them with type sap.ui.model.type.DateTime / sap.ui.model.type.Date and formatOptions { pattern: 'yyyy-MM-dd HH:mm' } / { pattern: 'yyyy-MM-dd' }` &&
+               ` (CreateAppointmentDialog.fragment.xml:34,40,118). The port keeps the path and carries the pattern as valueFormat + displayFormat instead, which is not a cosmetic choice: a typed binding with a source` &&
+               ` pattern raises on the EMPTY value the recurrence picker seeds with and a cleared picker sends, which is why apps 549 and 609 settled on the same form. Until 2026-08-26 the port declared neither, and` &&
+               ` that was a real defect rather than a simplification - an unformatted picker writes a LOCALE string back through the two-way binding. Measured in de-DE: picking 4 March 2025 stored '04.03.2025,` &&
+               ` 10:15:00', which Formatter.DateCreateObject's new Date( ) reads month-first, so the appointment was drawn on 3 April. structural-diff cannot see this class at all - the port HAS a value attribute, so`.
+    lv_text1 = lv_text1 && ` nothing reads as missing.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.SinglePlanningCalendar`          name = `SinglePlanningCalendarRecurringItem`           class = `z2ui5_cl_smpc_app_555` path = `src/02/01/z2ui5_cl_smpc_app_555.clas.abap`
         score = 5
@@ -10084,15 +10098,18 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` contextMenu > m:Menu > two m:MenuItem subtree ({NAME} and {PRODUCTID}, the original's {Name}/{ProductId}) or leaves it out, which is setContextMenu / destroyContextMenu. (c)`.
     lv_text1 = lv_text1 && ` onProductIdCellContextMenu is still dropped, and with it the Table's beforeOpenContextMenu attribute: it calls oEvent.preventDefault( ), builds a sap.ui.unified.Menu per cell and opens it docked to` &&
                ` the clicked cell's DOM ref with Popup.Dock - a DOM anchor and a per-cell veto the wire has no counterpart for. Its handler goes with it. The columns, their sortProperty/filterProperty and the table's` &&
-               ` own header menus are unaffected. // NOTE: The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined with the five columns the sample binds. The original computes` &&
-               ` DeliveryDate from Date.now() with an i-mod-10 offset in 4-day steps; a fixed base date (2026-07-23) is used here so the port is deterministic - the corpus convention of app 164. The Quantity and` &&
-               ` Delivery Date columns keep the original's typed complex bindings with the path switched to the ABAP field, and sortProperty/filterProperty carry the ABAP (upper-cased) field names. ProductPicUrl` &&
-               ` values point at the OpenUI5 host per the asset-URL rule. // IMPROVISED: The footer OverflowToolbar stays empty: onInit lazily requires sap/ui/table/sample/TableExampleUtils and appends a`.
-    lv_text1 = lv_text1 && ` ToolbarSpacer plus its createInfoButton( ) to it. That helper lives in the demo kit's own sample folder, not in any UI5 library, and only opens a popover pointing at the sample's source. Every` &&
-               ` sap.ui.table sample of this batch drops it the same way. // NOTE: The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no` &&
-               ` document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23:` &&
-               ` the sentence used to claim the rewrite was 'declared by all 77 ports that do it', which had stopped being true as the corpus grew past that day's snapshot - 126 ports do it now, and 17 of them` &&
-               ` declared it nowhere. Those 17 carry the declaration since today, so the claim holds again; a stale absolute count is what made it wrong, so this wording names the date the count was taken.`.
+               ` own header menus are unaffected. One waiver rides with (b): the two MenuItem texts are RELATIVE bindings on a control the linter sees no binding context for, so both lines carry an` &&
+               ` abap2ui5lint-disable-next-line for relative-binding-without-context. It is a static blind spot, not a broken binding - sap.ui.table's _MenuUtils._openCustomContentCellContextMenu does` &&
+               ` oContextMenu.setBindingContext( TableUtils.getBindingContextOfRow( oRow ), ... ) before it opens the menu, which is why the original binds {Name} and {ProductId} there in the first place. // NOTE:` &&
+               ` The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined with the five columns the sample binds. The original computes DeliveryDate from Date.now() with an i-mod-10`.
+    lv_text1 = lv_text1 && ` offset in 4-day steps; a fixed base date (2026-07-23) is used here so the port is deterministic - the corpus convention of app 164. The Quantity and Delivery Date columns keep the original's typed` &&
+               ` complex bindings with the path switched to the ABAP field, and sortProperty/filterProperty carry the ABAP (upper-cased) field names. ProductPicUrl values point at the OpenUI5 host per the asset-URL` &&
+               ` rule. // IMPROVISED: The footer OverflowToolbar stays empty: onInit lazily requires sap/ui/table/sample/TableExampleUtils and appends a ToolbarSpacer plus its createInfoButton( ) to it. That helper` &&
+               ` lives in the demo kit's own sample folder, not in any UI5 library, and only opens a popover pointing at the sample's source. Every sap.ui.table sample of this batch drops it the same way. // NOTE:` &&
+               ` The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at` &&
+               ` https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the sentence used to claim the rewrite was 'declared by`.
+    lv_text1 = lv_text1 && ` all 77 ports that do it', which had stopped being true as the corpus grew past that day's snapshot - 126 ports do it now, and 17 of them declared it nowhere. Those 17 carry the declaration since` &&
+               ` today, so the claim holds again; a stale absolute count is what made it wrong, so this wording names the date the count was taken.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Menus`                                         class = `z2ui5_cl_smpc_app_355` path = `src/01/02/z2ui5_cl_smpc_app_355.clas.abap`
         score = 5
