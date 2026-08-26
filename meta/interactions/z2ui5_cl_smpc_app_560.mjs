@@ -21,4 +21,46 @@ export default async (page, expect) => {
     const s = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.WizardStep' && c.getId().endsWith('CreditCardStep'));
     return s && s.getValidated() === false;
   }, 'the credit card step was validated with an empty name');
+
+  // WizardStep._complete fires complete and then calls
+  // Wizard._handleNextButtonPress in the SAME tick, so the branch target has to
+  // stand BEFORE the press: PaymentTypeStep carries the seeded default as a
+  // declared nextStep, and every payment choice re-sends it from ABAP
+  await waitForUi5(page, () => {
+    const s = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.WizardStep' && c.getId().endsWith('PaymentTypeStep'));
+    return !!s && !!s.getNextStep() && s.getNextStep().endsWith('CreditCardStep') && s.getSubsequentSteps().length === 3;
+  }, 'PaymentTypeStep lost its declared nextStep=CreditCardStep — the first Next press would throw');
+
+  const pressNext = (suffix) => page.evaluate(`(() => {
+    const ui5All = () => Object.values(sap.ui.require("sap/ui/core/Element").registry.all());
+    const step = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.WizardStep' && c.getId().endsWith('${suffix}'));
+    if (!step) return 'no step ${suffix}';
+    const btn = step.getAggregation('_nextButton');
+    const dom = btn && btn.getDomRef();
+    if (!dom || dom.classList.contains('sapMWizardNextButtonHidden')) return 'the Next button on ${suffix} is not displayed';
+    try { btn.firePress(); return null; } catch (e) { return 'press threw: ' + e.message; }
+  })()`);
+
+  const contentsErr = await pressNext('ContentsStep');
+  if (contentsErr) throw new Error(`Next on ContentsStep: ${contentsErr}`);
+  await waitForUi5(page, () => {
+    const w = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.Wizard');
+    return !!w && w.getProgressStep().getId().endsWith('PaymentTypeStep');
+  }, 'the wizard never advanced from ContentsStep to PaymentTypeStep');
+
+  // ONE press must reach the Credit Card branch — with the branch left to the
+  // complete round trip this throws and the wizard stays put
+  const branchErr = await pressNext('PaymentTypeStep');
+  if (branchErr) throw new Error(`the FIRST Next press on PaymentTypeStep failed — ${branchErr}`);
+  await waitForUi5(page, () => {
+    const w = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.Wizard');
+    return !!w && w.getProgressStep().getId().endsWith('CreditCardStep');
+  }, 'the FIRST Next press on PaymentTypeStep did not reach CreditCardStep — the branch was not set before the press');
+
+  // arriving at BillingStep runs its activate wire, and that ABAP answer sends
+  // the delivery branch long before the validation can show the Next button
+  await waitForUi5(page, () => {
+    const s = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.WizardStep' && c.getId().endsWith('BillingStep'));
+    return !!s && s.getValidated() === false && s.getSubsequentSteps().length === 2;
+  }, 'BillingStep did not start unvalidated with its two subsequent steps');
 };
