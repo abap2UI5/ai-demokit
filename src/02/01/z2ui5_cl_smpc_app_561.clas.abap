@@ -99,6 +99,16 @@ CLASS z2ui5_cl_smpc_app_561 IMPLEMENTATION.
 
     client->view_display( view->stringify( ) ).
 
+    " Popup.setWithinArea( withinArea ) is the SUBJECT of this sample, not a
+    " detail: it confines every popup - dialogs included - to the bordered box
+    " above. It reaches the frontend through the CONTROL_GLOBAL target POPUP
+    " (the app-285 idiom), set once with the view rather than per press,
+    " because a follow-up action runs after the popup of the same round-trip
+    " has already opened. setWithinArea is @since 1.89, which this class
+    " already clears - it is filed under src/02 for ariaHasPopup @1.84
+    client->follow_up_action( val   = client->cs_event-control_global
+                              t_arg = VALUE #( ( `POPUP` ) ( `setWithinArea` ) ( `withinArea` ) ) ).
+
   ENDMETHOD.
 
 

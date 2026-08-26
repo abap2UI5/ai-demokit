@@ -2449,9 +2449,12 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` dialogs, their List and their Buttons are built in the CONTROLLER (new Dialog({ ... })). The port builds the same dialog in a chain and shows it with popup_display, so structural-diff reports Dialog,` &&
                ` List, StandardListItem and the extra Buttons as control extra - the sample's view declares none of them. The three presses differ only in the flags they set (contentWidth/contentHeight, resizable,` &&
                ` draggable) and in whether an OK button is there, which the port passes as parameters. // IMPROVISED: Popup.setWithinArea( withinArea ) is the POINT of the sample: it confines every popup - dialogs` &&
-               ` included - to the bordered HBox on the right. It is a static call on sap.ui.core.Popup with no declarative counterpart and no whitelisted frontend action, so the port keeps the within-area box (and` &&
-               ` its layout data) but the dialogs open unconfined, in the middle of the page. onExit's reset goes with it. // NOTE: The three dialogs and their resizable / draggable flags are unverified in a running`.
-    lv_text1 = lv_text1 && ` system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_561.mjs).`.
+               ` included - to the bordered HBox on the right. It has no declarative counterpart, but it IS whitelisted - the framework ships a CONTROL_GLOBAL target POPUP with methods { setWithinArea: ["within"] }` &&
+               ` and a purpose-built "within" argument kind that takes a control id. This note used to say there was no whitelisted frontend action, which was wrong and left the sample's whole subject unported: the`.
+    lv_text1 = lv_text1 && ` box was rendered and confined nothing. The port now issues the call once with the view (the app-285 idiom) rather than per press, because a follow-up action runs after the popup of the same` &&
+               ` round-trip has already opened - so onExit's reset is dropped, and this app opens no other popup, which makes the effect the same. setWithinArea is @since 1.89, already cleared by this class's` &&
+               ` ariaHasPopup @1.84 filing. // NOTE: The three dialogs and their resizable / draggable flags are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction,` &&
+               ` meta/interactions/z2ui5_cl_smpc_app_561.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Dialog`                          name = `DialogWithinArea`                              class = `z2ui5_cl_smpc_app_561` path = `src/02/01/z2ui5_cl_smpc_app_561.clas.abap`
         score = 5

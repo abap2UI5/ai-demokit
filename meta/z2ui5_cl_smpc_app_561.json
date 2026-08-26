@@ -5,8 +5,8 @@
   "file": "src/02/01/z2ui5_cl_smpc_app_561.clas.abap",
   "batch": "b46",
   "audit": {
-    "frontend_action": false,
-    "event_t_arg": false
+    "frontend_action": true,
+    "event_t_arg": true
   },
   "status": "generated",
   "checked": null,
@@ -21,7 +21,7 @@
     },
     {
       "type": "IMPROVISED",
-      "what": "Popup.setWithinArea( withinArea ) is the POINT of the sample: it confines every popup - dialogs included - to the bordered HBox on the right. It is a static call on sap.ui.core.Popup with no declarative counterpart and no whitelisted frontend action, so the port keeps the within-area box (and its layout data) but the dialogs open unconfined, in the middle of the page. onExit's reset goes with it."
+      "what": "Popup.setWithinArea( withinArea ) is the POINT of the sample: it confines every popup - dialogs included - to the bordered HBox on the right. It has no declarative counterpart, but it IS whitelisted - the framework ships a CONTROL_GLOBAL target POPUP with methods { setWithinArea: [\"within\"] } and a purpose-built \"within\" argument kind that takes a control id. This note used to say there was no whitelisted frontend action, which was wrong and left the sample's whole subject unported: the box was rendered and confined nothing. The port now issues the call once with the view (the app-285 idiom) rather than per press, because a follow-up action runs after the popup of the same round-trip has already opened - so onExit's reset is dropped, and this app opens no other popup, which makes the effect the same. setWithinArea is @since 1.89, already cleared by this class's ariaHasPopup @1.84 filing."
     },
     {
       "type": "NOTE",
