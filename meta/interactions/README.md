@@ -43,6 +43,18 @@ the per-port modules here):
   frontend-action chains (BUSY_INDICATOR+START_TIMER, NavContainer.to,
     FileUploader upload guard): 147 242 246
   KEYBOARD_SHORTCUT combo → backend event: 232
+  live control state that must survive a view rebuild: 022 235 557 (the
+    compound binding_call filter) 249 (setBadgeMinValue/MaxValue, which are
+    NOT properties — Button keeps them in private fields) 534 (the branching
+    Wizard's nextStep associations). The shape is always the same and is worth
+    recognising: view_display( ) destroys the slot and XMLView.create builds a
+    fresh control tree, so anything set through a control_by_id or binding_call
+    is gone — while the class state DESCRIBING it survives, and the app then
+    claims a state it does not show. Each of these legs asserts BOTH halves,
+    because asserting only the reset half passes on a port that never set
+    anything. 571 and 607 are the same mechanism from the other side (a
+    declared sorter the rebuilt binding re-applies, and an ordering the rebuild
+    drops); 585, 301, 302, 303, 167 and 558 carry it unfixed — see STATUS
   check_prevent_default (eBP wire): 241 093 (093 adds the confirm-then-
     remove flow: MessageBox onclose action + bound-row delete)
   breakpointChange → bound displaySize: 244
