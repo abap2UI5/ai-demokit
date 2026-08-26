@@ -2609,23 +2609,32 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` reads/clears the flags and re-filters. This is the documented 1:1 path (CAPABILITIES.md marks controller-read FacetFilter/List multi-select as expressible, with app 022 as its evidence port).`.
     lv_text1 = lv_text1 && ` handleFacetFilterReset also drops the per-list search filters, which the port does by restoring the untouched master list. // NOTE: the original's nested items-binding filter (_filterModel: ORs` &&
                ` inside each facet group, AND across the groups, model untouched) is expressed 1:1 as a declarative compound filter: apply_filter builds the groups JSON from the two-way bound selected flags and` &&
-               ` schedules follow_up_action cs_event-binding_call filter on idProductsTable/items. The filter column is the list TITLE, exactly as the original uses oList.getTitle() - Category / SupplierName. //` &&
-               ` NOTE: onInit creates the sap.m.sample.Table component, swaps the first cell for an ObjectIdentifier {Name}/{Category} and appends the table to idVBox; that table is rebuilt inline (the same inline` &&
-               ` rebuild app 235 carries), which is why the whole Table subtree - its header toolbar with the popin-layout ComboBox, the sticky CheckBoxes and the Hide/Show InfoToolbar ToggleButton, the info toolbar,` &&
-               ` the five columns and the ColumnListItem cells - counts as extra against the archived FacetFilter.view.xml. The price column keeps the original sap.ui.model.type.Currency composite binding 1:1. //`.
-    lv_text1 = lv_text1 && ` NOTE: the appended demo table's own controller logic is expressed the way app 235 expresses it: Table.sticky is bound to an ABAP string table maintained from the CheckBox round-trip (the app-009` &&
-               ` pattern), the ComboBox selectedKey is bound two-way and popinLayout is an expression over it (so the ComboBox change attribute is not emitted), and the ToggleButton's pressed flag drives the info` &&
-               ` toolbar's visible expression. // 1.71: the p:ColumnAIAction column plugin of the appended sap.m.sample.Table view (sap.m.plugins, far newer than UI5 1.71) is dropped with its dependents aggregation` &&
-               ` and press toast - the plugin class does not exist on a 1.71 runtime, so keeping it would crash view creation there. // NOTE: the original derives the ObjectNumber weight state in the demo table's` &&
-               ` frontend Formatter.js (weightState: KG conversion + Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin frontend - it is computed in ABAP model_init into a` &&
-               ` WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via a frontend formatter. // NOTE: not yet verified in a running system: the two-level lists/{VALUES} binding (a nested table inside a bound`.
-    lv_text1 = lv_text1 && ` aggregation row) and the search round-trip. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_557.mjs). // NOTE: Checked 2026-08-26, no change needed -` &&
-               ` recorded so the check is not repeated. apply_filter splices value-text and the list title into the compound-groups JSON without escaping, and this port DOES have a free-text search field, so it reads` &&
-               ` like the app 218/420/233/499 exposure. It is not: the search term never reaches the JSON. list_search only uses it as a server-side CS predicate that narrows t_filters, and it rebuilds t_filters from` &&
-               ` t_filters_all first, so every TEXT it keeps is one of the 28 seeded literals in model_init and every TYPE is Category or SupplierName. None of them contains a double quote or a backslash, and no` &&
-               ` control in the view can write TEXT (FacetFilterItem binds text and key one-way; only selected is two-way). Same conclusion as apps 022 and 235, which carry it as an inline comment. The residual case` &&
-               ` is a tampered client model - t_filters is a public attribute and round-trips - but that is true of every bound field in the corpus and its only effect is a filter that fails to apply in the`.
-    lv_text1 = lv_text1 && ` tamperer's own session.`.
+               ` schedules follow_up_action cs_event-binding_call filter on idProductsTable/items. The filter column is the list TITLE, exactly as the original uses oList.getTitle() - Category / SupplierName. The` &&
+               ` filter is issued from apply_filter( ) AND re-issued from view_display( ) (via the shared filter_issue( ), guarded by the last-issued payload in filter_live), because it lives on the binding and not` &&
+               ` in the model - the app-000/607 idiom. // NOTE: onInit creates the sap.m.sample.Table component, swaps the first cell for an ObjectIdentifier {Name}/{Category} and appends the table to idVBox; that` &&
+               ` table is rebuilt inline (the same inline rebuild app 235 carries), which is why the whole Table subtree - its header toolbar with the popin-layout ComboBox, the sticky CheckBoxes and the Hide/Show`.
+    lv_text1 = lv_text1 && ` InfoToolbar ToggleButton, the info toolbar, the five columns and the ColumnListItem cells - counts as extra against the archived FacetFilter.view.xml. The price column keeps the original` &&
+               ` sap.ui.model.type.Currency composite binding 1:1. // NOTE: the appended demo table's own controller logic is expressed the way app 235 expresses it: Table.sticky is bound to an ABAP string table` &&
+               ` maintained from the CheckBox round-trip (the app-009 pattern), the ComboBox selectedKey is bound two-way and popinLayout is an expression over it (so the ComboBox change attribute is not emitted),` &&
+               ` and the ToggleButton's pressed flag drives the info toolbar's visible expression. // 1.71: the p:ColumnAIAction column plugin of the appended sap.m.sample.Table view (sap.m.plugins, far newer than` &&
+               ` UI5 1.71) is dropped with its dependents aggregation and press toast - the plugin class does not exist on a 1.71 runtime, so keeping it would crash view creation there. // NOTE: the original derives` &&
+               ` the ObjectNumber weight state in the demo table's frontend Formatter.js (weightState: KG conversion + Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin frontend -`.
+    lv_text1 = lv_text1 && ` it is computed in ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via a frontend formatter. // NOTE: not yet verified in a running system: the two-level lists/{VALUES}` &&
+               ` binding (a nested table inside a bound aggregation row) and the search round-trip. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_557.mjs). // NOTE: Checked` &&
+               ` 2026-08-26, no change needed - recorded so the check is not repeated. apply_filter splices value-text and the list title into the compound-groups JSON without escaping, and this port DOES have a` &&
+               ` free-text search field, so it reads like the app 218/420/233/499 exposure. It is not: the search term never reaches the JSON. list_search only uses it as a server-side CS predicate that narrows` &&
+               ` t_filters, and it rebuilds t_filters from t_filters_all first, so every TEXT it keeps is one of the 28 seeded literals in model_init and every TYPE is Category or SupplierName. None of them contains` &&
+               ` a double quote or a backslash, and no control in the view can write TEXT (FacetFilterItem binds text and key one-way; only selected is two-way). Same conclusion as apps 022 and 235, which carry it as`.
+    lv_text1 = lv_text1 && ` an inline comment. The residual case is a tampered client model - t_filters is a public attribute and round-trips - but that is true of every bound field in the corpus and its only effect is a filter` &&
+               ` that fails to apply in the tamperer's own session. // NOTE: Measured 2026-08-26 with a probe, before the fix: filter to Category=Accessories (34 of 123 products), then restore the very same draft` &&
+               ` through the framework's own bookmark URL (?app_start=<class>#/z2ui5-xapp-state=<draft>, what cs_event-clipboard_app_state hands out). That request carries no frontend id, so the backend takes` &&
+               ` factory_first_start -> db_load(draft): check_on_navigated( ) is true while check_on_init( ) stays false, i.e. the ELSEIF branch, which is the only way a port that never calls another app reaches` &&
+               ` view_display( ) a second time. The rebuilt view came back with 123 rows and ZERO aFilters while the FacetFilter still read "Accessories" - the client-side filter lives on the LIVE items binding and` &&
+               ` dies with it, the two-way bound selected flags are class state and survive. Re-issuing the identical binding_call against the rebuilt binding put the 34 rows back, and the empty form ([] ->`.
+    lv_text1 = lv_text1 && ` buildFilterGroups -> binding.filter([]) in core/actions/ControlCall.js) clears without error, which is why the guard is "has a filter ever been issued" and not a selection scan. Statement order in` &&
+               ` ABAP is irrelevant: View1.controller.js awaits every T_SYSTEM display before it runs a T_CUSTOM follow-up. One consequence worth naming: apply_filter( ) builds its groups from t_filters, the` &&
+               ` search-NARROWED list, not from the t_filters_all master - so after a SEARCH that hides a selected value, the rebuild re-issues the narrower filter. That is the port's existing CONFIRM semantics (the` &&
+               ` next confirm would emit the same thing), not something the re-issue introduces.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.FacetFilter`                     name = `FacetFilterCustomFilters`                      class = `z2ui5_cl_smpc_app_557` path = `src/02/01/z2ui5_cl_smpc_app_557.clas.abap`
         score = 5
@@ -2656,11 +2665,20 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` UI5 1.71) is dropped with its dependents aggregation and press toast - the plugin class does not exist on a 1.71 runtime, so keeping it would crash view creation there. // NOTE: the original's nested`.
     lv_text1 = lv_text1 && ` items-binding filter (ORs inside each facet group, AND across the groups, model untouched) is expressed 1:1 as a declarative compound filter: apply_filter builds the groups JSON from the two-way` &&
                ` bound selected flags and schedules follow_up_action cs_event-binding_call filter on idProductsTable/items (compound groups implemented upstream 2026-07-20, pr/binding-call-compound-filters); the` &&
-               ` earlier ABAP-side model rebuild and the t_products_all mirror are gone. // NOTE: the original derives the ObjectNumber weight state in its frontend Formatter.js (weightState: KG conversion +` &&
-               ` Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin frontend - it is computed in ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via` &&
-               ` a frontend formatter (core:require dropped). Visually 1:1 with the original. // NOTE: the controller's onToggleInfoToolbar (ToggleButton press handler calling getInfoToolbar().setVisible(!pressed))` &&
-               ` is expressed as bound properties instead of a round-trip: the ToggleButton's press attribute is dropped, its pressed property is bound two-way, and the infoToolbar's OverflowToolbar gains a`.
-    lv_text1 = lv_text1 && ` visible={= !pressed } expression binding.`.
+               ` earlier ABAP-side model rebuild and the t_products_all mirror are gone. The filter is issued from apply_filter( ) AND re-issued from view_display( ) (via the shared filter_issue( ), guarded by the` &&
+               ` last-issued payload in filter_live), because it lives on the binding and not in the model - the app-000/607 idiom. // NOTE: the original derives the ObjectNumber weight state in its frontend` &&
+               ` Formatter.js (weightState: KG conversion + Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin frontend - it is computed in ABAP model_init into a WEIGHT_STATE field` &&
+               ` and bound state="{WEIGHT_STATE}", not via a frontend formatter (core:require dropped). Visually 1:1 with the original. // NOTE: the controller's onToggleInfoToolbar (ToggleButton press handler`.
+    lv_text1 = lv_text1 && ` calling getInfoToolbar().setVisible(!pressed)) is expressed as bound properties instead of a round-trip: the ToggleButton's press attribute is dropped, its pressed property is bound two-way, and the` &&
+               ` infoToolbar's OverflowToolbar gains a visible={= !pressed } expression binding. // NOTE: Measured 2026-08-26 with a probe, before the fix: filter to Category=Accessories (34 of 123 products), then` &&
+               ` restore the very same draft through the framework's own bookmark URL (?app_start=<class>#/z2ui5-xapp-state=<draft>, what cs_event-clipboard_app_state hands out). That request carries no frontend id,` &&
+               ` so the backend takes factory_first_start -> db_load(draft): check_on_navigated( ) is true while check_on_init( ) stays false, i.e. the ELSEIF branch, which is the only way a port that never calls` &&
+               ` another app reaches view_display( ) a second time. The rebuilt view came back with 123 rows and ZERO aFilters while the FacetFilter still read "Accessories" - the client-side filter lives on the LIVE` &&
+               ` items binding and dies with it, the two-way bound selected flags are class state and survive. Re-issuing the identical binding_call against the rebuilt binding put the 34 rows back, and the empty`.
+    lv_text1 = lv_text1 && ` form ([] -> buildFilterGroups -> binding.filter([]) in core/actions/ControlCall.js) clears without error, which is why the guard is "has a filter ever been issued" and not a selection scan. Statement` &&
+               ` order in ABAP is irrelevant: View1.controller.js awaits every T_SYSTEM display before it runs a T_CUSTOM follow-up. This also bounds the 2026-07-20 human live check recorded above: it exercised the` &&
+               ` filter inside one running app instance, where the view is never rebuilt, so it could not have seen this. The port stays checked - what was checked passed - but the compound-binding_call reference` &&
+               ` claim now rests on the re-issue as well.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.FacetFilter`                     name = `FacetFilterLight`                              class = `z2ui5_cl_smpc_app_022` path = `src/01/01/z2ui5_cl_smpc_app_022.clas.abap`
         score = 5
@@ -2691,9 +2709,17 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` (CONTROL_METHODS setSticky) closes a different footgun, an imperative call that silently received a string. // 1.71: the p:ColumnAIAction column plugin (sap.m.plugins, far newer than UI5 1.71) is` &&
                ` dropped with its dependents aggregation and press toast - the plugin class does not exist on a 1.71 runtime, so keeping it would crash view creation there. // NOTE: the original's nested` &&
                ` items-binding filter (ORs inside each facet group, AND across the groups, model untouched) is expressed 1:1 as a declarative compound filter: apply_filter builds the groups JSON from the two-way` &&
-               ` bound selected flags and schedules follow_up_action cs_event-binding_call filter on idProductsTable/items (compound groups implemented upstream 2026-07-20, pr/binding-call-compound-filters). // NOTE:`.
-    lv_text1 = lv_text1 && ` the original derives the ObjectNumber weight state in its frontend Formatter.js (weightState: KG conversion + Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin` &&
-               ` frontend - it is computed in ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via a frontend formatter (core:require dropped). Visually 1:1 with the original.`.
+               ` bound selected flags and schedules follow_up_action cs_event-binding_call filter on idProductsTable/items (compound groups implemented upstream 2026-07-20, pr/binding-call-compound-filters). The`.
+    lv_text1 = lv_text1 && ` filter is issued from apply_filter( ) AND re-issued from view_display( ) (via the shared filter_issue( ), guarded by the last-issued payload in filter_live), because it lives on the binding and not` &&
+               ` in the model - the app-000/607 idiom. // NOTE: the original derives the ObjectNumber weight state in its frontend Formatter.js (weightState: KG conversion + Success/Warning/Error thresholds). That is` &&
+               ` business logic, so - abap2UI5 being a thin frontend - it is computed in ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via a frontend formatter (core:require` &&
+               ` dropped). Visually 1:1 with the original. // NOTE: Measured 2026-08-26 with a probe, before the fix: filter to Category=Accessories (34 of 123 products), then restore the very same draft through the` &&
+               ` framework's own bookmark URL (?app_start=<class>#/z2ui5-xapp-state=<draft>, what cs_event-clipboard_app_state hands out). That request carries no frontend id, so the backend takes factory_first_start` &&
+               ` -> db_load(draft): check_on_navigated( ) is true while check_on_init( ) stays false, i.e. the ELSEIF branch, which is the only way a port that never calls another app reaches view_display( ) a second`.
+    lv_text1 = lv_text1 && ` time. The rebuilt view came back with 123 rows and ZERO aFilters while the FacetFilter still read "Accessories" - the client-side filter lives on the LIVE items binding and dies with it, the two-way` &&
+               ` bound selected flags are class state and survive. Re-issuing the identical binding_call against the rebuilt binding put the 34 rows back, and the empty form ([] -> buildFilterGroups ->` &&
+               ` binding.filter([]) in core/actions/ControlCall.js) clears without error, which is why the guard is "has a filter ever been issued" and not a selection scan. Statement order in ABAP is irrelevant:` &&
+               ` View1.controller.js awaits every T_SYSTEM display before it runs a T_CUSTOM follow-up.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.FacetFilter`                     name = `FacetFilterSimple`                             class = `z2ui5_cl_smpc_app_235` path = `src/01/01/z2ui5_cl_smpc_app_235.clas.abap`
         score = 5
