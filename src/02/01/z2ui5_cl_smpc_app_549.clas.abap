@@ -53,11 +53,16 @@ CLASS z2ui5_cl_smpc_app_549 DEFINITION PUBLIC.
     METHODS popup_details_display.
     METHODS popup_modify_display.
     METHODS popup_legend_display.
+    METHODS all_day_hours.
     METHODS type_text
       IMPORTING type          TYPE string
       RETURNING VALUE(result) TYPE string.
     METHODS iso_of
       IMPORTING first         TYPE i
+      RETURNING VALUE(result) TYPE string.
+    METHODS at_hour
+      IMPORTING iso           TYPE string
+                hour          TYPE i
       RETURNING VALUE(result) TYPE string.
     METHODS model_init.
 
@@ -393,33 +398,50 @@ CLASS z2ui5_cl_smpc_app_549 IMPLEMENTATION.
                     )->tag( `Label`
                         )->a( n = `text`     v = `From`
                         )->a( n = `labelFor` v = `startDate`
+                    " all four pickers carry an explicit ISO valueFormat. The original
+                    " never binds value at all - it sets dateValue imperatively - so the
+                    " port's string binding needs the format pinned: with none, a
+                    " DateTimePicker still READS the model's ISO string (DateFormat falls
+                    " back to ISO) but writes a LOCALE string back ("Jul 12, 2018, 2:30:00 PM"),
+                    " and a DatePicker cannot read it at all - it showed the raw
+                    " "2018-07-09T09:00:00" with no date value and wrote back "7/12/18".
+                    " With the format pinned both pairs read and write the same 19-character
+                    " ISO string, which is what makes the ALL_DAY hour rewrite below safe
+                    " (headless probe, 2026-08-26)
                     )->tag( `DateTimePicker`
-                        )->a( n = `id`       v = `DTPStartDate`
-                        )->a( n = `required` v = `true`
-                        )->a( n = `visible`  v = |\{= !${ client->_bind( all_day ) } \}|
-                        )->a( n = `value`    v = client->_bind( sel_start )
+                        )->a( n = `id`          v = `DTPStartDate`
+                        )->a( n = `required`    v = `true`
+                        )->a( n = `visible`     v = |\{= !${ client->_bind( all_day ) } \}|
+                        )->a( n = `valueFormat` v = `yyyy-MM-dd'T'HH:mm:ss`
+                        )->a( n = `value`       v = client->_bind( sel_start )
                     )->tag( `DatePicker`
-                        )->a( n = `id`       v = `DPStartDate`
-                        )->a( n = `required` v = `true`
-                        )->a( n = `visible`  v = |\{= ${ client->_bind( all_day ) } \}|
-                        )->a( n = `value`    v = client->_bind( sel_start )
+                        )->a( n = `id`          v = `DPStartDate`
+                        )->a( n = `required`    v = `true`
+                        )->a( n = `visible`     v = |\{= ${ client->_bind( all_day ) } \}|
+                        )->a( n = `valueFormat` v = `yyyy-MM-dd'T'HH:mm:ss`
+                        )->a( n = `value`       v = client->_bind( sel_start )
                     )->tag( `Label`
                         )->a( n = `text`     v = `To`
                         )->a( n = `labelFor` v = `endDate`
                     )->tag( `DateTimePicker`
-                        )->a( n = `id`       v = `DTPEndDate`
-                        )->a( n = `required` v = `true`
-                        )->a( n = `visible`  v = |\{= !${ client->_bind( all_day ) } \}|
-                        )->a( n = `value`    v = client->_bind( sel_end )
+                        )->a( n = `id`          v = `DTPEndDate`
+                        )->a( n = `required`    v = `true`
+                        )->a( n = `visible`     v = |\{= !${ client->_bind( all_day ) } \}|
+                        )->a( n = `valueFormat` v = `yyyy-MM-dd'T'HH:mm:ss`
+                        )->a( n = `value`       v = client->_bind( sel_end )
                     )->tag( `DatePicker`
-                        )->a( n = `id`       v = `DPEndDate`
-                        )->a( n = `required` v = `true`
-                        )->a( n = `visible`  v = |\{= ${ client->_bind( all_day ) } \}|
-                        )->a( n = `value`    v = client->_bind( sel_end )
+                        )->a( n = `id`          v = `DPEndDate`
+                        )->a( n = `required`    v = `true`
+                        )->a( n = `visible`     v = |\{= ${ client->_bind( all_day ) } \}|
+                        )->a( n = `valueFormat` v = `yyyy-MM-dd'T'HH:mm:ss`
+                        )->a( n = `value`       v = client->_bind( sel_end )
+                    " handleCheckBoxSelect rewrites the hours, it does not only swap
+                    " which picker pair is visible - so the select is wired
                     )->tag( `CheckBox`
                         )->a( n = `id`       v = `allDay`
                         )->a( n = `text`     v = `All-day`
                         )->a( n = `selected` v = client->_bind( all_day )
+                        )->a( n = `select`   v = client->_event( `ALL_DAY` )
                     )->tag( `Label`
                         )->a( n = `text`     v = `Type`
                         )->a( n = `labelFor` v = `appType`
@@ -493,8 +515,9 @@ CLASS z2ui5_cl_smpc_app_549 IMPLEMENTATION.
             sel_end     = appointment-end_at.
             sel_typetxt = type_text( appointment-type ).
             " an appointment that starts and ends at midnight is an all-day one
-            all_day     = xsdbool( substring( val = sel_start off = 11 len = 8 ) = `00:00:00`
-                               AND substring( val = sel_end off = 11 len = 8 ) = `00:00:00` ).
+            " (CP, not substring( ): a cleared picker sends an empty value and
+            " an offset read would dump on it)
+            all_day     = xsdbool( sel_start CP `*T00:00:00` AND sel_end CP `*T00:00:00` ).
             popup_details_display( ).
           ENDIF.
         ENDIF.
@@ -558,6 +581,16 @@ CLASS z2ui5_cl_smpc_app_549 IMPLEMENTATION.
                           end_at   = sel_end ) INTO TABLE t_appointments.
         ENDIF.
         client->popup_destroy( ).
+
+      WHEN `ALL_DAY`.
+        " handleCheckBoxSelect does more than swap which picker pair is visible:
+        " ticking All-day sets both times to midnight (_setHoursToZero) and
+        " unticking puts them back on the default hours 9 and 10
+        " (_getDefaultAppointmentStartHour / _getDefaultAppointmentEndHour),
+        " then copies both into the pair that has just become visible. The
+        " CheckBox writes its selected state into all_day BEFORE it fires
+        " select (sap.m.CheckBox.ontap), so the flag already carries the new value
+        all_day_hours( ).
 
       WHEN `DIALOG_CANCEL`.
         client->popup_destroy( ).
@@ -625,6 +658,22 @@ CLASS z2ui5_cl_smpc_app_549 IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD all_day_hours.
+
+    " _setHoursToZero for an all-day appointment, the sample's own default
+    " hours 9 and 10 for a timed one - the rewrite handleCheckBoxSelect does
+    " on top of swapping which picker pair is visible
+    IF all_day = abap_true.
+      sel_start = at_hour( iso = sel_start hour = 0 ).
+      sel_end   = at_hour( iso = sel_end   hour = 0 ).
+    ELSE.
+      sel_start = at_hour( iso = sel_start hour = 9 ).
+      sel_end   = at_hour( iso = sel_end   hour = 10 ).
+    ENDIF.
+
+  ENDMETHOD.
+
+
   METHOD type_text.
 
     " _typeFormatter: the legend text for the type key, or the key itself
@@ -642,6 +691,22 @@ CLASS z2ui5_cl_smpc_app_549 IMPLEMENTATION.
              |-{ CONV i( client->get_event_arg( first + 2 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
              |T{ CONV i( client->get_event_arg( first + 3 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
              |:{ CONV i( client->get_event_arg( first + 4 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }:00|.
+
+  ENDMETHOD.
+
+
+  METHOD at_hour.
+
+    " the same ISO string with its time part rewritten to the given full hour -
+    " _setHoursToZero and the two default-hour helpers of the original. The
+    " pickers carry valueFormat yyyy-MM-dd'T'HH:mm:ss, so every value that
+    " travels is 19 characters; a cleared picker sends an empty one and is
+    " left untouched rather than turned into a date-less time
+    IF strlen( iso ) < 10.
+      result = iso.
+      RETURN.
+    ENDIF.
+    result = |{ substring( val = iso len = 10 ) }T{ hour WIDTH = 2 ALIGN = RIGHT PAD = '0' }:00:00|.
 
   ENDMETHOD.
 

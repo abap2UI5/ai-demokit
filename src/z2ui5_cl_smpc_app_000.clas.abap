@@ -6091,12 +6091,24 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` the Day view (setSelectedView) and it moves the start date to the clicked day. The port does the second; the first is lost, because SinglePlanningCalendar.selectedView is an ASSOCIATION - it neither`.
     lv_text1 = lv_text1 && ` binds (the XML parser reads the value as a control id) nor has a whitelisted setter. // NOTE: The three fragments (Details popover, Modify dialog, Legend popover) are built in chains and shown with` &&
                ` popover_display / popup_display. handleViewChange's toast is composed on the client; handleStartDateChange names the new date and keeps its round-trip. The three date-validation helpers` &&
-               ` (handleDateTimePickerChange, handleDatePickerChange, updateButtonEnabledState) guard the OK button against an empty or malformed picker value - the port relies on the pickers' own required flag` &&
-               ` instead and always accepts the dialog. // NOTE: The details popover, the create/edit dialog, the delete, the legend, the three drag actions and the more-link are unverified in a running system.` &&
-               ` **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_549.mjs). // NOTE: The three feature flags seed abap_true, as the original's setData does - drag-and-drop,` &&
-               ` resize and drag-create are the behaviours this sample exists to show, and the three ToggleButtons start pressed. They had been seeded false, and the e2e module asserted that wrong value, so the`.
-    lv_text1 = lv_text1 && ` module had to be corrected with the port. // NOTE: The details popover is opened on the POPOVER slot, so it is closed with popover_destroy( ) - popup_destroy( ) tears down the separate POPUP slot and` &&
-               ` left the popover on screen. The EDIT branch closes it before opening the dialog, which the original does explicitly ("The sap.m.Popover has to be closed before the sap.m.Dialog gets opened").`.
+               ` (handleDateTimePickerChange, handleDatePickerChange, updateButtonEnabledState) have THREE error branches, not the single "empty or malformed picker value" this note used to claim: an empty picker` &&
+               ` ("Please pick a date"), a value the picker could not parse ("Invalid date", read off the change event's valid parameter), and - the one the pickers' own required flag can NOT substitute for - an end` &&
+               ` that is not after the start, which paints BOTH pickers ValueState.Error with "Start date should be before End date" and disables the OK button. The port keeps none of the three and always accepts the` &&
+               ` dialog, so it saves an appointment that ends before it starts. Its sibling app 609 implements the third branch in ABAP (date_check, bound valueState / valueStateText / enabled) because its original`.
+    lv_text1 = lv_text1 && ` has only that one and computes it from the two dates alone; doing the same here additionally needs the change event's valid parameter carried into the wire and would paint both pickers where the` &&
+               ` original paints one. // NOTE: handleCheckBoxSelect is wired (CheckBox select -> ALL_DAY). It does more than swap which picker pair is visible: ticking All-day rewrites both times to midnight` &&
+               ` (_setHoursToZero) and unticking restores the sample's own default hours 9 and 10 (_getDefaultAppointmentStartHour / _getDefaultAppointmentEndHour), then copies both into the newly visible pair.` &&
+               ` Without it the port stored a 09:00-10:00 appointment for an all-day one and the calendar never drew it in the all-day row - the all-day flag is DERIVED on read (start and end both at midnight) and` &&
+               ` nothing ever wrote it. sap.m.CheckBox writes selected into the model before it fires select, so the ABAP branch reads the new flag straight off all_day. The rewrite needs the four pickers'` &&
+               ` valueFormat pinned to yyyy-MM-dd'T'HH:mm:ss, which the original never needs because it sets dateValue imperatively and binds no value at all: measured headless (2026-08-26), an unpinned`.
+    lv_text1 = lv_text1 && ` DateTimePicker READS the model's ISO string but writes a LOCALE string back ("Jul 12, 2018, 2:30:00 PM"), and an unpinned DatePicker cannot read it at all - it showed the raw "2018-07-09T09:00:00"` &&
+               ` with no date value and wrote back "7/12/18". With the format pinned both pairs read and write the same 19-character ISO string. The midnight test is a CP pattern rather than an offset substring( ),` &&
+               ` which would dump on the empty value a cleared picker sends. // NOTE: The details popover, the create/edit dialog, the delete, the legend, the three drag actions and the more-link are unverified in a` &&
+               ` running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_549.mjs). // NOTE: The three feature flags seed abap_true, as the original's setData does -` &&
+               ` drag-and-drop, resize and drag-create are the behaviours this sample exists to show, and the three ToggleButtons start pressed. They had been seeded false, and the e2e module asserted that wrong` &&
+               ` value, so the module had to be corrected with the port. // NOTE: The details popover is opened on the POPOVER slot, so it is closed with popover_destroy( ) - popup_destroy( ) tears down the separate`.
+    lv_text1 = lv_text1 && ` POPUP slot and left the popover on screen. The EDIT branch closes it before opening the dialog, which the original does explicitly ("The sap.m.Popover has to be closed before the sap.m.Dialog gets` &&
+               ` opened").`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.SinglePlanningCalendar`          name = `SinglePlanningCalendar`                        class = `z2ui5_cl_smpc_app_549` path = `src/02/01/z2ui5_cl_smpc_app_549.clas.abap`
         score = 5
@@ -6117,17 +6129,32 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` from app 549's in four places, all carried: the labelFor targets and the ids read moreInfoText / startDateText / endDateText / allDayCheckBox, the all-day CheckBox is editable="false" rather than` &&
                ` enabled="false", and the type Text binds {type} directly instead of running app 549's _typeFormatter - there is no legend here to name the types, so the raw key is what shows. // NOTE: the Modify` &&
                ` dialog's type Select binds /types, an array the controller builds by walking the CalendarDayType enum, and shows the KEY as the text ({type} twice). The port seeds the same twenty-one members in the` &&
-               ` enum's own order. Its two Inputs also carry no maxLength here, where app 549's sample sets 255. // NOTE: handleAppointmentSelect reads the clicked appointment's binding context; the wire carries its` &&
-               ` path plus its selected flag, and an empty path means the user clicked empty space, which is what opens the create dialog. handleHeaderDateSelect and the Create button share that dialog.` &&
-               ` handleStartDateChange toasts the new start date, which the wire carries as the Date's own toString(). // IMPROVISED: the details popover is anchored on the appointment's DOM node upstream`.
-    lv_text1 = lv_text1 && ` (oEvent.getParameter('appointment')); a thin frontend has no such node, so it is anchored on the calendar by id. Everything the popover shows - title, additional info, the two formatted dates, the` &&
-               ` all-day flag and the type - is composed by the backend from the row the path names. // NOTE: the 35 appointments and the 2018-07-09 start date are seeded verbatim from onInit. Several carry an` &&
-               ` out-of-range minute (hour 7 minute 9, hour 9 minute 9, hour 13 minute 9) that JavaScript normalizes; the port stores the same values as ISO strings. // NOTE: not yet verified in a running system:` &&
-               ` that Create opens the modify dialog, that an appointment click opens the details popover with its type, and that saving writes the row back into the calendar. **e2e-verified 2026-08-25** (nightly e2e` &&
-               ` interaction, meta/interactions/z2ui5_cl_smpc_app_609.mjs). // NOTE: The details popover is opened on the POPOVER slot, so it is closed with popover_destroy( ) and addressed with cs_view-popover.` &&
-               ` popup_destroy( )/cs_view-popup target a different slot that this app never opens, so the close and the in-popover navigation were silent no-ops. // NOTE: The row created at runtime seeds the`.
-    lv_text1 = lv_text1 && ` enum-typed field explicitly. An ABAP field is never absent, so an unset one reaches the client as "" - not a member of the enum - and validateProperty throws, taking the binding update and the view` &&
-               ` down. The original pushes a JS object without the key at all, which falls back to the property default.`.
+               ` enum's own order. Its two Inputs also carry no maxLength here, where app 549's sample sets 255, and the port writes none either - it had carried 255, which contradicted this sentence and which` &&
+               ` structural-diff cannot see (it only reports attributes the ORIGINAL has and the port lacks, never one the port adds). // NOTE: handleCheckBoxSelect is wired (CheckBox select -> ALL_DAY). It does more` &&
+               ` than swap which picker pair is visible: ticking All-day rewrites both times to midnight (_setHoursToZero) and unticking restores the sample's own default hours 9 and 10`.
+    lv_text1 = lv_text1 && ` (_getDefaultAppointmentStartHour / _getDefaultAppointmentEndHour), then copies both into the newly visible pair. Without it the port stored a 09:00-10:00 appointment for an all-day one and the` &&
+               ` calendar never drew it in the all-day row - the all-day flag is DERIVED on read (start and end both at midnight) and nothing ever wrote it. sap.m.CheckBox writes selected into the model before it` &&
+               ` fires select, so the ABAP branch reads the new flag straight off all_day. The rewrite needs the four pickers' valueFormat pinned to yyyy-MM-dd'T'HH:mm:ss, which the original never needs because it` &&
+               ` sets dateValue imperatively and binds no value at all: measured headless (2026-08-26), an unpinned DateTimePicker READS the model's ISO string but writes a LOCALE string back ("Jul 12, 2018, 2:30:00` &&
+               ` PM"), and an unpinned DatePicker cannot read it at all - it showed the raw "2018-07-09T09:00:00" with no date value and wrote back "7/12/18". With the format pinned both pairs read and write the same` &&
+               ` 19-character ISO string. The midnight test is a CP pattern rather than an offset substring( ), which would dump on the empty value a cleared picker sends. // NOTE: The modify dialog's date validation`.
+    lv_text1 = lv_text1 && ` is KEPT, computed in ABAP and bound - it had been dropped entirely and undeclared. Upstream handleDateTimePickerChange and handleDatePickerChange call _setDateValueState and updateButtonEnabledState:` &&
+               ` an end that is not after the start paints BOTH pickers ValueState.Error with "Start date should be before End date", and the OK button is disabled for that and for an empty picker;` &&
+               ` handleDialogOkButton refuses to write while either picker is in error. The port wires change on all four pickers to a DATE_CHECK event, computes the state in date_check( ) and binds valueState /` &&
+               ` valueStateText on the pickers and enabled on the OK button, with the same guard in DIALOG_OK. The two comparisons of the original are kept apart: the DateTimePicker pair rejects an end that is not` &&
+               ` strictly after the start (<=), the DatePicker pair only an end BEFORE the start (<), so an all-day appointment may start and end on the same day. Both values are 19-character ISO strings because of` &&
+               ` the pinned valueFormat, so ordering them as strings orders them by time. Sibling app 549 does NOT implement this: its original has three error branches, one of which reads the change event's valid`.
+    lv_text1 = lv_text1 && ` parameter, and its sidecar declares the drop. // NOTE: handleAppointmentSelect reads the clicked appointment's binding context; the wire carries its path plus its selected flag, and an empty path` &&
+               ` means the user clicked empty space, which is what opens the create dialog. handleHeaderDateSelect and the Create button share that dialog. handleStartDateChange toasts the new start date, which the` &&
+               ` wire carries as the Date's own toString(). // IMPROVISED: the details popover is anchored on the appointment's DOM node upstream (oEvent.getParameter('appointment')); a thin frontend has no such` &&
+               ` node, so it is anchored on the calendar by id. Everything the popover shows - title, additional info, the two formatted dates, the all-day flag and the type - is composed by the backend from the row` &&
+               ` the path names. // NOTE: the 35 appointments and the 2018-07-09 start date are seeded verbatim from onInit. Several carry an out-of-range minute (hour 7 minute 9, hour 9 minute 9, hour 13 minute 9)` &&
+               ` that JavaScript normalizes; the port stores the same values as ISO strings. // NOTE: not yet verified in a running system: that Create opens the modify dialog, that an appointment click opens the`.
+    lv_text1 = lv_text1 && ` details popover with its type, and that saving writes the row back into the calendar. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_609.mjs). // NOTE: The` &&
+               ` details popover is opened on the POPOVER slot, so it is closed with popover_destroy( ) and addressed with cs_view-popover. popup_destroy( )/cs_view-popup target a different slot that this app never` &&
+               ` opens, so the close and the in-popover navigation were silent no-ops. // NOTE: The row created at runtime seeds the enum-typed field explicitly. An ABAP field is never absent, so an unset one reaches` &&
+               ` the client as "" - not a member of the enum - and validateProperty throws, taking the binding update and the view down. The original pushes a JS object without the key at all, which falls back to the` &&
+               ` property default.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.SinglePlanningCalendar`          name = `SinglePlanningCalendarCreateApp`               class = `z2ui5_cl_smpc_app_609` path = `src/02/01/z2ui5_cl_smpc_app_609.clas.abap`
         score = 5
@@ -6492,26 +6519,35 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
 
-    lv_text1 = `NOTE: addNewButtonPress appends an empty employee row to the bound /T_EMPLOYEES (the addItem+setSelectedItem equivalent for a bound aggregation; the new tab is appended but not auto-selected - the new` &&
-               ` tab is not auto-selected. Corrected 2026-08-23: this used to justify it with "TabContainer.selectedItem is an association a bound-row clone cannot address from the backend", which the framework` &&
-               ` lifted on 2026-08-06 - wherever an argument takes a control id it also takes an aggregation ITEM addressed positionally (``myTabContainer/items/<n>``, 0-based), setSelectedItem is whitelisted with` &&
-               ` the controlIdOrNull kind, and app 012 already uses exactly that form for the same class of problem. The auto-selection is therefore expressible and simply not done yet, the one residual difference).` &&
-               ` itemCloseHandler reproduced 1:1 since 2026-07-30: the itemClose wire carries s_ctrl-check_prevent_default (the original calls oEvent.preventDefault() unconditionally) and transports` &&
-               ` ${$parameters>/item}.getName() plus the row index via ${$parameters>/item/oParent}.indexOfItem(${$parameters>/item}) (the dnd-idiom index transport); the backend raises MessageBox.confirm (Do you`.
-    lv_text1 = lv_text1 && ` want to close the tab '<name>'?, onclose CLOSE_DECIDE) and on OK deletes the row (the bound-aggregation removeItem) and toasts 'Item closed: <name>' (duration 500), on Cancel toasts 'Item close` &&
-               ` canceled: <name>' - exactly the original's onClose branches. The pending name/index live in protected state across the confirm round-trip. The earlier static 'Close requested' toast (tab never` &&
-               ` removable) is gone. // NOTE: the prevent-default itemClose + MessageBox.confirm + row-delete chain and the index transport via the oParent indexOfItem form are unverified in a running system; the e2e` &&
-               ` interaction covers open-confirm-OK-removes end to end in the transpiled harness. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): covered in part - restated` &&
-               ` 2026-08-23: the module asserts the MessageBox contains the static prefix "Do you want to close the tab" and that a toast contains "Item closed:", and neither the item NAME in the box nor the row's` &&
-               ` REMOVAL is asserted. Since the texts are composed from close_name while the deletion rides on a separately transported index, a wrong index (or the -1 case the guard swallows) would leave the module`.
-    lv_text1 = lv_text1 && ` green. What it does cover: close icon -> confirm box with the item name -> OK -> row removed + 'Item closed:' toast (needs the 2026-07-30 Messages.js onclose fix - under the broken wire the OK action` &&
-               ` never arrived). **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_093.mjs). // NOTE: The added tab's CONTENT differs, which the auto-selection deviation had` &&
-               ` called "the one residual difference". The original constructs a bare TabContainerItem (name + modified) and addItem's it, so it carries no content and the new tab's body is EMPTY; the port appends a` &&
-               ` row to the bound table, so the new tab is a template clone showing the three Labels and three Inputs over a blank row. Declared 2026-08-23.`.
+    lv_text1 = `NOTE: SALARY is TYPE string, not the ``p LENGTH 8 DECIMALS 2`` it was until 2026-08-26. The original binds ``<Input value="{salary}" description="EUR"/>`` over a JSONModel, which keeps whatever the` &&
+               ` user types; a PACKED ABAP field cannot, because a table cell whose text does not convert is swallowed by delta_apply_field's ``CATCH cx_root ##NO_HANDLER`` ("skip just this cell",` &&
+               ` z2ui5_cl_ui5_srv_model) - the backend keeps the old number while the browser goes on showing the entry. MEASURED 2026-08-26 against the transpiled backend: typing ``1,455.22`` into the Salary Input` &&
+               ` and then taking the app's only round trip (the tab close) returned SALARY 1455.22, the OLD value, with no error and no toast. SALARY carries no typed binding anywhere, so the fix is the type itself` &&
+               ` rather than app 570's string-mirror workaround. The seeds are the digits UI5 renders TODAY, not the mock's literals: the packed field serialized as a JSON NUMBER, so ``1189.00`` reached the browser` &&
+               ` as 1189 and rendered ``1189`` (measured) - and the original's ``salary: 1189.00`` is likewise the JS number 1189, so ``1189`` is what both the port and the original show. Rendering is therefore`.
+    lv_text1 = lv_text1 && ` byte-identical to the pre-change port and faithful to the original. // NOTE: addNewButtonPress appends an empty employee row to the bound /T_EMPLOYEES (the addItem+setSelectedItem equivalent for a` &&
+               ` bound aggregation; the new tab is appended but not auto-selected - the new tab is not auto-selected. Corrected 2026-08-23: this used to justify it with "TabContainer.selectedItem is an association a` &&
+               ` bound-row clone cannot address from the backend", which the framework lifted on 2026-08-06 - wherever an argument takes a control id it also takes an aggregation ITEM addressed positionally` &&
+               ` (``myTabContainer/items/<n>``, 0-based), setSelectedItem is whitelisted with the controlIdOrNull kind, and app 012 already uses exactly that form for the same class of problem. The auto-selection is` &&
+               ` therefore expressible and simply not done yet, the one residual difference). itemCloseHandler reproduced 1:1 since 2026-07-30: the itemClose wire carries s_ctrl-check_prevent_default (the original` &&
+               ` calls oEvent.preventDefault() unconditionally) and transports ${$parameters>/item}.getName() plus the row index via ${$parameters>/item/oParent}.indexOfItem(${$parameters>/item}) (the dnd-idiom index`.
+    lv_text1 = lv_text1 && ` transport); the backend raises MessageBox.confirm (Do you want to close the tab '<name>'?, onclose CLOSE_DECIDE) and on OK deletes the row (the bound-aggregation removeItem) and toasts 'Item closed:` &&
+               ` <name>' (duration 500), on Cancel toasts 'Item close canceled: <name>' - exactly the original's onClose branches. The pending name/index live in protected state across the confirm round-trip. The` &&
+               ` earlier static 'Close requested' toast (tab never removable) is gone. // NOTE: the prevent-default itemClose + MessageBox.confirm + row-delete chain and the index transport via the oParent` &&
+               ` indexOfItem form are unverified in a running system; the e2e interaction covers open-confirm-OK-removes end to end in the transpiled harness. **e2e-verified 2026-07-30** (transpiled-framework` &&
+               ` interaction, scripts/e2e-smoke.mjs): covered in part - restated 2026-08-23: the module asserts the MessageBox contains the static prefix "Do you want to close the tab" and that a toast contains "Item` &&
+               ` closed:", and neither the item NAME in the box nor the row's REMOVAL is asserted. Since the texts are composed from close_name while the deletion rides on a separately transported index, a wrong`.
+    lv_text1 = lv_text1 && ` index (or the -1 case the guard swallows) would leave the module green. What it does cover: close icon -> confirm box with the item name -> OK -> row removed + 'Item closed:' toast (needs the` &&
+               ` 2026-07-30 Messages.js onclose fix - under the broken wire the OK action never arrived). **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_093.mjs).` &&
+               ` **Corrected 2026-08-26 - that gap is closed.** The interaction now asserts the item NAME in the MessageBox, that the tab count drops 4 -> 3, and that the removed tab is the one that was closed, so a` &&
+               ` wrong (or guard-swallowed -1) index can no longer leave the module green. It also types ``1,455.22`` into the Salary Input before closing and asserts the entry survives the round trip - the leg that` &&
+               ` FAILS against the packed field (measured). **Needs a backend rebuild (``npm run e2e:build``) before the nightly can confirm it.** // NOTE: The added tab's CONTENT differs, which the auto-selection` &&
+               ` deviation had called "the one residual difference". The original constructs a bare TabContainerItem (name + modified) and addItem's it, so it carries no content and the new tab's body is EMPTY; the`.
+    lv_text1 = lv_text1 && ` port appends a row to the bound table, so the new tab is a template clone showing the three Labels and three Inputs over a blank row. Declared 2026-08-23.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.TabContainer`                    name = `TabContainer`                                  class = `z2ui5_cl_smpc_app_093` path = `src/01/01/z2ui5_cl_smpc_app_093.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
         notes = lv_text1 ) ).
 
@@ -6691,22 +6727,35 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.16`
         notes = lv_text1 ) ).
 
-    lv_text1 = `NOTE: onEdit / onSave / onCancel rebind the SAME table between a read-only ColumnListItem template (the one the view declares) and an editable one the controller builds in JavaScript. abap2UI5` &&
+    lv_text1 = `IMPROVISED: PRICE is ``p LENGTH 9 DECIMALS 2`` (the read-only template needs it packed for the original's sap.ui.model.type.Currency composite binding), but a PACKED table cell cannot take a two-way` &&
+               ` write-back: a cell whose text does not convert is swallowed by delta_apply_field's ``CATCH cx_root ##NO_HANDLER`` ("skip just this cell", z2ui5_cl_ui5_srv_model), so the backend keeps the old number` &&
+               ` while the browser goes on showing what the user typed. MEASURED 2026-08-26 against the transpiled backend, editing row 1 (Notebook Basic 15, PRICE 956) and pressing Save: ``1250.00`` -> 1250 (the` &&
+               ` write-back itself works), but ``1,250.00``, ``1 250``, ``12.50 EUR``, ``1250,00`` and ``abc`` ALL left the model on its previous value with no error, no toast and no valueState, and ``-``, an emptied` &&
+               ` cell and a blanks-only cell each silently became 0.00. Remedy: the editable cell now binds a PRICE_TEXT string mirror (a string cell always arrives), EDIT seeds it from the packed price, and SAVE` &&
+               ` parses it back under a digit/character/length guard plus TRY ... CATCH cx_root. This is a deliberate BEHAVIOUR difference from the original, which has no packed field and lets its JSONModel keep any`.
+    lv_text1 = lv_text1 && ` string: a row whose text does not convert keeps its old price, has its text put back from that price, and the app STAYS in edit mode with a MessageToast naming the row and the rejected entry - the` &&
+               ` entry is reported, never discarded behind the user's back. A converting entry saves and leaves edit mode exactly as before. Same defect class and same string-mirror idiom as app 351's MINSIZE_TEXT.` &&
+               ` // NOTE: onEdit / onSave / onCancel rebind the SAME table between a read-only ColumnListItem template (the one the view declares) and an editable one the controller builds in JavaScript. abap2UI5` &&
                ` rebuilds the view on every round trip, so the two templates are the two branches of one IF in view_display, driven by an EDIT_MODE flag - the rendered table carries exactly one of them at a time. The` &&
                ` four Inputs of the editable template are the control extra against the archived Table.view.xml, which only holds the read-only one; they are also why the linter's static reconstruction shows eight` &&
-               ` cells in a four-column row - it does not evaluate the IF, and only one branch is ever emitted at runtime. // NOTE: the three toolbar buttons swap visibility through setVisible in the original;` &&
-               ` visible is a bindable property, so Edit binds the negated EDIT_MODE expression and Save/Cancel bind the flag itself - no setter and no extra state. onCancel's deepExtend copy of /ProductCollection is` &&
-               ` a plain table copy taken on Edit and put back on Cancel. // NOTE: the original derives the ObjectNumber weight state in its frontend Formatter.js (weightState: <0 None, <1000 Success, <2000 Warning,`.
-    lv_text1 = lv_text1 && ` else Error, over the RAW WeightMeasure). That is business logic, so - abap2UI5 being a thin frontend - it is computed in ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}". //` &&
+               ` cells in a four-column row - it does not evaluate the IF, and only one branch is ever emitted at runtime. // NOTE: the three toolbar buttons swap visibility through setVisible in the original;`.
+    lv_text1 = lv_text1 && ` visible is a bindable property, so Edit binds the negated EDIT_MODE expression and Save/Cancel bind the flag itself - no setter and no extra state. onCancel's deepExtend copy of /ProductCollection is` &&
+               ` a plain table copy taken on Edit and put back on Cancel. Corrected 2026-08-26: onSave is no longer a bare ``edit_mode = abap_false`` - it parses the PRICE_TEXT mirror back into the packed PRICE first` &&
+               ` and only leaves edit mode when every row converted. // NOTE: the original derives the ObjectNumber weight state in its frontend Formatter.js (weightState: <0 None, <1000 Success, <2000 Warning, else` &&
+               ` Error, over the RAW WeightMeasure). That is business logic, so - abap2UI5 being a thin frontend - it is computed in ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}". //` &&
                ` NOTE: onPaste and onOrder both only show a MessageToast, composed on the client, so both stay there as roundtrip-free control_global MESSAGE_TOAST wires - onPaste with the {0} placeholder for the` &&
-               ` pasted data, onOrder with its static text. rebindTable's sKeyboardMode argument is never used by the original (it is accepted and dropped), so it has no counterpart. // NOTE: the full mock` &&
-               ` /ProductCollection is seeded with the fields the two templates bind (ProductId, Name, Quantity, UoM, WeightMeasure, WeightUnit, Price, CurrencyCode); the price column keeps the original` &&
-               ` sap.ui.model.type.Currency composite binding and the quantity column its sap.ui.model.type.String one. // NOTE: not yet verified in a running system: the Edit/Save/Cancel template swap and the Cancel` &&
-               ` rollback. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_570.mjs).`.
+               ` pasted data, onOrder with its static text. rebindTable's sKeyboardMode argument is never used by the original (it is accepted and dropped), so it has no counterpart. // NOTE: the full mock`.
+    lv_text1 = lv_text1 && ` /ProductCollection is seeded with the fields the two templates bind (ProductId, Name, Quantity, UoM, WeightMeasure, WeightUnit, Price, CurrencyCode); the price column keeps the original` &&
+               ` sap.ui.model.type.Currency composite binding and the quantity column its sap.ui.model.type.String one. Corrected 2026-08-26: the EDITABLE template's price cell no longer binds {PRICE} - it binds the` &&
+               ` {PRICE_TEXT} string mirror (see the IMPROVISED deviation); only the READ-ONLY template still binds PRICE, which is what carries the Currency composite binding. // NOTE: not yet verified in a running` &&
+               ` system: the Edit/Save/Cancel template swap and the Cancel rollback. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_570.mjs). Extended 2026-08-26: the` &&
+               ` interaction now also drives the string mirror end to end - a ``1,250.00`` typed into the Price cell must leave the app IN edit mode with a "Not a number" toast and the cell restored from the packed` &&
+               ` price, and a following ``1250.00`` must save and reach PRICE 1250. Both legs FAIL against the pre-fix packed binding (measured), so they cannot pass by accident. **Needs a backend rebuild (``npm run`.
+    lv_text1 = lv_text1 && ` e2e:build``) before the nightly can confirm them.**`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Table`                           name = `TableEditable`                                 class = `z2ui5_cl_smpc_app_570` path = `src/01/01/z2ui5_cl_smpc_app_570.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16`
         notes = lv_text1 ) ).
 
@@ -6823,40 +6872,47 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.16`
         notes = lv_text1 ) ).
 
-    lv_text1 = `POST-1.71: three post-1.71 members are kept for the 1:1 port: sap.f.FlexibleColumnLayout.autoFocus (since UI5 1.76) and restoreFocusOnBackNavigation (since 1.77), both set by the sample's own FCL` &&
-               ` view, and the sap.m.Avatar control (since 1.73) that its detail page uses twice. // NOTE: the sample is a Component with a ROUTER and three views (FlexibleColumnLayout, Master, Detail). abap2UI5` &&
-               ` serves one view, so the three become one: the FCL declares its begin and mid column pages inline, and the routing collapses to the FCL's own layout property - onListItemPress opens the mid column` &&
-               ` (TwoColumnsMidExpanded), handleFullScreen / handleExitFullScreen / handleClose set MidColumnFullScreen / TwoColumnsMidExpanded / OneColumn. That is what the router's navTo(layout) does; the URL it` &&
-               ` also writes has no counterpart. This is the corpus's first sap.f.FlexibleColumnLayout port. // NOTE: the three archived views declare different default namespaces - FlexibleColumnLayout.view.xml has` &&
-               ` xmlns="sap.f", Master.view.xml xmlns="sap.m" with f: for sap.f, and Detail.view.xml xmlns="sap.uxap" with m: for sap.m. One abap2UI5 view can only have one default namespace (sap.m here), so every`.
-    lv_text1 = lv_text1 && ` control of the detail page carries a different PREFIX than in its original file even though it is the same control: ObjectPageLayout, ObjectPageDynamicHeaderTitle, ObjectPageSection and` &&
-               ` ObjectPageSubSection become uxap:-prefixed; FlexBox, VBox, Label, Text, Title, Avatar, ObjectNumber, OverflowToolbarButton and form:SimpleForm lose their m: prefix; and the FlexibleColumnLayout gains` &&
-               ` an f: one. The whole missing/extra pairing of this port's structural diff is that shift - no control is actually added or dropped. // NOTE: the three navigation-action buttons are shown by the sample` &&
-               ` through the FCL helper's actionButtonsInfo (visible="{= ${/actionButtonsInfo/midColumn/fullScreen} !== null }" and so on). The helper is a JavaScript utility, so the port derives the same three` &&
-               ` visibilities from the layout itself: full-screen while the mid column is not full screen, exit-full-screen while it is, and close while any mid column is open. // NOTE: Detail.controller binds the` &&
-               ` mid column with bindElement('/ProductCollection/<n>'), so all its bindings are relative. The port folds them to root-seeded D_* fields (app 229 idiom): the pressed row's ProductId travels with the`.
-    lv_text1 = lv_text1 && ` press and the backend copies that product's fields over. The detail Price is pre-composed as '<CurrencyCode> <Price>', which is the composite text the original's ObjectNumber binds. // IMPROVISED:` &&
-               ` the sample exists to show sap.m.Table.scrollToIndex: the FCL's columnResize handler calls oTable.scrollToIndex(iIndex) with the index of the row the user last pressed, so that row stays in view when` &&
-               ` the columns resize. scrollToIndex is an imperative Table method with no bindable counterpart and it is not on the framework's control-method whitelist, so the port keeps the press index bookkeeping` &&
-               ` out and lets the table keep its own scroll position - everything else about the sample (the FCL layout changes, the master/detail binding, the growing table, the search) is ported. Wiring` &&
-               ` columnResize alone would fire a round trip that could not do anything with it. // NOTE: the table's sticky="ColumnHeaders,HeaderToolbar" is a literal in the sample, so the port keeps it as one - no` &&
-               ` bound string table is needed here (app 235 binds it because its check boxes change it). // NOTE: onSearch filters the table's items on Name; the port filters in the backend into a second table so the`.
-    lv_text1 = lv_text1 && ` search can widen again. Contains on a client model is case-insensitive, which the ABAP comparison matches by upper-casing both sides. The master title's count comes from` &&
-               ` ProductCollectionStats/Counts/Total (123), seeded as a field. // NOTE: the two Avatar src values are '../../../../../../../{products>ProductPicUrl}' in the sample - a relative path out of the demo` &&
-               ` kit's own frame. The port binds the mock's ProductPicUrl as it stands, without the traversal prefix, which is what the corpus does everywhere for these images. // NOTE: not yet verified in a running` &&
-               ` system: the FlexibleColumnLayout column changes, the master/detail fold and the ObjectPage header. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_575.mjs).` &&
-               ` // NOTE: two attributes of the archived views have no counterpart. mvc:View displayBlock="true" is a Component-app setting (it makes the view fill the page when it is the root of a Component) and` &&
-               ` abap2UI5 owns the view container itself. FlexibleColumnLayout stateChange is wired in the sample only to rewrite the URL through the router after a navigation arrow was used; there is no URL to`.
-    lv_text1 = lv_text1 && ` rewrite here, so the port drops it - unlike columnResize, which is dropped for the reason given above.`.
+    lv_text1 = `POST-1.71: four post-1.71 members are kept for the 1:1 port: sap.f.FlexibleColumnLayout.autoFocus (since UI5 1.76), restoreFocusOnBackNavigation (since 1.77) and the columnResize event (since 1.76),` &&
+               ` all three declared by the sample's own FCL view, and the sap.m.Avatar control (since 1.73) that its detail page uses twice. // NOTE: the sample is a Component with a ROUTER and three views` &&
+               ` (FlexibleColumnLayout, Master, Detail). abap2UI5 serves one view, so the three become one: the FCL declares its begin and mid column pages inline, and the routing collapses to the FCL's own layout` &&
+               ` property - onListItemPress opens the mid column (TwoColumnsMidExpanded), handleFullScreen / handleExitFullScreen / handleClose set MidColumnFullScreen / TwoColumnsMidExpanded / OneColumn. That is` &&
+               ` what the router's navTo(layout) does; the URL it also writes has no counterpart. This is the corpus's first sap.f.FlexibleColumnLayout port. // NOTE: the three archived views declare different` &&
+               ` default namespaces - FlexibleColumnLayout.view.xml has xmlns="sap.f", Master.view.xml xmlns="sap.m" with f: for sap.f, and Detail.view.xml xmlns="sap.uxap" with m: for sap.m. One abap2UI5 view can`.
+    lv_text1 = lv_text1 && ` only have one default namespace (sap.m here), so every control of the detail page carries a different PREFIX than in its original file even though it is the same control: ObjectPageLayout,` &&
+               ` ObjectPageDynamicHeaderTitle, ObjectPageSection and ObjectPageSubSection become uxap:-prefixed; FlexBox, VBox, Label, Text, Title, Avatar, ObjectNumber, OverflowToolbarButton and form:SimpleForm lose` &&
+               ` their m: prefix; and the FlexibleColumnLayout gains an f: one. The whole missing/extra pairing of this port's structural diff is that shift - no control is actually added or dropped. // NOTE: the` &&
+               ` three navigation-action buttons are shown by the sample through the FCL helper's actionButtonsInfo (visible="{= ${/actionButtonsInfo/midColumn/fullScreen} !== null }" and so on). The helper is a` &&
+               ` JavaScript utility, so the port derives the same three visibilities from the layout itself: full-screen while the mid column is not full screen, exit-full-screen while it is, and close while any mid` &&
+               ` column is open. // NOTE: Detail.controller binds the mid column with bindElement('/ProductCollection/<n>'), so all its bindings are relative. The port folds them to root-seeded D_* fields (app 229`.
+    lv_text1 = lv_text1 && ` idiom): the pressed row's ProductId travels with the press and the backend copies that product's fields over. The detail Price is pre-composed as '<CurrencyCode> <Price>', which is the composite text` &&
+               ` the original's ObjectNumber binds. // IMPROVISED: the sample exists to show sap.m.Table.scrollToIndex, and the port now makes the call. This note used to say scrollToIndex "is not on the framework's` &&
+               ` control-method whitelist", which was wrong - CONTROL_METHODS carries scrollToIndex: ["int"] - and it left the sample's whole subject unported: the class had no scrollToIndex, no columnResize wire and` &&
+               ` no follow-up action at all, and the table simply kept whatever scroll position it had. The FCL's columnResize (the original's onColumnResize) is wired 1:1 and carries the same` &&
+               ` ${$parameters>/beginColumn} flag the original guards on; onListItemPress stores the pressed row's index (press_index) and the columnResize round-trip issues follow_up_action( control_by_id,` &&
+               ` productsTable, scrollToIndex, press_index ). Two things are IMPROVISED rather than copied. (a) The original reads the index off the control - oItem.getParent().indexOfItem( oItem ) - which no backend`.
+    lv_text1 = lv_text1 && ` can do; a thin frontend computes it instead, and because the items binding sorts on NAME the port sorts its own row table the same way and takes the position in that order. (b) The original's second` &&
+               ` guard is a DOM test, oTable.$( ).is( ':visible' ); the begin column is hidden exactly while the layout is MidColumnFullScreen, so the backend derives the same answer from LAYOUT. The columnResize` &&
+               ` event fires once per column whose width changed (FlexibleColumnLayout._cacheColumnWidth, COLUMN_ORDER begin/mid/end) and also on the first render and on a window resize, so the port pays a round trip` &&
+               ` for firings that do nothing - it returns immediately until a row has been pressed, exactly as the original's handler returns until this.iIndex is set. // NOTE: the table's` &&
+               ` sticky="ColumnHeaders,HeaderToolbar" is a literal in the sample, so the port keeps it as one - no bound string table is needed here (app 235 binds it because its check boxes change it). // NOTE:` &&
+               ` onSearch filters the table's items on Name; the port filters in the backend into a second table so the search can widen again. Contains on a client model is case-insensitive, which the ABAP`.
+    lv_text1 = lv_text1 && ` comparison matches by upper-casing both sides. The master title's count comes from ProductCollectionStats/Counts/Total (123), seeded as a field. // NOTE: the two Avatar src values are` &&
+               ` '../../../../../../../{products>ProductPicUrl}' in the sample - a relative path out of the demo kit's own frame. The port binds the mock's ProductPicUrl as it stands, without the traversal prefix,` &&
+               ` which is what the corpus does everywhere for these images. // NOTE: not yet verified in a running system: the FlexibleColumnLayout column changes, the master/detail fold and the ObjectPage header.` &&
+               ` **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_575.mjs). The columnResize -> scrollToIndex wire added 2026-08-26 is NOT covered by that module and needs a` &&
+               ` fresh e2e build before it can be verified. // NOTE: two attributes of the archived views have no counterpart. mvc:View displayBlock="true" is a Component-app setting (it makes the view fill the page` &&
+               ` when it is the root of a Component) and abap2UI5 owns the view container itself. FlexibleColumnLayout stateChange is wired in the sample only to rewrite the URL through the router after a navigation`.
+    lv_text1 = lv_text1 && ` arrow was used; there is no URL to rewrite here, so the port drops it - unlike columnResize, which IS wired (see the scrollToIndex deviation).`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Table`                           name = `TableScrollToIndex`                            class = `z2ui5_cl_smpc_app_575` path = `src/02/01/z2ui5_cl_smpc_app_575.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
         since = `1.16`
         is_post171 = abap_true
         notes = lv_text1
-        post171 = `three post-1.71 members are kept for the 1:1 port: sap.f.FlexibleColumnLayout.autoFocus (since UI5 1.76) and restoreFocusOnBackNavigation (since 1.77), both set by the sample's own FCL view, and the` &&
-                 ` sap.m.Avatar control (since 1.73) that its detail page uses twice.` ) ).
+        post171 = `four post-1.71 members are kept for the 1:1 port: sap.f.FlexibleColumnLayout.autoFocus (since UI5 1.76), restoreFocusOnBackNavigation (since 1.77) and the columnResize event (since 1.76), all three` &&
+                 ` declared by the sample's own FCL view, and the sap.m.Avatar control (since 1.73) that its detail page uses twice.` ) ).
 
     lv_text1 = `POST-1.71: sap.m.plugins.CellSelector is @since 1.119 and sap.m.plugins.CopyProvider is @since 1.110 (its visible property @since 1.114) - all newer than the 1.71 floor. The CellSelector is kept, so` &&
                ` the port is filed under src/02. // IMPROVISED: The CopyProvider is DROPPED. Its extractData is a JavaScript callback that reads each column's app:bindings CustomData and formats it with app:template,` &&
