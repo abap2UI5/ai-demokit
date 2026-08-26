@@ -29,7 +29,7 @@
     },
     {
       "type": "POST_171",
-      "what": "sap.tnt.ToolPage aggregation subHeader (@since 1.93) carries the horizontal IconTabHeader navigation and is kept 1:1; IconTabFilter.interactionMode=\"SelectLeavesOnly\" (@since 1.121) is kept 1:1 on the top-level filter template; sap.m.Avatar (control @since 1.73) is kept 1:1 as the ToolHeader profile avatar. All newer than UI5 1.71."
+      "what": "sap.tnt.ToolPage aggregation subHeader (@since 1.93) carries the horizontal IconTabHeader navigation and is kept 1:1; IconTabFilter.interactionMode=\"SelectLeavesOnly\" (the UI5 sources tag it @ui5-experimental-since 1.121, not @since - an EXPERIMENTAL property that arrived in 1.121, so it is above the floor AND may still change) is kept 1:1 on the top-level filter template; sap.m.Avatar (control @since 1.73) is kept 1:1 as the ToolHeader profile avatar. All newer than UI5 1.71."
     },
     {
       "type": "NOTE",

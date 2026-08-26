@@ -20,11 +20,15 @@ CLASS z2ui5_cl_smpc_app_355 DEFINITION PUBLIC.
     " toggles work without a round-trip
     DATA show_freeze_menu_entry TYPE abap_bool.
     DATA enable_cell_filter     TYPE abap_bool.
+    " onToggleContextMenu's pressed state - the view carries the contextMenu
+    " subtree only while it is on, which is setContextMenu / destroyContextMenu
+    DATA custom_context_menu    TYPE abap_bool.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
+    METHODS on_event.
     METHODS model_init.
 
   PRIVATE SECTION.
@@ -41,6 +45,8 @@ CLASS z2ui5_cl_smpc_app_355 IMPLEMENTATION.
       view_display( ).
     ELSEIF client->check_on_navigated( ).
       view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -54,7 +60,7 @@ CLASS z2ui5_cl_smpc_app_355 IMPLEMENTATION.
     " the Table's enableColumnFreeze / enableCellFilter bind the same fields,
     " so both work entirely on the client - which is what the original's
     " {ui>/...} two-way bindings already do.
-    view->ele( n = `View` ns = `mvc`
+    DATA(table) = view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.ui.table`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:u`   v = `sap.ui.unified`
@@ -73,124 +79,151 @@ CLASS z2ui5_cl_smpc_app_355 IMPLEMENTATION.
                     )->a( n = `rows`               v = client->_bind( t_products )
                     )->a( n = `enableColumnFreeze` v = client->_bind( show_freeze_menu_entry )
                     )->a( n = `enableCellFilter`   v = client->_bind( enable_cell_filter )
-                    )->a( n = `ariaLabelledBy`     v = `title`
+                    )->a( n = `ariaLabelledBy`     v = `title` ).
 
-                    )->ele( `extension`
-                        )->ele( n = `OverflowToolbar` ns = `m`
-                            )->a( n = `style` v = `Clear`
+    " onToggleContextMenu: setContextMenu( new sap.m.Menu with two bound
+    " MenuItems ) while the toggle is pressed, destroyContextMenu( ) when it is
+    " released - the backend emits the subtree or leaves it out (app 436 idiom)
+    IF custom_context_menu = abap_true.
+      table->ele( `contextMenu`
+          )->ele( n = `Menu` ns = `m`
+              )->tag( n = `MenuItem` ns = `m`
+                  " abap2ui5lint-disable-next-line relative-binding-without-context -- the table sets the menu's context to the clicked row
+                  )->a( n = `text` v = `{NAME}`
+              )->tag( n = `MenuItem` ns = `m`
+                  " abap2ui5lint-disable-next-line relative-binding-without-context -- same row context, the original binds {ProductId}
+                  )->a( n = `text` v = `{PRODUCTID}` ).
+    ENDIF.
 
-                            )->tag( n = `Title` ns = `m`
-                                )->a( n = `id`   v = `title`
-                                )->a( n = `text` v = `Products`
+    table->ele( `extension`
+        )->ele( n = `OverflowToolbar` ns = `m`
+            )->a( n = `style` v = `Clear`
 
-                            )->tag( n = `ToolbarSpacer` ns = `m`
+            )->tag( n = `Title` ns = `m`
+                )->a( n = `id`   v = `title`
+                )->a( n = `text` v = `Products`
 
-                            )->tag( n = `ToggleButton` ns = `m`
-                                )->a( n = `icon`    v = `sap-icon://resize-horizontal`
-                                )->a( n = `tooltip` v = `Enable / Disable Freezing Menu Entries`
-                                )->a( n = `pressed` v = client->_bind( show_freeze_menu_entry )
+            )->tag( n = `ToolbarSpacer` ns = `m`
 
-                            )->tag( n = `ToggleButton` ns = `m`
-                                )->a( n = `icon`    v = `sap-icon://filter`
-                                )->a( n = `tooltip` v = `Enable / Disable Cell Filter`
-                                )->a( n = `pressed` v = client->_bind( enable_cell_filter )
+            )->tag( n = `ToggleButton` ns = `m`
+                )->a( n = `icon`    v = `sap-icon://resize-horizontal`
+                )->a( n = `tooltip` v = `Enable / Disable Freezing Menu Entries`
+                )->a( n = `pressed` v = client->_bind( show_freeze_menu_entry )
 
-                            )->tag( n = `ToggleButton` ns = `m`
-                                )->a( n = `icon`    v = `sap-icon://menu`
-                                )->a( n = `tooltip` v = `Enable / Disable Custom Context Menu`
+            )->tag( n = `ToggleButton` ns = `m`
+                )->a( n = `icon`    v = `sap-icon://filter`
+                )->a( n = `tooltip` v = `Enable / Disable Cell Filter`
+                )->a( n = `pressed` v = client->_bind( enable_cell_filter )
 
-                        )->end(
-                    )->end(
-                    )->ele( `columns`
-                        )->ele( `Column`
-                            )->a( n = `id`                  v = `name`
-                            )->a( n = `width`               v = `11rem`
-                            )->a( n = `sortProperty`        v = `NAME`
-                            )->a( n = `filterProperty`      v = `NAME`
-                            )->a( n = `showFilterMenuEntry` v = `true`
-                            )->a( n = `showSortMenuEntry`   v = `true`
+            " NOT `b = <field>`: that parameter writes the LITERAL
+            " 'true'/'false' at render time, so a field the event
+            " handler changes would never reach the control
+            )->tag( n = `ToggleButton` ns = `m`
+                )->a( n = `icon`    v = `sap-icon://menu`
+                )->a( n = `tooltip` v = `Enable / Disable Custom Context Menu`
+                )->a( n = `pressed` v = client->_bind( custom_context_menu )
+                )->a( n = `press`   v = client->_event( val   = `TOGGLE_CONTEXT_MENU`
+                                                        t_arg = VALUE #( ( `${$parameters>/pressed}` ) ) )
 
-                            )->tag( n = `Label` ns = `m`
-                                )->a( n = `text` v = `Product Name`
+        )->end( ).
 
-                            )->ele( `template`
-                                )->tag( n = `Text` ns = `m`
-                                    )->a( n = `text`     v = `{NAME}`
-                                    )->a( n = `wrapping` v = `false`
+    table->ele( `columns`
+        )->ele( `Column`
+            )->a( n = `id`                  v = `name`
+            )->a( n = `width`               v = `11rem`
+            )->a( n = `sortProperty`        v = `NAME`
+            )->a( n = `filterProperty`      v = `NAME`
+            )->a( n = `showFilterMenuEntry` v = `true`
+            )->a( n = `showSortMenuEntry`   v = `true`
 
-                            )->end(
-                        )->end(
-                        )->ele( `Column`
-                            )->a( n = `id`             v = `productId`
-                            )->a( n = `filterProperty` v = `PRODUCTID`
-                            )->a( n = `sortProperty`   v = `PRODUCTID`
-                            )->a( n = `width`          v = `11rem`
+            )->tag( n = `Label` ns = `m`
+                )->a( n = `text` v = `Product Name`
 
-                            )->tag( n = `Label` ns = `m`
-                                )->a( n = `text` v = `Product Id`
+            )->ele( `template`
+                )->tag( n = `Text` ns = `m`
+                    )->a( n = `text`     v = `{NAME}`
+                    )->a( n = `wrapping` v = `false`
 
-                            )->ele( `template`
-                                )->tag( n = `Text` ns = `m`
-                                    )->a( n = `text`     v = `{PRODUCTID}`
-                                    )->a( n = `wrapping` v = `false`
+            )->end(
+        )->end(
+        )->ele( `Column`
+            )->a( n = `id`             v = `productId`
+            )->a( n = `filterProperty` v = `PRODUCTID`
+            )->a( n = `sortProperty`   v = `PRODUCTID`
+            )->a( n = `width`          v = `11rem`
 
-                            )->end(
-                        )->end(
-                        )->ele( `Column`
-                            )->a( n = `id`    v = `image`
-                            )->a( n = `width` v = `9rem`
+            )->tag( n = `Label` ns = `m`
+                )->a( n = `text` v = `Product Id`
 
-                            )->tag( n = `Label` ns = `m`
-                                )->a( n = `text` v = `Image`
+            )->ele( `template`
+                )->tag( n = `Text` ns = `m`
+                    )->a( n = `text`     v = `{PRODUCTID}`
+                    )->a( n = `wrapping` v = `false`
 
-                            )->ele( `template`
-                                )->tag( n = `Link` ns = `m`
-                                    )->a( n = `text`   v = `Show Image`
-                                    )->a( n = `href`   v = `{PRODUCTPICURL}`
-                                    )->a( n = `target` v = `_blank`
+            )->end(
+        )->end(
+        )->ele( `Column`
+            )->a( n = `id`    v = `image`
+            )->a( n = `width` v = `9rem`
 
-                            )->end(
-                        )->end(
-                        )->ele( `Column`
-                            )->a( n = `id`           v = `quantity`
-                            )->a( n = `width`        v = `6rem`
-                            )->a( n = `hAlign`       v = `End`
-                            )->a( n = `sortProperty` v = `QUANTITY`
+            )->tag( n = `Label` ns = `m`
+                )->a( n = `text` v = `Image`
 
-                            )->tag( n = `Label` ns = `m`
-                                )->a( n = `text` v = `Quantity`
+            )->ele( `template`
+                )->tag( n = `Link` ns = `m`
+                    )->a( n = `text`   v = `Show Image`
+                    )->a( n = `href`   v = `{PRODUCTPICURL}`
+                    )->a( n = `target` v = `_blank`
 
-                            )->ele( `template`
-                                )->tag( n = `Label` ns = `m`
-                                    )->a( n = `text` v = |\{ path: 'QUANTITY', type: 'sap.ui.model.type.Integer' \}|
+            )->end(
+        )->end(
+        )->ele( `Column`
+            )->a( n = `id`           v = `quantity`
+            )->a( n = `width`        v = `6rem`
+            )->a( n = `hAlign`       v = `End`
+            )->a( n = `sortProperty` v = `QUANTITY`
 
-                            )->end(
-                        )->end(
-                        )->ele( `Column`
-                            )->a( n = `width` v = `9rem`
+            )->tag( n = `Label` ns = `m`
+                )->a( n = `text` v = `Quantity`
 
-                            )->tag( n = `Label` ns = `m`
-                                )->a( n = `text` v = `Delivery Date`
+            )->ele( `template`
+                )->tag( n = `Label` ns = `m`
+                    )->a( n = `text` v = |\{ path: 'QUANTITY', type: 'sap.ui.model.type.Integer' \}|
 
-                            )->ele( `template`
-                                )->tag( n = `Text` ns = `m`
-                                    )->a( n = `text`     v = |\{ path: 'DELIVERYDATE', type: 'sap.ui.model.type.Date', formatOptions: \{ source: \{ pattern: 'timestamp' \} \} \}|
-                                    )->a( n = `wrapping` v = `false`
+            )->end(
+        )->end(
+        )->ele( `Column`
+            )->a( n = `width` v = `9rem`
 
-                            )->end(
-                        )->end(
-                    )->end(
-                    )->ele( `footer`
-                        )->tag( n = `OverflowToolbar` ns = `m`
-                            )->a( n = `id` v = `infobar`
+            )->tag( n = `Label` ns = `m`
+                )->a( n = `text` v = `Delivery Date`
 
-                    )->end(
-                )->end(
+            )->ele( `template`
+                )->tag( n = `Text` ns = `m`
+                    )->a( n = `text`     v = |\{ path: 'DELIVERYDATE', type: 'sap.ui.model.type.Date', formatOptions: \{ source: \{ pattern: 'timestamp' \} \} \}|
+                    )->a( n = `wrapping` v = `false`
+
             )->end(
         )->end(
     )->end( ).
 
+    table->ele( `footer`
+        )->tag( n = `OverflowToolbar` ns = `m`
+            )->a( n = `id` v = `infobar` ).
+
     client->view_display( view->stringify( ) ).
+
+  ENDMETHOD.
+
+
+  METHOD on_event.
+
+    " onToggleContextMenu: the pressed state decides whether the table carries
+    " the custom context menu at all
+    IF client->get_event( ) = `TOGGLE_CONTEXT_MENU`.
+      custom_context_menu = client->get_event_arg( ).
+      view_display( ).
+    ENDIF.
 
   ENDMETHOD.
 

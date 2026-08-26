@@ -38,7 +38,7 @@
     },
     {
       "type": "NOTE",
-      "what": "not yet verified in a running system: that the All tab shows all 123 rows and that each of the three weight tabs filters the table to its range. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_619.mjs)."
+      "what": "not yet verified in a running system: that the All tab puts every row back and that each of the three weight tabs filters the table to its range. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_619.mjs). Corrected 2026-08-26: this used to claim the All tab \"shows all 123 rows\", which the port does not do and the original does not either - a JSONModel's default size limit is 100 and neither the sample nor the port raises it (app 613 shows what raising it looks like), so the unfiltered table renders 100 of the 123 seeded rows. That is exactly what the interaction module states and asserts, so the sidecar contradicted its own e2e evidence; siblings 617/618 word the same check without a row count."
     },
     {
       "type": "NOTE",

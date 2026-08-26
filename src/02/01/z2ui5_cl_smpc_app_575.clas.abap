@@ -39,9 +39,16 @@ CLASS z2ui5_cl_smpc_app_575 DEFINITION PUBLIC.
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
+    " Master.controller stores the index of the row it navigated from
+    " (this.iIndex) so onColumnResize can scroll it back into view. Not bound,
+    " so it stays out of the round-trip model scan
+    DATA press_index TYPE i VALUE -1.
+
     METHODS view_display.
     METHODS on_event.
     METHODS detail_bind IMPORTING productid TYPE string.
+    METHODS row_index IMPORTING productid     TYPE string
+                      RETURNING VALUE(result) TYPE i.
     METHODS model_init.
 
   PRIVATE SECTION.
@@ -84,6 +91,12 @@ CLASS z2ui5_cl_smpc_app_575 IMPLEMENTATION.
             )->a( n = `autoFocus`                   v = `false`
             )->a( n = `restoreFocusOnBackNavigation` v = `true`
             )->a( n = `backgroundDesign`            v = `Translucent`
+            " onColumnResize (@since 1.76) carries the same beginColumn flag the
+            " original's handler guards on - it fires once the begin column's
+            " resize has completed, which is when the pressed row has to be
+            " scrolled back into view
+            )->a( n = `columnResize`                v = client->_event( val   = `COLUMN_RESIZE`
+                                                                        t_arg = VALUE #( ( `${$parameters>/beginColumn}` ) ) )
             )->a( n = `layout`                      v = client->_bind( layout ) ).
 
     " Master.view.xml - the DynamicPage with the products table
@@ -373,6 +386,24 @@ CLASS z2ui5_cl_smpc_app_575 IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD row_index.
+
+    " the items binding renders T_ROWS sorted on NAME, so the row index the
+    " original reads off the aggregation is the position in that order
+    DATA(rows) = t_rows.
+    SORT rows BY name AS TEXT ASCENDING.
+
+    result = -1.
+    LOOP AT rows INTO DATA(row).
+      IF row-productid = productid.
+        result = sy-tabix - 1.
+        RETURN.
+      ENDIF.
+    ENDLOOP.
+
+  ENDMETHOD.
+
+
   METHOD on_event.
 
     CASE client->get_event( ).
@@ -380,6 +411,9 @@ CLASS z2ui5_cl_smpc_app_575 IMPLEMENTATION.
       WHEN `LIST_ITEM`.
         " onListItemPress: navigate to the detail route, which opens the mid column
         detail_bind( client->get_event_arg( ) ).
+        " oItem.getParent( )->indexOfItem( oItem ) - the index of the pressed row
+        " in the RENDERED items, which the items binding sorts on NAME
+        press_index = row_index( client->get_event_arg( ) ).
         layout = `TwoColumnsMidExpanded`.
 
       WHEN `FULL_SCREEN`.
@@ -390,6 +424,19 @@ CLASS z2ui5_cl_smpc_app_575 IMPLEMENTATION.
 
       WHEN `CLOSE_COLUMN`.
         layout = `OneColumn`.
+
+      WHEN `COLUMN_RESIZE`.
+        " onColumnResize: oTable.scrollToIndex( iIndex ) once the begin column
+        " has finished resizing, so the row the user pressed stays in view. The
+        " original also asks oTable.$( )->is( ':visible' ); the begin column is
+        " hidden exactly while the mid column is full screen, which the backend
+        " reads off LAYOUT instead of the DOM
+        IF client->get_event_arg( ) = abap_true
+           AND press_index >= 0
+           AND layout <> `MidColumnFullScreen`.
+          client->follow_up_action( val   = client->cs_event-control_by_id
+                                    t_arg = VALUE #( ( `productsTable` ) ( `scrollToIndex` ) ( |{ press_index }| ) ) ).
+        ENDIF.
 
       WHEN `SEARCH`.
         " onSearch filters the table's items on Name

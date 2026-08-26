@@ -5,16 +5,16 @@
   "file": "src/02/01/z2ui5_cl_smpc_app_575.clas.abap",
   "batch": "b47",
   "audit": {
-    "frontend_action": false,
+    "frontend_action": true,
     "event_t_arg": true,
-    "note": "the pressed row's ProductId and the search query travel with the events"
+    "note": "the pressed row's ProductId, the search query and the columnResize beginColumn flag travel with the events; the scroll-to-index call itself rides a control_by_id follow-up action"
   },
   "status": "generated",
   "checked": null,
   "deviations": [
     {
       "type": "POST_171",
-      "what": "three post-1.71 members are kept for the 1:1 port: sap.f.FlexibleColumnLayout.autoFocus (since UI5 1.76) and restoreFocusOnBackNavigation (since 1.77), both set by the sample's own FCL view, and the sap.m.Avatar control (since 1.73) that its detail page uses twice."
+      "what": "four post-1.71 members are kept for the 1:1 port: sap.f.FlexibleColumnLayout.autoFocus (since UI5 1.76), restoreFocusOnBackNavigation (since 1.77) and the columnResize event (since 1.76), all three declared by the sample's own FCL view, and the sap.m.Avatar control (since 1.73) that its detail page uses twice."
     },
     {
       "type": "NOTE",
@@ -34,7 +34,7 @@
     },
     {
       "type": "IMPROVISED",
-      "what": "the sample exists to show sap.m.Table.scrollToIndex: the FCL's columnResize handler calls oTable.scrollToIndex(iIndex) with the index of the row the user last pressed, so that row stays in view when the columns resize. scrollToIndex is an imperative Table method with no bindable counterpart and it is not on the framework's control-method whitelist, so the port keeps the press index bookkeeping out and lets the table keep its own scroll position - everything else about the sample (the FCL layout changes, the master/detail binding, the growing table, the search) is ported. Wiring columnResize alone would fire a round trip that could not do anything with it."
+      "what": "the sample exists to show sap.m.Table.scrollToIndex, and the port now makes the call. This note used to say scrollToIndex \"is not on the framework's control-method whitelist\", which was wrong - CONTROL_METHODS carries scrollToIndex: [\"int\"] - and it left the sample's whole subject unported: the class had no scrollToIndex, no columnResize wire and no follow-up action at all, and the table simply kept whatever scroll position it had. The FCL's columnResize (the original's onColumnResize) is wired 1:1 and carries the same ${$parameters>/beginColumn} flag the original guards on; onListItemPress stores the pressed row's index and the columnResize round-trip issues follow_up_action( control_by_id, productsTable, scrollToIndex, <index> ). Two things are IMPROVISED rather than copied. (a) The original reads the index off the control - oItem.getParent( ).indexOfItem( oItem ) - which no backend can do; a thin frontend computes it instead, and because the items binding sorts on NAME the port sorts its own row table the same way and takes the position in that order. (b) The original's second guard is a DOM test, oTable.$( ).is( ':visible' ); the begin column is hidden exactly while the layout is MidColumnFullScreen, so the backend derives the same answer from LAYOUT. The columnResize event fires once per column whose width changed (FlexibleColumnLayout._cacheColumnWidth over COLUMN_ORDER begin/mid/end) and also on the first render and on a window resize, so the port pays a round trip for firings that do nothing - the handler returns immediately until a row has been pressed, exactly as the original's returns until this.iIndex is set. The begin column is cached FIRST, which is also the one firing the client's busy guard keeps when several arrive in the same tick."
     },
     {
       "type": "NOTE",
@@ -50,11 +50,11 @@
     },
     {
       "type": "NOTE",
-      "what": "not yet verified in a running system: the FlexibleColumnLayout column changes, the master/detail fold and the ObjectPage header. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_575.mjs)."
+      "what": "not yet verified in a running system: the FlexibleColumnLayout column changes, the master/detail fold and the ObjectPage header. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_575.mjs). The columnResize -> scrollToIndex wire added 2026-08-26 is NOT covered by that module and needs a fresh e2e build before it can be verified."
     },
     {
       "type": "NOTE",
-      "what": "two attributes of the archived views have no counterpart. mvc:View displayBlock=\"true\" is a Component-app setting (it makes the view fill the page when it is the root of a Component) and abap2UI5 owns the view container itself. FlexibleColumnLayout stateChange is wired in the sample only to rewrite the URL through the router after a navigation arrow was used; there is no URL to rewrite here, so the port drops it - unlike columnResize, which is dropped for the reason given above."
+      "what": "two attributes of the archived views have no counterpart. mvc:View displayBlock=\"true\" is a Component-app setting (it makes the view fill the page when it is the root of a Component) and abap2UI5 owns the view container itself. FlexibleColumnLayout stateChange is wired in the sample only to rewrite the URL through the router after a navigation arrow was used; there is no URL to rewrite here, so the port drops it - unlike columnResize, which IS wired (see the scrollToIndex deviation)."
     }
   ]
 }
