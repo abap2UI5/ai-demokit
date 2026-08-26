@@ -13,12 +13,16 @@
   "checked": null,
   "deviations": [
     {
+      "type": "IMPROVISED",
+      "what": "PRICE is `p LENGTH 9 DECIMALS 2` (the read-only template needs it packed for the original's sap.ui.model.type.Currency composite binding), but a PACKED table cell cannot take a two-way write-back: a cell whose text does not convert is swallowed by delta_apply_field's `CATCH cx_root ##NO_HANDLER` (\"skip just this cell\", z2ui5_cl_ui5_srv_model), so the backend keeps the old number while the browser goes on showing what the user typed. MEASURED 2026-08-26 against the transpiled backend, editing row 1 (Notebook Basic 15, PRICE 956) and pressing Save: `1250.00` -> 1250 (the write-back itself works), but `1,250.00`, `1 250`, `12.50 EUR`, `1250,00` and `abc` ALL left the model on its previous value with no error, no toast and no valueState, and `-`, an emptied cell and a blanks-only cell each silently became 0.00. Remedy: the editable cell now binds a PRICE_TEXT string mirror (a string cell always arrives), EDIT seeds it from the packed price, and SAVE parses it back under a digit/character/length guard plus TRY ... CATCH cx_root. This is a deliberate BEHAVIOUR difference from the original, which has no packed field and lets its JSONModel keep any string: a row whose text does not convert keeps its old price, has its text put back from that price, and the app STAYS in edit mode with a MessageToast naming the row and the rejected entry - the entry is reported, never discarded behind the user's back. A converting entry saves and leaves edit mode exactly as before. Same defect class and same string-mirror idiom as app 351's MINSIZE_TEXT."
+    },
+    {
       "type": "NOTE",
       "what": "onEdit / onSave / onCancel rebind the SAME table between a read-only ColumnListItem template (the one the view declares) and an editable one the controller builds in JavaScript. abap2UI5 rebuilds the view on every round trip, so the two templates are the two branches of one IF in view_display, driven by an EDIT_MODE flag - the rendered table carries exactly one of them at a time. The four Inputs of the editable template are the control extra against the archived Table.view.xml, which only holds the read-only one; they are also why the linter's static reconstruction shows eight cells in a four-column row - it does not evaluate the IF, and only one branch is ever emitted at runtime."
     },
     {
       "type": "NOTE",
-      "what": "the three toolbar buttons swap visibility through setVisible in the original; visible is a bindable property, so Edit binds the negated EDIT_MODE expression and Save/Cancel bind the flag itself - no setter and no extra state. onCancel's deepExtend copy of /ProductCollection is a plain table copy taken on Edit and put back on Cancel."
+      "what": "the three toolbar buttons swap visibility through setVisible in the original; visible is a bindable property, so Edit binds the negated EDIT_MODE expression and Save/Cancel bind the flag itself - no setter and no extra state. onCancel's deepExtend copy of /ProductCollection is a plain table copy taken on Edit and put back on Cancel. Corrected 2026-08-26: onSave is no longer a bare `edit_mode = abap_false` - it parses the PRICE_TEXT mirror back into the packed PRICE first and only leaves edit mode when every row converted."
     },
     {
       "type": "NOTE",
@@ -30,11 +34,11 @@
     },
     {
       "type": "NOTE",
-      "what": "the full mock /ProductCollection is seeded with the fields the two templates bind (ProductId, Name, Quantity, UoM, WeightMeasure, WeightUnit, Price, CurrencyCode); the price column keeps the original sap.ui.model.type.Currency composite binding and the quantity column its sap.ui.model.type.String one."
+      "what": "the full mock /ProductCollection is seeded with the fields the two templates bind (ProductId, Name, Quantity, UoM, WeightMeasure, WeightUnit, Price, CurrencyCode); the price column keeps the original sap.ui.model.type.Currency composite binding and the quantity column its sap.ui.model.type.String one. Corrected 2026-08-26: the EDITABLE template's price cell no longer binds {PRICE} - it binds the {PRICE_TEXT} string mirror (see the IMPROVISED deviation); only the READ-ONLY template still binds PRICE, which is what carries the Currency composite binding."
     },
     {
       "type": "NOTE",
-      "what": "not yet verified in a running system: the Edit/Save/Cancel template swap and the Cancel rollback. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_570.mjs)."
+      "what": "not yet verified in a running system: the Edit/Save/Cancel template swap and the Cancel rollback. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_570.mjs). Extended 2026-08-26: the interaction now also drives the string mirror end to end - a `1,250.00` typed into the Price cell must leave the app IN edit mode with a \"Not a number\" toast and the cell restored from the packed price, and a following `1250.00` must save and reach PRICE 1250. Both legs FAIL against the pre-fix packed binding (measured), so they cannot pass by accident. **Needs a backend rebuild (`npm run e2e:build`) before the nightly can confirm them.**"
     }
   ]
 }

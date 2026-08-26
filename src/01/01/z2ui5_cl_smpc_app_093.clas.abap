@@ -11,7 +11,12 @@ CLASS z2ui5_cl_smpc_app_093 DEFINITION PUBLIC.
         modified       TYPE abap_bool,
         emp_first_name TYPE string,
         emp_last_name  TYPE string,
-        salary         TYPE p LENGTH 8 DECIMALS 2,
+        " SALARY carries no typed binding anywhere - the original binds it into a
+        " plain Input over a JSONModel that holds whatever the user types. A packed
+        " field cannot: a table cell that fails to convert is swallowed by
+        " delta_apply_field's "skip just this cell", so an entry like 1,455.22 was
+        " discarded without an error and the browser kept showing it (measured)
+        salary         TYPE string,
       END OF ty_s_emp.
     DATA t_employees TYPE STANDARD TABLE OF ty_s_emp WITH EMPTY KEY.
 
@@ -131,10 +136,13 @@ CLASS z2ui5_cl_smpc_app_093 IMPLEMENTATION.
   METHOD model_init.
 
     t_employees = VALUE #(
-      ( name = `Jean Doe`       emp_first_name = `Jean`     emp_last_name = `Doe`     salary = '1455.22' )
-      ( name = `John Smith`     emp_first_name = `John`     emp_last_name = `Smith`   salary = '1390.77' modified = abap_true )
-      ( name = `Particia Clark` emp_first_name = `Particia` emp_last_name = `Clark`   salary = '1189.00' )
-      ( name = `Tim McAfeed`    emp_first_name = `Tim`      emp_last_name = `McAfeed` salary = '1235.37' ) ).
+      " the seeds are the digits UI5 renders today: the packed field serialized as a
+      " JSON NUMBER, so 1189.00 reached the browser as 1189 - and the original's
+      " salary: 1189.00 is likewise the JS number 1189, so both render 1189
+      ( name = `Jean Doe`       emp_first_name = `Jean`     emp_last_name = `Doe`     salary = `1455.22` )
+      ( name = `John Smith`     emp_first_name = `John`     emp_last_name = `Smith`   salary = `1390.77` modified = abap_true )
+      ( name = `Particia Clark` emp_first_name = `Particia` emp_last_name = `Clark`   salary = `1189` )
+      ( name = `Tim McAfeed`    emp_first_name = `Tim`      emp_last_name = `McAfeed` salary = `1235.37` ) ).
 
   ENDMETHOD.
 

@@ -6872,47 +6872,40 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.16`
         notes = lv_text1 ) ).
 
-    lv_text1 = `POST-1.71: four post-1.71 members are kept for the 1:1 port: sap.f.FlexibleColumnLayout.autoFocus (since UI5 1.76), restoreFocusOnBackNavigation (since 1.77) and the columnResize event (since 1.76),` &&
-               ` all three declared by the sample's own FCL view, and the sap.m.Avatar control (since 1.73) that its detail page uses twice. // NOTE: the sample is a Component with a ROUTER and three views` &&
-               ` (FlexibleColumnLayout, Master, Detail). abap2UI5 serves one view, so the three become one: the FCL declares its begin and mid column pages inline, and the routing collapses to the FCL's own layout` &&
-               ` property - onListItemPress opens the mid column (TwoColumnsMidExpanded), handleFullScreen / handleExitFullScreen / handleClose set MidColumnFullScreen / TwoColumnsMidExpanded / OneColumn. That is` &&
-               ` what the router's navTo(layout) does; the URL it also writes has no counterpart. This is the corpus's first sap.f.FlexibleColumnLayout port. // NOTE: the three archived views declare different` &&
-               ` default namespaces - FlexibleColumnLayout.view.xml has xmlns="sap.f", Master.view.xml xmlns="sap.m" with f: for sap.f, and Detail.view.xml xmlns="sap.uxap" with m: for sap.m. One abap2UI5 view can`.
-    lv_text1 = lv_text1 && ` only have one default namespace (sap.m here), so every control of the detail page carries a different PREFIX than in its original file even though it is the same control: ObjectPageLayout,` &&
-               ` ObjectPageDynamicHeaderTitle, ObjectPageSection and ObjectPageSubSection become uxap:-prefixed; FlexBox, VBox, Label, Text, Title, Avatar, ObjectNumber, OverflowToolbarButton and form:SimpleForm lose` &&
-               ` their m: prefix; and the FlexibleColumnLayout gains an f: one. The whole missing/extra pairing of this port's structural diff is that shift - no control is actually added or dropped. // NOTE: the` &&
-               ` three navigation-action buttons are shown by the sample through the FCL helper's actionButtonsInfo (visible="{= ${/actionButtonsInfo/midColumn/fullScreen} !== null }" and so on). The helper is a` &&
-               ` JavaScript utility, so the port derives the same three visibilities from the layout itself: full-screen while the mid column is not full screen, exit-full-screen while it is, and close while any mid` &&
-               ` column is open. // NOTE: Detail.controller binds the mid column with bindElement('/ProductCollection/<n>'), so all its bindings are relative. The port folds them to root-seeded D_* fields (app 229`.
-    lv_text1 = lv_text1 && ` idiom): the pressed row's ProductId travels with the press and the backend copies that product's fields over. The detail Price is pre-composed as '<CurrencyCode> <Price>', which is the composite text` &&
-               ` the original's ObjectNumber binds. // IMPROVISED: the sample exists to show sap.m.Table.scrollToIndex, and the port now makes the call. This note used to say scrollToIndex "is not on the framework's` &&
-               ` control-method whitelist", which was wrong - CONTROL_METHODS carries scrollToIndex: ["int"] - and it left the sample's whole subject unported: the class had no scrollToIndex, no columnResize wire and` &&
-               ` no follow-up action at all, and the table simply kept whatever scroll position it had. The FCL's columnResize (the original's onColumnResize) is wired 1:1 and carries the same` &&
-               ` ${$parameters>/beginColumn} flag the original guards on; onListItemPress stores the pressed row's index (press_index) and the columnResize round-trip issues follow_up_action( control_by_id,` &&
-               ` productsTable, scrollToIndex, press_index ). Two things are IMPROVISED rather than copied. (a) The original reads the index off the control - oItem.getParent().indexOfItem( oItem ) - which no backend`.
-    lv_text1 = lv_text1 && ` can do; a thin frontend computes it instead, and because the items binding sorts on NAME the port sorts its own row table the same way and takes the position in that order. (b) The original's second` &&
-               ` guard is a DOM test, oTable.$( ).is( ':visible' ); the begin column is hidden exactly while the layout is MidColumnFullScreen, so the backend derives the same answer from LAYOUT. The columnResize` &&
-               ` event fires once per column whose width changed (FlexibleColumnLayout._cacheColumnWidth, COLUMN_ORDER begin/mid/end) and also on the first render and on a window resize, so the port pays a round trip` &&
-               ` for firings that do nothing - it returns immediately until a row has been pressed, exactly as the original's handler returns until this.iIndex is set. // NOTE: the table's` &&
-               ` sticky="ColumnHeaders,HeaderToolbar" is a literal in the sample, so the port keeps it as one - no bound string table is needed here (app 235 binds it because its check boxes change it). // NOTE:` &&
-               ` onSearch filters the table's items on Name; the port filters in the backend into a second table so the search can widen again. Contains on a client model is case-insensitive, which the ABAP`.
-    lv_text1 = lv_text1 && ` comparison matches by upper-casing both sides. The master title's count comes from ProductCollectionStats/Counts/Total (123), seeded as a field. // NOTE: the two Avatar src values are` &&
-               ` '../../../../../../../{products>ProductPicUrl}' in the sample - a relative path out of the demo kit's own frame. The port binds the mock's ProductPicUrl as it stands, without the traversal prefix,` &&
-               ` which is what the corpus does everywhere for these images. // NOTE: not yet verified in a running system: the FlexibleColumnLayout column changes, the master/detail fold and the ObjectPage header.` &&
-               ` **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_575.mjs). The columnResize -> scrollToIndex wire added 2026-08-26 is NOT covered by that module and needs a` &&
-               ` fresh e2e build before it can be verified. // NOTE: two attributes of the archived views have no counterpart. mvc:View displayBlock="true" is a Component-app setting (it makes the view fill the page` &&
-               ` when it is the root of a Component) and abap2UI5 owns the view container itself. FlexibleColumnLayout stateChange is wired in the sample only to rewrite the URL through the router after a navigation`.
-    lv_text1 = lv_text1 && ` arrow was used; there is no URL to rewrite here, so the port drops it - unlike columnResize, which IS wired (see the scrollToIndex deviation).`.
+    lv_text1 = `POST-1.71: three post-1.71 members are kept for the 1:1 port: sap.f.FlexibleColumnLayout.autoFocus (since UI5 1.76) and restoreFocusOnBackNavigation (since 1.77), both set by the sample's own FCL` &&
+               ` view, and the sap.m.Avatar control (since 1.73) that its detail page uses twice. // NOTE: the sample is a Component with a ROUTER and three views (FlexibleColumnLayout, Master, Detail). abap2UI5` &&
+               ` serves one view, so the three become one: the FCL declares its begin and mid column pages inline, and the routing collapses to the FCL's own layout property - onListItemPress opens the mid column` &&
+               ` (TwoColumnsMidExpanded), handleFullScreen / handleExitFullScreen / handleClose set MidColumnFullScreen / TwoColumnsMidExpanded / OneColumn. That is what the router's navTo(layout) does; the URL it` &&
+               ` also writes has no counterpart. This is the corpus's first sap.f.FlexibleColumnLayout port. // NOTE: the three archived views declare different default namespaces - FlexibleColumnLayout.view.xml has` &&
+               ` xmlns="sap.f", Master.view.xml xmlns="sap.m" with f: for sap.f, and Detail.view.xml xmlns="sap.uxap" with m: for sap.m. One abap2UI5 view can only have one default namespace (sap.m here), so every`.
+    lv_text1 = lv_text1 && ` control of the detail page carries a different PREFIX than in its original file even though it is the same control: ObjectPageLayout, ObjectPageDynamicHeaderTitle, ObjectPageSection and` &&
+               ` ObjectPageSubSection become uxap:-prefixed; FlexBox, VBox, Label, Text, Title, Avatar, ObjectNumber, OverflowToolbarButton and form:SimpleForm lose their m: prefix; and the FlexibleColumnLayout gains` &&
+               ` an f: one. The whole missing/extra pairing of this port's structural diff is that shift - no control is actually added or dropped. // NOTE: the three navigation-action buttons are shown by the sample` &&
+               ` through the FCL helper's actionButtonsInfo (visible="{= ${/actionButtonsInfo/midColumn/fullScreen} !== null }" and so on). The helper is a JavaScript utility, so the port derives the same three` &&
+               ` visibilities from the layout itself: full-screen while the mid column is not full screen, exit-full-screen while it is, and close while any mid column is open. // NOTE: Detail.controller binds the` &&
+               ` mid column with bindElement('/ProductCollection/<n>'), so all its bindings are relative. The port folds them to root-seeded D_* fields (app 229 idiom): the pressed row's ProductId travels with the`.
+    lv_text1 = lv_text1 && ` press and the backend copies that product's fields over. The detail Price is pre-composed as '<CurrencyCode> <Price>', which is the composite text the original's ObjectNumber binds. // IMPROVISED:` &&
+               ` the sample exists to show sap.m.Table.scrollToIndex: the FCL's columnResize handler calls oTable.scrollToIndex(iIndex) with the index of the row the user last pressed, so that row stays in view when` &&
+               ` the columns resize. scrollToIndex is an imperative Table method with no bindable counterpart and it is not on the framework's control-method whitelist, so the port keeps the press index bookkeeping` &&
+               ` out and lets the table keep its own scroll position - everything else about the sample (the FCL layout changes, the master/detail binding, the growing table, the search) is ported. Wiring` &&
+               ` columnResize alone would fire a round trip that could not do anything with it. // NOTE: the table's sticky="ColumnHeaders,HeaderToolbar" is a literal in the sample, so the port keeps it as one - no` &&
+               ` bound string table is needed here (app 235 binds it because its check boxes change it). // NOTE: onSearch filters the table's items on Name; the port filters in the backend into a second table so the`.
+    lv_text1 = lv_text1 && ` search can widen again. Contains on a client model is case-insensitive, which the ABAP comparison matches by upper-casing both sides. The master title's count comes from` &&
+               ` ProductCollectionStats/Counts/Total (123), seeded as a field. // NOTE: the two Avatar src values are '../../../../../../../{products>ProductPicUrl}' in the sample - a relative path out of the demo` &&
+               ` kit's own frame. The port binds the mock's ProductPicUrl as it stands, without the traversal prefix, which is what the corpus does everywhere for these images. // NOTE: not yet verified in a running` &&
+               ` system: the FlexibleColumnLayout column changes, the master/detail fold and the ObjectPage header. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_575.mjs).` &&
+               ` // NOTE: two attributes of the archived views have no counterpart. mvc:View displayBlock="true" is a Component-app setting (it makes the view fill the page when it is the root of a Component) and` &&
+               ` abap2UI5 owns the view container itself. FlexibleColumnLayout stateChange is wired in the sample only to rewrite the URL through the router after a navigation arrow was used; there is no URL to`.
+    lv_text1 = lv_text1 && ` rewrite here, so the port drops it - unlike columnResize, which is dropped for the reason given above.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Table`                           name = `TableScrollToIndex`                            class = `z2ui5_cl_smpc_app_575` path = `src/02/01/z2ui5_cl_smpc_app_575.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16`
         is_post171 = abap_true
         notes = lv_text1
-        post171 = `four post-1.71 members are kept for the 1:1 port: sap.f.FlexibleColumnLayout.autoFocus (since UI5 1.76), restoreFocusOnBackNavigation (since 1.77) and the columnResize event (since 1.76), all three` &&
-                 ` declared by the sample's own FCL view, and the sap.m.Avatar control (since 1.73) that its detail page uses twice.` ) ).
+        post171 = `three post-1.71 members are kept for the 1:1 port: sap.f.FlexibleColumnLayout.autoFocus (since UI5 1.76) and restoreFocusOnBackNavigation (since 1.77), both set by the sample's own FCL view, and the` &&
+                 ` sap.m.Avatar control (since 1.73) that its detail page uses twice.` ) ).
 
     lv_text1 = `POST-1.71: sap.m.plugins.CellSelector is @since 1.119 and sap.m.plugins.CopyProvider is @since 1.110 (its visible property @since 1.114) - all newer than the 1.71 floor. The CellSelector is kept, so` &&
                ` the port is filed under src/02. // IMPROVISED: The CopyProvider is DROPPED. Its extractData is a JavaScript callback that reads each column's app:bindings CustomData and formats it with app:template,` &&
