@@ -291,6 +291,12 @@ CLASS z2ui5_cl_smpc_app_571 IMPLEMENTATION.
           table_sort( field      = `NAME`
                       descending = xsdbool( order = `Descending` ) ).
           product_indicator = order.
+          " the original passes a ONE-element sorter list to oBinding.sort( ),
+          " which REPLACES the grouper - so sorting drops the grouping. Without
+          " this the declared sorter comes back on the rebuilt binding and
+          " JSONListBinding.update re-applies it as the primary key, leaving the
+          " ABAP order as a mere tiebreak inside each supplier
+          grouped = abap_false.
         ENDIF.
         view_display( ).
 
@@ -298,6 +304,11 @@ CLASS z2ui5_cl_smpc_app_571 IMPLEMENTATION.
         grouped = xsdbool( grouped = abap_false ).
         product_indicator = `None`.
         price_indicator = `None`.
+        " ungrouping is oBinding.sort( [] ) upstream, which returns the table to
+        " MODEL order - t_products would otherwise keep the last ABAP sort forever
+        IF grouped = abap_false.
+          model_init( ).
+        ENDIF.
         view_display( ).
 
       WHEN `SORT_PRICE_ASC`.
@@ -305,6 +316,8 @@ CLASS z2ui5_cl_smpc_app_571 IMPLEMENTATION.
                     descending = abap_false ).
         price_indicator = `Ascending`.
         product_indicator = `None`.
+        " sort( [Sorter] ) replaces the grouper
+        grouped = abap_false.
         view_display( ).
 
       WHEN `SORT_PRICE_DESC`.
@@ -312,6 +325,8 @@ CLASS z2ui5_cl_smpc_app_571 IMPLEMENTATION.
                     descending = abap_true ).
         price_indicator = `Descending`.
         product_indicator = `None`.
+        " sort( [Sorter] ) replaces the grouper
+        grouped = abap_false.
         view_display( ).
 
       WHEN `ALIGN`.
