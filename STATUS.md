@@ -42,9 +42,13 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   upstream landing and that run the reproducible builds — and any local
   checkout — still resolve a framework without the two properties, where these
   two ports can produce nothing but `Property "TokenKeyCell" does not exist`.
-  That is why both still carry an open `LIVE_TEST` while everything else about
-  them is closed; the nightly, which runs main tip as the upstream canary by
-  design, gets past it. Both ports drop the `tokens`
+  That is what kept both `LIVE_TEST`s open while everything else about them was
+  closed. Both were verified and closed on 2026-08-26 without waiting for the
+  pin, by building the backend the way the nightly does — `A2UI5_BRANCH=main`,
+  the canary path, which bypasses `A2UI5_PIN` rather than changing it — against
+  main tip `ddbdd13`; four consecutive green runs each. So the pin is still at
+  `bf92a79c`, and that is a statement about the reproducible builds, not about
+  these two ports. Both ports drop the `tokens`
   binding, the `tokens` aggregation and the `suggestionItemSelected` wire, and
   carry one `MultiInputExt` per tabular input (`TokenKeyCell="0"`,
   `TokenTextCells="3"` — Name and the Price cell, the `Name(Price Currency)`
