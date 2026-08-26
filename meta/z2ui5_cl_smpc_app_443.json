@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_smpc_app_443",
   "sample": "sap.m.sample.TextRenderWhitespace",
   "entity": "sap.m.Text",
-  "file": "src/02/01/z2ui5_cl_smpc_app_443.clas.abap",
+  "file": "src/01/01/z2ui5_cl_smpc_app_443.clas.abap",
   "batch": "b34",
   "audit": {
     "frontend_action": false,
@@ -12,8 +12,8 @@
   "checked": null,
   "deviations": [
     {
-      "type": "POST_171",
-      "what": "sap.m.Text.renderWhitespace is @since 1.89 and is what the sample demonstrates, so it is kept 1:1 (bound here) and the port needs a UI5 runtime >= 1.89."
+      "type": "NOTE",
+      "what": "sap.m.Text.renderWhitespace is what the sample demonstrates and is kept 1:1 (bound here). It was declared a POST_171 as '@since 1.89' until 2026-08-24, which is wrong: the JSDoc reads @since 1.51 (sap/m/Text.js) and ui5/properties.json agrees. 1.89 is the @since of a different member entirely, sap.m.Link.emptyIndicatorMode. Nothing in this port is post-1.71 - every other member used is base version or 1.16.3/1.34 - so the deviation is withdrawn and the class moved from src/02/01 back to src/01/01, where an in-scope port belongs (AGENTS section 3). No gate could see this: view-gates only lets a POST_171 EXCUSE a version finding, nothing flags an excuse with nothing behind it. The sibling port 249 uses renderWhitespace on six Texts and correctly declares nothing for it."
     },
     {
       "type": "NOTE",

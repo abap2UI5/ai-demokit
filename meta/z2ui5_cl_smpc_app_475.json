@@ -17,7 +17,7 @@
     },
     {
       "type": "NOTE",
-      "what": "The change wire and the two bound value-state properties are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_475.mjs)."
+      "what": "The change wire and the bound valueState Error branch are e2e-verified 2026-08-22 (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_475.mjs): the module types an unknown country and asserts getValueState( ) === 'Error'. Three things it does NOT cover and which stay unverified in a running system: valueStateText (never read), the recovery branch (the module never corrects the entry, so a dead ELSE that leaves the state at Error would pass), and the selectedKey binding (drop it and selected_key stays initial, the error branch still fires and the assertion still passes)."
     }
   ]
 }

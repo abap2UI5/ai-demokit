@@ -173,7 +173,8 @@ CLASS z2ui5_cl_smpc_app_618 IMPLEMENTATION.
                     )->a( n = `unit`   v = `{WEIGHTUNIT}`
                     )->a( n = `state`  v = `{WEIGHT_STATE}`
                 )->tag( `ObjectNumber`
-                    )->a( n = `number` v = `{PRICE}`
+                    )->a( n = `number` v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCYCODE'\}],| &&
+                                          | type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
                     )->a( n = `unit`   v = `{CURRENCYCODE}`
             )->end(
         )->end(

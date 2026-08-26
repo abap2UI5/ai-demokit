@@ -14,6 +14,7 @@ CLASS z2ui5_cl_smpc_app_547 DEFINITION PUBLIC.
              pic       TYPE string,
              tentative TYPE abap_bool,
              aria      TYPE string,
+             selected  TYPE abap_bool,
            END OF ty_s_appointment.
     TYPES ty_t_appointment TYPE STANDARD TABLE OF ty_s_appointment WITH EMPTY KEY.
     TYPES: BEGIN OF ty_s_header,
@@ -115,8 +116,12 @@ CLASS z2ui5_cl_smpc_app_547 IMPLEMENTATION.
                             ( `${$parameters>/appointment} ? ${$parameters>/appointment}.getBindingContext().getPath() : ''` )
                             ( `${$parameters>/appointment} ? ${$parameters>/appointment}.getSelected() : false` )
                             ( `${$parameters>/appointments} ? ${$parameters>/appointments}.length : 0` )
-                            ( `${$parameters>/appointments} ? ${$parameters>/appointments}[0].getType() : ''` )
-                            ( `${$parameters>/appointments} ? ${$parameters>/appointments}.some(function(a){return a.getType() !== ${$parameters>/appointments}[0].getType();}) : false` ) ) )
+                            " the "do the types differ" test used to be a fifth arg
+                            " holding a JS callback (.some(function(a){...})), which is
+                            " not in the UI5 expression grammar - it threw and lost the
+                            " whole handler. CalendarAppointment.selected is bindable,
+                            " so ABAP reads the selected rows and compares them itself.
+                            ( `${$parameters>/appointments} ? ${$parameters>/appointments}[0].getType() : ''` ) ) )
                 )->a( n = `showEmptyIntervalHeaders`  v = `false`
                 " handleAppointmentAddWithContext opens the same dialog pre-set to
                 " the selected interval
@@ -164,6 +169,7 @@ CLASS z2ui5_cl_smpc_app_547 IMPLEMENTATION.
                                 )->a( n = `text`         v = `{INFO}`
                                 )->a( n = `type`         v = `{TYPE}`
                                 )->a( n = `tentative`    v = `{TENTATIVE}`
+                                )->a( n = `selected`     v = `{SELECTED}`
                                 )->a( n = `ariaHasPopup` v = `{ARIA}`
 
                         )->end(
@@ -340,13 +346,26 @@ CLASS z2ui5_cl_smpc_app_547 IMPLEMENTATION.
         IF path IS INITIAL.
           " _handleGroupAppointments: a collapsed GROUP was clicked
           DATA(count)  = client->get_event_arg( 3 ).
-          DATA(differ) = xsdbool( client->get_event_arg( 5 ) = abap_true ).
+          " whether the selected appointments differ in type is computed here, from
+          " the bound `selected` flags - the client-side .some(function(a){...}) it
+          " replaced is not in the UI5 expression grammar and threw
+          DATA(first_type) = ``.
+          DATA(differ)     = abap_false.
+          LOOP AT t_people INTO DATA(person_sel).
+            LOOP AT person_sel-t_appointments INTO DATA(appt_sel) WHERE selected = abap_true.
+              IF first_type IS INITIAL.
+                first_type = appt_sel-type.
+              ELSEIF appt_sel-type <> first_type.
+                differ = abap_true.
+              ENDIF.
+            ENDLOOP.
+          ENDLOOP.
           client->message_toast_display(
               COND string( WHEN differ = abap_true
                            THEN |{ count } Appointments of different types selected|
                            ELSE |{ count } Appointments of the same { client->get_event_arg( 4 ) } selected| ) ).
         ELSEIF client->get_event_arg( 2 ) <> abap_true.
-          client->popup_destroy( ).
+          client->popover_destroy( ).
         ELSE.
           SPLIT path AT `/` INTO TABLE DATA(parts).
           DELETE parts WHERE table_line IS INITIAL.
@@ -392,6 +411,7 @@ CLASS z2ui5_cl_smpc_app_547 IMPLEMENTATION.
 
       WHEN `EDIT`.
         " handleEditButton closes the popover and opens the dialog on the row
+        client->popover_destroy( ).
         d_mode        = `edit_appointment`.
         d_person      = COND #( WHEN sel_row >= 0 AND sel_row < lines( t_people )
                                 THEN t_people[ sel_row + 1 ]-name
@@ -410,7 +430,7 @@ CLASS z2ui5_cl_smpc_app_547 IMPLEMENTATION.
         IF sy-subrc = 0 AND sel_index >= 0 AND sel_index < lines( <person>-t_appointments ).
           DELETE <person>-t_appointments INDEX sel_index + 1.
         ENDIF.
-        client->popup_destroy( ).
+        client->popover_destroy( ).
 
       WHEN `CREATE_CHANGE`.
         " _validateDateTimePicker: the end date has to be after the start date

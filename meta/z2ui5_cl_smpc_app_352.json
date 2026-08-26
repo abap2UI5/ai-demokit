@@ -29,7 +29,7 @@
     },
     {
       "type": "NOTE",
-      "what": "Unverified in a running system: whether the two-way bound FacetFilterItem selected flags return with the listClose round-trip and produce the expected server-side selection, and whether the noData Link appears when the filters leave no rows. **e2e-verified 2026-08-17** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_352.mjs)."
+      "what": "Unverified in a running system: whether the two-way bound FacetFilterItem selected flags return with the listClose round-trip and produce the expected server-side selection, and whether the noData Link appears when the filters leave no rows - that second half is NOT covered by the module and cannot be: it treats an empty result as a FAILURE (`the filtered table is empty`), so the noData path can never be reached there. Closing it would be easy - the Category facet carries 'Graphics Card' and 'Telekommunikation', neither of which matches any product's Category ('Graphic Cards' / 'Telecommunications'), so either selection yields zero rows. **e2e-verified 2026-08-17** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_352.mjs)."
     }
   ]
 }

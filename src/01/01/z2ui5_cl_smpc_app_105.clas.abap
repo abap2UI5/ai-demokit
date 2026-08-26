@@ -61,52 +61,52 @@ CLASS z2ui5_cl_smpc_app_105 IMPLEMENTATION.
 
             )->ele( n = `addAction` ns = `semantic`
                 )->tag( n = `AddAction` ns = `semantic`
-                    )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `AddAction` ) ) )
+                    )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.AddAction` ) ) )
 
             )->end(
             )->ele( n = `editAction` ns = `semantic`
                 )->tag( n = `EditAction` ns = `semantic`
-                    )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `EditAction` ) ) )
+                    )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.EditAction` ) ) )
 
             )->end(
             )->ele( n = `deleteAction` ns = `semantic`
                 )->tag( n = `DeleteAction` ns = `semantic`
-                    )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `DeleteAction` ) ) )
+                    )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.DeleteAction` ) ) )
 
             )->end(
             )->ele( n = `flagAction` ns = `semantic`
                 )->tag( n = `FlagAction` ns = `semantic`
-                    )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `FlagAction` ) ) )
+                    )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.FlagAction` ) ) )
 
             )->end(
             )->ele( n = `favoriteAction` ns = `semantic`
                 )->tag( n = `FavoriteAction` ns = `semantic`
-                    )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `FavoriteAction` ) ) )
+                    )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.FavoriteAction` ) ) )
 
             )->end(
             )->ele( n = `sendEmailAction` ns = `semantic`
                 )->tag( n = `SendEmailAction` ns = `semantic`
-                    )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `SendEmailAction` ) ) )
+                    )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.SendEmailAction` ) ) )
 
             )->end(
             )->ele( n = `sendMessageAction` ns = `semantic`
                 )->tag( n = `SendMessageAction` ns = `semantic`
-                    )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `SendMessageAction` ) ) )
+                    )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.SendMessageAction` ) ) )
 
             )->end(
             )->ele( n = `discussInJamAction` ns = `semantic`
                 )->tag( n = `DiscussInJamAction` ns = `semantic`
-                    )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `DiscussInJamAction` ) ) )
+                    )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.DiscussInJamAction` ) ) )
 
             )->end(
             )->ele( n = `shareInJamAction` ns = `semantic`
                 )->tag( n = `ShareInJamAction` ns = `semantic`
-                    )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `ShareInJamAction` ) ) )
+                    )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.ShareInJamAction` ) ) )
 
             )->end(
             )->ele( n = `printAction` ns = `semantic`
                 )->tag( n = `PrintAction` ns = `semantic`
-                    )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `PrintAction` ) ) )
+                    )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.PrintAction` ) ) )
 
             )->end(
             )->ele( n = `messagesIndicator` ns = `semantic`

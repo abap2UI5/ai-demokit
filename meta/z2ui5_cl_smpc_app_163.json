@@ -18,7 +18,7 @@
     },
     {
       "type": "NOTE",
-      "what": "The original drives the footer toolbar button visibility from a separate 'range' media JSON model ({range>/isNoPhone}, isNotPhoneOrTablet, isTablet, isPhoneOrTablet). abap2UI5 has one default model, so the flags live flat in it and visible binds them directly - the 'range>' prefix is dropped; the last path segment is identical, which structural-diff matches. Values use the desktop media ranges (the original filled them from Device.media - a client-only decision)."
+      "what": "The original drives the toolbar and ActionSheet visibility from a separate 'range' media JSON model (isNoPhone, isNotPhoneOrTablet, isTablet, isPhoneOrTablet, isPhone), seeded from Device.media.getCurrentRange('Std') and kept current by an attachHandler on that range set. **Reworked 2026-08-23**: the flags are UI5 expression bindings over the framework's own device> model - {= ${device>/media/range} === 'Phone' } and friends - which reads the SAME 'Std' range set and is refreshed on every resize (CAPABILITIES; models.js). Until then the port seeded the five flags once with the desktop values and nothing ever wrote them again, which did not just freeze the layout: isPhoneOrTablet was false forever, so the overflow Button that opens the ActionSheet was permanently invisible, its OPEN_SHEET event could never fire, and the 40-line ActionSheet rebuild in on_event was dead code - in a sample whose whole subject is 'toolbar items displayed depending on the current device'. The justification given for the seeding ('a client-only decision') named a limitation the framework does not have."
     }
   ]
 }

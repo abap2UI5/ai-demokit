@@ -21,7 +21,7 @@
     },
     {
       "type": "POST_171",
-      "what": "sap.m.Title aggregation 'content' is @since 1.87 - the original nests an m:Link inside two m:Title controls (Profile, Product Description) and the port keeps that nesting 1:1. Needs a UI5 runtime >= 1.87; below it the Link would not render."
+      "what": "sap.m.Title aggregation 'content' is @since 1.87 - the original nests an m:Link inside two m:Title controls (Profile, Product Description) and the port keeps that nesting 1:1. Needs a UI5 runtime >= 1.87; below it the whole VIEW fails to load. (Corrected 2026-08-23: content is sap.m.Title's only aggregation and its defaultAggregation, so on a pre-1.87 runtime Title has no default aggregation and XMLTemplateProcessor THROWS \"Cannot add direct child without default aggregation defined\" - a blank app, not an ObjectPage missing two links.)"
     },
     {
       "type": "NOTE",

@@ -44,8 +44,16 @@
       "what": "The row images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The details popover, the three dialog modes, the owner change, the interval-header routing, the date validation and the group report are unverified in a running system."
+      "type": "NOTE",
+      "what": "The details popover, the three dialog modes, the owner change, the interval-header routing, the date validation and the group report are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_547.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "A JS callback is not in the UI5 expression grammar - ExpressionParser has no `function` keyword and reads { as an object literal, so the whole handler string failed to parse and every argument was lost. The selection is read from the model instead: PlanningCalendarRow (and CalendarAppointment) declare a bindable `selected`, so the flags travel with the rows and ABAP does the work. Here that also covers the \"do the selected appointments differ in type\" test, which the original computes with .some( )."
+    },
+    {
+      "type": "NOTE",
+      "what": "The details popover is opened on the POPOVER slot, so it is closed with popover_destroy( ) - popup_destroy( ) tears down the separate POPUP slot and left the popover on screen. The EDIT branch closes it before opening the dialog, which the original does explicitly (\"The sap.m.Popover has to be closed before the sap.m.Dialog gets opened\")."
     }
   ]
 }

@@ -57,8 +57,8 @@
       "what": "the original re-renders the footer button from an attachChange handler on the MessagePopover's items binding (navigateBack + setType/setIcon/setText). abap2UI5 has no binding-change hook, so the button's three properties are recomputed on the SAVE round-trip that authors the messages - the only moment they change in this sample - and MessagePopover.navigateBack has no whitelisted frontend-action counterpart, so the popover opens on its list page (which is where a freshly opened popover starts anyway)."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the Dialog + MessagePopover-in-dependents combination, the toggleBy/openBy anchoring from inside a popup, and the backend-computed button severity."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the Dialog + MessagePopover-in-dependents combination, the toggleBy/openBy anchoring from inside a popup, and the backend-computed button severity. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_562.mjs)."
     }
   ]
 }

@@ -80,6 +80,21 @@ function usesEventTArg(src) {
   return false;
 }
 
+/* the universe's own entity per sample, and the library an entity name sits in
+ * — longest known library prefix wins, so sap.ui.model.type.Currency resolves
+ * to sap.ui.model and not to sap.ui. */
+const UNIVERSE = JSON.parse(fs.readFileSync(path.join(UI5, 'universe.json'), 'utf8'));
+const UNIVERSE_ENTITY = new Map(
+  UNIVERSE.libs.flatMap((l) => l.samples.map((s) => [`${l.lib}.sample.${s.name}`, s.entity])),
+);
+const KNOWN_LIBS = [...new Set([...UNIVERSE.libs.map((l) => l.lib), 'sap.ui.model', 'sap.ui.core'])];
+const universeEntity = (sample) => UNIVERSE_ENTITY.get(sample) || null;
+const entityLib = (e) => {
+  let best = '';
+  for (const l of KNOWN_LIBS) if ((e === l || e.startsWith(`${l}.`)) && l.length > best.length) best = l;
+  return best || e.slice(0, e.lastIndexOf('.'));
+};
+
 let errors = 0;
 const err = (m) => { console.log(`ERROR ${m}`); errors++; };
 const liveTestClasses = [];
@@ -265,6 +280,18 @@ for (const sf of sidecars.sort()) {
     const sname = m.sample.slice(m.sample.indexOf('.sample.') + '.sample.'.length);
     if (!fs.existsSync(path.join(UI5, lib, sname))) {
       err(`${sf}: template ui5/${lib}/${sname}/ is not archived`);
+    }
+    /* the sidecar entity may be SHARPER than the universe's (the universe says
+     * sap.ui.unified.ColorPicker where the sample is really the Popover), but
+     * it may not name a different LIBRARY: generate-catalogue derives the
+     * catalogue's library column from this field alone, so a foreign library
+     * here files the port under a library it is not in, and nothing else
+     * notices - app 143 carried "sap.f.DynamicPage" for a sap.tnt.InfoLabel
+     * sample until 2026-08-23, listed under sap.f in catalogue.json while
+     * api.md (which reads the universe) had it right. */
+    const ue = universeEntity(m.sample);
+    if (ue && m.entity && entityLib(m.entity) !== entityLib(ue)) {
+      err(`${sf}: entity "${m.entity}" is in a different library than the universe's "${ue}" for ${m.sample} — a sharper entity is fine, a foreign library is not (it decides the catalogue's library column)`);
     }
   }
 }

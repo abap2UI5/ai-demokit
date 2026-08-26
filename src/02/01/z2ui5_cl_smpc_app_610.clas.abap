@@ -261,7 +261,11 @@ CLASS z2ui5_cl_smpc_app_610 IMPLEMENTATION.
 
     " handleAppointmentCreateDnD pushes a bare 'New Appointment' over the
     " dragged interval - no text, no type, no icon
+    " type must be seeded: an unset ABAP field reaches CalendarDayType as "",
+    " which is not a member - validateProperty throws and the view goes down.
+    " The original pushes an object with no type key, which keeps the default.
     INSERT VALUE #( title    = `New Appointment`
+                    type     = `Type01`
                     start_at = iso_of( 1 )
                     end_at   = iso_of( 6 ) ) INTO TABLE t_appointments.
 

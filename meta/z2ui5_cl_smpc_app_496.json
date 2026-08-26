@@ -17,15 +17,23 @@
     },
     {
       "type": "NOTE",
-      "what": "The node names follow the original's Array(level+3).join('-1') exactly (repeat( val = '-1' occ = level + 2 )), and the dummy child that makes a node expandable is kept as a real model field, so the tree still stops at 'Last node' on level 5."
+      "what": "The port's node ladder is typed to tree level 5, so it stops two levels short of the original, which reaches level 7 - expanding a level-5 item there yields level-6 children whose second node carries a level-7 `Last node` child. In the port `is_last` can never become true (level is at most 4) and the WHEN 5 branch emits no dummy child, so its deepest node is not expandable and the `Last node` string is unreachable. A faithful depth would need two more nested row types."
     },
     {
       "type": "NOTE",
-      "what": "An ABAP nested table needs a type per level, so the port declares six of them and walks the parsed path with a CASE over its depth - the JSON model of the original has no such limit, but the sample never goes deeper than six levels."
+      "what": "The port's node ladder is typed to tree level 5, so it stops two levels short of the original, which reaches level 7 - expanding a level-5 item there yields level-6 children whose second node carries a level-7 `Last node` child. In the port `is_last` can never become true (level is at most 4) and the WHEN 5 branch emits no dummy child, so its deepest node is not expandable and the `Last node` string is unreachable. A faithful depth would need two more nested row types."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The toggle wire (path parsing, the appended nodes and the three-value toast) is unverified in a running system."
+      "type": "NOTE",
+      "what": "The toggle wire (path parsing, the appended nodes and the three-value toast) is unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_496.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The client sends a binding path of the shape /T_NODES/1/NODES/0 - the root segment is the bound ATTRIBUTE's name and the model is serialized upper-cased by z2ui5_cl_ajson_mapping=>create_upper_case( ). It is not the original sample's /1/nodes/0. The parser therefore keeps the numeric segments and ignores the named ones (app 546's index_of does the same); matching a literal lowercase `nodes` never fired and drove every segment into CONV i( )."
+    },
+    {
+      "type": "NOTE",
+      "what": "loadData in the original only refills when the expanded node still holds its dummy child (bChildIsDummyNode). The port guards on `expanded` alone and assigns the children outright, so collapsing an already-expanded node and re-expanding it resets that subtree to the two default nodes where the original leaves it alone. Also: the original's toast passes width: \"auto\" alongside duration; the port passes duration only, so the three-line toast wraps in the default 15em."
     }
   ]
 }

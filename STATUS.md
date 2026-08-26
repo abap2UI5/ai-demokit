@@ -15,12 +15,12 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 
 | Aspect | State |
 |---|---|
-| Ports | **622** sidecars in `meta/` (src/01 OpenUI5 <= 1.71: 408 · src/02 OpenUI5 > 1.71: 214) |
+| Ports | **622** sidecars in `meta/` (src/01 OpenUI5 <= 1.71: 403 · src/02 OpenUI5 > 1.71: 219) |
 | Per library | sap.f: 36 · sap.m: 393 · sap.tnt: 17 · sap.ui: 131 · sap.uxap: 45 |
-| Status ladder | 206 `generated` · 355 `reviewed` · 61 `checked` (live-verified) |
-| Deviations | 11 DROPPED_171 · 131 IMPROVISED · 119 LIVE_TEST · 1662 NOTE · 284 POST_171 |
-| Open LIVE_TESTs | **119 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
-| Declared gate skips | 2 structural-diff · 7 render-smoke (each re-verified per run — a stale skip FAILS) |
+| Status ladder | 208 `generated` · 355 `reviewed` · 59 `checked` (live-verified) |
+| Deviations | 11 DROPPED_171 · 164 IMPROVISED · 2 LIVE_TEST · 1870 NOTE · 292 POST_171 |
+| Open LIVE_TESTs | **2 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
+| Declared gate skips | 2 structural-diff · 6 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_smpc_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_smpc_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_smpc_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_smpc_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_smpc_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
 
 _Coverage per library (ported / in scope) is generated into the [README](README.md#coverage); one row per sample in [api.md](api.md)._
@@ -176,8 +176,358 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   undeclared handler-to-binding swap (022), inline comments citing apps that do
   not exist (010 cited app 534) or the wrong one (009 cited 401 for 022), and
   a `checked.note` claiming no interaction paths were open on a port that ships
-  a press → Dialog → close wire (010). Ports 035–061 are still unread against
-  their originals.
+  a press → Dialog → close wire (010).
+  **Ports 035–061 were read on 2026-08-23** — all 27, each against its archived
+  original (view, controller, fragments, manifest, mock) and against the pinned
+  OpenUI5 sources wherever a claim rested on UI5 behaviour. **20 came back
+  clean** (035–037, 039, 041, 043–048, 050–059) and **7 carried a finding**, all
+  of them documentation drift and not one of them a behavioural defect — which
+  is itself the result worth recording, since the first batch of this re-read
+  found a real one in app 003 and the fear was that `checked` ports hid more.
+  What the seven were: a deviation justifying its choice with a framework
+  limitation that had been lifted two days after the sentence was written (038,
+  the `message>` write half — `z2ui5.cc.MessageManager` does it, and app 065
+  here uses it) *and* citing a class in the retired `z2ui5_cl_demo_app_*` scheme that
+  exists nowhere — see the gate gap below; an `@since` the sources do not carry (040, "the
+  tokens aggregation is public since 1.16" — `MultiInput.js` tags it not at all,
+  and `Tokenizer`, which renders it, is @since 1.22; the figure was in
+  CAPABILITIES.md too); a declared extra control the port does not build (042
+  claimed two content Texts and a "Close Button"; it builds one Text and an OK
+  button, exactly as the original's controller does); an e2e claim its own
+  interaction module contradicts (049 promised ArrowUp + Enter and "the quotes
+  intact", while the module records that the keyboard route stopped firing
+  `change` on the pinned UI5, falls back to the control API, and asserts the
+  text without the quoted value); a mis-scoped `POST_171` (061 said
+  `beforeMenuOpen` sits on "the split-mode buttons", one button short — the
+  `menuPosition="RightBottom"` one carries it with no `buttonMode` at all); an
+  inline comment quoting the original as something it is not (060 said the
+  sample toasts `item.getText()`, where it actually walks the parent chain); and
+  an interaction module whose header named the wrong wire (061 said `{0}
+  Pressed`, asserts `Action triggered on item: Save`). All seven are corrected.
+  **Two of the findings were not in the ports at all**, and both left this
+  repository: 060/061's breadcrumb reasoning ("an expression has no loop") is no
+  longer the operative reason — the framework has `$controller.textPath`, which
+  *does* loop — and the sidecars now carry the real one, that `getTextPath`
+  breaks at the first ancestor without `getText` and `sap.m.Menu` puts a
+  `MenuWrapper` (@since 1.136, no `getText`) exactly there, so it returns the
+  leaf text and rewiring would be a no-op. The framework's own comment on that
+  helper promised the opposite and is fixed upstream.
+  A **gate gap** explains why 038's dead class name outlived the 2026-08-21
+  sweep that removed the others: `check-prose-names` reads eight markdown files
+  and no `meta/` sidecar, although a deviation is prose, is what agents read,
+  and is baked verbatim into the generated overview app. The script is shared
+  with `samples` and `samples-stack`, so it is filed as
+  `prose-gate-blind-to-sidecars` in abap2UI5's backlog rather than changed in
+  one consumer.
+  A second corpus-wide drift surfaced from the same reading and is fixed:
+  **ten CAPABILITIES.md rows still said "LIVE-TEST pending" for apps that are
+  now `checked`** (007, 013, 022, 026, 028, 030, 033, 039, 040, 044, 046, 047 —
+  all live-verified between 2026-07-15 and 2026-07-20), and four rows pointed at
+  `app/webapp/core/Messages.js`, a module that no longer exists (the toast and
+  message-box hooks live in `core/actions/ControlCall.js`). Understating a
+  capability in the file whose whole job is to stop a port from improvising is
+  the more expensive of the two.
+  **The `checked` re-read is now complete for the whole corpus (2026-08-23).**
+  The 20 remaining `checked` ports above 061 — 065, 066, 084, 085, 108, 140,
+  164, 171, 256, 257, 272–281 — were read the same way. **Four came back clean** (066, 085,
+  276, 278) and sixteen carried a finding — **and this time three were
+  BEHAVIOURAL**, which is exactly what a re-read of human-signed-off ports
+  existed to find out:
+  - **App 084's tel and sms could never have worked.** Both were wired
+    `t_arg = ( 'TRIGGER_TEL' ) ( <number as a plain string> )`, but
+    `evUrlHelper` reads `args[2]` as an OBJECT and takes `params.TEL`, so
+    `URLHelper` got `undefined` and `formatTel` returned `''` — the items
+    navigated to a bare `tel:`/`sms:`. Its `checked.note` said "tel/sms/email
+    and REDIRECT all fire correctly", `CAPABILITIES.md` documented the plain
+    string as the API, and app 528 had copied the shape. All four are fixed;
+    the check is retired and the port is back to `generated`. **The key is
+    `TEL` for sms too** — the handler reads `params.TEL` for both.
+  - **App 065 showed two invented message texts.** Only two of the original's
+    four Save messages are authored by hand; the ZIP and Email ones are UI5's
+    own type messages ("Enter a number with no decimal places", "Enter a valid
+    value"). The port had paraphrased both, which also made it disagree with
+    itself — typing the same bad value makes abap2UI5's auto-collection emit
+    the real bundle text. Corrected to the strings the sample shows.
+  - **App 272's four toasts ran 3000 ms instead of the original's 500**, on a
+    deviation claiming `message_toast_display` has no `duration` parameter. It
+    has one, at the pinned commit, and five ports here were already passing it.
+  A third class is new and worth naming: **a `checked` stamp that outlived the
+  code it certified.** App 108 was signed off 2026-07-27 for "interactions
+  toast as declared", but the port raises no toast at all (both handlers open a
+  MessageBox, faithfully), and its interactions were only built on 2026-08-05 —
+  so the run can only have covered rendering. App 084's is the same shape.
+  AGENTS §10 already rules on this, and both are now `generated` with the
+  historical check kept as a `LIVE_TEST`. **App 277's e2e close was withdrawn**
+  for the neighbouring reason: `close-live-tests` stamps a deviation only when
+  the module drives the wire it names, and 277's module asserts the strip is
+  VISIBLE on a desktop viewport while the deviation is about the phone-portrait
+  branch — which nothing rotates. It is a `LIVE_TEST` again.
+  The rest were documentation drift of the shapes the 001–061 wave established:
+  a mis-scoped declaration (065's ColumnElementData, 140's "every cell", 275's
+  "four tiles", 281's `getSelectedItems`), an `@since` the sources do not carry
+  (281's `showSelectAll` 1.111), an undeclared drop (108's `icon="{pic}"`,
+  164's `TableExampleUtils` info button, which six sibling ports declare), a
+  stale sentence asking for a check the same deviation records (171), a
+  justification that is the opposite of the truth (279 — "no gate sees it",
+  when the linter reports four version findings and that declaration is the
+  only thing keeping the port green; 274 — a residual blamed on UI5 1.149 when
+  the harness serves 1.151), and an e2e claim wider than its module (273, 280,
+  281).
+  **The `reviewed` re-read has started (2026-08-23), and the first block of 20
+  changed the picture again.** Ports 062–064, 067–083 were read the same way.
+  **Ten came back clean** (062, 063, 064, 068, 069, 070, 071, 075, 078, 079,
+  082) and ten carried findings — including the worst defect the whole sweep
+  has produced:
+  - **App 077's close button silently did nothing on 11 of its 15 handlers.**
+    The original resolves the parent per item (`oItem.getParent()`), and
+    `sap.m.NotificationListGroup` declares its own `items` aggregation, so a
+    NESTED item's parent is the GROUP. All fifteen wires were hard-coded to the
+    outer list id: right for the four group closes, and for the eleven item
+    closes `ManagedObject.removeAggregation` looped the list's four groups,
+    matched nothing and returned `null` — no error, no log, the item stayed on
+    screen and only the toast fired. Every gate was green because the call
+    fails silently, and the sidecar called it "reproduced 1:1". The groups now
+    carry ids and each nested item removes itself from its own group. Note the
+    same wire is CORRECT in app 076, where every item is a direct child — which
+    is why the probe it leaned on (a flat Tokenizer) never covered this.
+  - **App 067 dropped a user-visible toast on a false justification.** Its
+    deviation said `setAsyncDescriptionHandler` and the `longtextLoaded` toast
+    both never fire because no mock row has a `longtextUrl`. That is true of
+    the first and false of the second: `longtextLoaded` is ungated —
+    `_navigateToDetails` fires it on every drill-down — so in the original
+    clicking any message toasts "Description validation has been performed."
+    Now wired.
+  - **App 073 lost the Cancel button's `type="Reject"`** (Submit's `Accept` was
+    there, so the pair was asymmetric) **and toasted with every default** where
+    the original shows the toast ON the still-open dialog for 2 s, centre
+    docked, and closes it from `onClose`. Both fixed; only `of` stays dropped,
+    because the framework hands that option to MessageToast unresolved so a
+    control id cannot travel in it.
+  A corpus-wide claim also turned out false and is now closed rather than just
+  corrected: 22 sidecars asserted the asset-path rewrite was "declared by all
+  77 ports that do it". Re-counted: **126 ports do it and 17 declared it
+  nowhere** — exactly the condition the sentence claimed to have closed. The 17
+  now carry the declaration and the sentence names the date its count was
+  taken, since a bare absolute count is what went stale.
+  The remaining findings are the familiar shapes: an undeclared substitution
+  (072's twelve client toasts, 076's `onErrorPress` losing a persistent
+  MessageStrip and its link, 077's `onAcceptErrors` inventing a toast the
+  original does not have), a version floor that is understated (072 needs
+  1.110 for `sapMObjectNumberLongText`, not the 1.86 it claimed), a member
+  declared POST_171 that carries no `@since` at all (067's
+  `markupDescription`), a leftover comment the code below it contradicts (077),
+  a justification that is simply not how UI5 behaves (077's "UI5 boolean
+  parsing rejects `falseue`" — it coerces), a dead `LIVE_TEST` pointer (074),
+  and e2e claims wider than their modules (067, 074, 080 — 074's module now
+  asserts the whole composed toast instead of its prefix).
+  **Block 2 (2026-08-23) read ports 086–105** (103 excepted, reworked the same
+  day). **Six clean** (086, 087, 088, 089, 090, 095, 098) and the rest carried
+  findings — and the behavioural share keeps rising as the sweep moves into
+  ports that actually wire things:
+  - **App 101 had two step texts silently TRUNCATED to roughly half** — 475 of
+    955 characters and 385 of 575, each a clean prefix stopping mid-paragraph —
+    and had quietly corrected the original's own typo "Donec ppellentesque".
+    Restored. No gate in this repo compares long text bodies, which is exactly
+    why it survived three sweeps. Its navigation also used `to` for all three
+    legs where the original uses `backToPage` for two (a reverse transition
+    that unwinds the NavContainer stack rather than pushing onto it), its
+    weight check demanded all digits where the original tests `parseInt() is
+    NaN` (so `12.5`, `-5` and `12abc` are valid there — on an `Input
+    type="Number"`, where a decimal is what a user types), and it dropped the
+    `setCurrentStep` both failing branches call. All fixed.
+  - **App 105 and its siblings 106/107 printed the wrong text in 36 toasts.**
+    The original strips the LIBRARY name, and the library of a
+    `sap.m.semantic.*` control is `sap.m` — so it prints
+    `Pressed: semantic.AddAction`. All three ports passed the bare action name,
+    stripping the namespace too.
+  - **App 099 dropped the navigate toast's identity and its whole back-button
+    branch**, on the justification that `navOrigin` "is a control reference not
+    transportable as an event arg" — which its own twin, app 100, had recorded
+    as a corrected defect three weeks earlier. The correction never reached
+    099; it has now.
+  - **App 102 does not reproduce the guard its sidecar says it does, and the
+    handler is worse than the "no-op" it was called.** `sap.m.Input` writes its
+    value binding on change, not per keystroke, so the delta carries nothing
+    and the comparison can only ever be true; and every round-trip clears all
+    pending timers *before* running, so one keystroke cancels the armed rebind
+    entirely, where the original's `dataReceived` always fires and is merely
+    declined. Declared precisely rather than reworked — the fix needs the value
+    transported AND the timer problem solved together.
+  - **App 104 kept its search filter across a close**, where `handleClose`
+    resets it first on confirm and cancel alike (`open()` clears the search
+    field but never the binding filter). Fixed.
+  Two twin-port lessons came out of this block and are worth carrying forward:
+  a correction applied to one port of a pair does not reach the other by
+  itself (096→097, 100→099), and the same wire can be right in one port and
+  silently wrong in the next when the aggregation nests one level deeper
+  (076 vs 077 in block 1).
+  The rest are the established documentation shapes: a deviation declaring a
+  wire the port does not have (094, 096, 097 — all three claimed a `setMode`
+  frontend action where the handler only assigns a two-way bound field), a
+  limitation the framework lifted (093's aggregation-item addressing, available
+  since 2026-08-06 and already used by app 012), a dead pointer (092's
+  "core:require dropped" — the sample has none), a mis-stated moment rather
+  than mechanism (092's popin re-flow happens per tick, not on picker close),
+  an undeclared content difference (093's added tab), a dropped
+  `templateShareable` (099, 100), a dropped a11y override (100), and e2e claims
+  wider than their modules (091, 093, 096, 097, 101, 104).
+  **Block 3 (2026-08-23) read ports 106–126.** **Nine clean** (110, 111, 113,
+  117, 119, 120, 122, 124, 125) and the block produced the sweep's first
+  outright CRASH plus several dead wires:
+  - **App 115 threw a TypeError on every token ADD.** `MultiInput` fires
+    `tokenUpdate` with `type: "added"` and `removedTokens: []`, and the wire's
+    unguarded `${$parameters>/removedTokens}[0].getKey()` raised in the
+    expression parser *before* the round-trip started — so picking a suggestion
+    produced a console exception instead of the original's model write. Guarded
+    now. Its `removed` branch was a no-op besides: the original REWRITES the
+    whole token list from the post-update aggregation and that write is the
+    only thing that ever fills the model, so the port's bound table is empty for
+    all 123 rows and its `DELETE` matches nothing.
+  - **App 126's `uploadComplete` could never fire.** Nothing called `upload()`
+    and `uploadOnChange` defaults to `false`, so both firing paths were
+    unreachable, while the press raised an invented toast the original does not
+    have. `upload` is an ordinary public method and is not on the frontend
+    denylist; the press calls it now.
+  - **App 121's remove only toasted** — the file came back on the next render —
+    **and its version button was hard-coded off**, so the button the sample's
+    selection logic exists to demonstrate was permanently dead. Both wired; the
+    five invented toasts are gone (the original raises none).
+  - **App 118 printed "URL: undefined" on every date click.** The original
+    guards on the action TYPE and only toasts for `Navigation`; the Calendar
+    card fires a `DateChange` whose parameters carry no `url`. Guarded — a
+    view-wired client action always fires, so suppressing it entirely would need
+    a per-firing veto that form does not have, and that residue is declared.
+  - **Apps 106/107 lost half of the SortSelect toast**, the same derivation
+    fixed for the button literals earlier the same day: the original prints
+    `Selected: semantic.SortSelect by <text>`. A reminder that fixing one
+    handler does not fix its sibling.
+  Documentation drift, same shapes as before: a rendering claim wrong on
+  desktop (112 — declaring the two button aggregations at all makes
+  `ResponsivePopover._setButton` create a footer Toolbar that `visible=false`
+  cannot remove), an `@since` the sources do not carry (109's MonthView is
+  1.69), a deviation typed `NOTE` where the recipe requires `IMPROVISED` (116,
+  the canonical two-view BlockBase case), counts and classes that do not match
+  the code (115, 116, 126), and e2e claims wider than their modules (123).
+  One difference was declared rather than "fixed": app 114 renders 13
+  tab-indented lines where the original's literal newlines collapse to spaces
+  through XML attribute-value normalisation — the port is the source-faithful
+  side, and matching the original's RENDERING would mean writing spaces where
+  the sample wrote newlines.
+  **What is left: 275 `reviewed` and 206 `generated` ports above 061.**
+
+  **Block 4 (2026-08-23) read ports 127–147.** **Six clean** (127, 129, 131,
+  142, 144, 146). The block's finds were fewer dead wires and more claims that
+  did not survive being checked:
+  - **App 130 lost the sample's only behaviour.** The original presses once and
+    the busy state clears itself after 5s (`setTimeout`); the port toggled, so
+    busy stayed until a second press. `cs_event-start_timer` has expressed this
+    since 2026-07-30 and app 147 — the *other* BusyIndicator sample — already
+    used it. Now `busy = abap_true` plus a `CLEAR_BUSY` timer.
+  - **App 136 threw the panel's state away on every toggle.** The `TOGGLE`
+    branch ended in `view_display( )`, and `SidePanel.selectedItem` is an
+    association and `sideContentExpanded` a hidden property, so the side content
+    the user had just opened came back collapsed. The re-render existed only to
+    re-bake the render-time veto flag — which was itself one toggle late,
+    because the two Switches carry no event. `s_ctrl-prevent_default_expr`
+    decides per firing and reads both Switch states, so the re-render is gone
+    and both defects with it.
+  - **App 137's sort and filter menus operated on paths that do not exist.**
+    `sortProperty`/`filterProperty` were copied lowercase from the original
+    while the cells bind `{SUPPLIER}`/`{STREET}`/`{CITY}`/`{PHONE}` — abap2UI5
+    derives model paths from the ABAP component names. UI5 generates the menu
+    entries off the property being *set*, so sorting was a no-op and filtering
+    returned nothing.
+  - **App 141 dropped the announce the sample exists for**, justified by "no
+    control_global entry" — `ControlCall.js` has defined
+    `INVISIBLE_MESSAGE.announce` since 2026-08-05, CAPABILITIES marks it ✅ and
+    apps 289/435 use it. Sharper still: `ui5/scope-exceptions.json` keeps this
+    post-1.71 sample precisely because the accessibility-announcement idiom
+    exists nowhere else in the corpus.
+  - **Two e2e claims were vacuous, in two different ways.** App 133's mode leg
+    clicked the segment the port already loads in, and `SegmentedButton` returns
+    early there — no `selectionChange`, both assertions true at page load. App
+    147's asserted that the busy overlay appears and later disappears, which the
+    *framework* satisfies on its own (it shows the same global singleton on
+    every request and hides it before the port's follow-up JS runs). 133 now
+    clicks a different segment and asserts the sentence the backend composes;
+    147 measures how long the overlay stays up.
+  - **App 297, found while checking 136's framework contract:** its
+    `prevent_default_expr` was built as `|${ client->_bind( path = abap_true ) }
+    === 'Error'|`, and an ABAP template treats the following brace as an
+    embedded expression — what reached the wire was `$/DATE_VALUE_STATE`, which
+    the UI5 event-handler parser does not know. That veto could never have
+    fired.
+  - **App 145's archive was incomplete while its sidecar said the gap was
+    closed.** `RevealGrid/RevealGrid.js` — the controller's only dependency — was
+    missing, though `manifest.json` lists it and two sibling samples archive it
+    byte-identically. That named a whole gate class: `scripts/check-archive.mjs`
+    now checks every manifest-listed file against the archive on disk (0 errors
+    after this fix; the 57 `../SharedBlocks` files 30 sap.uxap samples pull from
+    sibling folders are reported as a standing advisory, since backfilling them
+    needs a harvest run).
+  - **App 135 was in the wrong category folder.** `formatOptions
+    { showNumber: false }` is `@since 1.89` — a binding-info parameter no gate
+    can see — so the port owed a `POST_171` and, with it, `src/02`.
+  - Documentation-only corrections: 128 (two justifications that were false
+    against the files in the repo today — the property gate is *not* blind to
+    sap.tnt, and it *does* check controls as well as members), 132 (the floor is
+    1.149, the `tag` aggregation's, not the group's 1.121), 134 (the dropped
+    device handler also toasts, and `onInit` calls it — the original shows a
+    message on every load), 138 (two residuals now stated: the dropped
+    `if (iValue)` guard and the initial toggle-button state the
+    `breakpointChanged` wire provably cannot cover), 139 (a phone rule dropped
+    as "not used by the view" — `sapUiCal` is written by the renderer, not the
+    author), 143 (the sidecar's `entity` named a foreign library, which put the
+    port under `sap.f` in the generated catalogue; `validate-meta` now
+    cross-checks the entity's library against the universe).
+  **What is left: 255 `reviewed` and 206 `generated` ports above 147.**
+
+  **Blocks 5-7 (2026-08-23) read ports 148-271** — 124 ports in three waves of
+  parallel readers. The pattern of the whole sweep changed here: fewer dead
+  wires per port, and more claims that did not survive being checked against the
+  sources. Wires that could not work:
+  - **A raw-argument rule, found the hard way.** `get_t_arg` leaves a `t_arg`
+    entry unquoted only when it starts with `$` or `{` (or is an `.eB`/`.eF`
+    call); everything else becomes a single-quoted JS string. App 250's
+    `liveChange` composed `'rgba(' + ${…}` and handed it to the `css` setter,
+    where CSSOM dropped the text — the icon never changed colour. The
+    value-help pre-filter added to app 233 *earlier in this same sweep* had the
+    identical shape and was corrected before it could ship as a fix that fixed
+    nothing.
+  - **165** wrote its URLHELPER payload in a backtick literal, where `\{` is a
+    real backslash: the expression never evaluated and the user got "Invalid
+    redirect URL" instead of the redirect.
+  - **168** gave `class=` an expression binding. `XMLTemplateProcessor`
+    intercepts `class` before the property branch and hands the raw string to
+    `addStyleClass`, which drops any value containing a quote — so the control
+    got no class at all, losing the original's static one too.
+  - **252** bound an int property to a field the Input writes back as a string;
+    every keystroke threw out of the binding. The binding carries a type now,
+    which is where the original's `Number( )` went.
+  - **241** left the nested `items` aggregation unbound on a row template, so
+    one row's children never rendered and every row grew a spurious child.
+  - **167** computed `false` where the original's expression THROWS and UI5
+    falls back to the declared default `true` — one whole page was unreachable.
+  - **163** froze five media flags at their desktop values, which left the
+    overflow button permanently invisible and its ActionSheet branch dead code,
+    in the sample about device-dependent toolbars.
+  - **246** cleared a bound field beside `clear( )`: the model push runs before
+    the queued follow-up actions, so `upload( )` posted an empty form.
+  - **148** hit ABAP's `INSERT … INDEX` where JS `splice` clamps — dropping the
+    last card onto itself lost the row on a real system.
+  Two sweeps of one defect across ports: mixed-case `sortProperty`/
+  `filterProperty` against upper-cased model paths (164/174/247/353, after 137),
+  and the `.sap-phone .sapUiCal` rule dropped as "not used by the view" in six
+  calendar ports — it is written by the renderer, not the author.
+  The **framework** fix of the day came out of app 196: `CONTROL_GLOBAL
+  FORMATTING` asked for `sap/ui/core/Formatting`, a module UI5 does not have,
+  and both unit tests stubbed the same wrong id. The gate that should have
+  caught it read only `sap.ui.define` arrays; it checks probed ids now.
+  Documentation: 26 uxap sidecars typed the block substitution `NOTE` where
+  CAPABILITIES and the recipe both say `IMPROVISED`, ten e2e stamps claimed
+  more than their modules assert, and a dozen justifications named framework
+  limitations that do not exist.
+  **What is left: 136 `reviewed` and 206 `generated` ports above 271.**
 
 - [x] **CAPABILITIES.md's stale class citations — DONE.** Both halves of this
   are closed, and neither closed the way the entry predicted. The shared

@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "btnChangeOrientation flips Splitter.orientation, which IS a bindable property, so the port binds it and flips the model field instead of calling the setter (the prefer-a-bindable-property rule). btnInvalidateSplitter has no bindable equivalent either - invalidate( ) forces a re-render without changing a property - and it needs none: invalidate is denied by the frontend action allowlist (the render lifecycle belongs to the framework, CONTROL_METHOD_DENY_PREFIXES), and the round-trip the button already makes re-renders the slot by itself. So the button keeps its wire and its effect, with no control method called. The Splitter's resize event is wired to the backend, which increments the counter and writes the timestamped 'Resize # n' text the original's handler writes."
+      "what": "btnChangeOrientation flips Splitter.orientation, which IS a bindable property, so the port binds it and flips the model field instead of calling the setter (the prefer-a-bindable-property rule). btnInvalidateSplitter has no bindable equivalent either - invalidate( ) forces a re-render without changing a property - and it needs none: invalidate is denied by the frontend action allowlist (the render lifecycle belongs to the framework, CONTROL_METHOD_DENY_PREFIXES), and the slot is re-displayed instead, which IS a re-render and restores the sizes off the model. Until 2026-08-24 the branch was EMPTY, on the reasoning that the round-trip the button already makes re-renders the slot by itself - it does not: main_end sends a model only when a slot displayed XML or when main( ) actually changed the model, and an empty branch changes nothing, so the response carried an empty model and the button was a strict no-op. So the button keeps its wire and its effect, with no control method called. The Splitter's resize event is wired to the backend, which increments the counter and writes the timestamped 'Resize # n' text the original's handler writes."
     },
     {
       "type": "IMPROVISED",
@@ -37,7 +37,7 @@
     },
     {
       "type": "NOTE",
-      "what": "Unverified in a running system: whether inserting/deleting a row re-renders the bound contentAreas aggregation, whether the shared table keeps the option row and the layout data in sync while dragging a splitter bar, and whether the Invalidate button's plain round-trip re-renders the Splitter the way the original's invalidate( ) does. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_351.mjs)."
+      "what": "Unverified in a running system: whether inserting/deleting a row re-renders the bound contentAreas aggregation, whether the shared table keeps the option row and the layout data in sync while dragging a splitter bar, and whether the Invalidate button's plain round-trip re-renders the Splitter the way the original's invalidate( ) does. **e2e-verified 2026-08-21** for the FIRST clause only - the module drives Add/Remove and really does watch getContentAreas().length move. It says itself that it cannot drive a splitter-bar drag, and its Invalidate check is only `count() !== 3`, i.e. \"the areas survived\", which the no-op above also passed. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_351.mjs)."
     }
   ]
 }

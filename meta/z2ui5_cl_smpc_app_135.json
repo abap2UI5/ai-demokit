@@ -2,12 +2,22 @@
   "class": "z2ui5_cl_smpc_app_135",
   "sample": "sap.ui.core.sample.TypeCurrency",
   "entity": "sap.ui.model.type.Currency",
-  "file": "src/01/02/z2ui5_cl_smpc_app_135.clas.abap",
+  "file": "src/02/02/z2ui5_cl_smpc_app_135.clas.abap",
   "batch": "b04",
-  "audit": { "frontend_action": false, "event_t_arg": false },
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
   "status": "reviewed",
   "checked": null,
   "deviations": [
-    { "type": "NOTE", "what": "Composite data-type binding paradigm: the Currency type is pulled in via core:require and every Input/Text binds a composite parts:['/amount','/currency'] with type:'CurrencyType' plus formatOptions (showMeasure/showNumber/preserveDecimals/currencyCode/style) 1:1. The two model fields amount ('123456789.123') and currency ('USD') are serialized by abap2UI5 as /AMOUNT and /CURRENCY; the paths are generated via _bind (never hardcoded)." }
+    {
+      "type": "NOTE",
+      "what": "Composite data-type binding paradigm: the Currency type is pulled in via core:require and every Input/Text binds a composite parts:['/amount','/currency'] with type:'CurrencyType' plus formatOptions (showMeasure/showNumber/preserveDecimals/currencyCode/style) 1:1. The two model fields amount ('123456789.123') and currency ('USD') are serialized by abap2UI5 as /AMOUNT and /CURRENCY; the paths are generated via _bind (never hardcoded)."
+    },
+    {
+      "type": "POST_171",
+      "what": "the Currency type's formatOptions { showNumber: false } on the third Input is @since 1.89 (sap/ui/model/type/Currency.js: \"since 1.89.0, if the format option showNumber is set to false, the amount is not shown in the control\") and is kept 1:1 from the original. A format option is a binding-info parameter, not a control member, so no gate can ever see it - declared by policy, the same route apps 264/265 take for boundFilters. Below 1.89 the option is ignored and that Input renders the full amount plus the currency instead of the bare 'USD', which is exactly what the field is in the sample to show. Undeclared until 2026-08-23; declaring it moves the port from src/01/02 to src/02/02 per AGENTS section 3."
+    }
   ]
 }

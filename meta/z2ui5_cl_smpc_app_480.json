@@ -14,6 +14,10 @@
     {
       "type": "NOTE",
       "what": "Formatter.randomBoolean decides the unread flag per row with Math.random. A backend cannot repeat a client-side random draw, so unread is a plain model field seeded alternately (every second row unread) - same two states over the same 123 rows, deterministic instead of random."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Added 2026-08-23: this port did the rewrite without declaring it, one of 17 found by re-counting the corpus-wide claim that every port doing it had a declaration."
     }
   ]
 }

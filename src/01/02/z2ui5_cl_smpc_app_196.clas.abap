@@ -142,8 +142,13 @@ CLASS z2ui5_cl_smpc_app_196 IMPLEMENTATION.
     client->view_display( view->stringify( ) ).
 
     " the controller's Formatting.setCustomCurrencies({BGN4:{digits:4},
-    " WWWW:{digits:5}}) - list five renders those two codes with 4 and 5
-    " decimals instead of the standard digit count
+    " WWWW:{digits:5}}). The original runs it in onInit, BEFORE the view exists;
+    " a client action necessarily runs after the render, and sap.ui.unified.Currency
+    " caches its NumberFormat in init( ) and implements no localization-change
+    " hook - so the two codes still render with the CLDR default digits here.
+    " The registration itself is real (it reaches a BOUND
+    " sap.ui.model.type.Currency, which does re-format); this control cannot
+    " pick it up. Measured 2026-08-23
     client->follow_up_action( val   = client->cs_event-control_global
                               t_arg = VALUE #( ( `FORMATTING` )
                                                ( `setCustomCurrencies` )
@@ -155,9 +160,8 @@ CLASS z2ui5_cl_smpc_app_196 IMPLEMENTATION.
   METHOD model_init.
 
     " inline mock data of the sample's controller (the four JSONModel arrays).
-    " the controller's Formatting.setCustomCurrencies (BGN4/WWWW digit
-    " definitions) is reproduced in on_rendering( ), so list five renders
-    " those two codes with 4 and 5 decimals like the original
+    " the Formatting.setCustomCurrencies call sits at the end of view_display( )
+    " - see the note there for what it can and cannot reach
     variousnumberdatamodel = VALUE #(
         ( currency = `EUR` price = `2300.12` )
         ( currency = `EUR` price = `38` )

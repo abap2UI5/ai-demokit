@@ -122,7 +122,7 @@ CLASS z2ui5_cl_smpc_app_118 IMPLEMENTATION.
                                       t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                        ( `show` )
                                                        ( `URL: {0}` )
-                                                       ( `${$parameters>/parameters}.url` ) ) )
+                                                       ( `${$parameters>/parameters}.url ? ${$parameters>/parameters}.url : ''` ) ) )
 
                             )->ele( n = `customData` ns = `w`
                                 )->tag( n = `CardBadgeCustomData` ns = `card`
@@ -149,7 +149,7 @@ CLASS z2ui5_cl_smpc_app_118 IMPLEMENTATION.
                                       t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                        ( `show` )
                                                        ( `URL: {0}` )
-                                                       ( `${$parameters>/parameters}.url` ) ) )
+                                                       ( `${$parameters>/parameters}.url ? ${$parameters>/parameters}.url : ''` ) ) )
 
                             )->ele( n = `layoutData` ns = `w`
                                 )->tag( n = `GridContainerItemLayoutData` ns = `f`
@@ -167,7 +167,7 @@ CLASS z2ui5_cl_smpc_app_118 IMPLEMENTATION.
                                       t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                        ( `show` )
                                                        ( `URL: {0}` )
-                                                       ( `${$parameters>/parameters}.url` ) ) )
+                                                       ( `${$parameters>/parameters}.url ? ${$parameters>/parameters}.url : ''` ) ) )
 
                             )->ele( n = `customData` ns = `w`
                                 )->tag( n = `CardBadgeCustomData` ns = `card`
@@ -196,7 +196,7 @@ CLASS z2ui5_cl_smpc_app_118 IMPLEMENTATION.
                                       t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                        ( `show` )
                                                        ( `URL: {0}` )
-                                                       ( `${$parameters>/parameters}.url` ) ) )
+                                                       ( `${$parameters>/parameters}.url ? ${$parameters>/parameters}.url : ''` ) ) )
 
                             )->ele( n = `customData` ns = `w`
                                 )->tag( n = `CardBadgeCustomData` ns = `card`
@@ -273,7 +273,7 @@ CLASS z2ui5_cl_smpc_app_118 IMPLEMENTATION.
                                       t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                        ( `show` )
                                                        ( `URL: {0}` )
-                                                       ( `${$parameters>/parameters}.url` ) ) )
+                                                       ( `${$parameters>/parameters}.url ? ${$parameters>/parameters}.url : ''` ) ) )
 
                             )->ele( n = `layoutData` ns = `w`
                                 )->tag( n = `GridContainerItemLayoutData` ns = `f`

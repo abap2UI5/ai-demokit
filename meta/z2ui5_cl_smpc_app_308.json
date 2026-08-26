@@ -20,7 +20,7 @@
     },
     {
       "type": "NOTE",
-      "what": "DateTypeRange.startDate/endDate are typed 'object' and demand a real JS Date; the model carries ISO strings and Formatter.DateCreateObject (the curated formatter pack) converts them at the point of use via core:require. endDate is set on exactly one range, so its conversion is guarded with an expression binding - an unguarded new Date('') is an Invalid Date, which is truthy and takes the whole view down. Rows without color/secondaryType/tooltip bind through omit_initial_paths so the UI5 default applies instead of an empty string."
+      "what": "DateTypeRange.startDate/endDate are typed 'object' and demand a real JS Date; the model carries ISO strings and Formatter.DateAbapDateToDateObject (the curated formatter pack) converts them at the point of use via core:require. endDate is set on exactly one range, so its conversion needs no guard - an unguarded new Date('') is an Invalid Date, which is truthy and takes the whole view down. Rows without color/secondaryType/tooltip bind through omit_initial_paths so the UI5 default applies instead of an empty string. (Corrected 2026-08-23: DateAbapDateToDateObject returns null for anything that is not an 8-digit ABAP date, so the plain { path, formatter } binding handles the one range that has no endDate - the ternary guard was removed when the formatter changed and this sentence was not carried along.)"
     },
     {
       "type": "POST_171",
@@ -36,7 +36,7 @@
     },
     {
       "type": "NOTE",
-      "what": "The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). This sample's manifest lists `../style.css` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding / labelMarginLeft classes the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs."
+      "what": "The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). This sample's manifest lists `../style.css` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding / labelMarginLeft classes the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs. Corrected 2026-08-23: the sheet's .sap-phone .sapUiCal{position:relative} rule was dropped as \"not used by the view\" and is injected now - sapUiCal is written by CalendarRenderer on the Calendar's own root, not by the author, so it does reach this view on a phone. Same sweep as apps 139/177/220/240/305/306/307/308. The sheet's remaining rule targets .sapUiCancel, which no OpenUI5 renderer writes."
     },
     {
       "type": "NOTE",

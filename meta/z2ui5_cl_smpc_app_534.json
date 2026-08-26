@@ -28,12 +28,12 @@
       "what": "validateProdInfoStep reads the two Inputs imperatively and calls setValidated; the port binds ProductInfoStep.validated and the two value states and recomputes all three in ABAP on the same change wires. The Linear view declares no validated attribute at all, so the step starts VALIDATED here too - that is what lets currentStep=\"PricingStep\" hold on startup. onActivate syncs the Select with the activated step, which the port does by sending each step's id with its activate wire (an added activate attribute on the steps the sample leaves unwired)."
     },
     {
-      "type": "IMPROVISED",
-      "what": "onBackgroundDesignChange sets backgroundDesign on both Wizards. sap.m.Wizard has no backgroundDesign property in the 1.71 metadata the gates check and no whitelisted setter, so the port keeps the Select and its two-way bound key but the design is not applied to the wizards."
+      "type": "NOTE",
+      "what": "The Select drives the Wizard's backgroundDesign through a two-way binding. The property does exist and is base-version - sap.m.Wizard declares backgroundDesign with no @since (Wizard.js:156) and a real public setBackgroundDesign (:685) - so the earlier claim that it is absent from the 1.71 metadata and has no whitelisted setter was wrong on both halves."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The two showcases, the two current-step Selects, the three branching paths and the step-2 validation are unverified in a running system."
+      "type": "NOTE",
+      "what": "The two showcases, the two current-step Selects, the three branching paths and the step-2 validation are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_534.mjs)."
     }
   ],
   "render_smoke": {

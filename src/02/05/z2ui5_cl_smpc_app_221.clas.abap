@@ -58,7 +58,7 @@ CLASS z2ui5_cl_smpc_app_221 IMPLEMENTATION.
                 " deselects every tab. The original finds that header by walking the
                 " DOM; here each button knows it statically, and selectedKey is a
                 " BINDABLE property - so the reset is a bound value, not a frontend
-                " action (AGENTS "prefer a bindable property")
+                " action (the recipe's "prefer a bindable property" rule)
                 )->a( n = `press` v = client->_event( val   = `HOME_PRESS`
                                                       t_arg = VALUE #( ( `1` ) ) )
                 )->a( n = `type` v = `Transparent`
@@ -146,7 +146,7 @@ CLASS z2ui5_cl_smpc_app_221 IMPLEMENTATION.
                 " deselects every tab. The original finds that header by walking the
                 " DOM; here each button knows it statically, and selectedKey is a
                 " BINDABLE property - so the reset is a bound value, not a frontend
-                " action (AGENTS "prefer a bindable property")
+                " action (the recipe's "prefer a bindable property" rule)
                 )->a( n = `press` v = client->_event( val   = `HOME_PRESS`
                                                       t_arg = VALUE #( ( `2` ) ) )
                 )->a( n = `type` v = `Transparent`
@@ -270,7 +270,7 @@ CLASS z2ui5_cl_smpc_app_221 IMPLEMENTATION.
                 " deselects every tab. The original finds that header by walking the
                 " DOM; here each button knows it statically, and selectedKey is a
                 " BINDABLE property - so the reset is a bound value, not a frontend
-                " action (AGENTS "prefer a bindable property")
+                " action (the recipe's "prefer a bindable property" rule)
                 )->a( n = `press` v = client->_event( val   = `HOME_PRESS`
                                                       t_arg = VALUE #( ( `3` ) ) )
                 )->a( n = `type` v = `Transparent`

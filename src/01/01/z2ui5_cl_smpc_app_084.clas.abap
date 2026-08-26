@@ -61,13 +61,13 @@ CLASS z2ui5_cl_smpc_app_084 IMPLEMENTATION.
                     )->a( n = `value` v = `{TEL}`
                     )->a( n = `type`  v = `Active`
                     )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-urlhelper
-                                                                    t_arg = VALUE #( ( `TRIGGER_TEL` ) ( s_supplier-tel ) ) )
+                                                                    t_arg = VALUE #( ( `TRIGGER_TEL` ) ( |\{ TEL: '{ s_supplier-tel }' \}| ) ) )
                 )->tag( `DisplayListItem`
                     )->a( n = `label` v = `SMS`
                     )->a( n = `value` v = `{SMS}`
                     )->a( n = `type`  v = `Active`
                     )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-urlhelper
-                                                                    t_arg = VALUE #( ( `TRIGGER_SMS` ) ( s_supplier-sms ) ) )
+                                                                    t_arg = VALUE #( ( `TRIGGER_SMS` ) ( |\{ TEL: '{ s_supplier-sms }' \}| ) ) )
                 )->tag( `DisplayListItem`
                     )->a( n = `label` v = `Email`
                     )->a( n = `value` v = `{EMAIL}`

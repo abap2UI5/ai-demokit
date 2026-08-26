@@ -5,7 +5,7 @@
   "file": "src/01/02/z2ui5_cl_smpc_app_354.clas.abap",
   "batch": "b20",
   "audit": {
-    "frontend_action": false,
+    "frontend_action": true,
     "event_t_arg": true
   },
   "status": "reviewed",
@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "Every filter of this sample is applied in ABAP and the Table binds the RESULT, so the controller's Filter objects and its binding.filter( ) calls become one server-side selection - the thin-frontend move. The global SearchField filter (Name OR Category contains the query), the availability toggle and the price band are ANDed exactly as _filter( ) combines them, and clearAllFilters resets all three. The Table's filter event carries the pressed column's filterProperty and the entered value (${$parameters>/column}.getFilterProperty() and ${$parameters>/value}) and vetoes the built-in filter for the PRICE COLUMN ONLY, through s_ctrl-prevent_default_expr - which is what the original does by returning from filterPrice before oEvent.preventDefault( ) for every other column. Until 2026-08-21 this was the boolean check_prevent_default, and that is baked per WIRE rather than per firing: it vetoed all five columns while the backend implemented only the price rule, so Name, Category, Available and Quantity filtered nothing at all and the enableCellFilter feature was inert everywhere but on Price. The four now keep the table's own client-side filtering, including Category's defaultFilterOperator StartsWith and Available's EQ, which is the behaviour the original has and no gate can see. Worked precedent for the conditional form: app 247's columnResize. The price column keeps its special rule - a +/- 20 BAND around the entered value rather than an exact match, which is the point of the original's filterPrice."
+      "what": "Every filter of this sample is applied in ABAP and the Table binds the RESULT, so the controller's Filter objects and its binding.filter( ) calls become one server-side selection - the thin-frontend move. The global SearchField filter (Name OR Category contains the query), the availability toggle and the price band are ANDed with them. (_filter( ) itself combines only the global and the price filter, both Application-type; the availability toggle goes through the COLUMN's filter( 'X' ) and the binding ANDs it as a Control filter. Same net result, different mechanism), and clearAllFilters resets all three. The Table's filter event carries the pressed column's filterProperty and the entered value (${$parameters>/column}.getFilterProperty() and ${$parameters>/value}) and vetoes the built-in filter for the PRICE COLUMN ONLY, through s_ctrl-prevent_default_expr - which is what the original does by returning from filterPrice before oEvent.preventDefault( ) for every other column. Until 2026-08-21 this was the boolean check_prevent_default, and that is baked per WIRE rather than per firing: it vetoed all five columns while the backend implemented only the price rule, so Name, Category, Available and Quantity filtered nothing at all and the enableCellFilter feature was inert everywhere but on Price. The four now keep the table's own client-side filtering, including Category's defaultFilterOperator StartsWith and Available's EQ, which is the behaviour the original has and no gate can see. Worked precedent for the conditional form: app 247's columnResize. The price column keeps its special rule - a +/- 20 BAND around the entered value rather than an exact match, which is the point of the original's filterPrice."
     },
     {
       "type": "NOTE",
@@ -28,12 +28,12 @@
       "what": "The footer OverflowToolbar stays empty: onInit lazily requires sap/ui/table/sample/TableExampleUtils and appends a ToolbarSpacer plus its createInfoButton( ) to it. That helper lives in the demo kit's own sample folder, not in any UI5 library, and only opens a popover pointing at the sample's source. Every sap.ui.table sample of this batch drops it the same way."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Unverified in a running system: whether the price column's prevented default plus the server-side band show the expected rows, whether the other four columns still filter client-side through the conditional veto (the leg the 2026-08-21 review found broken), and whether the enableCellFilter binding lets a cell filter fire that same event."
+      "type": "NOTE",
+      "what": "Unverified in a running system: whether the price column's prevented default plus the server-side band show the expected rows, whether the other four columns still filter client-side through the conditional veto (the leg the 2026-08-21 review found broken), and whether the enableCellFilter binding lets a cell filter fire that same event. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_354.mjs)."
     },
     {
       "type": "NOTE",
-      "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency: this rewrite is now declared by all 77 ports that do it - before that day 64 declared it and thirteen did not, which left a real difference asserted nowhere and gave every review sweep the same thing to re-find."
+      "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the sentence used to claim the rewrite was 'declared by all 77 ports that do it', which had stopped being true as the corpus grew past that day's snapshot - 126 ports do it now, and 17 of them declared it nowhere. Those 17 carry the declaration since today, so the claim holds again; a stale absolute count is what made it wrong, so this wording names the date the count was taken."
     }
   ]
 }

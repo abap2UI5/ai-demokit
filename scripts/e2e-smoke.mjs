@@ -172,6 +172,14 @@ function makeExpect(errs) {
         await new Promise((r) => setTimeout(r, 250));
       }
     },
+    // numeric bound — a MEASURED value (a duration, a count computed in the
+    // page) that no locator matcher can express. app 147 needs it: only the
+    // LENGTH of the busy overlay's visible episode separates the port's wire
+    // from the framework's own per-round-trip show/hide.
+    async toBeAtLeast(n) {
+      const v = Number(locator);
+      if (!(v >= n)) throw new Error(`${label}: ${v} is below ${n}`);
+    },
     // negative form — a filter assertion needs it (the row that must be GONE).
     // Polls until the text is absent so an async re-filter is tolerated.
     async notToContainText(txt) {
@@ -261,13 +269,37 @@ const backend = await startBackend();
 await waitPort(3000);
 // prefer the sandbox's pinned Chromium when present, else the playwright-managed one (CI)
 const LOCAL_CHROMIUM = '/opt/pw-browsers/chromium';
-const browser = fs.existsSync(LOCAL_CHROMIUM)
-  ? await chromium.launch({ headless: !HEADED, executablePath: LOCAL_CHROMIUM })
-  : await chromium.launch({ headless: !HEADED });
+/* --disable-dev-shm-usage: Chromium's default /dev/shm is small in a container,
+ * and the heaviest views in this corpus (app 233 boots in ~100 s, unthemed and
+ * unbundled) are where the process dies. Measured 2026-08-25: 4 crashes in ~25
+ * runs on that one port. */
+const LAUNCH_ARGS = ['--disable-dev-shm-usage'];
+const launchBrowser = () => (fs.existsSync(LOCAL_CHROMIUM)
+  ? chromium.launch({ headless: !HEADED, executablePath: LOCAL_CHROMIUM, args: LAUNCH_ARGS })
+  : chromium.launch({ headless: !HEADED, args: LAUNCH_ARGS }));
+let browser = await launchBrowser();
+
+/* A dead browser used to end the RUN, not the port. `checkPort` opens a
+ * context on the first line, so when Chromium had gone the throw travelled out
+ * of the loop uncaught and Node exited - one crash on port 233 could abort a
+ * 623-port nightly mid-way, and the report showed neither the crash nor the
+ * hundreds of ports that never ran. Now the port is failed with the reason and
+ * the browser is relaunched for the next one. */
+const BROWSER_GONE = /Target page, context or browser has been closed|Target closed|browser has been closed/i;
+async function checkPortResilient(cls) {
+  try {
+    return await checkPort(browser, cls);
+  } catch (e) {
+    if (!BROWSER_GONE.test(String(e && e.message))) throw e;
+    try { await browser.close(); } catch { /* already gone */ }
+    browser = await launchBrowser();
+    return [`the browser died on this view (relaunched for the next port): ${String(e.message).slice(0, 120)}`];
+  }
+}
 
 let failed = 0;
 for (const m of metas) {
-  const errs = await checkPort(browser, m.class);
+  const errs = await checkPortResilient(m.class);
   const cls = m.class.replace('z2ui5_cl_smpc_app_', '');
   if (errs.length) { failed++; console.log(`FAIL  ${cls}  ${errs[0]}`); }
   else console.log(`pass  ${cls}${INTERACTIONS[m.class] ? '  (+interaction)' : ''}`);
@@ -277,7 +309,7 @@ for (const m of metas) {
 let overviewChecked = 0;
 if (!ONLY || ONLY.some((o) => OVERVIEW.endsWith(o))) {
   overviewChecked = 1;
-  const errs = await checkPort(browser, OVERVIEW);
+  const errs = await checkPortResilient(OVERVIEW);
   if (errs.length) { failed++; console.log(`FAIL  overview  ${errs[0]}`); }
   else console.log('pass  overview  (+interaction)');
 }

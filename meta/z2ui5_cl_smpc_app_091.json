@@ -30,7 +30,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the change toast was switched to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template `Time selected: {0}` filled by ${$parameters>/value}; on_event dropped, init-only) - re-verify picking a time toasts \"Time selected: <value>\". **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_091.mjs)."
+      "what": "the change toast was switched to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template `Time selected: {0}` filled by ${$parameters>/value}; on_event dropped, init-only) - re-verify picking a time toasts \"Time selected: <value>\" - scope, added 2026-08-23: the interaction module covers the openBy half ONLY. It clicks the button and asserts the Popover appears; it never opens the clock, never picks a time and never looks at a toast, so the change wire could be deleted and the module would still pass. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_091.mjs)."
     }
   ]
 }

@@ -13,7 +13,11 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "Breadth-probe: the ACE-based sap.ui.codeeditor CodeEditor (a wrapped third-party editor). **Both findings of the 2026-07-27 review are fixed (2026-08-05)**: the value carries all TWELVE language entries of the original verbatim (it had been shortened to four, against the verbatim-data rule), and the brace escaping is right. The original's own view.xml writes value='\\{\u2026' - the backslash has to SURVIVE into the serialized attribute or the XMLView parser reads the JSON braces as a binding - so the braces come from `backtick` literals (taken verbatim) while the body uses |\u2026| templates for the real newlines; inside a template \\{ would collapse to a bare brace. That distinction is now a linter rule of its own (escaped-brace-in-backtick, the mirror of collapsed-brace-in-style)."
+      "what": "Breadth-probe: the ACE-based sap.ui.codeeditor CodeEditor (a wrapped third-party editor). **Both findings of the 2026-07-27 review are fixed (2026-08-05)**: the value carries all TWELVE language entries of the original verbatim (it had been shortened to four, against the verbatim-data rule), and the brace escaping is right. The original's own view.xml writes value='\\{…' - the backslash has to SURVIVE into the serialized attribute or the XMLView parser reads the JSON braces as a binding - so the braces come from `backtick` literals (taken verbatim) while the body uses |…| templates for the real newlines; inside a template \\{ would collapse to a bare brace. That distinction is now a linter rule of its own (escaped-brace-in-backtick, the mirror of collapsed-brace-in-style)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The editor renders 13 tab-indented lines where the ORIGINAL renders one collapsed line, and the port is the source-faithful side rather than the display-faithful one. The original puts literal LF and TAB characters into an XML attribute value, and XML attribute-value normalisation turns each into a single space before the value reaches CodeEditor.value - so the demo kit shows the JSON on one long line. abap2UI5's builder deliberately emits &#xA;/&#x9; character references instead (a character reference is NOT normalised), precisely so a two-line noDataText survives, and here that preserves the formatting the sample's source has and its rendering loses. Declared 2026-08-23 rather than collapsed to match: reproducing the original's RENDERING would mean deliberately writing spaces where the sample wrote newlines."
     }
   ]
 }

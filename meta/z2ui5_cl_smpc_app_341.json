@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "The eleven card manifests come from manifests/cardManifests.json verbatim. The original carries them in a named `manifests>` model and the controller pushes them into the Cards on submit; abap2UI5 has one default model, so each manifest is a bound field on it (the `manifests>` prefix is dropped, the last path segment stays identical, which is what structural-diff matches). model_init is deliberately NOT called from main: the sample's Cards start without a manifest and only get one on the first 'Start loading' press, so the model is seeded in on_event and pushed on that round-trip - the manifest-less initial state is reproduced 1:1."
+      "what": "The eleven card manifests come from manifests/cardManifests.json verbatim. The original carries them in a named `manifests>` model and the controller pushes them into the Cards on submit; abap2UI5 has one default model, so each manifest is a bound field on it (there is no view-side counterpart to match: the original's view declares its eleven `<w:Card>` tags with only an `id` and a `<w:layoutData>`, and never binds `manifest` at all - the named model is read exclusively in the controller, `getModel('manifests').getData()` then `oCard.setManifest(...)`. So structural-diff sees no manifest attribute on the original side and nothing here rests on its last-path-segment rule; had the original bound one, the rule would NOT have covered it either, since MANIFEST_LISTTEST normalizes to `manifestlisttest` against the key's `listtest`.). model_init is deliberately NOT called from main: the sample's Cards start without a manifest and only get one on the first 'Start loading' press, so the model is seeded in on_event and pushed on that round-trip - the manifest-less initial state is reproduced 1:1."
     },
     {
       "type": "NOTE",
@@ -25,11 +25,11 @@
     },
     {
       "type": "NOTE",
-      "what": "onFormSubmit's two branches are both reproduced: the first press publishes the manifests through the model (the original's setManifest branch), every later press issues a follow_up_action control_by_id <cardId>/refresh for each of the eleven Cards (the original's oCard.refresh() branch). refresh( ) is a public sap.ui.integration.widgets.Card method that does not match the FrontendAction deny regex, so it runs through the unlisted-method path; it is unverified in a running system."
+      "what": "onFormSubmit's two branches are both reproduced: the first press publishes the manifests through the model (the original's setManifest branch), every later press issues a follow_up_action control_by_id <cardId>/refresh for each of the eleven Cards (the original's oCard.refresh() branch). refresh( ) is a public sap.ui.integration.widgets.Card method that does not match the FrontendAction deny regex, so it runs through the unlisted-method path. The second branch is only reached on a LATER press, which is why the e2e module has to press twice - see deviation 5."
     },
     {
       "type": "NOTE",
-      "what": "Unverified in a running system: whether the eleven spliced JSON manifests render their Cards, whether an empty-string manifest shows the original's manifest-less placeholder before the first press, and the control_by_id refresh wire on the second press. **e2e-verified 2026-08-17** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_341.mjs)."
+      "what": "Unverified in a running system: whether the eleven spliced JSON manifests render their Cards, whether a manifest seeded as the JSON literal `null` shows the original's manifest-less placeholder before the first press (NOT an empty string - that is not JSON and the ajson sanity check raises on it, which is why c_no_manifest is `null`), and the control_by_id refresh wire on the second press. **e2e-verified 2026-08-17** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_341.mjs) - but that run covered the first two only: until 2026-08-21 the module pressed ONCE and then re-counted the cards, so the refresh branch never executed. The module presses twice since, so the wire is covered from that date, not from the 08-17 stamp."
     },
     {
       "type": "NOTE",

@@ -24,8 +24,12 @@
       "what": "_handleValueHelpSearch filters the dialog's items by Name, reproduced 1:1 with follow_up_action binding_call; _handleValueHelpClose writes the picked title into the Input (the title travels as an event arg) and closes the popup."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The value-help dialog, its search filter and the value write-back are unverified in a running system."
+      "type": "NOTE",
+      "what": "The value-help dialog, its search filter and the value write-back are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_510.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Added 2026-08-23: this port did the rewrite without declaring it, one of 17 found by re-counting the corpus-wide claim that every port doing it had a declaration."
     }
   ]
 }

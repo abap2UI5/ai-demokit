@@ -41,8 +41,12 @@
       "what": "the items binding carries a sorter on Name; a thin frontend sorts the data it sends, so the 123 rows are seeded verbatim in the mock's order and SORTed by name in model_init - never through SORT BY (field), which the transpiled backend drops (the 2026-08-22 e2e finding)."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: that each of the four weight tabs filters the table to its range and that the two RadioButtonGroups repaint the bar's background and its header."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: that each of the four weight tabs filters the table to its range and that the two RadioButtonGroups repaint the bar's background and its header. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_617.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The price cell keeps the original's composite sap.ui.model.type.Currency binding rather than binding the raw field. The type is not a pass-through: NumberFormat's currency instance applies grouping and the currency's own fraction digits, so EUR renders 956.00 / 1,249.00 where the bare field renders 956 / 1249. The earlier justification - that the fold is what the formatter renders because the mock's prices are plain numbers - was wrong on both halves."
     }
   ]
 }

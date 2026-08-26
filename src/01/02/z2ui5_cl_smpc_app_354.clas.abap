@@ -142,6 +142,7 @@ CLASS z2ui5_cl_smpc_app_354 IMPLEMENTATION.
                     )->end(
                     )->ele( `columns`
                         )->ele( `Column`
+                            )->a( n = `id`             v = `name`
                             )->a( n = `width`          v = `11rem`
                             )->a( n = `filterProperty` v = `NAME`
 
@@ -156,6 +157,7 @@ CLASS z2ui5_cl_smpc_app_354 IMPLEMENTATION.
                             )->end(
                         )->end(
                         )->ele( `Column`
+                            )->a( n = `id`                    v = `category`
                             )->a( n = `width`                 v = `11rem`
                             )->a( n = `filterProperty`        v = `CATEGORY`
                             )->a( n = `defaultFilterOperator` v = `StartsWith`
@@ -218,6 +220,7 @@ CLASS z2ui5_cl_smpc_app_354 IMPLEMENTATION.
                             )->end(
                         )->end(
                         )->ele( `Column`
+                            )->a( n = `id`             v = `quantity`
                             )->a( n = `width`          v = `6rem`
                             )->a( n = `hAlign`         v = `End`
                             )->a( n = `filterProperty` v = `QUANTITY`
@@ -273,11 +276,29 @@ CLASS z2ui5_cl_smpc_app_354 IMPLEMENTATION.
         filter_apply( ).
 
       WHEN `CLEAR_FILTERS`.
-        " clearAllFilters
+        " clearAllFilters resets the ui-model fields AND loops every column
+        " calling oTable.filter( column, null ). Only the first half was
+        " reproduced until 2026-08-24, which left the button doing half its job:
+        " this port deliberately keeps Name / Category / Available / Quantity
+        " filtering CLIENT-side (only the price column is vetoed), so those four
+        " are Control-type filters living on the rows binding, untouched by
+        " anything the backend does to the model - and on_event never rebuilds
+        " the view, so they simply stayed on.
         global_filter          = ``.
         availability_filter_on = abap_false.
         price_filter           = ``.
         filter_apply( ).
+        " Table.filter( col, null ) delegates to Column.filter( '' ), which does
+        " setFiltered( abap_false ), setFilterValue( '' ) and re-applies the
+        " Control filters - so the header indicators clear with the rows. The
+        " price column needs no call: its filter event is vetoed, so
+        " Column.filter returns before setFiltered and it never carries an
+        " indicator in the first place.
+        LOOP AT VALUE string_table( ( `name` ) ( `category` )
+                                    ( `availability` ) ( `quantity` ) ) INTO DATA(lv_col).
+          client->follow_up_action( val   = client->cs_event-control_by_id
+                                    t_arg = VALUE #( ( lv_col ) ( `filter` ) ( `` ) ) ).
+        ENDLOOP.
 
     ENDCASE.
 

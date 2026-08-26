@@ -247,7 +247,17 @@ CLASS z2ui5_cl_smpc_app_360 IMPLEMENTATION.
       " paste at the selected cell range; the CellSelector that provides that
       " range is added in the controller and has no counterpart here, so the
       " table-level branch of the same handler is what remains
-      client->message_toast_display( |Pasted Data (on Table Level):\n\n{ client->get_event_arg( ) }| ).
+      " the paste parameter is string[][], so it arrives as serialized JSON -
+      " [["Pasted Name","Pasted Id"]]. The original concatenates the ARRAY into
+      " the message, and JS coerces it to Pasted Name,Pasted Id. Toasting the
+      " raw JSON (until 2026-08-24) showed the brackets and quotes the user
+      " never sees upstream; stripping them reproduces the coercion, the same
+      " way the sibling port 361 declares it for its index array.
+      DATA(lv_pasted) = client->get_event_arg( ).
+      REPLACE ALL OCCURRENCES OF `"` IN lv_pasted WITH ``.
+      REPLACE ALL OCCURRENCES OF `[` IN lv_pasted WITH ``.
+      REPLACE ALL OCCURRENCES OF `]` IN lv_pasted WITH ``.
+      client->message_toast_display( |Pasted Data (on Table Level):\n\n{ lv_pasted }| ).
     ENDIF.
 
 

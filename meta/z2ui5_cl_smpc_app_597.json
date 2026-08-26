@@ -41,8 +41,8 @@
       "what": "the objectImageURI points at the sdk.openui5.org host per the offline asset-URL rule; the original writes it relative as './test-resources/sap/uxap/images/imageID_275314.png'."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the two header buttons and their toasts, and that the four bound subsection modes open the page with three collapsed subsections and one expanded."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the two header buttons and their toasts, and that the four bound subsection modes open the page with three collapsed subsections and one expanded. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_597.mjs)."
     }
   ]
 }

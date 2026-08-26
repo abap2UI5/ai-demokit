@@ -62,6 +62,7 @@ CLASS z2ui5_cl_smpc_app_470 IMPLEMENTATION.
                         )->ele( `ComboBox`
                             )->a( n = `id`                  v = `combobox1`
                             )->a( n = `showSecondaryValues` v = `true`
+                            )->a( n = `filterSecondaryValues` v = `true`
                             )->a( n = `items`               v = |\{ path: '{ client->_bind( val = t_countries path = abap_true ) }', sorter: \{ path: 'TEXT' \} \}|
 
                             )->tag( n = `ListItem` ns = `core`

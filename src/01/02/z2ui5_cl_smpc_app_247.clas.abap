@@ -102,7 +102,7 @@ CLASS z2ui5_cl_smpc_app_247 IMPLEMENTATION.
 
                         )->ele( `Column`
                             )->a( n = `width`          v = client->_bind( name )
-                            )->a( n = `filterProperty` v = `Name`
+                            )->a( n = `filterProperty` v = `NAME`
                             )->a( n = `resizable`      v = `true`
                             )->a( n = `autoResizable`  v = `true`
                             )->tag( n = `Label` ns = `m`
@@ -118,7 +118,7 @@ CLASS z2ui5_cl_smpc_app_247 IMPLEMENTATION.
                         )->ele( `Column`
                             )->a( n = `width`          v = client->_bind( category )
                             )->a( n = `resizable`      v = `true`
-                            )->a( n = `filterProperty` v = `Category`
+                            )->a( n = `filterProperty` v = `CATEGORY`
                             )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Category`
 

@@ -15,6 +15,18 @@ CLASS z2ui5_cl_smpc_app_203 DEFINITION PUBLIC.
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
+    TYPES: BEGIN OF ty_s_event_token,
+             text TYPE string,
+             key  TYPE string,
+           END OF ty_s_event_token.
+    TYPES ty_t_event_token TYPE STANDARD TABLE OF ty_s_event_token WITH EMPTY KEY.
+
+    METHODS event_tokens
+      IMPORTING
+        val           TYPE string
+      RETURNING
+        VALUE(result) TYPE ty_t_event_token.
+
     METHODS view_display.
     METHODS on_event.
     METHODS model_init.
@@ -61,8 +73,12 @@ CLASS z2ui5_cl_smpc_app_203 IMPLEMENTATION.
                 " static tokens are folded into a bound aggregation (the app-085 pattern):
                 " adding appends a row, deleting removes the row by its key
                 )->a( n = `tokens`    v = client->_bind( t_tokens )
+                " onTokenDelete iterates ALL deleted tokens - the event carries the
+                " whole selection, not one token - so the ARRAY travels and ABAP
+                " loops. The frontend marshals each control into its properties
+                " (Lib.normalizeEventArgs), the same route app 103 uses
                 )->a( n = `tokenDelete` v = client->_event( val   = `TOKEN_DELETE`
-                                                            t_arg = VALUE #( ( `${$parameters>/tokens}[0].getKey()` ) ) )
+                                                            t_arg = VALUE #( ( `${$parameters>/tokens}` ) ) )
                 )->ele( `tokens`
                     )->tag( `Token`
                         )->a( n = `text` v = `{TEXT}`
@@ -428,13 +444,47 @@ CLASS z2ui5_cl_smpc_app_203 IMPLEMENTATION.
         CLEAR new_token.
 
       WHEN `TOKEN_DELETE`.
-        " onTokenDelete: remove the deleted token and toast its text
-        DATA(deleted_key) = client->get_event_arg( ).
-        DATA(deleted) = VALUE #( t_tokens[ key = deleted_key ] OPTIONAL ).
-        DELETE t_tokens WHERE key = deleted_key.
-        client->message_toast_display( |Token deleted: { deleted-text }| ).
+        " onTokenDelete: aDeletedTokens.forEach - toast each token's text and
+        " remove it. Selecting several tokens and pressing Delete really does
+        " deliver several: Tokenizer fires with getSelectedTokens( ) when there
+        " is a selection, and with the focused token otherwise
+        LOOP AT event_tokens( client->get_event_arg( ) ) REFERENCE INTO DATA(lr_del).
+          client->message_toast_display( |Token deleted: { lr_del->text }| ).
+          DELETE t_tokens WHERE key = lr_del->key.
+        ENDLOOP.
 
     ENDCASE.
+
+  ENDMETHOD.
+
+
+  METHOD event_tokens.
+
+    DATA(lv_json) = condense( val ).
+    IF lv_json IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    IF lv_json(1) <> `[`.
+      lv_json = |[{ lv_json }]|.
+    ENDIF.
+
+    TRY.
+        " the frontend marshals a control with ALL its public properties, so
+        " only the two fields this port models are mapped - a plain to_abap( )
+        " fails on the first extra one
+        "
+        " z2ui5_cl_ajson is the framework's VENDORED ajson copy and lives
+        " outside the released API (src/02); there is no released JSON reader
+        " to use instead, the same reasoning as apps 103/298
+        " abap2ui5lint-disable-next-line non-released-api -- no released JSON reader exists; see the comment above and the sidecar deviation
+        z2ui5_cl_ajson=>parse( lv_json
+          )->to_abap_corresponding_only(
+          )->to_abap( IMPORTING ev_container = result ).
+        " abap2ui5lint-disable-next-line non-released-api -- the exception of the call above
+      CATCH z2ui5_cx_ajson_error.
+        CLEAR result.
+    ENDTRY.
 
   ENDMETHOD.
 

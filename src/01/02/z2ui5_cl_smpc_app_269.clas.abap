@@ -1,4 +1,4 @@
-" @keywords dynamicsidecontent dynamic side content sap.ui.layout dynamicsidecontentproduct vbox title image text toolbar toolbarspacer
+" @keywords dynamicsidecontent dynamic side content sap.ui.layout dynamicsidecontentproduct html vbox title image text toolbar
 " @summary Product page with comments example.
 CLASS z2ui5_cl_smpc_app_269 DEFINITION PUBLIC.
 
@@ -17,6 +17,9 @@ CLASS z2ui5_cl_smpc_app_269 DEFINITION PUBLIC.
     DATA toggle_enabled     TYPE abap_bool.
     DATA show_side_btn      TYPE abap_bool.
     DATA show_side_content  TYPE abap_bool VALUE abap_true.
+    " the last breakpoint the control reported - updateShowSideContentButtonVisibility
+    " reads getCurrentBreakpoint( ) in EVERY call site, not only in the event handler
+    DATA breakpoint         TYPE string.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -61,6 +64,12 @@ CLASS z2ui5_cl_smpc_app_269 IMPLEMENTATION.
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:core` v = `sap.ui.core`
+        " the sample's own style.css - the view carries sapUiDSCExplored and the
+        " rules behind them have to come with it (apps 122/124/133/138).
+        " \{ \} escaped: the XMLView parser reads an unescaped brace as a binding
+        )->tag( n = `HTML` ns = `core`
+            )->a( n = `content` v = `<style>.sapUiDSC.sapUiDSCExplored h1\{font-size:2rem\}</style>`
 
         )->ele( `Page`
             )->a( n = `showHeader`    v = `false`
@@ -205,19 +214,20 @@ CLASS z2ui5_cl_smpc_app_269 IMPLEMENTATION.
     CASE client->get_event( ).
       WHEN `BREAKPOINT_CHANGED`.
         " updateToggleButtonState: the Toggle button is enabled on S only.
-        " updateShowSideContentButtonVisibility: the Open Side Content button
-        " shows unless the breakpoint is S (the original additionally hides it
-        " while the side content is visible - see the sidecar)
-        DATA(lv_breakpoint) = client->get_event_arg( ).
-        toggle_enabled = xsdbool( lv_breakpoint = `S` ).
-        show_side_btn  = xsdbool( lv_breakpoint <> `S` ).
+        " updateShowSideContentButtonVisibility: bShowButton =
+        " !(breakpoint === 'S' || isSideContentVisible( )) - both halves
+        breakpoint     = client->get_event_arg( ).
+        toggle_enabled = xsdbool( breakpoint = `S` ).
+        show_side_btn  = xsdbool( breakpoint <> `S` AND show_side_content = abap_false ).
 
       WHEN `SIDE_CONTENT_HIDE`.
         " handleSideContentHide: setShowSideContent(false) + re-evaluate the
         " Open Side Content button. showSideContent is a bindable property, so
         " the flag is bound two-way and only flipped here
         show_side_content = abap_false.
-        show_side_btn     = abap_true.
+        " !(breakpoint === 'S' || isSideContentVisible( )) - at S the button
+        " stays hidden after Close, which an unconditional abap_true missed
+        show_side_btn     = xsdbool( breakpoint <> `S` ).
 
       WHEN `SIDE_CONTENT_SHOW`.
         " handleSideContentShow: setShowSideContent(true); the button hides

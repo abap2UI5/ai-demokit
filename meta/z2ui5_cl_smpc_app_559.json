@@ -41,8 +41,12 @@
       "what": "the icon-only share Button in the title's actions is text-less and tooltip-less in the sample. The port gives it tooltip=\"Share\" so it is reachable with a screen reader - the one accessibility addition in this port."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the DynamicPage with a sap.ui.table.Table in fitContent mode and the card popover anchored on the GenericTag."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the DynamicPage with a sap.ui.table.Table in fitContent mode and the card popover anchored on the GenericTag. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_559.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Added 2026-08-23: this port did the rewrite without declaring it, one of 17 found by re-counting the corpus-wide claim that every port doing it had a declaration."
     }
   ]
 }

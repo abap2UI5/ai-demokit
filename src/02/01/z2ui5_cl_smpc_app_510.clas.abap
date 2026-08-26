@@ -96,11 +96,9 @@ CLASS z2ui5_cl_smpc_app_510 IMPLEMENTATION.
       WHEN `VALUE_HELP_SEARCH`.
         " _handleValueHelpSearch filters the dialog's items by Name
         DATA(term) = client->get_event_arg( ).
-        DATA(filter) = COND string( WHEN term IS INITIAL
-                                    THEN `[]`
-                                    ELSE |[\{"path":"NAME","operator":"Contains","value1":"{ term }"\}]| ).
         client->follow_up_action( val   = client->cs_event-binding_call
-                                  t_arg = VALUE #( ( `valueHelpDialog` ) ( `items` ) ( `filter` ) ( filter ) ) ).
+                                  t_arg = VALUE #( ( `valueHelpDialog` ) ( `items` ) ( `filter` )
+                                                   ( `NAME` ) ( `Contains` ) ( term ) ) ).
 
     ENDCASE.
 

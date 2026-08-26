@@ -17,7 +17,7 @@
     },
     {
       "type": "NOTE",
-      "what": "The external Navigate-Back button drives the card 1:1 via follow_up_action( cs_event-control_by_id, navigateBack ) — navigateBack was whitelisted in the paired abap2UI5 change. afterNavigate forwards the public isTopPage parameter and enables the button while the card is not on its top page. The navigate toast is simplified to a fixed message (the original distinguishes the clicked link's text vs the back button via navOrigin, a control reference that is not transportable as an event arg)."
+      "what": "The external Navigate-Back button drives the card 1:1 via follow_up_action( cs_event-control_by_id, navigateBack ) — navigateBack was whitelisted in the paired abap2UI5 change. afterNavigate forwards the public isTopPage parameter and enables the button while the card is not on its top page. The navigate toast is simplified to a fixed message (the original distinguishes the clicked link's text vs the back button via navOrigin, REPRODUCED since 2026-08-23. The justification that stood here - \"navOrigin is a control reference that is not transportable as an event arg\" - was disproved by the twin port 100, whose own sidecar records the same defect being corrected on 2026-08-01. The wire now carries ${$parameters>/navOrigin} ? ${$parameters>/navOrigin}.getText() : '' and a COND rebuilds the original's if/else, so the clicked link is named and the back-button branch exists again)."
     },
     {
       "type": "NOTE",
@@ -26,6 +26,10 @@
     {
       "type": "POST_171",
       "what": "sap.m.Avatar (control since 1.73) is kept 1:1 as the page icon via the QuickViewPage avatar aggregation, which itself is since UI5 1.92 - so the app needs UI5 >= 1.92 to render the avatar."
+    },
+    {
+      "type": "NOTE",
+      "what": "The top-level pages binding drops the original's templateShareable: true; the relative groups/elements bindings keep it. Declared 2026-08-23 - app 412 declares the identical drop and cites this port family as its precedent, while the precedent itself carried no such sentence. Harmless here for the reason 412 gives: each display builds a fresh fragment, so no template outlives its binding."
     }
   ]
 }

@@ -273,7 +273,7 @@ CLASS ${cls} IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       model_init( ).
-      view_display( ).${initExtra}
+      view_display( ).
     ELSEIF client->check_on_navigated( ).
       view_display( ).
     ELSEIF client->check_on_event( ).
@@ -291,7 +291,7 @@ CLASS ${cls} IMPLEMENTATION.
     " fragment; both are inlined here and switched by one bound flag instead
 ${body.join('\n')}
 
-    client->view_display( view->stringify( ) ).
+    client->view_display( view->stringify( ) ).${initExtra}
 
   ENDMETHOD.
 
@@ -356,14 +356,22 @@ function initExtraFrom(sampleDir) {
   const id = (src.match(new RegExp(`${m[1]}\\s*=\\s*this\\.byId\\("(\\w+)"\\)`)) || [])[1];
   if (!id) throw new Error(`${sampleDir}: toDetail( ) on a SplitContainer this emitter cannot name`);
   return `
-      " onInit ends with oSplitContainer.toDetail( this.createId('${m[2]}') ) -
-      " "to navigate to the page on phone and not show the split screen items".
-      " initialDetail names the detail page but does not put a PHONE into detail
-      " mode, so without this a phone opens on the master list where the sample
-      " opens on the form. toDetail is a listed control method taking a
-      " controlId, so the wire carries it as-is.
-      client->follow_up_action( val   = client->cs_event-control_by_id
-                                t_arg = VALUE #( ( \`${id}\` ) ( \`toDetail\` ) ( \`${m[2]}\` ) ) ).`;
+
+    " onInit ends with oSplitContainer.toDetail( this.createId('${m[2]}') ) -
+    " "to navigate to the page on phone and not show the split screen items".
+    " initialDetail names the detail page but does not put a PHONE into detail
+    " mode, so without this a phone opens on the master list where the sample
+    " opens on the form. toDetail is a listed control method taking a controlId,
+    " so the wire carries it as-is.
+    " It sits HERE, at the tail of view_display, and not in the on_init branch of
+    " main: view_display rebuilds the SplitContainer, so EVERY path that builds
+    " the view has to re-issue toDetail. check_on_navigated( ) reaches this method
+    " with check_on_init( ) false - a bookmarked draft restored into an already
+    " initialized container - and a phone would then re-render on the master list,
+    " the exact state this call exists to avoid. The invariant is "view built,
+    " toDetail follows", so the wire belongs to the builder, not to one branch.
+    client->follow_up_action( val   = client->cs_event-control_by_id
+                              t_arg = VALUE #( ( \`${id}\` ) ( \`toDetail\` ) ( \`${m[2]}\` ) ) ).`;
 }
 
 // ---------- CLI ----------

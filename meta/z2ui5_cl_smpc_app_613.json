@@ -5,8 +5,8 @@
   "file": "src/01/01/z2ui5_cl_smpc_app_613.clas.abap",
   "batch": "b51",
   "audit": {
-    "frontend_action": false,
-    "event_t_arg": false,
+    "frontend_action": true,
+    "event_t_arg": true,
     "note": "the port raises no frontend action and, since the token validator moved to the z2ui5.cc.MultiInputExt companion, handles no event at all"
   },
   "status": "generated",
@@ -22,15 +22,15 @@
     },
     {
       "type": "NOTE",
-      "what": "the Price cell is a composite currency binding in the sample (parts Price + CurrencyCode through sap.ui.model.type.Currency with showMeasure TRUE, so the unit is part of the text). The port binds the two fields as one composite text ('{PRICE} {CURRENCYCODE}'), which is what that formatter renders, since the mock's prices are plain numbers."
-    },
-    {
-      "type": "NOTE",
       "what": "the controller's oModel.setSizeLimit(1000000) has no counterpart: the port ships all 123 rows of sap/ui/demo/mock/products.json /ProductCollection to the client in one model, so the 100-entry default limit the call works around never applies."
     },
     {
       "type": "LIVE_TEST",
       "what": "the e2e interaction module now covers what this deviation used to name: the grouping sorter is asserted through the sap.ui.core.SeparatorItem entries it produces in both suggestion aggregations, and the z2ui5.cc.MultiInputExt companion is asserted on productMIWithTable with TokenKeyCell 0 and TokenTextCells 3, its tokenFromRow( ) building the sample's token from a real bound suggestion row with an empty, unbound tokens aggregation behind it (2026-08-23, headless). What stays unverified in a running system is the interaction a person performs: opening either suggestion popover, seeing the grey supplier group headers rendered in it, and picking a row so that MultiInput itself calls the registered validator."
+    },
+    {
+      "type": "NOTE",
+      "what": "The price cell keeps the original's composite sap.ui.model.type.Currency binding rather than binding the raw field. The type is not a pass-through: NumberFormat's currency instance applies grouping and the currency's own fraction digits, so EUR renders 956.00 / 1,249.00 where the bare field renders 956 / 1249. The earlier justification - that the fold is what the formatter renders because the mock's prices are plain numbers - was wrong on both halves."
     }
   ]
 }

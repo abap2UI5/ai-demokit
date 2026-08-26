@@ -14,6 +14,9 @@ CLASS z2ui5_cl_smpc_app_417 DEFINITION PUBLIC.
 
     METHODS view_display.
     METHODS on_event.
+    " is the DynamicSideContent at breakpoint S right now?
+    METHODS at_breakpoint_s
+      RETURNING VALUE(result) TYPE abap_bool.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -230,6 +233,33 @@ CLASS z2ui5_cl_smpc_app_417 IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD at_breakpoint_s.
+
+    " The original keeps sCurrentBreakpoint fresh in onAfterRendering AND in
+    " handleBreakpointChange, and reads it at press time. The port only had the
+    " event half, and that half provably never fires on the first measurement:
+    " _setBreakpointFromWidth guards the fire with `if (sCurrentBreakpoint !==
+    " undefined)` and _currentBreakpoint is undefined until that very call. So
+    " an app OPENED at a small viewport - a phone, where nothing ever resizes -
+    " kept breakpoint initial forever and both handlers took their non-S leg,
+    " which is exactly the dead end the S branch exists to avoid.
+    " The window width closes it without a new wire: the framework mirrors the
+    " client's device data server-side and refreshes it every round trip, and
+    " 720 is the control's own S_M_BREAKPOINT. containerQuery is true here, so
+    " the control measures its CONTAINER - which can never be wider than the
+    " window, so window <= 720 implies breakpoint S. The converse (a wide
+    " window whose container is narrow) is what the breakpointChanged event
+    " still reports, which is why that wire stays and is consulted first.
+    IF breakpoint IS NOT INITIAL.
+      result = xsdbool( breakpoint = `S` ).
+      RETURN.
+    ENDIF.
+
+    result = xsdbool( client->get( )-s_device-resize-width <= 720 ).
+
+  ENDMETHOD.
+
+
   METHOD on_event.
 
     CASE client->get_event( ).
@@ -252,7 +282,7 @@ CLASS z2ui5_cl_smpc_app_417 IMPLEMENTATION.
         " same defect as apps 344/138, and worse here: the open button hides
         " itself in the same round-trip and SET_FOCUS targets a button inside
         " the side content that never came up.
-        IF breakpoint = `S`.
+        IF at_breakpoint_s( ) = abap_true.
           client->follow_up_action( val   = client->cs_event-control_by_id
                                     t_arg = VALUE #( ( `DynamicSideContent` ) ( `toggle` ) ) ).
         ELSE.
@@ -264,8 +294,21 @@ CLASS z2ui5_cl_smpc_app_417 IMPLEMENTATION.
 
       WHEN `CLOSE_SIDE_CONTENT`.
         " handleSideContentHide hides the side content, shows the open button
-        " again and moves the focus back to it
-        show_side        = abap_false.
+        " again and moves the focus back to it - and it branches on the
+        " breakpoint exactly like handleSCBtnPress does, which the port did not
+        " reproduce until 2026-08-24. It matters beyond the close itself:
+        " toggle( ) reaches its swap through setShowSideContent( true, true ),
+        " so the PROPERTY stays true, while setShowSideContent( false ) leaves
+        " it false. After a close at S and a resize up to M/L the original's
+        " isSideContentVisible( ) therefore still reports true and the side
+        " content comes back; with the unconditional false it stayed hidden
+        " next to a re-shown open button.
+        IF at_breakpoint_s( ) = abap_true.
+          client->follow_up_action( val   = client->cs_event-control_by_id
+                                    t_arg = VALUE #( ( `DynamicSideContent` ) ( `toggle` ) ) ).
+        ELSE.
+          show_side = abap_false.
+        ENDIF.
         open_btn_visible = abap_true.
         client->follow_up_action( val   = client->cs_event-set_focus
                                   t_arg = VALUE #( ( `openSideContentBtn` ) ) ).

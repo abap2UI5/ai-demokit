@@ -5,7 +5,6 @@ CLASS z2ui5_cl_smpc_app_138 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
-    DATA hint_visible   TYPE abap_bool.
     DATA toggle_enabled TYPE abap_bool.
 
   PROTECTED SECTION.
@@ -24,7 +23,6 @@ CLASS z2ui5_cl_smpc_app_138 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
-      hint_visible = abap_true.
       view_display( ).
     ELSEIF client->check_on_navigated( ).
       view_display( ).
@@ -115,6 +113,10 @@ CLASS z2ui5_cl_smpc_app_138 IMPLEMENTATION.
                     )->tag( `Slider`
                         )->a( n = `id`         v = `DSCWidthSlider`
                         )->a( n = `value`      v = `100`
+                        " onBeforeRendering: setVisible( !Device.system.phone )
+                        " on the Slider and the hint Text alike - expressed over
+                        " the framework's device> model (app 030/344 precedent)
+                        )->a( n = `visible`    v = `{= !${device>/system/phone} }`
                         )->a( n = `liveChange` v = client->follow_up_action(
                                   val   = client->cs_event-control_by_id
                                   t_arg = VALUE #( ( `sideContentContainer` )
@@ -124,7 +126,7 @@ CLASS z2ui5_cl_smpc_app_138 IMPLEMENTATION.
                     )->tag( `Text`
                         )->a( n = `id`      v = `DSCWidthHintText`
                         )->a( n = `text`    v = `Best view in full screen mode`
-                        )->a( n = `visible` v = client->_bind( hint_visible ) ).
+                        )->a( n = `visible` v = `{= !${device>/system/phone} }` ).
 
     client->view_display( view->stringify( ) ).
 

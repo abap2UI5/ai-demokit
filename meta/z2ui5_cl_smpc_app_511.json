@@ -20,8 +20,12 @@
       "what": "onChange and onLiveChange only toast the ids of the involved items. Both are composed on the client from ${$parameters>/selectedItem}.getId() and ${$parameters>/previousSelectedItem}.getId(), so neither needs a round-trip and the texts stay the original's."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Both client-composed toasts are unverified in a running system."
+      "type": "NOTE",
+      "what": "Both client-composed toasts are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_511.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The client-composed toast template is written with BARE {0}/{1} placeholders. It had carried \\{0\\}, which is wrong in a backtick literal: only |...| templates treat \\{ as an escape, so the backslashes were real characters and formatTemplate's /\\{(\\d+)...\\}/ never matched - the placeholders rendered verbatim. The escape is not needed at all on this path: the value lands in an EVENT attribute, which XMLTemplateProcessor routes through EventHandlerResolver without a BindingParser pass. An ordinary attribute is the opposite case and still needs \\{ (see app 523's app:template)."
     }
   ]
 }

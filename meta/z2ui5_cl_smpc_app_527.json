@@ -28,8 +28,8 @@
       "what": "RevealGrid is a sample-local JS helper module that draws a DOM overlay outlining the grid cells. It has no declarative equivalent, so the ToggleButton is kept but its press wire is dropped (structural-diff reports ToggleButton.press as attr missing) - same treatment as app 168, which ships the same helper."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The drag and drop between the List and the GridContainer, in both directions and within each container, is unverified in a running system."
+      "type": "NOTE",
+      "what": "The drag and drop between the List and the GridContainer, in both directions and within each container, is unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_527.mjs)."
     }
   ]
 }

@@ -108,9 +108,13 @@ CLASS z2ui5_cl_smpc_app_246 IMPLEMENTATION.
       ELSE.
         client->follow_up_action( val   = client->cs_event-control_by_id
                                   t_arg = VALUE #( ( `fileUploader` ) ( `upload` ) ) ).
+        " clear( ) resets the control, which is all the original does after
+        " upload( ). Clearing the BOUND field here as well would be worse than
+        " redundant: a changed model is pushed BEFORE the queued follow-up
+        " actions run, so FileUploader.setValue('') would reset the form and
+        " upload( ) would post an empty one
         client->follow_up_action( val   = client->cs_event-control_by_id
                                   t_arg = VALUE #( ( `fileUploader` ) ( `clear` ) ) ).
-        file_value = ``.
       ENDIF.
     ENDIF.
 

@@ -14,7 +14,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "onExpandMultiPress and onCollapseMultiPress collect the selected items' INDICES (oTree.indexOfItem per selected item) and hand the array to oTree.expand / oTree.collapse. Both travel as round-trip-free follow_up_action( control_by_id, Tree / expand | collapse, <expression> ), the index array built by the same client expression the original computes: $event.oSource.getParent().getParent().getSelectedItems().map(...indexOfItem...). expand and collapse are not listed in CONTROL_METHODS, but the resolved array reaches those public methods through castArgAuto untouched - app 248 carries the identical pair and is e2e-verified on it."
+      "what": "onExpandMultiPress and onCollapseMultiPress collect the selected items' INDICES (oTree.indexOfItem per selected item) and hand the array to oTree.expand / oTree.collapse. The port issues one round-trip-free follow_up_action( control_by_id, Tree, expandSelected | collapseSelected ) instead, and the frontend does that mapping. The original's spelling is not portable: an event argument is resolved by UI5's BindingParser, whose ExpressionParser has no `function` keyword and reads `{` as an object literal, so `.getSelectedItems().map(function (o) { ... })` does not fail on that one argument - the WHOLE handler fails to parse and every argument is lost. app 248 carries the same interaction on sap.ui.table.TreeTable, which has getSelectedIndices( ) and therefore needs no loop; sap.m.Tree has no callback-free equivalent, which is why abap2UI5 grew the two synthetic CONTROL_METHODS entries."
     },
     {
       "type": "NOTE",

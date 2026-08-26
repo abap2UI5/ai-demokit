@@ -37,8 +37,12 @@
       "what": "the full mock /ProductCollection is seeded with the three fields the tables bind (Name, Category, Quantity) and the Rank the controller adds to every row (Initial = 0), so every product starts in the Available table."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the drag and drop across the two tables, the re-ordering inside the Selected one, and the four move buttons."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the drag and drop across the two tables, the re-ordering inside the Selected one, and the four move buttons. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_569.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The drop guard tests the binding CONTEXT, not the method: every sap.ui.core.Element has getBindingContext, so `X.getBindingContext ? ...` was always truthy. When the drop target is the table rather than a row - which is what happens on the first drag, since the Selected table starts empty - getBindingContext() is undefined and the chained getProperty threw inside the handler, so nothing moved."
     }
   ]
 }

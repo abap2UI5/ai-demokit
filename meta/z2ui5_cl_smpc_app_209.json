@@ -17,7 +17,7 @@
     },
     {
       "type": "NOTE",
-      "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the folded single record resolves in the running app - the title 'Notebook Basic 15' and the Manufacturer attribute 'Very Best Screens' render. Like 206 this port rendered EMPTY until the fields were bound absolutely (see the corrected NOTE above). Residual: the ObjectMarker icons, which need the theme CSS the harness does not load."
+      "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the folded single record resolves in the running app - the title 'Notebook Basic 15' and the Manufacturer attribute 'Very Best Screens' render. Like 206 this port rendered EMPTY until the fields were bound absolutely (see the corrected NOTE above). Residual: the ObjectMarker icons, which need the theme CSS the harness does not load. (Corrected 2026-08-23: intro binds DESCRIPTION, whose literal opens with 'Notebook Basic 15', so that assertion passes with the title binding dead. The Manufacturer half is separable and genuinely covered.)"
     }
   ]
 }

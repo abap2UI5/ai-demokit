@@ -83,8 +83,14 @@ controls are listed as out of scope. The pipeline:
    backlog), `⊘` one reserved as hold-out (in scope, unported on purpose) and
    `✗` an out-of-scope one (deprecated / newer than UI5 1.71).
 
-Reviewed, curated samples graduate to the hand-maintained
-[abap2UI5/samples](https://github.com/abap2UI5/samples) repository.
+Nothing graduates out of here. Since 2026-08-12 this repository is the home of
+the demo kit rebuilds (AGENTS.md §1) — `checked` is the top rung of the quality
+ladder, not a hand-off. Only three kinds of control sample live in the
+hand-maintained [abap2UI5/samples](https://github.com/abap2UI5/samples)
+repository instead: a **1.71-safe variant** of a sample whose port here has to
+declare `POST_171` (that repo is downported to 7.02), a sample in this
+repository's **hold-out set** (`ui5/holdout.json`), and a **free-style control
+demo** with no single demo kit original.
 
 The **generation prompt** the porting agent is given — the condensed form of
 the porting recipe — is `scripts/generation-prompt.txt`. It is the single

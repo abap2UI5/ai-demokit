@@ -22,10 +22,6 @@
     },
     {
       "type": "NOTE",
-      "what": "the Price cell is a composite currency binding in the sample (parts Price + CurrencyCode through sap.ui.model.type.Currency with showMeasure TRUE, so the unit is part of the text). The port binds the two fields as one composite text ('{PRICE} {CURRENCYCODE}'), which is what that formatter renders, since the mock's prices are plain numbers."
-    },
-    {
-      "type": "NOTE",
       "what": "handleFormattedTextLinkPress calls oEvent.preventDefault( ) and then MessageToast.show with my/at = Popup.Dock.CenterCenter. The veto rides along on the wire as s_ctrl-check_prevent_default (baked per wire at render time), the toast is composed on the way back through follow_up_action control_global MESSAGE_TOAST show. The CenterCenter placement is not reachable through that global target, so the toast keeps its default bottom placement."
     },
     {
@@ -35,6 +31,10 @@
     {
       "type": "LIVE_TEST",
       "what": "the e2e interaction module now covers what this deviation used to name: the z2ui5.cc.MultiInputExt companions are asserted on both tabular MultiInputs with TokenKeyCell 0 and TokenTextCells 3, their tokenFromRow( ) builds the sample's token from a real bound suggestion row, the tokens aggregation is empty with no binding behind it, and the Link inside the value state message fires its preventDefault wire and raises the toast (2026-08-23, headless). What stays unverified in a running system is the interaction a person performs: opening the suggestion popover and picking a row so that MultiInput itself calls the registered validator - the assertion reaches the validator's code through the companion rather than through the popup, which measures zero unthemed."
+    },
+    {
+      "type": "NOTE",
+      "what": "The price cell keeps the original's composite sap.ui.model.type.Currency binding rather than binding the raw field. The type is not a pass-through: NumberFormat's currency instance applies grouping and the currency's own fraction digits, so EUR renders 956.00 / 1,249.00 where the bare field renders 956 / 1249. The earlier justification - that the fold is what the formatter renders because the mock's prices are plain numbers - was wrong on both halves."
     }
   ]
 }

@@ -121,11 +121,13 @@ CLASS z2ui5_cl_smpc_app_496 IMPLEMENTATION.
         RETURN.
       ENDIF.
 
-      " the path the client sends looks like /1/nodes/0 - every second segment is
-      " the literal `nodes`, the others are the zero-based row indices
+      " abap2UI5 sends /T_NODES/1/NODES/0 - NOT the original sample's /1/nodes/0:
+      " the root is the bound attribute's name and the model is serialized
+      " upper-cased, so matching a literal `nodes` never fires. Keep the numeric
+      " segments and ignore the named ones, the way app 546's index_of does.
       SPLIT item_path AT `/` INTO TABLE segments.
       LOOP AT segments INTO DATA(segment).
-        IF segment IS NOT INITIAL AND segment <> `nodes`.
+        IF segment IS NOT INITIAL AND segment CO `0123456789`.
           APPEND CONV i( segment ) + 1 TO indices.
         ENDIF.
       ENDLOOP.

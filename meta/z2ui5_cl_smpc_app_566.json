@@ -33,8 +33,8 @@
       "what": "the Order model (products / count / hasCounts) becomes the SELECTED flag on the product nodes plus the derived ORDER_COUNT and HAS_COUNTS fields: the info toolbar's visible and its '<n> Products Selected' Label bind them, and so does the footer button's enabled - the original's isAnyProductSelected formatter. handleOrderPress toasts the selected product names, which the backend composes because it is the one holding the selection."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the two drill-down steps, the breadcrumb links back up, and the leaf-level multi-selection feeding the order count."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the two drill-down steps, the breadcrumb links back up, and the leaf-level multi-selection feeding the order count. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_566.mjs)."
     }
   ]
 }

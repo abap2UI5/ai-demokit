@@ -250,11 +250,14 @@ CLASS z2ui5_cl_smpc_app_115 IMPLEMENTATION.
                                 )->ele( n = `MultiInput` ns = `m`
                                     " updateMultipleSelection rewrites the row's token
                                     " table after a delete - the update type, the removed
-                                    " key and the row path travel, ABAP removes the entry
+                                    " key and the row path travel, ABAP removes the entry.
+                                    " The removedTokens guard is required: an ADD fires the
+                                    " same event with removedTokens = [], and an unguarded
+                                    " [0].getKey() throws before the round-trip even starts
                                     )->a( n = `tokenUpdate`      v = client->_event(
                                               val   = `TOKEN_UPDATE`
                                               t_arg = VALUE #( ( `${$parameters>/type}` )
-                                                               ( `${$parameters>/removedTokens}[0].getKey()` )
+                                                               ( `${$parameters>/removedTokens}[0] ? ${$parameters>/removedTokens}[0].getKey() : ''` )
                                                                ( `$event.oSource.getBindingContext().getPath()` ) ) )
                                     )->a( n = `value`            v = `{ADDITIONALCATEGORY}`
                                     )->a( n = `tokens`           v = |\{ path: 'ADDITIONALCATEGORIESSELECTION', templateShareable: false \}|

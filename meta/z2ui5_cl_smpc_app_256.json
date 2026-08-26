@@ -24,7 +24,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified on 2026-08-02: the anchored open of the hideInput picker and the change-value toast both work in a real browser. The 016 headless finding (Popover.onfocusin recursion on the hidden input) is therefore headless-only for this control too; no e2e interaction is armed for the hidden-picker class."
+      "what": "live-verified on 2026-08-02: the anchored open of the hideInput picker and the change-value toast both work in a real browser. The 016 headless finding (Popover.onfocusin recursion on the hidden input) is therefore headless-only for this control too; no e2e interaction is armed for THIS APP. Corrected 2026-08-23: the sentence used to end \"for the hidden-picker class\", which denies coverage that exists - app 091 arms exactly this idiom (control_by_id / openBy / $event.oSource.sId on a hideInput picker), its module asserts the Popover opens, and its sidecar records it e2e-verified 2026-08-04. App 016, the precedent both of these cite, scoped it correctly to itself; the copy dropped the scope."
     }
   ]
 }

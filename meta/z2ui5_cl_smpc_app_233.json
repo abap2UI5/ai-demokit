@@ -30,7 +30,7 @@
     },
     {
       "type": "NOTE",
-      "what": "handleValueHelpSearch / _getCombinedFilter build an OR filter of PurchaseID Contains + SupplierName Contains, and _filterAndOpenValueHelpDialog opens the dialog pre-filtered with the current input value. **Both reproduced 2026-08-05** against capabilities that had shipped and were unused: the search round-trips its value and the backend issues the COMPOUND binding_call filter (a JSON group with both fields, ORed inside the group - pr/binding-call-compound-filters; the payload is one JSON string, so the value cannot be substituted client-side, which is why this one wire round-trips like app 022's), and valueHelpRequest now passes $event.oSource.getValue() to open( ), the search-string argument the whitelist already declared. The Input's setFilterFunction (case-insensitive contains over key+text) stays unreproduced - it is UI5's built-in suggestion filtering."
+      "what": "handleValueHelpSearch / _getCombinedFilter build an OR filter of PurchaseID Contains + SupplierName Contains, and _filterAndOpenValueHelpDialog opens the dialog pre-filtered with the current input value. **Both reproduced - the pre-filter only since 2026-08-23** against capabilities that had shipped and were unused: the search round-trips its value and the backend issues the COMPOUND binding_call filter (a JSON group with both fields, ORed inside the group - pr/binding-call-compound-filters; the payload is one JSON string, so the value cannot be substituted client-side, which is why this one wire round-trips like app 022's - re-verified 2026-08-23: get_t_arg emits an argument raw only when it starts with $ or { (or is an .eB/.eBP/.eF expression), and the compound payload starts with [, so it is quoted as a JS string and any ${...} inside it stays literal text), and valueHelpRequest now passes $event.oSource.getValue() to open( ), the search-string argument the whitelist already declared. The Input's setFilterFunction (case-insensitive contains over key+text) stays unreproduced - it is UI5's built-in suggestion filtering. Until then only the open( sInputValue ) half was: SelectDialog.open does NOT filter, it just seeds its search field, so the dialog listed everything while the search box showed the typed text. The valueHelpRequest wire now chains the same compound binding_call filter the search handler uses - built from $event.oSource.getValue( ) inside the argument expression - before the open, which is what _filterAndOpenValueHelpDialog does."
     },
     {
       "type": "NOTE",
@@ -41,12 +41,16 @@
       "what": "sap.m.IllustratedMessage (control since UI5 1.98, with illustrationType/title/description) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.98 to render it. property-check does not track IllustratedMessage members, so this is declared by policy, not gate-forced."
     },
     {
-      "type": "POST_171",
-      "what": "sap.m.Input.autocomplete (since UI5 1.108) is newer than 1.71 but kept 1:1 (autocomplete='false'); the app needs a UI5 release >= 1.108 to render it. Not tracked by property-check (declared by policy)."
+      "type": "NOTE",
+      "what": "sap.m.Input.autocomplete is kept 1:1 from the original (autocomplete=\"false\"). It was declared POST_171 here as '@since 1.108' until 2026-08-23 - the sources say otherwise: Input.js carries @since 1.61 on that property, below the 1.71 floor, so nothing is owed and the stated minimum runtime was wrong. The port stays under src/02 for the IllustratedMessage declaration, which is genuine."
     },
     {
       "type": "NOTE",
       "what": "leg (c) is closed: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): F4 on the PurchaseID Input (the keyboard form of valueHelpRequest - its icon has no layout box headless) opens the SelectDialog client-side through control_by_id, and the dialog renders its bound purchase rows. Still unverified in a running system: (a) Input submit resolving the entered PurchaseID and redrawing; (b) suggestionItemSelected transporting ${$parameters>/selectedItem}.getKey(); (d) the SelectDialog search (binding_call filter) and its confirm arg - the dialog row has no layout box headless and neither a click nor a keyboard Enter reaches the confirm; (e) the ObjectPageLayout/IllustratedMessage/Table rendering. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_233.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "Two more differences from the original controller, both corrected 2026-08-23. (a) An EMPTY submit set has_selection = false and collapsed the whole ObjectPage back to the IllustratedMessage; handleInputSubmit only writes /inputPopulated and leaves the selection alone. (b) The input showed the bare key after a selection, because the port writes the field and re-renders. The original resolves the purchase through Input.setSelectedKey, and with textFormatMode=\"KeyValue\" the field then reads \"(<key>) <text>\" - the port composes exactly that string now. Note the original's own follow-on quirk comes with it: submitting that composed text matches no PurchaseID, so the not-found state shows, on both sides."
     }
   ]
 }

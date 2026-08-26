@@ -41,12 +41,12 @@ CLASS z2ui5_cl_smpc_app_149 IMPLEMENTATION.
         )->ele( `VBox`
             )->tag( `Link`
                 )->a( n = `text`      v = `Visit the Card Explorer`
-                )->a( n = `href`      v = `test-resources/sap/ui/integration/demokit/cardExplorer/index.html`
+                )->a( n = `href`      v = `https://sdk.openui5.org/test-resources/sap/ui/integration/demokit/cardExplorer/index.html`
                 )->a( n = `emphasized` v = `true`
                 )->a( n = `class`     v = `sapUiSmallMargin`
                 )->a( n = `target`    v = `_blank`
             )->tag( `Image`
-                )->a( n = `src`   v = `./resources/sap/ui/documentation/sdk/images/tools/CardExplorer.png`
+                )->a( n = `src`   v = `https://sdk.openui5.org/resources/sap/ui/documentation/sdk/images/tools/CardExplorer.png`
                 )->a( n = `alt`   v = `Card Explorer`
                 )->a( n = `class` v = `sapUiSmallMargin`
                 " original onImagePress: URLHelper.redirect(url, true) - 1:1 via the

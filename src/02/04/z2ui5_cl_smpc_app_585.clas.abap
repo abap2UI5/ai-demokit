@@ -81,7 +81,7 @@ CLASS z2ui5_cl_smpc_app_585 IMPLEMENTATION.
             )->a( n = `title`               v = `Application Title`
             )->a( n = `secondTitle`         v = `Short description`
             )->a( n = `showMenuButton`      v = `true`
-            )->a( n = `homeIcon`            v = `./resources/sap/ui/documentation/sdk/images/logo_sap.png`
+            )->a( n = `homeIcon`            v = `https://sdk.openui5.org/resources/sap/ui/documentation/sdk/images/logo_sap.png`
             )->a( n = `showCopilot`         v = `true`
             )->a( n = `showNotifications`   v = `true`
             )->a( n = `notificationsNumber` v = `2`

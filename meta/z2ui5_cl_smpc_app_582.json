@@ -37,8 +37,8 @@
       "what": "the four GridLists differ only in their GridItemLayoutData spans (2x2, 3x1, 3x2, 2x3), which is what makes the items different sizes and the two-dimensional navigation interesting; those are carried 1:1. The shared cssgrid:GridBasicLayout (5rem auto-rows, repeat(auto-fill, minmax(5rem, 1fr)), 0.5rem gap) and the outer GridResponsiveLayout (two columns, one below S) are carried 1:1 as well."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: that arrow keys inside a grid reach its border and raise the toast, and that dragging the slider narrows the container without a round trip."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: that arrow keys inside a grid reach its border and raise the toast, and that dragging the slider narrows the container without a round trip. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_582.mjs)."
     }
   ]
 }

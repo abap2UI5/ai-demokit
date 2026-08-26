@@ -14,7 +14,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "The ObjectHeader binds the fixed record {/ProductCollection/3} with the binding attribute. The port seeds exactly those row-3 fields at the default-model root and binds them absolutely, so icon, iconAlt, intro, title, number, numberUnit and all five ObjectAttribute texts read the same mock values - there is no element binding to resolve a relative {Field} against, so the binding attribute itself has no counterpart."
+      "what": "The ObjectHeader binds the fixed record {/ProductCollection/3} with the binding attribute. The port seeds exactly those row-3 fields at the default-model root and binds them absolutely, so icon, iconAlt, intro, title, number, numberUnit and all five ObjectAttribute texts read the same mock values. The record is a fixed index, so no bind_element follow-up is needed (abap2UI5 has one, cs_event-bind_element, for the per-row case) and the binding attribute itself has no counterpart; the relative {Field} form is NOT kept, because without an element binding on the view it would resolve against nothing and render empty."
     },
     {
       "type": "NOTE",
@@ -33,8 +33,8 @@
       "what": "showTitleSelector='true' adds the down-arrow next to the title; its titleSelectorPress runs MessageBox.alert('Link was clicked!') in the controller, which the port raises as one round trip closing on client->message_box_display( type = 'alert' ) - the same box, the same text."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "the Currency-typed number binding, the title press opening the popover anchored to the title, and the title selector's MessageBox.alert are unverified in a running system."
+      "type": "NOTE",
+      "what": "the Currency-typed number binding, the title press opening the popover anchored to the title, and the title selector's MessageBox.alert are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_615.mjs)."
     }
   ]
 }

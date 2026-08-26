@@ -21,11 +21,11 @@
     },
     {
       "type": "NOTE",
-      "what": "The original leaves /separatorStyle unset until the first change, so the Breadcrumbs starts on the control default. An ABAP string field cannot be absent - it would serialize as \"\" and an enum-typed property rejects that - so the port seeds the control's own default value Slash (sap.m.Breadcrumbs.separatorStyle defaultValue), which renders identically and pre-selects the matching Select entry."
+      "what": "The original leaves /separatorStyle unset until the first change, so the Breadcrumbs starts on the control default. An initial ABAP string field would serialize as \"\" and an enum-typed property rejects that. (It CAN be made absent - _bind carries omit_initial / omit_initial_paths precisely so an initial field stays out of the model and the control keeps its own default, live in apps 241/299/308. The port simply does not need it here: Breadcrumbs.separatorStyle defaults to Slash, which is what is seeded, and Select.forceSelection would have picked the first item - also Slash - anyway. The claim that a field cannot be absent was wrong and is corrected 2026-08-24.) - so the port seeds the control's own default value Slash (sap.m.Breadcrumbs.separatorStyle defaultValue), which renders identically and pre-selects the matching Select entry."
     },
     {
       "type": "NOTE",
-      "what": "The client-composed link toasts and the two-way bound separatorStyle (Select -> Breadcrumbs) are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_441.mjs)."
+      "what": "The client-composed link toasts and the two-way bound separatorStyle (Select -> Breadcrumbs) are unverified in a running system. The module drives only the Select -> Breadcrumbs field; none of the six MESSAGE_TOAST wires is ever pressed. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_441.mjs)."
     }
   ]
 }

@@ -103,6 +103,12 @@ CLASS z2ui5_cl_smpc_app_515 IMPLEMENTATION.
 
     client->view_display( view->stringify( ) ).
 
+    " onInit: oModel.setSizeLimit(100000) - "The default limit of the model is set
+    " to 100. We want to show all the entries." Without it both Inputs' bound
+    " suggestionItems stop at 100 of the 123 products (the app-252 / app-444 idiom)
+    client->follow_up_action( val   = client->cs_event-set_size_limit
+                              t_arg = VALUE #( ( `100000` ) ( `MAIN` ) ) ).
+
   ENDMETHOD.
 
 
@@ -116,16 +122,14 @@ CLASS z2ui5_cl_smpc_app_515 IMPLEMENTATION.
         IF value IS NOT INITIAL.
           client->follow_up_action( val   = client->cs_event-binding_call
                                     t_arg = VALUE #( ( `selectDialog` ) ( `items` ) ( `filter` )
-                                                     ( |[\{"path":"NAME","operator":"Contains","value1":"{ value }"\}]| ) ) ).
+                                                     ( `NAME` ) ( `Contains` ) ( value ) ) ).
         ENDIF.
 
       WHEN `VALUE_HELP_SEARCH`.
         DATA(term) = client->get_event_arg( ).
-        DATA(filter) = COND string( WHEN term IS INITIAL
-                                    THEN `[]`
-                                    ELSE |[\{"path":"NAME","operator":"Contains","value1":"{ term }"\}]| ).
         client->follow_up_action( val   = client->cs_event-binding_call
-                                  t_arg = VALUE #( ( `selectDialog` ) ( `items` ) ( `filter` ) ( filter ) ) ).
+                                  t_arg = VALUE #( ( `selectDialog` ) ( `items` ) ( `filter` )
+                                                   ( `NAME` ) ( `Contains` ) ( term ) ) ).
 
       WHEN `VALUE_HELP_CLOSE`.
         " onValueHelpClose writes the picked title into the first Input

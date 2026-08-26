@@ -16,8 +16,12 @@
       "what": "The sample runs a MockServer with a 3-second delay behind an ODataModel; abap2UI5 binds the ABAP table directly, so the rows are there at once. The growing, busy-indicator and noDataText settings are kept 1:1 - what is not reproduced is the artificial delay the sample uses to show the busy state, and refreshDataFromBackend re-reads the same rows from the backend on a round-trip."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The refresh wire is unverified in a running system."
+      "type": "NOTE",
+      "what": "The refresh wire is unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_522.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Added 2026-08-23: this port did the rewrite without declaring it, one of 17 found by re-counting the corpus-wide claim that every port doing it had a declaration."
     }
   ]
 }

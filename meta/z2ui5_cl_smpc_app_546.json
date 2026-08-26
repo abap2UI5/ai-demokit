@@ -36,8 +36,12 @@
       "what": "The row images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The three roles and their per-row enable flags, the drag-and-drop move and copy, the resize with its overlap refusal and the drag-create are unverified in a running system."
+      "type": "NOTE",
+      "what": "The three roles and their per-row enable flags, the drag-and-drop move and copy, the resize with its overlap refusal and the drag-create are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_546.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The drag-created appointment seeds type = 'None'. An ABAP field is never absent, so an unset type reaches CalendarAppointment.type as the empty string, which is not a CalendarDayType member - validateProperty throws and the binding update takes the view down. The original pushes a JS object with no type key, which falls back to the property default."
     }
   ]
 }

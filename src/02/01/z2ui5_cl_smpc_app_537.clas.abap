@@ -36,6 +36,7 @@ CLASS z2ui5_cl_smpc_app_537 DEFINITION PUBLIC.
              t_free_hours   TYPE ty_t_int,
              t_appointments TYPE ty_t_appointment,
              t_headers      TYPE ty_t_header,
+             selected       TYPE abap_bool,
            END OF ty_s_person.
     DATA t_people TYPE STANDARD TABLE OF ty_s_person WITH EMPTY KEY.
 
@@ -134,8 +135,7 @@ CLASS z2ui5_cl_smpc_app_537 IMPLEMENTATION.
                             ( `${$parameters>/endDate}.getDate()` )
                             ( `${$parameters>/endDate}.getHours()` )
                             ( `${$parameters>/endDate}.getMinutes()` )
-                            ( `${$parameters>/row} ? $event.oSource.indexOfRow(${$parameters>/row}) : -1` )
-                            ( `$event.oSource.getSelectedRows().map(function(r){return $event.oSource.indexOfRow(r);}).join(',')` ) ) )
+                            ( `${$parameters>/row} ? $event.oSource.indexOfRow(${$parameters>/row}) : -1` ) ) )
                 )->a( n = `showEmptyIntervalHeaders`  v = `false`
 
                 )->ele( `toolbarContent`
@@ -212,6 +212,7 @@ CLASS z2ui5_cl_smpc_app_537 IMPLEMENTATION.
                         )->a( n = `icon`            v = `{PIC}`
                         )->a( n = `title`           v = `{NAME}`
                         )->a( n = `text`            v = `{ROLE}`
+                        )->a( n = `selected`     v = `{SELECTED}`
                         )->a( n = `nonWorkingDays`  v = `{T_FREE_DAYS}`
                         )->a( n = `nonWorkingHours` v = `{T_FREE_HOURS}`
                         )->a( n = `appointments`    v = `{path: 'T_APPOINTMENTS', templateShareable: false}`
@@ -321,13 +322,18 @@ CLASS z2ui5_cl_smpc_app_537 IMPLEMENTATION.
                                                       title    = `new appointment`
                                                       type     = `Type09` ).
           DATA(row_index) = CONV i( client->get_event_arg( 11 ) ).
+          " the selected rows are read from the model, not transported:
+          " PlanningCalendarRow has a bindable `selected`, and a JS callback
+          " (getSelectedRows().map(function...)) is not in the UI5 expression
+          " grammar - it threw and lost the whole handler
           DATA(rows) = VALUE ty_t_int( ).
           IF row_index >= 0.
             APPEND row_index TO rows.
-          ELSEIF client->get_event_arg( 12 ) IS NOT INITIAL.
-            SPLIT client->get_event_arg( 12 ) AT `,` INTO TABLE DATA(selected_rows).
-            LOOP AT selected_rows INTO DATA(sel).
-              APPEND CONV i( sel ) TO rows.
+          ELSE.
+            LOOP AT t_people INTO DATA(person_sel).
+              IF person_sel-selected = abap_true.
+                APPEND sy-tabix - 1 TO rows.
+              ENDIF.
             ENDLOOP.
           ENDIF.
           " the row is addressed through a field symbol, not a table expression:

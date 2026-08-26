@@ -84,17 +84,17 @@ CLASS z2ui5_cl_smpc_app_107 IMPLEMENTATION.
                     )->end(
                     )->ele( n = `filter` ns = `semantic`
                         )->tag( n = `FilterAction` ns = `semantic`
-                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `FilterAction` ) ) )
+                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.FilterAction` ) ) )
 
                     )->end(
                     )->ele( n = `group` ns = `semantic`
                         )->tag( n = `GroupAction` ns = `semantic`
-                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `GroupAction` ) ) )
+                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.GroupAction` ) ) )
 
                     )->end(
                     )->ele( n = `addAction` ns = `semantic`
                         )->tag( n = `AddAction` ns = `semantic`
-                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `AddAction` ) ) )
+                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.AddAction` ) ) )
 
                     )->end(
                     )->ele( n = `multiSelectAction` ns = `semantic`
@@ -112,53 +112,53 @@ CLASS z2ui5_cl_smpc_app_107 IMPLEMENTATION.
                     )->ele( n = `positiveAction` ns = `semantic`
                         )->tag( n = `PositiveAction` ns = `semantic`
                             )->a( n = `text`  v = `Positive`
-                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `PositiveAction` ) ) )
+                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.PositiveAction` ) ) )
 
                     )->end(
                     )->ele( n = `negativeAction` ns = `semantic`
                         )->tag( n = `NegativeAction` ns = `semantic`
                             )->a( n = `text`  v = `Negative`
-                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `NegativeAction` ) ) )
+                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.NegativeAction` ) ) )
 
                     )->end(
                     )->ele( n = `forwardAction` ns = `semantic`
                         )->tag( n = `ForwardAction` ns = `semantic`
-                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `ForwardAction` ) ) )
+                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.ForwardAction` ) ) )
 
                     )->end(
                     )->ele( n = `flagAction` ns = `semantic`
                         )->tag( n = `FlagAction` ns = `semantic`
-                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `FlagAction` ) ) )
+                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.FlagAction` ) ) )
 
                     )->end(
                     )->ele( n = `favoriteAction` ns = `semantic`
                         )->tag( n = `FavoriteAction` ns = `semantic`
-                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `FavoriteAction` ) ) )
+                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.FavoriteAction` ) ) )
 
                     )->end(
                     )->ele( n = `sendEmailAction` ns = `semantic`
                         )->tag( n = `SendEmailAction` ns = `semantic`
-                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `SendEmailAction` ) ) )
+                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.SendEmailAction` ) ) )
 
                     )->end(
                     )->ele( n = `sendMessageAction` ns = `semantic`
                         )->tag( n = `SendMessageAction` ns = `semantic`
-                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `SendMessageAction` ) ) )
+                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.SendMessageAction` ) ) )
 
                     )->end(
                     )->ele( n = `discussInJamAction` ns = `semantic`
                         )->tag( n = `DiscussInJamAction` ns = `semantic`
-                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `DiscussInJamAction` ) ) )
+                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.DiscussInJamAction` ) ) )
 
                     )->end(
                     )->ele( n = `shareInJamAction` ns = `semantic`
                         )->tag( n = `ShareInJamAction` ns = `semantic`
-                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `ShareInJamAction` ) ) )
+                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.ShareInJamAction` ) ) )
 
                     )->end(
                     )->ele( n = `printAction` ns = `semantic`
                         )->tag( n = `PrintAction` ns = `semantic`
-                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `PrintAction` ) ) )
+                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.PrintAction` ) ) )
 
                     )->end(
                     )->ele( n = `messagesIndicator` ns = `semantic`
@@ -229,7 +229,10 @@ CLASS z2ui5_cl_smpc_app_107 IMPLEMENTATION.
         client->message_toast_display( |Pressed: { client->get_event_arg( ) }| ).
 
       WHEN `SELECT_CHANGE`.
-        client->message_toast_display( |Selected: { sort_key }| ).
+        " onSemanticSelectChange derives the same class name as onSemanticButtonPress
+        " - getMetadata( ).getName( ) minus the LIBRARY 'sap.m' - and appends the
+        " selected item's text, so the original prints 'semantic.SortSelect by <text>'
+        client->message_toast_display( |Selected: semantic.SortSelect by { sort_key }| ).
 
       WHEN `MULTI`.
         " onMultiSelectPress: getPressed() ? 'MultiSelect Pressed' : 'MultiSelect Unpressed'

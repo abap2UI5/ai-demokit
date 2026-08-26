@@ -671,6 +671,7 @@ CLASS z2ui5_cl_smpc_app_588 IMPLEMENTATION.
                     )->ele( `subSections`
                         )->ele( `ObjectPageSubSection`
                             )->a( n = `id`             v = `connectionsSS1`
+                            )->a( n = `title`          v = `Connections`
                             )->a( n = `titleUppercase` v = `false`
 
                             )->ele( `blocks`

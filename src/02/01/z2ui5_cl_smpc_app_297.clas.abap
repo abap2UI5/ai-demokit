@@ -322,8 +322,12 @@ CLASS z2ui5_cl_smpc_app_297 IMPLEMENTATION.
                                                             t_arg = VALUE #( ( `${$parameters>/filterString}` ) ) )
                 )->a( n = `beforeClose` v = client->_event(
                           val    = `BEFORE_CLOSE`
-                          s_ctrl = VALUE #( prevent_default_expr = |${ client->_bind( val  = date_value_state
-                                                                                     path = abap_true ) } === 'Error'| ) )
+                          " _bind( ) - NOT path = abap_true: an ABAP template eats the
+                          " braces (|${ ... }| yields "$" + the bare path), and $/PATH is
+                          " not a token the UI5 event-handler parser knows. The braced
+                          " form gives the ${/PATH} the expression needs
+                          s_ctrl = VALUE #( prevent_default_expr =
+                                              |${ client->_bind( date_value_state ) } === 'Error'| ) )
 
                 )->ele( `customTabs`
                     )->ele( `ViewSettingsCustomTab`

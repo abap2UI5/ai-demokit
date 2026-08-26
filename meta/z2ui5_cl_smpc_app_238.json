@@ -31,6 +31,10 @@
     {
       "type": "NOTE",
       "what": "unverified in a running system: that the Card popover opens anchored to the pressed GenericTag (popover_display by_id = $event.oSource.sId), and that the Toggle Footer round-trip flips showFooter and reveals/hides the DynamicPage footer. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the GenericTag press opens the Card popover with the NumericHeader rendering ('Sales Revenue'; asserted on text - the popover box measures empty headless); the layoutData-button variant is the identical wire. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_238.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "TOGGLE_FOOTER writes the bound showFooter field and nothing else since 2026-08-23. It re-rendered the whole view until then, which the original's onToggleFooter never does - a view_display( ) destroys the MAIN slot and builds a new XMLView, so every press snapped the IconTabBar back to the Products tab (neither side declares a selectedKey) and reset the pinnable header and the scroll position. The bound property needs no re-render: the model diff is pushed automatically."
     }
   ]
 }

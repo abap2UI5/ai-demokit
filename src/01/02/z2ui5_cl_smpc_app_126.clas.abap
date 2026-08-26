@@ -58,7 +58,12 @@ CLASS z2ui5_cl_smpc_app_126 IMPLEMENTATION.
                 )->a( n = `uploadComplete` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `File upload complete. Status: 200 (Upload Success)` ) ) )
             )->tag( `Button`
                 )->a( n = `text`  v = `Upload File`
-                )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Uploading file to the local server ...` ) ) ) ).
+                " handleUploadPress calls oFileUploader.upload( ), which is what makes
+                " the uploadComplete toast above reachable at all - upload is an
+                " ordinary public control method and is not on the frontend denylist.
+                " Only the checkFileReadable( ) guard and its error toast stay dropped
+                )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                t_arg = VALUE #( ( `fileUploader` ) ( `upload` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 

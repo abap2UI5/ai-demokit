@@ -118,6 +118,12 @@ CLASS z2ui5_cl_smpc_app_241 IMPLEMENTATION.
                         )->a( n = `target`     v = `{TARGET}`
                         )->a( n = `selectable` v = `{SELECTABLE}`
                         )->a( n = `expanded`   v = `{EXPANDED}`
+                        " the NESTED aggregation needs its own binding on the row
+                        " template (app 167's shape). Without it the inner element is
+                        " a STATIC child cloned with every row - Mileage's two children
+                        " never render, and every row grows one spurious child bearing
+                        " the row's own text
+                        )->a( n = `items`      v = `{ITEMS}`
                         )->a( n = `press`      v = client->_event( val    = `ITEM_PRESS`
                                                               t_arg  = VALUE #( ( `${$parameters>/item}.getText()` ) ( `${$parameters>/ctrlKey}` ) ( `${$parameters>/shiftKey}` ) ( `${$parameters>/altKey}` ) ( `${$parameters>/metaKey}` ) )
                                                               s_ctrl = VALUE #( check_prevent_default = prevent_default ) )
@@ -222,7 +228,7 @@ CLASS z2ui5_cl_smpc_app_241 IMPLEMENTATION.
   METHOD popup_quickcreate_display.
 
     " original quickActionPress builds this Dialog imperatively (new Dialog({...}).open());
-    " expressed as a core:FragmentDefinition shown via popup_display (see IMPROVISED deviation)
+    " expressed as a core:FragmentDefinition shown via popup_display (declared in the sidecar)
     DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     popup->ele( n = `FragmentDefinition` ns = `core`

@@ -20,8 +20,8 @@
       "what": "the controller's oData array is seeded verbatim: all 22 people with their firstName / lastName / birthDate / gender. birthDate is carried as the ISO string the sample stores, which is what its Label binding renders."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the contextualWidth switch and the popin layout it drives."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the contextualWidth switch and the popin layout it drives. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_568.mjs)."
     }
   ]
 }

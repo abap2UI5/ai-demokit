@@ -16,7 +16,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "the controller's onInit pre-sets the tokens on both MultiInputs (Token 1..6 and one long token); they are declared statically in the view's tokens aggregation instead - same rendering (CAPABILITIES.md marks controller-filled aggregations as expressible, the tokens aggregation is public since UI5 1.16), so this is a faithful 1:1, not a workaround."
+      "what": "the controller's onInit pre-sets the tokens on both MultiInputs (Token 1..6 and one long token); they are declared statically in the view's tokens aggregation instead - same rendering (CAPABILITIES.md marks controller-filled aggregations as expressible, the tokens aggregation is comfortably pre-1.71, so no POST_171 is owed. **Corrected 2026-08-23**: this used to name 'UI5 1.16', a figure the sources do not carry - sap/m/MultiInput.js declares the tokens aggregation with no @since at all, and the control itself carries none either, so the correct reading is base-version. The nearest sourced figure is sap.m.Tokenizer @since 1.22, which renders the aggregation, so the aggregation cannot predate 1.22), so this is a faithful 1:1, not a workaround."
     },
     {
       "type": "NOTE",

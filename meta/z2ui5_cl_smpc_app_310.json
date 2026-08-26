@@ -21,7 +21,7 @@
     },
     {
       "type": "NOTE",
-      "what": "not yet run in a system: the anchored popover round-trip and the phone-only Submit/Cancel buttons. **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_310.mjs)."
+      "what": "not yet run in a system: the anchored popover round-trip and the phone-only Submit/Cancel buttons - NOT covered by the interaction module (scope corrected 2026-08-23). **e2e-verified 2026-08-16** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_310.mjs)."
     }
   ]
 }

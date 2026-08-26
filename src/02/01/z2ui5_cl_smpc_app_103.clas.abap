@@ -40,11 +40,22 @@ CLASS z2ui5_cl_smpc_app_103 DEFINITION PUBLIC.
     DATA resizable TYPE abap_bool.
 
   PROTECTED SECTION.
+    TYPES: BEGIN OF ty_s_event_item,
+             id    TYPE string,
+             title TYPE string,
+           END OF ty_s_event_item.
+    TYPES ty_t_event_item TYPE STANDARD TABLE OF ty_s_event_item WITH EMPTY KEY.
+
     DATA client TYPE REF TO z2ui5_if_client.
     CONSTANTS c_img_base TYPE string VALUE `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/`.
 
     METHODS view_display.
     METHODS on_event.
+    METHODS event_items
+      IMPORTING
+        val           TYPE string
+      RETURNING
+        VALUE(result) TYPE ty_t_event_item.
     METHODS open_dialog IMPORTING multi       TYPE abap_bool DEFAULT abap_false
                                   rem         TYPE abap_bool DEFAULT abap_false
                                   grow        TYPE abap_bool DEFAULT abap_false
@@ -94,8 +105,10 @@ CLASS z2ui5_cl_smpc_app_103 IMPLEMENTATION.
                 )->a( n = `title`      v = `Select Product`
                 )->a( n = `search`     v = client->follow_up_action( val   = client->cs_event-binding_call
                                                                      t_arg = VALUE #( ( `mySelectDialog` ) ( `items` ) ( `filter` ) ( `NAME` ) ( `Contains` ) ( `${$parameters>/value}` ) ) )
-                )->a( n = `confirm`    v = client->_event( `CONFIRM` )
-                )->a( n = `cancel`     v = client->_event( `CONFIRM` )
+                )->a( n = `confirm`    v = client->_event( val   = `CONFIRM`
+                                                           t_arg = VALUE #( ( `${$parameters>/selectedItems}` ) ) )
+                )->a( n = `cancel`     v = client->_event( val   = `CONFIRM`
+                                                           t_arg = VALUE #( ( `${$parameters>/selectedItems}` ) ) )
                 )->a( n = `multiSelect`        v = client->_bind( multi_select )
                 )->a( n = `growing`            v = client->_bind( growing )
                 )->a( n = `growingThreshold`   v = client->_bind( growing_threshold )
@@ -337,7 +350,30 @@ CLASS z2ui5_cl_smpc_app_103 IMPLEMENTATION.
                                   t_arg = VALUE #( ( `valueHelpDialog` ) ( `open` ) ) ).
 
       WHEN `CONFIRM`.
-        client->message_toast_display( `Selection confirmed` ).
+        " onDialogClose: name every chosen product, or say that none was
+        " picked. The original reads selectedContexts and maps getObject().Name;
+        " a Context is not a control, so the wire carries the selectedItems
+        " ARRAY instead - the frontend projects each StandardListItem to its
+        " public properties, and title is the bound Name. Cancel fires the same
+        " handler with no selection, which is the original's else branch
+        DATA(sel_items) = event_items( client->get_event_arg( ) ).
+        IF sel_items IS INITIAL.
+          client->message_toast_display( `No new item was selected.` ).
+        ELSE.
+          DATA(sel_names) = ``.
+          LOOP AT sel_items REFERENCE INTO DATA(lr_sel).
+            sel_names = COND #( WHEN sel_names IS INITIAL THEN lr_sel->title
+                                ELSE |{ sel_names }, { lr_sel->title }| ).
+          ENDLOOP.
+          client->message_toast_display( |You have chosen { sel_names }| ).
+        ENDIF.
+        " ... and the last line of onDialogClose:
+        " oEvent.getSource( ).getBinding( 'items' ).filter( [] ) - so the
+        " search a user typed is gone the next time the dialog opens. A
+        " binding_call filter with no values is exactly that clear (the
+        " client leaves the filter empty when value1 and value2 both are)
+        client->follow_up_action( val   = client->cs_event-binding_call
+                                  t_arg = VALUE #( ( `mySelectDialog` ) ( `items` ) ( `filter` ) ) ).
 
       WHEN `VH_CLOSE`.
         " onValueHelpDialogClose: the picked title lands in the input, and a
@@ -345,6 +381,39 @@ CLASS z2ui5_cl_smpc_app_103 IMPLEMENTATION.
         product_value = client->get_event_arg( ).
 
     ENDCASE.
+
+  ENDMETHOD.
+
+
+  METHOD event_items.
+
+    DATA(lv_json) = condense( val ).
+    IF lv_json IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    IF lv_json(1) <> `[`.
+      lv_json = |[{ lv_json }]|.
+    ENDIF.
+
+    TRY.
+        " the frontend marshals a control with ALL its public properties
+        " (description, icon, type, ...), so only the fields this port models
+        " are mapped - a plain to_abap( ) fails on the first extra one
+        "
+        " z2ui5_cl_ajson is the framework's VENDORED ajson copy and lives
+        " outside the released API (src/02), so it may be renamed or
+        " restructured without notice - the linter says so, and it is right.
+        " There is no released JSON reader to use instead, the same reasoning
+        " as app 298; declared as a deviation in the sidecar
+        " abap2ui5lint-disable-next-line non-released-api -- no released JSON reader exists; see the comment above and the sidecar deviation
+        z2ui5_cl_ajson=>parse( lv_json
+          )->to_abap_corresponding_only(
+          )->to_abap( IMPORTING ev_container = result ).
+        " abap2ui5lint-disable-next-line non-released-api -- the exception of the call above
+      CATCH z2ui5_cx_ajson_error.
+        CLEAR result.
+    ENDTRY.
 
   ENDMETHOD.
 

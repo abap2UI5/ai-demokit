@@ -81,7 +81,14 @@ CLASS z2ui5_cl_smpc_app_291 IMPLEMENTATION.
             )->a( n = `class` v = `sapUiSmallMargin`
 
             )->ele( `NotificationList`
-                )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_groups path = abap_true ) }', templateShareable: true \}|
+                " AUTHORAVATARCOLOR is omitted where it is initial: the mock sets
+                " authorAvatarColor on one item only, and the property is enum-typed
+                " (sap.m.AvatarColor) - an empty string is not a member, so
+                " validateProperty THROWS out of the binding rather than falling back
+                " to the control's Accent6 default
+                )->a( n = `items` v = |\{ path: '{ client->_bind( val                = t_groups
+                                                                 path               = abap_true
+                                                                 omit_initial_paths = VALUE #( ( `AUTHORAVATARCOLOR` ) ) ) }', templateShareable: true \}|
 
                 )->ele( `layoutData`
                     )->tag( `FlexItemData`

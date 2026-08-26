@@ -13,15 +13,15 @@
   "deviations": [
     {
       "type": "IMPROVISED",
-      "what": "All three MultiInputs get their behaviour from MultiInput.addValidator( ) - a JavaScript callback that turns the typed text into a Token. abap2UI5 has no way to register such a callback, so each MultiInput binds its tokens and its value instead and the port creates the token in ABAP on the change event: the first one only while the CheckBox is selected and with the second validator's '#: ' prefix already applied, the second one after the MessageBox.confirm answers OK (the same question and title, answered over a round-trip instead of an asyncCallback), the third one immediately - the original's 500ms setTimeout has nothing to reproduce it. The visible outcome per field is the same; what is lost is the validator chain itself (a rejected validator returning undefined keeps the text in the field, here the field is cleared either way)."
+      "what": "The original registers an app-authored addValidator callback. abap2UI5 does ship a validator - the bundled companion control z2ui5.cc.MultiInputExt installs addValidator(({text}) => new Token({key:text, text})) and mirrors added/removed tokens back through addedTokens/removedTokens (CAPABILITIES.md marks it fine, and apps 040/612/613 use it). What it cannot do is run THIS sample's per-field logic, which is what is improvised here: the bundled validator is fixed, so the port rebuilds the accept/reject decision in ABAP over a change round-trip instead."
     },
     {
       "type": "NOTE",
       "what": "The three MultiInputs get a bound tokens aggregation with a Token template each (structural-diff reports control extra Token: 0 vs 3) - the original creates its Tokens in JavaScript, so its view declares none."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "All three token-creation paths, including the confirm round-trip of the second field, are unverified in a running system."
+      "type": "NOTE",
+      "what": "All three token-creation paths, including the confirm round-trip of the second field, are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_501.mjs)."
     }
   ]
 }

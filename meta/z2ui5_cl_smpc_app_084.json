@@ -8,11 +8,8 @@
     "frontend_action": true,
     "event_t_arg": true
   },
-  "status": "checked",
-  "checked": {
-    "date": "2026-07-27",
-    "note": "verified in a running system 2026-07-27 - URLHelper tel/sms/email triggers and REDIRECT all fire correctly"
-  },
+  "status": "generated",
+  "checked": null,
   "deviations": [
     {
       "type": "NOTE",
@@ -20,7 +17,11 @@
     },
     {
       "type": "NOTE",
-      "what": "URLHelper.triggerTel/triggerSms/triggerEmail/redirect map 1:1 to the URLHELPER frontend action (cs_event-urlhelper): TRIGGER_TEL/TRIGGER_SMS take the number as a plain string param, TRIGGER_EMAIL/REDIRECT take a { EMAIL/URL, ... } object-literal t_arg (get_t_arg emits {-prefixed args raw as UI5 event-handler object literals). open_new_tab is NOT used - it is same-origin-only (isValidRedirectURL)."
+      "what": "URLHelper.triggerTel/triggerSms/triggerEmail/redirect map 1:1 to the URLHELPER frontend action (cs_event-urlhelper): TRIGGER_TEL/TRIGGER_SMS take a { TEL: '...' } object-literal t_arg like the other two (corrected 2026-08-23 - this said 'take the number as a plain string param', and the port was wired that way, so BOTH fired with no number at all: evUrlHelper reads args[2] as an OBJECT and takes params.TEL, so a primitive string yields undefined, URLHelper.formatTel returns '' for a non-string, and the item navigated to a bare tel:/sms:. Note the key for SMS is TEL as well, not SMS - the handler reads params.TEL for both), TRIGGER_EMAIL/REDIRECT take a { EMAIL/URL, ... } object-literal t_arg (get_t_arg emits {-prefixed args raw as UI5 event-handler object literals). open_new_tab is NOT used - it is same-origin-only (isValidRedirectURL)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The 2026-07-27 live check is retired and the port is back to `generated` (AGENTS section 10: a behavioural rework of a checked port resets the status or is restamped after a fresh live run). Its note read \"verified in a running system 2026-07-27 - URLHelper tel/sms/email triggers and REDIRECT all fire correctly\" - but tel and sms could not have fired with a number on that code: both were wired with a primitive string where evUrlHelper reads params.TEL off an object, so URLHelper received undefined and formatTel returned the empty string. The email and redirect halves of that run stand; the tel and sms halves need a fresh one now that the wires carry { TEL: '...' }. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_084.mjs)."
     }
   ]
 }

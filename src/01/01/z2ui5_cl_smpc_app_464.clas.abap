@@ -1,5 +1,5 @@
 " @keywords standardmargins standard margins sap.ui.core standardmarginstwosided text panel
-" @summary Clear the space to the left and right, top and bottom of your control. Choose a size ('Tiny', 'Small', 'Medium' or 'Large', which stands for 8px (0.
+" @summary Clear the space to the left and right, top and bottom of your control.
 CLASS z2ui5_cl_smpc_app_464 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -20,8 +20,12 @@
       "what": "onSelectionChange counts oList.getSelectedContexts(true) and drives the info toolbar's visibility and label. The port binds the selection per row (StandardListItem.selected), counts the flagged rows in ABAP and writes the two bound properties - the same count across the current filter, since the flag lives on the row rather than on the rendered item."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The search filter and the selection counter are unverified in a running system."
+      "type": "NOTE",
+      "what": "The search filter and the selection counter are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_499.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Added 2026-08-23: this port did the rewrite without declaring it, one of 17 found by re-counting the corpus-wide claim that every port doing it had a declaration."
     }
   ]
 }

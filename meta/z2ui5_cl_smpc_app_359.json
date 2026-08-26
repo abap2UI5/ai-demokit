@@ -32,8 +32,12 @@
       "what": "The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined with the four columns the sample binds plus the derived Available flag the Navigation item's visible binding needs - the controller derives it the same way (Status === 'Available')."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Unverified in a running system: whether the bound rowActionCount plus the per-item visible flags reproduce each mode's row actions, and whether the two-argument client-composed toast fills both placeholders."
+      "type": "NOTE",
+      "what": "Unverified in a running system: whether the bound rowActionCount plus the per-item visible flags reproduce each mode's row actions, and whether the two-argument client-composed toast fills both placeholders. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_359.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "switchState always calls setRowActionTemplate BEFORE setRowActionCount, and that ordering is load-bearing: setRowActionTemplate ends in invalidateRowsAggregation( ), setRowActionCount only setProperty( ). A row's _rowAction is attached exclusively in _getRowClone( ), guarded by hasRowActions( ) which needs getRowActionCount( ) > 0 - so any row created while the count is 0 has NO _rowAction, and merely raising the count afterwards never re-creates the clones. The port drives only the count from the model and had no counterpart for that invalidation, which left a dead end reachable without anything exotic: pick 'No Actions', leave and come back, and check_on_navigated rebuilds the view with mode_key still 'None' - every row is then created actionless and no later mode switch brings the actions back. invalidateRowsAggregation( ) cannot be wired (the frontend action allowlist denies the whole invalidate* prefix), so since 2026-08-24 a mode change that raises the count off 0 re-displays the slot instead, rebuilding the Table with the new count already set. Note the e2e module's 2026-08-21 experiment - setRowActionCount(2) + invalidate( ) direct on the table - did NOT rule the port out as that comment claimed: neither call re-creates a row clone, so it reproduced this very gap."
     }
   ]
 }

@@ -93,6 +93,21 @@ const CANDIDATES = [
     expect: 'one control projecting to key=INFO',
   },
   {
+    key: 'dateRange-array',
+    what: 'Calendar.select -> getSelectedDates(): an ARRAY of sap.ui.unified.DateRange controls whose startDate is a DATE OBJECT, not a string',
+    consumer: 'apps 307 (31 index-guarded expression args, capped) and 109 (toast reduced to the event name)',
+    xml: `<u:Calendar id="c" intervalSelection="false" singleSelection="false" select=".eB('EVT', $event.oSource.getSelectedDates())"/>`,
+    fire: `(function () {
+      var DateRange = sap.ui.require('sap/ui/unified/DateRange');
+      // LOCAL midnight of two days - what the Calendar itself puts in the
+      // aggregation when the user clicks a day
+      c.addSelectedDate(new DateRange({ startDate: new Date(2018, 6, 9) }));
+      c.addSelectedDate(new DateRange({ startDate: new Date(2018, 6, 10) }));
+      c.fireSelect();
+    })()`,
+    expect: 'two entries - and the point of the candidate: whether startDate survives as the LOCAL day 2018-07-09, or is serialized through UTC and lands a day early east of Greenwich',
+  },
+  {
     key: 'filterString-display',
     what: 'the OLD route for comparison: filterString, a localized display string',
     consumer: 'what samples 099 used to parse - shown here to document why it is not a contract',
@@ -106,12 +121,19 @@ const CANDIDATES = [
   },
 ];
 
-const VIEW = (inner) => `<mvc:View xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc">${inner}</mvc:View>`;
+const VIEW = (inner) => `<mvc:View xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:u="sap.ui.unified">${inner}</mvc:View>`;
+
+// The browser timezone the page runs in. It matters for one candidate only,
+// and decisively: a Date property is serialized by JSON.stringify through
+// toISOString(), which is UTC, so a LOCAL-midnight day lands on the previous
+// date everywhere east of Greenwich. Default to a positive offset so the
+// shift is visible - a probe run in UTC would report a false all-clear.
+const TZ = (process.argv.find((a) => a.startsWith('--tz=')) || '--tz=Europe/Berlin').slice(5);
 
 const HARNESS = `<!DOCTYPE html><html><head><meta charset="utf-8">
 <script id="sap-ui-bootstrap" src="/resources/sap-ui-core.js"
   data-sap-ui-theme="sap_horizon" data-sap-ui-async="true"
-  data-sap-ui-libs="sap.m,sap.ui.core"
+  data-sap-ui-libs="sap.m,sap.ui.core,sap.ui.unified"
   data-sap-ui-compatVersion="edge" data-sap-ui-preload=""></script>
 <script>
 window.uiReady = new Promise(function (resolve) {
@@ -240,7 +262,8 @@ if (!roots.length) {
 }
 const server = await startServer(roots);
 const browser = await launchBrowser();
-const page = await browser.newPage();
+const context = await browser.newContext({ timezoneId: TZ });
+const page = await context.newPage();
 const consoleErrors = [];
 page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text()); });
 await page.goto(`http://127.0.0.1:${server.address().port}/harness.html`);
@@ -257,7 +280,7 @@ server.close();
 if (process.argv.includes('--json')) {
   console.log(JSON.stringify(results, null, 1));
 } else {
-  console.log(`control-valued event-arg probe - real OpenUI5, ${CANDIDATES.length} candidates\n`);
+  console.log(`control-valued event-arg probe - real OpenUI5, ${CANDIDATES.length} candidates, browser timezone ${TZ}\n`);
   for (const r of results) {
     const verdict = r.error ? 'ERROR' : !r.called ? 'NOT CALLED' : 'ARRIVED';
     console.log(`${verdict.padEnd(11)} ${r.key}`);

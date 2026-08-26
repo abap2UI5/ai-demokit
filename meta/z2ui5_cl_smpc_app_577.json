@@ -17,7 +17,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the sample is a Component with a ROUTER and three views (FlexibleColumnLayout, List, Detail). abap2UI5 serves one view, so the three become one: the FCL declares its begin and mid column pages inline and the routing collapses to the FCL's own layout property - toDetail opens the mid column (TwoColumnsMidExpanded) and handleClose closes it (OneColumn), which is what navTo(layout) does. The URL the router also writes has no counterpart, and neither has the sample's own actionButtonsInfo helper state - the close button is the only navigation action and it is always the right one to show while the mid column is open. Same fold as app 575."
+      "what": "the sample is a Component with a ROUTER and three views (FlexibleColumnLayout, List, Detail). abap2UI5 serves one view, so the three become one: the FCL declares its begin and mid column pages inline and the routing collapses to the FCL's own layout property - toDetail opens the mid column (MidColumnFullScreen - see the maxColumnsCount note below) and handleClose closes it (OneColumn), which is what navTo(layout) does. The URL the router also writes has no counterpart, and neither has the sample's own actionButtonsInfo helper state - the close button is the only navigation action and it is always the right one to show while the mid column is open. Same fold as app 575."
     },
     {
       "type": "NOTE",
@@ -36,12 +36,16 @@
       "what": "the close Button in the detail page's navigationActions is icon-only in the sample. The port gives it tooltip=\"Close column\" so it is reachable with a screen reader - the one accessibility addition in this port."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the two-column open and close and the bound sections aggregation."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the mid-column open and close and the bound sections aggregation. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_577.mjs)."
     },
     {
       "type": "NOTE",
       "what": "mvc:View displayBlock=\"true\" has no counterpart: it is a Component-app setting that makes the view fill the page when it is the root of a Component, and abap2UI5 owns the view container itself."
+    },
+    {
+      "type": "NOTE",
+      "what": "toDetail sets MidColumnFullScreen, not TwoColumnsMidExpanded. This sample builds its semantic helper with maxColumnsCount: 1, and getNextUIState short-circuits to MidColumnFullScreen in that case - which is what hides the begin column and makes the return to OneColumn a begin-column resize from zero width, the event the sample exists to demonstrate."
     }
   ]
 }

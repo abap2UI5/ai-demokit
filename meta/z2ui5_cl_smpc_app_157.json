@@ -15,6 +15,10 @@
     {
       "type": "NOTE",
       "what": "NumericContent presses show a client MessageToast ('Fire press', the original press handler's text - review fixed the earlier text copied from the NumericContentDifColors neighbour). Two vertical HeaderContainers — one of eight NumericContents, one of five TileContents (each wrapping a NumericContent) — reproduced 1:1. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): pressing the first NumericContent toasts 'Fire press'; the other tiles are the identical wire."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The sample's own style.css is neither archived nor reproduced. HeaderContainerVM is the only sample in the 622 that declares its stylesheet through the OLD UIComponent form - Component.js metadata `includes: \"HeaderContainerVM/style.css\"` - instead of manifest sap.ui5.resources.css, so the harvest never read the declaration and the file was never fetched; it is not reachable from this environment either (the network policy answers 403 for the OpenUI5 host). What the sheet does cannot be stated: the original view carries no author class at all, so its rules must target UI5's own render classes, and nothing offline says which. The first NOTE's \"reproduced 1:1\" therefore covers the control tree, not the rendering. scripts/check-archive.mjs reads both declaration forms since 2026-08-23 and holds this file in scripts/archive-absent.json; the entry is to be dropped, and this deviation revisited, as soon as a harvest run brings the sheet in. Found by the reviewed re-read 2026-08-23."
     }
   ]
 }

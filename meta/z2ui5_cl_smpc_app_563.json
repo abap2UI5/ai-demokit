@@ -26,7 +26,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the two controller handlers that reach into controls become bound state, per the prefer-a-bindable-property rule: oBackButton.setVisible(...) is visible={/BACK_VISIBLE} and oPopoverTitle.setText(...) is text={/POPOVER_TITLE}. Only navigateBack has no bindable equivalent - it is the one frontend action (control_by_id, view = cs_view-popup, on the MessageView id messageView), the same path app 284 uses. handlePopoverPress's own navigateBack is not needed: popover_display rebuilds the fragment, so the MessageView always opens on its list page; only the header state is reset in ABAP."
+      "what": "the two controller handlers that reach into controls become bound state, per the prefer-a-bindable-property rule: oBackButton.setVisible(...) is visible={/BACK_VISIBLE} and oPopoverTitle.setText(...) is text={/POPOVER_TITLE}. Only navigateBack has no bindable equivalent - it is the one frontend action (control_by_id, view = cs_view-popup, on the MessageView id messageView), the same path app 284 uses. Re-verified 2026-08-23: still true. navigateBack is a method with no bindable twin, and the port wires it as a frontend action - the setVisible/setText this sentence also names are the ones it BOUND instead, which is what makes it read like a stale claim to the stale-impossibility probe. handlePopoverPress's own navigateBack is not needed: popover_display rebuilds the fragment, so the MessageView always opens on its list page; only the header state is reset in ABAP."
     },
     {
       "type": "NOTE",
@@ -41,8 +41,12 @@
       "what": "the nav-back Button is icon-only in the original (IconPool.getIconURI('nav-back'), no text and no tooltip). The port gives it tooltip=\"Back\" so it is reachable with a screen reader - the one accessibility addition in this port."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the anchored popover with a MessageView inside it and the navigateBack frontend action on the popup view."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the anchored popover with a MessageView inside it and the navigateBack frontend action on the popup view. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_563.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The details popover is opened on the POPOVER slot, so it is closed with popover_destroy( ) and addressed with cs_view-popover. popup_destroy( )/cs_view-popup target a different slot that this app never opens, so the close and the in-popover navigation were silent no-ops."
     }
   ]
 }

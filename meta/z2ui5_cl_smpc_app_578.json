@@ -57,12 +57,16 @@
       "what": "the icon-only share Button in the detail page's actions is tooltip-less in the sample, and so are the add and sort buttons of the list toolbar. The port gives all three a tooltip so they are reachable with a screen reader - the accessibility additions in this port."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the three-column navigation, the six full-screen / close actions and the bound column-distribution sizes."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the three-column navigation, the six full-screen / close actions and the bound column-distribution sizes. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_578.mjs)."
     },
     {
       "type": "NOTE",
       "what": "mvc:View displayBlock=\"true\" has no counterpart: it is a Component-app setting that makes the view fill the page when it is the root of a Component, and abap2UI5 owns the view container itself. FlexibleColumnLayout stateChange is wired in the sample only to rewrite the URL through the router after a navigation arrow was used; there is no URL to rewrite here, so the port drops it."
+    },
+    {
+      "type": "NOTE",
+      "what": "Component.js raises the model size limit; the port issues cs_event-set_size_limit for MAIN. The collection is 123 rows and the JSONModel caps a bound aggregation at 100, so without it the table stopped 23 rows short of the count its own title reports."
     }
   ]
 }

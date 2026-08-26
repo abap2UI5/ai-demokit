@@ -20,7 +20,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the controller's onPopinLayoutChanged (ComboBox change handler running a PopinLayout switch with a Block default) is expressed as bound properties instead of a round-trip (AGENTS 'prefer a bindable property'): the ComboBox's change attribute is dropped, its selectedKey is bound two-way, and the Table gains a popinLayout expression binding that reproduces the switch including its Block default."
+      "what": "the controller's onPopinLayoutChanged (ComboBox change handler running a PopinLayout switch with a Block default) is expressed as bound properties instead of a round-trip (the recipe's 'prefer a bindable property' rule (.claude/skills/port-a-sample/SKILL.md; the linter enforces it as settable-property-via-action)): the ComboBox's change attribute is dropped, its selectedKey is bound two-way, and the Table gains a popinLayout expression binding that reproduces the switch including its Block default."
     },
     {
       "type": "NOTE",

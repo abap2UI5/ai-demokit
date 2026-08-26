@@ -36,8 +36,8 @@
       "what": "handleViewChange toasts a constant text; the toast is composed on the client, so the view change needs no round-trip."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The nine recurring appointments with their rules, the eleven recurring non-working periods, and the create dialog with its recurrence branches are unverified in a running system."
+      "type": "NOTE",
+      "what": "The nine recurring appointments with their rules, the eleven recurring non-working periods, and the create dialog with its recurrence branches are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_555.mjs)."
     }
   ]
 }

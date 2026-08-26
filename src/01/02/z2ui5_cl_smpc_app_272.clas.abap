@@ -399,7 +399,8 @@ CLASS z2ui5_cl_smpc_app_272 IMPLEMENTATION.
             discount_text    = |Group '{ lv_group }' Validation:Success|.
             discount_visible = abap_true.
         ENDCASE.
-        client->message_toast_display( |Validation of field group '{ lv_group }' triggered.| ).
+        client->message_toast_display( text     = |Validation of field group '{ lv_group }' triggered.|
+                                       duration = `500` ).
 
       WHEN `CLOSE_BILLING`.
         billing_visible = abap_false.
@@ -415,11 +416,11 @@ CLASS z2ui5_cl_smpc_app_272 IMPLEMENTATION.
 
       WHEN `ACCEPT`.
         hide_messages( ).
-        client->message_toast_display( `Accept triggered` ).
+        client->message_toast_display( text = `Accept triggered` duration = `500` ).
 
       WHEN `CANCEL`.
         hide_messages( ).
-        client->message_toast_display( `Cancel triggered` ).
+        client->message_toast_display( text = `Cancel triggered` duration = `500` ).
 
       WHEN `RESET`.
         " onReset: hide the messages and setData({}) - every bound field back
@@ -439,7 +440,7 @@ CLASS z2ui5_cl_smpc_app_272 IMPLEMENTATION.
         creditcardvalidationcode = VALUE #( ).
         onlinemail               = VALUE #( ).
         onlinetwitter            = VALUE #( ).
-        client->message_toast_display( `Reset triggered` ).
+        client->message_toast_display( text = `Reset triggered` duration = `500` ).
 
     ENDCASE.
 

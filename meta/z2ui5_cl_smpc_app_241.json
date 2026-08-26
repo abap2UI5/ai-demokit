@@ -29,7 +29,7 @@
     },
     {
       "type": "NOTE",
-      "what": "itemPress preventDefault reproduced 1:1 since 2026-07-30: every NavigationListItem press wire carries s_ctrl-check_prevent_default = prevent_default, so when the 'preventDefaultCheckbox' is selected the handler cancels the item's built-in default client-side (oEvent.preventDefault() before the round-trip - selection stays, href navigation is suppressed) exactly like the original. The flag is baked into the handler expression at render time, so the CheckBox got an added select wire (PREVENT_TOGGLE, declared) that redraws the view when toggled; the redraw resets the client-side selection back to selectedKey='walked' - a small toggle-time caveat the original (which never redraws) does not have. The checkbox state stays two-way bound (selected={/PREVENT_DEFAULT}); the toast heading ('Default was prevented:' vs 'Item Pressed:') is composed server-side from the same flag."
+      "what": "itemPress preventDefault reproduced 1:1 since 2026-07-30: every NavigationListItem press wire carries s_ctrl-check_prevent_default = prevent_default, so when the 'preventDefaultCheckbox' is selected the handler cancels the item's built-in default client-side (oEvent.preventDefault() before the round-trip - selection stays, href navigation is suppressed) exactly like the original. The flag is baked into the handler expression at render time, so the CheckBox got an added select wire (PREVENT_TOGGLE, declared) that redraws the view when toggled; the redraw resets the client-side selection - a small toggle-time caveat the original (which never redraws) does not have. The checkbox state stays two-way bound (selected={/PREVENT_DEFAULT}); the toast heading ('Default was prevented:' vs 'Item Pressed:') is composed server-side from the same flag. (Corrected 2026-08-23: the earlier wording said the selection resets 'back to selectedKey=walked'. No item declares a key on either side, and _getUniqueKey falls back to the generated control id, so that selectedKey selects nothing - in the original too. What the redraw loses is the user's selection, not a named resting state.)"
     },
     {
       "type": "NOTE",
@@ -46,6 +46,10 @@
     {
       "type": "NOTE",
       "what": "EXPANDED joins omit_initial_paths since 2026-08-21. The original declares `expanded` on NO NavigationListItem, so UI5's own default (true) applies and 'Mileage' opens showing Driven and Walked; the port bound the attribute to a field no seeded row sets, and ajson emitted a real JSON false that collapsed it - the sample's only parent item silently lost its children, with selectedKey pointing at a hidden child. Omitting the INITIAL value restores the default while the Create dialog's explicit abap_true still travels. Found by the review sweep."
+    },
+    {
+      "type": "NOTE",
+      "what": "The nested items aggregation carried no binding on the row template between the 2026-08-05 static-to-bound rewrite and 2026-08-23. The outer NavigationList bound {/T_NAV_ITEMS}, but the inner tnt:items element held a STATIC NavigationListItem, so it was cloned with every row and its {TEXT} resolved in the row's own context: Mileage's two children (Driven, Walked) never rendered, and all five rows grew one spurious child bearing their own label. The row template now carries items=\"{ITEMS}\", the shape app 167 uses on the same control. No gate could see it - structural-diff was satisfied by the declared control count, and the interaction module only presses one top-level item."
     }
   ]
 }

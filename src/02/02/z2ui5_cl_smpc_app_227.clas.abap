@@ -46,7 +46,10 @@ CLASS z2ui5_cl_smpc_app_227 IMPLEMENTATION.
                 )->a( n = `text`         v = `Open Menu`
                 )->a( n = `ariaHasPopup` v = `Menu`
                 " the sample opens the Menu anchored to the button via oMenu.open( kbd, button, ... );
-                " sap.ui.unified.Menu has no openBy and open cannot receive the anchor - see pr/ (no-op today)
+                " sap.ui.unified.Menu has no openBy of its own; the frontend's openBy
+                " falls back to open( false, anchor, 'begin top', 'begin bottom', anchor )
+                " for exactly this control (pr/unified-menu-open-anchored, 2026-07-27) -
+                " the "no-op today" this comment claimed until 2026-08-23 is long gone
                 )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                        t_arg = VALUE #( ( `theMenu` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 

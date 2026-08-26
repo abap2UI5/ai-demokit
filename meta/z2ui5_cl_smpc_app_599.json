@@ -13,8 +13,8 @@
   "checked": null,
   "deviations": [
     {
-      "type": "NOTE",
-      "what": "Block->content inlining (app 401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): all 359 blocks are the SAME BlockBase, sample:InfoButton, around view/blocks/InfoButton.view.xml - a single m:Button (width='100%', text='infoButton', type='Emphasized'). It is inlined into each of the 359 aggregations, which is the missing/extra pairing: sample:InfoButton 359 vs 0 and Button 1 vs 0 against m:Button 0 vs 359 (the block view defaults to xmlns=\"sap.m\" and is archived once; the port's one view defaults to sap.uxap, so each carries the m: prefix, 359 times). The block view's own mvc:View root with its width='100%' is the View.width line."
+      "type": "IMPROVISED",
+      "what": "Block->content inlining (app 401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): all 359 blocks are the SAME BlockBase, sample:InfoButton, around view/blocks/InfoButton.view.xml - a single m:Button (width='100%', text='infoButton', type='Emphasized'). It is inlined into each of the 359 aggregations, which is the missing/extra pairing: sample:InfoButton 359 vs 0 and Button 1 vs 0 against m:Button 0 vs 359 (the block view defaults to xmlns=\"sap.m\" and is archived once; the port's one view defaults to sap.uxap, so each carries the m: prefix, 359 times). The block view's own mvc:View root with its width='100%' is the View.width line. Typed IMPROVISED since 2026-08-23. CAPABILITIES' own row says \"Declare the block→content substitution (IMPROVISED)\", and the recipe's refinement is explicit that removing a control the original declares - even a zero-visual-output one - is a loss regardless of a pixel-identical render. 26 of the 31 sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column assignment, and the block ids and view roots go with it."
     },
     {
       "type": "IMPROVISED",
@@ -29,8 +29,8 @@
       "what": "the ToggleButtons' pressed state is not bound in the sample either (the controller keeps isTitleOnTop / bUseTwoColumns of its own), so the port does not bind it: the button's own toggle and the backend flag start in step and stay in step, one press each."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: that the two toggles switch the subsection layout to TitleOnLeft and the page into two-column mode."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: that the two toggles switch the subsection layout to TitleOnLeft and the page into two-column mode. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_599.mjs)."
     }
   ]
 }

@@ -16,8 +16,8 @@
       "what": "The sample runs a MockServer and an ODataModel, suspends the items binding and resumes it in handleLoadItems. abap2UI5 has no OData model, so the port binds an ABAP table that is EMPTY until the loadItems event fires and the backend fills it - the same lazy behaviour (nothing is fetched before the picker opens), expressed with the framework's own round-trip. The binding-info's suspended flag has no equivalent and is dropped, and the mock server's artificial 3-second delay is not reproduced."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The loadItems wire filling the bound items is unverified in a running system."
+      "type": "NOTE",
+      "what": "The loadItems wire filling the bound items is unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_493.mjs)."
     }
   ]
 }

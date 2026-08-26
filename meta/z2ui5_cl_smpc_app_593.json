@@ -13,8 +13,8 @@
   "checked": null,
   "deviations": [
     {
-      "type": "NOTE",
-      "what": "Block->content inlining (app 401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): all eleven sections hold the SAME employment:EmploymentBlockJob, a lazy-loading BlockBase wrapper around a static view, so that view is inlined into each of the eleven (the layout:Grid / layout:VerticalLayout / layout:HorizontalLayout tree with its layout:GridData layoutData and the four m:Label the two employee cards show). Absent as a result: the eleven BlockBase controls with their ids, and the block view's own mvc:View root. Eleven copies of one heavy block is the sample: a page long enough that enableLazyLoading is worth watching."
+      "type": "IMPROVISED",
+      "what": "Block->content inlining (app 401/416 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): all eleven sections hold the SAME employment:EmploymentBlockJob, a lazy-loading BlockBase wrapper around a static view, so that view is inlined into each of the eleven (the layout:Grid / layout:VerticalLayout / layout:HorizontalLayout tree with its layout:GridData layoutData and the four m:Label the two employee cards show). Absent as a result: the eleven BlockBase controls with their ids, and the block view's own mvc:View root. Eleven copies of one heavy block is the sample: a page long enough that enableLazyLoading is worth watching. Typed IMPROVISED since 2026-08-23. CAPABILITIES' own row says \"Declare the block→content substitution (IMPROVISED)\", and the recipe's refinement is explicit that removing a control the original declares - even a zero-visual-output one - is a loss regardless of a pixel-identical render. 26 of the 31 sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column assignment, and the block ids and view roots go with it."
     },
     {
       "type": "IMPROVISED",

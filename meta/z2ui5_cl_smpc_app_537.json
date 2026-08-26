@@ -40,12 +40,16 @@
       "what": "The two row images are the demo kit's own test-resources files (John_Miller.png, Donna_Moore.jpg), re-hosted on sdk.openui5.org."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The four views, the non-working day toggle, the interval-select appointment push, the built-in views box and the two nonWorkingDays / nonWorkingHours arrays are unverified in a running system."
+      "type": "NOTE",
+      "what": "The four views, the non-working day toggle, the interval-select appointment push, the built-in views box and the two nonWorkingDays / nonWorkingHours arrays are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_537.mjs)."
     },
     {
       "type": "NOTE",
       "what": "**e2e-caught 2026-08-22**: the sample's own data carries an upstream typo - UI5Date.getInstance(201, 2, 4, 13, 30), a year of 201 where every neighbouring row says 2017 (Page.controller.js:110). In JavaScript that is a VALID date (4 March 201 AD); as the ISO string the port stores it became '201-03-04T13:30:00', which new Date() cannot parse at all, so the appointment reached the calendar as an Invalid Date and CalendarUtils._checkJSDateObject took the whole app down. The year is now written '0201', which is the same absurd date the original produces and which parses. The typo itself is kept: it is the sample's data."
+    },
+    {
+      "type": "NOTE",
+      "what": "A JS callback is not in the UI5 expression grammar - ExpressionParser has no `function` keyword and reads { as an object literal, so the whole handler string failed to parse and every argument was lost. The selection is read from the model instead: PlanningCalendarRow (and CalendarAppointment) declare a bindable `selected`, so the flags travel with the rows and ABAP does the work."
     }
   ],
   "render_smoke": {

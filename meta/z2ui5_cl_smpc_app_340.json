@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "the original view writes minSize=\"200px\" on the third SplitterLayoutData, but sap.ui.layout.SplitterLayoutData.minSize is typed int - UI5 cannot parse the px suffix. The port writes the numeric value 200 the original means."
+      "what": "the original view writes minSize=\"200px\" on the third SplitterLayoutData, but sap.ui.layout.SplitterLayoutData.minSize is typed int - UI5 would parse the px suffix fine (int.parseValue is parseInt); what rejects it is the corpus linter's invalid-property-value rule for a non-numeric literal on a numeric type. The port writes the numeric value 200 the original means."
     }
   ]
 }

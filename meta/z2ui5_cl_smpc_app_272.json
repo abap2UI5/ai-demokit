@@ -24,7 +24,7 @@
     },
     {
       "type": "NOTE",
-      "what": "onReset does getModel().setData({}) - reproduced by CLEARing the fourteen bound field values. onAccept/onCancel/onReset all call hideMessages() first, kept as a helper method. The four MessageToast texts are passed through verbatim ('Validation of field group '<g>' triggered.', 'Accept triggered', 'Cancel triggered', 'Reset triggered'); the original's duration:500 is dropped because abap2UI5's message_toast_display has no duration parameter."
+      "what": "onReset does getModel().setData({}) - reproduced by CLEARing the fourteen bound field values. onAccept/onCancel/onReset all call hideMessages() first, kept as a helper method. The four MessageToast texts are passed through verbatim ('Validation of field group '<g>' triggered.', 'Accept triggered', 'Cancel triggered', 'Reset triggered'); the original's duration:500 is carried through since 2026-08-23. It used to be dropped on the reasoning that \"abap2UI5's message_toast_display has no duration parameter\", which was never true: the interface declares an optional duration (z2ui5_if_client, and already at the pinned commit), z2ui5_cl_ui5_client forwards it and the client spreads it into MessageToast.show - and five ports in this corpus were already passing it, app 451 with this very value. The four toasts had been lingering 3000 ms against the original's 500."
     },
     {
       "type": "NOTE",

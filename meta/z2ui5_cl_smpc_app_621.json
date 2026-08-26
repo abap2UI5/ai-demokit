@@ -27,6 +27,10 @@
     {
       "type": "NOTE",
       "what": "the sample has no handler at all - its controller only loads the mock - so the port raises no event either. Typing filters the suggestions in the BROWSER, over the rows the backend already sent."
+    },
+    {
+      "type": "NOTE",
+      "what": "The price cell keeps the original's composite sap.ui.model.type.Currency binding rather than binding the raw field. The type is not a pass-through: NumberFormat's currency instance applies grouping and the currency's own fraction digits, so EUR renders 956.00 / 1,249.00 where the bare field renders 956 / 1249. The earlier justification - that the fold is what the formatter renders because the mock's prices are plain numbers - was wrong on both halves."
     }
   ]
 }

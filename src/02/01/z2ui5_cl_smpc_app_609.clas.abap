@@ -329,7 +329,7 @@ CLASS z2ui5_cl_smpc_app_609 IMPLEMENTATION.
         " appointment, and closes it again when the appointment is deselected
         DATA(path) = client->get_event_arg( ).
         IF path IS INITIAL OR client->get_event_arg( 2 ) <> abap_true.
-          client->popup_destroy( ).
+          client->popover_destroy( ).
         ELSE.
           SPLIT path AT `/` INTO TABLE DATA(parts).
           DELETE parts WHERE table_line IS INITIAL.
@@ -349,7 +349,10 @@ CLASS z2ui5_cl_smpc_app_609 IMPLEMENTATION.
           ENDIF.
         ENDIF.
       WHEN `EDIT`.
-        " handleEditButton closes the popover and opens the dialog on the same row
+        " handleEditButton closes the popover and opens the dialog on the same row -
+        " the original comments that the Popover HAS to be closed before the Dialog
+        " opens, so the close is not optional
+        client->popover_destroy( ).
         dialog_title = `Edit appointment`.
         popup_modify_display( ).
       WHEN `DELETE`.
@@ -357,7 +360,7 @@ CLASS z2ui5_cl_smpc_app_609 IMPLEMENTATION.
         IF sel_index >= 0 AND sel_index < lines( t_appointments ).
           DELETE t_appointments INDEX sel_index + 1.
         ENDIF.
-        client->popup_destroy( ).
+        client->popover_destroy( ).
       WHEN `APPT_CREATE` OR `HEADER_DATE`.
         " _createInitialDialogValues seeds the dialog at the default 9 - 10 hours
         " of the picked day (or of the calendar's own start date)
@@ -392,9 +395,14 @@ CLASS z2ui5_cl_smpc_app_609 IMPLEMENTATION.
           t_appointments[ sel_index + 1 ]-start_at = sel_start.
           t_appointments[ sel_index + 1 ]-end_at   = sel_end.
         ELSE.
+          " aria must be seeded: an unset ABAP field reaches ariaHasPopup as "",
+          " which is not a sap.ui.core.aria.HasPopup member, so validateProperty
+          " throws and the binding update takes the view down. The original pushes
+          " ariaHasPopup: "Dialog" on the created object.
           INSERT VALUE #( title    = sel_title
                           text     = sel_text
                           type     = sel_type
+                          aria     = `Dialog`
                           start_at = sel_start
                           end_at   = sel_end ) INTO TABLE t_appointments.
         ENDIF.

@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "IMPROVISED",
-      "what": "onInit calls combobox1.setFilterFunction( ) with a JavaScript callback matching the term case-insensitively at the START of the item text OR of its key. UI5's default filtering already covers the starts-with-on-text half; the key half has no bindable or backend equivalent (app-authored JS functions are the documented boundary) and is lost."
+      "what": "onInit calls combobox1.setFilterFunction( ) with a JavaScript callback matching the search term case-insensitively at the START of the item text OR of its key. An app-authored JS callback is the documented boundary, so the port ships UI5's built-in filtering, plus filterSecondaryValues (@since 1.46, under the 1.71 floor) so the default filter also tests additionalText, which this port binds to {KEY} - that is the sample's or-key half. One residual difference stays: UI5's wordStartsWithValue anchors at ANY word start, the sample's regex only at the string start, so 'Herzegovina' matches 'Bosnia and Herzegovina' here and does not in the original."
     }
   ]
 }

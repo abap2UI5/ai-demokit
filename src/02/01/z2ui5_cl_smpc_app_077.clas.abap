@@ -53,9 +53,11 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                 )->end(
 
                 )->ele( `NotificationListGroup`
+                    )->a( n = `id`              v = `notificationGroup1`
                     )->a( n = `title`           v = `Orders`
                     )->a( n = `showCloseButton` v = `true`
-                    " the original onItemClose also removes the item client-side - static items here, so close only toasts
+                    " onItemClose removes the item from ITS OWN parent and toasts; the
+                    " group closes target the list, the nested item closes target their group
                     )->a( n = `close`           v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                               t_arg = VALUE #( ( `notificationList` )
                                                                                             ( `removeItem` )
@@ -79,7 +81,7 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                         )->a( n = `unread`          v = `true`
                         )->a( n = `priority`        v = `None`
                         )->a( n = `close`           v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                                  t_arg = VALUE #( ( `notificationList` )
+                                                                                  t_arg = VALUE #( ( `notificationGroup1` )
                                                                                                 ( `removeItem` )
                                                                                                 ( `$event.oSource.getId()` ) ) ) && `; ` &&
                                                         client->follow_up_action( val   = client->cs_event-control_global
@@ -99,7 +101,7 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                         )->a( n = `unread`          v = `true`
                         )->a( n = `priority`        v = `High`
                         )->a( n = `close`           v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                                  t_arg = VALUE #( ( `notificationList` )
+                                                                                  t_arg = VALUE #( ( `notificationGroup1` )
                                                                                                 ( `removeItem` )
                                                                                                 ( `$event.oSource.getId()` ) ) ) && `; ` &&
                                                         client->follow_up_action( val   = client->cs_event-control_global
@@ -128,7 +130,7 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                         )->a( n = `datetime`        v = `3 days`
                         )->a( n = `priority`        v = `High`
                         )->a( n = `close`           v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                                  t_arg = VALUE #( ( `notificationList` )
+                                                                                  t_arg = VALUE #( ( `notificationGroup1` )
                                                                                                 ( `removeItem` )
                                                                                                 ( `$event.oSource.getId()` ) ) ) && `; ` &&
                                                         client->follow_up_action( val   = client->cs_event-control_global
@@ -152,6 +154,7 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                 )->end(
 
                 )->ele( `NotificationListGroup`
+                    )->a( n = `id`              v = `notificationGroup2`
                     )->a( n = `title`           v = `Orders`
                     )->a( n = `showCloseButton` v = `true`
                     )->a( n = `collapsed`       v = `true`
@@ -181,7 +184,7 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                         )->a( n = `unread`          v = `true`
                         )->a( n = `priority`        v = `None`
                         )->a( n = `close`           v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                                  t_arg = VALUE #( ( `notificationList` )
+                                                                                  t_arg = VALUE #( ( `notificationGroup2` )
                                                                                                 ( `removeItem` )
                                                                                                 ( `$event.oSource.getId()` ) ) ) && `; ` &&
                                                         client->follow_up_action( val   = client->cs_event-control_global
@@ -199,7 +202,7 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                         )->a( n = `unread`          v = `true`
                         )->a( n = `priority`        v = `High`
                         )->a( n = `close`           v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                                  t_arg = VALUE #( ( `notificationList` )
+                                                                                  t_arg = VALUE #( ( `notificationGroup2` )
                                                                                                 ( `removeItem` )
                                                                                                 ( `$event.oSource.getId()` ) ) ) && `; ` &&
                                                         client->follow_up_action( val   = client->cs_event-control_global
@@ -228,7 +231,7 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                         )->a( n = `datetime`        v = `3 days`
                         )->a( n = `priority`        v = `High`
                         )->a( n = `close`           v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                                  t_arg = VALUE #( ( `notificationList` )
+                                                                                  t_arg = VALUE #( ( `notificationGroup2` )
                                                                                                 ( `removeItem` )
                                                                                                 ( `$event.oSource.getId()` ) ) ) && `; ` &&
                                                         client->follow_up_action( val   = client->cs_event-control_global
@@ -252,6 +255,7 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                 )->end(
 
                 )->ele( `NotificationListGroup`
+                    )->a( n = `id`              v = `notificationGroup3`
                     )->a( n = `title`           v = `When 'Accept All' is pressed some of the notifications will show an error`
                     )->a( n = `showCloseButton` v = `true`
                     )->a( n = `close`           v = client->follow_up_action( val   = client->cs_event-control_by_id
@@ -281,7 +285,7 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                         )->a( n = `unread`          v = `true`
                         )->a( n = `priority`        v = `None`
                         )->a( n = `close`           v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                                  t_arg = VALUE #( ( `notificationList` )
+                                                                                  t_arg = VALUE #( ( `notificationGroup3` )
                                                                                                 ( `removeItem` )
                                                                                                 ( `$event.oSource.getId()` ) ) ) && `; ` &&
                                                         client->follow_up_action( val   = client->cs_event-control_global
@@ -300,7 +304,7 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                         )->a( n = `unread`          v = `true`
                         )->a( n = `priority`        v = `High`
                         )->a( n = `close`           v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                                  t_arg = VALUE #( ( `notificationList` )
+                                                                                  t_arg = VALUE #( ( `notificationGroup3` )
                                                                                                 ( `removeItem` )
                                                                                                 ( `$event.oSource.getId()` ) ) ) && `; ` &&
                                                         client->follow_up_action( val   = client->cs_event-control_global
@@ -327,7 +331,7 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                         )->a( n = `datetime`        v = `3 days`
                         )->a( n = `priority`        v = `High`
                         )->a( n = `close`           v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                                  t_arg = VALUE #( ( `notificationList` )
+                                                                                  t_arg = VALUE #( ( `notificationGroup3` )
                                                                                                 ( `removeItem` )
                                                                                                 ( `$event.oSource.getId()` ) ) ) && `; ` &&
                                                         client->follow_up_action( val   = client->cs_event-control_global
@@ -350,6 +354,7 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                 )->end(
 
                 )->ele( `NotificationListGroup`
+                    )->a( n = `id`              v = `notificationGroup4`
                     )->a( n = `title`           v = `Group with notifications without footer buttons`
                     )->a( n = `showCloseButton` v = `true`
                     )->a( n = `close`           v = client->follow_up_action( val   = client->cs_event-control_by_id
@@ -369,7 +374,7 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                         )->a( n = `unread`          v = `true`
                         )->a( n = `priority`        v = `None`
                         )->a( n = `close`           v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                                  t_arg = VALUE #( ( `notificationList` )
+                                                                                  t_arg = VALUE #( ( `notificationGroup4` )
                                                                                                 ( `removeItem` )
                                                                                                 ( `$event.oSource.getId()` ) ) ) && `; ` &&
                                                         client->follow_up_action( val   = client->cs_event-control_global
@@ -388,7 +393,7 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                         )->a( n = `unread`          v = `true`
                         )->a( n = `priority`        v = `High`
                         )->a( n = `close`           v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                                  t_arg = VALUE #( ( `notificationList` )
+                                                                                  t_arg = VALUE #( ( `notificationGroup4` )
                                                                                                 ( `removeItem` )
                                                                                                 ( `$event.oSource.getId()` ) ) ) && `; ` &&
                                                         client->follow_up_action( val   = client->cs_event-control_global

@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "the original's view.xml has no MessageStrip at all: showMsgStrip destroys the previous one and _generateMsgStrip creates a new sap.m.MessageStrip in the controller, adding it to the VerticalLayout. The port declares that MessageStrip in the view (one control more than the original view.xml) and binds its four varying properties - text, type, showIcon, showCloseButton - plus visible, which keeps it hidden until the button has been pressed once. Destroy-and-recreate then has no counterpart: rebinding the same control is the abap2UI5 form of the same result."
+      "what": "the original's view.xml has no MessageStrip at all: showMsgStrip destroys the previous one and _generateMsgStrip creates a new sap.m.MessageStrip in the controller, adding it to the VerticalLayout. The port declares that MessageStrip in the view (one control more than the original view.xml) and binds its four varying properties - text, type, showIcon, showCloseButton - plus visible, which keeps it hidden until the button has been pressed once. Destroy-and-recreate then has no counterpart: the port re-renders the view, which is the destroy-and-create the original does. **Corrected 2026-08-23**: rebinding alone was NOT the same result. MessageStrip.close( ) sets visible = false on the CONTROL while the model still holds abap_true, and an unchanged model value fires no binding update - so once the user closed a strip it never came back, and the following presses kept changing text and type behind an invisible control. The original destroys the strip and creates a new one on every press."
     },
     {
       "type": "IMPROVISED",

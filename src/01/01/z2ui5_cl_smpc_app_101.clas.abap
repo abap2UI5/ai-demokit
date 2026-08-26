@@ -133,9 +133,13 @@ CLASS z2ui5_cl_smpc_app_101 IMPLEMENTATION.
                                     )->a( n = `text`     v = `Validation in the wizard is controlled by calling the validateStep(Step) and invalidateStep(Step) methods `
                                     )->a( n = `showIcon` v = `true`
                                 )->tag( `Text`
-                                    )->a( n = `text` v = `Cras tellus leo, volutpat vitae ullamcorper eu, posuere malesuada nisl. Integer pellentesque leo sit amet dui vehicula, quis ullamcorper est pulvinar. ` &&
-                                                        `Nam in libero sem. Suspendisse arcu metus, molestie a turpis a, molestie aliquet dui. Donec pulvinar, sapien et viverra imperdiet, orci erat porttitor nulla, ` &&
-                                                        `eget commodo metus nibh nec ipsum. Aliquam lacinia euismod metus, sollicitudin pellentesque purus volutpat eget. Pellentesque egestas erat quis eros convallis mattis.`
+                                    )->a( n = `text` v = `Cras tellus leo, volutpat vitae ullamcorper eu, posuere malesuada nisl. Integer pellentesque leo sit amet dui vehicula, quis ullamcorper est pulvinar. Nam in ` &&
+                                                        `libero sem. Suspendisse arcu metus, molestie a turpis a, molestie aliquet dui. Donec pulvinar, sapien et viverra imperdiet, orci erat porttitor nulla, eget ` &&
+                                                        `commodo metus nibh nec ipsum. Aliquam lacinia euismod metus, sollicitudin pellentesque purus volutpat eget. Pellentesque egestas erat quis eros convallis ` &&
+                                                        `mattis. Mauris hendrerit sapien a malesu corper eu, posuere malesuada nisl. Integer pellentesque leo sit amet dui vehicula, quis ullamcorper est pulvinar. Nam ` &&
+                                                        `in libero sem. Suspendisse arcu metus, molestie a turpis a, molestie aliquet dui. Donec pulvinar, sapien corper eu, posuere malesuada nisl. Integer ` &&
+                                                        `pellentesque leo sit amet dui vehicula, quis ullamcorper est pulvinar. Nam in libero sem. Suspendisse arcu metus, molestie a turpis a, molestie aliquet dui. ` &&
+                                                        `Donec pulvinar, sapien `
 
                                 )->ele( n = `SimpleForm` ns = `form`
                                     )->a( n = `editable` v = `true`
@@ -208,9 +212,10 @@ CLASS z2ui5_cl_smpc_app_101 IMPLEMENTATION.
                                     )->a( n = `text`     v = `You can validate steps by default with the validated='true' property of the step. The next button is always enabled.`
                                     )->a( n = `showIcon` v = `true`
                                 )->tag( `Text`
-                                    )->a( n = `text` v = `Integer pellentesque leo sit amet dui vehicula, quis ullamcorper est pulvinar. Nam in libero sem. Suspendisse arcu metus, molestie a turpis a, molestie aliquet dui. ` &&
-                                                        `Donec pellentesque leo sit amet dui vehicula, quis ullamcorper est pulvinar. Nam in libero sem. Suspendisse arcu metus, molestie a turpis a, molestie aliquet dui. ` &&
-                                                        `Donec pulvinar, sapien corper eu, posuere malesuada nisl.`
+                                    )->a( n = `text` v = `Integer pellentesque leo sit amet dui vehicula, quis ullamcorper est pulvinar. Nam in libero sem. Suspendisse arcu metus, molestie a turpis a, molestie aliquet ` &&
+                                                        `dui. Donec ppellentesque leo sit amet dui vehicula, quis ullamcorper est pulvinar. Nam in libero sem. Suspendisse arcu metus, molestie a turpis a, molestie ` &&
+                                                        `aliquet dui. Donec pulvinar, sapien corper eu, posuere malesuada nisl. Integer pellentesque leo sit amet dui vehicula, quis ullamcorper est pulvinar. Nam in ` &&
+                                                        `libero sem. Suspendisse arcu metus, molestie a turpis a, molestie aliquet dui. Donec pulvinar, sapien `
 
                                 )->ele( n = `SimpleForm` ns = `form`
                                     )->a( n = `editable` v = `true`
@@ -484,11 +489,25 @@ CLASS z2ui5_cl_smpc_app_101 IMPLEMENTATION.
 
       WHEN `ADDITIONAL_INFO`.
         " reproduces additionalInfoValidation: name >= 6 chars, weight numeric
-        DATA(name_ok)   = xsdbool( strlen( product_name ) >= 6 ).
-        DATA(weight_ok) = xsdbool( product_weight CO `0123456789` AND product_weight IS NOT INITIAL ).
+        DATA(name_ok) = xsdbool( strlen( product_name ) >= 6 ).
+        " the original tests parseInt( ) IS NaN, which is far laxer than "all
+        " digits": leading blanks and a sign are skipped and parsing stops at
+        " the first non-digit, so '12.5', '-5' and '12abc' are all VALID there
+        DATA(weight) = condense( product_weight ).
+        IF weight IS NOT INITIAL AND ( weight(1) = `-` OR weight(1) = `+` ).
+          weight = weight+1.
+        ENDIF.
+        DATA(weight_ok) = COND abap_bool( WHEN weight IS INITIAL THEN abap_false
+                                          ELSE xsdbool( weight(1) CO `0123456789` ) ).
         product_name_state   = COND #( WHEN name_ok = abap_true THEN `None` ELSE `Error` ).
         product_weight_state = COND #( WHEN weight_ok = abap_true THEN `None` ELSE `Error` ).
         step2_validated      = xsdbool( name_ok = abap_true AND weight_ok = abap_true ).
+        IF step2_validated = abap_false.
+          " both failing branches of the original also call
+          " setCurrentStep( ProductInfoStep ), forcing the wizard back to it
+          client->follow_up_action( val   = client->cs_event-control_by_id
+                                    t_arg = VALUE #( ( `CreateProductWizard` ) ( `setCurrentStep` ) ( `ProductInfoStep` ) ) ).
+        ENDIF.
 
       WHEN `OPTIONAL_ACTIVATE`.
         client->message_toast_display( `This event is fired on activate of Step3.` ).
@@ -524,7 +543,7 @@ CLASS z2ui5_cl_smpc_app_101 IMPLEMENTATION.
       WHEN `CANCEL_CLOSED`.
         IF client->get_event_arg( ) = `YES`.
           client->follow_up_action( val   = client->cs_event-control_by_id
-                                    t_arg = VALUE #( ( `wizardNavContainer` ) ( `to` ) ( `wizardContentPage` ) ) ).
+                                    t_arg = VALUE #( ( `wizardNavContainer` ) ( `backToPage` ) ( `wizardContentPage` ) ) ).
           client->follow_up_action( val   = client->cs_event-control_by_id
                                     t_arg = VALUE #( ( `CreateProductWizard` ) ( `discardProgress` ) ( `ProductTypeStep` ) ) ).
         ENDIF.
@@ -538,7 +557,7 @@ CLASS z2ui5_cl_smpc_app_101 IMPLEMENTATION.
 
     " original _handleNavigationToStep: back to the wizard content page, then goToStep
     client->follow_up_action( val   = client->cs_event-control_by_id
-                              t_arg = VALUE #( ( `wizardNavContainer` ) ( `to` ) ( `wizardContentPage` ) ) ).
+                              t_arg = VALUE #( ( `wizardNavContainer` ) ( `backToPage` ) ( `wizardContentPage` ) ) ).
     client->follow_up_action( val   = client->cs_event-control_by_id
                               t_arg = VALUE #( ( `CreateProductWizard` ) ( `goToStep` ) ( step_id ) ) ).
 

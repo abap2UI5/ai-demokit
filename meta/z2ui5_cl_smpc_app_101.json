@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "Step validation (additionalInfoValidation) is reproduced in ABAP: on the ProductName/ProductWeight liveChange (and ProductInfoStep activate) the name-length>=6 / weight-numeric checks set the two valueStates and the ProductInfoStep validated property, which is bound two-way (step2_validated) instead of the original imperative validateStep/invalidateStep. The other steps keep their literal validated='true'."
+      "what": "Step validation (additionalInfoValidation) is reproduced in ABAP: on the ProductName/ProductWeight liveChange (and ProductInfoStep activate) the name-length>=6 / weight checks (the weight one was NARROWER than the original until 2026-08-23: it required all digits, while the original tests parseInt( ) IS NaN, which skips leading blanks and a sign and stops at the first non-digit - so '12.5', '-5' and '12abc' are valid there and were rejected here, and the Input is type=Number, so a decimal is exactly what a user types). Both failing branches also call setCurrentStep( ProductInfoStep ), which the port had dropped and now issues as a frontend action set the two valueStates and the ProductInfoStep validated property, which is bound two-way (step2_validated) instead of the original imperative validateStep/invalidateStep. The other steps keep their literal validated='true'."
     },
     {
       "type": "NOTE",
@@ -21,11 +21,15 @@
     },
     {
       "type": "NOTE",
-      "what": "Navigation is 1:1 via follow_up_action( cs_event-control_by_id ): Wizard complete -> NavContainer 'to' the review page; each Edit link -> 'to' the content page then Wizard 'goToStep' the target step (whitelisted). Cancel and Submit open a MessageBox (warning/confirm) with YES/NO; on YES the wizard resets via 'to' the content page + 'discardProgress' ProductTypeStep, matching _handleMessageBoxOpen."
+      "what": "Navigation is via follow_up_action( cs_event-control_by_id ). Corrected 2026-08-23: it used to say 1:1 while using `to` for all three legs. Only the Wizard-complete leg is `to` in the original; the Edit and Cancel/Submit legs are backToPage, a REVERSE transition that unwinds the NavContainer stack rather than pushing onto it, and they now use it. The original's afterNavigate deferral - it attaches a listener and calls goToStep only inside it - stays dropped: Wizard complete -> NavContainer 'to' the review page; each Edit link -> 'to' the content page then Wizard 'goToStep' the target step (whitelisted). Cancel and Submit open a MessageBox (warning/confirm) with YES/NO; on YES the wizard resets via 'to' the content page + 'discardProgress' ProductTypeStep, matching _handleMessageBoxOpen."
     },
     {
       "type": "NOTE",
-      "what": "the cancel leg is closed: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the first wizard step renders and the footer Cancel really round-trips - message_box_display opens the MessageBox 'Are you sure you want to cancel your report?' with its YES/NO onclose action. Still needs an in-system check: step validation gating the Next button, the complete/edit navigation, the goToStep scroll and the submit/cancel reset itself. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_101.mjs)."
+      "what": "the cancel leg is closed: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the first wizard step renders and the footer Cancel really round-trips - message_box_display opens the MessageBox 'Are you sure you want to cancel your report?' with its question text (restated 2026-08-23: the module asserts the dialog text only; it never locates a YES or NO button and never exercises onclose, so that leg is not covered). Still needs an in-system check: step validation gating the Next button, the complete/edit navigation, the goToStep scroll and the submit/cancel reset itself. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_101.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "Two step body Texts had been TRUNCATED and are restored 2026-08-23: ProductInfoStep's ran 475 of the original's 955 characters and OptionalInfoStep's 385 of 575, each a clean prefix that stopped mid-paragraph. OptionalInfoStep had also silently corrected the original's own typo \"Donec ppellentesque\" to \"pellentesque\". Both now carry the full text; the original's trailing TAB is written as the single space XML attribute-value normalisation turns it into. No gate compares long text bodies, which is why this survived."
     }
   ]
 }

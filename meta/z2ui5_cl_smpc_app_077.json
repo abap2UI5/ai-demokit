@@ -14,15 +14,19 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "onItemClose is reproduced 1:1 since 2026-08-05. The original removes the item from its list (oList.removeItem(oItem)) and toasts its title; the port does BOTH client-side on the same event: UI5 runs a ';'-separated pair of event handlers (measured with scripts/probes/event-arg-expression-probe.mjs), so the wire chains control_by_id removeItem with the client-composed toast. The item travels as its own id ($event.oSource.getId()), which ManagedObject.removeAggregation accepts (measured in the same probe). The NotificationList gained an `id` the original does not carry - removeItem needs a target for the wire; that is the port's only extra attribute here. The earlier 'static items, so close only toasts' rationale is retired. Group 3's onAcceptErrors keeps its accept toast."
+      "what": "onItemClose is reproduced 1:1 since 2026-08-05. The original removes the item from its list (oList.removeItem(oItem)) and toasts its title; the port does BOTH client-side on the same event. **Corrected 2026-08-23 - it was 1:1 for 4 of the 15 close handlers and a SILENT NO-OP for the other 11.** The original resolves the parent per item (oItem.getParent()), and sap.m.NotificationListGroup declares its own `items` aggregation, so a NESTED NotificationListItem's parent is the GROUP, not the outer list. All fifteen wires had been hard-coded to the list id: for the four group closes that is right, and for the eleven item closes ManagedObject.removeAggregation looped the list's four groups, matched nothing, and returned null - no error, no log, the item stayed on screen and only the toast fired. Every gate stayed green because the call fails silently. The four groups now carry ids (notificationGroup1..4) and each nested item removes itself from its own group. The probe this had leaned on measured a FLAT Tokenizer, which is why a two-level aggregation was never covered.: UI5 runs a ';'-separated pair of event handlers (measured with scripts/probes/event-arg-expression-probe.mjs), so the wire chains control_by_id removeItem with the client-composed toast. The item travels as its own id ($event.oSource.getId()), which ManagedObject.removeAggregation accepts (measured in the same probe). The NotificationList gained an `id` the original does not carry - removeItem needs a target for the wire; that is the port's only extra attribute here. The earlier 'static items, so close only toasts' rationale is retired. Group 3's onAcceptErrors keeps its accept toast."
     },
     {
       "type": "NOTE",
-      "what": "the original's showCloseButton=\"falseue\" typo on two items is corrected to false, otherwise UI5 boolean parsing rejects it."
+      "what": "the original's showCloseButton=\"falseue\" typo on two items is corrected to false, and it is a readability fix rather than a repair - corrected 2026-08-23: UI5 does not reject 'falseue'. DataType's boolean parses `sValue == \"true\"`, so the typo silently coerces to false and renders exactly as the corrected value does."
     },
     {
       "type": "POST_171",
       "what": "the NotificationList container control (since UI5 1.90) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.90 to render it (control-level, invisible to the member-level property gate)."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "Group 3's onAcceptErrors is reduced to the same generic 'Accept Button Pressed' toast the other groups fire. The original shows NO toast there: it clears the processingMessage aggregation on all three items and then puts an error MessageStrip (with the 'SAP CE' link) on a RANDOMLY chosen one - which is what that group's own title announces, \"When 'Accept All' is pressed some of the notifications will show an error\". So the port loses the behaviour the group exists to demonstrate and invents a toast in its place, leaving the title describing something the app does not do. Declared 2026-08-23; the sidecar had said 'Group 3's onAcceptErrors keeps its accept toast', and there was no accept toast to keep."
     }
   ]
 }

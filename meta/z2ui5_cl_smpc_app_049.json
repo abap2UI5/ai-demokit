@@ -18,7 +18,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the change toast was switched to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template `Value changed to '{0}'` with get_t_arg single-quote escaping; on_event dropped, init-only) - re-verify changing a StepInput toasts \"Value changed to '<value>'\" with the quotes intact. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): ArrowUp + Enter on the first StepInput fires change and toasts \"Value changed to '<value>'\" with the quotes intact; the other StepInputs are the identical wire."
+      "what": "the change toast was switched to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template `Value changed to '{0}'` with get_t_arg single-quote escaping; on_event dropped, init-only) - re-verify changing a StepInput toasts \"Value changed to '<value>'\" with the quotes intact. **e2e-verified 2026-07-30, restated 2026-08-23** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the port's change wire fires and toasts \"Value changed to ...\"; the other StepInputs are the identical wire. The earlier wording claimed more than the module does and had drifted from it: ArrowUp + Enter stopped producing a change on the pinned UI5 (the +/- icons render zero-size headless, which is why the keyboard route was chosen in the first place), so the module now falls back to firing change through the control API after checking that no toast appeared - it still exercises the port's wire, which is what is under test, but it is not the keyboard path. The assertion is also toContainText(\"Value changed to\") only, so the quoted <value> and its quotes are NOT asserted."
     }
   ]
 }

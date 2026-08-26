@@ -12,12 +12,12 @@
   "checked": null,
   "render_smoke": {
     "skip": true,
-    "reason": "The 20 DateTypeRange rows are COMPUTED in model_init (a DO loop over sy-datum building 'yyyy-MM-dd' strings into VALUE #( BASE t_special )), so the static reconstruction cannot resolve START_DATE and the row reaches the harness without it - Formatter.DateCreateObject then gets undefined and XMLView.create fails with 'Date must be a JavaScript or UI5Date date object'. It is the harness's row, not the port's: at runtime every row carries a real ISO date. Verified against the render each run - the skip is honoured only while it still errors."
+    "reason": "The 20 DateTypeRange rows are COMPUTED in model_init (a DO loop over sy-datum building 'yyyy-MM-dd' strings into VALUE #( BASE t_special )), so the static reconstruction cannot resolve START_DATE and the row reaches the harness without it - Formatter.DateAbapDateToDateObject then gets undefined and XMLView.create fails with 'Date must be a JavaScript or UI5Date date object'. It is the harness's row, not the port's: at runtime every row carries a real ISO date. Verified against the render each run - the skip is honoured only while it still errors. (Reason re-stated 2026-08-23: the port has bound DateAbapDateToDateObject since the 2026-08-21 rewrite, and that formatter returns null rather than an Invalid Date for a non-date, so the failure mode named here no longer describes this class - the skip stands on the harness not carrying the row, not on the formatter.)"
   },
   "deviations": [
     {
       "type": "POST_171",
-      "what": "DateTypeRange.startDate is a date-object (type object) property, so it is bound through core:require=\"{Formatter: 'z2ui5/model/formatter'}\" + formatter 'Formatter.DateCreateObject' (the curated module), which needs UI5 >= 1.74 - a plain ISO-string binding would crash view creation (CAPABILITIES 'Date-object properties'; same idiom as apps 108/109). The xmlns:core + core:require were added for it; the original view had neither."
+      "what": "DateTypeRange.startDate is a date-object (type object) property, so it is bound through core:require=\"{Formatter: 'z2ui5/model/formatter'}\" + formatter 'Formatter.DateAbapDateToDateObject' (the curated module), which needs UI5 >= 1.74 - a plain ISO-string binding would crash view creation (CAPABILITIES 'Date-object properties'; same idiom as apps 108/109). The xmlns:core + core:require were added for it; the original view had neither."
     },
     {
       "type": "NOTE",
@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). This sample's manifest lists `../style.css` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding / labelMarginLeft classes the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs."
+      "what": "The sample's own stylesheet is injected since 2026-08-21 through an added core:HTML style leaf (no counterpart in the original view). This sample's manifest lists `../style.css` - the sheet the sap.ui.unified samples SHARE one folder up - and it was never archived, so the viewPadding / labelMarginLeft classes the view carries had no rule behind them and the port rendered flush against the page edge where the sample renders padded. The sheet now sits at ui5/sap.ui.unified/style.css (closing the AGENTS section 4 archive gap) and only the rules this view actually uses are injected. Found by scripts/probes/orphan-style-class-probe.mjs. Corrected 2026-08-23: the sheet's .sap-phone .sapUiCal{position:relative} rule was dropped as \"not used by the view\" and is injected now - sapUiCal is written by CalendarRenderer on the Calendar's own root, not by the author, so it does reach this view on a phone. Same sweep as apps 139/177/220/240/305/306/307/308. The sheet's remaining rule targets .sapUiCancel, which no OpenUI5 renderer writes."
     },
     {
       "type": "NOTE",

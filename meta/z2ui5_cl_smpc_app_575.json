@@ -49,8 +49,8 @@
       "what": "the two Avatar src values are '../../../../../../../{products>ProductPicUrl}' in the sample - a relative path out of the demo kit's own frame. The port binds the mock's ProductPicUrl as it stands, without the traversal prefix, which is what the corpus does everywhere for these images."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "not yet verified in a running system: the FlexibleColumnLayout column changes, the master/detail fold and the ObjectPage header."
+      "type": "NOTE",
+      "what": "not yet verified in a running system: the FlexibleColumnLayout column changes, the master/detail fold and the ObjectPage header. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_575.mjs)."
     },
     {
       "type": "NOTE",

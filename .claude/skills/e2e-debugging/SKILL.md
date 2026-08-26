@@ -117,6 +117,24 @@ verdicts below turned out to be harness effects.
   `page.setViewportSize({ width: 400, height: 900 })` and then waits for the
   bound `enabled` flag. A responsive wire is testable; it just needs the
   viewport as an input.
+- **An external-protocol hand-off kills input for the WHOLE tab, and every
+  later click still reports success.** `sap.m.URLHelper.redirect( )` assigns
+  `window.location.href`; for `tel:`, `sms:` or `mailto:` headless Chromium has
+  no handler, never commits the navigation, and from that moment delivers no
+  further input event to the tab. Measured on app 084 (2026-08-25): after the
+  first press, UI5's own event log shows the full
+  mousedown/saptouchstart/mouseup/click/tap chain for item 0 and **nothing**
+  afterwards, while Playwright — which dispatches through CDP — reports each
+  later `.click()` as successful. The leg then dies in its own "the wire did
+  not fire" message, indistinguishable from a dead port. The document is NOT
+  replaced, so a `framenavigated` or url check does not catch it. Neither
+  escape from the zero-size-box rule works here: focus+`Enter` is swallowed the
+  same way, and even a `page.goto( )` reload does not bring input back — the
+  suppression outlives the document. So a port driving URLHelper gets exactly
+  ONE gesture-driven leg per tab; spend it on one and fire the rest through the
+  control's own `firePress( )`, guarded on `getType() === 'Active'` and
+  `hasListeners('press')` so an unwired item fails naming what it lost instead
+  of passing silently.
 - **Device APIs need a secure context (HTTPS)** — geolocation and the camera
   (`z2ui5.cc.Geolocation` / `CameraPicture`) silently do nothing over plain
   HTTP; `getCurrentPosition` / `getUserMedia` fail with a secure-origin error.

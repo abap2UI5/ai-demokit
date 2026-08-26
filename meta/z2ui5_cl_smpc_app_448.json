@@ -34,6 +34,10 @@
     {
       "type": "NOTE",
       "what": "The MessagePopover toggle over the bridged message, the three semantic action toasts, the nav-button toast and the clearDraftState wire are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_448.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleLiveChange's three calls do NOT collapse into the last one, which is what the port assumed while making only the clearDraftState call - so typing showed nothing at all. DraftIndicator is queue-driven with a minDisplayTime of 1500 ms: showDraftSaving pushes [Saving, Clear] and _processQueue paints \"Saving...\" immediately and arms the timer, after which the two later calls - which only queued, because _processQueue returns early while iDelayedCallId is set - drain and paint \"Draft saved\" for another 1500 ms. The original therefore visibly shows Saving... -> Draft saved on every keystroke, which is what the sample's own header text advertises. The port now calls showDraftSaving, which alone queues [Saving, Clear] and so shows the indicator and clears itself, roundtrip-free. The intermediate \"Draft saved\" label stays unreproduced: an event attribute carries ONE action, and routing all three through a round-trip instead puts a server hop on every keystroke - the lossy pattern AGENTS section 10 warns about, and it trips the live-event-roundtrip advisory ratchet, so it was tried and withdrawn."
     }
   ]
 }

@@ -17,11 +17,11 @@
     },
     {
       "type": "IMPROVISED",
-      "what": "The sample's behaviour comes from a JS validator with three setTimeout callbacks. abap2UI5 cannot register a validator, so the same switch runs in ABAP on the change event: c and d become themselves, e becomes 'f', a is added after 3 seconds and f after 10 through the framework's START_TIMER, and b is rejected after 5 seconds (nothing added). What cannot be reproduced is the PASTE path the sample is written around - a multi-line paste raises one tokenUpdate with several tokens in the original, while the port only sees the change event of the field, so the three instant tokens are created one by one rather than in a single batch."
+      "what": "The original registers an app-authored addValidator callback. abap2UI5 does ship a validator - the bundled companion control z2ui5.cc.MultiInputExt installs addValidator(({text}) => new Token({key:text, text})) and mirrors added/removed tokens back through addedTokens/removedTokens (CAPABILITIES.md marks it fine, and apps 040/612/613 use it). What it cannot do is run THIS sample's per-field logic, which is what is improvised here: the bundled validator is fixed, so the port rebuilds the accept/reject decision in ABAP over a change round-trip instead."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The validator switch, both timers and the tokenUpdate toast are unverified in a running system."
+      "type": "NOTE",
+      "what": "The validator switch, both timers and the tokenUpdate toast are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_504.mjs)."
     }
   ]
 }

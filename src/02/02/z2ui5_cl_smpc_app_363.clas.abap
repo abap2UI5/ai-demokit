@@ -50,6 +50,13 @@ CLASS z2ui5_cl_smpc_app_363 DEFINITION PUBLIC.
 
     METHODS view_display.
     METHODS on_event.
+    " one Input's value the way the original's `getValue() || 0` + parseInt
+    " reads it: empty means 0, a clean number means that number, and anything
+    " else keeps what was there (where the original would pass on a NaN)
+    METHODS count_read
+      IMPORTING text          TYPE string
+                last          TYPE i
+      RETURNING VALUE(result) TYPE i.
     METHODS model_init.
 
   PRIVATE SECTION.
@@ -333,20 +340,25 @@ CLASS z2ui5_cl_smpc_app_363 IMPLEMENTATION.
     IF client->get_event( ) = `APPLY`.
       " buttonPress: read the Inputs the way the original parseInts them, then
       " clamp against the table's own totals and tell the user when a value
-      " had to be corrected. A non-numeric entry keeps the last value - the
-      " original's parseInt would hand setFixedColumnCount a NaN there.
-      IF column_count_text CO ` 0123456789` AND column_count_text IS NOT INITIAL.
-        fixed_column_count = column_count_text.
-      ENDIF.
-      IF top_row_count_text CO ` 0123456789` AND top_row_count_text IS NOT INITIAL.
-        fixed_top_row_count = top_row_count_text.
-      ENDIF.
-      IF bottom_row_count_text CO ` 0123456789` AND bottom_row_count_text IS NOT INITIAL.
-        fixed_bottom_row_count = bottom_row_count_text.
-      ENDIF.
+      " had to be corrected.
+      " EMPTY and non-numeric are NOT the same case, and treating them alike
+      " until 2026-08-24 cost the sample its unfreeze: the original reads
+      " `getValue() || 0`, so a cleared Input is 0 and Apply un-freezes. The
+      " port kept the previous value for empty too, which left no way to
+      " un-freeze at all. Only a non-empty, non-numeric entry keeps the last
+      " value - there the original's parseInt hands the setter a NaN.
+      fixed_column_count     = count_read( text = column_count_text
+                                           last = fixed_column_count ).
+      fixed_top_row_count    = count_read( text = top_row_count_text
+                                           last = fixed_top_row_count ).
+      fixed_bottom_row_count = count_read( text = bottom_row_count_text
+                                           last = fixed_bottom_row_count ).
 
       IF fixed_column_count > cv_total_columns.
         fixed_column_count = cv_total_columns.
+        " the original's oView.byId( 'inputColumn' ).setValue( ) - inside the
+        " clamp branch, not after it
+        column_count_text = |{ fixed_column_count }|.
         client->message_toast_display( `Fixed column count exceeds the total column count. Value in column count input got updated.` ).
       ENDIF.
 
@@ -361,14 +373,31 @@ CLASS z2ui5_cl_smpc_app_363 IMPLEMENTATION.
           fixed_top_row_count    = 1.
           fixed_bottom_row_count = 1.
         ENDIF.
+        " likewise the original's two setValue( ) calls, both inside the branch
+        top_row_count_text    = |{ fixed_top_row_count }|.
+        bottom_row_count_text = |{ fixed_bottom_row_count }|.
         client->message_toast_display( `Sum of fixed row count and bottom row count exceeds the total row count. Input values got updated.` ).
       ENDIF.
 
-      " the original's oView.byId( ... ).setValue( ) - the corrected numbers
-      " travel back into the Inputs
-      column_count_text     = |{ fixed_column_count }|.
-      top_row_count_text    = |{ fixed_top_row_count }|.
-      bottom_row_count_text = |{ fixed_bottom_row_count }|.
+      " NOTHING is written back outside those two branches. Writing all three
+      " unconditionally (until 2026-08-24) meant the very first Apply on a
+      " freshly loaded app - where all three Inputs are legitimately empty and
+      " nothing is clamped - stamped "0" into each of them and dropped all
+      " three placeholders, which is the defect the initial render already
+      " fixed once.
+    ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD count_read.
+
+    IF text IS INITIAL.
+      result = 0.
+    ELSEIF text CO ` 0123456789`.
+      result = text.
+    ELSE.
+      result = last.
     ENDIF.
 
   ENDMETHOD.
