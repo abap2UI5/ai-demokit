@@ -2568,7 +2568,13 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` and press toast - the plugin class does not exist on a 1.71 runtime, so keeping it would crash view creation there. // NOTE: the original derives the ObjectNumber weight state in the demo table's` &&
                ` frontend Formatter.js (weightState: KG conversion + Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin frontend - it is computed in ABAP model_init into a` &&
                ` WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via a frontend formatter. // NOTE: not yet verified in a running system: the two-level lists/{VALUES} binding (a nested table inside a bound`.
-    lv_text1 = lv_text1 && ` aggregation row) and the search round-trip. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_557.mjs).`.
+    lv_text1 = lv_text1 && ` aggregation row) and the search round-trip. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_557.mjs). // NOTE: Checked 2026-08-26, no change needed -` &&
+               ` recorded so the check is not repeated. apply_filter splices value-text and the list title into the compound-groups JSON without escaping, and this port DOES have a free-text search field, so it reads` &&
+               ` like the app 218/420/233/499 exposure. It is not: the search term never reaches the JSON. list_search only uses it as a server-side CS predicate that narrows t_filters, and it rebuilds t_filters from` &&
+               ` t_filters_all first, so every TEXT it keeps is one of the 28 seeded literals in model_init and every TYPE is Category or SupplierName. None of them contains a double quote or a backslash, and no` &&
+               ` control in the view can write TEXT (FacetFilterItem binds text and key one-way; only selected is two-way). Same conclusion as apps 022 and 235, which carry it as an inline comment. The residual case` &&
+               ` is a tampered client model - t_filters is a public attribute and round-trips - but that is true of every bound field in the corpus and its only effect is a filter that fails to apply in the`.
+    lv_text1 = lv_text1 && ` tamperer's own session.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.FacetFilter`                     name = `FacetFilterCustomFilters`                      class = `z2ui5_cl_smpc_app_557` path = `src/02/01/z2ui5_cl_smpc_app_557.clas.abap`
         score = 5
@@ -3281,7 +3287,20 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` differences from the original controller, both corrected 2026-08-23. (a) An EMPTY submit set has_selection = false and collapsed the whole ObjectPage back to the IllustratedMessage; handleInputSubmit` &&
                ` only writes /inputPopulated and leaves the selection alone. (b) The input showed the bare key after a selection, because the port writes the field and re-renders. The original resolves the purchase` &&
                ` through Input.setSelectedKey, and with textFormatMode="KeyValue" the field then reads "(<key>) <text>" - the port composes exactly that string now. Note the original's own follow-on quirk comes with` &&
-               ` it: submitting that composed text matches no PurchaseID, so the not-found state shows, on both sides.`.
+               ` it: submitting that composed text matches no PurchaseID, so the not-found state shows, on both sides. // NOTE: JSON-escaping of the compound filter payload, 2026-08-26. VH_SEARCH splices the`.
+    lv_text1 = lv_text1 && ` SelectDialog search term straight into the compound-groups JSON string, and the term is free text: the search wire carries ${$parameters>/value} from the dialog's SearchField. The earlier note here` &&
+               ` is right that get_t_arg quotes a [-leading argument as a JS string literal instead of emitting it raw - but that only escapes the JS layer (escape_js_string handles \\ and ' and CR/LF), never the` &&
+               ` JSON layer, and this payload travels the queued follow_up_action path anyway, where get_event_client_ajson tries z2ui5_cl_ajson=>parse and silently falls back to a plain string when the JSON is` &&
+               ` malformed. Typing a double quote - '15"' against mock descriptions that literally read '15" LCD' - therefore produced [[["PURCHASEID","Contains","15""],...]], buildFilterGroups' JSON.parse threw, and` &&
+               ` it does Lib.logError + return WITHOUT calling binding.filter([]) - so the filter was neither applied nor cleared and the previous one silently stayed on. A backslash is worse and fully silent: \b` &&
+               ` parses as a backspace character (filter applies, matches nothing, no log line) and \z or a trailing \ throws. Fixed by the app 218/420 precedent - REPLACE ALL OCCURRENCES of backslash then of the`.
+    lv_text1 = lv_text1 && ` double quote, backslash first so the escapes added afterwards are not re-escaped. // NOTE: KNOWN, UNFIXED (2026-08-26): the valueHelpRequest leg composes the same compound-groups JSON CLIENT-SIDE and` &&
+               ` cannot be escaped in ABAP. Its t_arg is a raw $-leading UI5 expression that concatenates $event.oSource.getValue() into the JSON string literal three times, so a double quote in the Input's value` &&
+               ` breaks the payload exactly as VH_SEARCH used to, with the same outcome: buildFilterGroups logs and returns, the pre-filter never lands and the dialog opens on whatever was filtered before. It is` &&
+               ` reachable - type 15" into the PurchaseID Input, then F4. It is left as it is on purpose: the escaping would have to happen inside the UI5 expression grammar` &&
+               ` (EventHandlerResolver/BindingParser.parseExpression), which has no regex literal and no verified replaceAll, and the only shape that is certainly safe - round-tripping the value to the backend the` &&
+               ` way VH_SEARCH does - would give up the roundtrip-free pre-filter this leg exists to demonstrate and would be a behavioural rework of a reviewed port. Whoever picks this up owns an e2e run, not a` &&
+               ` source-only change.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.InitialPagePattern`              name = `InitialPagePattern`                            class = `z2ui5_cl_smpc_app_233` path = `src/02/01/z2ui5_cl_smpc_app_233.clas.abap`
         score = 5
@@ -3701,7 +3720,12 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` the row rather than on the rendered item. // NOTE: The search filter and the selection counter are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction,` &&
                ` meta/interactions/z2ui5_cl_smpc_app_499.mjs). // NOTE: The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document` &&
                ` root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Added 2026-08-23: this port did the rewrite without declaring it, one of`.
-    lv_text1 = lv_text1 && ` 17 found by re-counting the corpus-wide claim that every port doing it had a declaration.`.
+    lv_text1 = lv_text1 && ` 17 found by re-counting the corpus-wide claim that every port doing it had a declaration. // NOTE: JSON-escaping of the compound filter payload, 2026-08-26. The SEARCH term is genuine free text - the` &&
+               ` SearchField's liveChange carries ${$parameters>/newValue}, i.e. raw keystrokes - and it was spliced into the compound-groups JSON unescaped. get_t_arg quotes a [-leading argument as a JS string` &&
+               ` (escape_js_string covers backslash, apostrophe and CR/LF) but nothing escapes the JSON layer, so a typed double quote made JSON.parse throw inside buildFilterGroups, which does Lib.logError + return` &&
+               ` and never calls binding.filter([]) - the filter was neither applied nor cleared and the previous keystroke's filter stayed on the list. A backslash is the silent variant: \b parses as a backspace` &&
+               ` character so the filter applies and matches nothing with no log line at all, while \z or a trailing backslash throws. Fixed by the app 218/420 precedent - REPLACE ALL OCCURRENCES of backslash then of` &&
+               ` the double quote, backslash first. The empty-term reset is unaffected: escaping an empty string leaves it empty, so the IS INITIAL branch still emits [] and clears.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.List`                            name = `ListSelectionSearch`                           class = `z2ui5_cl_smpc_app_499` path = `src/01/01/z2ui5_cl_smpc_app_499.clas.abap`
         score = 4
@@ -7340,11 +7364,20 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` check is retired and the port is back to ``generated`` (AGENTS section 10: a behavioural rework of a checked port resets the status or is restamped after a fresh live run). Its note read "verified in` &&
                ` a running system 2026-07-27 - URLHelper tel/sms/email triggers and REDIRECT all fire correctly" - but tel and sms could not have fired with a number on that code: both were wired with a primitive` &&
                ` string where evUrlHelper reads params.TEL off an object, so URLHelper received undefined and formatTel returned the empty string. The email and redirect halves of that run stand; the tel and sms` &&
-               ` halves need a fresh one now that the wires carry { TEL: '...' }. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_084.mjs).`.
+               ` halves need a fresh one now that the wires carry { TEL: '...' }. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_084.mjs). // NOTE: Reviewed 2026-08-26 and` &&
+               ` deliberately LEFT AS IS: the four URLHELPER wires interpolate model data into the RAW object-literal branch of get_t_arg ({ TEL: '<value>' }), which is not escaped by design - get_t_arg emits an` &&
+               ` argument raw whenever it starts with { or $, and only quotes/escapes the others via escape_js_string. An apostrophe or a backslash in TEL/SMS/EMAIL/URL would therefore close the JS string literal`.
+    lv_text1 = lv_text1 && ` inside the press handler and take the whole handler expression down when UI5 parses it. NOT REACHABLE here: s_supplier is written exactly once, by model_init, from four literals copied verbatim from` &&
+               ` ui5/mock/supplier.json (+49 6227 747474 / +49 173 123456 / john.smith@sap.com / http://www.sap.com); this class has no on_event method at all, no control in the view is editable (the four` &&
+               ` DisplayListItems bind value one-way), and the interpolation happens at view-build time on the server. The data is fixed by construction, not merely quote-free today. Nor is the usual mitigation` &&
+               ` available: evUrlHelper reads args[2] as an OBJECT and takes params.TEL / params.EMAIL / params.URL off it, so the value cannot be moved into a separate quoted argument without a framework change, and` &&
+               ` the queued (AJSON) form is no help either - { TEL: '...' } is not valid JSON, so it would fall back to a plain string and params.TEL would be undefined, which is exactly the bug corrected on` &&
+               ` 2026-08-23. Escaping the two characters in ABAP would be a speculative change to a working, e2e-verified port whose input cannot vary. If this port ever grows an editable supplier record, or is`.
+    lv_text1 = lv_text1 && ` copied as the template for one, the escaping has to be added at that point - an apostrophe is realistic in a real email local part (o'brien@...), just not in a phone number and not in this seed.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.URLHelper`                       name = `UrlHelper`                                     class = `z2ui5_cl_smpc_app_084` path = `src/01/01/z2ui5_cl_smpc_app_084.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.10`
         notes = lv_text1 ) ).
 

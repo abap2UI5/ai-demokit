@@ -26,6 +26,10 @@
     {
       "type": "NOTE",
       "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Added 2026-08-23: this port did the rewrite without declaring it, one of 17 found by re-counting the corpus-wide claim that every port doing it had a declaration."
+    },
+    {
+      "type": "NOTE",
+      "what": "JSON-escaping of the compound filter payload, 2026-08-26. The SEARCH term is genuine free text - the SearchField's liveChange carries ${$parameters>/newValue}, i.e. raw keystrokes - and it was spliced into the compound-groups JSON unescaped. get_t_arg quotes a [-leading argument as a JS string (escape_js_string covers backslash, apostrophe and CR/LF) but nothing escapes the JSON layer, so a typed double quote made JSON.parse throw inside buildFilterGroups, which does Lib.logError + return and never calls binding.filter([]) - the filter was neither applied nor cleared and the previous keystroke's filter stayed on the list. A backslash is the silent variant: \\b parses as a backspace character so the filter applies and matches nothing with no log line at all, while \\z or a trailing backslash throws. Fixed by the app 218/420 precedent - REPLACE ALL OCCURRENCES of backslash then of the double quote, backslash first. The empty-term reset is unaffected: escaping an empty string leaves it empty, so the IS INITIAL branch still emits [] and clears."
     }
   ]
 }

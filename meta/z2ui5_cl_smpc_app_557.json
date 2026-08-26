@@ -55,6 +55,10 @@
     {
       "type": "NOTE",
       "what": "not yet verified in a running system: the two-level lists/{VALUES} binding (a nested table inside a bound aggregation row) and the search round-trip. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_557.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "Checked 2026-08-26, no change needed - recorded so the check is not repeated. apply_filter splices value-text and the list title into the compound-groups JSON without escaping, and this port DOES have a free-text search field, so it reads like the app 218/420/233/499 exposure. It is not: the search term never reaches the JSON. list_search only uses it as a server-side CS predicate that narrows t_filters, and it rebuilds t_filters from t_filters_all first, so every TEXT it keeps is one of the 28 seeded literals in model_init and every TYPE is Category or SupplierName. None of them contains a double quote or a backslash, and no control in the view can write TEXT (FacetFilterItem binds text and key one-way; only selected is two-way). Same conclusion as apps 022 and 235, which carry it as an inline comment. The residual case is a tampered client model - t_filters is a public attribute and round-trips - but that is true of every bound field in the corpus and its only effect is a filter that fails to apply in the tamperer's own session."
     }
   ]
 }

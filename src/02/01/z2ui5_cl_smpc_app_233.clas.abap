@@ -448,6 +448,9 @@ CLASS z2ui5_cl_smpc_app_233 IMPLEMENTATION.
         " value - one group, so the two entries OR (the compound form shipped with
         " pr/binding-call-compound-filters)
         DATA(search_value) = client->get_event_arg( ).
+        " free text spliced into a JSON string literal - backslash first, then the quote (app 218/420)
+        REPLACE ALL OCCURRENCES OF `\` IN search_value WITH `\\`.
+        REPLACE ALL OCCURRENCES OF `"` IN search_value WITH `\"`.
         client->follow_up_action(
             val   = client->cs_event-binding_call
             t_arg = VALUE #( ( `selectDialog` )
