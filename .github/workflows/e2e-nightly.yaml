@@ -12,12 +12,14 @@ on:
   schedule:
     - cron: '30 2 * * *'   # nightly, 02:30 UTC
 
-# Read-only. `issues: write` was here for a `gh issue create` failure channel
-# that could never fire: issues are DISABLED on this repository, so the token
-# had a permission the API refuses to honour. The report is the step summary
-# now, which needs no permission at all.
+# `issues: write` is here again, and this time the API will honour it: issues
+# were DISABLED on this repository until 2026-08-27, which is why the original
+# `gh issue create` channel could never land. The step summary is still written
+# unconditionally and needs no permission; the issue is the TRACKED half, and
+# is best-effort on top of it — it must never be the reason the job is red.
 permissions:
   contents: read
+  issues: write
 
 concurrency:
   group: e2e-nightly
@@ -78,10 +80,11 @@ jobs:
     # A red nightly is a regression in a LIVE_TEST-class wire — it must reach
     # someone, not sit in the Actions tab until the next release.
     #
-    # The channel is $GITHUB_STEP_SUMMARY, and deliberately NOT the
-    # `gh issue create` this step used to attempt. Issues are DISABLED on this
-    # repository (`"has_issues": false`), so that call could never land. What
-    # actually happened every night is in the run log of 33074599814:
+    # The primary channel is $GITHUB_STEP_SUMMARY, and for a long time it was
+    # the ONLY one that worked: issues were disabled here until 2026-08-27
+    # (`"has_issues": false`), so the `gh issue create` this step used to
+    # attempt could never land. What actually happened every night until then
+    # is in the run log of 33074599814:
     #
     #   ##[warning]could not reach the issue tracker (the
     #   'abap2UI5/samples-controls' repository has disabled issues )
@@ -101,10 +104,10 @@ jobs:
     # lines, so acting on it meant opening the run and scrolling 623 `pass`
     # lines to find the two that said FAIL. The summary now carries them.
     #
-    # A TRACKED channel (one item per breakage, closable) needs issues enabled
-    # in the repository settings — an owner-only change this workflow cannot
-    # make. If it is ever flipped on, add `issues: write` back and a step that
-    # files the verdict below; nothing else here has to change.
+    # A TRACKED channel (one item per breakage, closable) needed issues
+    # enabled in the repository settings. They were turned on 2026-08-27, so
+    # the step below files one — but the summary stays the primary report,
+    # because it is the thing the red-run notification already links to.
     #
     # `!cancelled()` rather than `always()`: a run cut off by the 90-minute
     # timeout has no verdict to carry and a runner being torn down under it.
@@ -154,3 +157,45 @@ jobs:
             printf '```\n'
           fi
         } >> "$GITHUB_STEP_SUMMARY"
+
+    # The TRACKED half: one open issue while the nightly is red, closed when it
+    # goes green again. Deliberately best-effort — `continue-on-error` and a
+    # `|| true` on every `gh` call — because a tracker that is unreachable
+    # (disabled again, a token scope change, an outage) must never be what
+    # turns a GREEN nightly red. The summary above has already been written by
+    # the time this runs, so nothing is lost if this step does nothing.
+    #
+    # ONE issue, not one per night: the title is the search key, so a nightly
+    # that is red for a week updates the same item instead of filing seven.
+    - name: File or close the tracking issue
+      if: ${{ !cancelled() }}
+      continue-on-error: true
+      env:
+        GH_TOKEN: ${{ github.token }}
+        SMOKE: ${{ steps.smoke.outcome }}
+        RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      run: |
+        set -uo pipefail
+        title='e2e-nightly is red'
+        existing="$(gh issue list --state open --search "$title in:title" \
+                      --json number --jq '.[0].number' 2>/dev/null || true)"
+
+        if [ "$SMOKE" = "success" ]; then
+          # Close only what this workflow opened, and say why in the thread
+          # rather than closing silently.
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "Green again as of $RUN_URL — closing." || true
+            gh issue close "$existing" || true
+          fi
+          exit 0
+        fi
+
+        log="$RUNNER_TEMP/e2e-smoke.log"
+        fails="$( [ -s "$log" ] && grep -E '^(FAIL|e2e-smoke:)' "$log" | tail -40 || true )"
+        body="$(printf '%s\n\n```\n%s\n```\n' "The nightly is red: $RUN_URL" "$fails")"
+
+        if [ -n "$existing" ]; then
+          gh issue comment "$existing" --body "$body" || true
+        else
+          gh issue create --title "$title" --body "$body" || true
+        fi
