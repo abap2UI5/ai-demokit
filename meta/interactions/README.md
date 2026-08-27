@@ -59,14 +59,22 @@ the per-port modules here):
     are fixed as of 2026-08-27: 585 301 302 303 167 re-issue the guarded
     control_by_id 'to' from the end of view_display( ) against the surviving
     two-way bound selected key, 558 against a PROTECTED nav_page that parks the
-    target the live navCon was last sent to. All six legs drive the rebuild
-    through the bookmark restore. 558 should not have needed it — four of its
+    target the live navCon was last sent to. FIVE of the six legs drive the
+    rebuild through the bookmark restore; 558 does not need it — four of its
     five view_display( ) branches are reachable only FROM tabContainerPage, so
-    the tab bar's + button is one press away — but firing addNewButtonPress
-    drove no round trip at all in the headless harness (measured 2026-08-27
-    against the built backend: the listener IS attached and the event fires,
-    the TabContainer keeps its items and navCon never moves), so the + button
-    stays a human live check and the leg takes the restore like its siblings.
+    the tab bar's + button is one press away, and that is what its leg clicks.
+    An earlier reading that firing addNewButtonPress "drove no round trip at
+    all" was a HARNESS ARTEFACT, corrected 2026-08-27: eB DROPS any event fired
+    while a round trip is in flight (View1.controller.js, `if
+    (AppState.state.isBusy && !ignoreBusy) { BusyIndicator.show(0); return; }`)
+    — the listener still runs and fireEvent still returns cleanly, so a press
+    sent too early reads back as a dead control. Measured both ways on the
+    built backend: fired while busy, no POST and the items never change; fired
+    one second later on an idle frontend, TAB_ADD_NEW goes out and the tabs go
+    2 → 3. The TabContainer's own add button (class sapMTSAddNewTabBtn, tooltip
+    "Add New Tab", rendered into the control's TabStrip) takes a plain
+    Playwright click with no force at 95x22 px. Every leg here that presses
+    after a round trip therefore waits for `!z2ui5.isBusy` first.
     What the five restore legs measured BEFORE the fix, each against the very
     same draft: 585 and 167 came back on page2 while the SideNavigation read
     page1, 302 and 303 came back on page1 while the IconTabHeader read page2,

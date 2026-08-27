@@ -6725,10 +6725,14 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` bookkeeping and only PUBLIC attributes are serialized into the view model; not PRIVATE, because the draft serialization walks the attributes with a dynamic ASSIGN obj->(name) that cannot reach a` &&
                ` PRIVATE one), and the end of view_display( ) re-issues it, guarded by ``nav_page IS NOT INITIAL AND nav_page <> ``table````. Re-issuing the LAST-ISSUED target rather than re-deriving it is what keeps` &&
                ` the branches that DO want the table correct: nav_to_table and the tab_close redirect when the last tab goes both park ``table`` and are skipped by the same guard. Unlike the sibling ports this one`.
-    lv_text1 = lv_text1 && ` needs no bookmark restore to reach the second view_display( ) IN A BROWSER - TAB_ADD_NEW is one press away from the tab page. The interaction module nonetheless drives the bookmark restore, because` &&
-               ` firing addNewButtonPress drove no round trip at all in the headless harness (measured 2026-08-27 against the built backend: the listener IS attached and the event fires, but the TabContainer keeps` &&
-               ` its two items and navCon never moves), and a leg that cannot drive the rebuild proves nothing. The + button is therefore the one path here that still wants a human live run. The leg asserts BOTH` &&
-               ` halves: the two surviving tabs AND the re-issued tabContainerPage.`.
+    lv_text1 = lv_text1 && ` needs no bookmark restore to reach the second view_display( ) IN A BROWSER - TAB_ADD_NEW is one press away from the tab page, and the interaction module clicks that + for real. An earlier note here` &&
+               ` claimed firing addNewButtonPress drove no round trip at all in the headless harness; that was a HARNESS ARTEFACT and is withdrawn (corrected 2026-08-27). The frontend's eB DROPS any event fired while` &&
+               ` a round trip is still in flight - the listener runs and fireEvent returns cleanly, and nothing goes out on the wire - so a press sent too early reads back as a dead control. Measured both ways` &&
+               ` against the built backend: fired while busy, no POST and the TabContainer keeps its two items; fired a second later on an idle frontend, TAB_ADD_NEW goes out, t_tabs grows to three and navCon stays` &&
+               ` on tabContainerPage. The TabContainer's own add button IS rendered (class sapMTSAddNewTabBtn, tooltip "Add New Tab", in the control's TabStrip) and takes a plain click with no force. Not to be` &&
+               ` confused with the product table's headerToolbar OverflowToolbarButton (sap-icon://add, tooltip "Add"), which is NEW_ITEM_ADD on a different page. The leg asserts all three halves: the third tab, its`.
+    lv_text1 = lv_text1 && ` key ProductId-1 (the backend counter, so it is TAB_ADD_NEW's own row), and the re-issued tabContainerPage - and with the guarded re-issue removed from view_display( ) only the last of the three` &&
+               ` fails.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.TabContainer`                    name = `TabContainerMHC`                               class = `z2ui5_cl_smpc_app_558` path = `src/01/01/z2ui5_cl_smpc_app_558.clas.abap`
         score = 5
