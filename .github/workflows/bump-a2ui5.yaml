@@ -5,6 +5,27 @@
 # that commit, runs the e2e smoke over every port, and opens a PR — so a
 # breaking framework change arrives as a red bump PR instead of a broken
 # Pages deploy.
+#
+# The RED half of that promise is the whole point, so the pull request opens on
+# the smoke's verdict rather than only on its success: create-pull-request is
+# guarded by `!cancelled()`, the smoke step itself is never softened (no
+# continue-on-error, no weakened flags — a broken corpus at the new pin still
+# reddens this job), and the PR title, the PR body and the step summary all
+# carry the verdict plus every FAIL line. Guarding the PR on
+# `changed == 'true'` alone — as this file did until 2026-08-27 — inverted the
+# promise exactly: a failing smoke aborted the job and opened NOTHING, which is
+# the one case the header exists to cover. Three runs died that way
+# (2026-08-25 twice, 2026-08-27, each "623 app(s), 1 failing"): no PR, no
+# issue, nobody told, and A2UI5_PIN sat at bf92a79c while abap2UI5 main moved
+# 61 commits.
+#
+# The failure channel here is the pull request plus $GITHUB_STEP_SUMMARY, and
+# deliberately NOT the `gh issue create` that e2e-nightly.yaml uses: issues are
+# DISABLED on this repository, which is why every red nightly failed a second
+# time inside that step and reached nobody (the comment there says so). A pull
+# request is the one notification channel this repo actually has open — and
+# unlike an issue it carries the diff that caused the breakage and blocks
+# itself on its own red checks.
 name: bump-a2ui5
 
 on:
@@ -12,6 +33,8 @@ on:
     - cron: '11 5 * * 2'   # Tuesdays 05:11 UTC, off the full-hour load spikes
   workflow_dispatch:
 
+# No `issues: write`: see the header — the report is the PR and the step
+# summary, so this workflow never touches the (disabled) issue tracker.
 permissions:
   contents: write
   pull-requests: write
@@ -67,6 +90,10 @@ jobs:
         fi
         # `changed` covers the abaplint pin too - the release tag can move on a
         # week where main did not, and vice versa.
+        # Every step below is gated on this, and it is written only once both
+        # resolves have succeeded: a run that dies in either resolve leaves it
+        # UNSET, so no `!cancelled()` step below can mistake a broken run for a
+        # no-op one, and a genuine no-op week still opens nothing.
         if git diff --quiet; then
           echo "changed=false" >> "$GITHUB_OUTPUT"
         else
@@ -89,31 +116,135 @@ jobs:
       run: npx playwright install --with-deps chromium
     - if: steps.pin.outputs.changed == 'true'
       run: node scripts/node-setup.mjs
-    - if: steps.pin.outputs.changed == 'true'
-      run: node scripts/e2e-smoke.mjs --strict
 
-    - if: steps.pin.outputs.changed == 'true'
+    # The gate this whole workflow exists to run, and it stays able to fail:
+    # no continue-on-error, no relaxed flags, no `|| true`. A red smoke at the
+    # new pin is the CORRECT outcome and it reddens this job. All that changed
+    # is that the steps after it still run.
+    #
+    # `tee` so the PR body can name the ports that broke instead of only
+    # linking the run. `set -o pipefail` is load-bearing: the implicit default
+    # shell is `bash -e {0}` WITHOUT pipefail, so without it `tee`'s exit code
+    # would mask the smoke's and this gate would report green while failing.
+    # The log lives in RUNNER_TEMP, outside the work tree, where nothing
+    # create-pull-request does to that tree can reach it.
+    - name: Run the strict e2e smoke at the new pin
+      id: smoke
+      if: steps.pin.outputs.changed == 'true'
+      run: |
+        set -o pipefail
+        node scripts/e2e-smoke.mjs --strict 2>&1 | tee "$RUNNER_TEMP/e2e-smoke.log"
+
+    # Composes what the PR will say, and writes the same verdict to the step
+    # summary so the run stays readable even if opening the PR itself fails.
+    #
+    # `!cancelled()` rather than `always()`: a run cut off by the 90-minute
+    # timeout — the shape that turned the nightly grey six times in August —
+    # has no verdict to carry and a runner being torn down under it, so it
+    # opens nothing. Everything else, pass or fail, produces a PR.
+    - name: Compose the bump PR title and body
+      id: report
+      if: ${{ !cancelled() && steps.pin.outputs.changed == 'true' }}
+      env:
+        # through env, not inline `${{ }}` in the script: SHA and TAG are
+        # `git ls-remote` output, and expressions are pasted into the shell
+        # before it parses anything.
+        SMOKE: ${{ steps.smoke.outcome }}
+        SHA: ${{ steps.pin.outputs.sha }}
+        TAG: ${{ steps.release.outputs.tag }}
+        RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      run: |
+        set -euo pipefail
+        log="$RUNNER_TEMP/e2e-smoke.log"
+        # `outcome` is empty when the step never ran at all, i.e. the build
+        # died before the smoke - a third verdict, not a green one.
+        case "$SMOKE" in
+          success)
+            title='chore: bump the pinned abap2UI5 framework commit'
+            verdict='The full backend build and the strict e2e smoke over all ports ran green at the new pin. This is a routine bump.'
+            ;;
+          failure)
+            title='chore: bump abap2UI5 — THE E2E SMOKE IS RED AT THE NEW PIN'
+            verdict='**The strict e2e smoke FAILED at the new pin.** Read this PR as the report of a breaking framework change — here is the change, and below is what it broke — not as a routine bump. Do not merge it to clear the badge: either the ports below get their fix in this same PR, or the pin waits for an upstream fix and this PR is closed.'
+            ;;
+          *)
+            title='chore: bump abap2UI5 — THE BUILD IS RED AT THE NEW PIN'
+            verdict='**The e2e smoke never ran.** `npm ci`, the Playwright install or `node scripts/node-setup.mjs` failed at the new pin, so nothing about the ports is known yet — but a backend that no longer builds against main is itself the finding.'
+            ;;
+        esac
+        echo "title=$title" >> "$GITHUB_OUTPUT"
+
+        # every printf format is SINGLE-quoted: the body is full of backticks
+        # and none of them may reach the shell as a command substitution
+        {
+          printf 'Weekly re-resolve of the two framework references:\n\n'
+          printf -- '- `A2UI5_PIN` against abap2UI5 main (`%s`) — what node-setup, the\n' "$SHA"
+          printf '  Pages build and the e2e smoke run against;\n'
+          printf -- '- the abaplint configs against the newest release (`%s`) — whether\n' "$TAG"
+          printf '  the corpus compiles against the framework its readers have installed.\n\n'
+          printf 'The nightly e2e keeps testing main tip, so all three questions stay\n'
+          printf 'separately answered.\n\n'
+          printf '## The verdict at the new pin\n\n'
+          printf '%s\n\n' "$verdict"
+          printf 'Run: %s\n' "$RUN_URL"
+          if [ -s "$log" ]; then
+            printf '\n```\n'
+            grep -E '^(FAIL|e2e-smoke:)' "$log" | tail -40 || true
+            printf '```\n\n'
+            printf 'Every FAIL line is a port whose live wire broke against the new\n'
+            printf 'framework commit — or a harness effect, see `.claude/skills/e2e-debugging`.\n'
+          fi
+        } > "$RUNNER_TEMP/pr-body.md"
+
+        # multi-line step output, the documented delimiter form. `body-path:`
+        # would read better, but this workflow's create-pull-request is pinned
+        # by SHA and `body:` is the input it is already known to accept.
+        delim="PR_BODY_EOF_${RANDOM}${RANDOM}"
+        {
+          echo "body<<$delim"
+          cat "$RUNNER_TEMP/pr-body.md"
+          echo "$delim"
+        } >> "$GITHUB_OUTPUT"
+
+        {
+          printf '## %s\n\n' "$title"
+          cat "$RUNNER_TEMP/pr-body.md"
+        } >> "$GITHUB_STEP_SUMMARY"
+
+    # `!cancelled()` — not `always()`, and emphatically not `success()`: a bump
+    # that breaks the corpus is precisely what this workflow exists to surface,
+    # and the diff plus the FAIL lines in the body are what make it actionable.
+    # This step succeeding does not un-fail the smoke, so the job stays red and
+    # so does the PR.
+    - name: Open (or update) the bump PR, red or green
+      if: ${{ !cancelled() && steps.pin.outputs.changed == 'true' }}
       uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
       with:
         branch: bump-a2ui5
-        title: 'chore: bump the pinned abap2UI5 framework commit'
+        # the fallbacks matter: if composing the report is what died, the pin
+        # move must still reach a human rather than vanish with it. Both values
+        # are DOUBLE-quoted because the fallback strings contain `: `, which an
+        # unquoted plain scalar reads as a mapping.
+        title: "${{ steps.report.outputs.title || 'chore: bump the pinned abap2UI5 framework commit' }}"
+        body: "${{ steps.report.outputs.body || format('The bump PR body could not be composed. Read the run instead - {0}/{1}/actions/runs/{2}', github.server_url, github.repository, github.run_id) }}"
         commit-message: 'chore: bump A2UI5_PIN to abap2UI5/abap2UI5@${{ steps.pin.outputs.sha }}'
-        body: |
-          Weekly re-resolve of the two framework references:
-
-          - `A2UI5_PIN` against abap2UI5 main (`${{ steps.pin.outputs.sha }}`) —
-            what node-setup, the Pages build and the e2e smoke run against;
-          - the abaplint configs against the newest release
-            (`${{ steps.release.outputs.tag }}`) — whether the corpus compiles
-            against the framework its readers have installed.
-
-          The nightly e2e keeps testing main tip, so all three questions stay
-          separately answered.
-
-          The full backend build and the strict e2e smoke over all ports ran
-          at the new pin in the workflow that opened this PR.
         add-paths: |
           A2UI5_PIN
           abaplint.jsonc
           .github/abaplint
         delete-branch: true
+
+    # The one remaining path that can open no PR: the job died before it knew
+    # whether there was a bump at all, i.e. in one of the two network resolves,
+    # which leaves `changed` unset. Nothing else would say so, so it lands in
+    # the step summary rather than only in the job log.
+    - name: Report a failure no PR can carry
+      if: ${{ failure() && steps.pin.outputs.changed != 'true' }}
+      run: |
+        {
+          echo "## bump-a2ui5 failed before it could open a PR"
+          echo
+          echo "The run failed while resolving the abap2UI5 references, so it never"
+          echo "reached the point where a bump PR would carry the news. A2UI5_PIN is"
+          echo "unchanged. Read the job log."
+        } >> "$GITHUB_STEP_SUMMARY"

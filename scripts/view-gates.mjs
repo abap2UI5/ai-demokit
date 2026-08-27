@@ -208,7 +208,16 @@ const ADVISORY_BUDGET = {
   // view instead of judged and only app 121 reached the tally. The budget was
   // deliberately left at the TRUE count of 5 for exactly this moment, and the
   // count landed on 5 - keep it there rather than ratcheting
-  'event-on-disabled-control': 5,
+  // ratcheted down 2026-08-27 to 4, and the "keep it there" above is now spent:
+  // it guarded against an UNDER-count from the reconstructor gap, and this drop
+  // is not one. App 121 no longer fires because #148 gave it a real fix - the
+  // Button's `enabled` is `client->_bind( version_enabled )`, a bound flag the
+  // radio group flips, which is precisely what the rule's message asks for
+  // ("bind enabled if it should ever flip"). The four below are still the
+  // literal enabled="false" samples that exist to SHOW the disabled control.
+  // Measured on the 0.5.1 bump; the count was already 4 on 0.4.1, so this is
+  // pre-existing slack the bump surfaced rather than anything the bump moved.
+  'event-on-disabled-control': 4,
 };
 
 const metas = fs.readdirSync(META)

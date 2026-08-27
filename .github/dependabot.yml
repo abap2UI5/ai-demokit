@@ -3,7 +3,7 @@
 #
 # @abap2ui5/linter is deliberately NOT here. bump-linter.yaml already owns it
 # and does more than Dependabot can: it moves the lock to the latest published
-# version and runs the full strict view gates over all 416 ports BEFORE the
+# version and runs the full strict view gates over all 622 ports BEFORE the
 # pull request exists, so a rule regression fails the workflow instead of
 # arriving as a green-looking lockfile diff. abap2UI5 itself is pinned by
 # commit in A2UI5_PIN, which is not a package manifest at all - bump-a2ui5.yaml
