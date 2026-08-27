@@ -267,8 +267,18 @@ metas.sort((a, b) => a.class.localeCompare(b.class));
 console.log(`e2e-smoke: ${metas.length} port(s), backend from ${A2}`);
 const backend = await startBackend();
 await waitPort(3000);
-// prefer the sandbox's pinned Chromium when present, else the playwright-managed one (CI)
-const LOCAL_CHROMIUM = '/opt/pw-browsers/chromium';
+/* prefer the sandbox's pinned Chromium when present, else the playwright-managed
+ * one (CI). PW_CHROMIUM overrides the first: CI has no /opt/pw-browsers, so it
+ * launches playwright's chrome-headless-shell while a sandbox run launches FULL
+ * Chromium, and the two do not render this corpus identically. App 233's
+ * unbounded-layout defect reached the browser only on the headless shell — a
+ * full-corpus sandbox run passed it while bump-a2ui5 failed it twice — so
+ * "green here, red in CI" is worth one re-run on CI's actual binary:
+ *   PW_CHROMIUM=/opt/pw-browsers/chromium_headless_shell-*'/chrome-linux/headless_shell' \
+ *     node scripts/e2e-smoke.mjs --only <class> --strict
+ * (that shell also takes its locale from the environment and UI5 rejects the
+ * sandbox default, so pass LANG=en_US.UTF-8 with it). */
+const LOCAL_CHROMIUM = process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium';
 /* --disable-dev-shm-usage: Chromium's default /dev/shm is small in a container,
  * and the heaviest views in this corpus (app 233 boots in ~100 s, unthemed and
  * unbundled) are where the process dies. Measured 2026-08-25: 4 crashes in ~25

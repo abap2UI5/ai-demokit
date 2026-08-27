@@ -3420,12 +3420,19 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` breaks the payload exactly as VH_SEARCH used to, with the same outcome: buildFilterGroups logs and returns, the pre-filter never lands and the dialog opens on whatever was filtered before. It is` &&
                ` reachable - type 15" into the PurchaseID Input, then F4. It is left as it is on purpose: the escaping would have to happen inside the UI5 expression grammar` &&
                ` (EventHandlerResolver/BindingParser.parseExpression), which has no regex literal and no verified replaceAll, and the only shape that is certainly safe - round-tripping the value to the backend the` &&
-               ` way VH_SEARCH does - would give up the roundtrip-free pre-filter this leg exists to demonstrate and would be a behavioural rework of a reviewed port. Whoever picks this up owns an e2e run, not a` &&
-               ` source-only change.`.
+               ` way VH_SEARCH does - would give up the roundtrip-free pre-filter this leg exists to demonstrate and would be a behavioural rework of a reviewed port. Whoever picks this up owns an e2e run, not a`.
+    lv_text1 = lv_text1 && ` source-only change. // IMPROVISED: The IllustratedMessage subsection drops the original fragment's sapUxAPObjectPageSubSectionFitContainer class. That class makes the subsection fill its container` &&
+               ` and its contract is an ObjectPageLayout with a DEFINITE height; abap2UI5 hosts the view in a content-sized sap.m.NavContainer, so the whole chain (ObjectPageLayout <- the port's XMLView <- sapMNav)` &&
+               ` is sized by its own content and there is no definite height to fit. The class then closes a positive feedback loop - the subsection fits the container, which grows the ObjectPageLayout, which grows` &&
+               ` the container - measured 2026-08-27: a single window resize took the ObjectPageLayout 329px -> 19,249px -> 60,142px and then pegged the renderer, after which no Playwright wait on the view can` &&
+               ` resolve. This is what failed app 233 in CI twice, both times as a layout-dependent assertion timing out while every wire was intact: the IllustratedMessage body-text scan on 2026-08-26, then the` &&
+               ` PurchaseID input's visibility wait in bump-a2ui5 run 33087805313. Without the class the same layout holds at 329px across repeated resizes. The loss is cosmetic - the IllustratedMessage sits at its`.
+    lv_text1 = lv_text1 && ` content height instead of centred in the remaining space - and the e2e interaction module now drives a resize and asserts the ObjectPageLayout stays bounded, so re-adding the class fails with its own` &&
+               ` sentence.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.InitialPagePattern`              name = `InitialPagePattern`                            class = `z2ui5_cl_smpc_app_233` path = `src/02/01/z2ui5_cl_smpc_app_233.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         ui5_only = abap_true
         is_post171 = abap_true

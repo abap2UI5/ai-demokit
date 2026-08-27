@@ -238,8 +238,24 @@ CLASS z2ui5_cl_smpc_app_233 IMPLEMENTATION.
                     )->a( n = `visible`   v = |\{= !${ client->_bind( has_selection ) } \}|
 
                     )->ele( n = `subSections` ns = `uxap`
+                        " the original's sapUxAPObjectPageSubSectionFitContainer is NOT carried
+                        " over: that class makes the subsection fill its container, and its
+                        " contract is an ObjectPageLayout with a DEFINITE height. Here there is
+                        " none - abap2UI5 hosts the view in a content-sized sap.m.NavContainer,
+                        " so the layout chain reads OPL 329px <- our XMLView 329px <- sapMNav
+                        " 329px, every one of them sized by its own content. The class then
+                        " closes a positive feedback loop (subsection fits container -> OPL
+                        " grows -> container grows -> subsection fits again): measured
+                        " 2026-08-27, one window resize took the ObjectPageLayout 329px ->
+                        " 19,249px -> 60,142px and then pegged the renderer outright. That is
+                        " what failed app 233 in CI TWICE - both times as a layout-dependent
+                        " assertion timing out while every wire was intact (the body-text scan
+                        " of 2026-08-26, then the PurchaseID input's visibility wait in
+                        " bump-a2ui5 run 33087805313). Without the class the same layout holds
+                        " at 329px across repeated resizes. The cost is cosmetic: the
+                        " IllustratedMessage sits at its content height instead of centred in
+                        " the remaining space.
                         )->ele( n = `ObjectPageSubSection` ns = `uxap`
-                            )->a( n = `class` v = `sapUxAPObjectPageSubSectionFitContainer`
 
                             )->tag( n = `IllustratedMessage` ns = `m`
                                 )->a( n = `illustrationType` v = |\{= ${ client->_bind( inputpopulated ) } ? 'sapIllus-UnableToUpload' : 'sapIllus-NoSearchResults' \}|
