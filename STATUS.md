@@ -611,7 +611,7 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   down to two letters, so the bare name would let a NOTE about "data" excuse a
   finding about `da` (which is exactly what app 134 did before the match was
   tightened). **0 `source-line-too-long`.**
-- [ ] **LIVE_TEST debt → e2e interactions.** The open `LIVE_TEST` count (see
+- [x] **LIVE_TEST debt → e2e interactions — reached zero 2026-08-26.** The open `LIVE_TEST` count (see
   the generated table) is the corpus' unverified-behaviour backlog. The
   systematic close path is the e2e harness: add a per-port interaction module
   under `meta/interactions/<class>.mjs` (one generic assertion per LIVE_TEST
@@ -634,7 +634,14 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   through its own API, bypassing the port, still leaves every row without a
   `_rowAction`. That rules the port out as the cause and leaves the leg to the
   human live run.
-  **The open set is now 301/348/350/353/354/359/362**, and the composition
+  **The open set is EMPTY since 2026-08-26** - the backlog went 122 ports to 0,
+  and the generated table at the top of this file is the live count. The last
+  two, 612 and 613, were never blocked by their modules: A2UI5_PIN predated the
+  TokenKeyCell / TokenTextCells properties they need, so a pinned checkout could
+  only produce `Property "TokenKeyCell" does not exist`. They were closed on the
+  canary path (A2UI5_BRANCH=main against ddbdd13), four consecutive green runs
+  each - see the 612/613 entry above. The sentence below records the state this
+  paragraph described while the backlog was still open, and the composition
   changed in both directions on 2026-08-21. 351 closed once its module was
   rewritten from a DOM dump into a real test. 362 was REOPENED: it had been
   closed as live-verified, but its module only presses the three toolbar

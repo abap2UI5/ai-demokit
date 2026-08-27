@@ -830,7 +830,9 @@ CLASS z2ui5_cl_smpc_app_535 IMPLEMENTATION.
 
   METHOD branch_payment.
 
-    " goToPaymentStep's branch, sent as soon as the payment type is CHOSEN.
+    " goToPaymentStep's branch, sent as soon as the payment type is CHOSEN,
+    " and again from view_display( ) - the association is live control state a
+    " rebuilt view resets, so the call sites below are not the whole story.
     " WizardStep._complete fires complete and then calls
     " Wizard._handleNextButtonPress in the SAME tick, so a nextStep that only
     " arrives with the complete round trip is one press too late.
@@ -846,7 +848,9 @@ CLASS z2ui5_cl_smpc_app_535 IMPLEMENTATION.
 
   METHOD branch_delivery.
 
-    " billingAddressComplete's branch, sent on the step's activate wire and on
+    " billingAddressComplete's branch, sent from view_display( ) too - BillingStep
+    " declares NO nextStep, so after a rebuild it has no branch at all until this
+    " runs. Also sent on the step's activate wire and on
     " every change of the checkbox - for the same reason as branch_payment
     DATA(next) = COND string( WHEN differentdeliveryaddress = abap_true
                               THEN `DeliveryAddressStep`

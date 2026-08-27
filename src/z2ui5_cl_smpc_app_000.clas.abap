@@ -977,27 +977,29 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` progress stayed on PaymentTypeStep, and only the SECOND press advanced; with the branch already set the same press advanced straight to CreditCardStep. Unlike app 534 the button really is reachable -`.
     lv_text1 = lv_text1 && ` PaymentTypeStep declares no validated, so it defaults to true and WizardStep.setButtonVisibility displays its Next button from the first render (measured buttonDisplayed=true). The port therefore` &&
                ` sends the branch BEFORE the press instead of on it: PaymentTypeStep carries nextStep=CreditCardStep - the payment default model_init seeds - as a declared association the original does not have, and` &&
-               ` branch_payment re-sends the current choice from the SegmentedButton's selectionChange and from the YES branch of the discard confirmation. BillingStep needs no declared association: its Next button` &&
-               ` is gated behind validated, only a CHECK_BILLING answer can raise that flag, and CHECK_BILLING is also the step's activate wire - so the branch_delivery call it carries always lands before the button` &&
-               ` can appear (measured: at the activate event validated=false and the button is hidden; the deferred answer sets nextStep, and only then does validated flip). The complete wires stay in the view and` &&
-               ` re-assert the same value, as goToPaymentStep and billingAddressComplete do. Cost of the declared association: the progress navigator reads 4 (varying) at load where the original reads 2 (varying) -`.
-    lv_text1 = lv_text1 && ` the port shows from the start what the original shows once the payment branch is chosen. BillingStep's own reveal is unchanged, and declaring its nextStep too would have cost the varying indication` &&
-               ` altogether (measured 5 (fixed)), which is why it is not declared. // NOTE: checkCreditCardStep / checkCashOnDeliveryStep / checkBillingStep call validateStep and invalidateStep imperatively. Each` &&
-               ` step's validated property is bound two-way here and the same liveChange wires recompute it in ABAP with the same rule (at least three characters), so the Next button gates exactly as in the original.` &&
-               ` // IMPROVISED: setDiscardableProperty only asks for confirmation while the wizard's PROGRESS STEP is past the step being discarded (getProgressStep() !== discardStep). A backend cannot read` &&
-               ` getProgressStep(), so the port keeps two flags that stand in for the two comparisons: each is raised by the activate wire of the step that follows the compared one, and cleared again when the` &&
-               ` progress is discarded. This costs two added activate attributes (BankAccountStep, DeliveryAddressStep and DeliveryTypeStep, which the sample leaves unwired) and gets the question asked in the same`.
-    lv_text1 = lv_text1 && ` situations. The YES branch discards the progress through control_by_id and remembers the new value; the NO branch restores the remembered one, both as in the original. // NOTE: handleDelete removes` &&
-               ` the row whose title the delete event carries and never removes the last one; the port sends the title with the event and does the same, then recomputes the total the way calcTotal does.` &&
+               ` branch_payment re-sends the current choice from the SegmentedButton's selectionChange and from the YES branch of the discard confirmation. Both branch methods are ALSO called unconditionally at the` &&
+               ` end of view_display( ), which is what makes the branch survive a rebuild - without it PaymentTypeStep falls back to its static nextStep whatever the user chose, and BillingStep comes back with no` &&
+               ` branch at all, which is the "wizard is in branching mode and no next step is defined" throw. Deleting those two calls as unaccounted-for restores it. BillingStep needs no declared association: its` &&
+               ` Next button is gated behind validated, only a CHECK_BILLING answer can raise that flag, and CHECK_BILLING is also the step's activate wire - so the branch_delivery call it carries always lands before`.
+    lv_text1 = lv_text1 && ` the button can appear (measured: at the activate event validated=false and the button is hidden; the deferred answer sets nextStep, and only then does validated flip). The complete wires stay in the` &&
+               ` view and re-assert the same value, as goToPaymentStep and billingAddressComplete do. Cost of the declared association: the progress navigator reads 4 (varying) at load where the original reads 2` &&
+               ` (varying) - the port shows from the start what the original shows once the payment branch is chosen. BillingStep's own reveal is unchanged, and declaring its nextStep too would have cost the varying` &&
+               ` indication altogether (measured 5 (fixed)), which is why it is not declared. // NOTE: checkCreditCardStep / checkCashOnDeliveryStep / checkBillingStep call validateStep and invalidateStep` &&
+               ` imperatively. Each step's validated property is bound two-way here and the same liveChange wires recompute it in ABAP with the same rule (at least three characters), so the Next button gates exactly` &&
+               ` as in the original. // IMPROVISED: setDiscardableProperty only asks for confirmation while the wizard's PROGRESS STEP is past the step being discarded (getProgressStep() !== discardStep). A backend`.
+    lv_text1 = lv_text1 && ` cannot read getProgressStep(), so the port keeps two flags that stand in for the two comparisons: each is raised by the activate wire of the step that follows the compared one, and cleared again when` &&
+               ` the progress is discarded. This costs two added activate attributes (BankAccountStep, DeliveryAddressStep and DeliveryTypeStep, which the sample leaves unwired) and gets the question asked in the` &&
+               ` same situations. The YES branch discards the progress through control_by_id and remembers the new value; the NO branch restores the remembered one, both as in the original. // NOTE: handleDelete` &&
+               ` removes the row whose title the delete event carries and never removes the last one; the port sends the title with the event and does the same, then recomputes the total the way calcTotal does.` &&
                ` attachRequestCompleted keeps the first FIVE rows of the mock product collection and seeds the payment and delivery defaults - the port seeds exactly those five rows. // NOTE: completedHandler,` &&
-               ` _navBackToStep and _handleMessageBoxOpen navigate the NavContainer and the wizard imperatively. All three go through control_by_id here ('to', 'goToStep', 'discardProgress' - all whitelisted), the` &&
-               ` same idiom app 101 uses for the sibling sample. _navBackToStep's backToPage/attachAfterNavigate pair collapses to one 'to' on the DynamicPage followed by 'goToStep' - abap2UI5 schedules the two` &&
-               ` frontend actions in order, so the after-navigate callback the original needs has no counterpart. // NOTE: The five product images are the demo kit's own test-resources files, re-hosted on`.
-    lv_text1 = lv_text1 && ` sdk.openui5.org. // NOTE: The **e2e-verified 2026-08-25** marker on this port overstated what the nightly covered: the interaction module of that day asserted the cart rows, the calcTotal sum, the` &&
+               ` _navBackToStep and _handleMessageBoxOpen navigate the NavContainer and the wizard imperatively. All three go through control_by_id here ('to', 'goToStep', 'discardProgress' - all whitelisted), the`.
+    lv_text1 = lv_text1 && ` same idiom app 101 uses for the sibling sample. _navBackToStep's backToPage/attachAfterNavigate pair collapses to one 'to' on the DynamicPage followed by 'goToStep' - abap2UI5 schedules the two` &&
+               ` frontend actions in order, so the after-navigate callback the original needs has no counterpart. // NOTE: The five product images are the demo kit's own test-resources files, re-hosted on` &&
+               ` sdk.openui5.org. // NOTE: The **e2e-verified 2026-08-25** marker on this port overstated what the nightly covered: the interaction module of that day asserted the cart rows, the calcTotal sum, the` &&
                ` eight steps and the row delete and never pressed Next, so no branch was ever exercised and the broken first press went unseen. meta/interactions/z2ui5_cl_smpc_app_560.mjs now walks ContentsStep ->` &&
                ` PaymentTypeStep -> CreditCardStep and fails if one press does not reach the branch, and it pins PaymentTypeStep's declared nextStep so a rebuild that loses the association is caught. Still unverified` &&
-               ` in a running system: the Bank Transfer and Cash on Delivery branches, the delivery-address branch, the two discard confirmations, the DynamicPage's sticky subheader over the wizard and the review` &&
-               ` page's six Edit links.`.
+               ` in a running system: the Bank Transfer and Cash on Delivery branches, the delivery-address branch, the two discard confirmations, the DynamicPage's sticky subheader over the wizard and the review`.
+    lv_text1 = lv_text1 && ` page's six Edit links.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.DynamicPage`                     name = `DynamicPageWithWizard`                         class = `z2ui5_cl_smpc_app_560` path = `src/01/04/z2ui5_cl_smpc_app_560.clas.abap`
         score = 5
@@ -1815,9 +1817,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` binding driving badge and StepInput; (b) the icon/text expression bindings over /BUTTONWITHICON//BUTTONWITHTEXT; (c) the MIN_CHANGE/MAX_CHANGE validation round-trips incl. the reset-on-invalid path` &&
                ` and the setBadgeMin/MaxValue follow-ups. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): (a) is covered - the badge renders data-badge 1 and follows the` &&
                ` StepInput to 2 after ArrowUp+Enter (the change event carries the two-way write); the MIN/MAX validation round-trips remain unexercised. **e2e-verified 2026-08-04** (nightly e2e interaction,` &&
-               ` meta/interactions/z2ui5_cl_smpc_app_249.mjs). **e2e-verified 2026-08-26** (meta/interactions/z2ui5_cl_smpc_app_249.mjs): MIN_CHANGE/MAX_CHANGE are now exercised - min 5 hides the badge over the` &&
-               ` current value 2 (proof that setBadgeMinValue landed), max 50 reaches _badgeMaxValue - and the module then restores the saved draft through the app-state hash (#/z2ui5-xapp-state=), the framework's`.
-    lv_text1 = lv_text1 && ` come-back-to-this-app path, and asserts that the rebuilt Button still carries 5/50.`.
+               ` meta/interactions/z2ui5_cl_smpc_app_249.mjs). **measured 2026-08-26** (the wire, not a green leg: the badge bounds were read off the live Button and the re-issue replayed in the page; the interaction` &&
+               ` leg that asserts it FAILS against the transpiled backend as it stands and needs an e2e:build before the nightly can confirm it) (meta/interactions/z2ui5_cl_smpc_app_249.mjs): MIN_CHANGE/MAX_CHANGE`.
+    lv_text1 = lv_text1 && ` are now exercised - min 5 hides the badge over the current value 2 (proof that setBadgeMinValue landed), max 50 reaches _badgeMaxValue - and the module then restores the saved draft through the` &&
+               ` app-state hash (#/z2ui5-xapp-state=), the framework's come-back-to-this-app path, and asserts that the rebuilt Button still carries 5/50.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Button`                          name = `ButtonWithBadge`                               class = `z2ui5_cl_smpc_app_249` path = `src/02/01/z2ui5_cl_smpc_app_249.clas.abap`
         score = 4
@@ -2182,12 +2185,13 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` <templateId>-<parentId>-<index> - but the parent id carries the VIEW PREFIX the framework assigns at runtime (v1--tpl-v1--car-0), which the backend never sees, so it cannot spell one. The earlier` &&
                ` sidecar called them 'nondeterministic', which the probe refutes; the gap was the prefix, not the determinism. Wherever a CONTROL_BY_ID argument takes a control id it now also takes an aggregation`.
     lv_text1 = lv_text1 && ` ITEM, addressed positionally as <id>/<aggregation>/<index> (pr/aggregation-item-address, implemented upstream), resolved on the client where both the prefix and the aggregation are known. Both` &&
-               ` carousels are re-synced on every PAGE_CHANGED, as in the original. // NOTE: the DynamicPageTitle stateChange handler (.onStateChange, add/removeSnappedContent of the snapped Carousel as a` &&
-               ` Carousel-animation workaround) is dropped together with its stateChange attribute - imperative aggregation surgery with no framework equivalent; the snapped/expanded content still switches natively` &&
-               ` with the DynamicPage header state. // NOTE: comparison Props are built from a fixed 19-key list in the mock JSON key order (the original iterates the FIRST selected product's own keys, skipping` &&
-               ` ProductPicUrl - so a first product without DateOfSale would drop that row, and missing values rendered '<strong>undefined</strong>' where the port renders an empty <strong></strong>); selected` &&
-               ` products are taken in model row order, not click order; the original's per-product information cache is unnecessary server-side. The controller's handleButtonPress (MessageBox) is dead code`.
-    lv_text1 = lv_text1 && ` referenced by no view and not ported. // NOTE: the comparison Props row for Price shows 956.00 where the original shows 956. The mock carries Price as a JSON number (956) and the original prints that` &&
+               ` carousels are re-synced on every PAGE_CHANGED, as in the original - and, since 2026-08-27, again at the end of view_display( ) whenever first_item is past page 0, because a rebuilt Carousel is back` &&
+               ` at page 0 while first_item survives as class state AND drives the bound comparison rows. // NOTE: the DynamicPageTitle stateChange handler (.onStateChange, add/removeSnappedContent of the snapped` &&
+               ` Carousel as a Carousel-animation workaround) is dropped together with its stateChange attribute - imperative aggregation surgery with no framework equivalent; the snapped/expanded content still` &&
+               ` switches natively with the DynamicPage header state. // NOTE: comparison Props are built from a fixed 19-key list in the mock JSON key order (the original iterates the FIRST selected product's own` &&
+               ` keys, skipping ProductPicUrl - so a first product without DateOfSale would drop that row, and missing values rendered '<strong>undefined</strong>' where the port renders an empty <strong></strong>);`.
+    lv_text1 = lv_text1 && ` selected products are taken in model row order, not click order; the original's per-product information cache is unnecessary server-side. The controller's handleButtonPress (MessageBox) is dead code` &&
+               ` referenced by no view and not ported. // NOTE: the comparison Props row for Price shows 956.00 where the original shows 956. The mock carries Price as a JSON number (956) and the original prints that` &&
                ` value straight into the Props text; the port holds it in a packed field (p LENGTH 8 DECIMALS 2, needed for the ObjectNumber's sap.ui.model.type.Currency binding, which renders 956.00 in BOTH), and an` &&
                ` ABAP packed value always serialises with its two decimals. Only the Props text differs, and only in the trailing zeros - the ObjectNumber above it is identical in both.`.
     result = VALUE #( BASE result
@@ -2196,7 +2200,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         ui5_only = abap_true
-        checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`
+        checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed) — that check bounds what was verified: the 2026-08-27` &&
+                 ` change added a render-time re-issue of both setActivePage calls at the end of view_display( ), which no listed check covered and which only a rebuild (a restored draft, or returning from a called` &&
+                 ` app) exercises. The port stays checked; what was checked passed, and the new half is unverified rather than re-checked.`
         notes = lv_text1 ) ).
 
     lv_text1 = `IMPROVISED: the i18n> ResourceModel (i18n/i18n.properties) has no framework i18n mechanism here - all texts (dialog title, section titles/summaries/details, button labels) are inlined as the resolved` &&
@@ -5310,9 +5316,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` on the client and a backend round-trip cannot answer in time, so the appointmentDragEnter wire is dropped (structural-diff reports it as attr missing). The overlap rule itself survives on the resize` &&
                ` path, which is not synchronous. // NOTE: The row images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org. // NOTE: The three roles and their per-row enable flags, the` &&
                ` drag-and-drop move and copy, the resize with its overlap refusal and the drag-create are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction,`.
-    lv_text1 = lv_text1 && ` meta/interactions/z2ui5_cl_smpc_app_546.mjs). // NOTE: The drag-created appointment seeds type = 'None'. An ABAP field is never absent, so an unset type reaches CalendarAppointment.type as the empty` &&
-               ` string, which is not a CalendarDayType member - validateProperty throws and the binding update takes the view down. The original pushes a JS object with no type key, which falls back to the property` &&
-               ` default.`.
+    lv_text1 = lv_text1 && ` meta/interactions/z2ui5_cl_smpc_app_546.mjs). // NOTE: The drag-created appointment seeds type = 'Type01'. An ABAP field is never absent, so an unset type reaches CalendarAppointment.type as the` &&
+               ` empty string, which is not a CalendarDayType member - validateProperty throws and the binding update takes the view down. The original pushes a JS object with no type key, which falls back to the` &&
+               ` property default. The default is Type01, inherited from DateTypeRange.type (DateTypeRange.js:43) - NOT None, which is secondaryType's default. This note said None until 2026-08-27; seeding None` &&
+               ` renders a different colour from the original, so the sentence was instructing the next reader to re-introduce the defect.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.PlanningCalendar`                name = `PlanningCalendarDnD`                           class = `z2ui5_cl_smpc_app_546` path = `src/01/01/z2ui5_cl_smpc_app_546.clas.abap`
         score = 5
@@ -7659,24 +7666,27 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` advanced straight to CreditCardStep. Unlike app 534 the button really is reachable - PaymentTypeStep declares no validated, so it defaults to true and WizardStep.setButtonVisibility displays its Next` &&
                ` button from the first render (measured buttonDisplayed=true). The port therefore sends the branch BEFORE the press instead of on it: PaymentTypeStep carries nextStep=CreditCardStep - the payment` &&
                ` default model_init seeds - as a declared association the original does not have, and branch_payment re-sends the current choice from the SegmentedButton's selectionChange and from the YES branch of` &&
-               ` the discard confirmation. BillingStep needs no declared association: its Next button is gated behind validated, only a CHECK_BILLING answer can raise that flag, and CHECK_BILLING is also the step's` &&
-               ` activate wire - so the branch_delivery call it carries always lands before the button can appear (measured: at the activate event validated=false and the button is hidden; the deferred answer sets` &&
-               ` nextStep, and only then does validated flip). The complete wires stay in the view and re-assert the same value, as goToPaymentStep and billingAddressComplete do. Cost of the declared association: the`.
-    lv_text1 = lv_text1 && ` progress navigator reads 4 (varying) at load where the original reads 2 (varying) - the port shows from the start what the original shows once the payment branch is chosen. BillingStep's own reveal` &&
-               ` is unchanged, and declaring its nextStep too would have cost the varying indication altogether (measured 5 (fixed)), which is why it is not declared. // NOTE: checkCreditCardStep /` &&
-               ` checkCashOnDeliveryStep / checkBillingStep call validateStep and invalidateStep imperatively. Each step's validated property is bound two-way here and the same liveChange wires recompute it in ABAP` &&
-               ` with the same rule (at least three characters), so the Next button gates exactly as in the original. // IMPROVISED: setDiscardableProperty only asks for confirmation while the wizard's PROGRESS STEP` &&
-               ` is past the step being discarded (getProgressStep() !== discardStep). A backend cannot read getProgressStep(), so the port keeps two flags that stand in for the two comparisons: each is raised by the` &&
-               ` activate wire of the step that follows the compared one, and cleared again when the progress is discarded. This costs two added activate attributes (BankAccountStep, DeliveryAddressStep and`.
-    lv_text1 = lv_text1 && ` DeliveryTypeStep, which the sample leaves unwired) and gets the question asked in the same situations. The YES branch discards the progress through control_by_id and remembers the new value; the NO` &&
-               ` branch restores the remembered one, both as in the original. // NOTE: handleDelete removes the row whose title the delete event carries and never removes the last one; the port sends the title with` &&
-               ` the event and does the same, then recomputes the total the way calcTotal does. attachRequestCompleted keeps the first FIVE rows of the mock product collection and seeds the payment and delivery` &&
-               ` defaults - the port seeds exactly those five rows. // NOTE: completedHandler, _navBackToStep and _handleMessageBoxOpen navigate the NavContainer and the wizard imperatively. All three go through` &&
-               ` control_by_id here ('to', 'goToStep', 'discardProgress' - all whitelisted), the same idiom app 101 uses for the sibling sample. // NOTE: The five product images are the demo kit's own test-resources` &&
-               ` files, re-hosted on sdk.openui5.org. // NOTE: The **e2e-verified 2026-08-25** marker on this port overstated what the nightly covered: the interaction module of that day asserted the cart rows, the`.
-    lv_text1 = lv_text1 && ` calcTotal sum, the eight steps and the row delete and never pressed Next, so no branch was ever exercised and the broken first press went unseen. meta/interactions/z2ui5_cl_smpc_app_535.mjs now walks` &&
-               ` ContentsStep -> PaymentTypeStep -> CreditCardStep and fails if one press does not reach the branch, and it pins PaymentTypeStep's declared nextStep so a rebuild that loses the association is caught.` &&
-               ` Still unverified in a running system: the Bank Transfer and Cash on Delivery branches, the delivery-address branch, the two discard confirmations and the review page's six Edit links.`.
+               ` the discard confirmation. Both branch methods are ALSO called unconditionally at the end of view_display( ), which is what makes the branch survive a rebuild - without it PaymentTypeStep falls back` &&
+               ` to its static nextStep whatever the user chose, and BillingStep comes back with no branch at all, which is the "wizard is in branching mode and no next step is defined" throw. Deleting those two` &&
+               ` calls as unaccounted-for restores it. BillingStep needs no declared association: its Next button is gated behind validated, only a CHECK_BILLING answer can raise that flag, and CHECK_BILLING is also`.
+    lv_text1 = lv_text1 && ` the step's activate wire - so the branch_delivery call it carries always lands before the button can appear (measured: at the activate event validated=false and the button is hidden; the deferred` &&
+               ` answer sets nextStep, and only then does validated flip). The complete wires stay in the view and re-assert the same value, as goToPaymentStep and billingAddressComplete do. Cost of the declared` &&
+               ` association: the progress navigator reads 4 (varying) at load where the original reads 2 (varying) - the port shows from the start what the original shows once the payment branch is chosen.` &&
+               ` BillingStep's own reveal is unchanged, and declaring its nextStep too would have cost the varying indication altogether (measured 5 (fixed)), which is why it is not declared. // NOTE:` &&
+               ` checkCreditCardStep / checkCashOnDeliveryStep / checkBillingStep call validateStep and invalidateStep imperatively. Each step's validated property is bound two-way here and the same liveChange wires` &&
+               ` recompute it in ABAP with the same rule (at least three characters), so the Next button gates exactly as in the original. // IMPROVISED: setDiscardableProperty only asks for confirmation while the`.
+    lv_text1 = lv_text1 && ` wizard's PROGRESS STEP is past the step being discarded (getProgressStep() !== discardStep). A backend cannot read getProgressStep(), so the port keeps two flags that stand in for the two` &&
+               ` comparisons: each is raised by the activate wire of the step that follows the compared one, and cleared again when the progress is discarded. This costs two added activate attributes` &&
+               ` (BankAccountStep, DeliveryAddressStep and DeliveryTypeStep, which the sample leaves unwired) and gets the question asked in the same situations. The YES branch discards the progress through` &&
+               ` control_by_id and remembers the new value; the NO branch restores the remembered one, both as in the original. // NOTE: handleDelete removes the row whose title the delete event carries and never` &&
+               ` removes the last one; the port sends the title with the event and does the same, then recomputes the total the way calcTotal does. attachRequestCompleted keeps the first FIVE rows of the mock product` &&
+               ` collection and seeds the payment and delivery defaults - the port seeds exactly those five rows. // NOTE: completedHandler, _navBackToStep and _handleMessageBoxOpen navigate the NavContainer and the`.
+    lv_text1 = lv_text1 && ` wizard imperatively. All three go through control_by_id here ('to', 'goToStep', 'discardProgress' - all whitelisted), the same idiom app 101 uses for the sibling sample. // NOTE: The five product` &&
+               ` images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org. // NOTE: The **e2e-verified 2026-08-25** marker on this port overstated what the nightly covered: the interaction` &&
+               ` module of that day asserted the cart rows, the calcTotal sum, the eight steps and the row delete and never pressed Next, so no branch was ever exercised and the broken first press went unseen.` &&
+               ` meta/interactions/z2ui5_cl_smpc_app_535.mjs now walks ContentsStep -> PaymentTypeStep -> CreditCardStep and fails if one press does not reach the branch, and it pins PaymentTypeStep's declared` &&
+               ` nextStep so a rebuild that loses the association is caught. Still unverified in a running system: the Bank Transfer and Cash on Delivery branches, the delivery-address branch, the two discard` &&
+               ` confirmations and the review page's six Edit links.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Wizard`                          name = `WizardBranching`                               class = `z2ui5_cl_smpc_app_535` path = `src/01/01/z2ui5_cl_smpc_app_535.clas.abap`
         score = 5
@@ -11577,9 +11587,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` NOTE: the four asset paths (the imageID_275314.png avatar twice, linkedin.png, Twitter.png) and HRData.json's person.png point at the sdk.openui5.org host per the offline asset-URL rule, matching app` &&
                ` 263 which carries the same view; the original writes them relative as './test-resources/sap/uxap/images/...'. // NOTE: not yet verified in a running system: that Edit toasts the mode and re-bakes the` &&
                ` veto, that an icon-tab press in edit mode is cancelled and raises the dialog, and that OK then navigates through setSelectedSection while Cancel leaves the page where it was. **e2e-verified` &&
-               ` 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_588.mjs). // NOTE: The Connections subsection carries title="Connections" as the original does. The port's ObjectPageLayout` &&
-               ` subtree was built from app 263, whose own sample has no title on that subsection, so the attribute was lost in the copy. structural-diff cannot see it: attribute presence is a union per control TYPE,` &&
-               ` and other ObjectPageSubSection instances do carry title.`.
+               ` 2026-08-25**, before the 2026-08-27 render-time re-issue - that half needs a fresh e2e build before the nightly can confirm it; (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_588.mjs).` &&
+               ` // NOTE: The Connections subsection carries title="Connections" as the original does. The port's ObjectPageLayout subtree was built from app 263, whose own sample has no title on that subsection, so` &&
+               ` the attribute was lost in the copy. structural-diff cannot see it: attribute presence is a union per control TYPE, and other ObjectPageSubSection instances do carry title.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageBeforeNavigate`                      class = `z2ui5_cl_smpc_app_588` path = `src/02/03/z2ui5_cl_smpc_app_588.clas.abap`
         score = 5

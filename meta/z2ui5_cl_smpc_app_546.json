@@ -41,7 +41,7 @@
     },
     {
       "type": "NOTE",
-      "what": "The drag-created appointment seeds type = 'None'. An ABAP field is never absent, so an unset type reaches CalendarAppointment.type as the empty string, which is not a CalendarDayType member - validateProperty throws and the binding update takes the view down. The original pushes a JS object with no type key, which falls back to the property default."
+      "what": "The drag-created appointment seeds type = 'Type01'. An ABAP field is never absent, so an unset type reaches CalendarAppointment.type as the empty string, which is not a CalendarDayType member - validateProperty throws and the binding update takes the view down. The original pushes a JS object with no type key, which falls back to the property default. The default is Type01, inherited from DateTypeRange.type (DateTypeRange.js:43) - NOT None, which is secondaryType's default. This note said None until 2026-08-27; seeding None renders a different colour from the original, so the sentence was instructing the next reader to re-introduce the defect."
     }
   ]
 }
