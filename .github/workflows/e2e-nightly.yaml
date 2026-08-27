@@ -12,9 +12,12 @@ on:
   schedule:
     - cron: '30 2 * * *'   # nightly, 02:30 UTC
 
+# Read-only. `issues: write` was here for a `gh issue create` failure channel
+# that could never fire: issues are DISABLED on this repository, so the token
+# had a permission the API refuses to honour. The report is the step summary
+# now, which needs no permission at all.
 permissions:
   contents: read
-  issues: write   # the failure channel below — a red nightly used to be visible only in the Actions tab
 
 concurrency:
   group: e2e-nightly
@@ -54,52 +57,100 @@ jobs:
         A2UI5_HOME: ${{ github.workspace }}/.abap2UI5
       run: npm run e2e:build
 
+    # The gate the whole workflow exists to run, and it stays able to fail: no
+    # continue-on-error, no relaxed flags, no `|| true`. A regressed port is the
+    # CORRECT reason for this job to be red. All that changes is that the report
+    # step below now runs afterwards and can say WHICH ports.
+    #
+    # `tee` so the verdict can name them instead of only linking the run.
+    # `set -o pipefail` is load-bearing: the implicit default shell is
+    # `bash -e {0}` WITHOUT pipefail, so without it `tee`'s exit code (always 0)
+    # masks the smoke's and this gate reports green while failing. The log lives
+    # in RUNNER_TEMP, outside the work tree.
     - name: Run every port as the real app
+      id: smoke
       env:
         A2UI5_HOME: ${{ github.workspace }}/.abap2UI5
-      run: node scripts/e2e-smoke.mjs --strict
+      run: |
+        set -o pipefail
+        node scripts/e2e-smoke.mjs --strict 2>&1 | tee "$RUNNER_TEMP/e2e-smoke.log"
 
     # A red nightly is a regression in a LIVE_TEST-class wire — it must reach
-    # someone, not sit in the Actions tab until the next release. One issue is
-    # kept per breakage (updated, not duplicated) and it references the run.
+    # someone, not sit in the Actions tab until the next release.
     #
-    # The issue is the PREFERRED channel, not the only one, and it must never be
-    # the reason the job is red: issues are disabled on this repository, so
-    # every red nightly failed a second time in `gh issue create` ("the
-    # 'abap2UI5/ai-demokit' repository has disabled issues") and none of them
-    # reached anybody. The step summary always gets written, so the verdict
-    # survives either way; enabling issues restores the tracked channel with no
-    # change here.
-    - name: Report the nightly failure
-      if: failure()
-      continue-on-error: true
+    # The channel is $GITHUB_STEP_SUMMARY, and deliberately NOT the
+    # `gh issue create` this step used to attempt. Issues are DISABLED on this
+    # repository (`"has_issues": false`), so that call could never land. What
+    # actually happened every night is in the run log of 33074599814:
+    #
+    #   ##[warning]could not reach the issue tracker (the
+    #   'abap2UI5/samples-controls' repository has disabled issues )
+    #
+    # — i.e. `gh issue list` failed FIRST and the guard swallowed it, so
+    # `gh issue create` was never even reached. The comment that used to stand
+    # here claimed the opposite ("failed a second time in `gh issue create`")
+    # and quoted an error naming 'abap2UI5/ai-demokit', a different repository:
+    # it was imported prose, not an observation of this repo. The conclusion
+    # was right, the mechanism it described was not.
+    #
+    # What reaches a human is the RED RUN ITSELF: GitHub notifies the account
+    # that owns a scheduled workflow when its run fails, and that notification
+    # links to this page. That channel was never broken — 8 of the 9 nightlies
+    # since 2026-08-18 were red and delivered. What was broken is that the
+    # report said "every FAIL line in the run log" and then printed no FAIL
+    # lines, so acting on it meant opening the run and scrolling 623 `pass`
+    # lines to find the two that said FAIL. The summary now carries them.
+    #
+    # A TRACKED channel (one item per breakage, closable) needs issues enabled
+    # in the repository settings — an owner-only change this workflow cannot
+    # make. If it is ever flipped on, add `issues: write` back and a step that
+    # files the verdict below; nothing else here has to change.
+    #
+    # `!cancelled()` rather than `always()`: a run cut off by the 90-minute
+    # timeout has no verdict to carry and a runner being torn down under it.
+    # (The budget is not tight — 33074599814 used 68 minutes of the 90.)
+    # `${{ }}` around it is mandatory: a bare `if: !cancelled()` is invalid
+    # YAML, because `!` opens a tag.
+    - name: Report the nightly verdict
+      if: ${{ !cancelled() }}
       env:
-        GH_TOKEN: ${{ github.token }}
+        SMOKE: ${{ steps.smoke.outcome }}
         RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       run: |
-        title="e2e nightly is red"
-        body="The nightly e2e smoke failed: ${RUN_URL}
+        set -euo pipefail
+        log="$RUNNER_TEMP/e2e-smoke.log"
 
-        Every FAIL line in the run log is a port whose live wire regressed (or a harness effect — see .claude/skills/e2e-debugging). This issue is updated by each red nightly and should be closed when the nightly is green again."
+        # THREE verdicts, not two. `outcome` is EMPTY when the step never ran
+        # at all — the build died before the smoke — and an `if success/else`
+        # would render that case as green, which is the exact failure this
+        # report exists to stop.
+        case "$SMOKE" in
+          success)
+            heading='e2e-nightly is green'
+            verdict='Every port booted as the real app and every interaction wire held.'
+            ;;
+          failure)
+            heading='e2e-nightly is RED — a live wire regressed'
+            verdict='**The strict e2e smoke FAILED.** Every `FAIL` line below is a port whose live wire regressed — or a harness effect, see `.claude/skills/e2e-debugging`. Fix the port or record it in STATUS.md: a nightly that stays red for days stops being read.'
+            ;;
+          *)
+            heading='e2e-nightly is RED — the smoke never ran'
+            verdict='**The e2e smoke did not run.** `npm ci`, the Playwright install, the abap2UI5 clone or `npm run e2e:build` died first, so nothing about the ports is known yet — but a backend that no longer builds against the pinned framework is itself the finding.'
+            ;;
+        esac
 
+        # every printf format is SINGLE-quoted: the text is full of backticks
+        # and none of them may reach the shell as a command substitution
         {
-          echo "## $title"
-          echo
-          echo "The nightly e2e smoke failed — every FAIL line in the run log is a port"
-          echo "whose live wire regressed (or a harness effect, see"
-          echo ".claude/skills/e2e-debugging)."
+          printf '## %s\n\n' "$heading"
+          printf '%s\n\n' "$verdict"
+          printf 'Run: %s\n' "$RUN_URL"
+          if [ -s "$log" ]; then
+            printf '\n```\n'
+            # `|| true` because grep exits 1 on no match, and `set -o pipefail`
+            # is in force from `set -euo pipefail` above — a green run legitimately
+            # has no FAIL line and must not fail the report.
+            grep -E '^(FAIL|e2e-smoke:)' "$log" | tail -40 || true
+            printf '```\n'
+          fi
         } >> "$GITHUB_STEP_SUMMARY"
-
-        # stderr goes to a file, NOT into `existing`: the value is used as an
-        # issue number below, and a gh warning on a SUCCEEDING call would end up
-        # in it just as readily as an error message on a failing one
-        gh_err=$(mktemp)
-        if ! existing=$(gh issue list --state open --search "in:title \"$title\"" --json number --jq '.[0].number // empty' 2>"$gh_err"); then
-          echo "::warning::could not reach the issue tracker ($(tr '\n' ' ' <"$gh_err")) — the step summary above is the only report"
-          exit 0
-        fi
-        if [ -n "$existing" ]; then
-          gh issue comment "$existing" --body "Still red: ${RUN_URL}"
-        else
-          gh issue create --title "$title" --body "$body"
-        fi
