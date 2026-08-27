@@ -1,5 +1,30 @@
-// the table page, the open-selected flow and the TabContainer it fills
+// the table page, the open-selected flow, the TabContainer it fills — and that
+// the tab page the user is ON survives a view rebuild
 import { waitForUi5, ui5All } from '../../scripts/lib-e2e.mjs';
+
+const UI5_ALL = 'const ui5All = () => Object.values(sap.ui.require("sap/ui/core/Element").registry.all());';
+
+const state = (page) => page.evaluate(`(() => { ${UI5_ALL}
+  const tc = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.TabContainer');
+  const nav = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.NavContainer');
+  const cur = nav && nav.getCurrentPage();
+  return {
+    tabs: tc ? tc.getItems().length : null,
+    page: cur ? cur.getId() : null,
+    draft: (window.z2ui5 && window.z2ui5.oResponse && window.z2ui5.oResponse.ID) || null,
+  }; })()`);
+
+async function boot(page, url) {
+  // about:blank first: a goto that only changes the FRAGMENT is a same-document
+  // navigation and does NOT reload, so the restore would never be requested
+  await page.goto('about:blank');
+  await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
+  await page.waitForFunction(() => window.sap && window.sap.ui && document.querySelectorAll('[data-sap-ui]').length > 3, { timeout: 90000 });
+  await waitForUi5(page, () => {
+    const nav = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.NavContainer');
+    return !!(nav && nav.getCurrentPage());
+  }, 'the restored view never rebuilt its NavContainer');
+}
 
 const select = async (page, index) => {
   await page.evaluate((i) => {
@@ -48,39 +73,45 @@ export default async (page, expect) => {
     .some((c) => c.getVisible() === false), 'the tab Edit form was not hidden while the tab is unmodified');
 
   /*
-   * The NavContainer's position is live control state. TAB_ADD_NEW answers with
-   * a full view_display( ), which destroys the MAIN slot — XMLView.create then
-   * rebuilds navCon on its FIRST page, the product list, because this
-   * NavContainer declares no initialPage. `selected_tab`, `save_visible` and
-   * `cancel_visible` are class state and survive, so before the fix pressing +
-   * on the tab bar created the tab, put the buttons into edit mode and dropped
-   * the user back on the product list.
+   * The NavContainer's position is live control state. view_display( ) destroys
+   * the MAIN slot and XMLView.create rebuilds navCon on its FIRST page — the
+   * product list, this NavContainer declaring no initialPage — while t_tabs,
+   * selected_tab, save_visible and cancel_visible survive as class state. Four
+   * of the five branches that call view_display( ) are reachable only FROM
+   * tabContainerPage (TAB_CANCEL, TAB_CLOSE, CLOSE_TAB_CLOSED, TAB_ADD_NEW), so
+   * before the fix pressing + on the tab bar created the tab and dropped the
+   * user on the product list while the footer still claimed an open tab.
    *
-   * This port needs no bookmark restore to reach the second view_display( ):
-   * four of the five branches that call it (TAB_CANCEL, TAB_CLOSE,
-   * CLOSE_TAB_CLOSED, TAB_ADD_NEW) are reachable only FROM tabContainerPage,
-   * and TAB_ADD_NEW is one press away from where the leg already stands.
+   * The rebuild is driven through the framework's own bookmark restore —
+   * `?app_start=<class>#/z2ui5-xapp-state=<draft>`, the URL
+   * cs_event-clipboard_app_state hands out. That request carries no frontend
+   * id, so the backend takes factory_first_start -> db_load(draft), which sets
+   * check_on_navigated( ) while check_on_init( ) stays false: exactly the
+   * `ELSEIF check_on_navigated( )` branch. It is used here rather than the tab
+   * bar's + button because firing addNewButtonPress drove no round trip at all
+   * in the headless harness (measured 2026-08-27 against a real backend: the
+   * listener IS attached and the event fires, the TabContainer keeps its two
+   * items and navCon never moves), and a leg that cannot drive the rebuild
+   * proves nothing. The + button remains the path a human should re-check.
    *
-   * BOTH halves are asserted: the three tabs and the Cancel button are the
-   * surviving state, tabContainerPage is the re-issued position. Remove the
-   * `IF nav_page IS NOT INITIAL AND nav_page <> 'table'.` block from
-   * view_display( ) and the last assertion fails.
+   * BOTH halves are asserted — the two surviving tabs AND the re-issued
+   * position. Asserting only the reset half would pass on a port that never
+   * navigated. REMOVE the guarded nav_page re-issue from view_display( ) and
+   * the last assertion fails.
    */
-  await page.evaluate(() => {
-    const reg = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
-    reg.find((c) => c.getId().endsWith('idTabContainer')).fireEvent('addNewButtonPress', {});
-  });
+  const origin = new URL(page.url()).origin;
+  const before = await state(page);
+  if (before.tabs !== 2) throw new Error(`expected the two opened tabs before the rebuild, got ${before.tabs}`);
+  if (!before.draft) throw new Error('no draft id on the response — the restore URL cannot be built');
+
+  await boot(page, `${origin}/?app_start=z2ui5_cl_smpc_app_558#/z2ui5-xapp-state=${before.draft}`);
   await waitForUi5(page, () => {
     const tc = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.TabContainer');
-    return tc && tc.getItems().length === 3;
-  }, 'the add-new button never opened a third tab');
-  // the surviving half: the new tab starts in edit mode, so Save/Cancel replace Edit
-  await waitForUi5(page, () => ui5All().some((c) => c.getId().endsWith('idCancel') && c.getVisible() === true)
-    && ui5All().some((c) => c.getId().endsWith('idEditItem') && c.getVisible() === false),
-  'the new tab did not put the footer into edit mode');
-  // the reset half: the rebuilt navCon must be BACK on the tab page, not on the table
-  await waitForUi5(page, () => {
-    const nav = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.NavContainer');
-    return nav && /tabContainerPage$/.test(nav.getCurrentPage().getId());
-  }, 'the rebuilt view dropped back to the product list while the footer still claims an open tab in edit mode — view_display( ) did not re-issue the navCon position');
+    return !!(tc && tc.getItems().length === 2);
+  }, 'the restored draft lost the two open tabs — this leg can no longer see the asymmetry it guards');
+  const restored = await state(page);
+
+  if (!/tabContainerPage$/.test(restored.page || '')) {
+    throw new Error(`the rebuilt view came back on ${restored.page} while ${restored.tabs} tabs are still open — view_display( ) did not re-issue the navCon position`);
+  }
 };

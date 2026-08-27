@@ -59,10 +59,19 @@ the per-port modules here):
     are fixed as of 2026-08-27: 585 301 302 303 167 re-issue the guarded
     control_by_id 'to' from the end of view_display( ) against the surviving
     two-way bound selected key, 558 against a PROTECTED nav_page that parks the
-    target the live navCon was last sent to. Five of them need the bookmark
-    restore to reach a second view_display( ); 558 does not — four of its five
-    view_display( ) branches are reachable only FROM tabContainerPage, so the
-    tab bar's + button drives the rebuild directly. None of the six navigates a
+    target the live navCon was last sent to. All six legs drive the rebuild
+    through the bookmark restore. 558 should not have needed it — four of its
+    five view_display( ) branches are reachable only FROM tabContainerPage, so
+    the tab bar's + button is one press away — but firing addNewButtonPress
+    drove no round trip at all in the headless harness (measured 2026-08-27
+    against the built backend: the listener IS attached and the event fires,
+    the TabContainer keeps its items and navCon never moves), so the + button
+    stays a human live check and the leg takes the restore like its siblings.
+    What the five restore legs measured BEFORE the fix, each against the very
+    same draft: 585 and 167 came back on page2 while the SideNavigation read
+    page1, 302 and 303 came back on page1 while the IconTabHeader read page2,
+    and 301 came back on `home` — the lorem ipsum — while page_text read
+    "Fired event to load page 7". None of the six navigates a
     sap.f.FlexibleColumnLayout, so the `to` cast fixed upstream by 977474af
     does not gate any of them.
     What the five actually DRIVE (2026-08-26). 022 235 557 open the

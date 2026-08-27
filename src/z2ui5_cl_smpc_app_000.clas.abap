@@ -1691,7 +1691,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` sent, guarded so a fresh view already sitting on the initialPage="page2" issues nothing. The second view_display( ) is reached through the framework's own bookmark restore` &&
                ` (?app_start=<class>#/z2ui5-xapp-state=<draft>, the URL cs_event-clipboard_app_state hands out): that request carries no frontend id, so the backend takes factory_first_start -> db_load(draft),` &&
                ` check_on_navigated( ) is true while check_on_init( ) stays false - the ELSEIF branch, and the only way a port that calls no other app renders twice. The interaction module asserts BOTH halves, the`.
-    lv_text1 = lv_text1 && ` surviving key AND the re-issued page; asserting only the reset half would pass on a port that never navigated. Guard: selected_key IS NOT INITIAL AND selected_key <> ``page2``.`.
+    lv_text1 = lv_text1 && ` surviving key AND the re-issued page; asserting only the reset half would pass on a port that never navigated. Guard: selected_key IS NOT INITIAL AND selected_key <> ``page2``. Measured 2026-08-27 on` &&
+               ` the built backend, BEFORE the fix: select "Child Item 1" (key page1), restore the very same draft through the bookmark URL - the rebuilt view came back showing mainView--page2 while the` &&
+               ` SideNavigation still read page1.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.ShellBar`                        name = `ShellBarWithSplitApp`                          class = `z2ui5_cl_smpc_app_585` path = `src/02/04/z2ui5_cl_smpc_app_585.clas.abap`
         score = 5
@@ -6488,11 +6490,16 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` navigation (to/toDetail/toMaster/backDetail/backMaster - setMode is NOT among them, see the correction above) need an in-system check — machine gates only verify view validity, not the runtime`.
     lv_text1 = lv_text1 && ` navigation roundtrip. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_097.mjs). // NOTE: the mode RadioButtonGroup's handler calls oSplitApp.setMode( ) in` &&
                ` the original; SplitApp.mode is a bindable property, so the port binds it two-way (added attribute, no structural diff) and the handler only assigns the chosen mode - the prefer-a-bindable-property` &&
-               ` rule, gated by the linter rule settable-property-via-action. The state then survives a view rebuild instead of living only in the control.`.
+               ` rule, gated by the linter rule settable-property-via-action. The state then survives a view rebuild instead of living only in the control. // NOTE: Measured 2026-08-27 against the ``pageId`` argument` &&
+               ` kind abap2UI5 introduced for ``to`` (977474af). sap.m.SplitContainer.to probes ``this._oMasterNav.getPage(pageId)`` and falls through to ``this._oDetailNav.to( )`` (SplitContainer.js:828), and` &&
+               ` getPage compares ``aPages[i].getId() == pageId`` - a comparison a Control can never win. So before the fix the master probe ALWAYS missed and every ``to`` went to the detail NavContainer, whose own` &&
+               ` ``to`` normalises a Control to its id on its first line. This port's target ``detailDetail`` is a detailPages entry, so the wrong branch reached the right page and nothing was observably broken. The`.
+    lv_text1 = lv_text1 && ` trap is latent, not active: a ``to`` naming a MASTER page would have navigated the detail container instead. Corpus-wide there is no such call - 096 and 097 are the only SplitContainer/SplitApp ports` &&
+               ` that wire ``to``, both to ``detailDetail``, and app 578's FlexibleColumnLayout was the only container the same probe actually broke.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.SplitApp`                        name = `SplitApp`                                      class = `z2ui5_cl_smpc_app_097` path = `src/01/01/z2ui5_cl_smpc_app_097.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: Master-detail navigation is driven 1:1 via follow_up_action( cs_event-control_by_id ) on the newly whitelisted SplitContainer methods: to (Go-to-Detail button), backDetail/backMaster (page` &&
@@ -6511,7 +6518,12 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` replaces the setMode( ) action and is not live-verified. The imperative form it replaces WAS verified: verified in a running system 2026-07-27 - SplitContainer` &&
                ` toDetail/toMaster/backDetail/backMaster/setMode navigation works across modes (2026-07-27) - kept as context. A fresh live run (each radio button switches the split mode and the toast names it)` &&
                ` restamps this port to checked. Residual, added 2026-08-23: the interaction module clicks ONE radio ('hide') and asserts one toast; the other three are never touched and nothing asserts the` &&
-               ` SplitContainer's mode actually changed. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_096.mjs).`.
+               ` SplitContainer's mode actually changed. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_096.mjs). // NOTE: Measured 2026-08-27 against the ``pageId``` &&
+               ` argument kind abap2UI5 introduced for ``to`` (977474af). sap.m.SplitContainer.to probes ``this._oMasterNav.getPage(pageId)`` and falls through to ``this._oDetailNav.to( )`` (SplitContainer.js:828),`.
+    lv_text1 = lv_text1 && ` and getPage compares ``aPages[i].getId() == pageId`` - a comparison a Control can never win. So before the fix the master probe ALWAYS missed and every ``to`` went to the detail NavContainer, whose` &&
+               ` own ``to`` normalises a Control to its id on its first line. This port's target ``detailDetail`` is a detailPages entry, so the wrong branch reached the right page and nothing was observably broken.` &&
+               ` The trap is latent, not active: a ``to`` naming a MASTER page would have navigated the detail container instead. Corpus-wide there is no such call - 096 and 097 are the only SplitContainer/SplitApp` &&
+               ` ports that wire ``to``, both to ``detailDetail``, and app 578's FlexibleColumnLayout was the only container the same probe actually broke.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.SplitContainer`                  name = `SplitContainer`                                class = `z2ui5_cl_smpc_app_096` path = `src/01/01/z2ui5_cl_smpc_app_096.clas.abap`
         score = 5
@@ -6713,8 +6725,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` bookkeeping and only PUBLIC attributes are serialized into the view model; not PRIVATE, because the draft serialization walks the attributes with a dynamic ASSIGN obj->(name) that cannot reach a` &&
                ` PRIVATE one), and the end of view_display( ) re-issues it, guarded by ``nav_page IS NOT INITIAL AND nav_page <> ``table````. Re-issuing the LAST-ISSUED target rather than re-deriving it is what keeps` &&
                ` the branches that DO want the table correct: nav_to_table and the tab_close redirect when the last tab goes both park ``table`` and are skipped by the same guard. Unlike the sibling ports this one`.
-    lv_text1 = lv_text1 && ` needs no bookmark restore to reach the second view_display( ) - TAB_ADD_NEW is one press away from the tab page, which is what the interaction module drives; it asserts BOTH halves, the three tabs` &&
-               ` plus the edit-mode footer AND the re-issued tabContainerPage.`.
+    lv_text1 = lv_text1 && ` needs no bookmark restore to reach the second view_display( ) IN A BROWSER - TAB_ADD_NEW is one press away from the tab page. The interaction module nonetheless drives the bookmark restore, because` &&
+               ` firing addNewButtonPress drove no round trip at all in the headless harness (measured 2026-08-27 against the built backend: the listener IS attached and the event fires, but the TabContainer keeps` &&
+               ` its two items and navCon never moves), and a leg that cannot drive the rebuild proves nothing. The + button is therefore the one path here that still wants a human live run. The leg asserts BOTH` &&
+               ` halves: the two surviving tabs AND the re-issued tabContainerPage.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.TabContainer`                    name = `TabContainerMHC`                               class = `z2ui5_cl_smpc_app_558` path = `src/01/01/z2ui5_cl_smpc_app_558.clas.abap`
         score = 5
@@ -7996,7 +8010,8 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` frontend id, so the backend takes factory_first_start -> db_load(draft), check_on_navigated( ) is true while check_on_init( ) stays false - the ELSEIF branch, and the only way a port that calls no` &&
                ` other app renders twice. The interaction module asserts BOTH halves, the surviving key AND the re-issued page; asserting only the reset half would pass on a port that never navigated. Guard:` &&
                ` selectedkey IS NOT INITIAL AND selectedkey <> ``home``. The class already fixed exactly this asymmetry for its POPOVER (the bound selectedkey that survives the per-open fragment rebuild) and missed` &&
-               ` the main view one level up.`.
+               ` the main view one level up. Measured 2026-08-27 on the built backend, BEFORE the fix: select "Sales Order" (key page7), restore that draft - the rebuilt view came back on mainView--home, i.e. showing` &&
+               ` the home lorem ipsum, while page_text still read "Fired event to load page 7".`.
     lv_text2 = `sap.m.Avatar (control @since 1.73) is kept 1:1 in the ShellBar's f:profile aggregation (initials 'SN'). Newer than UI5 1.71 (app 152 precedent, control-level declaration). //` &&
                ` sap.tnt.NavigationListGroup (control @since 1.121) is used 1:1 for the 'Business Areas for selected user role' group. Newer than UI5 1.71. // NavigationListItem.selectable (@since 1.116) is kept 1:1` &&
                ` (selectable=false on Manufacturing management, Employee Services, Create, App Finder and Legal). // NavigationListItem.design="Action" and NavigationListItem.ariaHasPopup="Dialog" (both @since 1.133)` &&
@@ -8311,7 +8326,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` cs_event-clipboard_app_state hands out): that request carries no frontend id, so the backend takes factory_first_start -> db_load(draft), check_on_navigated( ) is true while check_on_init( ) stays` &&
                ` false - the ELSEIF branch, and the only way a port that calls no other app renders twice. The interaction module asserts BOTH halves, the surviving key AND the re-issued page; asserting only the` &&
                ` reset half would pass on a port that never navigated. Guard: selectedkey IS NOT INITIAL AND selectedkey <> ``page2``. This port's itemSelect is roundtrip-free, so the key reaches the backend only on`.
-    lv_text1 = lv_text1 && ` the NEXT event - the interaction module uses the user-name popover press for that before it takes the draft.`.
+    lv_text1 = lv_text1 && ` the NEXT event - the interaction module uses the user-name popover press for that before it takes the draft. Measured 2026-08-27 on the built backend, BEFORE the fix: select "Child Item 1" (key` &&
+               ` page1, a roundtrip-free itemSelect), press the user-name button so the model reaches the backend, restore that draft - the rebuilt view came back showing mainView--page2 while the SideNavigation` &&
+               ` still read page1.`.
     lv_text2 = `Several members newer than UI5 1.71 are kept 1:1 from the original. sap.tnt.NavigationListItem: selectable (@since 1.116), design (@since 1.133.0, sap.tnt.NavigationListItemDesign), press (event,` &&
                ` @since 1.133 on NavigationListItemBase), ariaHasPopup (@since 1.133.0). sap.m.Button.ariaHasPopup (@since 1.84) on the header 'Alan Smith' button. Declared per the property-171 policy; the tnt` &&
                ` members were previously mis/under-declared (the earlier note cited only sap.m.Button 1.84 for ariaHasPopup, which is the Button version, not the tnt member's 1.133) because the property gate is blind` &&
@@ -8347,7 +8364,8 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` framework's own bookmark restore (?app_start=<class>#/z2ui5-xapp-state=<draft>, the URL cs_event-clipboard_app_state hands out): that request carries no frontend id, so the backend takes`.
     lv_text1 = lv_text1 && ` factory_first_start -> db_load(draft), check_on_navigated( ) is true while check_on_init( ) stays false - the ELSEIF branch, and the only way a port that calls no other app renders twice. The` &&
                ` interaction module asserts BOTH halves, the surviving key AND the re-issued page; asserting only the reset half would pass on a port that never navigated. Guard: selectedkey IS NOT INITIAL AND` &&
-               ` selectedkey <> ``page1``.`.
+               ` selectedkey <> ``page1``. Measured 2026-08-27 on the built backend, BEFORE the fix: select "Applications" (key page2), restore the very same draft through the bookmark URL - the rebuilt view came` &&
+               ` back showing mainView--page1 while the IconTabHeader still read page2.`.
     lv_text2 = `sap.tnt.ToolPage aggregation subHeader (@since 1.93) carries the horizontal IconTabHeader navigation - it is the whole point of this sample and is kept 1:1. Newer than UI5 1.71. //` &&
                ` IconTabFilter.interactionMode="SelectLeavesOnly" (the UI5 sources tag it @ui5-experimental-since 1.121, not @since - an EXPERIMENTAL property that arrived in 1.121, so it is above the floor AND may` &&
                ` still change) is kept 1:1 on the top-level filter template, and sap.m.Avatar (control @since 1.73) is kept 1:1 as the profile avatar of the ToolHeader. Both newer than UI5 1.71. //` &&
@@ -8390,7 +8408,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` sent, guarded so a fresh view already sitting on the initialPage="page1" issues nothing. The second view_display( ) is reached through the framework's own bookmark restore` &&
                ` (?app_start=<class>#/z2ui5-xapp-state=<draft>, the URL cs_event-clipboard_app_state hands out): that request carries no frontend id, so the backend takes factory_first_start -> db_load(draft),` &&
                ` check_on_navigated( ) is true while check_on_init( ) stays false - the ELSEIF branch, and the only way a port that calls no other app renders twice. The interaction module asserts BOTH halves, the` &&
-               ` surviving key AND the re-issued page; asserting only the reset half would pass on a port that never navigated. Guard: selectedkey IS NOT INITIAL AND selectedkey <> ``page1``.`.
+               ` surviving key AND the re-issued page; asserting only the reset half would pass on a port that never navigated. Guard: selectedkey IS NOT INITIAL AND selectedkey <> ``page1``. Measured 2026-08-27 on` &&
+               ` the built backend, BEFORE the fix: select "Applications" (key page2), restore the very same draft through the bookmark URL - the rebuilt view came back showing mainView--page1 while the IconTabHeader` &&
+               ` still read page2.`.
     lv_text2 = `sap.tnt.ToolPage aggregation subHeader (@since 1.93) carries the horizontal IconTabHeader navigation and is kept 1:1; IconTabFilter.interactionMode="SelectLeavesOnly" (the UI5 sources tag it` &&
                ` @ui5-experimental-since 1.121, not @since - an EXPERIMENTAL property that arrived in 1.121, so it is above the floor AND may still change) is kept 1:1 on the top-level filter template; sap.m.Avatar` &&
                ` (control @since 1.73) is kept 1:1 as the ToolHeader profile avatar. All newer than UI5 1.71. // sap.m.IconTabFilter.items @since 1.77 - the nested sub-filter aggregation - is kept 1:1 from the` &&
