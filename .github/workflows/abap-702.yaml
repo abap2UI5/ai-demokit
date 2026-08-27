@@ -18,14 +18,22 @@ jobs:
   abap-702:
     runs-on: ubuntu-latest
     # `npm run downport` is abaplint --fix iterating the downport rule to a
-    # fixpoint over the whole corpus — ~27 passes at 416 ports, each one a
-    # full re-parse, and it grows with every batch. It outgrew the 10 minutes
-    # this job used to allow some time ago: EVERY run since then died in that
-    # step, so the badge has been reading "cancelled" for a timeout rather
-    # than for a v702 finding. The downport rule alone needs ~44 passes and
-    # definitions_top then settles one statement per pass over 300+ more, so
-    # the whole step measures well over half an hour at 416 ports; 60 leaves
-    # room for a few more batches.
+    # fixpoint over the whole corpus, each pass a full re-parse, and it grows
+    # with every batch. It outgrew the 10 minutes this job used to allow some
+    # time ago: EVERY run since then died in that step, so the badge read
+    # "cancelled" for a timeout rather than for a v702 finding.
+    #
+    # Where 60 came from, at 416 ports: ~27 passes overall (the downport rule
+    # alone ~44, definitions_top then settling one statement per pass over
+    # 300+ more), measured as "well over half an hour".
+    #
+    # RE-DERIVED 2026-08-27 at 622 ports, because the pass counts above were
+    # never re-measured and cannot be — nothing in the step prints them, so
+    # the budget is derived from the step's own wall clock instead. Run
+    # 33074679973 (main, c25a252, ubuntu-latest): `npm run downport` 36 m 50 s,
+    # whole job 37 m 43 s. So 60 still holds, with ~22 minutes of headroom —
+    # roughly another third of corpus growth at this rate. Re-derive the same
+    # way (a green run's step timings), not from the 416-era pass counts.
     timeout-minutes: 60
     steps:
     # fetch-depth: 0 - the scope step below diffs against the base commit,
