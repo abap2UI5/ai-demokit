@@ -111,10 +111,17 @@ jobs:
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
       with:
+        # Every file the steps above write, or the PR opens against its own
+        # freshness gates. catalogue.json carries `ui5Snapshot:
+        # universe.release` (generate-catalogue.mjs), so refreshing the universe
+        # ALWAYS makes it stale. SAMPLES.md is deliberately absent: it reads the
+        # ports, the meta/ sidecars and ui5/descriptions.json, none of which
+        # this workflow writes.
         add-paths: |
           api.md
           README.md
           STATUS.md
+          catalogue.json
           ui5/universe.json
           ui5/properties.json
           src/z2ui5_cl_smpc_app_000.clas.abap
