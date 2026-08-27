@@ -374,8 +374,8 @@ the per-port modules here):
     fails the leg instead of passing quietly. 535 adds the Delete-mode row
     drop with the total recomputed in ABAP (5724 -> 4768); 560 the seeded
     payment default reaching the SegmentedButton and CreditCardStep starting
-    invalidated on an empty name. Neither drives a view REBUILD — see
-    "still open"
+    invalidated on an empty name. Both also carry a REBUILD leg since
+    2026-08-27 that has never been run — see "still open"
   the SinglePlanningCalendar modify dialog (2026-08-26): 549 609 — all four
     pickers of that dialog share ONE ISO string, and the pinned valueFormat
     (yyyy-MM-dd'T'HH:mm:ss) is what lets both pairs read it; unpinned, a
@@ -448,22 +448,30 @@ the per-port modules here):
     OVERRIDDEN by UI5 itself — the Dialog's own initial focus, the footer
     OverflowToolbar's focus restore — and the ORIGINAL loses them the same
     way, so there is no end state a leg could assert that a correct port
-    would satisfy; only the Set Preferences transition is driven. 535 and
-    560 assert the branch STANDING before the press but not the branch
-    SURVIVING a view rebuild: branch_payment( ) and branch_delivery( ) are
-    re-issued from view_display( ) since 2026-08-27 (found by the linter's
-    control-state-lost-on-rebuild rule, after that work had been reported
-    finished on the pre-press half alone), and neither module drives a
-    second view_display( ) — after a rebuild PaymentTypeStep falls back to
-    the static nextStep="CreditCardStep" whatever `selectedpayment` says,
-    and BillingStep, which declares only subsequentSteps, comes back with no
-    branch at all and throws. The bookmark-restore driver 022/235/557 use is
-    what would close it. 575's module predates its port's subject: the
-    2026-08-26 correction added scrollToIndex, columnResize and the
-    follow-up action to the port, and the module still drives only the
-    OneColumn start, the master rows and their total, the row press that
-    opens the mid column with the folded detail fields, and the
-    close-column button — the sample's actual subject is uncovered. And
+    would satisfy; only the Set Preferences transition is driven. 535, 560
+    and 575 carry legs for their gaps since 2026-08-27 that have never
+    been RUN, so the gaps stay here. What the legs do: 535 and 560 pick
+    Bank Transfer through the SegmentedButtonItem's own internal button —
+    the only path that both writes the two-way bound selectedKey into the model
+    (setProperty -> updateModelProperty) and fires selectionChange — then
+    reload the draft through `?app_start=<class>#/z2ui5-xapp-state=<draft>`
+    and require the REBUILT PaymentTypeStep to branch at BankAccountStep
+    rather than at the XML's static nextStep="CreditCardStep", and the
+    rebuilt BillingStep, which declares only subsequentSteps and no nextStep
+    at all, to carry DeliveryTypeStep instead of nothing; 575 wraps
+    scrollToIndex on the master table the layout actually rendered, presses
+    row 7 and requires the layout change to call it with 7. What is missing
+    is the measurement: the transpiled backend was rebuilding for the whole
+    of that session, `.abap2UI5/node/output` never appeared, and not one of
+    the three legs was executed even once — let alone proven against its
+    defect by deleting the fix from the transpiled backend, which is what
+    every other entry above rests on. They are reasoned, not measured. Until
+    a run says otherwise, read a red on 535, 560 or 575 as a claim about the
+    LEG and check the three assumptions it stands on: that
+    sap.f.FlexibleColumnLayout fires columnResize in the headless harness,
+    that SegmentedButton._buttonPressed's model write-back reaches the round
+    trip, and that the app-state restore rebuilds these two wizards the way
+    it rebuilds 022/235/557/249. And
     the general limit app 578 exposed, which belongs to no single port: a
     leg that asserts getItems( ).length on a control it only found in the
     REGISTRY passes VACUOUSLY. A bound aggregation fills whether or not its
