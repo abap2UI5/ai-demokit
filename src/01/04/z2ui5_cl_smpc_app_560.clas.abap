@@ -692,6 +692,20 @@ CLASS z2ui5_cl_smpc_app_560 IMPLEMENTATION.
 
     client->view_display( view->stringify( ) ).
 
+    " The two branch associations are live control state: a rebuilt view resets
+    " them to what the XML declares, and BillingStep declares NO nextStep at all
+    " (only subsequentSteps), while `selectedpayment` and
+    " `differentdeliveryaddress` are bound class state that survives. So without
+    " this the wizard comes back branching to the static CreditCardStep whatever
+    " the user chose, and BillingStep comes back with no branch at all - the
+    " "wizard is in branching mode and no next step is defined" throw again.
+    " Both methods are pure: they compute from the surviving fields and issue
+    " the wire, so re-issuing on every render is idempotent. Found by the
+    " linter's new control-state-lost-on-rebuild rule, which is exactly the
+    " class it was written for
+    branch_payment( ).
+    branch_delivery( ).
+
   ENDMETHOD.
 
 
