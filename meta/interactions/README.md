@@ -59,14 +59,22 @@ the per-port modules here):
     are fixed as of 2026-08-27: 585 301 302 303 167 re-issue the guarded
     control_by_id 'to' from the end of view_display( ) against the surviving
     two-way bound selected key, 558 against a PROTECTED nav_page that parks the
-    target the live navCon was last sent to. All six legs drive the rebuild
-    through the bookmark restore. 558 should not have needed it — four of its
+    target the live navCon was last sent to. FIVE of the six legs drive the
+    rebuild through the bookmark restore; 558 does not need it — four of its
     five view_display( ) branches are reachable only FROM tabContainerPage, so
-    the tab bar's + button is one press away — but firing addNewButtonPress
-    drove no round trip at all in the headless harness (measured 2026-08-27
-    against the built backend: the listener IS attached and the event fires,
-    the TabContainer keeps its items and navCon never moves), so the + button
-    stays a human live check and the leg takes the restore like its siblings.
+    the tab bar's + button is one press away, and that is what its leg clicks.
+    An earlier reading that firing addNewButtonPress "drove no round trip at
+    all" was a HARNESS ARTEFACT, corrected 2026-08-27: eB DROPS any event fired
+    while a round trip is in flight (View1.controller.js, `if
+    (AppState.state.isBusy && !ignoreBusy) { BusyIndicator.show(0); return; }`)
+    — the listener still runs and fireEvent still returns cleanly, so a press
+    sent too early reads back as a dead control. Measured both ways on the
+    built backend: fired while busy, no POST and the items never change; fired
+    one second later on an idle frontend, TAB_ADD_NEW goes out and the tabs go
+    2 → 3. The TabContainer's own add button (class sapMTSAddNewTabBtn, tooltip
+    "Add New Tab", rendered into the control's TabStrip) takes a plain
+    Playwright click with no force at 95x22 px. Every leg here that presses
+    after a round trip therefore waits for `!z2ui5.isBusy` first.
     What the five restore legs measured BEFORE the fix, each against the very
     same draft: 585 and 167 came back on page2 while the SideNavigation read
     page1, 302 and 303 came back on page1 while the IconTabHeader read page2,
@@ -374,8 +382,8 @@ the per-port modules here):
     fails the leg instead of passing quietly. 535 adds the Delete-mode row
     drop with the total recomputed in ABAP (5724 -> 4768); 560 the seeded
     payment default reaching the SegmentedButton and CreditCardStep starting
-    invalidated on an empty name. Both also carry a REBUILD leg since
-    2026-08-27 that has never been run — see "still open"
+    invalidated on an empty name. Both also carry a REBUILD leg, added
+    2026-08-27 and first RUN the same day — green — see the entry below
   the SinglePlanningCalendar modify dialog (2026-08-26): 549 609 — all four
     pickers of that dialog share ONE ISO string, and the pinned valueFormat
     (yyyy-MM-dd'T'HH:mm:ss) is what lets both pairs read it; unpinned, a
@@ -397,6 +405,41 @@ the per-port modules here):
     fireSelect / setValue + fireChange rather than a gesture: a port that
     wired the event to nothing still fails them, a port whose CheckBox
     cannot be clicked does not
+  the three legs that were reasoned and are now MEASURED (2026-08-27):
+    535 560 575 — the REBUILD legs on the two wizards and 575's
+    COLUMN_RESIZE follow-up were written on 2026-08-27 and had never been
+    executed once. They ran that day in a full-corpus run against
+    `.abap2UI5` at 26a16a4, whose `app/webapp` is byte-identical to
+    abap2UI5 main and therefore carries the `pageId` fix in
+    core/actions/ControlCall.js, and all three passed — "pass  535
+    (+interaction)", "pass  560  (+interaction)", "pass  575
+    (+interaction)", under "e2e-smoke: 623 app(s), 0 failing." Each of the
+    three assumptions the legs stood on is CONFIRMED, and each one
+    separately, because no green is obtainable without it:
+    (1) sap.f.FlexibleColumnLayout DOES fire columnResize in the headless
+    harness — the port issues scrollToIndex from exactly ONE place, the
+    `WHEN COLUMN_RESIZE` arm guarded by `press_index >= 0`, so the spy
+    recording any call at all is that event having made the round trip;
+    (2) SegmentedButton._buttonPressed's model write-back DOES reach the
+    round trip — the branch target is a SWITCH over `selectedpayment`, so
+    PaymentTypeStep re-pointing at BankAccountStep can only come from the
+    two-way bound selectedKey arriving in ABAP;
+    (3) the app-state restore DOES rebuild these two wizards the way it
+    rebuilds 022/235/557/249 — the reloaded draft came back with a Wizard
+    that has a DOM node and its eight steps.
+    The three coverage gaps therefore CLOSE, and on more than the pass:
+    each leg is differential against its own defect BY CONSTRUCTION. The
+    rebuilt PaymentTypeStep is required to carry BankAccountStep, which is
+    NOT the XML's static nextStep="CreditCardStep", and BillingStep
+    declares no nextStep at all — so the two un-fixed answers
+    (CreditCardStep, null) are each NAMED and rejected with their own
+    sentence; and 575 requires the recorded index to BE 7, which nothing
+    but the recorded press can produce. What is still NOT done, and this
+    is the one notch these three sit below every entry above: none of them
+    has been proven by DELETING the fix from the transpiled backend and
+    watching the leg go red — for 535/560 that is the `branch_payment( )`
+    / `branch_delivery( )` pair called from `view_display( )`, for 575 the
+    `WHEN COLUMN_RESIZE` arm — see "still open"
   still open: 353's four drag & drop wires (HTML5 dnd, which Playwright's
     dragTo cannot produce for sap.ui.table's pointer extension - dispatching
     the DataTransfer events by hand would test the harness), 354's
@@ -448,39 +491,30 @@ the per-port modules here):
     OVERRIDDEN by UI5 itself — the Dialog's own initial focus, the footer
     OverflowToolbar's focus restore — and the ORIGINAL loses them the same
     way, so there is no end state a leg could assert that a correct port
-    would satisfy; only the Set Preferences transition is driven. 535, 560
-    and 575 carry legs for their gaps since 2026-08-27 that have never
-    been RUN, so the gaps stay here. What the legs do: 535 and 560 pick
-    Bank Transfer through the SegmentedButtonItem's own internal button —
-    the only path that both writes the two-way bound selectedKey into the model
-    (setProperty -> updateModelProperty) and fires selectionChange — then
-    reload the draft through `?app_start=<class>#/z2ui5-xapp-state=<draft>`
-    and require the REBUILT PaymentTypeStep to branch at BankAccountStep
-    rather than at the XML's static nextStep="CreditCardStep", and the
-    rebuilt BillingStep, which declares only subsequentSteps and no nextStep
-    at all, to carry DeliveryTypeStep instead of nothing; 575 wraps
-    scrollToIndex on the master table the layout actually rendered, presses
-    row 7 and requires the layout change to call it with 7. What is missing
-    is the measurement: the transpiled backend was rebuilding for the whole
-    of that session, `.abap2UI5/node/output` never appeared, and not one of
-    the three legs was executed even once — let alone proven against its
-    defect by deleting the fix from the transpiled backend, which is what
-    every other entry above rests on. They are reasoned, not measured. Until
-    a run says otherwise, read a red on 535, 560 or 575 as a claim about the
-    LEG and check the three assumptions it stands on: that
-    sap.f.FlexibleColumnLayout fires columnResize in the headless harness,
-    that SegmentedButton._buttonPressed's model write-back reaches the round
-    trip, and that the app-state restore rebuilds these two wizards the way
-    it rebuilds 022/235/557/249. And
+    would satisfy; only the Set Preferences transition is driven. What is
+    still open on 535, 560 and 575 is no longer COVERAGE — their legs ran
+    green on 2026-08-27 and the entry above records what that measured —
+    but the DEFECT PROOF: not one of the three has been re-run with its
+    fix deleted from the transpiled backend, which is what every other
+    entry above rests on. A leg that passes is weaker evidence than a leg
+    that has been made to go red on demand, so until someone does that,
+    read a red on 535, 560 or 575 leg-first — a little more readily than
+    you would a red anywhere else in this file. And
     the general limit app 578 exposed, which belongs to no single port: a
     leg that asserts getItems( ).length on a control it only found in the
     REGISTRY passes VACUOUSLY. A bound aggregation fills whether or not its
     control is on screen, and a page a NavContainer has swapped away leaves
     its controls alive with no DOM node — so 578's drill-down reads (16
     categories, 11 Laptops rows, and the supplier row it reaches for by
-    index) prove the bindings resolved and NOT that any of it is displayed,
-    and the same reading applies to every count in this directory taken off
-    a bare registry find( ). The rule is the app-108 one applied to the
+    index) proved the bindings resolved and NOT that any of it was
+    displayed. That is why every one of them carries the rendered filter
+    since 2026-08-27, and both of 578's legs — the begin-column `to` and
+    the sort round-trip that must not lose the column — then RAN and
+    PASSED the same day ("pass  578  (+interaction)") against a build
+    carrying the `pageId` fix, so the swap is measured and not merely
+    reasoned. The same reading still applies to every count in this
+    directory taken off a bare registry find( ). The rule is the app-108
+    one applied to the
     CLAIM: getDomRef( ) belongs on the control whose STATE is the
     assertion, and on no other — absent there it hides a page that never
     rendered, present everywhere else it makes the predicate unsatisfiable
