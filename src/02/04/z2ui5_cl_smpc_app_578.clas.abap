@@ -34,6 +34,11 @@ CLASS z2ui5_cl_smpc_app_578 DEFINITION PUBLIC.
     DATA total_count TYPE i.
     DATA descending  TYPE abap_bool.
 
+    " the beginColumnPages page the LIVE FlexibleColumnLayout was last sent to.
+    " A column position is control state, not model state, so view_display( )
+    " loses it (app 585 idiom); this field is what lets it be re-issued
+    DATA begin_page  TYPE string.
+
     " the product the mid column shows and the supplier the end column shows
     DATA d_name          TYPE string.
     DATA d_productid     TYPE string.
@@ -503,6 +508,19 @@ CLASS z2ui5_cl_smpc_app_578 IMPLEMENTATION.
     " rows short of the count its own title reports
     client->follow_up_action( val   = client->cs_event-set_size_limit
                               t_arg = VALUE #( ( `1000` ) ( `MAIN` ) ) ).
+    " The column position of a FlexibleColumnLayout is LIVE control state:
+    " view_display( ) destroys the MAIN slot and XMLView.create builds a fresh
+    " tree, so the begin column comes back on the first beginColumnPages entry
+    " (categoriesPage) - while layout and t_rows are class state that survive.
+    " Measured 2026-08-27: after a SEARCH the user was back on the categories
+    " while the layout still claimed three columns and the filtered products
+    " table was bound but off screen. Re-issuing the SAME page the CATEGORY_ITEM
+    " branch last sent is the app 585 idiom; a view that has never navigated
+    " parks nothing and issues nothing
+    IF begin_page IS NOT INITIAL.
+      client->follow_up_action( val   = client->cs_event-control_by_id
+                                t_arg = VALUE #( ( `fcl` ) ( `to` ) ( begin_page ) ) ).
+    ENDIF.
 
   ENDMETHOD.
 
@@ -547,8 +565,10 @@ CLASS z2ui5_cl_smpc_app_578 IMPLEMENTATION.
           detail_bind( t_rows[ 1 ]-productid ).
         ENDIF.
         layout = `TwoColumnsMidExpanded`.
+        " park it too, so a later view_display( ) can put the column back
+        begin_page = `dynamicPageId`.
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `fcl` ) ( `to` ) ( `dynamicPageId` ) ) ).
+                                  t_arg = VALUE #( ( `fcl` ) ( `to` ) ( begin_page ) ) ).
 
       WHEN `LIST_ITEM`.
         " Detail.controller's onListItemPress opens the mid column on that product

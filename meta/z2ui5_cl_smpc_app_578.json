@@ -26,6 +26,10 @@
     },
     {
       "type": "NOTE",
+      "what": "the begin column's page is LIVE control state, and view_display( ) loses it. A FlexibleColumnLayout column position lives in the control tree, which view_display( ) destroys and XMLView.create rebuilds, so the begin column falls back to the FIRST beginColumnPages entry (categoriesPage) - while layout, t_rows and the D_* detail fields are class state that survive the round trip and the draft. Measured 2026-08-27 against a framework carrying the FCL `to` fix (abap2UI5 977474af): press a category (begin column on dynamicPageId, eleven Laptops rows on screen), press a supplier (no view_display( ), so the position holds), then search - the rebuilt view came back with the begin column on categoriesPage and dynamicPageId without a DOM node, while layout still read ThreeColumnsMidExpanded and t_rows held the 92 search hits nobody could see. SEARCH and SORT are the two branches that rebuild. The router-driven original has no such reset: its URL carries the route. So the port parks the page the CATEGORY_ITEM branch navigated to in BEGIN_PAGE and re-issues the same control_by_id 'to' from the end of view_display( ), guarded so a view that has never navigated issues nothing - the app 585 idiom, applied to an FCL instead of a NavContainer. This was invisible before 977474af, because the `to` had never moved the begin column at all: the sweep that fixed the same asymmetry in apps 167/301/302/303/558/585 excluded this port for exactly that reason."
+    },
+    {
+      "type": "NOTE",
       "what": "List.controller's onListItemPress looks up the FIRST product of the pressed category and opens it, which is what the port does; its phone branch (navTo('detail') with OneColumn) has no counterpart, since a backend cannot read Device.system.phone. The products table has no sorter in this sample, and its title is the plain 'Products'."
     },
     {

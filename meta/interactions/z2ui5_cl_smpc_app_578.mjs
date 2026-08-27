@@ -66,4 +66,32 @@ export default async (page, expect) => {
     const fcl = ui5All().find((c) => !c.bIsDestroyed && c.getMetadata().getName() === 'sap.f.FlexibleColumnLayout');
     return Boolean(fcl && fcl.getLayout() === 'ThreeColumnsMidExpanded');
   }, 'pressing a supplier never opened the end column');
+  // A column position is LIVE control state and view_display( ) loses it: the
+  // sort round-trip rebuilds the whole tree, so the begin column falls back to
+  // the first beginColumnPages entry unless the port re-issues its `to`. Both
+  // halves are asserted, because the surviving half passes on its own even on a
+  // port that never navigated: the eleven Laptops rows come back RE-SORTED
+  // (class state that survives) AND on the page the begin column shows.
+  const firstBefore = await page.evaluate(() => {
+    const reg = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
+    const t = reg.find((c) => !c.bIsDestroyed && c.getId().endsWith('productsTable'));
+    return t.getItems()[0].getBindingContext().getProperty('NAME');
+  });
+  await page.evaluate(() => {
+    const reg = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
+    const b = reg.find((c) => !c.bIsDestroyed && c.getMetadata().getName() === 'sap.m.OverflowToolbarButton'
+      && c.getIcon() === 'sap-icon://sort' && c.hasListeners('press'));
+    if (!b) throw new Error('the products toolbar has no wired sort button');
+    b.firePress();
+  });
+  await waitForUi5(page, (first) => {
+    const fcl = ui5All().find((c) => !c.bIsDestroyed && c.getMetadata().getName() === 'sap.f.FlexibleColumnLayout');
+    const cur = fcl && fcl.getCurrentBeginColumnPage();
+    const t = ui5All().find((c) => !c.bIsDestroyed && c.getId().endsWith('productsTable'));
+    return Boolean(cur && cur.getId().endsWith('dynamicPageId')
+      && cur.getDomRef() && document.body.contains(cur.getDomRef())
+      && t && t.getItems().length === 11
+      && t.getDomRef() && document.body.contains(t.getDomRef())
+      && t.getItems()[0].getBindingContext().getProperty('NAME') !== first);
+  }, 'the sort round-trip rebuilt the view and lost the begin column - the eleven re-sorted Laptops rows have to come back as the page the begin column shows', firstBefore);
 };
