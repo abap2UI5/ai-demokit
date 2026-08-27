@@ -30,6 +30,10 @@
     {
       "type": "NOTE",
       "what": "the mode RadioButtonGroup's handler calls oSplitApp.setMode( ) in the original; SplitApp.mode is a bindable property, so the port binds it two-way (added attribute, no structural diff) and the handler only assigns the chosen mode - the prefer-a-bindable-property rule, gated by the linter rule settable-property-via-action. The state then survives a view rebuild instead of living only in the control."
+    },
+    {
+      "type": "NOTE",
+      "what": "Measured 2026-08-27 against the `pageId` argument kind abap2UI5 introduced for `to` (977474af). sap.m.SplitContainer.to probes `this._oMasterNav.getPage(pageId)` and falls through to `this._oDetailNav.to( )` (SplitContainer.js:828), and getPage compares `aPages[i].getId() == pageId` - a comparison a Control can never win. So before the fix the master probe ALWAYS missed and every `to` went to the detail NavContainer, whose own `to` normalises a Control to its id on its first line. This port's target `detailDetail` is a detailPages entry, so the wrong branch reached the right page and nothing was observably broken. The trap is latent, not active: a `to` naming a MASTER page would have navigated the detail container instead. Corpus-wide there is no such call - 096 and 097 are the only SplitContainer/SplitApp ports that wire `to`, both to `detailDetail`, and app 578's FlexibleColumnLayout was the only container the same probe actually broke."
     }
   ]
 }
