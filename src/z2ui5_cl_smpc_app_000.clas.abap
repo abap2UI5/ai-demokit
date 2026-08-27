@@ -1113,43 +1113,48 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` 'mainView--dynamicPageId', but this page is not known/aggregated by Element sap.m.NavContainer#mainView--fcl-endColumnNav". abap2UI5 commit 977474af adds a narrow ``pageId`` argument kind that` &&
                ` resolves the control exactly as ``controlId`` does and then hands the container ``control.getId()``; against a framework tree built at that commit the same press puts ``getCurrentBeginColumnPage()``` &&
                ` on ``dynamicPageId``, gives the products DynamicPage and its table a DOM node, and raises no warning. The port was not changed - it is correct on both sides of the fix and simply could not work` &&
-               ` before it - so the begin-column swap needs abap2UI5 at 977474af or later. That commit is on a BRANCH and not yet on main, and the corpus harness (``.abap2UI5``, cloned with A2UI5_BRANCH=main, at`.
-    lv_text1 = lv_text1 && ` ddbdd136) still carries the broken cast. // NOTE: the begin column's page is LIVE control state, and view_display( ) loses it. A FlexibleColumnLayout column position lives in the control tree, which` &&
-               ` view_display( ) destroys and XMLView.create rebuilds, so the begin column falls back to the FIRST beginColumnPages entry (categoriesPage) - while layout, t_rows and the D_* detail fields are class` &&
-               ` state that survive the round trip and the draft. Measured 2026-08-27 against a framework carrying the FCL ``to`` fix (abap2UI5 977474af): press a category (begin column on dynamicPageId, eleven` &&
-               ` Laptops rows on screen), press a supplier (no view_display( ), so the position holds), then search - the rebuilt view came back with the begin column on categoriesPage and dynamicPageId without a DOM` &&
-               ` node, while layout still read ThreeColumnsMidExpanded and t_rows held the 92 search hits nobody could see. SEARCH and SORT are the two branches that rebuild. The router-driven original has no such` &&
-               ` reset: its URL carries the route. So the port parks the page the CATEGORY_ITEM branch navigated to in BEGIN_PAGE and re-issues the same control_by_id 'to' from the end of view_display( ), guarded so`.
-    lv_text1 = lv_text1 && ` a view that has never navigated issues nothing - the app 585 idiom, applied to an FCL instead of a NavContainer. This was invisible before 977474af, because the ``to`` had never moved the begin` &&
-               ` column at all: the sweep that fixed the same asymmetry in apps 167/301/302/303/558/585 excluded this port for exactly that reason. // NOTE: List.controller's onListItemPress looks up the FIRST` &&
-               ` product of the pressed category and opens it, which is what the port does; its phone branch (navTo('detail') with OneColumn) has no counterpart, since a backend cannot read Device.system.phone. The` &&
-               ` products table has no sorter in this sample, and its title is the plain 'Products'. // NOTE: the five archived views declare different default namespaces - FlexibleColumnLayout.view.xml and` &&
-               ` DetailDetail.view.xml have xmlns="sap.f", List.view.xml and AboutPage.view.xml xmlns="sap.m" with f: for sap.f, and Detail.view.xml xmlns="sap.uxap" with m: for sap.m. One abap2UI5 view can only have` &&
-               ` one default namespace (sap.m here), so every control carries a different PREFIX than in its original file even though it is the same control: ObjectPageLayout, ObjectPageDynamicHeaderTitle,`.
-    lv_text1 = lv_text1 && ` ObjectPageSection and ObjectPageSubSection become uxap:-prefixed; DynamicPage and DynamicPageTitle become f:-prefixed (which is why the f:DynamicPage and f:DynamicPageTitle counts read 3 vs 2 - the` &&
-               ` sap.f-defaulted DetailDetail page joins the two the other files already prefix); and FlexBox, VBox, Label, Text, Title, Avatar, ObjectNumber, ObjectIdentifier, ColumnListItem, Link, Button,` &&
-               ` OverflowToolbarButton and form:SimpleForm lose their m: prefix. The whole missing/extra pairing of this port's structural diff is that shift - no control is actually added or dropped. The` &&
-               ` OverflowToolbarButton count (9 vs 3+6) is the same nine buttons counted once instead of split across two prefixes. // NOTE: the six navigation-action buttons are shown by the sample through the FCL` &&
-               ` helper's actionButtonsInfo (visible="{= ${/actionButtonsInfo/midColumn/fullScreen} !== null }" and so on). The helper is a JavaScript utility, so the port derives the same visibilities from the` &&
-               ` layout itself: full-screen while that column is not full screen, exit-full-screen while it is, and close while the column is open. // NOTE: Detail.controller binds the mid column with`.
-    lv_text1 = lv_text1 && ` bindElement('/ProductCollection/<n>') and DetailDetail binds the supplier row, so all their bindings are relative. The port folds them to root-seeded D_* / DD_TEXT fields (app 229 idiom): the pressed` &&
-               ` row's ProductId and the pressed supplier's text travel with the press. The detail Price is pre-composed as '<CurrencyCode> <Price>', which is the composite text the original's ObjectNumber binds. //` &&
-               ` NOTE: onSort flips a Sorter on the items binding; a thin frontend sorts the data it sends, so the ABAP table is re-ordered (app 298 idiom). onSearch filters on Name into a second table so the search` &&
-               ` can widen again. onAdd's MessageBox.show with the Information icon and the 'Aw, Snap!' title is ported 1:1 through client->message_box_display. // NOTE: the full mock /ProductCollection is seeded` &&
-               ` with the fields the three pages bind, plus the twelve supplier names of /ProductCollectionStats/Filters/1/values that the detail page's Suppliers table lists. The master title's count comes from` &&
-               ` ProductCollectionStats/Counts/Total (123). // NOTE: the two Avatar src values are '../../../../../../../{products>ProductPicUrl}' in the sample - a relative path out of the demo kit's own frame. The`.
-    lv_text1 = lv_text1 && ` port binds the mock's ProductPicUrl as it stands, without the traversal prefix, which is what the corpus does everywhere for these images. // NOTE: the icon-only share Button in the detail page's` &&
-               ` actions is tooltip-less in the sample, and so are the add and sort buttons of the list toolbar. The port gives all three a tooltip so they are reachable with a screen reader - the accessibility` &&
-               ` additions in this port. // NOTE: not yet verified in a running system: the three-column navigation, the six full-screen / close actions and the bound column-distribution sizes. **e2e-verified` &&
-               ` 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_578.mjs). **Bounded 2026-08-27:** that verification did not cover the BEGIN-column navigation and could not have. The module` &&
-               ` of the day asserted ``productsTable.getItems().length === 11`` off a bare ``Element.registry`` find, and a control the FlexibleColumnLayout never rendered answers that identically - so the leg was` &&
-               ` green while the swap was dead. Proven both ways against the pre-fix framework on 2026-08-27: the 2026-08-25 module still passes on it, and the module rewritten the same day fails on it with its own`.
-    lv_text1 = lv_text1 && ` sentence, 'the ``to`` never moved the BEGIN column onto the products page'. What 2026-08-25 verified stands for the mid and end columns and the layout states; the begin-column swap is verified as of` &&
-               ` 2026-08-27 against a framework built at abap2UI5 977474af, and remains UNVERIFIED against the framework the nightly actually runs (main), where it cannot pass. // NOTE: mvc:View displayBlock="true"` &&
-               ` has no counterpart: it is a Component-app setting that makes the view fill the page when it is the root of a Component, and abap2UI5 owns the view container itself. FlexibleColumnLayout stateChange` &&
-               ` is wired in the sample only to rewrite the URL through the router after a navigation arrow was used; there is no URL to rewrite here, so the port drops it. // NOTE: Component.js raises the model size` &&
-               ` limit; the port issues cs_event-set_size_limit for MAIN. The collection is 123 rows and the JSONModel caps a bound aggregation at 100, so without it the table stopped 23 rows short of the count its` &&
-               ` own title reports.`.
+               ` before it - so the begin-column swap needs abap2UI5 at 977474af or later. **Updated 2026-08-27, later the same day:** that commit was squash-merged into abap2UI5 main as ``56ff2a10`` (#2669), which`.
+    lv_text1 = lv_text1 && ` means ``977474af`` is now on NO branch at all - it is reachable only as a dangling object, so cite ``56ff2a10`` for where the fix lives and ``977474af`` only for what was measured above. Main tip is` &&
+               ` ``329e0c84``; the corpus harness (``.abap2UI5``, cloned with A2UI5_BRANCH=main) therefore no longer carries the broken cast, and the ``ddbdd136`` reading is what it held before the merge, not what it` &&
+               ` holds now. The PIN is the separate question and is unchanged: ``A2UI5_PIN`` is still ``bf92a79c`` (2026-08-14), which predates the fix, so a reproducible build still cannot do the begin-column swap.` &&
+               ` // NOTE: the begin column's page is LIVE control state, and view_display( ) loses it. A FlexibleColumnLayout column position lives in the control tree, which view_display( ) destroys and` &&
+               ` XMLView.create rebuilds, so the begin column falls back to the FIRST beginColumnPages entry (categoriesPage) - while layout, t_rows and the D_* detail fields are class state that survive the round` &&
+               ` trip and the draft. Measured 2026-08-27 against a framework carrying the FCL ``to`` fix (abap2UI5 977474af): press a category (begin column on dynamicPageId, eleven Laptops rows on screen), press a`.
+    lv_text1 = lv_text1 && ` supplier (no view_display( ), so the position holds), then search - the rebuilt view came back with the begin column on categoriesPage and dynamicPageId without a DOM node, while layout still read` &&
+               ` ThreeColumnsMidExpanded and t_rows held the 92 search hits nobody could see. SEARCH and SORT are the two branches that rebuild. The router-driven original has no such reset: its URL carries the` &&
+               ` route. So the port parks the page the CATEGORY_ITEM branch navigated to in BEGIN_PAGE and re-issues the same control_by_id 'to' from the end of view_display( ), guarded so a view that has never` &&
+               ` navigated issues nothing - the app 585 idiom, applied to an FCL instead of a NavContainer. This was invisible before 977474af, because the ``to`` had never moved the begin column at all: the sweep` &&
+               ` that fixed the same asymmetry in apps 167/301/302/303/558/585 excluded this port for exactly that reason. // NOTE: List.controller's onListItemPress looks up the FIRST product of the pressed category` &&
+               ` and opens it, which is what the port does; its phone branch (navTo('detail') with OneColumn) has no counterpart, since a backend cannot read Device.system.phone. The products table has no sorter in`.
+    lv_text1 = lv_text1 && ` this sample, and its title is the plain 'Products'. // NOTE: the five archived views declare different default namespaces - FlexibleColumnLayout.view.xml and DetailDetail.view.xml have xmlns="sap.f",` &&
+               ` List.view.xml and AboutPage.view.xml xmlns="sap.m" with f: for sap.f, and Detail.view.xml xmlns="sap.uxap" with m: for sap.m. One abap2UI5 view can only have one default namespace (sap.m here), so` &&
+               ` every control carries a different PREFIX than in its original file even though it is the same control: ObjectPageLayout, ObjectPageDynamicHeaderTitle, ObjectPageSection and ObjectPageSubSection` &&
+               ` become uxap:-prefixed; DynamicPage and DynamicPageTitle become f:-prefixed (which is why the f:DynamicPage and f:DynamicPageTitle counts read 3 vs 2 - the sap.f-defaulted DetailDetail page joins the` &&
+               ` two the other files already prefix); and FlexBox, VBox, Label, Text, Title, Avatar, ObjectNumber, ObjectIdentifier, ColumnListItem, Link, Button, OverflowToolbarButton and form:SimpleForm lose their` &&
+               ` m: prefix. The whole missing/extra pairing of this port's structural diff is that shift - no control is actually added or dropped. The OverflowToolbarButton count (9 vs 3+6) is the same nine buttons`.
+    lv_text1 = lv_text1 && ` counted once instead of split across two prefixes. // NOTE: the six navigation-action buttons are shown by the sample through the FCL helper's actionButtonsInfo (visible="{=` &&
+               ` ${/actionButtonsInfo/midColumn/fullScreen} !== null }" and so on). The helper is a JavaScript utility, so the port derives the same visibilities from the layout itself: full-screen while that column` &&
+               ` is not full screen, exit-full-screen while it is, and close while the column is open. // NOTE: Detail.controller binds the mid column with bindElement('/ProductCollection/<n>') and DetailDetail binds` &&
+               ` the supplier row, so all their bindings are relative. The port folds them to root-seeded D_* / DD_TEXT fields (app 229 idiom): the pressed row's ProductId and the pressed supplier's text travel with` &&
+               ` the press. The detail Price is pre-composed as '<CurrencyCode> <Price>', which is the composite text the original's ObjectNumber binds. // NOTE: onSort flips a Sorter on the items binding; a thin` &&
+               ` frontend sorts the data it sends, so the ABAP table is re-ordered (app 298 idiom). onSearch filters on Name into a second table so the search can widen again. onAdd's MessageBox.show with the`.
+    lv_text1 = lv_text1 && ` Information icon and the 'Aw, Snap!' title is ported 1:1 through client->message_box_display. // NOTE: the full mock /ProductCollection is seeded with the fields the three pages bind, plus the twelve` &&
+               ` supplier names of /ProductCollectionStats/Filters/1/values that the detail page's Suppliers table lists. The master title's count comes from ProductCollectionStats/Counts/Total (123). // NOTE: the` &&
+               ` two Avatar src values are '../../../../../../../{products>ProductPicUrl}' in the sample - a relative path out of the demo kit's own frame. The port binds the mock's ProductPicUrl as it stands,` &&
+               ` without the traversal prefix, which is what the corpus does everywhere for these images. // NOTE: the icon-only share Button in the detail page's actions is tooltip-less in the sample, and so are the` &&
+               ` add and sort buttons of the list toolbar. The port gives all three a tooltip so they are reachable with a screen reader - the accessibility additions in this port. // NOTE: not yet verified in a` &&
+               ` running system: the three-column navigation, the six full-screen / close actions and the bound column-distribution sizes. **e2e-verified 2026-08-25** (nightly e2e interaction,`.
+    lv_text1 = lv_text1 && ` meta/interactions/z2ui5_cl_smpc_app_578.mjs). **Bounded 2026-08-27:** that verification did not cover the BEGIN-column navigation and could not have. The module of the day asserted` &&
+               ` ``productsTable.getItems().length === 11`` off a bare ``Element.registry`` find, and a control the FlexibleColumnLayout never rendered answers that identically - so the leg was green while the swap` &&
+               ` was dead. Proven both ways against the pre-fix framework on 2026-08-27: the 2026-08-25 module still passes on it, and the module rewritten the same day fails on it with its own sentence, 'the ``to``` &&
+               ` never moved the BEGIN column onto the products page'. What 2026-08-25 verified stands for the mid and end columns and the layout states; the begin-column swap is verified as of 2026-08-27 against a` &&
+               ` framework built at abap2UI5 977474af, and remains UNVERIFIED against the framework the nightly actually runs (main), where it cannot pass. **Updated 2026-08-27, later the same day:** ``977474af``` &&
+               ` merged to main as ``56ff2a10`` (#2669), so the last clause has expired - the canary path (A2UI5_BRANCH=main) now builds a framework that CARRIES the fix, and the next nightly is the first run for`.
+    lv_text1 = lv_text1 && ` which this leg can pass. What still cannot pass is the PINNED path: ``A2UI5_PIN`` is ``bf92a79c`` (2026-08-14), and the 2026-08-27 bump-a2ui5 run failed on app 233 (``boot: the PurchaseID input did` &&
+               ` not render``), so the pin has not moved. // NOTE: mvc:View displayBlock="true" has no counterpart: it is a Component-app setting that makes the view fill the page when it is the root of a Component,` &&
+               ` and abap2UI5 owns the view container itself. FlexibleColumnLayout stateChange is wired in the sample only to rewrite the URL through the router after a navigation arrow was used; there is no URL to` &&
+               ` rewrite here, so the port drops it. // NOTE: Component.js raises the model size limit; the port issues cs_event-set_size_limit for MAIN. The collection is 123 rows and the JSONModel caps a bound` &&
+               ` aggregation at 100, so without it the table stopped 23 rows short of the count its own title reports.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.FlexibleColumnLayout`            name = `FlexibleColumnLayoutWithFullscreenPage`        class = `z2ui5_cl_smpc_app_578` path = `src/02/04/z2ui5_cl_smpc_app_578.clas.abap`
         score = 5
@@ -6491,11 +6496,12 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` navigation roundtrip. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_097.mjs). // NOTE: the mode RadioButtonGroup's handler calls oSplitApp.setMode( ) in` &&
                ` the original; SplitApp.mode is a bindable property, so the port binds it two-way (added attribute, no structural diff) and the handler only assigns the chosen mode - the prefer-a-bindable-property` &&
                ` rule, gated by the linter rule settable-property-via-action. The state then survives a view rebuild instead of living only in the control. // NOTE: Measured 2026-08-27 against the ``pageId`` argument` &&
-               ` kind abap2UI5 introduced for ``to`` (977474af). sap.m.SplitContainer.to probes ``this._oMasterNav.getPage(pageId)`` and falls through to ``this._oDetailNav.to( )`` (SplitContainer.js:828), and` &&
-               ` getPage compares ``aPages[i].getId() == pageId`` - a comparison a Control can never win. So before the fix the master probe ALWAYS missed and every ``to`` went to the detail NavContainer, whose own` &&
-               ` ``to`` normalises a Control to its id on its first line. This port's target ``detailDetail`` is a detailPages entry, so the wrong branch reached the right page and nothing was observably broken. The`.
-    lv_text1 = lv_text1 && ` trap is latent, not active: a ``to`` naming a MASTER page would have navigated the detail container instead. Corpus-wide there is no such call - 096 and 097 are the only SplitContainer/SplitApp ports` &&
-               ` that wire ``to``, both to ``detailDetail``, and app 578's FlexibleColumnLayout was the only container the same probe actually broke.`.
+               ` kind abap2UI5 introduced for ``to`` (``977474af``, squash-merged into main as ``56ff2a10``, #2669 - ``977474af`` itself is on no branch). sap.m.SplitContainer.to probes` &&
+               ` ``this._oMasterNav.getPage(pageId)`` and falls through to ``this._oDetailNav.to( )`` (SplitContainer.js:828), and getPage compares ``aPages[i].getId() == pageId`` - a comparison a Control can never` &&
+               ` win. So before the fix the master probe ALWAYS missed and every ``to`` went to the detail NavContainer, whose own ``to`` normalises a Control to its id on its first line. This port's target`.
+    lv_text1 = lv_text1 && ` ``detailDetail`` is a detailPages entry, so the wrong branch reached the right page and nothing was observably broken. The trap is latent, not active: a ``to`` naming a MASTER page would have` &&
+               ` navigated the detail container instead. Corpus-wide there is no such call - 096 and 097 are the only SplitContainer/SplitApp ports that wire ``to``, both to ``detailDetail``, and app 578's` &&
+               ` FlexibleColumnLayout was the only container the same probe actually broke.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.SplitApp`                        name = `SplitApp`                                      class = `z2ui5_cl_smpc_app_097` path = `src/01/01/z2ui5_cl_smpc_app_097.clas.abap`
         score = 5
@@ -6519,11 +6525,12 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` toDetail/toMaster/backDetail/backMaster/setMode navigation works across modes (2026-07-27) - kept as context. A fresh live run (each radio button switches the split mode and the toast names it)` &&
                ` restamps this port to checked. Residual, added 2026-08-23: the interaction module clicks ONE radio ('hide') and asserts one toast; the other three are never touched and nothing asserts the` &&
                ` SplitContainer's mode actually changed. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_096.mjs). // NOTE: Measured 2026-08-27 against the ``pageId``` &&
-               ` argument kind abap2UI5 introduced for ``to`` (977474af). sap.m.SplitContainer.to probes ``this._oMasterNav.getPage(pageId)`` and falls through to ``this._oDetailNav.to( )`` (SplitContainer.js:828),`.
-    lv_text1 = lv_text1 && ` and getPage compares ``aPages[i].getId() == pageId`` - a comparison a Control can never win. So before the fix the master probe ALWAYS missed and every ``to`` went to the detail NavContainer, whose` &&
-               ` own ``to`` normalises a Control to its id on its first line. This port's target ``detailDetail`` is a detailPages entry, so the wrong branch reached the right page and nothing was observably broken.` &&
-               ` The trap is latent, not active: a ``to`` naming a MASTER page would have navigated the detail container instead. Corpus-wide there is no such call - 096 and 097 are the only SplitContainer/SplitApp` &&
-               ` ports that wire ``to``, both to ``detailDetail``, and app 578's FlexibleColumnLayout was the only container the same probe actually broke.`.
+               ` argument kind abap2UI5 introduced for ``to`` (``977474af``, squash-merged into main as ``56ff2a10``, #2669 - ``977474af`` itself is on no branch). sap.m.SplitContainer.to probes`.
+    lv_text1 = lv_text1 && ` ``this._oMasterNav.getPage(pageId)`` and falls through to ``this._oDetailNav.to( )`` (SplitContainer.js:828), and getPage compares ``aPages[i].getId() == pageId`` - a comparison a Control can never` &&
+               ` win. So before the fix the master probe ALWAYS missed and every ``to`` went to the detail NavContainer, whose own ``to`` normalises a Control to its id on its first line. This port's target` &&
+               ` ``detailDetail`` is a detailPages entry, so the wrong branch reached the right page and nothing was observably broken. The trap is latent, not active: a ``to`` naming a MASTER page would have` &&
+               ` navigated the detail container instead. Corpus-wide there is no such call - 096 and 097 are the only SplitContainer/SplitApp ports that wire ``to``, both to ``detailDetail``, and app 578's` &&
+               ` FlexibleColumnLayout was the only container the same probe actually broke.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.SplitContainer`                  name = `SplitContainer`                                class = `z2ui5_cl_smpc_app_096` path = `src/01/01/z2ui5_cl_smpc_app_096.clas.abap`
         score = 5
@@ -7700,14 +7707,25 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` Corrected 2026-08-23: it used to say 1:1 while using ``to`` for all three legs. Only the Wizard-complete leg is ``to`` in the original; the Edit and Cancel/Submit legs are backToPage, a REVERSE` &&
                ` transition that unwinds the NavContainer stack rather than pushing onto it, and they now use it. The original's afterNavigate deferral - it attaches a listener and calls goToStep only inside it -` &&
                ` stays dropped: Wizard complete -> NavContainer 'to' the review page; each Edit link -> 'to' the content page then Wizard 'goToStep' the target step (whitelisted). Cancel and Submit open a MessageBox` &&
-               ` (warning/confirm) with YES/NO; on YES the wizard resets via 'to' the content page + 'discardProgress' ProductTypeStep, matching _handleMessageBoxOpen. // NOTE: the cancel leg is closed:` &&
-               ` **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the first wizard step renders and the footer Cancel really round-trips - message_box_display opens`.
-    lv_text1 = lv_text1 && ` the MessageBox 'Are you sure you want to cancel your report?' with its question text (restated 2026-08-23: the module asserts the dialog text only; it never locates a YES or NO button and never` &&
-               ` exercises onclose, so that leg is not covered). Still needs an in-system check: step validation gating the Next button, the complete/edit navigation, the goToStep scroll and the submit/cancel reset` &&
-               ` itself. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_101.mjs). // NOTE: Two step body Texts had been TRUNCATED and are restored 2026-08-23:` &&
-               ` ProductInfoStep's ran 475 of the original's 955 characters and OptionalInfoStep's 385 of 575, each a clean prefix that stopped mid-paragraph. OptionalInfoStep had also silently corrected the` &&
-               ` original's own typo "Donec ppellentesque" to "pellentesque". Both now carry the full text; the original's trailing TAB is written as the single space XML attribute-value normalisation turns it into.` &&
-               ` No gate compares long text bodies, which is why this survived.`.
+               ` (warning/confirm) with YES/NO; on YES the wizard resets via 'to' the content page + 'discardProgress' ProductTypeStep, matching _handleMessageBoxOpen. **Bounded 2026-08-27: the backToPage legs do` &&
+               ` NOTHING on the pinned framework.** "they now use it" is true of the port and false of what a reader gets when they run it. ``backToPage`` was not in the frontend's ``CONTROL_METHODS`` until abap2UI5`.
+    lv_text1 = lv_text1 && ` ``329e0c84`` (#2670), so it took the unlisted-method path, which infers argument types and hands the RAW ABAP literal over. ``sap.m.NavContainer.backToPage`` does not rescue that: ``_backTo``` &&
+               ` normalises only a Control, then ``_findClosestPreviousPageInfo`` compares ``info.id === sRequestedPreviousPageId`` strictly against a ``_pageStack`` whose entries were all pushed as ``page.getId()``` &&
+               ` and therefore carry the runtime view prefix the backend never sees. Measured 2026-08-27 on this port against the live Node backend (#2670): after the complete leg the stack reads` &&
+               ` ["mainView--wizardContentPage", "mainView--wizardReviewPage"], the Edit link fires ``backToPage("wizardContentPage")``, and UI5 answers "Cannot navigate backToPage('wizardContentPage') because target` &&
+               ` page was not found among the previous pages." with the review page still on screen. A SILENT no-op - no wrong target, no exception - which is why nothing here caught it. The four Edit links and the` &&
+               ` Cancel/Submit reset therefore leave the review page up; only the Wizard-complete ``to`` leg, and the ``goToStep``/``discardProgress`` that follow the dead back-navigation, do anything. The fix is the`.
+    lv_text1 = lv_text1 && ` ``pageId`` argument kind, which resolves the control and hands over ``control.getId()``; it is on abap2UI5 MAIN (``329e0c84``) and NOT in this corpus's framework: ``A2UI5_PIN`` is ``bf92a79c``` &&
+               ` (2026-08-14) and is blocked - the 2026-08-27 bump-a2ui5 run failed on app 233 ("boot: the PurchaseID input did not render"). Until the pin moves these legs stay dead here. Note also which way this` &&
+               ` cuts: the 2026-08-23 correction ABOVE, which switched Edit and Cancel/Submit from ``to`` to ``backToPage`` for fidelity with the original, is what made them stop working - ``to`` was listed and` &&
+               ` normalised its argument, so the pre-2026-08-23 port navigated (with the wrong transition direction). Fidelity was bought with function, and this is the record of that. // NOTE: the cancel leg is` &&
+               ` closed: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the first wizard step renders and the footer Cancel really round-trips -` &&
+               ` message_box_display opens the MessageBox 'Are you sure you want to cancel your report?' with its question text (restated 2026-08-23: the module asserts the dialog text only; it never locates a YES or`.
+    lv_text1 = lv_text1 && ` NO button and never exercises onclose, so that leg is not covered). Still needs an in-system check: step validation gating the Next button, the complete/edit navigation, the goToStep scroll and the` &&
+               ` submit/cancel reset itself. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_101.mjs). // NOTE: Two step body Texts had been TRUNCATED and are restored` &&
+               ` 2026-08-23: ProductInfoStep's ran 475 of the original's 955 characters and OptionalInfoStep's 385 of 575, each a clean prefix that stopped mid-paragraph. OptionalInfoStep had also silently corrected` &&
+               ` the original's own typo "Donec ppellentesque" to "pellentesque". Both now carry the full text; the original's trailing TAB is written as the single space XML attribute-value normalisation turns it` &&
+               ` into. No gate compares long text bodies, which is why this survived.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Wizard`                          name = `Wizard`                                        class = `z2ui5_cl_smpc_app_101` path = `src/01/01/z2ui5_cl_smpc_app_101.clas.abap`
         score = 5

@@ -9,7 +9,7 @@
 # workflow tracked the linter's main branch unconditionally, so following every
 # published release — major ones included — is the same policy expressed
 # against a registry instead of a branch. The full strict view gates run before
-# the PR exists, which is what makes that safe: a rule regression over the 416
+# the PR exists, which is what makes that safe: a rule regression over the 622
 # ports fails this workflow instead of landing on main.
 name: bump-linter
 
@@ -58,7 +58,7 @@ jobs:
         fi
 
     # the corpus gate that consumes the linter — a rule regression over the
-    # 416 ports surfaces here, in the PR run, not on main
+    # 622 ports surfaces here, in the PR run, not on main
     - if: steps.pin.outputs.changed == 'true'
       run: npx playwright install --with-deps chromium
     - if: steps.pin.outputs.changed == 'true'

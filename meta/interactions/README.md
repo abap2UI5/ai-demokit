@@ -81,7 +81,7 @@ the per-port modules here):
     and 301 came back on `home` — the lorem ipsum — while page_text read
     "Fired event to load page 7". None of the six navigates a
     sap.f.FlexibleColumnLayout, so the `to` cast fixed upstream by 977474af
-    does not gate any of them.
+    (squash-merged into abap2UI5 main as 56ff2a10) does not gate any of them.
     What the five actually DRIVE (2026-08-26). 022 235 557 open the
     FacetFilter — 022 through the Light type's whole summary bar, which is
     the opener there (the -add button has no DOM at all in that type), 235
