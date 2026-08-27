@@ -1656,11 +1656,20 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` NOTE: the sample's two fragments (SideNavigation and the NavigationList item template it uses twice) are built inline; the item template is emitted by one parameterised method, so the reconstructed` &&
                ` view shows one NavigationList where the original has two - a helper's chain is emitted once however often it is called. // NOTE: onMenuButtonPress calls toolPage.setSideExpanded(!getSideExpanded()).` &&
                ` sideExpanded is a bindable property, so the port binds a flag and the handler flips it. onItemSelect's pageContainer.to(key) is the one frontend action (control_by_id 'to'), with the pressed item's` &&
-               ` key travelling on the event; the SideNavigation's selectedKey is bound to the same field, which is what keeps the highlight in step. // NOTE: model.json is seeded verbatim - the four navigation roots`.
-    lv_text1 = lv_text1 && ` with their icons, keys and children and the three fixed items. The item template also binds enabled, which the mock never sets: it is seeded true, the NavigationListItem default, because a flat ABAP` &&
-               ` row would otherwise send abap_false and disable every item. // NOTE: the second page's Text carries the sample's own multi-paragraph lorem ipsum. An XML attribute value normalizes its line breaks and` &&
-               ` indentation to single spaces before the control ever sees it, so the port stores that normalized string - the same text the browser renders. // NOTE: not yet verified in a running system: the side` &&
-               ` navigation with its nested items, the menu-button toggle and the page switch. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_585.mjs).`.
+               ` key travelling on the event; the SideNavigation's selectedKey is bound to the same field. **Corrected 2026-08-27**: that binding keeps the highlight across a ROUND TRIP, but it does NOT keep it in`.
+    lv_text1 = lv_text1 && ` step with the NavContainer across a view REBUILD - the earlier claim that it does was the defect, not the remedy. The bound key survives the rebuild and the NavContainer does not, so the two came` &&
+               ` apart; see the rebuild NOTE below for the re-issue that actually holds them together. // NOTE: model.json is seeded verbatim - the four navigation roots with their icons, keys and children and the` &&
+               ` three fixed items. The item template also binds enabled, which the mock never sets: it is seeded true, the NavigationListItem default, because a flat ABAP row would otherwise send abap_false and` &&
+               ` disable every item. // NOTE: the second page's Text carries the sample's own multi-paragraph lorem ipsum. An XML attribute value normalizes its line breaks and indentation to single spaces before the` &&
+               ` control ever sees it, so the port stores that normalized string - the same text the browser renders. // NOTE: not yet verified in a running system: the side navigation with its nested items, the` &&
+               ` menu-button toggle and the page switch. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_585.mjs). // NOTE: A NavContainer's position is LIVE CONTROL STATE`.
+    lv_text1 = lv_text1 && ` and does not survive a view rebuild. view_display( ) destroys the MAIN slot and XMLView.create builds a fresh control tree, so pageContainer comes back on the initialPage its XML declares - while` &&
+               ` selected_key (bound to the SideNavigation's selectedKey, and written by the ITEM_SELECT branch), being two-way bound class state, survives the round trip and the draft. The app then showed one page` &&
+               ` while its own navigation control claimed another. Fixed 2026-08-27 with the app-000 re-issue idiom: the end of view_display( ) sends the SAME control_by_id 'to' payload the ITEM_SELECT path last` &&
+               ` sent, guarded so a fresh view already sitting on the initialPage="page2" issues nothing. The second view_display( ) is reached through the framework's own bookmark restore` &&
+               ` (?app_start=<class>#/z2ui5-xapp-state=<draft>, the URL cs_event-clipboard_app_state hands out): that request carries no frontend id, so the backend takes factory_first_start -> db_load(draft),` &&
+               ` check_on_navigated( ) is true while check_on_init( ) stays false - the ELSEIF branch, and the only way a port that calls no other app renders twice. The interaction module asserts BOTH halves, the`.
+    lv_text1 = lv_text1 && ` surviving key AND the re-issued page; asserting only the reset half would pass on a port that never navigated. Guard: selected_key IS NOT INITIAL AND selected_key <> ``page2``.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.ShellBar`                        name = `ShellBarWithSplitApp`                          class = `z2ui5_cl_smpc_app_585` path = `src/02/04/z2ui5_cl_smpc_app_585.clas.abap`
         score = 5
@@ -6674,7 +6683,16 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` the add-item page is icon-only in the original (icon=sap-icon://add, no text and no tooltip). The port gives it tooltip="Add" so it is reachable with a screen reader - the one accessibility addition` &&
                ` in this port. // NOTE: not yet verified in a running system: the TabContainer built over a bound items aggregation, the visible-driven Display/Edit swap inside a tab, and the close-confirmation round` &&
                ` trip that relies on the view being sent again. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_558.mjs). // NOTE: onInit calls oModel.setSizeLimit(200)` &&
-               ` because the collection is 123 rows and the JSONModel caps a bound aggregation at 100. The port issues cs_event-set_size_limit for MAIN; without it the table stopped 23 rows short.`.
+               ` because the collection is 123 rows and the JSONModel caps a bound aggregation at 100. The port issues cs_event-set_size_limit for MAIN; without it the table stopped 23 rows short. // NOTE: A` &&
+               ` NavContainer's position is LIVE CONTROL STATE and does not survive a view rebuild. view_display( ) destroys the MAIN slot and XMLView.create builds a fresh control tree, so navCon comes back on its`.
+    lv_text1 = lv_text1 && ` FIRST page - the product list, this NavContainer declaring no initialPage - while selected_tab, save_visible and cancel_visible survive as class state. Four of the five branches that call` &&
+               ` view_display( ) are reachable only FROM tabContainerPage (TAB_CANCEL, TAB_CLOSE, CLOSE_TAB_CLOSED, TAB_ADD_NEW), so pressing + on the tab bar created the tab, put the footer into edit mode and` &&
+               ` dropped the user on the product list. Fixed 2026-08-27 with the app-000 re-issue idiom: a PROTECTED nav_page parks the target the LIVE navCon was last sent to (PROTECTED, not PUBLIC, because it is` &&
+               ` bookkeeping and only PUBLIC attributes are serialized into the view model; not PRIVATE, because the draft serialization walks the attributes with a dynamic ASSIGN obj->(name) that cannot reach a` &&
+               ` PRIVATE one), and the end of view_display( ) re-issues it, guarded by ``nav_page IS NOT INITIAL AND nav_page <> ``table````. Re-issuing the LAST-ISSUED target rather than re-deriving it is what keeps` &&
+               ` the branches that DO want the table correct: nav_to_table and the tab_close redirect when the last tab goes both park ``table`` and are skipped by the same guard. Unlike the sibling ports this one`.
+    lv_text1 = lv_text1 && ` needs no bookmark restore to reach the second view_display( ) - TAB_ADD_NEW is one press away from the tab page, which is what the interaction module drives; it asserts BOTH halves, the three tabs` &&
+               ` plus the edit-mode footer AND the re-issued tabContainerPage.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.TabContainer`                    name = `TabContainerMHC`                               class = `z2ui5_cl_smpc_app_558` path = `src/01/01/z2ui5_cl_smpc_app_558.clas.abap`
         score = 5
@@ -7947,7 +7965,16 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` NavigationListItemBase, which is the relocated-member shape no gate can see (the blind-spot probe has no row for it either). The sidecar declared design and ariaHasPopup on the same item and stopped` &&
                ` there; the event that makes the item do anything was undeclared until 2026-08-23. The port already lives under src/02/05 for the other declarations. // NOTE: The ResponsivePopover carries` &&
                ` showHeader="{= ${device>/system/phone}}", an attribute the original fragment does not declare - it reproduces the controller's setShowHeader( Device.system.phone ). ResponsivePopover.showHeader`.
-    lv_text1 = lv_text1 && ` defaults to true, so binding it is what makes both arms behave like the original. Declared 2026-08-23; the sibling added attributes were declared, this one was not.`.
+    lv_text1 = lv_text1 && ` defaults to true, so binding it is what makes both arms behave like the original. Declared 2026-08-23; the sibling added attributes were declared, this one was not. // NOTE: A NavContainer's position` &&
+               ` is LIVE CONTROL STATE and does not survive a view rebuild. view_display( ) destroys the MAIN slot and XMLView.create builds a fresh control tree, so pageContainer comes back on the initialPage its` &&
+               ` XML declares - while BOTH selectedkey (which the rebuilt popover's SideNavigation reads back) and page_text, which ITEM_SELECT writes onto the TARGET page and the home page does not even bind, being` &&
+               ` two-way bound class state, survives the round trip and the draft. The app then showed one page while its own navigation control claimed another. Fixed 2026-08-27 with the app-000 re-issue idiom: the` &&
+               ` end of view_display( ) sends the SAME control_by_id 'to' payload the ITEM_SELECT path last sent, guarded so a fresh view already sitting on the initialPage="home" issues nothing. The second` &&
+               ` view_display( ) is reached through the framework's own bookmark restore (?app_start=<class>#/z2ui5-xapp-state=<draft>, the URL cs_event-clipboard_app_state hands out): that request carries no`.
+    lv_text1 = lv_text1 && ` frontend id, so the backend takes factory_first_start -> db_load(draft), check_on_navigated( ) is true while check_on_init( ) stays false - the ELSEIF branch, and the only way a port that calls no` &&
+               ` other app renders twice. The interaction module asserts BOTH halves, the surviving key AND the re-issued page; asserting only the reset half would pass on a port that never navigated. Guard:` &&
+               ` selectedkey IS NOT INITIAL AND selectedkey <> ``home``. The class already fixed exactly this asymmetry for its POPOVER (the bound selectedkey that survives the per-open fragment rebuild) and missed` &&
+               ` the main view one level up.`.
     lv_text2 = `sap.m.Avatar (control @since 1.73) is kept 1:1 in the ShellBar's f:profile aggregation (initials 'SN'). Newer than UI5 1.71 (app 152 precedent, control-level declaration). //` &&
                ` sap.tnt.NavigationListGroup (control @since 1.121) is used 1:1 for the 'Business Areas for selected user role' group. Newer than UI5 1.71. // NavigationListItem.selectable (@since 1.116) is kept 1:1` &&
                ` (selectable=false on Manufacturing management, Employee Services, Create, App Finder and Legal). // NavigationListItem.design="Action" and NavigationListItem.ariaHasPopup="Dialog" (both @since 1.133)` &&
@@ -8254,7 +8281,15 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` that rule applied correctly. Only Quick Create keeps selectable = abap_false, which data.json does set. The same class caught Root Item 2 on 2026-08-23: it is the one navigation row with no items key` &&
                ` at all, so the original's selectable="{= ${items}.length > 3}" THROWS rather than evaluating to false - ExpressionParser wraps every formatter in a try/catch that logs and returns undefined, and` &&
                ` validateProperty then falls back to the declared default true. The port computed 0 > 3 = false, and since NavigationListItem only calls _selectItem when getSelectable( ) is true, that made the root2` &&
-               ` page - a whole ScrollContainer the port declares - unreachable. Root Items 1 and 3 are unaffected: they carry items, so the expression really does evaluate.`.
+               ` page - a whole ScrollContainer the port declares - unreachable. Root Items 1 and 3 are unaffected: they carry items, so the expression really does evaluate. // NOTE: A NavContainer's position is LIVE` &&
+               ` CONTROL STATE and does not survive a view rebuild. view_display( ) destroys the MAIN slot and XMLView.create builds a fresh control tree, so pageContainer comes back on the initialPage its XML`.
+    lv_text1 = lv_text1 && ` declares - while selectedkey (bound to the SideNavigation's selectedKey), being two-way bound class state, survives the round trip and the draft. The app then showed one page while its own navigation` &&
+               ` control claimed another. Fixed 2026-08-27 with the app-000 re-issue idiom: the end of view_display( ) sends the SAME control_by_id 'to' payload the ITEM_SELECT path last sent, guarded so a fresh view` &&
+               ` already sitting on the initialPage="page2" issues nothing. The second view_display( ) is reached through the framework's own bookmark restore (?app_start=<class>#/z2ui5-xapp-state=<draft>, the URL` &&
+               ` cs_event-clipboard_app_state hands out): that request carries no frontend id, so the backend takes factory_first_start -> db_load(draft), check_on_navigated( ) is true while check_on_init( ) stays` &&
+               ` false - the ELSEIF branch, and the only way a port that calls no other app renders twice. The interaction module asserts BOTH halves, the surviving key AND the re-issued page; asserting only the` &&
+               ` reset half would pass on a port that never navigated. Guard: selectedkey IS NOT INITIAL AND selectedkey <> ``page2``. This port's itemSelect is roundtrip-free, so the key reaches the backend only on`.
+    lv_text1 = lv_text1 && ` the NEXT event - the interaction module uses the user-name popover press for that before it takes the draft.`.
     lv_text2 = `Several members newer than UI5 1.71 are kept 1:1 from the original. sap.tnt.NavigationListItem: selectable (@since 1.116), design (@since 1.133.0, sap.tnt.NavigationListItemDesign), press (event,` &&
                ` @since 1.133 on NavigationListItemBase), ariaHasPopup (@since 1.133.0). sap.m.Button.ariaHasPopup (@since 1.84) on the header 'Alan Smith' button. Declared per the property-171 policy; the tnt` &&
                ` members were previously mis/under-declared (the earlier note cited only sap.m.Button 1.84 for ariaHasPopup, which is the Button version, not the tnt member's 1.133) because the property gate is blind` &&
@@ -8283,7 +8318,14 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` select -> NavContainer 'to' frontend action and the two-way bound selectedKey - NOT covered by the interaction module (scope corrected 2026-08-23). **e2e-verified 2026-08-16** (nightly e2e` &&
                ` interaction, meta/interactions/z2ui5_cl_smpc_app_303.mjs). // POST-1.71: sap.m.IconTabFilter.items @since 1.77 - the nested sub-filter aggregation - is kept 1:1 from the original view. An`.
     lv_text1 = lv_text1 && ` AGGREGATION-level member, which the property gate does not see at the attribute-name level; app 221 declares the same member with the same rationale. Declared by policy 2026-08-21` &&
-               ` (scripts/probes/post171-blindspot-probe.mjs).`.
+               ` (scripts/probes/post171-blindspot-probe.mjs). // NOTE: A NavContainer's position is LIVE CONTROL STATE and does not survive a view rebuild. view_display( ) destroys the MAIN slot and XMLView.create` &&
+               ` builds a fresh control tree, so pageContainer comes back on the initialPage its XML declares - while selectedkey (bound to the IconTabHeader's selectedKey), being two-way bound class state, survives` &&
+               ` the round trip and the draft. The app then showed one page while its own navigation control claimed another. Fixed 2026-08-27 with the app-000 re-issue idiom: the end of view_display( ) sends the` &&
+               ` SAME control_by_id 'to' payload the ITEM_SELECT path last sent, guarded so a fresh view already sitting on the initialPage="page1" issues nothing. The second view_display( ) is reached through the` &&
+               ` framework's own bookmark restore (?app_start=<class>#/z2ui5-xapp-state=<draft>, the URL cs_event-clipboard_app_state hands out): that request carries no frontend id, so the backend takes`.
+    lv_text1 = lv_text1 && ` factory_first_start -> db_load(draft), check_on_navigated( ) is true while check_on_init( ) stays false - the ELSEIF branch, and the only way a port that calls no other app renders twice. The` &&
+               ` interaction module asserts BOTH halves, the surviving key AND the re-issued page; asserting only the reset half would pass on a port that never navigated. Guard: selectedkey IS NOT INITIAL AND` &&
+               ` selectedkey <> ``page1``.`.
     lv_text2 = `sap.tnt.ToolPage aggregation subHeader (@since 1.93) carries the horizontal IconTabHeader navigation - it is the whole point of this sample and is kept 1:1. Newer than UI5 1.71. //` &&
                ` IconTabFilter.interactionMode="SelectLeavesOnly" (the UI5 sources tag it @ui5-experimental-since 1.121, not @since - an EXPERIMENTAL property that arrived in 1.121, so it is above the floor AND may` &&
                ` still change) is kept 1:1 on the top-level filter template, and sap.m.Avatar (control @since 1.73) is kept 1:1 as the profile avatar of the ToolHeader. Both newer than UI5 1.71. //` &&
@@ -8319,7 +8361,14 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` sap.m.IconTabFilter.items @since 1.77 - the nested sub-filter aggregation - is kept 1:1 from the original view. An AGGREGATION-level member, which the property gate does not see at the attribute-name`.
     lv_text1 = lv_text1 && ` level; app 221 declares the same member with the same rationale. Declared by policy 2026-08-21 (scripts/probes/post171-blindspot-probe.mjs). // POST-1.71: sap.tnt.NavigationListItem.expanded is kept` &&
                ` 1:1 from the original view. The property PREDATES 1.71, but it now lives on sap.tnt.NavigationListItemBase and its JSDoc there carries @since 1.121, which is the version any scanner reads - the` &&
-               ` relocated-member residual limit AGENTS section 5 names. Declared by policy 2026-08-21 (scripts/probes/post171-blindspot-probe.mjs); no gate can raise it.`.
+               ` relocated-member residual limit AGENTS section 5 names. Declared by policy 2026-08-21 (scripts/probes/post171-blindspot-probe.mjs); no gate can raise it. // NOTE: A NavContainer's position is LIVE` &&
+               ` CONTROL STATE and does not survive a view rebuild. view_display( ) destroys the MAIN slot and XMLView.create builds a fresh control tree, so pageContainer comes back on the initialPage its XML` &&
+               ` declares - while selectedkey (bound to the IconTabHeader's and the phone SideNavigation's selectedKey), being two-way bound class state, survives the round trip and the draft. The app then showed one` &&
+               ` page while its own navigation control claimed another. Fixed 2026-08-27 with the app-000 re-issue idiom: the end of view_display( ) sends the SAME control_by_id 'to' payload the ITEM_SELECT path last`.
+    lv_text1 = lv_text1 && ` sent, guarded so a fresh view already sitting on the initialPage="page1" issues nothing. The second view_display( ) is reached through the framework's own bookmark restore` &&
+               ` (?app_start=<class>#/z2ui5-xapp-state=<draft>, the URL cs_event-clipboard_app_state hands out): that request carries no frontend id, so the backend takes factory_first_start -> db_load(draft),` &&
+               ` check_on_navigated( ) is true while check_on_init( ) stays false - the ELSEIF branch, and the only way a port that calls no other app renders twice. The interaction module asserts BOTH halves, the` &&
+               ` surviving key AND the re-issued page; asserting only the reset half would pass on a port that never navigated. Guard: selectedkey IS NOT INITIAL AND selectedkey <> ``page1``.`.
     lv_text2 = `sap.tnt.ToolPage aggregation subHeader (@since 1.93) carries the horizontal IconTabHeader navigation and is kept 1:1; IconTabFilter.interactionMode="SelectLeavesOnly" (the UI5 sources tag it` &&
                ` @ui5-experimental-since 1.121, not @since - an EXPERIMENTAL property that arrived in 1.121, so it is above the floor AND may still change) is kept 1:1 on the top-level filter template; sap.m.Avatar` &&
                ` (control @since 1.73) is kept 1:1 as the ToolHeader profile avatar. All newer than UI5 1.71. // sap.m.IconTabFilter.items @since 1.77 - the nested sub-filter aggregation - is kept 1:1 from the` &&

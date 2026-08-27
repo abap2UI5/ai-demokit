@@ -46,4 +46,41 @@ export default async (page, expect) => {
   // the Edit form of a tab is hidden until that tab is modified
   await waitForUi5(page, () => ui5All().filter((c) => c.getMetadata().getName() === 'sap.ui.layout.form.SimpleForm')
     .some((c) => c.getVisible() === false), 'the tab Edit form was not hidden while the tab is unmodified');
+
+  /*
+   * The NavContainer's position is live control state. TAB_ADD_NEW answers with
+   * a full view_display( ), which destroys the MAIN slot — XMLView.create then
+   * rebuilds navCon on its FIRST page, the product list, because this
+   * NavContainer declares no initialPage. `selected_tab`, `save_visible` and
+   * `cancel_visible` are class state and survive, so before the fix pressing +
+   * on the tab bar created the tab, put the buttons into edit mode and dropped
+   * the user back on the product list.
+   *
+   * This port needs no bookmark restore to reach the second view_display( ):
+   * four of the five branches that call it (TAB_CANCEL, TAB_CLOSE,
+   * CLOSE_TAB_CLOSED, TAB_ADD_NEW) are reachable only FROM tabContainerPage,
+   * and TAB_ADD_NEW is one press away from where the leg already stands.
+   *
+   * BOTH halves are asserted: the three tabs and the Cancel button are the
+   * surviving state, tabContainerPage is the re-issued position. Remove the
+   * `IF nav_page IS NOT INITIAL AND nav_page <> 'table'.` block from
+   * view_display( ) and the last assertion fails.
+   */
+  await page.evaluate(() => {
+    const reg = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
+    reg.find((c) => c.getId().endsWith('idTabContainer')).fireEvent('addNewButtonPress', {});
+  });
+  await waitForUi5(page, () => {
+    const tc = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.TabContainer');
+    return tc && tc.getItems().length === 3;
+  }, 'the add-new button never opened a third tab');
+  // the surviving half: the new tab starts in edit mode, so Save/Cancel replace Edit
+  await waitForUi5(page, () => ui5All().some((c) => c.getId().endsWith('idCancel') && c.getVisible() === true)
+    && ui5All().some((c) => c.getId().endsWith('idEditItem') && c.getVisible() === false),
+  'the new tab did not put the footer into edit mode');
+  // the reset half: the rebuilt navCon must be BACK on the tab page, not on the table
+  await waitForUi5(page, () => {
+    const nav = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.NavContainer');
+    return nav && /tabContainerPage$/.test(nav.getCurrentPage().getId());
+  }, 'the rebuilt view dropped back to the product list while the footer still claims an open tab in edit mode — view_display( ) did not re-issue the navCon position');
 };

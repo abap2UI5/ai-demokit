@@ -46,15 +46,25 @@ the per-port modules here):
   live control state that must survive a view rebuild: 022 235 557 (the
     compound binding_call filter) 249 (setBadgeMinValue/MaxValue, which are
     NOT properties — Button keeps them in private fields) 534 (the branching
-    Wizard's nextStep associations). The shape is always the same and is worth
-    recognising: view_display( ) destroys the slot and XMLView.create builds a
-    fresh control tree, so anything set through a control_by_id or binding_call
-    is gone — while the class state DESCRIBING it survives, and the app then
-    claims a state it does not show. Each of these legs asserts BOTH halves,
-    because asserting only the reset half passes on a port that never set
-    anything. 571 and 607 are the same mechanism from the other side (a
+    Wizard's nextStep associations) 585 301 302 303 167 558 (a NavContainer /
+    ToolPage POSITION, fixed 2026-08-27). The shape is always the same and is
+    worth recognising: view_display( ) destroys the slot and XMLView.create
+    builds a fresh control tree, so anything set through a control_by_id or
+    binding_call is gone — while the class state DESCRIBING it survives, and
+    the app then claims a state it does not show. Each of these legs asserts
+    BOTH halves, because asserting only the reset half passes on a port that
+    never set anything. 571 and 607 are the same mechanism from the other side (a
     declared sorter the rebuilt binding re-applies, and an ordering the rebuild
-    drops); 585, 301, 302, 303, 167 and 558 carry it unfixed — see STATUS.
+    drops). The six NavContainer ports were the last carrying it unfixed and
+    are fixed as of 2026-08-27: 585 301 302 303 167 re-issue the guarded
+    control_by_id 'to' from the end of view_display( ) against the surviving
+    two-way bound selected key, 558 against a PROTECTED nav_page that parks the
+    target the live navCon was last sent to. Five of them need the bookmark
+    restore to reach a second view_display( ); 558 does not — four of its five
+    view_display( ) branches are reachable only FROM tabContainerPage, so the
+    tab bar's + button drives the rebuild directly. None of the six navigates a
+    sap.f.FlexibleColumnLayout, so the `to` cast fixed upstream by 977474af
+    does not gate any of them.
     What the five actually DRIVE (2026-08-26). 022 235 557 open the
     FacetFilter — 022 through the Light type's whole summary bar, which is
     the opener there (the -add button has no DOM at all in that type), 235
