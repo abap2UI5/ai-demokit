@@ -24,6 +24,10 @@ CLASS z2ui5_cl_smpc_app_607 DEFINITION PUBLIC.
     DATA grouped       TYPE abap_bool.
     DATA descending    TYPE abap_bool.
     DATA toggle_state  TYPE abap_bool.
+    " set by filters_apply, so a rebuilt view knows an ordering is in force.
+    " It cannot be derived from grouped/descending: RESET clears both and still
+    " applies a Name-ascending sorter, exactly as fnApplyFiltersAndOrdering does
+    DATA ordering_applied TYPE abap_bool.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -39,6 +43,7 @@ CLASS z2ui5_cl_smpc_app_607 DEFINITION PUBLIC.
     METHODS on_event.
     METHODS filters_apply.
     METHODS model_init.
+    METHODS ordering_issue.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -265,6 +270,16 @@ CLASS z2ui5_cl_smpc_app_607 IMPLEMENTATION.
 
     client->view_display( view->stringify( ) ).
 
+    " A rebuilt view creates a FRESH items binding with an empty aSorters, so the
+    " client-side ordering is gone - while grouped/descending/search_query are
+    " class state that survives. Without this the Sort and Group buttons report a
+    " state the rows do not show, and the ABAP filter (which lives in t_products)
+    " survives while the sorter does not: asymmetric, and invisible in a run that
+    " never leaves the app. check_on_navigated takes exactly this path
+    IF ordering_applied = abap_true.
+      ordering_issue( ).
+    ENDIF.
+
   ENDMETHOD.
 
 
@@ -324,6 +339,16 @@ CLASS z2ui5_cl_smpc_app_607 IMPLEMENTATION.
       DELETE t_products WHERE name NS search_query.
     ENDIF.
 
+    ordering_applied = abap_true.
+    ordering_issue( ).
+
+  ENDMETHOD.
+
+
+  METHOD ordering_issue.
+
+    " the sorter lives on the LIVE binding, so it does not survive a rebuild -
+    " issued from filters_apply and again from view_display (the app-000 idiom)
     client->follow_up_action(
         val   = client->cs_event-binding_call
         t_arg = VALUE #( ( `idProductsTable` )

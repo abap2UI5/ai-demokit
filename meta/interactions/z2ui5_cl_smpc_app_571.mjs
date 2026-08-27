@@ -25,6 +25,31 @@ export default async (page, expect) => {
     const first = t.getItems()[0].getCells()[0];
     return first.getTitle() === 'Flyer';
   }, 'Sort Ascending never re-ordered the rows by price');
+  // Sorting WHILE GROUPED — the path that was never driven, and the reason a
+  // grouper that overruled every ABAP sort survived here. Upstream each action
+  // passes a ONE-element list to oBinding.sort( ), which replaces the grouper,
+  // so sorting by price must drop the grouping and put Flyer (the cheapest)
+  // first. With the grouper still declared, the rebuilt JSONListBinding
+  // re-applies SUPPLIERNAME as the primary key and some other row leads.
+  await page.evaluate(() => {
+    const reg = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
+    reg.find((c) => c.getMetadata().getName() === 'sap.m.table.columnmenu.ActionItem'
+      && c.getLabel() === 'Toggle Grouping').firePress();
+  });
+  await waitForUi5(page, () => {
+    const t = ui5All().find((c) => c.getId().endsWith('productsTable'));
+    return t && t.getBinding('items') && t.getBinding('items').isGrouped();
+  }, 'Toggle Grouping never put a grouper on the items binding');
+  await page.evaluate(() => {
+    const reg = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
+    reg.find((c) => c.getMetadata().getName() === 'sap.m.Button' && c.getText() === 'Sort Ascending').firePress();
+  });
+  await waitForUi5(page, () => {
+    const t = ui5All().find((c) => c.getId().endsWith('productsTable'));
+    const b = t && t.getBinding('items');
+    return b && !b.isGrouped() && t.getItems()[0].getCells()[0].getTitle() === 'Flyer';
+  }, 'sorting by price while grouped did not drop the grouper and lead with Flyer');
+
   // and the align entries reach the Dimensions column
   await page.evaluate(() => {
     const reg = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());

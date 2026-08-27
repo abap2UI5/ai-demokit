@@ -6,18 +6,19 @@
   "batch": "b41",
   "audit": {
     "frontend_action": false,
-    "event_t_arg": true
+    "event_t_arg": false,
+    "note": "the token lists no longer ride the event wire - z2ui5.cc.MultiInputExt mirrors them into the bound addedTokens/removedTokens properties and its change event carries no argument"
   },
   "status": "generated",
   "checked": null,
   "deviations": [
     {
       "type": "NOTE",
-      "what": "The bound tokens aggregation adds a Token template the original's view does not declare (it creates Tokens in JavaScript), which structural-diff reports as control extra Token."
+      "what": "the port adds one invisible control the original view does not declare - z2ui5:MultiInputExt (xmlns:z2ui5=\"z2ui5.cc\"), which structural-diff reports as control extra z2ui5:MultiInputExt. It is where the original's onInit lives; the app 040 shape. Until 2026-08-26 the extra control here was a Token template instead, because the port bound the tokens aggregation to the model - it no longer does, so the port's MultiInput now declares exactly what the sample's does (width, id, suggestionItems + core:Item, showValueHelp)."
     },
     {
-      "type": "IMPROVISED",
-      "what": "The sample registers a JS validator (text -> Token) and a tokenUpdate handler that keeps the model's /items in sync. abap2UI5 cannot register a validator, so the port creates the token in ABAP on the change event and keeps ONE table for tokens, suggestions and the List below - adding and removing tokens therefore updates the model exactly as the sample demonstrates. What is lost is the validator itself: a value that the original's validator would reject still becomes a token here, and a multi-token removal reports only its first key."
+      "type": "NOTE",
+      "what": "onInit's addValidator( function(args){ return new Token({key: args.text, text: args.text}); } ) and its attachTokenUpdate handler are both wired through the bundled invisible companion control z2ui5.cc.MultiInputExt (app 040 idiom): MultiInputId points it at the input, and it installs that validator VERBATIM - z2ui5_cl_ui5f_multiinp_js.clas.abap:154 is input.addValidator((args) => ... new Token({ key: args.text, text: args.text })), the same free-text branch this sample registers. This deviation used to read \"abap2UI5 cannot register a validator\", which was wrong (CAPABILITIES.md marks addValidator expressible, apps 040/612/613 use it, and apps 501/504 already carried the corrected wording), and it protected two defects: the port improvised token creation over a change round-trip, so a token only appeared AFTER the server answered, and its tokenUpdate wire read ${$parameters>/removedTokens}[0].getKey() - only the FIRST key of a multi-token removal. The companion mirrors the WHOLE added / removed list into the bindable addedTokens / removedTokens properties (as {KEY, TEXT} rows) and fires change, so the backend now replays both branches of the original's handler over the full lists and the model stays in sync for any number of tokens. What is still not the original: the bundled validator is FIXED, so this route could not express a sample with per-field accept/reject logic (apps 501/504) - it happens to be exactly this sample's validator."
     },
     {
       "type": "NOTE",
@@ -25,7 +26,7 @@
     },
     {
       "type": "NOTE",
-      "what": "Adding a token and removing it again (with the List following) is unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_512.mjs)."
+      "what": "Adding a token and removing it again (with the List following) is unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_512.mjs). The MultiInputExt rewrite of 2026-08-26 changes how that same behaviour is produced and needs a fresh e2e build before it is re-verified."
     }
   ]
 }

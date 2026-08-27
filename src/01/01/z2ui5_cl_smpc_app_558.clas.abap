@@ -53,6 +53,14 @@ CLASS z2ui5_cl_smpc_app_558 DEFINITION PUBLIC.
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
+    " The page the LIVE navCon was last sent to, so a rebuilt view can be sent
+    " there again (see view_display). Empty until something navigated, which is
+    " the guard. PROTECTED, not PUBLIC: it is bookkeeping and not model data,
+    " and only PUBLIC attributes are serialized into the view model - and not
+    " PRIVATE, because the draft serialization walks the attributes with a
+    " dynamic ASSIGN obj->(name) that cannot reach a PRIVATE one
+    DATA nav_page TYPE string.
+
     METHODS view_display.
     METHODS on_event.
     METHODS model_init.
@@ -304,6 +312,23 @@ CLASS z2ui5_cl_smpc_app_558 IMPLEMENTATION.
 
     client->view_display( view->stringify( ) ).
 
+    " The NavContainer's position is live control state: view_display( )
+    " destroys the MAIN slot and XMLView.create builds a fresh tree, so navCon
+    " comes back on its FIRST page - the table, this NavContainer declaring no
+    " initialPage - while selected_tab, save_visible and cancel_visible survive
+    " as class state. Four of the five branches that call view_display( ) are
+    " reachable only FROM tabContainerPage (TAB_CANCEL, TAB_CLOSE,
+    " CLOSE_TAB_CLOSED, TAB_ADD_NEW), so pressing + on the tab bar created the
+    " tab and dropped the user on the product list while the buttons claimed an
+    " open tab in edit mode. Re-issued from the LAST-issued target rather than
+    " re-derived, so the branches that DO want the table (nav_to_table, the
+    " tab_close redirect when the last tab goes) park `table` and are skipped
+    " here by the same guard. The app-000 idiom
+    IF nav_page IS NOT INITIAL AND nav_page <> `table`.
+      client->follow_up_action( val   = client->cs_event-control_by_id
+                                t_arg = VALUE #( ( `navCon` ) ( `to` ) ( nav_page ) ) ).
+    ENDIF.
+
     " onInit: oModel.setSizeLimit(200) - the collection is 123 rows and the
     " JSONModel caps a bound aggregation at 100, so without this the table
     " stops 23 rows short (the app-252 / app-444 idiom)
@@ -328,6 +353,7 @@ CLASS z2ui5_cl_smpc_app_558 IMPLEMENTATION.
     " the selection that is left
     client->follow_up_action( val   = client->cs_event-control_by_id
                               t_arg = VALUE #( ( `navCon` ) ( `back` ) ) ).
+    nav_page = `table`.
     open_visible = xsdbool( line_exists( t_products[ selected = abap_true ] ) ).
 
   ENDMETHOD.
@@ -431,8 +457,9 @@ CLASS z2ui5_cl_smpc_app_558 IMPLEMENTATION.
         ENDLOOP.
         selected_tab = VALUE #( t_tabs[ 1 ]-product_id OPTIONAL ).
         buttons_state( edit = abap_true ).
+        nav_page = `tabContainerPage`.
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `navCon` ) ( `to` ) ( `tabContainerPage` ) ) ).
+                                  t_arg = VALUE #( ( `navCon` ) ( `to` ) ( nav_page ) ) ).
 
       WHEN `TAB_SELECT`.
         selected_tab = client->get_event_arg( ).
@@ -517,8 +544,9 @@ CLASS z2ui5_cl_smpc_app_558 IMPLEMENTATION.
         CLEAR: add_name, add_supplier, add_description.
         add_price = 0.
         add_mode = abap_true.
+        nav_page = `addItemPage`.
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `navCon` ) ( `to` ) ( `addItemPage` ) ) ).
+                                  t_arg = VALUE #( ( `navCon` ) ( `to` ) ( nav_page ) ) ).
 
       WHEN `NEW_ITEM_SAVE`.
         " handleNewItemSave: the form's data joins the collection

@@ -15,6 +15,13 @@ CLASS z2ui5_cl_smpc_app_570 DEFINITION PUBLIC.
              " Formatter.weightState, computed in the backend (thin frontend)
              weight_state  TYPE string,
              price         TYPE p LENGTH 9 DECIMALS 2,
+             " PRICE stays packed for the read-only template's Currency composite
+             " binding, so the EDITABLE cell binds this string mirror instead. A
+             " packed cell cannot take the write-back: delta_apply_field ends in
+             " CATCH cx_root ##NO_HANDLER ("skip just this cell"), so 1,250.00 was
+             " dropped with no error and a lone - or a cleared cell became 0.00
+             " (both measured). A string cell always arrives, and SAVE parses it
+             price_text    TYPE string,
              currencycode  TYPE string,
            END OF ty_s_product.
     TYPES ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
@@ -184,7 +191,7 @@ CLASS z2ui5_cl_smpc_app_570 IMPLEMENTATION.
               )->a( n = `value`       v = `{WEIGHTMEASURE}`
               )->a( n = `description` v = `{WEIGHTUNIT}`
           )->tag( `Input`
-              )->a( n = `value`       v = `{PRICE}`
+              )->a( n = `value`       v = `{PRICE_TEXT}`
               )->a( n = `description` v = `{CURRENCYCODE}` ).
     ELSE.
       cells->tag( `ObjectIdentifier`
@@ -209,16 +216,52 @@ CLASS z2ui5_cl_smpc_app_570 IMPLEMENTATION.
 
   METHOD on_event.
 
+    " the first row SAVE could not parse, if any - see the SAVE branch
+    DATA lv_bad TYPE string.
+
     CASE client->get_event( ).
 
       WHEN `EDIT`.
-        " onEdit: keep a copy for Cancel, then rebind to the editable template
+        " onEdit: seed the string mirror from the packed price, keep a copy for
+        " Cancel, then rebind to the editable template
+        LOOP AT t_products REFERENCE INTO DATA(lr_seed).
+          lr_seed->price_text = |{ lr_seed->price }|.
+        ENDLOOP.
         t_backup = t_products.
         edit_mode = abap_true.
         view_display( ).
 
       WHEN `SAVE`.
-        edit_mode = abap_false.
+        " the typed text always reaches the backend now, so SAVE - not the
+        " framework - decides. A cell that does not convert keeps its old price,
+        " its text is put back from that price, and the app STAYS in edit mode
+        " with a toast: the entry is never discarded behind the user's back
+        LOOP AT t_products REFERENCE INTO DATA(lr_prod).
+          DATA(lv_txt) = condense( lr_prod->price_text ).
+          " three terms, not just the character one: CA demands a real digit so a
+          " lone `-` or `.` cannot reach the assignment (it used to land as 0.00),
+          " and the length term keeps a long digit run from overflowing the target
+          DATA(lv_ok) = xsdbool( lv_txt IS NOT INITIAL
+                             AND lv_txt CO `0123456789.-`
+                             AND lv_txt CA `0123456789`
+                             AND strlen( lv_txt ) <= 15 ).
+          IF lv_ok = abap_true.
+            TRY.
+                lr_prod->price = lv_txt.
+              CATCH cx_root.
+                lv_ok = abap_false.
+            ENDTRY.
+          ENDIF.
+          IF lv_ok = abap_false AND lv_bad IS INITIAL.
+            lv_bad = |{ lr_prod->name }: '{ lv_txt }'|.
+          ENDIF.
+          lr_prod->price_text = |{ lr_prod->price }|.
+        ENDLOOP.
+        IF lv_bad IS INITIAL.
+          edit_mode = abap_false.
+        ELSE.
+          client->message_toast_display( |Not a number, the old price was kept - { lv_bad }| ).
+        ENDIF.
         view_display( ).
 
       WHEN `CANCEL`.

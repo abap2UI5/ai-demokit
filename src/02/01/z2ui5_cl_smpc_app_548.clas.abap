@@ -358,10 +358,26 @@ CLASS z2ui5_cl_smpc_app_548 IMPLEMENTATION.
                     )->tag( `Label`
                         )->a( n = `text` v = `Start`
                     )->tag( `DateTimePicker`
+                        " The ORIGINAL binds this typed, with a pattern:
+                        "   type: 'sap.ui.model.type.DateTime',
+                        "   formatOptions: \{ pattern: 'yyyy-MM-dd HH:mm' \}
+                        " The port kept the path and dropped both, so the picker wrote a
+                        " LOCALE string back. Measured in de-DE: the user picks 4 March
+                        " 2025, the model stores "04.03.2025, 10:15:00", and
+                        " Formatter.DateCreateObject's new Date( ) reads it MONTH-first -
+                        " the appointment is drawn on 3 April. valueFormat rather than the
+                        " typed binding because this field seeds EMPTY on the recurrence
+                        " picker, and a typed binding with a source pattern raises on the
+                        " empty value a cleared picker sends (the app-549/609 reasoning)
+                        )->a( n = `valueFormat`   v = `yyyy-MM-dd'T'HH:mm:ss`
+                        )->a( n = `displayFormat` v = `yyyy-MM-dd HH:mm`
                         )->a( n = `value` v = client->_bind( c_start )
                     )->tag( `Label`
                         )->a( n = `text` v = `End`
                     )->tag( `DateTimePicker`
+                        " see the Start picker above - same contract
+                        )->a( n = `valueFormat`   v = `yyyy-MM-dd'T'HH:mm:ss`
+                        )->a( n = `displayFormat` v = `yyyy-MM-dd HH:mm`
                         )->a( n = `value` v = client->_bind( c_end )
 
                     )->tag( n = `Title` ns = `core`
@@ -584,6 +600,13 @@ CLASS z2ui5_cl_smpc_app_548 IMPLEMENTATION.
                         )->a( n = `visible` v = |\{= ${ client->_bind( c_rec_type ) } !== '' \}|
                     )->tag( `DatePicker`
                         )->a( n = `visible` v = |\{= ${ client->_bind( c_rec_type ) } !== '' \}|
+                        " the original binds this typed too (sap.ui.model.type.Date,
+                        " pattern 'yyyy-MM-dd'); valueFormat carries the same contract
+                        " without raising on the empty value this field seeds with.
+                        " The ISO datetime shape, not the original's date-only one, so
+                        " recurrenceenddate matches the port's own seeded rows
+                        )->a( n = `valueFormat`   v = `yyyy-MM-dd'T'HH:mm:ss`
+                        )->a( n = `displayFormat` v = `yyyy-MM-dd`
                         )->a( n = `value`   v = client->_bind( c_rec_end )
 
                 )->end(
@@ -649,7 +672,13 @@ CLASS z2ui5_cl_smpc_app_548 IMPLEMENTATION.
                                                         type     = c_type ).
         IF c_rec_type IS NOT INITIAL.
           new_appointment-recurrencetype    = c_rec_type.
-          new_appointment-recurrencepattern = COND i( WHEN c_rec_pattern IS INITIAL THEN 1 ELSE CONV i( c_rec_pattern ) ).
+          " guarded on characters AND length: c_rec_pattern comes straight from a
+          " free-entry Input, so an unguarded CONV i can raise NO_NUMBER or
+          " OVERFLOW; an unusable entry falls back to the sample's default
+          new_appointment-recurrencepattern = COND i( WHEN c_rec_pattern CO `0123456789` AND c_rec_pattern IS NOT INITIAL
+                                                      AND strlen( c_rec_pattern ) <= 9
+                                                      THEN CONV i( c_rec_pattern )
+                                                      ELSE 1 ).
           new_appointment-recurrenceenddate = c_rec_end.
           IF c_rec_type = `Weekly` AND c_rec_days IS NOT INITIAL.
             new_appointment-t_recurrence_day = c_rec_days.
@@ -657,7 +686,11 @@ CLASS z2ui5_cl_smpc_app_548 IMPLEMENTATION.
           IF c_rec_type = `Monthly` OR c_rec_type = `Yearly`.
             new_appointment-ruletype = c_rule_type.
             IF c_rule_type = `DayOfMonth`.
-              new_appointment-ruledayofmonth = COND i( WHEN c_rule_dom IS INITIAL THEN 0 ELSE CONV i( c_rule_dom ) ).
+              " same guard as recurrencepattern above - c_rule_dom is free entry too
+              new_appointment-ruledayofmonth = COND i( WHEN c_rule_dom CO `0123456789` AND c_rule_dom IS NOT INITIAL
+                                                       AND strlen( c_rule_dom ) <= 9
+                                                       THEN CONV i( c_rule_dom )
+                                                       ELSE 0 ).
             ELSE.
               new_appointment-ruleweekofmonth = c_rule_wom.
               new_appointment-ruledayofweek   = CONV i( c_rule_dow ).

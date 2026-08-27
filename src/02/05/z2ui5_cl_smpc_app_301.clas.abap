@@ -328,6 +328,21 @@ CLASS z2ui5_cl_smpc_app_301 IMPLEMENTATION.
 
     client->view_display( view->stringify( ) ).
 
+    " The NavContainer's position is live control state - the same asymmetry
+    " the popover above already fixes, one level up. view_display( ) destroys
+    " the MAIN slot and XMLView.create builds a fresh tree, so pageContainer
+    " comes back on its initialPage="home", while BOTH fields that describe
+    " where the user is survive as class state: selectedkey (which the rebuilt
+    " SideNavigation reads back) and page_text, which ITEM_SELECT writes onto
+    " the TARGET page and the home page does not even bind. Re-issuing the SAME
+    " key the ITEM_SELECT branch last sent is the app-000 idiom; guarded twice,
+    " because an untouched key and the key the initialPage already shows both
+    " need no action
+    IF selectedkey IS NOT INITIAL AND selectedkey <> `home`.
+      client->follow_up_action( val   = client->cs_event-control_by_id
+                                t_arg = VALUE #( ( `pageContainer` ) ( `to` ) ( selectedkey ) ) ).
+    ENDIF.
+
   ENDMETHOD.
 
 

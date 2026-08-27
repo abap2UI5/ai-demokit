@@ -54,6 +54,16 @@ export default async (page, expect) => {
         ? inp.mEventRegistry.valueHelpRequest.length : 0,
       dialogTitle: dlg ? dlg.getTitle() : null,
       rows: binding ? binding.getLength() : 0,
+      // the IllustratedMessage lives in a uxap:ObjectPageSubSection, which
+      // ObjectPageLayout renders LAZILY - so it is read from the registry by
+      // existence only, never through getDomRef(). Its title is an expression
+      // binding over the same flag the whole no-selection state hangs on, so
+      // reading the property tests the wire; scanning the body for the text
+      // tested uxap's render scheduling instead, which is what went red
+      illustratedTitle: (() => {
+        const im = all.find((c) => c.getMetadata().getName() === 'sap.m.IllustratedMessage' && !c.bIsDestroyed);
+        return im ? im.getTitle() : null;
+      })(),
     };
   })()`);
 
@@ -73,7 +83,12 @@ export default async (page, expect) => {
     throw new Error('the SelectDialog items binding carries no purchase row');
   }
 
-  // the IllustratedMessage "no selection yet" state the port boots into — the
-  // one thing on this screen that is rendered, bound and cheap to read
-  await expect(page.locator('body'), 'the initial page state').toContainText('Enter purchase ID');
+  // the "no selection yet" state the port boots into. Asserted on the control's
+  // own property rather than on body text: the 2026-08-26 full-corpus run was
+  // red here alone, on a 623-app runner, with every wire check above it green.
+  // A lazily rendered subsection cannot satisfy a 10 s text scan, and a correct
+  // port was failing for it (the app-108 rule, on a different control)
+  if (wire.illustratedTitle !== 'Enter purchase ID') {
+    throw new Error(`the IllustratedMessage title is ${JSON.stringify(wire.illustratedTitle)}, not the boot state 'Enter purchase ID' - the expression binding over INPUTPOPULATED did not resolve to the no-selection branch`);
+  }
 };

@@ -111,6 +111,9 @@ CLASS z2ui5_cl_smpc_app_499 IMPLEMENTATION.
 
       WHEN `SEARCH`.
         DATA(term) = client->get_event_arg( ).
+        " free text spliced into a JSON string literal - backslash first, then the quote (app 218/420)
+        REPLACE ALL OCCURRENCES OF `\` IN term WITH `\\`.
+        REPLACE ALL OCCURRENCES OF `"` IN term WITH `\"`.
         " The compound payload is an array of GROUPS, each group an array of
         " [path, operator, value1] ROWS (app 022's shape). It was written as an
         " array of objects, which buildFilterGroups drops as not-an-array - and

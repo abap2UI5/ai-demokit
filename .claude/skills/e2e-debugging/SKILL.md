@@ -195,6 +195,23 @@ verdicts below turned out to be harness effects.
   turns "the port might be broken" into "the harness cannot show this", and it
   belongs in the module as a comment plus a "still open" line in
   `meta/interactions/README.md`, never a silently dropped assertion.
+- **Prove an assertion against the DEFECT, not against itself.** Temporarily
+  changing the *expected value* and watching the run fail naming what it
+  actually found shows the assertion reads *something* — worth doing (apps 084,
+  233, 529: *"the `message>` model carries ["Something wrong happened"], not the
+  sample's Error message"*), but it is the weaker half. The discriminating check
+  is to delete the FIX from the **transpiled backend** —
+  `.abap2UI5/node/output/<class>.clas.mjs`, the code the browser actually runs —
+  re-run that one port, require the leg to go red **with its own sentence**, and
+  restore. App 571: with `this.grouped.set(abap.builtin.abap_false)` deleted from
+  the price-ascending branch the leg presses, the run failed with exactly
+  `FAIL 571 sorting by price while grouped did not drop the grouper and lead
+  with Flyer`; restored, green again. Apps 093/570's round-trip legs were built
+  the same way against the old packed binding, so they cannot pass by accident.
+  The corollary is worth saying plainly: **a pass is weak evidence on its own**
+  — an enum seed only matters when the INSERT actually runs, and a conversion
+  guard only matters on input no module types, so a green run over such a change
+  establishes that it breaks nothing, not that the defect is provably absent.
 - **A binding TEMPLATE answers for no row.** Asserting `getVisible()` on the
   `RowAction` template (app 359) or on any aggregation template reads a state
   with no binding context — the app-207 trap in a different control.
@@ -257,6 +274,30 @@ verdicts below turned out to be harness effects.
   previous control with its previous state. App 351 passed in isolation and
   failed in a full run on exactly this. Use
   `!c.bIsDestroyed && c.getDomRef() && document.body.contains(c.getDomRef())`.
+- **`getItems()` is answered just as happily by a control that never
+  rendered.** `ui5All()` is `Element.registry.all()` with no DOM filter of any
+  kind (`scripts/lib-e2e.mjs`), so an aggregation or property read off a
+  registry-found control proves the control EXISTS and was bound — not that it
+  reached the screen. Where the claim is "this is on screen", put the previous
+  bullet's filter in the same predicate, or assert something only a rendered
+  control can produce. App 578's three table legs read `getItems().length` off a
+  bare `ui5All()`/registry find and would answer identically for a control the
+  layout never rendered. There is no `lib-e2e` helper for this yet — the filter
+  is spelled out per module, which is exactly how it goes missing.
+- **…but a control inside a LAZILY rendered container has no DOM and is still
+  correct.** `sap.uxap.ObjectPageLayout` renders its subsections lazily, so
+  `body` may not carry a subsection's text yet, or at all, while the control is
+  present and right. App 233's final leg scanned the body for an
+  `IllustratedMessage` title inside a `uxap:ObjectPageSubSection` and was the one
+  red app in the 623-app full-corpus run of 2026-08-26 — every wire check above
+  it green, so the port was correct and the assertion was not. Scanning the body
+  tested uxap's render SCHEDULING on a 623-app runner, not the port. The rule is
+  app 108's, generalised: the filter belongs on the control whose STATE is the
+  claim, and a control that legitimately has no DOM must only be required to
+  EXIST — read its bound property out of the registry instead. 233's title is an
+  expression binding over the same flag the whole no-selection state hangs on, so
+  the property is the wire the assertion was always about, and it rides in the
+  single registry read the module already does.
 - **A predicate passed to `waitForUi5` runs in the PAGE.** It is stringified,
   so it cannot call another function from your module — `() => sideShown() === false`
   fails with `sideShown is not defined`. Inline the whole check. And remember

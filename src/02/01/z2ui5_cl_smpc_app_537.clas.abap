@@ -320,7 +320,8 @@ CLASS z2ui5_cl_smpc_app_537 IMPLEMENTATION.
           DATA(appointment) = VALUE ty_s_appointment( start_at = iso_start
                                                       end_at   = iso_end
                                                       title    = `new appointment`
-                                                      type     = `Type09` ).
+                                                      type     = `Type09`
+                                                      aria     = `None` ).
           DATA(row_index) = CONV i( client->get_event_arg( 11 ) ).
           " the selected rows are read from the model, not transported:
           " PlanningCalendarRow has a bindable `selected`, and a JS callback

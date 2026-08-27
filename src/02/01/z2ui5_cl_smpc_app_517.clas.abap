@@ -264,7 +264,11 @@ CLASS z2ui5_cl_smpc_app_517 IMPLEMENTATION.
 
       WHEN `START_LOADING`.
         tile_state = `Loading`.
+        " the length term matters as much as the character one: without it
+        " `99999999999` passes CO and overflows CONV i, and 2147484 already
+        " overflows the `seconds * 1000` below, which calculates in i
         DATA(seconds) = CONV i( COND string( WHEN loading_seconds CO `0123456789` AND loading_seconds IS NOT INITIAL
+                                             AND strlen( loading_seconds ) <= 6
                                              THEN loading_seconds
                                              ELSE `0` ) ).
         client->follow_up_action( val   = client->cs_event-start_timer

@@ -18,8 +18,8 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 | Ports | **622** sidecars in `meta/` (src/01 OpenUI5 <= 1.71: 403 · src/02 OpenUI5 > 1.71: 219) |
 | Per library | sap.f: 36 · sap.m: 393 · sap.tnt: 17 · sap.ui: 131 · sap.uxap: 45 |
 | Status ladder | 208 `generated` · 355 `reviewed` · 59 `checked` (live-verified) |
-| Deviations | 11 DROPPED_171 · 164 IMPROVISED · 2 LIVE_TEST · 1870 NOTE · 292 POST_171 |
-| Open LIVE_TESTs | **2 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
+| Deviations | 10 DROPPED_171 · 167 IMPROVISED · 1898 NOTE · 292 POST_171 |
+| Open LIVE_TESTs | **0 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 2 structural-diff · 6 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_smpc_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_smpc_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_smpc_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_smpc_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_smpc_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
 
@@ -36,7 +36,19 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   harness learned the two properties in `@abap2ui5/linter` 0.3.0 (its
   companion-control mirrors moved into `lib/cc-controls.mjs` and
   `check-upstream` compares them against `app/webapp/cc/<Name>.js`, so they
-  cannot rot again), and the pin here follows. Both ports drop the `tokens`
+  cannot rot again). The pin here does NOT automatically follow, and that is
+  the one thing this entry used to get wrong: `A2UI5_PIN` moves only when
+  `bump-a2ui5.yaml` runs and its full-corpus e2e is green, so between the
+  upstream landing and that run the reproducible builds — and any local
+  checkout — still resolve a framework without the two properties, where these
+  two ports can produce nothing but `Property "TokenKeyCell" does not exist`.
+  That is what kept both `LIVE_TEST`s open while everything else about them was
+  closed. Both were verified and closed on 2026-08-26 without waiting for the
+  pin, by building the backend the way the nightly does — `A2UI5_BRANCH=main`,
+  the canary path, which bypasses `A2UI5_PIN` rather than changing it — against
+  main tip `ddbdd13`; four consecutive green runs each. So the pin is still at
+  `bf92a79c`, and that is a statement about the reproducible builds, not about
+  these two ports. Both ports drop the `tokens`
   binding, the `tokens` aggregation and the `suggestionItemSelected` wire, and
   carry one `MultiInputExt` per tabular input (`TokenKeyCell="0"`,
   `TokenTextCells="3"` — Name and the Price cell, the `Name(Price Currency)`
@@ -599,7 +611,7 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   down to two letters, so the bare name would let a NOTE about "data" excuse a
   finding about `da` (which is exactly what app 134 did before the match was
   tightened). **0 `source-line-too-long`.**
-- [ ] **LIVE_TEST debt → e2e interactions.** The open `LIVE_TEST` count (see
+- [x] **LIVE_TEST debt → e2e interactions — reached zero 2026-08-26.** The open `LIVE_TEST` count (see
   the generated table) is the corpus' unverified-behaviour backlog. The
   systematic close path is the e2e harness: add a per-port interaction module
   under `meta/interactions/<class>.mjs` (one generic assertion per LIVE_TEST
@@ -622,7 +634,14 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   through its own API, bypassing the port, still leaves every row without a
   `_rowAction`. That rules the port out as the cause and leaves the leg to the
   human live run.
-  **The open set is now 301/348/350/353/354/359/362**, and the composition
+  **The open set is EMPTY since 2026-08-26** - the backlog went 122 ports to 0,
+  and the generated table at the top of this file is the live count. The last
+  two, 612 and 613, were never blocked by their modules: A2UI5_PIN predated the
+  TokenKeyCell / TokenTextCells properties they need, so a pinned checkout could
+  only produce `Property "TokenKeyCell" does not exist`. They were closed on the
+  canary path (A2UI5_BRANCH=main against ddbdd13), four consecutive green runs
+  each - see the 612/613 entry above. The sentence below records the state this
+  paragraph described while the backlog was still open, and the composition
   changed in both directions on 2026-08-21. 351 closed once its module was
   rewritten from a DOM dump into a real test. 362 was REOPENED: it had been
   closed as live-verified, but its module only presses the three toolbar

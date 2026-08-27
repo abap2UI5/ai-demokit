@@ -5,7 +5,13 @@ CLASS z2ui5_cl_smpc_app_180 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
-    DATA filesize TYPE i.
+    " p LENGTH 8, not i: _bind is two-way, so this field is written back from
+    " whatever the user types, and FileSizeFormat.parse accepts units up to
+    " Yottabyte with no range check - a plain `3 GB` is 3e9 and overflows i.
+    " p keeps the JSON node numeric (ajson classes it as numeric), which the
+    " sample's own "fileSize": 100 requires; app 247 uses the same type for
+    " epoch milliseconds
+    DATA filesize TYPE p LENGTH 8 DECIMALS 0.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.

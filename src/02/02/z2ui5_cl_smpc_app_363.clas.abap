@@ -394,7 +394,9 @@ CLASS z2ui5_cl_smpc_app_363 IMPLEMENTATION.
 
     IF text IS INITIAL.
       result = 0.
-    ELSEIF text CO ` 0123456789`.
+    " the length term guards the implicit conversion: `99999999999` is all
+    " digits and overflows the TYPE i target
+    ELSEIF text CO ` 0123456789` AND strlen( condense( text ) ) <= 9.
       result = text.
     ELSE.
       result = last.

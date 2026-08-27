@@ -199,7 +199,8 @@ CLASS z2ui5_cl_smpc_app_108 IMPLEMENTATION.
           INSERT VALUE #( start_at = iso_start
                           end_at   = iso_end
                           title    = `new appointment`
-                          type     = `Type09` ) INTO TABLE <person>-t_appointments.
+                          type     = `Type09`
+                          aria     = `None` ) INTO TABLE <person>-t_appointments.
         ENDIF.
 
     ENDCASE.

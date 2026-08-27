@@ -34,6 +34,10 @@
     {
       "type": "NOTE",
       "what": "the two-way mode binding replaces the setMode( ) action and is not live-verified. The imperative form it replaces WAS verified: verified in a running system 2026-07-27 - SplitContainer toDetail/toMaster/backDetail/backMaster/setMode navigation works across modes (2026-07-27) - kept as context. A fresh live run (each radio button switches the split mode and the toast names it) restamps this port to checked. Residual, added 2026-08-23: the interaction module clicks ONE radio ('hide') and asserts one toast; the other three are never touched and nothing asserts the SplitContainer's mode actually changed. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_096.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "Measured 2026-08-27 against the `pageId` argument kind abap2UI5 introduced for `to` (977474af). sap.m.SplitContainer.to probes `this._oMasterNav.getPage(pageId)` and falls through to `this._oDetailNav.to( )` (SplitContainer.js:828), and getPage compares `aPages[i].getId() == pageId` - a comparison a Control can never win. So before the fix the master probe ALWAYS missed and every `to` went to the detail NavContainer, whose own `to` normalises a Control to its id on its first line. This port's target `detailDetail` is a detailPages entry, so the wrong branch reached the right page and nothing was observably broken. The trap is latent, not active: a `to` naming a MASTER page would have navigated the detail container instead. Corpus-wide there is no such call - 096 and 097 are the only SplitContainer/SplitApp ports that wire `to`, both to `detailDetail`, and app 578's FlexibleColumnLayout was the only container the same probe actually broke."
     }
   ]
 }

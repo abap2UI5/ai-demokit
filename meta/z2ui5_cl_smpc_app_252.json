@@ -29,6 +29,10 @@
     },
     {
       "type": "NOTE",
+      "what": "/PAGES_COUNT is TYPE i behind a free-entry Input and its two-way write-back never reaches ABAP - by construction, not by luck, so the widening apps 249/604 took on 2026-08-26 is not needed here. This port wires NO event at all: main handles check_on_init and check_on_navigated only, there is no client->_event( ) anywhere, and the single follow_up_action is the set_size_limit seed that rides on the initial response. The frontend attaches the model delta to a request in exactly one place - the eB( ) event round-trip in the app's view module - so with no wired event there is no request carrying MODEL, and the typed value stays in the browser. An out-of-range count is therefore a client-side concern only (the carousel is asked for that many pages); note that the type: 'IntegerType' on the Input keeps the node numeric but does not bound it - Integer.parseValue rejects NaN and nothing else (Integer.js:101-110)."
+    },
+    {
+      "type": "NOTE",
       "what": "onInit's device branch is resolved SERVER-SIDE since 2026-08-21: pages_count comes from client->get( )-s_device-system (desktop 4 / tablet 2 / else 1), the mirror apps 012/173/302 already read. It was hard-coded to the desktop leg with a NOTE calling that 'resolved statically' - but CAPABILITIES marks the device model ✅ and the branch is expressible, so declaring it did not make it right. The original seeds the value once in onInit and so does the port."
     }
   ]

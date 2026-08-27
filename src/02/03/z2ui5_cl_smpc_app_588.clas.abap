@@ -751,6 +751,16 @@ CLASS z2ui5_cl_smpc_app_588 IMPLEMENTATION.
 
     client->view_display( view->stringify( ) ).
 
+    " selectedSection is an ASSOCIATION - no binding can carry it, and a rebuilt
+    " ObjectPageLayout opens on its first section while selected_section
+    " survives as class state that the veto logic then compares against. So the
+    " remembered section has to be re-issued after every render, not only from
+    " CONFIRM_OK. Found by the linter's control-state-lost-on-rebuild rule
+    IF selected_section IS NOT INITIAL.
+      client->follow_up_action( val   = client->cs_event-control_by_id
+                                t_arg = VALUE #( ( `ObjectPageLayout` ) ( `setSelectedSection` ) ( selected_section ) ) ).
+    ENDIF.
+
   ENDMETHOD.
 
 

@@ -57,6 +57,8 @@ CLASS z2ui5_cl_smpc_app_535 DEFINITION PUBLIC.
     METHODS view_display.
     METHODS on_event.
     METHODS nav_back_to_step IMPORTING step_id TYPE string.
+    METHODS branch_payment.
+    METHODS branch_delivery.
     METHODS total_calc.
     METHODS model_init.
 
@@ -147,6 +149,7 @@ CLASS z2ui5_cl_smpc_app_535 IMPLEMENTATION.
                             )->ele( `WizardStep`
                                 )->a( n = `id`              v = `PaymentTypeStep`
                                 )->a( n = `title`           v = `Payment type`
+                                )->a( n = `nextStep`        v = `CreditCardStep`
                                 )->a( n = `subsequentSteps` v = `CreditCardStep, BankAccountStep, CashOnDeliveryStep`
                                 )->a( n = `complete`        v = client->_event( `GOTO_PAYMENT` )
                                 )->a( n = `icon`            v = `sap-icon://money-bills`
@@ -669,6 +672,20 @@ CLASS z2ui5_cl_smpc_app_535 IMPLEMENTATION.
 
     client->view_display( view->stringify( ) ).
 
+    " The two branch associations are live control state: a rebuilt view resets
+    " them to what the XML declares, and BillingStep declares NO nextStep at all
+    " (only subsequentSteps), while `selectedpayment` and
+    " `differentdeliveryaddress` are bound class state that survives. So without
+    " this the wizard comes back branching to the static CreditCardStep whatever
+    " the user chose, and BillingStep comes back with no branch at all - the
+    " "wizard is in branching mode and no next step is defined" throw again.
+    " Both methods are pure: they compute from the surviving fields and issue
+    " the wire, so re-issuing on every render is idempotent. Found by the
+    " linter's new control-state-lost-on-rebuild rule, which is exactly the
+    " class it was written for
+    branch_payment( ).
+    branch_delivery( ).
+
   ENDMETHOD.
 
 
@@ -685,21 +702,12 @@ CLASS z2ui5_cl_smpc_app_535 IMPLEMENTATION.
         ENDIF.
 
       WHEN `GOTO_PAYMENT`.
-        " goToPaymentStep branches on the chosen payment type
-        DATA(next) = SWITCH string( selectedpayment
-                                    WHEN `Credit Card`   THEN `CreditCardStep`
-                                    WHEN `Bank Transfer` THEN `BankAccountStep`
-                                    ELSE `CashOnDeliveryStep` ).
-        client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `PaymentTypeStep` ) ( `setNextStep` ) ( next ) ) ).
+        " goToPaymentStep - re-asserts the branch the choice already sent
+        branch_payment( ).
 
       WHEN `BILLING_COMPLETE`.
-        " billingAddressComplete branches on the delivery-address checkbox
-        DATA(next_billing) = COND string( WHEN differentdeliveryaddress = abap_true
-                                          THEN `DeliveryAddressStep`
-                                          ELSE `DeliveryTypeStep` ).
-        client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `BillingStep` ) ( `setNextStep` ) ( next_billing ) ) ).
+        " billingAddressComplete - re-asserts the branch the arrival already sent
+        branch_delivery( ).
 
       WHEN `SET_PAYMENT`.
         " setDiscardableProperty: only ask once the wizard is past the step
@@ -711,6 +719,7 @@ CLASS z2ui5_cl_smpc_app_535 IMPLEMENTATION.
                                        onclose = `DISCARD_DECIDE` ).
         ELSE.
           prev_payment = selectedpayment.
+          branch_payment( ).
         ENDIF.
 
       WHEN `SET_DIFFERENT_DELIVERY`.
@@ -722,6 +731,7 @@ CLASS z2ui5_cl_smpc_app_535 IMPLEMENTATION.
                                        onclose = `DISCARD_DECIDE` ).
         ELSE.
           prev_diff_delivery = differentdeliveryaddress.
+          branch_delivery( ).
         ENDIF.
 
       WHEN `DISCARD_DECIDE`.
@@ -731,9 +741,11 @@ CLASS z2ui5_cl_smpc_app_535 IMPLEMENTATION.
           IF pending_discard = `PaymentTypeStep`.
             prev_payment   = selectedpayment.
             payment_passed = abap_false.
+            branch_payment( ).
           ELSE.
             prev_diff_delivery = differentdeliveryaddress.
             billing_passed     = abap_false.
+            branch_delivery( ).
           ENDIF.
         ELSEIF pending_discard = `PaymentTypeStep`.
           " the NO branch restores the remembered value
@@ -754,6 +766,9 @@ CLASS z2ui5_cl_smpc_app_535 IMPLEMENTATION.
         payment_passed = abap_true.
 
       WHEN `CHECK_BILLING`.
+        " also the step's activate wire: the branch must stand before the Next
+        " button can ever appear, and only this answer can make it appear
+        branch_delivery( ).
         payment_passed    = abap_true.
         billing_validated = xsdbool( strlen( address ) >= 3
                                  AND strlen( city ) >= 3
@@ -809,6 +824,39 @@ CLASS z2ui5_cl_smpc_app_535 IMPLEMENTATION.
         ENDIF.
 
     ENDCASE.
+
+  ENDMETHOD.
+
+
+  METHOD branch_payment.
+
+    " goToPaymentStep's branch, sent as soon as the payment type is CHOSEN,
+    " and again from view_display( ) - the association is live control state a
+    " rebuilt view resets, so the call sites below are not the whole story.
+    " WizardStep._complete fires complete and then calls
+    " Wizard._handleNextButtonPress in the SAME tick, so a nextStep that only
+    " arrives with the complete round trip is one press too late.
+    DATA(next) = SWITCH string( selectedpayment
+                                WHEN `Credit Card`   THEN `CreditCardStep`
+                                WHEN `Bank Transfer` THEN `BankAccountStep`
+                                ELSE `CashOnDeliveryStep` ).
+    client->follow_up_action( val   = client->cs_event-control_by_id
+                              t_arg = VALUE #( ( `PaymentTypeStep` ) ( `setNextStep` ) ( next ) ) ).
+
+  ENDMETHOD.
+
+
+  METHOD branch_delivery.
+
+    " billingAddressComplete's branch, sent from view_display( ) too - BillingStep
+    " declares NO nextStep, so after a rebuild it has no branch at all until this
+    " runs. Also sent on the step's activate wire and on
+    " every change of the checkbox - for the same reason as branch_payment
+    DATA(next) = COND string( WHEN differentdeliveryaddress = abap_true
+                              THEN `DeliveryAddressStep`
+                              ELSE `DeliveryTypeStep` ).
+    client->follow_up_action( val   = client->cs_event-control_by_id
+                              t_arg = VALUE #( ( `BillingStep` ) ( `setNextStep` ) ( next ) ) ).
 
   ENDMETHOD.
 

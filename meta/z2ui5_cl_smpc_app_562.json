@@ -54,7 +54,7 @@
     },
     {
       "type": "IMPROVISED",
-      "what": "the original re-renders the footer button from an attachChange handler on the MessagePopover's items binding (navigateBack + setType/setIcon/setText). abap2UI5 has no binding-change hook, so the button's three properties are recomputed on the SAVE round-trip that authors the messages - the only moment they change in this sample - and MessagePopover.navigateBack has no whitelisted frontend-action counterpart, so the popover opens on its list page (which is where a freshly opened popover starts anyway)."
+      "what": "the original re-renders the footer button from an attachChange handler on the MessagePopover's items binding (navigateBack + setType/setIcon/setText). abap2UI5 has no binding-change hook, so the button's three properties are recomputed on the SAVE round-trip that authors the messages - the only moment they change in this sample. The popover's own navigateBack is not called, and the reason is NOT the one this note used to give: \"MessagePopover.navigateBack has no whitelisted frontend-action counterpart\" is false - CONTROL_METHODS carries navigateBack: [] and apps 099/284/294/421/563 call it through control_by_id. It is not called because it would have nothing to do: abap2UI5 rebuilds the popup fragment on the round trip, so the MessagePopover is opened FRESH and a fresh popover already starts on its list page - the same reasoning apps 563/564 write down for their own handleDialogPress/handlePopoverPress."
     },
     {
       "type": "NOTE",

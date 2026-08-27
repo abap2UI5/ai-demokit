@@ -7,7 +7,7 @@
   "audit": {
     "frontend_action": true,
     "event_t_arg": true,
-    "note": "the section the user tried to reach travels with beforeNavigate; the confirmed navigation goes back through control_by_id / setSelectedSection"
+    "note": "the section the user tried to reach travels with beforeNavigate; the confirmed navigation goes back through control_by_id / setSelectedSection - issued from TWO places since 2026-08-27: the OK button, and again at the end of view_display( ), because selectedSection is an ASSOCIATION that a rebuilt ObjectPageLayout resets while selected_section survives as class state"
   },
   "status": "generated",
   "checked": null,
@@ -46,7 +46,7 @@
     },
     {
       "type": "NOTE",
-      "what": "not yet verified in a running system: that Edit toasts the mode and re-bakes the veto, that an icon-tab press in edit mode is cancelled and raises the dialog, and that OK then navigates through setSelectedSection while Cancel leaves the page where it was. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_588.mjs)."
+      "what": "not yet verified in a running system: that Edit toasts the mode and re-bakes the veto, that an icon-tab press in edit mode is cancelled and raises the dialog, and that OK then navigates through setSelectedSection while Cancel leaves the page where it was. **e2e-verified 2026-08-25**, before the 2026-08-27 render-time re-issue - that half needs a fresh e2e build before the nightly can confirm it; (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_588.mjs)."
     },
     {
       "type": "NOTE",

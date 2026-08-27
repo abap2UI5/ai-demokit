@@ -431,6 +431,24 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
 
     client->view_display( view->stringify( ) ).
 
+    " A Carousel's active page is live control state a rebuilt view resets to
+    " page 0, while first_item survives as class state AND drives the bound
+    " comparison rows - so after a rebuild the two Carousels show item 0 next to
+    " props for items first_item.. Re-issued positionally, the same form the
+    " event branch uses (the pages are aggregation-template clones with no id
+    " the backend can spell). Guarded, because page 0 is where a fresh view
+    " already is. Found by the linter's control-state-lost-on-rebuild rule
+    IF first_item > 0.
+      client->follow_up_action( val   = client->cs_event-control_by_id
+                                t_arg = VALUE #( ( `carousel-snapped` )
+                                                 ( `setActivePage` )
+                                                 ( |carousel-snapped/pages/{ first_item }| ) ) ).
+      client->follow_up_action( val   = client->cs_event-control_by_id
+                                t_arg = VALUE #( ( `carousel-expanded` )
+                                                 ( `setActivePage` )
+                                                 ( |carousel-expanded/pages/{ first_item }| ) ) ).
+    ENDIF.
+
   ENDMETHOD.
 
 

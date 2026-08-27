@@ -51,9 +51,19 @@ CLASS z2ui5_cl_smpc_app_557 DEFINITION PUBLIC.
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
+    " the compound filter the LIVE items binding was last given, so a rebuilt
+    " view can be handed exactly the same one again (see view_display). Empty
+    " until the user has filtered once, which is the guard. PROTECTED, not
+    " PUBLIC: it is bookkeeping and not model data, and only PUBLIC attributes
+    " are serialized into the view model - and not PRIVATE, because the draft
+    " serialization walks the attributes with a dynamic ASSIGN obj->(name)
+    " that cannot reach a PRIVATE one
+    DATA filter_live TYPE string.
+
     METHODS view_display.
     METHODS on_event.
     METHODS apply_filter.
+    METHODS filter_issue.
     METHODS list_search IMPORTING title TYPE string
                                   term  TYPE string.
     METHODS model_init.
@@ -256,6 +266,22 @@ CLASS z2ui5_cl_smpc_app_557 IMPLEMENTATION.
 
     client->view_display( view->stringify( ) ).
 
+    " A rebuilt view creates a FRESH items binding whose aFilters is empty, so
+    " the client-side filter is gone - while the two-way bound selected flags
+    " on t_filters/t_filters_all are class state that survives. Without this
+    " the FacetFilter comes back claiming a selection the table does not show.
+    " check_on_navigated( ) takes exactly this path: measured on the
+    " framework's own bookmark restore
+    " (?app_start=<class>#/z2ui5-xapp-state=<draft>, the URL
+    " cs_event-clipboard_app_state hands out) - 34 filtered rows before,
+    " 123 unfiltered rows and the facet still reading Accessories after.
+    " Re-issuing the SAME payload is the app-000 idiom; statement order does
+    " not matter, the frontend awaits every T_SYSTEM display before it runs a
+    " T_CUSTOM follow-up
+    IF filter_live IS NOT INITIAL.
+      filter_issue( ).
+    ENDIF.
+
   ENDMETHOD.
 
 
@@ -346,7 +372,7 @@ CLASS z2ui5_cl_smpc_app_557 IMPLEMENTATION.
     " _filterModel: ORs between the values of each group, ANDs between the groups -
     " expressed as a declarative compound filter on the table's items binding, the
     " model itself untouched (the original calls oTable.getBinding('items').filter)
-    DATA(json_groups) = `[`.
+    filter_live = `[`.
 
     LOOP AT t_filters REFERENCE INTO DATA(lr_group).
       DATA(rows) = ``.
@@ -362,16 +388,25 @@ CLASS z2ui5_cl_smpc_app_557 IMPLEMENTATION.
       IF rows IS INITIAL.
         CONTINUE.
       ENDIF.
-      IF json_groups <> `[`.
-        json_groups = json_groups && `,`.
+      IF filter_live <> `[`.
+        filter_live = filter_live && `,`.
       ENDIF.
-      json_groups = json_groups && |[{ rows }]|.
+      filter_live = filter_live && |[{ rows }]|.
     ENDLOOP.
 
-    json_groups = json_groups && `]`.
+    filter_live = filter_live && `]`.
 
+    filter_issue( ).
+
+  ENDMETHOD.
+
+
+  METHOD filter_issue.
+
+    " the declarative compound filter on the table's items binding.
+    " Issued from apply_filter( ) and again from view_display( ), because the filter lives on the binding and not in the model
     client->follow_up_action( val   = client->cs_event-binding_call
-                              t_arg = VALUE #( ( `idProductsTable` ) ( `items` ) ( `filter` ) ( json_groups ) ) ).
+                              t_arg = VALUE #( ( `idProductsTable` ) ( `items` ) ( `filter` ) ( filter_live ) ) ).
 
   ENDMETHOD.
 

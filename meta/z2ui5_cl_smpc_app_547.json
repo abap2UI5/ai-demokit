@@ -33,7 +33,7 @@
     },
     {
       "type": "NOTE",
-      "what": "_validateDateTimePicker refuses an end date at or before the start and blocks the Save; the port binds the start picker's valueState and applies the same rule on the change round-trip, and the save is skipped while the state is Error. handleAppointmentTypeChange only re-reads the checkbox, which is bound two-way here, so its select wire is dropped."
+      "what": "_validateDateTimePicker refuses an end date at or before the start and blocks the Save; the port binds the start picker's valueState and applies the same rule on the change round-trip, and the save is skipped while the state is Error. That rule compares the two bound STRINGS (`d_end <= d_start`), so it only holds while both stay lexicographically sortable ISO - and until 2026-08-26 it did not: the pickers carried no valueFormat, so the first edit wrote a locale string back ('Jan 10, 2017, 8:00:00 AM' measured) and the comparison silently stopped firing, letting an appointment save with its end five days before its start. Both pickers now pin valueFormat=\"yyyy-MM-dd'T'HH:mm:ss\". Note the ORIGINAL binds no value at all - it works in Date objects through setDateValue/getDateValue - so the string binding, and the format contract it owes, are the port's own. handleAppointmentTypeChange only re-reads the checkbox, which is bound two-way here, so its select wire is dropped."
     },
     {
       "type": "IMPROVISED",

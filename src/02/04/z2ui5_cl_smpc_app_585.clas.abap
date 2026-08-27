@@ -176,6 +176,19 @@ CLASS z2ui5_cl_smpc_app_585 IMPLEMENTATION.
 
     client->view_display( view->stringify( ) ).
 
+    " The NavContainer's position is live control state: view_display( )
+    " destroys the MAIN slot and XMLView.create builds a fresh tree, so
+    " pageContainer comes back on its initialPage="page2" - while selected_key
+    " is bound class state that survives, and the SideNavigation then
+    " highlights root2 over a page2 the user never navigated back to.
+    " Re-issuing the SAME key the ITEM_SELECT branch last sent is the app-000
+    " idiom. Guarded twice: an untouched key (nothing selected yet) and the key
+    " the initialPage already shows both need no action at all
+    IF selected_key IS NOT INITIAL AND selected_key <> `page2`.
+      client->follow_up_action( val   = client->cs_event-control_by_id
+                                t_arg = VALUE #( ( `pageContainer` ) ( `to` ) ( selected_key ) ) ).
+    ENDIF.
+
   ENDMETHOD.
 
 

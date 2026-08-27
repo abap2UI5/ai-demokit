@@ -510,6 +510,16 @@ CLASS z2ui5_cl_smpc_app_534 IMPLEMENTATION.
 
     client->view_display( view->stringify( ) ).
 
+    " Branching.controller does applyPath( 0 ) in onAfterRendering - on EVERY
+    " render, not once. The nextStep associations are live control state that a
+    " rebuilt view resets to what the XML declares, and the two branch points A
+    " and E declare none at all (only subsequentSteps), so without this they sit
+    " at null: measured on the built backend, A and E came back next=NULL while
+    " every linear step carried its declared nextStep. The port used to set them
+    " only from the RadioButtonGroup's select event, which never fires for the
+    " already-selected button 0, so a freshly loaded wizard was never wired
+    path_apply( ).
+
   ENDMETHOD.
 
 

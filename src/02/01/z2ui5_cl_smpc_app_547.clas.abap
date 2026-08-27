@@ -311,6 +311,13 @@ CLASS z2ui5_cl_smpc_app_547 IMPLEMENTATION.
                 )->tag( `DateTimePicker`
                     )->a( n = `id`             v = `startDate`
                     )->a( n = `displayFormat`  v = `short`
+                    " the ORIGINAL binds no value at all - it works in Date objects
+                    " through setDateValue/getDateValue - so the string binding is the
+                    " port's own and the port owes the format. Without it the picker
+                    " writes a LOCALE string back (measured: "Jan 10, 2017, 8:00:00 AM"),
+                    " which breaks CREATE_CHANGE's `d_end <= d_start` string compare and
+                    " lands a non-ISO value in t_appointments beside ISO neighbours
+                    )->a( n = `valueFormat`    v = `yyyy-MM-dd'T'HH:mm:ss`
                     )->a( n = `required`       v = `true`
                     )->a( n = `value`          v = client->_bind( d_start )
                     )->a( n = `valueState`     v = client->_bind( d_start_state )
@@ -322,6 +329,9 @@ CLASS z2ui5_cl_smpc_app_547 IMPLEMENTATION.
                 )->tag( `DateTimePicker`
                     )->a( n = `id`            v = `endDate`
                     )->a( n = `displayFormat` v = `short`
+                    " see startDate above - the compare is only meaningful while both
+                    " sides stay lexicographically sortable ISO
+                    )->a( n = `valueFormat`   v = `yyyy-MM-dd'T'HH:mm:ss`
                     )->a( n = `required`      v = `true`
                     )->a( n = `value`         v = client->_bind( d_end )
                     )->a( n = `change`        v = client->_event( `CREATE_CHANGE` )
@@ -453,12 +463,14 @@ CLASS z2ui5_cl_smpc_app_547 IMPLEMENTATION.
               IF d_interval = abap_true.
                 INSERT VALUE #( title    = d_title
                                 start_at = d_start
-                                end_at   = d_end ) INTO TABLE <target>-t_headers.
+                                end_at   = d_end
+                                type     = `Type01` ) INTO TABLE <target>-t_headers.
               ELSE.
                 INSERT VALUE #( title    = d_title
                                 info     = d_info
                                 start_at = d_start
                                 end_at   = d_end
+                                type     = `Type01`
                                 aria     = `Dialog` ) INTO TABLE <target>-t_appointments.
               ENDIF.
             ENDIF.

@@ -331,8 +331,23 @@ CLASS z2ui5_cl_smpc_app_354 IMPLEMENTATION.
       DELETE t_products WHERE available = abap_false.
     ENDIF.
 
-    IF price_filter CO ` 0123456789.` AND price_filter IS NOT INITIAL.
-      DATA(lv_price) = CONV decfloat34( price_filter ).
+    " CO tests WHICH characters occur, never how they are ARRANGED: `.`, `12.`,
+    " `1.2.3` and `1 2` all pass it and none of them is valid ABAP numeric text,
+    " so CONV decfloat34 raised CX_SY_CONVERSION_NO_NUMBER and the round-trip
+    " died. They are one Enter away: Column.filter( ) fires the table's filter
+    " event with the RAW text before it parses anything (Column.js:914) and the
+    " price column declares no filterType, so the column menu's field submits
+    " whatever was typed. SPLIT decides the shape completely - at most one
+    " point, digits on each side of it, at least one digit present - and the
+    " padding literal is value-preserving: a leading zero on the whole part and
+    " a trailing one on the fraction change nothing. No length term is needed
+    " here (unlike the i-targeted guards elsewhere): decfloat34 carries 34
+    " digits and the comparison against PRICE is done in decfloat34 too
+    DATA(lv_text) = condense( price_filter ).
+    SPLIT lv_text AT `.` INTO DATA(lv_whole) DATA(lv_frac).
+    IF lv_text IS NOT INITIAL AND lv_text <> `.`
+       AND lv_whole CO `0123456789` AND lv_frac CO `0123456789`.
+      DATA(lv_price) = CONV decfloat34( |0{ lv_whole }.{ lv_frac }0| ).
       DELETE t_products WHERE price < lv_price - 20 OR price > lv_price + 20.
     ENDIF.
 

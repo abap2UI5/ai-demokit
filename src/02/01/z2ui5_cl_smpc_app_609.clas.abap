@@ -40,6 +40,12 @@ CLASS z2ui5_cl_smpc_app_609 DEFINITION PUBLIC.
     DATA sel_typetxt TYPE string.
     DATA dialog_title TYPE string.
 
+    " the modify dialog's date validation: _setDateValueState paints both
+    " pickers and updateButtonEnabledState gates the OK button
+    DATA date_state      TYPE string.
+    DATA date_state_text TYPE string.
+    DATA ok_enabled      TYPE abap_bool.
+
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
@@ -47,6 +53,12 @@ CLASS z2ui5_cl_smpc_app_609 DEFINITION PUBLIC.
     METHODS on_event.
     METHODS popup_details_display.
     METHODS popup_modify_display.
+    METHODS date_check.
+    METHODS all_day_hours.
+    METHODS at_hour
+      IMPORTING iso           TYPE string
+                hour          TYPE i
+      RETURNING VALUE(result) TYPE string.
     METHODS type_text
       IMPORTING type          TYPE string
       RETURNING VALUE(result) TYPE string.
@@ -234,10 +246,13 @@ CLASS z2ui5_cl_smpc_app_609 IMPLEMENTATION.
             )->a( n = `title` v = client->_bind( dialog_title )
 
             )->ele( `beginButton`
+                " updateButtonEnabledState: the OK button is disabled while a
+                " picker is empty or the end is not after the start
                 )->tag( `Button`
-                    )->a( n = `text`  v = `OK`
-                    )->a( n = `type`  v = `Emphasized`
-                    )->a( n = `press` v = client->_event( `DIALOG_OK` )
+                    )->a( n = `text`    v = `OK`
+                    )->a( n = `type`    v = `Emphasized`
+                    )->a( n = `enabled` v = client->_bind( ok_enabled )
+                    )->a( n = `press`   v = client->_event( `DIALOG_OK` )
 
             )->end(
             )->ele( `endButton`
@@ -261,46 +276,73 @@ CLASS z2ui5_cl_smpc_app_609 IMPLEMENTATION.
                         )->a( n = `text`     v = `Title`
                         )->a( n = `labelFor` v = `appTitle`
                     )->tag( `Input`
-                        )->a( n = `id`        v = `appTitle`
-                        )->a( n = `maxLength` v = `255`
-                        )->a( n = `value`     v = client->_bind( sel_title )
+                        )->a( n = `id`    v = `appTitle`
+                        )->a( n = `value` v = client->_bind( sel_title )
                     )->tag( `Label`
                         )->a( n = `text`     v = `Additional information`
                         )->a( n = `labelFor` v = `inputInfo`
                     )->tag( `Input`
-                        )->a( n = `id`        v = `moreInfo`
-                        )->a( n = `maxLength` v = `255`
-                        )->a( n = `value`     v = client->_bind( sel_text )
+                        )->a( n = `id`    v = `moreInfo`
+                        )->a( n = `value` v = client->_bind( sel_text )
                     )->tag( `Label`
                         )->a( n = `text`     v = `From`
                         )->a( n = `labelFor` v = `startDate`
+                    " all four pickers carry an explicit ISO valueFormat. The original
+                    " never binds value at all - it sets dateValue imperatively - so the
+                    " port's string binding needs the format pinned: with none, a
+                    " DateTimePicker still READS the model's ISO string (DateFormat falls
+                    " back to ISO) but writes a LOCALE string back ("Jul 12, 2018, 2:30:00 PM"),
+                    " and a DatePicker cannot read it at all - it showed the raw
+                    " "2018-07-09T09:00:00" with no date value and wrote back "7/12/18".
+                    " With the format pinned both pairs read and write the same 19-character
+                    " ISO string, which is what makes the ALL_DAY hour rewrite and the
+                    " string comparison in date_check safe (headless probe, 2026-08-26)
                     )->tag( `DateTimePicker`
-                        )->a( n = `id`       v = `DTPStartDate`
-                        )->a( n = `required` v = `true`
-                        )->a( n = `visible`  v = |\{= !${ client->_bind( all_day ) } \}|
-                        )->a( n = `value`    v = client->_bind( sel_start )
+                        )->a( n = `id`             v = `DTPStartDate`
+                        )->a( n = `required`       v = `true`
+                        )->a( n = `visible`        v = |\{= !${ client->_bind( all_day ) } \}|
+                        )->a( n = `valueFormat`    v = `yyyy-MM-dd'T'HH:mm:ss`
+                        )->a( n = `value`          v = client->_bind( sel_start )
+                        )->a( n = `valueState`     v = client->_bind( date_state )
+                        )->a( n = `valueStateText` v = client->_bind( date_state_text )
+                        )->a( n = `change`         v = client->_event( `DATE_CHECK` )
                     )->tag( `DatePicker`
-                        )->a( n = `id`       v = `DPStartDate`
-                        )->a( n = `required` v = `true`
-                        )->a( n = `visible`  v = |\{= ${ client->_bind( all_day ) } \}|
-                        )->a( n = `value`    v = client->_bind( sel_start )
+                        )->a( n = `id`             v = `DPStartDate`
+                        )->a( n = `required`       v = `true`
+                        )->a( n = `visible`        v = |\{= ${ client->_bind( all_day ) } \}|
+                        )->a( n = `valueFormat`    v = `yyyy-MM-dd'T'HH:mm:ss`
+                        )->a( n = `value`          v = client->_bind( sel_start )
+                        )->a( n = `valueState`     v = client->_bind( date_state )
+                        )->a( n = `valueStateText` v = client->_bind( date_state_text )
+                        )->a( n = `change`         v = client->_event( `DATE_CHECK` )
                     )->tag( `Label`
                         )->a( n = `text`     v = `To`
                         )->a( n = `labelFor` v = `endDate`
                     )->tag( `DateTimePicker`
-                        )->a( n = `id`       v = `DTPEndDate`
-                        )->a( n = `required` v = `true`
-                        )->a( n = `visible`  v = |\{= !${ client->_bind( all_day ) } \}|
-                        )->a( n = `value`    v = client->_bind( sel_end )
+                        )->a( n = `id`             v = `DTPEndDate`
+                        )->a( n = `required`       v = `true`
+                        )->a( n = `visible`        v = |\{= !${ client->_bind( all_day ) } \}|
+                        )->a( n = `valueFormat`    v = `yyyy-MM-dd'T'HH:mm:ss`
+                        )->a( n = `value`          v = client->_bind( sel_end )
+                        )->a( n = `valueState`     v = client->_bind( date_state )
+                        )->a( n = `valueStateText` v = client->_bind( date_state_text )
+                        )->a( n = `change`         v = client->_event( `DATE_CHECK` )
                     )->tag( `DatePicker`
-                        )->a( n = `id`       v = `DPEndDate`
-                        )->a( n = `required` v = `true`
-                        )->a( n = `visible`  v = |\{= ${ client->_bind( all_day ) } \}|
-                        )->a( n = `value`    v = client->_bind( sel_end )
+                        )->a( n = `id`             v = `DPEndDate`
+                        )->a( n = `required`       v = `true`
+                        )->a( n = `visible`        v = |\{= ${ client->_bind( all_day ) } \}|
+                        )->a( n = `valueFormat`    v = `yyyy-MM-dd'T'HH:mm:ss`
+                        )->a( n = `value`          v = client->_bind( sel_end )
+                        )->a( n = `valueState`     v = client->_bind( date_state )
+                        )->a( n = `valueStateText` v = client->_bind( date_state_text )
+                        )->a( n = `change`         v = client->_event( `DATE_CHECK` )
+                    " handleCheckBoxSelect rewrites the hours, it does not only swap
+                    " which picker pair is visible - so the select is wired
                     )->tag( `CheckBox`
                         )->a( n = `id`       v = `allDay`
                         )->a( n = `text`     v = `All-day`
                         )->a( n = `selected` v = client->_bind( all_day )
+                        )->a( n = `select`   v = client->_event( `ALL_DAY` )
                     )->tag( `Label`
                         )->a( n = `text`     v = `Type`
                         )->a( n = `labelFor` v = `appType`
@@ -343,8 +385,9 @@ CLASS z2ui5_cl_smpc_app_609 IMPLEMENTATION.
             sel_end     = appointment-end_at.
             sel_typetxt = type_text( appointment-type ).
             " an appointment that starts and ends at midnight is an all-day one
-            all_day     = xsdbool( substring( val = sel_start off = 11 len = 8 ) = `00:00:00`
-                               AND substring( val = sel_end off = 11 len = 8 ) = `00:00:00` ).
+            " (CP, not substring( ): a cleared picker sends an empty value and
+            " an offset read would dump on it)
+            all_day     = xsdbool( sel_start CP `*T00:00:00` AND sel_end CP `*T00:00:00` ).
             popup_details_display( ).
           ENDIF.
         ENDIF.
@@ -354,6 +397,7 @@ CLASS z2ui5_cl_smpc_app_609 IMPLEMENTATION.
         " opens, so the close is not optional
         client->popover_destroy( ).
         dialog_title = `Edit appointment`.
+        date_check( ).
         popup_modify_display( ).
       WHEN `DELETE`.
         " handlePopoverDeleteButton removes the appointment behind the popover
@@ -384,10 +428,28 @@ CLASS z2ui5_cl_smpc_app_609 IMPLEMENTATION.
         sel_end      = |{ day }T10:00:00|.
         all_day      = abap_false.
         dialog_title = `Create appointment`.
+        date_check( ).
         popup_modify_display( ).
+      WHEN `ALL_DAY`.
+        " handleCheckBoxSelect does more than swap which picker pair is visible:
+        " ticking All-day sets both times to midnight (_setHoursToZero) and
+        " unticking puts them back on the default hours 9 and 10
+        " (_getDefaultAppointmentStartHour / _getDefaultAppointmentEndHour),
+        " then copies both into the pair that has just become visible. The
+        " CheckBox writes its selected state into all_day BEFORE it fires
+        " select (sap.m.CheckBox.ontap), so the flag already carries the new value
+        all_day_hours( ).
+        date_check( ).
+      WHEN `DATE_CHECK`.
+        " handleDateTimePickerChange / handleDatePickerChange
+        date_check( ).
       WHEN `DIALOG_OK`.
         " handleDialogOkButton writes the dialog back into the picked row, or
-        " pushes a new one when the dialog was opened for a create
+        " pushes a new one when the dialog was opened for a create - and only
+        " when neither picker is in the error state, as the original checks too
+        IF ok_enabled = abap_false.
+          RETURN.
+        ENDIF.
         IF sel_index >= 0 AND sel_index < lines( t_appointments ).
           t_appointments[ sel_index + 1 ]-title    = sel_title.
           t_appointments[ sel_index + 1 ]-text     = sel_text.
@@ -413,6 +475,66 @@ CLASS z2ui5_cl_smpc_app_609 IMPLEMENTATION.
         client->message_toast_display(
             |'startDateChange' event fired.\n\nNew start date is { client->get_event_arg( ) }| ).
     ENDCASE.
+
+  ENDMETHOD.
+
+
+  METHOD date_check.
+
+    " handleDateTimePickerChange / handleDatePickerChange / _setDateValueState:
+    " an end that is not after the start paints BOTH pickers Error with
+    " "Start date should be before End date", and updateButtonEnabledState
+    " disables the OK button for that and for an empty picker. The DatePicker
+    " pair compares with < (the same all-day date is allowed), the
+    " DateTimePicker pair with <= - the two branches of the original.
+    " Both values are 19-character ISO strings (the pinned valueFormat), so
+    " comparing them as strings orders them by time
+    IF sel_start IS INITIAL OR sel_end IS INITIAL.
+      date_state      = `None`.
+      date_state_text = ``.
+      ok_enabled      = abap_false.
+    ELSEIF ( all_day = abap_true  AND sel_end < sel_start )
+        OR ( all_day = abap_false AND sel_end <= sel_start ).
+      date_state      = `Error`.
+      date_state_text = `Start date should be before End date`.
+      ok_enabled      = abap_false.
+    ELSE.
+      date_state      = `None`.
+      date_state_text = ``.
+      ok_enabled      = abap_true.
+    ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD all_day_hours.
+
+    " _setHoursToZero for an all-day appointment, the sample's own default
+    " hours 9 and 10 for a timed one - the rewrite handleCheckBoxSelect does
+    " on top of swapping which picker pair is visible
+    IF all_day = abap_true.
+      sel_start = at_hour( iso = sel_start hour = 0 ).
+      sel_end   = at_hour( iso = sel_end   hour = 0 ).
+    ELSE.
+      sel_start = at_hour( iso = sel_start hour = 9 ).
+      sel_end   = at_hour( iso = sel_end   hour = 10 ).
+    ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD at_hour.
+
+    " the same ISO string with its time part rewritten to the given full hour -
+    " _setHoursToZero and the two default-hour helpers of the original. The
+    " pickers carry valueFormat yyyy-MM-dd'T'HH:mm:ss, so every value that
+    " travels is 19 characters; a cleared picker sends an empty one and is
+    " left untouched rather than turned into a date-less time
+    IF strlen( iso ) < 10.
+      result = iso.
+      RETURN.
+    ENDIF.
+    result = |{ substring( val = iso len = 10 ) }T{ hour WIDTH = 2 ALIGN = RIGHT PAD = '0' }:00:00|.
 
   ENDMETHOD.
 

@@ -582,7 +582,11 @@ CLASS z2ui5_cl_smpc_app_580 IMPLEMENTATION.
   METHOD model_init.
 
     " the full mock /ProductCollection, in the mock order - the items binding
-    " keeps its own sorter on NAME
+    " carries NO sorter, so the backend owns the order. Do not add one: a
+    " declared sorter is re-applied by JSONListBinding.update on every model
+    " change (ClientListBinding.applySort), so it becomes the primary key and
+    " the ABAP order survives only as a tiebreak - which is exactly what made
+    " the Sort button unable to sort here
     t_products = VALUE #(
       ( productid = `HT-1000` name = `Notebook Basic 15`
         maincategory = `Computer Systems` category = `Laptops` suppliername = `Very Best Screens` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg`

@@ -176,6 +176,25 @@ picked the default) and overrides non-empty property **defaults** (e.g.
 data, or split the aggregation into per-shape templates (the QuickView port's
 `QuickViewGroupElementType`/`AvatarShape` crashed every page this way).
 
+**It takes the whole VIEW down, not the row**, and the miss is usually a single
+row: `validateProperty` throws *inside a binding update*, which
+`ManagedObjectBindingSupport` re-throws. The corpus sweep measured it —
+*"3,285 row-build sites across 128 (port, table) pairs examined, 10 defects in 6
+ports"* — and the shape to expect is 536's and 538's: **one** model row, out of
+46 and out of 37, without the field. A sibling row, or a sibling port, that does
+seed it is no evidence the row beside it does — and fixing one enum on a row does
+not fix the one next to it: 549's `type` was seeded by a linter rule that could
+not see the `aria` omission on the same INSERT, and 547 had the `aria` half of
+the identical pair fixed while the `type` half was not.
+
+**Read the default out of the UI5 source, and do not take it from the property
+next to it.** `CalendarAppointment.ariaHasPopup` defaults to `None`
+(`CalendarAppointment.js:120`), but `type` defaults to **`Type01`**, inherited
+from `DateTypeRange.js:43` — `CalendarAppointment` does not override it. App 546
+was once seeded `type = None` beside a comment saying the original "falls back
+to the property default": `None` is *`secondaryType`*'s default, so the port
+rendered a different colour from the original and nothing failed.
+
 The **boolean** case is the quiet one: `abap_bool` has no absent state either,
 so an unset field serializes as a real JSON `false` and OVERRIDES a control
 default of `true`. Nothing crashes — the control simply renders the opposite of
@@ -628,6 +647,32 @@ these entries.
   **display-only** value with variable decimals bound into a *text template*
   (`{WIDTH} x {DEPTH}`, dimensions `40.8`) stays `TYPE string` — packed with a
   fixed `DECIMALS` would add trailing zeros (`40.80`); string keeps it exact.
+  **An EDITABLE table cell is the other exception — next bullet.**
+- **A numeric field bound into an EDITABLE table cell is dropped SILENTLY —
+  mirror it as a string.** A cell ships a `__delta` and lands in
+  `z2ui5_cl_ui5_srv_model->delta_apply_field`, whose whole body ends in
+  `CATCH cx_root ##NO_HANDLER` — "skip just this cell". So text that will not
+  convert into the packed/`i` target leaves the backend on its OLD value while
+  the browser goes on showing what was typed: no exception, no toast, no
+  `valueState`. The scalar path is the opposite and that is what makes this easy
+  to miss — `main_json_to_attri` re-raises as `JSON_PARSING_ERROR`, so the same
+  bad input on a plain bound attribute is loud. Measured against the transpiled
+  backend on app 570 (`PRICE`, row 1 = 956): `1250.00` → `1250` writes back, but
+  `1,250.00`, `1 250`, `12.50 EUR`, `1250,00` and `abc` ALL left the model on its
+  previous value with no error, no toast and no `valueState` — and a lone `-`, an
+  emptied cell and a blanks-only cell each silently became `0.00`. In app 093,
+  `1,455.22` typed into Salary came back from the round trip as `1455.22`, the
+  old value. Two remedies, and which one applies is decided by whether anything
+  still needs the number: where it does (570 keeps `PRICE` packed for the
+  read-only template's Currency composite binding), bind the editable cell to a
+  **string mirror** — app 351's `MINSIZE_TEXT` idiom, app 363 does the same for
+  three counts: a `…_TEXT` string column in the row type, seeded from the packed
+  field when EDIT starts, parsed back on SAVE under a digit/character/length
+  guard plus `TRY … CATCH`, so a row that will not convert keeps its value, has
+  its text put back, and the app STAYS in edit mode with a toast naming the
+  entry — reported, never discarded. Where nothing needs the number (093's
+  `SALARY` carries no typed binding), just make the field `TYPE string`, which is
+  what the original's JSONModel holds anyway.
 - **A `client->_event( )` in the view needs an `on_event` branch that handles
   it** — otherwise the wire fires a full backend round-trip that falls through
   every `CASE` and the app does nothing, while *looking* wired (pattern-lint
@@ -658,6 +703,33 @@ these entries.
   strictly exclusive and reaches its single-day branch only when there is no
   `endDate` at all, so that seeds a range disabling nothing (app 220;
   pattern-lint rule `unguarded-date-formatter`).
+- **A picker that binds `value` needs a `valueFormat` — unless the binding is
+  typed.** Measured headless against the real OpenUI5 runtime (2026-08-26, apps
+  549/609): with no `valueFormat` a `DateTimePicker` READS the model's ISO string
+  but writes a LOCALE string back (`Jul 12, 2018, 2:30:00 PM`), and a
+  `DatePicker` cannot read it at all — it displayed the raw
+  `2018-07-09T09:00:00`, had no date value, and wrote back `7/12/18`. Give the
+  picker a `valueFormat` — apps 549/609 settled on
+  `valueFormat="yyyy-MM-dd'T'HH:mm:ss"` on all four of theirs, so both pairs read
+  and write the same 19-character ISO string the ABAP field holds. What the omission
+  costs is not cosmetic. Apps 548/555 dropped their original's typed binding
+  (`type: 'sap.ui.model.type.DateTime'` plus `formatOptions.pattern`) and kept
+  only the path: in en-US that is a corrupted shape, but in **de-DE** — German is
+  a first-class `sy-langu` — the user picks 4 March 2025, the model stores
+  `04.03.2025, 10:15:00`, and `Formatter.DateCreateObject`'s `new Date( )` reads
+  it MONTH-first, so the appointment is drawn on **3 April**, silently, with no
+  error anywhere. App 547 is the same class from the other side: its original
+  binds no `value` at all (it works in `Date` objects through
+  `setDateValue`/`getDateValue`), so the string binding is the PORT's and so is
+  the format contract it owes — its check compares the two bound strings
+  (`d_end <= d_start`), which is only meaningful while both stay
+  lexicographically sortable ISO; the first edit wrote `Jan 10, 2017, 8:00:00 AM`,
+  the compare stopped firing, and the dialog accepted an appointment ending five
+  days before it started. Prefer `valueFormat` over restoring a typed binding
+  wherever the picker can be **cleared**: a typed binding with a source pattern
+  raises on the empty value a cleared picker sends. **No gate sees this** — the
+  port HAS a `value` attribute, so structural-diff reads nothing as missing — so
+  it needs a declared NOTE.
 - **abaplint `commented_code` can fire on an ordinary English comment** — a
   `"` view-description comment containing a `/` next to CamelCase UI5 identifiers
   (e.g. `" bound to RowSettings highlight/highlightText`) lexes like ABAP and is
@@ -679,6 +751,13 @@ these entries.
   restored value is non-initial (the overview app's search). Sort state stays
   client-only: a view-wired `follow_up_action` sort cannot write to the model, so it is
   deliberately lost.
+  **The same is true of any `control_by_id` setter whose value cannot be
+  bound** — an association, a function-typed property, or a setter behind no
+  property at all — which is the broader and more productive half of this class;
+  the linter reports it as `control-state-lost-on-rebuild`, and the full idiom
+  (which helper to re-issue, what to guard on, why a draft restore reaches
+  `view_display( )` a second time without any navigation) is the
+  rebuild-survival row of the `idiom-lookup` cheat-sheet.
 - **A listed control method silently drops arguments beyond its
   declared kinds** — `castArgs` in `FrontendAction.js` maps over the
   `CONTROL_METHODS` kinds list, so a `to` transition name or a

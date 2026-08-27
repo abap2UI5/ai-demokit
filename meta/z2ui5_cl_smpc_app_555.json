@@ -38,6 +38,10 @@
     {
       "type": "NOTE",
       "what": "The nine recurring appointments with their rules, the eleven recurring non-working periods, and the create dialog with its recurrence branches are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_555.mjs)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The two DateTimePickers and the recurrence DatePicker bind their value UNTYPED, where the original binds them with type sap.ui.model.type.DateTime / sap.ui.model.type.Date and formatOptions { pattern: 'yyyy-MM-dd HH:mm' } / { pattern: 'yyyy-MM-dd' } (CreateAppointmentDialog.fragment.xml:34,40,118). The port keeps the path and carries the pattern as valueFormat + displayFormat instead, which is not a cosmetic choice: a typed binding with a source pattern raises on the EMPTY value the recurrence picker seeds with and a cleared picker sends, which is why apps 549 and 609 settled on the same form. Until 2026-08-26 the port declared neither, and that was a real defect rather than a simplification - an unformatted picker writes a LOCALE string back through the two-way binding. Measured in de-DE: picking 4 March 2025 stored '04.03.2025, 10:15:00', which Formatter.DateCreateObject's new Date( ) reads month-first, so the appointment was drawn on 3 April. structural-diff cannot see this class at all - the port HAS a value attribute, so nothing reads as missing."
     }
   ]
 }

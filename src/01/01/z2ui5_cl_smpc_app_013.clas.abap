@@ -68,10 +68,14 @@ CLASS z2ui5_cl_smpc_app_013 IMPLEMENTATION.
 
       WHEN `SHOW_COOKIE_DETAILS`.
         show_cookie_details = abap_true.
-        " the original moves the focus to the Save Preferences action
-        client->follow_up_action( val   = client->cs_event-control_by_id
-                                  view  = client->cs_view-popup
-                                  t_arg = VALUE #( ( `actionSavePreferences` ) ( `focus` ) ) ).
+        " the original moves the focus to the Save Preferences action through
+        " its _focusButton helper: focus now if the button is rendered, else
+        " once it is. SET_FOCUS is that helper - it waits for the render,
+        " where a control_by_id focus is a bare control.focus( ) that returns
+        " at once on the still-invisible button. SET_FOCUS resolves the id
+        " across every open slot, so it needs no view
+        client->follow_up_action( val   = client->cs_event-set_focus
+                                  t_arg = VALUE #( ( `actionSavePreferences` ) ) ).
 
       WHEN `ACCEPT_ALL_COOKIES`.
         " insert your accept all logic here
@@ -92,9 +96,8 @@ CLASS z2ui5_cl_smpc_app_013 IMPLEMENTATION.
         ELSE.
           " the cancel action navigates back to the preview
           show_cookie_details = abap_false.
-          client->follow_up_action( val   = client->cs_event-control_by_id
-                                    view  = client->cs_view-popup
-                                    t_arg = VALUE #( ( `actionSetPreferences` ) ( `focus` ) ) ).
+          client->follow_up_action( val   = client->cs_event-set_focus
+                                    t_arg = VALUE #( ( `actionSetPreferences` ) ) ).
         ENDIF.
 
     ENDCASE.
@@ -242,9 +245,8 @@ CLASS z2ui5_cl_smpc_app_013 IMPLEMENTATION.
     client->popup_display( popup->stringify( ) ).
 
     " the original's afterOpen handler moves the focus to the Set Preferences action
-    client->follow_up_action( val   = client->cs_event-control_by_id
-                              view  = client->cs_view-popup
-                              t_arg = VALUE #( ( `actionSetPreferences` ) ( `focus` ) ) ).
+    client->follow_up_action( val   = client->cs_event-set_focus
+                              t_arg = VALUE #( ( `actionSetPreferences` ) ) ).
 
   ENDMETHOD.
 

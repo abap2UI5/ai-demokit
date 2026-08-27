@@ -1,4 +1,4 @@
-" @keywords multiinput multi input sap.m multiinputmodelupdate verticallayout label token item list standardlistitem
+" @keywords multiinput multi input sap.m multiinputmodelupdate verticallayout label item multiinputext list standardlistitem
 " @summary This sample illustrates how the model bound to the MultiInput can be updated upon token creation or deletion.
 CLASS z2ui5_cl_smpc_app_512 DEFINITION PUBLIC.
 
@@ -13,8 +13,17 @@ CLASS z2ui5_cl_smpc_app_512 DEFINITION PUBLIC.
            END OF ty_s_item.
     TYPES ty_t_item TYPE STANDARD TABLE OF ty_s_item WITH EMPTY KEY.
 
-    DATA t_items TYPE ty_t_item.
-    DATA value   TYPE string.
+    " the tokens z2ui5.cc.MultiInputExt mirrors out of the tokenUpdate event -
+    " the whole added / removed list, not just its first entry
+    TYPES: BEGIN OF ty_s_token,
+             key  TYPE string,
+             text TYPE string,
+           END OF ty_s_token.
+    TYPES ty_t_token TYPE STANDARD TABLE OF ty_s_token WITH EMPTY KEY.
+
+    DATA t_items   TYPE ty_t_item.
+    DATA t_added   TYPE ty_t_token.
+    DATA t_removed TYPE ty_t_token.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -47,11 +56,12 @@ CLASS z2ui5_cl_smpc_app_512 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
-        )->a( n = `height`     v = `100%`
-        )->a( n = `xmlns:l`    v = `sap.ui.layout`
-        )->a( n = `xmlns:core` v = `sap.ui.core`
-        )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
-        )->a( n = `xmlns`      v = `sap.m`
+        )->a( n = `height`      v = `100%`
+        )->a( n = `xmlns:l`     v = `sap.ui.layout`
+        )->a( n = `xmlns:core`  v = `sap.ui.core`
+        )->a( n = `xmlns:mvc`   v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:z2ui5` v = `z2ui5.cc`
+        )->a( n = `xmlns`       v = `sap.m`
 
         )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
@@ -60,28 +70,11 @@ CLASS z2ui5_cl_smpc_app_512 IMPLEMENTATION.
             )->tag( `Label`
                 )->a( n = `text`     v = `Adding and removeing tokens in the MultiInput below will update the model.`
                 )->a( n = `labelFor` v = `multiInput`
-            " the validator creates a token from the typed text and the tokenUpdate
-            " handler keeps /items in sync - both happen in ABAP here, on the same
-            " one table the tokens and the List below are bound to
             )->ele( `MultiInput`
                 )->a( n = `width`           v = `50%`
                 )->a( n = `id`              v = `multiInput`
-                )->a( n = `value`           v = client->_bind( value )
-                )->a( n = `tokens`          v = client->_bind( t_items )
-                )->a( n = `change`          v = client->_event( val   = `ADD_TOKEN`
-                                                                t_arg = VALUE #( ( `${$parameters>/value}` ) ) )
-                )->a( n = `tokenUpdate`     v = client->_event( val   = `TOKEN_UPDATE`
-                                                                t_arg = VALUE #( ( `${$parameters>/type}` )
-                                                                                 ( `${$parameters>/removedTokens}[0].getKey()` ) ) )
                 )->a( n = `suggestionItems` v = client->_bind( t_items )
                 )->a( n = `showValueHelp`   v = `false`
-
-                )->ele( `tokens`
-                    )->tag( `Token`
-                        )->a( n = `key`  v = `{KEY}`
-                        )->a( n = `text` v = `{TEXT}`
-
-                )->end(
 
                 )->ele( `suggestionItems`
                     )->tag( n = `Item` ns = `core`
@@ -90,6 +83,16 @@ CLASS z2ui5_cl_smpc_app_512 IMPLEMENTATION.
 
                 )->end(
             )->end(
+
+            " onInit's addValidator( text -> new Token({key: text, text: text}) )
+            " and its attachTokenUpdate handler: the bundled companion control
+            " installs exactly that validator and mirrors the whole added /
+            " removed token list back, so the backend keeps /items in sync
+            )->tag( n = `MultiInputExt` ns = `z2ui5`
+                )->a( n = `MultiInputId`  v = `multiInput`
+                )->a( n = `addedTokens`   v = client->_bind( t_added )
+                )->a( n = `removedTokens` v = client->_bind( t_removed )
+                )->a( n = `change`        v = client->_event( `TOKEN_UPDATE` )
 
             )->tag( `Label`
                 )->a( n = `text` v = `Items in the model:`
@@ -110,27 +113,23 @@ CLASS z2ui5_cl_smpc_app_512 IMPLEMENTATION.
 
   METHOD on_event.
 
-    CASE client->get_event( ).
+    IF client->get_event( ) = `TOKEN_UPDATE`.
+      " the two branches of the original's tokenUpdate handler, over the FULL
+      " token lists the companion control mirrors out of the event
+      LOOP AT t_removed INTO DATA(removed).
+        DELETE t_items WHERE key = removed-key.
+      ENDLOOP.
 
-      WHEN `ADD_TOKEN`.
-        " the validator: the typed text becomes a token with the same key
-        DATA(text) = client->get_event_arg( ).
-        CLEAR value.
-        IF text IS NOT INITIAL AND NOT line_exists( t_items[ key = text ] ).
-          APPEND VALUE #( key       = text
-                          text      = text
-                          list_text = |text: { text }|
-                          list_info = |key: { text }| ) TO t_items.
+      LOOP AT t_added INTO DATA(added).
+        IF NOT line_exists( t_items[ key = added-key ] ).
+          " _textFormatter / _keyFormatter, computed in the backend
+          APPEND VALUE #( key       = added-key
+                          text      = added-text
+                          list_text = |text: { added-text }|
+                          list_info = |key: { added-key }| ) TO t_items.
         ENDIF.
-
-      WHEN `TOKEN_UPDATE`.
-        " the removed branch of the original's tokenUpdate handler
-        IF client->get_event_arg( ) = `removed`.
-          DATA(removed_key) = client->get_event_arg( 2 ).
-          DELETE t_items WHERE key = removed_key.
-        ENDIF.
-
-    ENDCASE.
+      ENDLOOP.
+    ENDIF.
 
   ENDMETHOD.
 

@@ -291,6 +291,20 @@ CLASS z2ui5_cl_smpc_app_167 IMPLEMENTATION.
 
     client->view_display( view->stringify( ) ).
 
+    " The NavContainer's position is live control state: view_display( )
+    " destroys the MAIN slot and XMLView.create builds a fresh tree, so
+    " pageContainer comes back on its initialPage="page2" - while selectedkey
+    " is two-way bound class state that survives every round trip, and the
+    " SideNavigation then highlights a page the main area is not showing.
+    " itemSelect issues its to( ) roundtrip-free, so nothing else re-states it.
+    " Re-issuing the SAME key is the app-000 idiom; guarded twice, because an
+    " untouched key (Root Item 3 and its children carry no key at all) and the
+    " key the initialPage already shows both need no action
+    IF selectedkey IS NOT INITIAL AND selectedkey <> `page2`.
+      client->follow_up_action( val   = client->cs_event-control_by_id
+                                t_arg = VALUE #( ( `pageContainer` ) ( `to` ) ( selectedkey ) ) ).
+    ENDIF.
+
   ENDMETHOD.
 
 

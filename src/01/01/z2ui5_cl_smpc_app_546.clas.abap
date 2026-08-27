@@ -275,9 +275,11 @@ CLASS z2ui5_cl_smpc_app_546 IMPLEMENTATION.
           " reaches CalendarAppointment.type as "" - not a CalendarDayType member,
           " so validateProperty throws and the binding update takes the view down.
           " The original pushes a JS object with no type key at all, which falls
-          " back to the property default.
+          " back to the property default - which is Type01, inherited from
+          " DateTypeRange.type, NOT None (that is secondaryType's default), so
+          " seeding None here would render a different colour than the original
           INSERT VALUE #( title    = `New Appointment`
-                          type     = `None`
+                          type     = `Type01`
                           start_at = new_start
                           end_at   = new_end ) INTO TABLE <target>-t_appointments.
           client->message_toast_display(

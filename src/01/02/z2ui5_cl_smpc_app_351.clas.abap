@@ -219,7 +219,10 @@ CLASS z2ui5_cl_smpc_app_351 IMPLEMENTATION.
         " here the parse happens in ABAP over the whole (already two-way
         " returned) table - no per-row index has to travel
         LOOP AT t_areas REFERENCE INTO DATA(lr_area).
+          " the length term, not just the character one - `99999999999` is all
+          " digits and overflows CONV i
           lr_area->minsize = COND i( WHEN lr_area->minsize_text CO ` 0123456789`
+                                     AND strlen( condense( lr_area->minsize_text ) ) <= 9
                                      THEN CONV i( lr_area->minsize_text ) ).
         ENDLOOP.
 

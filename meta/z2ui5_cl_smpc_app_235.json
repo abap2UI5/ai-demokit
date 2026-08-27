@@ -7,7 +7,7 @@
   "audit": {
     "frontend_action": true,
     "event_t_arg": true,
-    "note": "follow_up_action cs_event-binding_call: compound filter groups on the items binding (apply_filter)"
+    "note": "follow_up_action cs_event-binding_call: compound filter groups on the items binding (apply_filter, and re-issued from view_display via filter_issue)"
   },
   "status": "reviewed",
   "checked": null,
@@ -38,11 +38,15 @@
     },
     {
       "type": "NOTE",
-      "what": "the original's nested items-binding filter (ORs inside each facet group, AND across the groups, model untouched) is expressed 1:1 as a declarative compound filter: apply_filter builds the groups JSON from the two-way bound selected flags and schedules follow_up_action cs_event-binding_call filter on idProductsTable/items (compound groups implemented upstream 2026-07-20, pr/binding-call-compound-filters)."
+      "what": "the original's nested items-binding filter (ORs inside each facet group, AND across the groups, model untouched) is expressed 1:1 as a declarative compound filter: apply_filter builds the groups JSON from the two-way bound selected flags and schedules follow_up_action cs_event-binding_call filter on idProductsTable/items (compound groups implemented upstream 2026-07-20, pr/binding-call-compound-filters). The filter is issued from apply_filter( ) AND re-issued from view_display( ) (via the shared filter_issue( ), guarded by the last-issued payload in filter_live), because it lives on the binding and not in the model - the app-000/607 idiom."
     },
     {
       "type": "NOTE",
       "what": "the original derives the ObjectNumber weight state in its frontend Formatter.js (weightState: KG conversion + Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin frontend - it is computed in ABAP model_init into a WEIGHT_STATE field and bound state=\"{WEIGHT_STATE}\", not via a frontend formatter (core:require dropped). Visually 1:1 with the original."
+    },
+    {
+      "type": "NOTE",
+      "what": "Measured 2026-08-26 with a probe, before the fix: filter to Category=Accessories (34 of 123 products), then restore the very same draft through the framework's own bookmark URL (?app_start=<class>#/z2ui5-xapp-state=<draft>, what cs_event-clipboard_app_state hands out). That request carries no frontend id, so the backend takes factory_first_start -> db_load(draft): check_on_navigated( ) is true while check_on_init( ) stays false, i.e. the ELSEIF branch, which is the only way a port that never calls another app reaches view_display( ) a second time. The rebuilt view came back with 123 rows and ZERO aFilters while the FacetFilter still read \"Accessories\" - the client-side filter lives on the LIVE items binding and dies with it, the two-way bound selected flags are class state and survive. Re-issuing the identical binding_call against the rebuilt binding put the 34 rows back, and the empty form ([] -> buildFilterGroups -> binding.filter([]) in core/actions/ControlCall.js) clears without error, which is why the guard is \"has a filter ever been issued\" and not a selection scan. Statement order in ABAP is irrelevant: View1.controller.js awaits every T_SYSTEM display before it runs a T_CUSTOM follow-up."
     }
   ]
 }

@@ -25,8 +25,8 @@
       "what": "the controller's oModel.setSizeLimit(1000000) has no counterpart: the port ships all 123 rows of sap/ui/demo/mock/products.json /ProductCollection to the client in one model, so the 100-entry default limit the call works around never applies."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "the e2e interaction module now covers what this deviation used to name: the grouping sorter is asserted through the sap.ui.core.SeparatorItem entries it produces in both suggestion aggregations, and the z2ui5.cc.MultiInputExt companion is asserted on productMIWithTable with TokenKeyCell 0 and TokenTextCells 3, its tokenFromRow( ) building the sample's token from a real bound suggestion row with an empty, unbound tokens aggregation behind it (2026-08-23, headless). What stays unverified in a running system is the interaction a person performs: opening either suggestion popover, seeing the grey supplier group headers rendered in it, and picking a row so that MultiInput itself calls the registered validator."
+      "type": "NOTE",
+      "what": "the e2e interaction module now covers what this deviation used to name: the grouping sorter is asserted through the sap.ui.core.SeparatorItem entries it produces in both suggestion aggregations, and the z2ui5.cc.MultiInputExt companion is asserted on productMIWithTable with TokenKeyCell 0 and TokenTextCells 3, its tokenFromRow( ) building the sample's token from a real bound suggestion row with an empty, unbound tokens aggregation behind it (2026-08-23, headless). What stays unverified in a running system is the interaction a person performs: opening either suggestion popover, seeing the grey supplier group headers rendered in it, and picking a row so that MultiInput itself calls the registered validator. **e2e-verified 2026-08-26** (meta/interactions/z2ui5_cl_smpc_app_613.mjs, four consecutive green runs against a backend built from abap2UI5 main tip ddbdd13 via A2UI5_BRANCH=main - the canary path the nightly uses, not the A2UI5_PIN one, because the pinned framework predates the TokenKeyCell/TokenTextCells properties this port needs)."
     },
     {
       "type": "NOTE",
