@@ -54,9 +54,44 @@ the per-port modules here):
     because asserting only the reset half passes on a port that never set
     anything. 571 and 607 are the same mechanism from the other side (a
     declared sorter the rebuilt binding re-applies, and an ordering the rebuild
-    drops); 585, 301, 302, 303, 167 and 558 carry it unfixed — see STATUS
+    drops); 585, 301, 302, 303, 167 and 558 carry it unfixed — see STATUS.
+    What the five actually DRIVE (2026-08-26). 022 235 557 open the
+    FacetFilter — 022 through the Light type's whole summary bar, which is
+    the opener there (the -add button has no DOM at all in that type), 235
+    and 557 through the Simple type's per-facet button — tick Accessories
+    and close it, measured at 34 of 123 rows and ONE aFilter. Then they
+    rebuild the view through the framework's own bookmark restore,
+    `?app_start=<class>#/z2ui5-xapp-state=<draft>`: that request carries no
+    frontend id, so the backend takes factory_first_start -> db_load(draft),
+    which sets check_on_navigated( ) while check_on_init( ) stays false —
+    exactly the `ELSEIF check_on_navigated( )` branch, and the only way a
+    port that calls no other app reaches view_display( ) a second time. The
+    restored view must STILL read Accessories AND still show 34 rows over a
+    non-empty aFilters; before the fix it came back reading Accessories over
+    all 123. Remove the `IF filter_live IS NOT INITIAL. filter_issue( ).`
+    from view_display( ) and the last assertion fails, which is what makes
+    the leg worth its runtime. 557 drives the bound `lists` aggregation
+    first (two groups, 16 Category and 12 SupplierName values off the nested
+    values table). 235 and 557 close the facet popover through an OK button
+    if there is one and Escape if there is not — a fallback, so a port that
+    lost its OK is still confirmed by the Escape path. 249 arrows the
+    StepInput up (the badge follows to 2 with no round trip), commits
+    minimum 5 — which HIDES the indicator, because 2 is below it — and
+    maximum 50, read off the private _badgeMaxValue; then it reloads the
+    saved draft through the app-state hash and re-reads BOTH private fields
+    on the fresh Button (5/50) plus the badge still being absent. 534 reads
+    all NINE nextStep associations off the branching Wizard, not just the
+    two branch points: Branching.controller applies path 0
+    (A->B1->C->D->E->F1->F2->G) on EVERY render and that path RE-POINTS F1
+    away from its own XML default G, so a leg that checked only A and E
+    would pass on a controller that never re-pointed anything. The branching
+    wizard is not VISIBLE at boot (the showcase starts linear), so it and
+    its three path radio buttons are read from the registry rather than the
+    rendered body
   check_prevent_default (eBP wire): 241 093 (093 adds the confirm-then-
-    remove flow: MessageBox onclose action + bound-row delete)
+    remove flow: MessageBox onclose action + bound-row delete, the closed
+    tab's NAME travelling in the box rather than the static prefix, and the
+    SALARY round trip below)
   breakpointChange → bound displaySize: 244
   semantic action state transport: 107
   audit-fix wires (2026-07-30): 122 157 167 168 234 238
@@ -100,8 +135,10 @@ the per-port modules here):
   client-side growing (no wire at all): 276
   a controller replaced by a device-model expression: 277
   KEYBOARD activation for controls with no layout box: 008 (a palette
-    swatch, focus + Enter) 233 (F4 on the Input opens the SelectDialog) —
-    a DOM click does NOT reach either of them
+    swatch, focus + Enter) — a DOM click does NOT reach it. 233 stood here
+    for F4 on the Input until 2026-08-26; its module drives no gesture at
+    all any more and asserts the chain statically instead — see its own
+    entry below, and "still open"
   Edit/Save/Cancel through bound visible flags (2026-08-16): 312-337, all
     26 ports of the Form/SimpleForm family on ONE module - Edit swaps the
     form, CANCEL restores the record the EDIT handler cloned, SAVE keeps
@@ -215,6 +252,132 @@ the per-port modules here):
     toolbar re-laid out that way, which is a timing decision: the leg passed and
     failed on alternate runs while the gesture, the calendar and the model were
     all correct every time
+  a value typed into a CELL and read back AFTER the round trip — the trip
+    itself, not the keystroke (2026-08-26): 093 570. Both used to lose the
+    entry in silence: delta_apply_field catches cx_root ##NO_HANDLER ("skip
+    just this cell"), so a value the target field cannot take is dropped
+    with no error, no toast and no valueState while the browser goes on
+    showing it — which is why nothing short of driving the trip can see it.
+    093 fills 1,455.22 into the SALARY Input, Tabs out of it, then takes the
+    app's ONLY round trip (closing the LAST tab, so the edited row 0
+    survives) and re-reads the Input: SALARY is a string field, so the
+    assertion is that the typed text comes back VERBATIM. 570 is the other
+    answer to the same problem and drives BOTH of its branches: PRICE is
+    packed for the read-only Currency binding, so the editable cell binds a
+    PRICE_TEXT string mirror — 1,250.00 is REJECTED (a "Not a number" toast,
+    Save does NOT leave edit mode, the model's price is unchanged and the
+    cell is restored from the packed value) and 1250.00 goes home and
+    arrives in the row's binding context as 1250. 570 also drives the
+    read-only/editable template swap and the Cancel rollback, and addresses
+    its table by id: every sap.m.Input builds an INTERNAL sap.m.Table for
+    its suggestion popup, so a bare find( ) for sap.m.Table can return one
+    of those once the editable template has been shown
+  sorting WHILE grouped, the conflicting path (2026-08-26): 571 — the four
+    column header menus and the headerMenu association first, then Sort
+    Ascending on price (Flyer leads), then Toggle Grouping, asserted through
+    the items binding's own isGrouped( ), then Sort Ascending AGAIN with the
+    grouper on. Upstream each quick action passes a ONE-element list to
+    oBinding.sort( ), which REPLACES the grouper, so the second sort has to
+    leave isGrouped( ) false and Flyer first; with a grouper still declared
+    the rebuilt JSONListBinding re-applies SUPPLIERNAME as the primary key
+    and some other row leads. That conflicting path is exactly what let this
+    port's client-side grouper overrule the ABAP sort unnoticed, and the leg
+    was proven by REMOVING the fix. The quick actions are fired through the
+    menu entries' own firePress( ), not clicked, and the row count is
+    asserted at 100 rather than 123: a JSONModel's default sizeLimit is 100
+    and neither the sample nor the port raises it, so the original renders
+    100 too
+  a search term the JSON literal cannot carry (2026-08-26): 499 — the term
+    is zz"zz\zz, which carries BOTH characters that break the literal the
+    compound binding_call filter is built from. Unescaped, JSON.parse throws
+    inside buildFilterGroups, which LOGS and returns WITHOUT calling
+    binding.filter([]) — so the PREVIOUS filter stays on and the list still
+    shows the Notebooks the first leg narrowed it to. The list going EMPTY
+    is therefore the whole assertion: a leg that only asked for "not the
+    Notebooks" would pass on a filter that was never applied at all. Both
+    terms are raised through the SearchField's own setValue +
+    fireLiveChange, not typed — `.sapMSFI` is the wrapper, not the input,
+    and filling it left the control's value empty with the liveChange wire
+    never running (measured 2026-08-22)
+  a bound indicator whose symptom is INDIRECT, so the model is read first
+    (2026-08-26): 529 — SemanticConfiguration binds MessagesIndicator
+    .visible to a formatter over message>/, so a message model nothing fed
+    renders no button at all. The module reads the message model's CONTENT
+    first (Messaging.getMessageModel( ), with a fallback to the older
+    getCore( )->getMessageManager( ) so it runs on either core) and fails on
+    the count and on the sample's own "Something wrong happened" text,
+    THEN asserts the indicator that a fed model makes visible. Asserting the
+    button alone reports a missing button, which accuses the popover wire
+    instead of the z2ui5.cc.MessageManager bridge that is the thing actually
+    absent. It also drives ToggleFooter -> showFooter false
+  the whole gesture replaced by a STATIC wire assertion, deliberately
+    (2026-08-26): 233 — it waits for the Input's DOM (a DOM wait, not a
+    registry poll: a waitForFunction over Element.registry.all( ) is itself
+    part of the load on this view) and then reads in ONE evaluate:
+    showValueHelp, that valueHelpRequest carries TWO handlers — the
+    binding_call filter chained with the control_by_id open, where a 1 is
+    the pre-2026-08-24 half-wire — the dependent SelectDialog's title
+    ("Purchases") and its items binding length, and the IllustratedMessage
+    TITLE. That last one is the 2026-08-26 correction: the control sits in a
+    uxap:ObjectPageSubSection, which ObjectPageLayout renders LAZILY, so the
+    old body-text scan was testing uxap's render SCHEDULE and went red on a
+    correct port in the full-corpus run. It is read from the registry by
+    EXISTENCE only, never through getDomRef( ), and off the property the
+    expression binding over INPUTPOPULATED writes. What this entry does not
+    claim: nothing here presses F4 or confirms a row — see "still open"
+  SET_FOCUS, and the one transition where the wire alone decides the
+    outcome (2026-08-26): 013 — the port's three focus follow-ups are
+    SET_FOCUS, not a control_by_id `focus`. The buttons they aim at are
+    INVISIBLE when the action runs (their `visible` is bound to the flag the
+    same round trip flips), an invisible control renders through
+    InvisibleRenderer as a sap-ui-invisible- placeholder, and Element.focus
+    returns immediately when getFocusDomRef( ) is null — so a bare focus is
+    a silent no-op. SET_FOCUS is "focus now if rendered, else once it is",
+    which is the original's own _focusButton helper. ONE of the three is
+    driven: Set Preferences -> the detail list appears, Save Preferences is
+    visible with a DOM node, and document.activeElement has to BE it. The
+    module also drives Cancel-with-details, which navigates back to the
+    preview instead of closing the dialog. The other two SET_FOCUS calls are
+    deliberately not asserted — see "still open"
+  the branch a Wizard needs BEFORE the press, not with the answer to it
+    (2026-08-26): 535 560 — WizardStep._complete fires `complete` and then
+    calls Wizard._handleNextButtonPress in the SAME tick, so a branch that
+    arrives with the round trip's answer arrives too late and the press
+    throws "wizard is in branching mode and no next step is defined". Both
+    modules assert PaymentTypeStep's declared nextStep (CreditCardStep) and
+    its three subsequentSteps STANDING before anything is pressed, then
+    press Next twice — ContentsStep -> PaymentTypeStep, and the FIRST press
+    on PaymentTypeStep reaching CreditCardStep — and finally that arriving
+    on BillingStep left it unvalidated with its two subsequentSteps. The
+    presses go through the step's own _nextButton aggregation rather than a
+    click, and the helper first requires that button to have a DOM node and
+    to lack sapMWizardNextButtonHidden, so a Next that is not displayed
+    fails the leg instead of passing quietly. 535 adds the Delete-mode row
+    drop with the total recomputed in ABAP (5724 -> 4768); 560 the seeded
+    payment default reaching the SegmentedButton and CreditCardStep starting
+    invalidated on an empty name. Neither drives a view REBUILD — see
+    "still open"
+  the SinglePlanningCalendar modify dialog (2026-08-26): 549 609 — all four
+    pickers of that dialog share ONE ISO string, and the pinned valueFormat
+    (yyyy-MM-dd'T'HH:mm:ss) is what lets both pairs read it; unpinned, a
+    DatePicker cannot parse an ISO datetime at all and showed the raw
+    "2018-07-09T09:00:00" with no date value (headless probe, 2026-08-26),
+    so both modules require all two DateTimePickers and two DatePickers to
+    hold a real Date. Ticking All-day has to rewrite BOTH times to midnight
+    (_setHoursToZero) — without the ALL_DAY wire an all-day appointment was
+    saved as 09:00-10:00 — asserted on the two DatePicker VALUES ending
+    T00:00:00, which is the client end of the wire and not a saved
+    appointment. 609 adds DATE_CHECK: an end that is not AFTER the start
+    disables OK and paints both DateTimePickers Error, which is the wire
+    that stops a backwards appointment being saved, plus the whole
+    CalendarDayType enum reaching the type Select (key === text, Type09
+    present), the 35 seeded appointments over three views, and Cancel
+    closing the dialog again. 549 adds the ISO-to-Date formatter on the
+    calendar itself and the seeded drag/resize flags. Both All-day legs and
+    609's DATE_CHECK are raised through the control's own setSelected +
+    fireSelect / setValue + fireChange rather than a gesture: a port that
+    wired the event to nothing still fails them, a port whose CheckBox
+    cannot be clicked does not
   still open: 353's four drag & drop wires (HTML5 dnd, which Playwright's
     dragTo cannot produce for sap.ui.table's pointer extension - dispatching
     the DataTransfer events by hand would test the harness), 354's
@@ -260,4 +423,38 @@ the per-port modules here):
     reads "deselected" while a real system reads "selected". Asserting the
     word would fail a correct port, so that half stays with the human live
     run, as does the group-appointment path that alone produces the
-    no-appointment leg from a gesture
+    no-appointment leg from a gesture.
+    Four more from 2026-08-26/27. 013's OTHER two SET_FOCUS calls (the one
+    on the dialog opening and the one after Cancel) do land and are then
+    OVERRIDDEN by UI5 itself — the Dialog's own initial focus, the footer
+    OverflowToolbar's focus restore — and the ORIGINAL loses them the same
+    way, so there is no end state a leg could assert that a correct port
+    would satisfy; only the Set Preferences transition is driven. 535 and
+    560 assert the branch STANDING before the press but not the branch
+    SURVIVING a view rebuild: branch_payment( ) and branch_delivery( ) are
+    re-issued from view_display( ) since 2026-08-27 (found by the linter's
+    control-state-lost-on-rebuild rule, after that work had been reported
+    finished on the pre-press half alone), and neither module drives a
+    second view_display( ) — after a rebuild PaymentTypeStep falls back to
+    the static nextStep="CreditCardStep" whatever `selectedpayment` says,
+    and BillingStep, which declares only subsequentSteps, comes back with no
+    branch at all and throws. The bookmark-restore driver 022/235/557 use is
+    what would close it. 575's module predates its port's subject: the
+    2026-08-26 correction added scrollToIndex, columnResize and the
+    follow-up action to the port, and the module still drives only the
+    OneColumn start, the master rows and their total, the row press that
+    opens the mid column with the folded detail fields, and the
+    close-column button — the sample's actual subject is uncovered. And
+    the general limit app 578 exposed, which belongs to no single port: a
+    leg that asserts getItems( ).length on a control it only found in the
+    REGISTRY passes VACUOUSLY. A bound aggregation fills whether or not its
+    control is on screen, and a page a NavContainer has swapped away leaves
+    its controls alive with no DOM node — so 578's drill-down reads (16
+    categories, 11 Laptops rows, and the supplier row it reaches for by
+    index) prove the bindings resolved and NOT that any of it is displayed,
+    and the same reading applies to every count in this directory taken off
+    a bare registry find( ). The rule is the app-108 one applied to the
+    CLAIM: getDomRef( ) belongs on the control whose STATE is the
+    assertion, and on no other — absent there it hides a page that never
+    rendered, present everywhere else it makes the predicate unsatisfiable
+    the moment a control legitimately has no box
