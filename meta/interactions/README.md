@@ -347,11 +347,30 @@ the per-port modules here):
     ("Purchases") and its items binding length, and the IllustratedMessage
     TITLE. That last one is the 2026-08-26 correction: the control sits in a
     uxap:ObjectPageSubSection, which ObjectPageLayout renders LAZILY, so the
-    old body-text scan was testing uxap's render SCHEDULE and went red on a
-    correct port in the full-corpus run. It is read from the registry by
-    EXISTENCE only, never through getDomRef( ), and off the property the
-    expression binding over INPUTPOPULATED writes. What this entry does not
-    claim: nothing here presses F4 or confirms a row — see "still open"
+    old body-text scan was testing uxap's render SCHEDULE. It is read from the
+    registry by EXISTENCE only, never through getDomRef( ), and off the
+    property the expression binding over INPUTPOPULATED writes.
+    **That diagnosis was half right and the port was NOT correct (2026-08-27).**
+    The same view failed a SECOND time in bump-a2ui5 run 33087805313, now on the
+    Input's visibility wait, and the cause of both is one port defect: the
+    IllustratedMessage subsection carried the original's
+    sapUxAPObjectPageSubSectionFitContainer, whose contract is an
+    ObjectPageLayout with a definite height. abap2UI5 hosts the view in a
+    content-sized sap.m.NavContainer, so there is none, and the class closed a
+    feedback loop — one resize took the layout 329px -> 19,249px -> 60,142px and
+    then pegged the renderer, after which no wait on the page can resolve and
+    whichever assertion touches the layout first reports the timeout as its own.
+    Moving an assertion to the registry made it immune to the symptom and left
+    the defect in place; the class is now gone from the port (an IMPROVISED
+    deviation), the Input's wait deliberately stays a VISIBILITY wait as the one
+    check a pegged renderer cannot satisfy, and a final leg dispatches one
+    resize and requires the ObjectPageLayout to stay under 5000px, so re-adding
+    the class fails with its own sentence instead of as a mystery timeout.
+    Reproducing it needs CI's browser: the harness prefers the sandbox's
+    /opt/pw-browsers/chromium (full Chromium), CI runs playwright's
+    chrome-headless-shell, and the boot-time race only showed up on the latter.
+    What this entry does not claim: nothing here presses F4 or confirms a row —
+    see "still open"
   SET_FOCUS, and the one transition where the wire alone decides the
     outcome (2026-08-26): 013 — the port's three focus follow-ups are
     SET_FOCUS, not a control_by_id `focus`. The buttons they aim at are
