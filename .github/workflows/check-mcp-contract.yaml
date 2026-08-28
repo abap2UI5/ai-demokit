@@ -1,0 +1,42 @@
+name: check-mcp-contract
+
+# The file paths and shapes abap2UI5/mcp-server reaches into this checkout by:
+# it spawns scripts/e2e-build.mjs and scripts/scope-of.mjs, serves
+# scripts/generation-prompt.txt verbatim as its `generation_rules` rulebook,
+# imports the BENIGN noise contract from scripts/lib-smoke.mjs, executes
+# web/ci/patch_open_abap_xml.mjs and parses CAPABILITIES.md on every query.
+# Those names are a public API of this repository, and renaming one of them
+# breaks a consumer that has no way to notice until an editor session ENOENTs.
+#
+# It was step 9 of `npm run gates` and the only step there with no CI job of
+# the same name (AGENTS §6: "a step that runs only locally is a gate nobody
+# enforces"), which is precisely the shape chain-format was in until
+# 2026-08-18. Offline, no node_modules — the check reads files and imports one
+# local module.
+
+on:
+  pull_request:
+  # also on main, so this gate's verdict exists on the default branch -
+  # a workflow that never runs there shows "no status"
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-mcp-contract-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # The job id is the gate's name in `npm run gates`, so the chain and the
+  # workflows stay one list (AGENTS §6).
+  check-mcp-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+    - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      with:
+        node-version: '22'
+    - run: node scripts/check-mcp-contract.mjs

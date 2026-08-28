@@ -46,16 +46,25 @@
  *      is not v702-parseable).
  *   3. Never two `"branch"` keys in one dependency entry — duplicate keys
  *      are exactly the silent-shadowing trap above.
- *   4. ui5/properties.json is not OLDER than ui5/universe.json — the second
- *      version pairing in this repository, and the one generate-result.yaml
- *      warns about in prose without anything checking it. The property
- *      snapshot answers `@since`; the universe says which release the sample
- *      set was harvested from. A snapshot behind the universe has no `@since`
- *      for the controls introduced in between, so scopeOf reads them as in
- *      scope and a port gets scaffolded for a control the 1.71 floor could
- *      never render (sap.f.HeroBanner, @1.152, is the case that named this).
- *      Compared on major.minor: the snapshot is built from an OpenUI5 master
- *      checkout and calls itself `-SNAPSHOT`, which is the same release line.
+ *   4. Neither ui5/properties.json nor ui5/descriptions.json is OLDER than
+ *      ui5/universe.json — the second version pairing in this repository, and
+ *      the one generate-result.yaml warns about in prose without anything
+ *      checking it. All three come from ONE OpenUI5 checkout and answer three
+ *      questions about the same release: the universe says which release the
+ *      sample set was harvested from, the property snapshot answers `@since`,
+ *      the description snapshot answers what a sample demonstrates.
+ *      A property snapshot behind the universe has no `@since` for the
+ *      controls introduced in between, so scopeOf reads them as in scope and a
+ *      port gets scaffolded for a control the 1.71 floor could never render
+ *      (sap.f.HeroBanner, @1.152, is the case that named this). A DESCRIPTION
+ *      snapshot behind the universe is worse-natured: `check:summary` fails
+ *      HARD on a port that matches no source (deliberately — the point is that
+ *      a new undescribed sample gets noticed), so the corpus can reach a state
+ *      only a manual refresh repairs. It was six weeks and one minor release
+ *      behind when this rule was extended, and generate-result.yaml refreshed
+ *      the other two weekly without ever touching it.
+ *      Compared on major.minor: both snapshots are built from an OpenUI5
+ *      master checkout and call themselves `-SNAPSHOT`, the same release line.
  *   5. Prose AGREES with the pin. A sentence that asserts a commit SHA IS the
  *      pin — in a markdown document or in a `meta/` sidecar's long-form text —
  *      must name A2UI5_PIN's actual value. Nothing checked this, and
@@ -237,22 +246,42 @@ const line = (v) => {
 };
 let snapshotNote = 'snapshot/universe unread';
 {
-  const propsFile = path.join(ROOT, 'ui5', 'properties.json');
   const universeFile = path.join(ROOT, 'ui5', 'universe.json');
-  if (!fs.existsSync(propsFile) || !fs.existsSync(universeFile)) {
-    err('ui5/properties.json or ui5/universe.json missing — the snapshot pairing cannot be judged');
+  /* Both snapshots taken from the same checkout, each with the field it
+   * carries its version in and the sentence that says what going stale costs.
+   * A snapshot with NO version field is a bug in the snapshot, not a pass. */
+  const SNAPSHOTS = [
+    {
+      file: 'ui5/properties.json',
+      version: (d) => d.ui5Version,
+      costs: 'the @since of everything added in between is missing and scopeOf lets those controls through',
+    },
+    {
+      file: 'ui5/descriptions.json',
+      version: (d) => d.source?.version,
+      costs: 'a sample the universe gained is described nowhere, and check:summary fails HARD on a port that matches no source',
+    },
+  ];
+  if (!fs.existsSync(universeFile)) {
+    err('ui5/universe.json missing — the snapshot pairing cannot be judged');
   } else {
-    const snap = JSON.parse(fs.readFileSync(propsFile, 'utf8')).ui5Version;
     const uni = JSON.parse(fs.readFileSync(universeFile, 'utf8')).release;
-    const a = line(snap);
     const b = line(uni);
-    if (!a || !b) {
-      err(`ui5 snapshot pairing unreadable — properties.json ui5Version ${JSON.stringify(snap)}, universe.json release ${JSON.stringify(uni)}`);
-    } else if (a[0] < b[0] || (a[0] === b[0] && a[1] < b[1])) {
-      err(`ui5/properties.json is ${snap}, older than the universe it must cover (${uni}) — regenerate it against the same OpenUI5 checkout (generate-result.yaml does this), or the @since of everything added in between is missing and scopeOf lets those controls through`);
-    } else {
-      snapshotNote = `snapshot ${snap} covers universe ${uni}`;
+    const ok = [];
+    for (const s of SNAPSHOTS) {
+      const at = path.join(ROOT, s.file);
+      if (!fs.existsSync(at)) { err(`${s.file} missing — the snapshot pairing cannot be judged`); continue; }
+      const snap = s.version(JSON.parse(fs.readFileSync(at, 'utf8')));
+      const a = line(snap);
+      if (!a || !b) {
+        err(`ui5 snapshot pairing unreadable — ${s.file} version ${JSON.stringify(snap)}, universe.json release ${JSON.stringify(uni)}`);
+      } else if (a[0] < b[0] || (a[0] === b[0] && a[1] < b[1])) {
+        err(`${s.file} is ${snap}, older than the universe it must cover (${uni}) — regenerate it against the same OpenUI5 checkout (generate-result.yaml does this), or ${s.costs}`);
+      } else {
+        ok.push(`${s.file.replace('ui5/', '').replace('.json', '')} ${snap}`);
+      }
     }
+    if (ok.length === SNAPSHOTS.length) snapshotNote = `${ok.join(' + ')} cover universe ${uni}`;
   }
 }
 
