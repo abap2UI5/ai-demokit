@@ -50,10 +50,22 @@ reads the files directly. **Read the matching guide BEFORE starting the task**
 **Large files — grep them, never read them whole:** `api.md` (~316 KB
 generated table), `docs/history.md` (~330 KB journal), `CAPABILITIES.md`
 (~45 KB — grep for the feature row),
-`scripts/generate-overview.mjs` (~58 KB),
 `src/z2ui5_cl_smpc_app_000.clas.abap` (generated). (The e2e
 interactions live as one module per port under `meta/interactions/` —
 read only the port you work on.)
+
+`scripts/generate-overview.mjs` used to be on that list at 1477 lines, and
+being on it was the problem rather than the mitigation: it mixed the src walk,
+an OpenUI5 entity probe, version comparison, column-width maths, ABAP
+statement-size budgeting, text hoisting and the whole emitted class. It is a
+77-line pipeline since 2026-08-28 — read it whole — over three modules that
+are each about one thing: `scripts/lib/overview-openui5.mjs` (the membership
+oracle and its snapshot check), `scripts/lib/overview-model.mjs` (one row per
+port, joined from the sidecars, the universe and the port's own ABAP) and
+`scripts/lib/overview-emit.mjs` (everything that knows what ABAP looks like).
+The emitter is still ~1200 lines and most of that is the emitted class itself;
+its code sits at column 0 inside the function on purpose, because re-indenting
+a template literal changes the ABAP it emits.
 
 ---
 
