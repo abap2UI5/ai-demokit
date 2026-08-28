@@ -65,7 +65,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { readDescript } from './lib/descript.mjs';
-import { isSkippedDir } from './lib/src-tree.mjs';
+import { walkFiles } from './lib/src-tree.mjs';
 import { sampleNames } from './lib/sample-names.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -88,20 +88,10 @@ const cell = (s) => String(s || '')
   .replace(/>/g, '&gt;')
   .trim();
 
-const walk = (dir, out = []) => {
-  for (const name of fs.readdirSync(dir).sort()) {
-    const full = path.join(dir, name);
-    if (isSkippedDir(name)) continue;
-    if (fs.statSync(full).isDirectory()) walk(full, out);
-    else if (full.endsWith('.clas.abap')) out.push(full);
-  }
-  return out;
-};
-
 /** Everything the catalogue says about a port, read off the class. */
 function scan() {
   const out = [];
-  for (const file of walk(path.join(ROOT, 'src'))) {
+  for (const file of walkFiles(path.join(ROOT, 'src'), '.clas.abap')) {
     const cls = path.basename(file, '.clas.abap');
     const source = fs.readFileSync(file, 'utf8');
     if (!/INTERFACES\s+z2ui5_if_app\s*\./i.test(source)) continue;

@@ -17,10 +17,20 @@ comment in that file, pending a merge decision).
 interaction (key + source) without needing the backend — the loader's
 contract check and the refactor-diff tool.
 `node scripts/validate-meta.mjs` enforces that every file here matches a
-port sidecar (or the overview app); a port with an open LIVE_TEST deviation
-and no module here is reported as an advisory gap count (not yet a hard
-gate — the newest batches ship LIVE_TESTs before their interactions are
-written).
+port sidecar (or the overview app) and that every module can actually FAIL
+(`expect(`, a `throw`, or a lib-e2e helper — see below).
+
+It also reports **interaction coverage** as an advisory, over the PORT SET and
+split by the status ladder: 289 of 622 ports (46%) have no module here, and
+the split runs opposite to the ladder — 42 of 59 `checked` and 192 of 355
+`reviewed`, against 55 of 208 `generated`. The rungs that claim the most
+verification carry the least automated proof of it. It stays an advisory (289
+gaps cannot become a hard gate without failing every batch commit), and the
+number is printed so the debt is visible rather than implied. Until 2026-08-28
+this advisory counted only ports with an open LIVE_TEST deviation, which made
+it structurally dead the day that backlog reached 0: the source list was empty,
+so it reported nothing however the real debt moved. That view is kept as a
+second line, silent while the backlog is empty.
 
 GROW THIS DIRECTORY — it is the automated close path for the LIVE_TEST backlog
 (STATUS.md open findings): each entry proves one LIVE_TEST *class* end to

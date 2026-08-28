@@ -9,6 +9,7 @@
     "event_t_arg": true
   },
   "status": "reviewed",
+  "checked": null,
   "render_smoke": {
     "skip": true,
     "reason": "the render gate mocks the model, so the DateTypeRange/CalendarLegendItem row template resolves {TYPE} to the empty string and XMLView.create rejects it on the enum-typed CalendarDayType property - the same static-harness limit app 240 declares for the identical specialDates/legend binding."

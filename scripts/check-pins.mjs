@@ -46,16 +46,60 @@
  *      is not v702-parseable).
  *   3. Never two `"branch"` keys in one dependency entry — duplicate keys
  *      are exactly the silent-shadowing trap above.
- *   4. ui5/properties.json is not OLDER than ui5/universe.json — the second
- *      version pairing in this repository, and the one generate-result.yaml
- *      warns about in prose without anything checking it. The property
- *      snapshot answers `@since`; the universe says which release the sample
- *      set was harvested from. A snapshot behind the universe has no `@since`
- *      for the controls introduced in between, so scopeOf reads them as in
- *      scope and a port gets scaffolded for a control the 1.71 floor could
- *      never render (sap.f.HeroBanner, @1.152, is the case that named this).
- *      Compared on major.minor: the snapshot is built from an OpenUI5 master
- *      checkout and calls itself `-SNAPSHOT`, which is the same release line.
+ *   4. Neither ui5/properties.json nor ui5/descriptions.json is OLDER than
+ *      ui5/universe.json — the second version pairing in this repository, and
+ *      the one generate-result.yaml warns about in prose without anything
+ *      checking it. All three come from ONE OpenUI5 checkout and answer three
+ *      questions about the same release: the universe says which release the
+ *      sample set was harvested from, the property snapshot answers `@since`,
+ *      the description snapshot answers what a sample demonstrates.
+ *      A property snapshot behind the universe has no `@since` for the
+ *      controls introduced in between, so scopeOf reads them as in scope and a
+ *      port gets scaffolded for a control the 1.71 floor could never render
+ *      (sap.f.HeroBanner, @1.152, is the case that named this). A DESCRIPTION
+ *      snapshot behind the universe is worse-natured: `check:summary` fails
+ *      HARD on a port that matches no source (deliberately — the point is that
+ *      a new undescribed sample gets noticed), so the corpus can reach a state
+ *      only a manual refresh repairs. It was six weeks and one minor release
+ *      behind when this rule was extended, and generate-result.yaml refreshed
+ *      the other two weekly without ever touching it.
+ *      Compared on major.minor: both snapshots are built from an OpenUI5
+ *      master checkout and call themselves `-SNAPSHOT`, the same release line.
+ *   5. The UI5 RUNTIME pins are one exact version, and it is the version the
+ *      linter judges against. Three things have to agree for `view_gates` to
+ *      hold a single opinion: the `@openui5/*` packages the render harness
+ *      loads the runtime from, the `@sapui5/*` packages `scope-of.mjs` reads
+ *      `@since` out of, and `@abap2ui5/linter`'s own `data/properties.json`,
+ *      which is what the property gate calls "exists". When they disagree the
+ *      failure is not a version verdict a `POST_171` deviation can excuse: a
+ *      member released after the metadata is `unknown-property` ("typo?") plus
+ *      a render load failure, and the only way out is a `property_gate` skip.
+ *      App 611 carries exactly that pair today.
+ *      Exact pins, not ranges: half of these carried `^1.151.0`, so a fresh
+ *      `npm install` the day 1.152 publishes would move the render harness's
+ *      runtime — and with it which skips are stale — without a diff. The
+ *      linter's metadata version cannot move that way (it ships inside the
+ *      package), so a caret here is a promise that only one side can keep.
+ *      `ui5/universe.json` is deliberately NOT part of the equality: it is
+ *      harvested from an OpenUI5 CHECKOUT and legitimately runs ahead of what
+ *      npm has published. A gap there is reported as a note, because it is
+ *      the state that forces the skips above.
+ *   6. Prose AGREES with the pin. A sentence that asserts a commit SHA IS the
+ *      pin — in a markdown document or in a `meta/` sidecar's long-form text —
+ *      must name A2UI5_PIN's actual value. Nothing checked this, and
+ *      `bump-a2ui5.yaml` moves the pin on a schedule: the 2026-08-28 bump to
+ *      `2567ee10` left SEVEN documents saying the pin was still `bf92a79c`,
+ *      six of them the sidecars of ports that were "blocked on the pin" and
+ *      had not been for hours. That is the same failure mode
+ *      `check-prose-names.mjs` exists for one noun over, so it reads the same
+ *      two scopes: the prose files, and every sidecar's `deviations[].what` /
+ *      `audit.note` / `checked.note` / skip `reason`.
+ *      Only an ASSERTION is judged — "A2UI5_PIN is <sha>", "the pin moved to
+ *      <sha>", "the pin caught up (<sha>)". A past-tense sentence is HISTORY
+ *      and is left alone ("A2UI5_PIN sat at bf92a79c while main moved 61
+ *      commits" is a true record of a run that happened), exactly as the
+ *      journal is: `docs/history.md` is out of scope for the same reason
+ *      check-prose-names leaves it out.
  *
  * A deliberate, temporary feature-branch re-point (the documented re-pin
  * flow) must therefore edit ALLOWED_BRANCHES below in the same change — the
@@ -221,27 +265,182 @@ const line = (v) => {
 };
 let snapshotNote = 'snapshot/universe unread';
 {
-  const propsFile = path.join(ROOT, 'ui5', 'properties.json');
   const universeFile = path.join(ROOT, 'ui5', 'universe.json');
-  if (!fs.existsSync(propsFile) || !fs.existsSync(universeFile)) {
-    err('ui5/properties.json or ui5/universe.json missing — the snapshot pairing cannot be judged');
+  /* Both snapshots taken from the same checkout, each with the field it
+   * carries its version in and the sentence that says what going stale costs.
+   * A snapshot with NO version field is a bug in the snapshot, not a pass. */
+  const SNAPSHOTS = [
+    {
+      file: 'ui5/properties.json',
+      version: (d) => d.ui5Version,
+      costs: 'the @since of everything added in between is missing and scopeOf lets those controls through',
+    },
+    {
+      file: 'ui5/descriptions.json',
+      version: (d) => d.source?.version,
+      costs: 'a sample the universe gained is described nowhere, and check:summary fails HARD on a port that matches no source',
+    },
+  ];
+  if (!fs.existsSync(universeFile)) {
+    err('ui5/universe.json missing — the snapshot pairing cannot be judged');
   } else {
-    const snap = JSON.parse(fs.readFileSync(propsFile, 'utf8')).ui5Version;
     const uni = JSON.parse(fs.readFileSync(universeFile, 'utf8')).release;
-    const a = line(snap);
     const b = line(uni);
-    if (!a || !b) {
-      err(`ui5 snapshot pairing unreadable — properties.json ui5Version ${JSON.stringify(snap)}, universe.json release ${JSON.stringify(uni)}`);
-    } else if (a[0] < b[0] || (a[0] === b[0] && a[1] < b[1])) {
-      err(`ui5/properties.json is ${snap}, older than the universe it must cover (${uni}) — regenerate it against the same OpenUI5 checkout (generate-result.yaml does this), or the @since of everything added in between is missing and scopeOf lets those controls through`);
-    } else {
-      snapshotNote = `snapshot ${snap} covers universe ${uni}`;
+    const ok = [];
+    for (const s of SNAPSHOTS) {
+      const at = path.join(ROOT, s.file);
+      if (!fs.existsSync(at)) { err(`${s.file} missing — the snapshot pairing cannot be judged`); continue; }
+      const snap = s.version(JSON.parse(fs.readFileSync(at, 'utf8')));
+      const a = line(snap);
+      if (!a || !b) {
+        err(`ui5 snapshot pairing unreadable — ${s.file} version ${JSON.stringify(snap)}, universe.json release ${JSON.stringify(uni)}`);
+      } else if (a[0] < b[0] || (a[0] === b[0] && a[1] < b[1])) {
+        err(`${s.file} is ${snap}, older than the universe it must cover (${uni}) — regenerate it against the same OpenUI5 checkout (generate-result.yaml does this), or ${s.costs}`);
+      } else {
+        ok.push(`${s.file.replace('ui5/', '').replace('.json', '')} ${snap}`);
+      }
+    }
+    if (ok.length === SNAPSHOTS.length) snapshotNote = `${ok.join(' + ')} cover universe ${uni}`;
+  }
+}
+
+// --- 5. the UI5 runtime pins are one exact version -------------------------
+let runtimeNote = 'runtime pins unread';
+{
+  const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
+  const dev = pkg.devDependencies || {};
+  const ui5 = Object.entries(dev).filter(([n]) => /^@(openui5|sapui5)\//.test(n));
+  if (!ui5.length) {
+    err('package.json declares no @openui5/@sapui5 devDependency — the render harness has no runtime to load');
+  } else {
+    const ranged = ui5.filter(([, v]) => !/^\d+\.\d+\.\d+$/.test(v));
+    if (ranged.length) {
+      err(`${ranged.length} UI5 runtime package(s) carry a RANGE, not a pin (${ranged.map(([n, v]) => `${n} ${v}`).join(', ')}) `
+        + '— a caret moves the render harness the day the next release publishes, with no diff to read');
+    }
+    const versions = [...new Set(ui5.map(([, v]) => v))];
+    if (versions.length > 1) {
+      err(`the UI5 runtime packages name ${versions.length} different versions (${versions.join(', ')}) `
+        + '— a partial bump leaves the render harness on one release and scope-of.mjs on another:\n'
+        + ui5.map(([n, v]) => `        ${v}  ${n}`).join('\n'));
+    }
+    const runtime = versions[0];
+    /* The linter's metadata ships inside the package, so this half only
+     * answers with node_modules present. Absent is a NOTE: check-pins is the
+     * offline gate and must not require an install to run at all. */
+    const lintProps = path.join(ROOT, 'node_modules', '@abap2ui5', 'linter', 'data', 'properties.json');
+    let judged = null;
+    if (fs.existsSync(lintProps)) {
+      judged = JSON.parse(fs.readFileSync(lintProps, 'utf8')).ui5Version;
+      if (versions.length === 1 && line(judged) && line(runtime)
+          && (line(judged)[0] !== line(runtime)[0] || line(judged)[1] !== line(runtime)[1])) {
+        err(`@abap2ui5/linter judges against control metadata ${judged} while the runtime packages are pinned at ${runtime} `
+          + '— the property gate and the render gate then disagree about what exists, and the difference surfaces as '
+          + '`unknown-property` plus a view that fails to load, which no POST_171 deviation can excuse');
+      }
+    }
+    runtimeNote = `UI5 runtime ${runtime}${judged ? ` = linter metadata ${judged}` : ' (linter metadata unread — no node_modules)'}`;
+    /* A NOTE, never an error. The universe is harvested from an OpenUI5
+     * CHECKOUT and runs ahead of npm by design — 1.152.0 was in the checkout
+     * for weeks while `npm view @openui5/sap.ui.core versions` ended at
+     * 1.151.0. The gap is not a defect to fix here; it is the state that
+     * FORCES a `property_gate` / `render_smoke` skip on any port using a
+     * member released in between, and saying so is how the next such skip is
+     * read as a pin consequence instead of as a port defect. */
+    const uniFile = path.join(ROOT, 'ui5', 'universe.json');
+    if (fs.existsSync(uniFile)) {
+      const uniRel = JSON.parse(fs.readFileSync(uniFile, 'utf8')).release;
+      const u = line(uniRel);
+      const r = line(runtime);
+      if (u && r && (u[0] > r[0] || (u[0] === r[0] && u[1] > r[1]))) {
+        runtimeNote += `; note: the sample universe is ${uniRel}, ahead of the runtime — a member released in between is `
+          + 'unknown-property + a failed render here, which only a property_gate/render_smoke skip can carry (app 611)';
+      }
     }
   }
+}
+
+// --- 6. prose agrees with the pin -------------------------------------------
+/* The markdown a reader arrives at. `docs/history.md` is deliberately absent:
+ * a journal records what was true when the entry was written, which is history
+ * and not drift — the same cut check-prose-names.mjs makes. */
+const PROSE = [
+  'README.md', 'AGENTS.md', 'CLAUDE.md', 'CONTRIBUTING.md', 'TRAINING.md',
+  'STATUS.md', 'CAPABILITIES.md', 'E2E.md', 'docs/upstream-requests.md',
+];
+
+/* The other half of the prose, and in a sample repository the bigger half —
+ * the shape check-prose-names.mjs reads, plus the skip reasons, which are
+ * prose about a gate and cite the pin exactly as a deviation does. */
+function sidecarProse(file) {
+  const out = [];
+  let doc;
+  try { doc = JSON.parse(fs.readFileSync(file, 'utf8')); } catch { return out; }
+  const at = path.relative(ROOT, file).split(path.sep).join('/');
+  (doc.deviations ?? []).forEach((d, i) => {
+    if (typeof d?.what === 'string') out.push({ label: `${at} deviations[${i}].what`, text: d.what });
+  });
+  for (const [key, holder] of [['audit', doc.audit], ['checked', doc.checked]]) {
+    if (typeof holder?.note === 'string') out.push({ label: `${at} ${key}.note`, text: holder.note });
+  }
+  for (const key of ['render_smoke', 'structural_diff', 'data_fidelity', 'property_gate']) {
+    if (typeof doc[key]?.reason === 'string') out.push({ label: `${at} ${key}.reason`, text: doc[key].reason });
+  }
+  return out;
+}
+
+/* An ASSERTION that some SHA is the pin, in either word order. Present tense
+ * and completed moves count ("is", "moved to", "caught up … (<sha>)"); a past
+ * state does not ("was", "sat at", "used to be", "predated") — that is a
+ * record of a run, and rewriting it would falsify the history instead. */
+const PIN_SUBJECT = '(?:`?\\bA2UI5_PIN\\b`?|\\bthe pin\\b)';
+const PIN_VERB = '(?:is|are|reads|now reads|stands|remains|sits|points|moved|advanced|bumped|caught up|now)';
+let pinProseNote = 'prose unread';
+const PIN_CLAIMS = [
+  // "A2UI5_PIN is `2567ee10`", "the pin is still at `bf92a79c`",
+  // "the pin caught up on 2026-08-28 (`2567ee10`)"
+  new RegExp(`${PIN_SUBJECT}[^.\\n]{0,20}?\\b${PIN_VERB}\\b[^.\\n]{0,45}?\`?\\b([0-9a-f]{7,40})\\b`, 'gi'),
+  // "bump-a2ui5 advanced `A2UI5_PIN` to `2567ee10`"
+  new RegExp(`\\b(?:moved|advanced|bumped|set)\\s+${PIN_SUBJECT}\\s+to\\s+\`?\\b([0-9a-f]{7,40})\\b`, 'gi'),
+];
+
+{
+  const pin = fs.existsSync(pinFile) ? fs.readFileSync(pinFile, 'utf8').trim().toLowerCase() : '';
+  const sources = [];
+  for (const rel of PROSE) {
+    const at = path.join(ROOT, rel);
+    if (fs.existsSync(at)) sources.push({ label: rel, text: fs.readFileSync(at, 'utf8') });
+  }
+  const metaDir = path.join(ROOT, 'meta');
+  if (fs.existsSync(metaDir)) {
+    for (const name of fs.readdirSync(metaDir).sort()) {
+      if (name.endsWith('.json')) sources.push(...sidecarProse(path.join(metaDir, name)));
+    }
+  }
+  let claims = 0;
+  for (const { label, text } of sources) {
+    const seen = new Set();
+    for (const re of PIN_CLAIMS) {
+      re.lastIndex = 0;
+      for (const m of text.matchAll(re)) {
+        const sha = m[1].toLowerCase();
+        if (seen.has(sha)) continue;
+        seen.add(sha);
+        claims++;
+        if (pin && !pin.startsWith(sha)) {
+          err(`${label}: says the pin is \`${sha}\`, but A2UI5_PIN is \`${pin.slice(0, sha.length)}\` `
+            + `(${pin})\n        …${m[0].replace(/\s+/g, ' ').slice(-110)}\n`
+            + '        the bump moved the pin and this sentence did not follow — correct it, or, if the '
+            + 'sentence is about a state that has PASSED, write it in the past tense so it reads as history');
+        }
+      }
+    }
+  }
+  pinProseNote = `${claims} pin citation(s) in ${sources.length} prose source(s)`;
 }
 
 if (errors) {
   console.log(`check-pins: ${errors} error(s).`);
   process.exit(1);
 }
-console.log(`check-pins: ok (A2UI5_PIN well-formed, ${checked} abap2UI5 dependency entr${checked === 1 ? 'y' : 'ies'} on release ${distinct[0] ?? 'none'}, ${snapshotNote})`);
+console.log(`check-pins: ok (A2UI5_PIN well-formed, ${checked} abap2UI5 dependency entr${checked === 1 ? 'y' : 'ies'} on release ${distinct[0] ?? 'none'}, ${snapshotNote}, ${runtimeNote}, ${pinProseNote})`);

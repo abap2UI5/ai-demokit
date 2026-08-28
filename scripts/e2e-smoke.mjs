@@ -23,6 +23,7 @@
  *   node scripts/e2e-smoke.mjs --strict   exit 1 on any failing port
  *   node scripts/e2e-smoke.mjs --only 005      single port (debugging)
  *   node scripts/e2e-smoke.mjs --only 005,270  a comma-separated list
+ *   node scripts/e2e-smoke.mjs --shard 2/4     the 2nd of 4 round-robin slices
  *   node scripts/e2e-smoke.mjs --headed   show the browser (debugging)
  *   node scripts/e2e-smoke.mjs --dump-interactions
  *                       print every loaded interaction (key + source) and exit
@@ -46,6 +47,34 @@ if (ONLY && !ONLY.length) {
   console.error('e2e-smoke: --only needs a comma-separated class list (e.g. --only z2ui5_cl_smpc_app_001)');
   process.exit(2);
 }
+
+/* `--shard <i>/<n>`: run the i-th of n equal slices of the port list.
+ *
+ * The nightly ran all 623 apps in ONE job and took 90 minutes of wall clock,
+ * so one flaky port reddened the whole run and a real regression waited for a
+ * single serial pass. The slice is taken ROUND-ROBIN over the sorted class
+ * list rather than in contiguous blocks, deliberately: the ports are numbered
+ * in batch order, so contiguous blocks would put a whole library — and its
+ * whole class of failure — in one shard, and a shard that is always red stops
+ * being read. Round-robin spreads them.
+ *
+ * Deterministic and stateless: shard i of n always holds the same classes for
+ * a given corpus, so a red shard is reproducible with the same flag. */
+const SHARD = (() => {
+  const i = process.argv.indexOf('--shard');
+  if (i === -1) return null;
+  const m = /^(\d+)\/(\d+)$/.exec(process.argv[i + 1] || '');
+  if (!m) {
+    console.error('e2e-smoke: --shard wants <index>/<total>, 1-based (e.g. --shard 2/4)');
+    process.exit(2);
+  }
+  const [index, total] = [Number(m[1]), Number(m[2])];
+  if (index < 1 || total < 1 || index > total) {
+    console.error(`e2e-smoke: --shard ${index}/${total} is out of range`);
+    process.exit(2);
+  }
+  return { index, total };
+})();
 // the overview app is checked alongside the numbered ports (its interaction
 // module sits in meta/interactions/ like every other)
 const OVERVIEW = 'z2ui5_cl_smpc_app_000';
@@ -264,7 +293,13 @@ const metas = fs.readdirSync(META).filter((f) => f.endsWith('.json'))
   .filter((m) => !ONLY || ONLY.some((o) => m.class.endsWith(o)));
 metas.sort((a, b) => a.class.localeCompare(b.class));
 
-console.log(`e2e-smoke: ${metas.length} port(s), backend from ${A2}`);
+/* the shard is taken AFTER the sort, so the slice is a property of the corpus
+ * and not of readdir order */
+const sharded = SHARD ? metas.filter((_, i) => i % SHARD.total === SHARD.index - 1) : metas;
+metas.length = 0;
+metas.push(...sharded);
+
+console.log(`e2e-smoke: ${metas.length} port(s)${SHARD ? ` (shard ${SHARD.index}/${SHARD.total})` : ''}, backend from ${A2}`);
 const backend = await startBackend();
 await waitPort(3000);
 /* prefer the sandbox's pinned Chromium when present, else the playwright-managed
@@ -317,7 +352,9 @@ for (const m of metas) {
 
 // the overview app: same generic gate, plus the info-popover round-trip
 let overviewChecked = 0;
-if (!ONLY || ONLY.some((o) => OVERVIEW.endsWith(o))) {
+// the overview app rides with shard 1 (it is one app, and every shard running
+// it would report it n times and hide which shard actually failed)
+if ((!ONLY || ONLY.some((o) => OVERVIEW.endsWith(o))) && (!SHARD || SHARD.index === 1)) {
   overviewChecked = 1;
   const errs = await checkPortResilient(OVERVIEW);
   if (errs.length) { failed++; console.log(`FAIL  overview  ${errs[0]}`); }

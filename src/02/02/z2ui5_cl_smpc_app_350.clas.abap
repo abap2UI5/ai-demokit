@@ -48,6 +48,13 @@ CLASS z2ui5_cl_smpc_app_350 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
+      " Component.js init: IconPool.registerFont for the SAP-icons-TNT
+      " collection, which is what makes the sap-icon://SAP-icons-TNT/... URI of
+      " the Group2 tile resolvable. An abap2UI5 app has no Component of its own
+      " and IconPool is a module singleton, so the ICON_POOL global target is
+      " the only wire that reaches it - once per session, from the init branch
+      client->follow_up_action( val   = client->cs_event-control_global
+                                t_arg = VALUE #( ( `ICON_POOL` ) ( `registerFont` ) ( `SAP-icons-TNT` ) ( `sap/tnt/themes/base/fonts/` ) ) ).
       model_init( ).
       view_display( ).
     ELSEIF client->check_on_navigated( ).

@@ -1,9 +1,9 @@
 {
   "source": {
     "repo": "https://github.com/SAP/openui5",
-    "commit": "e50e7cc6dce895dd7521633749e0b0e67c912d96",
-    "committed": "2026-07-13",
-    "version": "1.151.0-SNAPSHOT",
+    "commit": "1f98a298ea8f2bd146831186bc5023d1360e43c4",
+    "committed": "2026-08-28",
+    "version": "1.153.0-SNAPSHOT",
     "from": "src/*/test/**/demokit/docuindex.json -> explored.samples[]",
     "libraries": 12,
     "licence": "Apache-2.0 (OpenUI5). Held verbatim, like the sample sources under ui5/<lib>/<Sample>/."
@@ -116,6 +116,26 @@
     "sap.f.sample.GridListResponsiveColumnLayout": {
       "name": "Grid List with Responsive Column Layout",
       "description": "This layout displays a variable number of grid columns depending on available screen size. Grid row's height is dynamically determined by the height of the highest grid element on this row."
+    },
+    "sap.f.sample.HeroBannerBasic": {
+      "name": "Hero Banner - Basic",
+      "description": "A basic Hero Banner with a header text and overline text."
+    },
+    "sap.f.sample.HeroBannerColumnsRatio": {
+      "name": "Hero Banner - Columns Ratio",
+      "description": "Demonstrates the three columnsRatio options: single column (no endContent), Equal, and FirstWider."
+    },
+    "sap.f.sample.HeroBannerHeaderBlockAndActionsPlacement": {
+      "name": "Hero Banner - Header Block and Actions Placement",
+      "description": "Demonstrates actionsPlacement and headerBlockPlacement properties for controlling the position of the header and actions."
+    },
+    "sap.f.sample.HeroBannerIntegrationCard": {
+      "name": "Hero Banner - Integration Card",
+      "description": "Demonstrates the use of sap.ui.integration.widgets.Card inside both the startContent (default slot) and endContent aggregations of the Hero Banner."
+    },
+    "sap.f.sample.HeroBannerUseCases": {
+      "name": "Hero Banner - Use Cases",
+      "description": "A collection of common Hero Banner use cases: header actions only, content with actions, actions below header, and header at bottom."
     },
     "sap.f.sample.ProductSwitchItemWithImageSrc": {
       "name": "Product Switch with imageSrc",
@@ -1432,6 +1452,10 @@
     "sap.m.sample.SelectDialogLazyLoading": {
       "name": "Select Dialog Lazy Loading",
       "description": "Select Dialog lazy loading example with JSON model."
+    },
+    "sap.m.sample.SelectGrouping": {
+      "name": "Select - with grouped items",
+      "description": "Illustrates the usage of a Select with items organized in groups using SeparatorItem as group headers."
     },
     "sap.m.sample.SelectList": {
       "name": "SelectList",
@@ -2921,6 +2945,10 @@
       "name": "Test Button Sample",
       "description": "Sample with Test Button."
     },
+    "sap.ui.unified.sample.CalendarAriaHasPopup": {
+      "name": "Calendar with aria-haspopup on special day cells",
+      "description": "Calendar demonstrating configurable aria-haspopup attribute on individual day cells via DateTypeRange and a global Calendar-level fallback."
+    },
     "sap.ui.unified.sample.CalendarCalendarType": {
       "name": "calendar type",
       "description": "islamic Calendar with secondary gregorian type"
@@ -3206,11 +3234,6 @@
       "name": "Object Page built entirely in XML",
       "description": "An ObjectPageLayout declared in one XML view - header title, header content and five sections whose blocks come from four different block namespaces - rather than assembled in a controller.",
       "why": "docuindex.json has no entry for this id (checked 2026-08-22 against the sap.uxap demokit index in an OpenUI5 checkout: 'ObjectPageXML' does not appear at all). The sample IS shipped - Component.js, manifest.json, controller/ and view/ are all there - but four of its five block types live in sap.uxap.testblocks.* and sap.uxap.sample.Headers.block, packages the demo kit does not publish as samples either, so the whole family is undocumented rather than this page alone"
-    },
-    "sap.ui.unified.sample.CalendarAriaHasPopup": {
-      "name": "Calendar - aria-haspopup on special dates",
-      "description": "A Calendar whose three special dates carry ariaHasPopup='dialog': day 5 with a Type01 colour bar, days 10-12 as a Type02 range, and day 20 with type='None' so the attribute reaches the DOM with no visual marking at all; selecting a marked day opens a Popover naming the day and its type.",
-      "why": "docuindex.json has no entry for this id (checked 2026-08-22 against the sap.ui.unified demokit index in an OpenUI5 checkout: no CalendarAriaHasPopup entry). The sample exists for one member, sap.ui.unified.DateTypeRange.ariaHasPopup, which is @since 1.152.0 - newer than the snapshot's own OpenUI5 version, which is why the demo kit index this repository mirrors does not carry it yet"
     }
   }
 }

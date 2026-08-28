@@ -19,7 +19,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { portPath, catFolder, libFolder, sampleLib, CAT_CTEXT, LIB_CTEXT } from './lib-packages.mjs';
-import { isSkippedDir } from './lib/src-tree.mjs';
+import { walkFiles } from './lib/src-tree.mjs';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'src');
@@ -98,20 +98,12 @@ const entityLib = (e) => {
 let errors = 0;
 const err = (m) => { console.log(`ERROR ${m}`); errors++; };
 const liveTestClasses = [];
-
-function walk(dir, out = []) {
-  for (const name of fs.readdirSync(dir)) {
-    const full = path.join(dir, name);
-    if (isSkippedDir(name)) continue;
-    if (fs.statSync(full).isDirectory()) walk(full, out);
-    else out.push(full);
-  }
-  return out;
-}
+/** class -> its parsed sidecar, for the checks that run after the per-file loop. */
+const metaByClass = new Map();
 
 // port classes = every class in a library package src/<cc>/<ll>/ (the overview
 // app sits directly under src/ and is not a port)
-const ports = walk(SRC)
+const ports = walkFiles(SRC)
   .filter((f) => f.endsWith('.clas.abap') && /src\/\d+\/\d+\/[^/]+$/.test(f.split(path.sep).join('/')))
   .map((f) => path.basename(f, '.clas.abap'));
 
@@ -125,9 +117,44 @@ for (const sf of sidecars.sort()) {
   try { m = JSON.parse(fs.readFileSync(path.join(META, sf), 'utf8')); }
   catch (e) { err(`${sf}: invalid JSON — ${e.message}`); continue; }
 
-  for (const k of ['class', 'sample', 'entity', 'file', 'batch', 'audit', 'status', 'deviations']) {
-    if (m[k] === undefined) err(`${sf}: missing field "${k}"`);
+  /* `checked` is REQUIRED, as `null` while the port is generated/reviewed
+   * (AGENTS §5 documents exactly that shape). It was listed in KNOWN_KEYS and
+   * validated when present, but never required — and 621 of 622 sidecars
+   * carried it anyway, so the one that did not (app 308) read as "nobody has
+   * decided" where every other file says "not live-checked yet". An absent
+   * optional key and an explicit null are the same to a reader who knows the
+   * schema and different to everyone else; making it required removes the
+   * question. */
+  for (const k of ['class', 'sample', 'entity', 'file', 'batch', 'audit', 'status', 'checked', 'deviations']) {
+    if (m[k] === undefined) {
+      err(`${sf}: missing field "${k}"`
+        + (k === 'checked' ? ' — write `"checked": null` while the port is not live-verified (AGENTS §5)' : ''));
+    }
   }
+  /* Every string in a sidecar is ONE LINE. `generate-overview.mjs` bakes this
+   * prose into ABAP backtick literals, and an ABAP string literal cannot span
+   * lines: a newline in a `what` is emitted RAW, which produces a class that
+   * does not parse and desyncs every downstream reader of that file — measured
+   * 2026-08-28, when a two-paragraph deviation on app 109 made the linter read
+   * a class name inside the broken literal as real code and `check:chains`
+   * reported `non-released-api` on the generated overview, 350 lines away from
+   * the sidecar that caused it. Zero of the 622 sidecars had one before, so
+   * this is an invariant that held by luck until it did not. Paragraphs belong
+   * in docs/history.md; a deviation is one sentence-stream. */
+  {
+    const scan = (v, at) => {
+      if (typeof v === 'string') {
+        const bad = /[\u0000-\u001f\u007f]/.exec(v);
+        if (bad) {
+          err(`${sf}: ${at} carries a control character (\\u${bad[0].charCodeAt(0).toString(16).padStart(4, '0')}) `
+            + '— sidecar text is one line: it is baked into an ABAP string literal, which cannot span lines');
+        }
+      } else if (Array.isArray(v)) v.forEach((x, i) => scan(x, `${at}[${i}]`));
+      else if (v && typeof v === 'object') for (const [k, x] of Object.entries(v)) scan(x, at ? `${at}.${k}` : k);
+    };
+    scan(m, '');
+  }
+  metaByClass.set(name, m);
   for (const k of Object.keys(m)) {
     if (!KNOWN_KEYS.has(k)) err(`${sf}: unknown field "${k}" (known: ${[...KNOWN_KEYS].join(', ')})`);
   }
@@ -317,32 +344,82 @@ for (const cls of sidecarSet) if (!portSet.has(cls)) err(`meta/${cls}.json has n
  *     module that can fail always says so somewhere: `expect(`, a `throw`, a
  *     `waitFor…` (Playwright's own waits reject on timeout), or an import from
  *     lib-e2e, whose helpers all throw.
- *   - ADVISORY: every port with an open LIVE_TEST deviation should have a
- *     module — that is the automated close path (STATUS.md). Not a hard gate
- *     yet: the newest batches ship their LIVE_TESTs before their interactions
- *     are written (61 gaps when this check was wired, 2026-08-10), so the
- *     count is reported to keep the debt visible instead of failing every
- *     batch commit. */
+ *   - ADVISORY: interaction COVERAGE, reported over the port set and split by
+ *     the status ladder.
+ *     This advisory used to be based on the LIVE_TEST backlog — every port
+ *     with an open LIVE_TEST deviation should have a module, that being the
+ *     automated close path (STATUS.md). It was right while the backlog had
+ *     122 entries and it became structurally DEAD when the backlog reached 0
+ *     on 2026-08-26: the source list is empty, so the advisory reports
+ *     nothing, forever, no matter how the real debt moves. What it was
+ *     standing in for is still there — 289 of 622 ports (46%) have no
+ *     meta/interactions/<class>.mjs — and it is worst exactly where a reader
+ *     would least expect it, because the ladder and the coverage run in
+ *     OPPOSITE directions: 42 of 59 `checked` ports and 192 of 355 `reviewed`
+ *     ones have no module, against 55 of 208 `generated`. The rungs that
+ *     claim the most verification carry the least automated proof of it, and
+ *     a `checked` port is the one whose live check a code change silently
+ *     invalidates (AGENTS §10).
+ *     Still an ADVISORY, deliberately: 289 gaps cannot become a hard gate
+ *     without failing every batch commit until they are closed, and the
+ *     directory README is explicit that it is grown port by port. AGENTS does
+ *     not argue for more — it asks for the debt to be visible. So the count is
+ *     printed, per rung, and the LIVE_TEST view is kept as a second line for
+ *     as long as the backlog is non-empty. */
 const INTERACTIONS_DIR = path.join(META, 'interactions');
 const OVERVIEW_CLASS = 'z2ui5_cl_smpc_app_000';
 let interactionGaps = [];
-if (fs.existsSync(INTERACTIONS_DIR)) {
-  const mods = fs.readdirSync(INTERACTIONS_DIR)
-    .filter((f) => f.endsWith('.mjs'))
-    .map((f) => f.replace(/\.mjs$/, ''));
+{
+  /* Not guarded on the directory EXISTING: an absent meta/interactions/ is
+   * 100% coverage debt, which is the one state the advisory most has to say
+   * out loud. Only the per-module checks below need the files. */
+  const mods = fs.existsSync(INTERACTIONS_DIR)
+    ? fs.readdirSync(INTERACTIONS_DIR).filter((f) => f.endsWith('.mjs')).map((f) => f.replace(/\.mjs$/, ''))
+    : [];
   const validClasses = new Set([...sidecars.map((f) => f.replace(/\.json$/, '')), OVERVIEW_CLASS]);
-  const CAN_FAIL = /expect\(|throw\s|waitFor|lib-e2e/;
+  /* An escape hatch keyed on free prose must be UNAMBIGUOUS (STATUS.md, the
+   * lesson two prior incidents wrote). `waitFor` was a bare substring test
+   * over the module SOURCE, so the comment `// waitFor the popover` satisfied
+   * it — a recon script with a sentence about waiting in it read as a test.
+   * Dropping it costs nothing and was measured before the change: 0 of the
+   * 334 modules rely on that branch, every one of them carries `expect(`, a
+   * `throw` or a lib-e2e import. Playwright's own waits do reject on timeout,
+   * but they reach this check through `waitForUi5` / `waitForCount`, which are
+   * lib-e2e helpers, or through an `expect` — both of which stay listed. */
+  const CAN_FAIL = /expect\(|throw\s|lib-e2e/;
   for (const c of mods) {
     if (!validClasses.has(c)) err(`meta/interactions/${c}.mjs matches no port sidecar (or the overview app) — orphan interaction module`);
     const src = fs.readFileSync(path.join(INTERACTIONS_DIR, `${c}.mjs`), 'utf8');
     if (!CAN_FAIL.test(src)) {
-      err(`meta/interactions/${c}.mjs asserts nothing — it can never fail, so it counts as coverage the nightly does not actually provide. Assert the wire the LIVE_TEST names (expect(…), a throw, a waitFor…, or a lib-e2e helper).`);
+      err(`meta/interactions/${c}.mjs asserts nothing — it can never fail, so it counts as coverage the nightly does not actually provide. Assert what the port really does: expect(…), a throw, or a lib-e2e helper (waitForUi5 / waitForCount and friends all throw).`);
     }
   }
   const modSet = new Set(mods);
-  interactionGaps = liveTestClasses.filter((c) => !modSet.has(c)).sort();
+  /* the real debt: ports with no module at all, by status. A port is counted
+   * on the rung its sidecar claims, which is what makes the split worth
+   * printing — see the block comment above. */
+  const byStatus = new Map(STATUS.map((s) => [s, { ports: 0, gaps: 0 }]));
+  for (const cls of sidecarSet) {
+    const meta = metaByClass.get(cls);
+    const row = byStatus.get(meta?.status) ?? byStatus.get('generated');
+    row.ports += 1;
+    if (!modSet.has(cls)) { row.gaps += 1; interactionGaps.push(cls); }
+  }
+  interactionGaps.sort();
+  const total = [...byStatus.values()].reduce((n, r) => n + r.ports, 0);
   if (interactionGaps.length) {
-    console.log(`note: ${interactionGaps.length} port(s) with an open LIVE_TEST deviation have no meta/interactions/<class>.mjs yet — the e2e close path cannot verify them (advisory; the newest batches' interaction debt)`);
+    const split = STATUS.map((st) => `${byStatus.get(st).gaps}/${byStatus.get(st).ports} ${st}`).join(' · ');
+    console.log(`note: ${interactionGaps.length} of ${total} port(s) (${Math.round((interactionGaps.length / total) * 100)}%) have no meta/interactions/<class>.mjs — ${split}`
+      + ' (advisory: the nightly e2e proves nothing about these beyond boot+render; the two rungs that claim verification carry the least of it)');
+  }
+  /* The LIVE_TEST view this advisory used to BE, kept while it can still say
+   * something: a port carrying an open LIVE_TEST with no module has no
+   * automated close path at all. The backlog is 0 today, so this line is
+   * silent — which is the correct behaviour for a view of an empty list, and
+   * the reason it must not be the only one. */
+  const liveGaps = liveTestClasses.filter((c) => !modSet.has(c)).sort();
+  if (liveGaps.length) {
+    console.log(`note: ${liveGaps.length} of them carry an open LIVE_TEST deviation — the e2e close path cannot verify those at all (advisory)`);
   }
 }
 
@@ -363,5 +440,5 @@ for (let n = 1; n <= (nums[nums.length - 1] ?? 0); n++) {
   }
 }
 
-console.log(`validate-meta: ${sidecars.length} sidecars, ${ports.length} ports, ${errors} error(s)${interactionGaps.length ? ` (${interactionGaps.length} LIVE_TEST interaction gap(s), advisory)` : ''}.`);
+console.log(`validate-meta: ${sidecars.length} sidecars, ${ports.length} ports, ${errors} error(s)${interactionGaps.length ? ` (${interactionGaps.length} port(s) with no e2e interaction module, advisory)` : ''}.`);
 process.exit(errors ? 1 : 0);

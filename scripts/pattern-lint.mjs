@@ -32,7 +32,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { isSkippedDir } from './lib/src-tree.mjs';
+import { walkFiles } from './lib/src-tree.mjs';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'src');
@@ -252,16 +252,6 @@ function grepLines(re) {
   };
 }
 
-function walk(dir, ext = '.clas.abap', out = []) {
-  for (const name of fs.readdirSync(dir)) {
-    const full = path.join(dir, name);
-    if (isSkippedDir(name)) continue;
-    if (fs.statSync(full).isDirectory()) walk(full, ext, out);
-    else if (full.endsWith(ext)) out.push(full);
-  }
-  return out;
-}
-
 let errors = 0;
 let warns = 0;
 const seenBaseline = new Set();
@@ -271,7 +261,7 @@ const seenBaseline = new Set();
 // crept in via agent-written files; human fix PR #38, 2026-07-27). The
 // scaffolder and generate-overview both emit the BOM; this gates hand-written
 // ones. Checked bytewise, outside the .clas.abap rule loop.
-for (const f of walk(SRC, '.xml').sort()) {
+for (const f of walkFiles(SRC, '.xml')) {
   const rel = path.relative(ROOT, f).split(path.sep).join('/');
   const b = fs.readFileSync(f);
   if (!(b[0] === 0xEF && b[1] === 0xBB && b[2] === 0xBF)) {
@@ -281,7 +271,7 @@ for (const f of walk(SRC, '.xml').sort()) {
   }
 }
 
-for (const f of walk(SRC).sort()) {
+for (const f of walkFiles(SRC, '.clas.abap')) {
   const rel = path.relative(ROOT, f).split(path.sep).join('/');
   const isPort = /^src\/\d+\/\d+\/[^/]+$/.test(rel);
   const content = fs.readFileSync(f, 'utf8');

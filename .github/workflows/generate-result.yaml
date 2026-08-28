@@ -87,6 +87,19 @@ jobs:
         }
         node "$GEN" --out ui5/properties.json
 
+    # The demo kit's own sentence per sample - the source `npm run summary`
+    # writes onto the classes and `npm run check:summary` holds them to. It is
+    # the THIRD snapshot taken from this checkout and was the only one with no
+    # refresh path at all: it stood at OpenUI5 e50e7cc6 / 1.151.0-SNAPSHOT
+    # while the universe beside it moved to 1.152.0. A sample the universe
+    # gains but the descriptions do not is a HARD failure of check:summary
+    # (a port that matches no source fails rather than being skipped, which is
+    # the point), so without this step the repository could reach a state no
+    # scheduled job could repair. check-pins rule 4 now holds all three
+    # snapshots to the same release line.
+    - name: Refresh the demo kit descriptions
+      run: node scripts/fetch-descriptions.mjs --openui5 ./openui5
+
     - name: Regenerate coverage (README + api.md)
       env:
         OPENUI5_DIR: ./openui5
@@ -94,11 +107,31 @@ jobs:
         REF: main
       run: node scripts/generate-coverage.mjs
 
+    # The classes' `" @summary` lines come FROM the snapshot refreshed above,
+    # so they move with it or check:summary fails on this workflow's own PR.
+    # It stays a diff somebody reads - that is what the snapshot is for - but
+    # the diff now arrives complete instead of as a red check.
+    # It runs BEFORE the three generators below: all three read the class
+    # `" @summary` line back out.
+    - name: Rewrite the class summary lines from the refreshed snapshot
+      run: node scripts/generate-summary.mjs
+
     - name: Regenerate the in-system overview app
       run: node scripts/generate-overview.mjs
 
     - name: Regenerate the STATUS.md state block
       run: node scripts/generate-status.mjs
+
+    # SAMPLES.md reads the ports, the meta/ sidecars AND ui5/descriptions.json;
+    # catalogue.json carries `ui5Snapshot: universe.release` plus every port's
+    # summary. Both are therefore stale the moment this workflow runs, and
+    # meta-valid.yaml regenerates and `git diff --exit-code`s them - so leaving
+    # them out opened a pull request that failed its own meta_valid gate.
+    - name: Regenerate SAMPLES.md
+      run: node scripts/generate-samples-md.mjs
+
+    - name: Regenerate catalogue.json
+      run: node scripts/generate-catalogue.mjs
 
     - name: Drop OpenUI5 checkout
       run: rm -rf openui5
@@ -114,17 +147,20 @@ jobs:
         # Every file the steps above write, or the PR opens against its own
         # freshness gates. catalogue.json carries `ui5Snapshot:
         # universe.release` (generate-catalogue.mjs), so refreshing the universe
-        # ALWAYS makes it stale. SAMPLES.md is deliberately absent: it reads the
-        # ports, the meta/ sidecars and ui5/descriptions.json, none of which
-        # this workflow writes.
+        # ALWAYS makes it stale; SAMPLES.md and every port's `" @summary` line
+        # read ui5/descriptions.json, which this workflow now refreshes. Both
+        # used to be absent and both were reachable by the gates that run on
+        # this workflow's own pull request.
         add-paths: |
           api.md
           README.md
           STATUS.md
+          SAMPLES.md
           catalogue.json
           ui5/universe.json
           ui5/properties.json
-          src/z2ui5_cl_smpc_app_000.clas.abap
+          ui5/descriptions.json
+          src/**/*.clas.abap
           src/z2ui5_cl_smpc_app_000.clas.xml
         commit-message: Regenerate sample coverage
         author: 'github-actions[bot] <github-actions[bot]@users.noreply.github.com>'

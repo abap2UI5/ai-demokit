@@ -11,12 +11,23 @@ CLASS z2ui5_cl_smpc_app_307 DEFINITION PUBLIC.
     DATA selecteddates TYPE STANDARD TABLE OF ty_s_date WITH EMPTY KEY.
 
   PROTECTED SECTION.
-    CONSTANTS c_max_dates TYPE i VALUE 31.
+    " one entry per DateRange the frontend marshalled out of the LIVE
+    " selectedDates aggregation - startDate arrives as an ISO LOCAL timestamp
+    " (no Z), so its first ten characters are the day the user picked
+    TYPES: BEGIN OF ty_s_event_range,
+             startdate TYPE string,
+           END OF ty_s_event_range.
+    TYPES ty_t_event_range TYPE STANDARD TABLE OF ty_s_event_range WITH EMPTY KEY.
 
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
     METHODS on_event.
+    METHODS event_ranges
+      IMPORTING
+        val           TYPE string
+      RETURNING
+        VALUE(result) TYPE ty_t_event_range.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -39,19 +50,6 @@ CLASS z2ui5_cl_smpc_app_307 IMPLEMENTATION.
 
 
   METHOD view_display.
-
-    " one expression arg per selectable slot: each one formats the day at that
-    " index of the LIVE selectedDates aggregation as yyyy-MM-dd on the client
-    " (local parts, not toISOString( ), which would shift the day east of
-    " Greenwich) and yields an empty string once the index is past the end
-    DATA(date_args) = VALUE string_table(
-      FOR i = 0 UNTIL i >= c_max_dates
-      ( |$event.oSource.getSelectedDates().length > { i } ? | &&
-        |$event.oSource.getSelectedDates()[{ i }].getStartDate().getFullYear() + '-' + | &&
-        |($event.oSource.getSelectedDates()[{ i }].getStartDate().getMonth() + 1 < 10 ? '0' : '') + | &&
-        |($event.oSource.getSelectedDates()[{ i }].getStartDate().getMonth() + 1) + '-' + | &&
-        |($event.oSource.getSelectedDates()[{ i }].getStartDate().getDate() < 10 ? '0' : '') + | &&
-        |$event.oSource.getSelectedDates()[{ i }].getStartDate().getDate() : ''| ) ).
 
     DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
@@ -77,8 +75,12 @@ CLASS z2ui5_cl_smpc_app_307 IMPLEMENTATION.
 
             )->tag( n = `Calendar` ns = `u`
                 )->a( n = `id`                v = `calendar`
+                " the WHOLE selectedDates aggregation travels in one arg: the
+                " frontend marshals each DateRange into its public properties
+                " (Lib.normalizeEventArgs), which is the loop the client
+                " expression grammar does not have
                 )->a( n = `select`            v = client->_event( val   = `CAL_SELECT`
-                                                                  t_arg = date_args )
+                                                                  t_arg = VALUE #( ( `$event.oSource.getSelectedDates()` ) ) )
                 )->a( n = `intervalSelection` v = `false`
                 )->a( n = `singleSelection`   v = `false`
             )->tag( `Button`
@@ -105,16 +107,17 @@ CLASS z2ui5_cl_smpc_app_307 IMPLEMENTATION.
     CASE client->get_event( ).
 
       WHEN `CAL_SELECT`.
-        " handleCalendarSelect: rebuild the model from every selected date,
-        " each formatted yyyy-MM-dd - here they arrive pre-formatted, one per arg
+        " handleCalendarSelect: rebuild the model from EVERY selected date,
+        " each formatted yyyy-MM-dd - the day is the first ten characters of
+        " the ISO local timestamp the marshalled DateRange carries
         CLEAR selecteddates.
-        DO c_max_dates TIMES.
-          DATA(day) = client->get_event_arg( sy-index ).
-          IF day IS INITIAL.
-            EXIT.
+        DATA(ranges) = event_ranges( client->get_event_arg( ) ).
+        LOOP AT ranges REFERENCE INTO DATA(lr_range).
+          IF strlen( lr_range->startdate ) < 10.
+            CONTINUE.
           ENDIF.
-          INSERT VALUE #( date = day ) INTO TABLE selecteddates.
-        ENDDO.
+          INSERT VALUE #( date = lr_range->startdate(10) ) INTO TABLE selecteddates.
+        ENDLOOP.
 
       WHEN `REMOVE_SELECTION`.
         " handleRemoveSelection: removeAllSelectedDates( ) + clear the model.
@@ -126,6 +129,39 @@ CLASS z2ui5_cl_smpc_app_307 IMPLEMENTATION.
                                   t_arg = VALUE #( ( `calendar` ) ( `removeAllSelectedDates` ) ) ).
 
     ENDCASE.
+
+  ENDMETHOD.
+
+
+  METHOD event_ranges.
+
+    DATA(lv_json) = condense( val ).
+    IF lv_json IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    IF lv_json(1) <> `[`.
+      lv_json = |[{ lv_json }]|.
+    ENDIF.
+
+    TRY.
+        " a marshalled DateRange carries ALL its public properties (ID,
+        " startDate, endDate), so only the one field this port models is
+        " mapped - a plain to_abap( ) fails on the first extra one
+        "
+        " z2ui5_cl_ajson is the framework's VENDORED ajson copy and lives
+        " outside the released API (src/02), so it may be renamed or
+        " restructured without notice - the linter says so, and it is right.
+        " There is no released JSON reader to use instead, the same reasoning
+        " as apps 103 and 298; declared as a deviation in the sidecar
+        " abap2ui5lint-disable-next-line non-released-api -- no released JSON reader exists; see the comment above and the sidecar deviation
+        z2ui5_cl_ajson=>parse( lv_json
+          )->to_abap_corresponding_only(
+          )->to_abap( IMPORTING ev_container = result ).
+        " abap2ui5lint-disable-next-line non-released-api -- the exception of the call above
+      CATCH z2ui5_cx_ajson_error.
+        CLEAR result.
+    ENDTRY.
 
   ENDMETHOD.
 
