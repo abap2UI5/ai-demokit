@@ -296,9 +296,7 @@ CLASS z2ui5_cl_smpc_app_606 IMPLEMENTATION.
         " a Remove action gets its own message
         DATA(tile_name) = client->get_event_arg( ).
         DATA(action)    = client->get_event_arg( 2 ).
-        DATA(kind)      = COND string( WHEN client->get_event( ) = `SLIDE_PRESS`
-                                       THEN `SlideTile`
-                                       ELSE `GenericTile` ).
+        DATA(kind) = COND string( WHEN client->get_event( ) = `SLIDE_PRESS` THEN `SlideTile` ELSE `GenericTile` ).
         IF action = `Remove`.
           client->message_toast_display( |Remove action of { kind } "{ tile_name }" has been pressed.| ).
         ELSE.

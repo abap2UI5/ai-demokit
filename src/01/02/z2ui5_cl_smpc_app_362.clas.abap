@@ -69,8 +69,7 @@ CLASS z2ui5_cl_smpc_app_362 IMPLEMENTATION.
       " list starts with NAME in it rather than empty
       SORT t_products BY name ASCENDING.
       sort_name = `Ascending`.
-      APPEND VALUE #( field      = `NAME`
-                      descending = abap_false ) TO t_sortkeys.
+      APPEND VALUE #( field = `NAME` descending = abap_false ) TO t_sortkeys.
       view_display( ).
     ELSEIF client->check_on_navigated( ).
       view_display( ).
@@ -296,8 +295,7 @@ CLASS z2ui5_cl_smpc_app_362 IMPLEMENTATION.
         " Ascending. Exactly the header-lies-about-the-rows defect the
         " SORT_CATEGORIES branch below was fixed for on 2026-08-21, still live
         " on the menu path.
-        APPEND VALUE #( field      = lv_property
-                        descending = xsdbool( lv_ascending = abap_false ) ) TO t_sortkeys.
+        APPEND VALUE #( field = lv_property descending = xsdbool( lv_ascending = abap_false ) ) TO t_sortkeys.
 
       WHEN `SORT_CATEGORIES_AND_NAME`.
         " sortCategoriesAndName: Category ascending, then Name ascending
@@ -315,8 +313,7 @@ CLASS z2ui5_cl_smpc_app_362 IMPLEMENTATION.
         " table while leaving the other columns' indicators standing: the
         " header claimed Name-ascending while the rows were Category-ascending.
         " The button's own tooltip says "in addition to current sorting".
-        DATA(ls_cat) = VALUE ty_s_sortkey( field      = `CATEGORY`
-                                           descending = category_descending ).
+        DATA(ls_cat) = VALUE ty_s_sortkey( field = `CATEGORY` descending = category_descending ).
         READ TABLE t_sortkeys TRANSPORTING NO FIELDS WITH KEY field = `CATEGORY`.
         IF sy-subrc = 0.
           t_sortkeys[ sy-tabix ] = ls_cat.
@@ -394,40 +391,40 @@ CLASS z2ui5_cl_smpc_app_362 IMPLEMENTATION.
     " the controller's DateFormat produces; the raw timestamp is kept alongside
     " it as the sort key the original needs its custom compare function for.
     t_products = VALUE #(
-      ( name = `Notebook Basic 15` category = `Laptops` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg` quantity = 10 deliverydatestr = `23/07/2026` deliverydate = 1784764800000 )
-      ( name = `Notebook Basic 17` category = `Laptops` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1001.jpg` quantity = 20 deliverydatestr = `19/07/2026` deliverydate = 1784419200000 )
-      ( name = `Notebook Basic 18` category = `Laptops` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1002.jpg` quantity = 10 deliverydatestr = `15/07/2026` deliverydate = 1784073600000 )
-      ( name = `Notebook Basic 19` category = `Laptops` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1003.jpg` quantity = 15 deliverydatestr = `11/07/2026` deliverydate = 1783728000000 )
-      ( name = `ITelO Vault` category = `Accessories` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1007.jpg` quantity = 15 deliverydatestr = `07/07/2026` deliverydate = 1783382400000 )
-      ( name = `Notebook Professional 15` category = `Accessories` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1010.jpg` quantity = 16 deliverydatestr = `03/07/2026` deliverydate = 1783036800000 )
-      ( name = `Notebook Professional 17` category = `Laptops` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1011.jpg` quantity = 17 deliverydatestr = `29/06/2026` deliverydate = 1782691200000 )
-      ( name = `ITelO Vault Net` category = `Accessories` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1020.jpg` quantity = 14 deliverydatestr = `25/06/2026` deliverydate = 1782345600000 )
-      ( name = `ITelO Vault SAT` category = `Accessories` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1021.jpg` quantity = 50 deliverydatestr = `21/06/2026` deliverydate = 1782000000000 )
-      ( name = `Comfort Easy` category = `Accessories` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1022.jpg` quantity = 30 deliverydatestr = `17/06/2026` deliverydate = 1781654400000 )
-      ( name = `Comfort Senior` category = `Accessories` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1023.jpg` quantity = 24 deliverydatestr = `23/07/2026` deliverydate = 1784764800000 )
-      ( name = `Ergo Screen E-I` category = `Flat Screen Monitors` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1030.jpg` quantity = 14 deliverydatestr = `19/07/2026` deliverydate = 1784419200000 )
-      ( name = `Ergo Screen E-II` category = `Flat Screen Monitors` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1031.jpg` quantity = 24 deliverydatestr = `15/07/2026` deliverydate = 1784073600000 )
-      ( name = `Ergo Screen E-III` category = `Flat Screen Monitors` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1032.jpg` quantity = 50 deliverydatestr = `11/07/2026` deliverydate = 1783728000000 )
-      ( name = `Flat Basic` category = `Flat Screen Monitors` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1035.jpg` quantity = 23 deliverydatestr = `07/07/2026` deliverydate = 1783382400000 )
-      ( name = `Flat Future` category = `Flat Screen Monitors` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1036.jpg` quantity = 22 deliverydatestr = `03/07/2026` deliverydate = 1783036800000 )
-      ( name = `Flat XL` category = `Flat Screen Monitors` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1037.jpg` quantity = 23 deliverydatestr = `29/06/2026` deliverydate = 1782691200000 )
-      ( name = `Laser Professional Eco` category = `Printers` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1040.jpg` quantity = 21 deliverydatestr = `25/06/2026` deliverydate = 1782345600000 )
-      ( name = `Laser Basic` category = `Printers` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1041.jpg` quantity = 8 deliverydatestr = `21/06/2026` deliverydate = 1782000000000 )
-      ( name = `Laser Allround` category = `Printers` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1042.jpg` quantity = 9 deliverydatestr = `17/06/2026` deliverydate = 1781654400000 )
-      ( name = `Ultra Jet Super Color` category = `Printers` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1050.jpg` quantity = 17 deliverydatestr = `23/07/2026` deliverydate = 1784764800000 )
-      ( name = `Ultra Jet Mobile` category = `Printers` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1051.jpg` quantity = 18 deliverydatestr = `19/07/2026` deliverydate = 1784419200000 )
-      ( name = `Ultra Jet Super Highspeed` category = `Printers` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1052.jpg` quantity = 25 deliverydatestr = `15/07/2026` deliverydate = 1784073600000 )
-      ( name = `Multi Print` category = `Multifunction Printers` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1055.jpg` quantity = 16 deliverydatestr = `11/07/2026` deliverydate = 1783728000000 )
-      ( name = `Multi Color` category = `Multifunction Printers` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1056.jpg` quantity = 5 deliverydatestr = `07/07/2026` deliverydate = 1783382400000 )
-      ( name = `Cordless Mouse` category = `Mice` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1060.jpg` quantity = 25 deliverydatestr = `03/07/2026` deliverydate = 1783036800000 )
-      ( name = `Speed Mouse` category = `Mice` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1061.jpg` quantity = 12 deliverydatestr = `29/06/2026` deliverydate = 1782691200000 )
-      ( name = `Track Mouse` category = `Mice` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1062.jpg` quantity = 12 deliverydatestr = `25/06/2026` deliverydate = 1782345600000 )
-      ( name = `Ergonomic Keyboard` category = `Keyboards` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1063.jpg` quantity = 50 deliverydatestr = `21/06/2026` deliverydate = 1782000000000 )
-      ( name = `Internet Keyboard` category = `Keyboards` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1064.jpg` quantity = 35 deliverydatestr = `17/06/2026` deliverydate = 1781654400000 )
-      ( name = `Media Keyboard` category = `Keyboards` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1065.jpg` quantity = 26 deliverydatestr = `23/07/2026` deliverydate = 1784764800000 )
-      ( name = `Mousepad` category = `Mousepads` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1066.jpg` quantity = 12 deliverydatestr = `19/07/2026` deliverydate = 1784419200000 )
-      ( name = `Ergo Mousepad` category = `Mousepads` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1067.jpg` quantity = 16 deliverydatestr = `15/07/2026` deliverydate = 1784073600000 )
-      ( name = `Designer Mousepad` category = `Mousepads` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1068.jpg` quantity = 26 deliverydatestr = `11/07/2026` deliverydate = 1783728000000 )
+      ( name = `Notebook Basic 15`         category = `Laptops`                productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg` quantity = 10 deliverydatestr = `23/07/2026` deliverydate = 1784764800000 )
+      ( name = `Notebook Basic 17`         category = `Laptops`                productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1001.jpg` quantity = 20 deliverydatestr = `19/07/2026` deliverydate = 1784419200000 )
+      ( name = `Notebook Basic 18`         category = `Laptops`                productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1002.jpg` quantity = 10 deliverydatestr = `15/07/2026` deliverydate = 1784073600000 )
+      ( name = `Notebook Basic 19`         category = `Laptops`                productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1003.jpg` quantity = 15 deliverydatestr = `11/07/2026` deliverydate = 1783728000000 )
+      ( name = `ITelO Vault`               category = `Accessories`            productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1007.jpg` quantity = 15 deliverydatestr = `07/07/2026` deliverydate = 1783382400000 )
+      ( name = `Notebook Professional 15`  category = `Accessories`            productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1010.jpg` quantity = 16 deliverydatestr = `03/07/2026` deliverydate = 1783036800000 )
+      ( name = `Notebook Professional 17`  category = `Laptops`                productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1011.jpg` quantity = 17 deliverydatestr = `29/06/2026` deliverydate = 1782691200000 )
+      ( name = `ITelO Vault Net`           category = `Accessories`            productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1020.jpg` quantity = 14 deliverydatestr = `25/06/2026` deliverydate = 1782345600000 )
+      ( name = `ITelO Vault SAT`           category = `Accessories`            productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1021.jpg` quantity = 50 deliverydatestr = `21/06/2026` deliverydate = 1782000000000 )
+      ( name = `Comfort Easy`              category = `Accessories`            productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1022.jpg` quantity = 30 deliverydatestr = `17/06/2026` deliverydate = 1781654400000 )
+      ( name = `Comfort Senior`            category = `Accessories`            productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1023.jpg` quantity = 24 deliverydatestr = `23/07/2026` deliverydate = 1784764800000 )
+      ( name = `Ergo Screen E-I`           category = `Flat Screen Monitors`   productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1030.jpg` quantity = 14 deliverydatestr = `19/07/2026` deliverydate = 1784419200000 )
+      ( name = `Ergo Screen E-II`          category = `Flat Screen Monitors`   productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1031.jpg` quantity = 24 deliverydatestr = `15/07/2026` deliverydate = 1784073600000 )
+      ( name = `Ergo Screen E-III`         category = `Flat Screen Monitors`   productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1032.jpg` quantity = 50 deliverydatestr = `11/07/2026` deliverydate = 1783728000000 )
+      ( name = `Flat Basic`                category = `Flat Screen Monitors`   productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1035.jpg` quantity = 23 deliverydatestr = `07/07/2026` deliverydate = 1783382400000 )
+      ( name = `Flat Future`               category = `Flat Screen Monitors`   productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1036.jpg` quantity = 22 deliverydatestr = `03/07/2026` deliverydate = 1783036800000 )
+      ( name = `Flat XL`                   category = `Flat Screen Monitors`   productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1037.jpg` quantity = 23 deliverydatestr = `29/06/2026` deliverydate = 1782691200000 )
+      ( name = `Laser Professional Eco`    category = `Printers`               productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1040.jpg` quantity = 21 deliverydatestr = `25/06/2026` deliverydate = 1782345600000 )
+      ( name = `Laser Basic`               category = `Printers`               productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1041.jpg` quantity = 8  deliverydatestr = `21/06/2026` deliverydate = 1782000000000 )
+      ( name = `Laser Allround`            category = `Printers`               productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1042.jpg` quantity = 9  deliverydatestr = `17/06/2026` deliverydate = 1781654400000 )
+      ( name = `Ultra Jet Super Color`     category = `Printers`               productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1050.jpg` quantity = 17 deliverydatestr = `23/07/2026` deliverydate = 1784764800000 )
+      ( name = `Ultra Jet Mobile`          category = `Printers`               productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1051.jpg` quantity = 18 deliverydatestr = `19/07/2026` deliverydate = 1784419200000 )
+      ( name = `Ultra Jet Super Highspeed` category = `Printers`               productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1052.jpg` quantity = 25 deliverydatestr = `15/07/2026` deliverydate = 1784073600000 )
+      ( name = `Multi Print`               category = `Multifunction Printers` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1055.jpg` quantity = 16 deliverydatestr = `11/07/2026` deliverydate = 1783728000000 )
+      ( name = `Multi Color`               category = `Multifunction Printers` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1056.jpg` quantity = 5  deliverydatestr = `07/07/2026` deliverydate = 1783382400000 )
+      ( name = `Cordless Mouse`            category = `Mice`                   productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1060.jpg` quantity = 25 deliverydatestr = `03/07/2026` deliverydate = 1783036800000 )
+      ( name = `Speed Mouse`               category = `Mice`                   productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1061.jpg` quantity = 12 deliverydatestr = `29/06/2026` deliverydate = 1782691200000 )
+      ( name = `Track Mouse`               category = `Mice`                   productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1062.jpg` quantity = 12 deliverydatestr = `25/06/2026` deliverydate = 1782345600000 )
+      ( name = `Ergonomic Keyboard`        category = `Keyboards`              productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1063.jpg` quantity = 50 deliverydatestr = `21/06/2026` deliverydate = 1782000000000 )
+      ( name = `Internet Keyboard`         category = `Keyboards`              productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1064.jpg` quantity = 35 deliverydatestr = `17/06/2026` deliverydate = 1781654400000 )
+      ( name = `Media Keyboard`            category = `Keyboards`              productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1065.jpg` quantity = 26 deliverydatestr = `23/07/2026` deliverydate = 1784764800000 )
+      ( name = `Mousepad`                  category = `Mousepads`              productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1066.jpg` quantity = 12 deliverydatestr = `19/07/2026` deliverydate = 1784419200000 )
+      ( name = `Ergo Mousepad`             category = `Mousepads`              productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1067.jpg` quantity = 16 deliverydatestr = `15/07/2026` deliverydate = 1784073600000 )
+      ( name = `Designer Mousepad`         category = `Mousepads`              productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1068.jpg` quantity = 26 deliverydatestr = `11/07/2026` deliverydate = 1783728000000 )
       ( name = `Universal card reader` category = `Computer System Accessories` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1069.jpg` quantity = 22 deliverydatestr = `07/07/2026`
         deliverydate = 1783382400000 )
       ( name = `Proctra X` category = `Graphic Cards` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1070.jpg` quantity = 15 deliverydatestr = `03/07/2026` deliverydate = 1783036800000 )
@@ -468,24 +465,24 @@ CLASS z2ui5_cl_smpc_app_362 IMPLEMENTATION.
       ( name = `Travel Adapter` category = `Accessories` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1119.jpg` quantity = 10 deliverydatestr = `25/06/2026` deliverydate = 1782345600000 )
       ( name = `Cordless Bluetooth Keyboard, english international` category = `Keyboards` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1120.jpg` quantity = 13 deliverydatestr = `21/06/2026`
         deliverydate = 1782000000000 )
-      ( name = `Flat XXL` category = `Flat Screen Monitors` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1137.jpg` quantity = 10 deliverydatestr = `17/06/2026` deliverydate = 1781654400000 )
-      ( name = `Pocket Mouse` category = `Mice` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1138.jpg` quantity = 20 deliverydatestr = `23/07/2026` deliverydate = 1784764800000 )
-      ( name = `PC Power Station` category = `PCs` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1210.jpg` quantity = 22 deliverydatestr = `19/07/2026` deliverydate = 1784419200000 )
-      ( name = `Astro Laptop 1516` category = `Laptops` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1251.jpg` quantity = 23 deliverydatestr = `15/07/2026` deliverydate = 1784073600000 )
-      ( name = `Astro Phone 6` category = `Smartphones and Tablets` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1252.jpg` quantity = 28 deliverydatestr = `11/07/2026` deliverydate = 1783728000000 )
-      ( name = `Benda Laptop 1408` category = `Laptops` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1253.jpg` quantity = 27 deliverydatestr = `07/07/2026` deliverydate = 1783382400000 )
-      ( name = `Bending Screen 21HD` category = `Flat Screens` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1254.jpg` quantity = 23 deliverydatestr = `03/07/2026` deliverydate = 1783036800000 )
-      ( name = `Broad Screen 22HD` category = `Flat Screens` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1255.jpg` quantity = 5 deliverydatestr = `29/06/2026` deliverydate = 1782691200000 )
-      ( name = `Cerdik Phone 7` category = `Smartphones and Tablets` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1256.jpg` quantity = 19 deliverydatestr = `25/06/2026` deliverydate = 1782345600000 )
-      ( name = `Cepat Tablet 10.5` category = `Smartphones and Tablets` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1257.jpg` quantity = 17 deliverydatestr = `21/06/2026` deliverydate = 1782000000000 )
-      ( name = `Cepat Tablet 8` category = `Smartphones and Tablets` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1258.jpg` quantity = 24 deliverydatestr = `17/06/2026` deliverydate = 1781654400000 )
-      ( name = `Server Basic` category = `Servers` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1500.jpg` quantity = 24 deliverydatestr = `23/07/2026` deliverydate = 1784764800000 )
-      ( name = `Server Professional` category = `Servers` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1501.jpg` quantity = 26 deliverydatestr = `19/07/2026` deliverydate = 1784419200000 )
-      ( name = `Server Power Pro` category = `Servers` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1502.jpg` quantity = 34 deliverydatestr = `15/07/2026` deliverydate = 1784073600000 )
-      ( name = `Family PC Basic` category = `Desktop Computers` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1600.jpg` quantity = 10 deliverydatestr = `11/07/2026` deliverydate = 1783728000000 )
-      ( name = `Family PC Pro` category = `Desktop Computers` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1601.jpg` quantity = 20 deliverydatestr = `07/07/2026` deliverydate = 1783382400000 )
-      ( name = `Gaming Monster` category = `Desktop Computers` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1602.jpg` quantity = 24 deliverydatestr = `03/07/2026` deliverydate = 1783036800000 )
-      ( name = `Gaming Monster Pro` category = `Desktop Computers` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1603.jpg` quantity = 25 deliverydatestr = `29/06/2026` deliverydate = 1782691200000 )
+      ( name = `Flat XXL`            category = `Flat Screen Monitors`    productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1137.jpg` quantity = 10 deliverydatestr = `17/06/2026` deliverydate = 1781654400000 )
+      ( name = `Pocket Mouse`        category = `Mice`                    productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1138.jpg` quantity = 20 deliverydatestr = `23/07/2026` deliverydate = 1784764800000 )
+      ( name = `PC Power Station`    category = `PCs`                     productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1210.jpg` quantity = 22 deliverydatestr = `19/07/2026` deliverydate = 1784419200000 )
+      ( name = `Astro Laptop 1516`   category = `Laptops`                 productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1251.jpg` quantity = 23 deliverydatestr = `15/07/2026` deliverydate = 1784073600000 )
+      ( name = `Astro Phone 6`       category = `Smartphones and Tablets` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1252.jpg` quantity = 28 deliverydatestr = `11/07/2026` deliverydate = 1783728000000 )
+      ( name = `Benda Laptop 1408`   category = `Laptops`                 productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1253.jpg` quantity = 27 deliverydatestr = `07/07/2026` deliverydate = 1783382400000 )
+      ( name = `Bending Screen 21HD` category = `Flat Screens`            productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1254.jpg` quantity = 23 deliverydatestr = `03/07/2026` deliverydate = 1783036800000 )
+      ( name = `Broad Screen 22HD`   category = `Flat Screens`            productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1255.jpg` quantity = 5  deliverydatestr = `29/06/2026` deliverydate = 1782691200000 )
+      ( name = `Cerdik Phone 7`      category = `Smartphones and Tablets` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1256.jpg` quantity = 19 deliverydatestr = `25/06/2026` deliverydate = 1782345600000 )
+      ( name = `Cepat Tablet 10.5`   category = `Smartphones and Tablets` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1257.jpg` quantity = 17 deliverydatestr = `21/06/2026` deliverydate = 1782000000000 )
+      ( name = `Cepat Tablet 8`      category = `Smartphones and Tablets` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1258.jpg` quantity = 24 deliverydatestr = `17/06/2026` deliverydate = 1781654400000 )
+      ( name = `Server Basic`        category = `Servers`                 productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1500.jpg` quantity = 24 deliverydatestr = `23/07/2026` deliverydate = 1784764800000 )
+      ( name = `Server Professional` category = `Servers`                 productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1501.jpg` quantity = 26 deliverydatestr = `19/07/2026` deliverydate = 1784419200000 )
+      ( name = `Server Power Pro`    category = `Servers`                 productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1502.jpg` quantity = 34 deliverydatestr = `15/07/2026` deliverydate = 1784073600000 )
+      ( name = `Family PC Basic`     category = `Desktop Computers`       productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1600.jpg` quantity = 10 deliverydatestr = `11/07/2026` deliverydate = 1783728000000 )
+      ( name = `Family PC Pro`       category = `Desktop Computers`       productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1601.jpg` quantity = 20 deliverydatestr = `07/07/2026` deliverydate = 1783382400000 )
+      ( name = `Gaming Monster`      category = `Desktop Computers`       productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1602.jpg` quantity = 24 deliverydatestr = `03/07/2026` deliverydate = 1783036800000 )
+      ( name = `Gaming Monster Pro`  category = `Desktop Computers`       productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1603.jpg` quantity = 25 deliverydatestr = `29/06/2026` deliverydate = 1782691200000 )
       ( name = `7" Widescreen Portable DVD Player w MP3` category = `Accessories` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2000.jpg` quantity = 20 deliverydatestr = `25/06/2026`
         deliverydate = 1782345600000 )
       ( name = `10" Portable DVD player` category = `Accessories` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2001.jpg` quantity = 21 deliverydatestr = `21/06/2026` deliverydate = 1782000000000 )

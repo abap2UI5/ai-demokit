@@ -252,9 +252,7 @@ CLASS z2ui5_cl_smpc_app_185 IMPLEMENTATION.
       REPLACE ALL OCCURRENCES OF `  ` IN lv_text WITH lv_repl.
       REPLACE ALL OCCURRENCES OF `  ` IN lv_add  WITH lv_repl.
 
-      APPEND VALUE #( key            = lv_i
-                      text           = lv_text
-                      additionaltext = lv_add ) TO t_items.
+      APPEND VALUE #( key = lv_i text = lv_text additionaltext = lv_add ) TO t_items.
     ENDDO.
 
   ENDMETHOD.

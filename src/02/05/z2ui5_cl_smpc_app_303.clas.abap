@@ -341,8 +341,8 @@ CLASS z2ui5_cl_smpc_app_303 IMPLEMENTATION.
                          ( title = `User 3` key = `page3` ) ) )
       ( title = `Identity`
         items = VALUE #( ( title = `Identity 1` key = `page4` )
-                         ( title = `Identity 2` key = `page4` )
-                         ( title = `Identity 3` key = `page4` ) ) )
+                         ( title = `Identity 2`   key = `page4` )
+                         ( title = `Identity 3`   key = `page4` ) ) )
       ( title = `Provisioning` key = `page5` )
       ( title = `Monitoring` icon = `sap-icon://unwired`
         items = VALUE #( ( title = `Monitoring 1` key = `page6` )

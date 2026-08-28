@@ -118,13 +118,11 @@ CLASS z2ui5_cl_smpc_app_585 IMPLEMENTATION.
             )->a( n = `itemSelect`  v = client->_event( val   = `ITEM_SELECT`
                                                         t_arg = VALUE #( ( `${$parameters>/item}.getKey()` ) ) ) ).
 
-    nav_list( node  = side
-              items = client->_bind( t_navigation ) ).
+    nav_list( node = side items = client->_bind( t_navigation ) ).
 
     DATA(fixed) = side->ele( n = `fixedItem` ns = `tnt` ).
 
-    nav_list( node  = fixed
-              items = client->_bind( t_fixed_navigation ) ).
+    nav_list( node = fixed items = client->_bind( t_fixed_navigation ) ).
 
     DATA(pages) = tool_page->ele( n = `mainContents` ns = `tnt`
         )->ele( `NavContainer`
@@ -265,7 +263,7 @@ CLASS z2ui5_cl_smpc_app_585 IMPLEMENTATION.
     t_fixed_navigation = VALUE #(
       ( title = `Fixed Item 1` icon = `sap-icon://employee` enabled = abap_true expanded = abap_true )
       ( title = `Fixed Item 2` icon = `sap-icon://building` enabled = abap_true expanded = abap_true )
-      ( title = `Fixed Item 3` icon = `sap-icon://card` enabled = abap_true expanded = abap_true ) ).
+      ( title = `Fixed Item 3` icon = `sap-icon://card`     enabled = abap_true expanded = abap_true ) ).
 
     " the second page's text, the sample's own lorem ipsum. An XML attribute
     " normalizes its line breaks and indentation to single spaces, which is what

@@ -573,8 +573,7 @@ CLASS ${CLASS} IMPLEMENTATION.
               )->a( n = \`class\`     v = \`sapUiSmallMarginTop\` ).
         ENDIF.
 
-        client->popover_display( xml   = links->stringify( )
-                                 by_id = client->get_event_arg( 2 ) ).
+        client->popover_display( xml = links->stringify( ) by_id = client->get_event_arg( 2 ) ).
 
       WHEN \`INFO\`.
         " everything the generator knows ABOUT the port (as opposed to where it
@@ -640,8 +639,7 @@ CLASS ${CLASS} IMPLEMENTATION.
               )->a( n = \`htmlText\` v = lv_html ).
         ENDIF.
 
-        client->popover_display( xml   = info->stringify( )
-                                 by_id = client->get_event_arg( 2 ) ).
+        client->popover_display( xml = info->stringify( ) by_id = client->get_event_arg( 2 ) ).
 
       WHEN \`${EV_INSTALL}\`.
         " a header icon whose repository is not on this system - anchor class,
@@ -664,8 +662,7 @@ CLASS ${CLASS} IMPLEMENTATION.
             " can give, and it is what the silent catch here used to produce.
             " Only the running system knows why the overview app of the other
             " repository did not start, so let it say so.
-            client->message_box_display( text = |{ lv_nav }: { lx_nav->get_text( ) }|
-                                         type = \`error\` ).
+            client->message_box_display( text = |{ lv_nav }: { lx_nav->get_text( ) }| type = \`error\` ).
         ENDTRY.
 
     ENDCASE.
@@ -738,8 +735,7 @@ CLASS ${CLASS} IMPLEMENTATION.
 
     " title and back button come with the custom header (render_header), not
     " with the page - a Page renders either its own header or a custom one
-    render_header( page  = page
-                   title = |abap2UI5 Demo Kit (\{ lines( t_app ) \})| ).
+    render_header( page = page title = |abap2UI5 Demo Kit (\{ lines( t_app ) \})| ).
 
     page->ele( \`subHeader\`
                     )->ele( \`OverflowToolbar\`
@@ -1051,8 +1047,7 @@ ${catalogStatements}
                     )->a( n = \`target\` v = \`_blank\`
                     )->a( n = \`class\`  v = \`sapUiSmallMarginTop\` ).
 
-    client->popover_display( xml   = info->stringify( )
-                             by_id = anchor ).
+    client->popover_display( xml = info->stringify( ) by_id = anchor ).
 
   ENDMETHOD.
 

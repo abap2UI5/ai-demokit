@@ -225,8 +225,7 @@ CLASS z2ui5_cl_smpc_app_609 IMPLEMENTATION.
                     )->a( n = `id`   v = `appTypeText`
                     )->a( n = `text` v = client->_bind( sel_typetxt ) ).
 
-    client->popover_display( xml   = popup->stringify( )
-                             by_id = `SPC1` ).
+    client->popover_display( xml = popup->stringify( ) by_id = `SPC1` ).
 
   ENDMETHOD.
 
@@ -493,8 +492,7 @@ CLASS z2ui5_cl_smpc_app_609 IMPLEMENTATION.
       date_state      = `None`.
       date_state_text = ``.
       ok_enabled      = abap_false.
-    ELSEIF ( all_day = abap_true  AND sel_end < sel_start )
-        OR ( all_day = abap_false AND sel_end <= sel_start ).
+    ELSEIF ( all_day = abap_true AND sel_end < sel_start ) OR ( all_day = abap_false AND sel_end <= sel_start ).
       date_state      = `Error`.
       date_state_text = `Start date should be before End date`.
       ok_enabled      = abap_false.

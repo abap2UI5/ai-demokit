@@ -161,8 +161,7 @@ CLASS z2ui5_cl_smpc_app_611 IMPLEMENTATION.
                         )->a( n = `id`   v = `popoverType`
                         )->a( n = `text` v = client->_bind( popover_type ) ).
 
-        client->popover_display( xml   = popover->stringify( )
-                                 by_id = `calendar` ).
+        client->popover_display( xml = popover->stringify( ) by_id = `calendar` ).
         RETURN.
       ENDIF.
     ENDLOOP.

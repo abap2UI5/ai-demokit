@@ -154,8 +154,7 @@ CLASS z2ui5_cl_smpc_app_531 IMPLEMENTATION.
             )->end(
         )->end( ).
 
-    client->popover_display( xml   = popup->stringify( )
-                             by_id = `showQuickView` ).
+    client->popover_display( xml = popup->stringify( ) by_id = `showQuickView` ).
 
   ENDMETHOD.
 

@@ -98,8 +98,7 @@ CLASS z2ui5_cl_smpc_app_490 IMPLEMENTATION.
         list = list && |'{ VALUE #( t_products[ productid = key ]-name OPTIONAL ) }'|.
       ENDLOOP.
 
-      client->message_toast_display( text  = |Event 'selectionFinished': [{ list }]|
-                                     width = `auto` ).
+      client->message_toast_display( text = |Event 'selectionFinished': [{ list }]| width = `auto` ).
 
     ENDIF.
 

@@ -645,9 +645,9 @@ CLASS z2ui5_cl_smpc_app_407 IMPLEMENTATION.
         key = `CustomerManagement` ariahaspopup = `None` design = `Default` tagstate = `None`
         items = VALUE #(
           enabled = abap_true selectable = abap_true ariahaspopup = `None` design = `Default` tagstate = `None`
-          ( title = `Contacts` key = `contacts` )
+          ( title = `Contacts`  key = `contacts` )
           ( title = `Companies` key = `companies` )
-          ( title = `Partners` key = `partners` ) ) )
+          ( title = `Partners`  key = `partners` ) ) )
       ( title = `SAP Best Practices` icon = `sap-icon://learning-assistant` expanded = abap_true selectable = abap_false
         key = `sapBestPractices` href = `https://sap.com` target = `_blank`
         ariahaspopup = `None` design = `Default` tagstate = `None` )
@@ -655,33 +655,33 @@ CLASS z2ui5_cl_smpc_app_407 IMPLEMENTATION.
         key = `Sales` ariahaspopup = `None` design = `Default` tagstate = `None`
         items = VALUE #(
           enabled = abap_true selectable = abap_true ariahaspopup = `None` design = `Default` tagstate = `None`
-          ( title = `Leads` key = `leads` )
+          ( title = `Leads`         key = `leads` )
           ( title = `Opportunities` key = `opportunities` )
-          ( title = `Quotes` key = `quotes` )
-          ( title = `Orders` key = `orders` )
-          ( title = `Invoices` key = `invoices` ) ) )
+          ( title = `Quotes`        key = `quotes` )
+          ( title = `Orders`        key = `orders` )
+          ( title = `Invoices`      key = `invoices` ) ) )
       ( title = `Products` icon = `sap-icon://customer-view` expanded = abap_true selectable = abap_true
         key = `products` ariahaspopup = `None` design = `Default` tagtext = `Low Stock` tagstate = `Indication18`
         items = VALUE #(
           enabled = abap_true selectable = abap_true ariahaspopup = `None` design = `Default` tagstate = `None`
-          ( title = `Product Catalog` key = `productCatalog` )
-          ( title = `Pricing` key = `pricing` )
+          ( title = `Product Catalog`      key = `productCatalog` )
+          ( title = `Pricing`              key = `pricing` )
           ( title = `Inventory Management` key = `inventoryManagement` ) ) )
       ( title = `Marketing` icon = `sap-icon://customer-view` expanded = abap_true selectable = abap_false
         key = `marketing` ariahaspopup = `None` design = `Default` tagstate = `None`
         items = VALUE #(
           enabled = abap_true selectable = abap_true ariahaspopup = `None` design = `Default` tagstate = `None`
-          ( title = `Campaigns` key = `campaigns` )
-          ( title = `E-mail Marketing` key = `emailMarketing` )
+          ( title = `Campaigns`            key = `campaigns` )
+          ( title = `E-mail Marketing`     key = `emailMarketing` )
           ( title = `MArketing Automation` key = `marketingAutomation` ) ) )
       ( title = `Finance` icon = `sap-icon://money-bills` expanded = abap_true selectable = abap_false
         ariahaspopup = `None` design = `Default` tagstate = `None`
         items = VALUE #(
           enabled = abap_true selectable = abap_true ariahaspopup = `None` design = `Default` tagstate = `None`
           ( title = `Accounts Receivable` key = `accountsReceivable` )
-          ( title = `Accounts Payable` key = `accountsPayable` )
-          ( title = `Budget Planning` key = `budgetPlanning` )
-          ( title = `Tax Management` key = `taxManagement` ) ) )
+          ( title = `Accounts Payable`    key = `accountsPayable` )
+          ( title = `Budget Planning`     key = `budgetPlanning` )
+          ( title = `Tax Management`      key = `taxManagement` ) ) )
       ( title = `Year-End Financial Reports` icon = `sap-icon://manager-insight` expanded = abap_true selectable = abap_true
         key = `reports` ariahaspopup = `None` design = `Default` tagstate = `None`
         items = VALUE #(
@@ -700,15 +700,15 @@ CLASS z2ui5_cl_smpc_app_407 IMPLEMENTATION.
         ariahaspopup = `None` design = `Default` tagstate = `None`
         items = VALUE #(
           enabled = abap_true selectable = abap_true ariahaspopup = `None` design = `Default` tagstate = `None`
-          ( title = `User Management` key = `userManagement` )
+          ( title = `User Management`      key = `userManagement` )
           ( title = `System Configuration` key = `systemConfig` )
-          ( title = `Audit Log` key = `auditLog` ) ) )
+          ( title = `Audit Log`            key = `auditLog` ) ) )
       ( title = `Service Management` icon = `sap-icon://customer-and-supplier` expanded = abap_false selectable = abap_false
         ariahaspopup = `None` design = `Default` tagstate = `None`
         items = VALUE #(
           enabled = abap_true selectable = abap_true ariahaspopup = `None` design = `Default` tagstate = `None`
-          ( title = `Service Tickets` key = `serviceTickets` )
-          ( title = `Knowledge Base` key = `knowledgeBase` )
+          ( title = `Service Tickets`   key = `serviceTickets` )
+          ( title = `Knowledge Base`    key = `knowledgeBase` )
           ( title = `Service Contracts` key = `serviceContracts` ) ) )
       ( title = `Notifications` icon = `sap-icon://message-information` expanded = abap_true selectable = abap_true
         key = `notifications` ariahaspopup = `None` design = `Default` tagtext = `8 New` tagstate = `Indication18` )

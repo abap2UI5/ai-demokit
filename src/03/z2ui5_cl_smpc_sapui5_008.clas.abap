@@ -106,9 +106,7 @@ CLASS z2ui5_cl_smpc_sapui5_008 IMPLEMENTATION.
               )->a( n = `value` v = CONV string( node-team ) ).
     ENDIF.
 
-    client->popover_display(
-      xml   = view->stringify( )
-      by_id = id ).
+    client->popover_display( xml = view->stringify( ) by_id = id ).
 
   ENDMETHOD.
 
@@ -280,8 +278,8 @@ CLASS z2ui5_cl_smpc_sapui5_008 IMPLEMENTATION.
                                      )
                                      lines = VALUE #( ( from = `Dinter` to = `Ninsei` )
                                                       ( from = `Ninsei` to = `Mills` )
-                                                      ( from = `Mills` to = `Polak` )
-                                                      ( from = `Mills` to = `Sykorova` )
+                                                      ( from = `Mills`  to = `Polak` )
+                                                      ( from = `Mills`  to = `Sykorova` )
                                     ) ).
 
       view_display( ).

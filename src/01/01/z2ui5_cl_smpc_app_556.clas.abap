@@ -202,16 +202,16 @@ CLASS z2ui5_cl_smpc_app_556 IMPLEMENTATION.
 
     " setSizeLimit( 10 ) keeps the first ten rows of the mock collection
     t_products = VALUE #(
-      ( name = `Notebook Basic 15` suppliername = `Very Best Screens` dateofsale = `2017-03-26` )
-      ( name = `Notebook Basic 17` suppliername = `Very Best Screens` dateofsale = `2017-04-17` )
-      ( name = `Notebook Basic 18` suppliername = `Very Best Screens` dateofsale = `2017-01-07` )
-      ( name = `Notebook Basic 19` suppliername = `Smartcards` dateofsale = `2017-04-09` )
-      ( name = `ITelO Vault` suppliername = `Technocom` dateofsale = `2017-05-17` )
+      ( name = `Notebook Basic 15`        suppliername = `Very Best Screens` dateofsale = `2017-03-26` )
+      ( name = `Notebook Basic 17`        suppliername = `Very Best Screens` dateofsale = `2017-04-17` )
+      ( name = `Notebook Basic 18`        suppliername = `Very Best Screens` dateofsale = `2017-01-07` )
+      ( name = `Notebook Basic 19`        suppliername = `Smartcards`        dateofsale = `2017-04-09` )
+      ( name = `ITelO Vault`              suppliername = `Technocom`         dateofsale = `2017-05-17` )
       ( name = `Notebook Professional 15` suppliername = `Very Best Screens` dateofsale = `2017-02-22` )
       ( name = `Notebook Professional 17` suppliername = `Very Best Screens` dateofsale = `2017-01-02` )
-      ( name = `ITelO Vault Net` suppliername = `Technocom` dateofsale = `2017-05-08` )
-      ( name = `ITelO Vault SAT` suppliername = `Technocom` dateofsale = `2017-06-30` )
-      ( name = `Comfort Easy` suppliername = `Technocom` dateofsale = `2017-03-02` )
+      ( name = `ITelO Vault Net`          suppliername = `Technocom`         dateofsale = `2017-05-08` )
+      ( name = `ITelO Vault SAT`          suppliername = `Technocom`         dateofsale = `2017-06-30` )
+      ( name = `Comfort Easy`             suppliername = `Technocom`         dateofsale = `2017-03-02` )
     ).
 
   ENDMETHOD.

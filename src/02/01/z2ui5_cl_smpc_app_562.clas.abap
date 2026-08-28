@@ -445,9 +445,7 @@ CLASS z2ui5_cl_smpc_app_562 IMPLEMENTATION.
                                    WHEN `Critical` THEN `Warning`
                                    WHEN `Success`  THEN `Success`
                                    ELSE `Information` ).
-    DATA(count) = REDUCE i( INIT n = 0
-                            FOR m IN t_messages
-                            NEXT n = COND #( WHEN m-type = highest THEN n + 1 ELSE n ) ).
+    DATA(count) = REDUCE i( INIT n = 0 FOR m IN t_messages NEXT n = COND #( WHEN m-type = highest THEN n + 1 ELSE n ) ).
     btn_text = COND #( WHEN count = 0 THEN `` ELSE |{ count }| ).
 
     " the formatter returns undefined while no message carries a severity; an empty

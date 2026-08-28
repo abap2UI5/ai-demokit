@@ -71,9 +71,9 @@ CLASS z2ui5_cl_smpc_app_253 IMPLEMENTATION.
     " onInit's aData 1:1 - every row carries a valueState (no absent-enum
     " trap); the rows without a valueStateText keep the empty default
     modeldata = VALUE #(
-      ( label = `DatePicker with valueState None` valuestate = `None` )
+      ( label = `DatePicker with valueState None`        valuestate = `None` )
       ( label = `DatePicker with valueState Information` valuestate = `Information` )
-      ( label = `DatePicker with valueState Success` valuestate = `Success` )
+      ( label = `DatePicker with valueState Success`     valuestate = `Success` )
       ( label = `DatePicker with valueState Warning and long valueStateText` valuestate = `Warning`
         valuestatetext = `Warning message. This is an extra long text used as a warning message. It illustrates how the text wraps into two or more lines without truncation to show the full length of the message.` )
       ( label = `DatePicker with valueState Error` valuestate = `Error` ) ).

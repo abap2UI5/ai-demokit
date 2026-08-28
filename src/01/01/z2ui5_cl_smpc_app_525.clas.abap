@@ -78,23 +78,23 @@ CLASS z2ui5_cl_smpc_app_525 IMPLEMENTATION.
     " the mock server's ProductCollection; INITIAL is the first letter of Name,
     " which is what the original's groupFunction returns
     t_products = VALUE #(
-        ( name = `Notebook Basic 15` description = `Notebook Basic 15 with 2,80 GHz quad core, 15" LCD, 4 GB DDR3 RAM, 500 GB Hard Disc, Windows 8 Pro` price = `956` currencycode = `EUR` initial = `N` )
-        ( name = `Notebook Basic 17` description = `Notebook Basic 17 with 2,80 GHz quad core, 17" LCD, 4 GB DDR3 RAM, 500 GB Hard Disc, Windows 8 Pro` price = `1249` currencycode = `EUR` initial = `N` )
-        ( name = `Notebook Basic 18` description = `Notebook Basic 18 with 2,80 GHz quad core, 18" LCD, 8 GB DDR3 RAM, 1000 GB Hard Disc, Windows 8 Pro` price = `1570` currencycode = `EUR` initial = `N` )
-        ( name = `Notebook Basic 19` description = `Notebook Basic 19 with 2,80 GHz quad core, 19" LCD, 8 GB DDR3 RAM, 1000 GB Hard Disc, Windows 8 Pro` price = `1650` currencycode = `EUR` initial = `N` )
-        ( name = `ITelO Vault` description = `Digital Organizer with State-of-the-Art Storage Encryption` price = `299` currencycode = `EUR` initial = `I` )
+        ( name = `Notebook Basic 15`        description = `Notebook Basic 15 with 2,80 GHz quad core, 15" LCD, 4 GB DDR3 RAM, 500 GB Hard Disc, Windows 8 Pro`                                             price = `956`  currencycode = `EUR` initial = `N` )
+        ( name = `Notebook Basic 17`        description = `Notebook Basic 17 with 2,80 GHz quad core, 17" LCD, 4 GB DDR3 RAM, 500 GB Hard Disc, Windows 8 Pro`                                             price = `1249` currencycode = `EUR` initial = `N` )
+        ( name = `Notebook Basic 18`        description = `Notebook Basic 18 with 2,80 GHz quad core, 18" LCD, 8 GB DDR3 RAM, 1000 GB Hard Disc, Windows 8 Pro`                                            price = `1570` currencycode = `EUR` initial = `N` )
+        ( name = `Notebook Basic 19`        description = `Notebook Basic 19 with 2,80 GHz quad core, 19" LCD, 8 GB DDR3 RAM, 1000 GB Hard Disc, Windows 8 Pro`                                            price = `1650` currencycode = `EUR` initial = `N` )
+        ( name = `ITelO Vault`              description = `Digital Organizer with State-of-the-Art Storage Encryption`                                                                                     price = `299`  currencycode = `EUR` initial = `I` )
         ( name = `Notebook Professional 15` description = `Notebook Professional 15 with 2,80 GHz quad core, 15" Multitouch LCD, 8 GB DDR3 RAM, 500 GB SSD - DVD-Writer (DVD-R/+R/-RW/-RAM),Windows 8 Pro` price = `1999` currencycode = `EUR` initial = `N` )
         ( name = `Notebook Professional 17` description = `Notebook Professional 17 with 2,80 GHz quad core, 17" Multitouch LCD, 8 GB DDR3 RAM, 500 GB SSD - DVD-Writer (DVD-R/+R/-RW/-RAM),Windows 8 Pro` price = `2299` currencycode = `EUR` initial = `N` )
-        ( name = `ITelO Vault Net` description = `Digital Organizer with State-of-the-Art Encryption for Storage and Network Communications` price = `459` currencycode = `EUR` initial = `I` )
-        ( name = `ITelO Vault SAT` description = `Digital Organizer with State-of-the-Art Encryption for Storage and Secure Stellite Link` price = `149` currencycode = `EUR` initial = `I` )
-        ( name = `Comfort Easy` description = `32 GB Digital Assistant with high-resolution color screen` price = `1679` currencycode = `EUR` initial = `C` )
-        ( name = `Comfort Senior` description = `64 GB Digital Assistant with high-resolution color screen and synthesized voice output` price = `512` currencycode = `EUR` initial = `C` )
-        ( name = `Ergo Screen E-I` description = `Optimum Hi-Resolution max. 1920 x 1080 @ 85Hz, Dot Pitch: 0.27mm` price = `230` currencycode = `EUR` initial = `E` )
-        ( name = `Ergo Screen E-II` description = `Optimum Hi-Resolution max. 1920 x 1200 @ 85Hz, Dot Pitch: 0.26mm` price = `285` currencycode = `EUR` initial = `E` )
-        ( name = `Ergo Screen E-III` description = `Optimum Hi-Resolution max. 2560 x 1440 @ 85Hz, Dot Pitch: 0.25mm` price = `345` currencycode = `EUR` initial = `E` )
-        ( name = `Flat Basic` description = `Optimum Hi-Resolution max. 1600 x 1200 @ 85Hz, Dot Pitch: 0.24mm` price = `399` currencycode = `EUR` initial = `F` )
-        ( name = `Flat Future` description = `Optimum Hi-Resolution max. 2048 x 1080 @ 85Hz, Dot Pitch: 0.26mm` price = `430` currencycode = `EUR` initial = `F` )
-        ( name = `Flat XL` description = `Optimum Hi-Resolution max. 2016 x 1512 @ 85Hz, Dot Pitch: 0.24mm` price = `1230` currencycode = `EUR` initial = `F` )
+        ( name = `ITelO Vault Net`          description = `Digital Organizer with State-of-the-Art Encryption for Storage and Network Communications`                                                      price = `459`  currencycode = `EUR` initial = `I` )
+        ( name = `ITelO Vault SAT`          description = `Digital Organizer with State-of-the-Art Encryption for Storage and Secure Stellite Link`                                                        price = `149`  currencycode = `EUR` initial = `I` )
+        ( name = `Comfort Easy`             description = `32 GB Digital Assistant with high-resolution color screen`                                                                                      price = `1679` currencycode = `EUR` initial = `C` )
+        ( name = `Comfort Senior`           description = `64 GB Digital Assistant with high-resolution color screen and synthesized voice output`                                                         price = `512`  currencycode = `EUR` initial = `C` )
+        ( name = `Ergo Screen E-I`          description = `Optimum Hi-Resolution max. 1920 x 1080 @ 85Hz, Dot Pitch: 0.27mm`                                                                               price = `230`  currencycode = `EUR` initial = `E` )
+        ( name = `Ergo Screen E-II`         description = `Optimum Hi-Resolution max. 1920 x 1200 @ 85Hz, Dot Pitch: 0.26mm`                                                                               price = `285`  currencycode = `EUR` initial = `E` )
+        ( name = `Ergo Screen E-III`        description = `Optimum Hi-Resolution max. 2560 x 1440 @ 85Hz, Dot Pitch: 0.25mm`                                                                               price = `345`  currencycode = `EUR` initial = `E` )
+        ( name = `Flat Basic`               description = `Optimum Hi-Resolution max. 1600 x 1200 @ 85Hz, Dot Pitch: 0.24mm`                                                                               price = `399`  currencycode = `EUR` initial = `F` )
+        ( name = `Flat Future`              description = `Optimum Hi-Resolution max. 2048 x 1080 @ 85Hz, Dot Pitch: 0.26mm`                                                                               price = `430`  currencycode = `EUR` initial = `F` )
+        ( name = `Flat XL`                  description = `Optimum Hi-Resolution max. 2016 x 1512 @ 85Hz, Dot Pitch: 0.24mm`                                                                               price = `1230` currencycode = `EUR` initial = `F` )
         ( name = `Laser Professional Eco` description = `Print 2400 dpi image quality color documents at speeds of up to 32 ppm (color) or 36 ppm (monochrome), letter/A4. Powerful 500 MHz processor, 512MB of memory`
           price = `830` currencycode = `EUR` initial = `L` )
         ( name = `Laser Basic` description = `Up to 22 ppm color or 24 ppm monochrome A4/letter, powerful 500 MHz processor and 128MB of memory` price = `490` currencycode = `EUR` initial = `L` )
@@ -155,9 +155,9 @@ CLASS z2ui5_cl_smpc_app_525 IMPLEMENTATION.
         ( name = `Astro Laptop 1516` description = `Flexible Laptop with 2,5 GHz Quad Core, 15" HD TN, 16 GB DDR SDRAM, 256 GB SSD, Windows 10 Pro` price = `989` currencycode = `EUR` initial = `A` )
         ( name = `Astro Phone 6` description = `6 inch 1280x800 HD display (216 ppi), Quad-core processor, 8 GB internal storage (actual formatted capacity will be less), 3050 mAh battery (Up to 8 hours of active use), grey or black`
           price = `649` currencycode = `EUR` initial = `A` )
-        ( name = `Benda Laptop 1408` description = `Flexible Laptop with 2,5 GHz Dual Core, 14" HD+ TN, 8 GB DDR SDRAM, 324 GB SSD, Windows 10 Pro` price = `976` currencycode = `EUR` initial = `B` )
+        ( name = `Benda Laptop 1408`   description = `Flexible Laptop with 2,5 GHz Dual Core, 14" HD+ TN, 8 GB DDR SDRAM, 324 GB SSD, Windows 10 Pro`      price = `976` currencycode = `EUR` initial = `B` )
         ( name = `Bending Screen 21HD` description = `Optimum Hi-Resolution Widescreen max. 1920 x 1080 @ 85Hz, Dot Pitch: 0.27mm, HDMI, Discontinued-Sub` price = `250` currencycode = `EUR` initial = `B` )
-        ( name = `Broad Screen 22HD` description = `Optimum Hi-Resolution Widescreen max. 2048 x 1080 @ 85Hz, Dot Pitch: 0.27mm, HDMI, Discontinued-Sub` price = `270` currencycode = `EUR` initial = `B` )
+        ( name = `Broad Screen 22HD`   description = `Optimum Hi-Resolution Widescreen max. 2048 x 1080 @ 85Hz, Dot Pitch: 0.27mm, HDMI, Discontinued-Sub` price = `270` currencycode = `EUR` initial = `B` )
         ( name = `Cerdik Phone 7` description = `7 inch 1280x800 HD display (216 ppi), Quad-core processor, 16 GB internal storage (actual formatted capacity will be less), 4325 mAh battery (Up to 8 hours of active use), white or black`
           price = `549` currencycode = `EUR` initial = `C` )
         ( name = `Cepat Tablet 10.5` description = `10.5-inch Multitouch HD Screen (1280 x 800), 16GB Internal Memory, Wireless N Wi-Fi; Bluetooth, GPS Enabled, 1GHz Dual-Core Processor` price = `549` currencycode = `EUR` initial = `C` )
@@ -198,14 +198,14 @@ CLASS z2ui5_cl_smpc_app_525 IMPLEMENTATION.
         ( name = `Smartphone Leather Case` description = `Button Clasp, Quality Material, 100% Leather, compatible with many smartphone models` price = `25` currencycode = `EUR` initial = `S` )
         ( name = `Smartphone Alpha` description = `7 inch 1280x800 HD display (216 ppi), Quad-core processor, 16 GB internal storage (actual formatted capacity will be less), 4325 mAh battery (Up to 8 hours of active use), white or black`
           price = `599` currencycode = `EUR` initial = `S` )
-        ( name = `Mini Tablet` description = `7 inch 1280x800 HD display (216 ppi), Quad-core processor, 16 GB internal storage, 4325 mAh battery (Up to 8 hours of active use)` price = `833` currencycode = `EUR` initial = `M` )
-        ( name = `Camcorder View` description = `1920x1080 Full HD, image stabilization reduces blur, 27x Optical / 32x Extended Zoom, wide angle Lens, 2.7" wide LCD display` price = `1388` currencycode = `EUR` initial = `C` )
-        ( name = `Tablet Pouch` description = `Stylish tablet pouch, protects from scratches, color: black` price = `20` currencycode = `EUR` initial = `T` )
-        ( name = `Tablet Pouch` description = `Stylish tablet pouch, protects from scratches, color: black` price = `20` currencycode = `EUR` initial = `T` )
-        ( name = `e-Book Reader ReadMe` description = `6-Inch E Ink Screen, Access To e-book Store, Adjustable Font Styles and Sizes, Stores Up To 1,000 Books` price = `33` currencycode = `EUR` initial = `e` )
-        ( name = `Smartphone Beta` description = `5 Megapixel Camera, Wi-Fi 802.11 b/g/n, Bluetooth, GPS Available-GPS support` price = `30` currencycode = `EUR` initial = `S` )
-        ( name = `Maxi Tablet` description = `10.1-inch Multitouch HD Screen (1280 x 800), 16GB Internal Memory, Wireless N Wi-Fi; Bluetooth, GPS Enabled, 1GHz Dual-Core Processor` price = `749` currencycode = `EUR` initial = `M` )
-        ( name = `Flyer` description = `Flyer for our product palette` price = `0` currencycode = `EUR` initial = `F` ) ).
+        ( name = `Mini Tablet`          description = `7 inch 1280x800 HD display (216 ppi), Quad-core processor, 16 GB internal storage, 4325 mAh battery (Up to 8 hours of active use)`     price = `833`  currencycode = `EUR` initial = `M` )
+        ( name = `Camcorder View`       description = `1920x1080 Full HD, image stabilization reduces blur, 27x Optical / 32x Extended Zoom, wide angle Lens, 2.7" wide LCD display`          price = `1388` currencycode = `EUR` initial = `C` )
+        ( name = `Tablet Pouch`         description = `Stylish tablet pouch, protects from scratches, color: black`                                                                           price = `20`   currencycode = `EUR` initial = `T` )
+        ( name = `Tablet Pouch`         description = `Stylish tablet pouch, protects from scratches, color: black`                                                                           price = `20`   currencycode = `EUR` initial = `T` )
+        ( name = `e-Book Reader ReadMe` description = `6-Inch E Ink Screen, Access To e-book Store, Adjustable Font Styles and Sizes, Stores Up To 1,000 Books`                               price = `33`   currencycode = `EUR` initial = `e` )
+        ( name = `Smartphone Beta`      description = `5 Megapixel Camera, Wi-Fi 802.11 b/g/n, Bluetooth, GPS Available-GPS support`                                                          price = `30`   currencycode = `EUR` initial = `S` )
+        ( name = `Maxi Tablet`          description = `10.1-inch Multitouch HD Screen (1280 x 800), 16GB Internal Memory, Wireless N Wi-Fi; Bluetooth, GPS Enabled, 1GHz Dual-Core Processor` price = `749`  currencycode = `EUR` initial = `M` )
+        ( name = `Flyer`                description = `Flyer for our product palette`                                                                                                         price = `0`    currencycode = `EUR` initial = `F` ) ).
 
   ENDMETHOD.
 

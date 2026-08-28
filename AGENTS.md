@@ -961,9 +961,29 @@ DSAG Leitfaden, then the samples style. Essentials:
 - Backticks for string literals; string templates (`|...{ }...|`) for
   concatenation; `VALUE #( )` to reset, never `CLEAR`.
 - Prefix only tables (`t_`) and structures (`s_`); local types `ty_s_` / `ty_t_`.
-- Lifecycle: chain `check_on_init( )` / `check_on_navigated( )` /
-  `check_on_event( )` with `ELSEIF`. Re-display the view in the
-  `check_on_navigated( )` branch.
+- Lifecycle: `check_on_navigated( )` is the DISPLAY branch and
+  `check_on_event( )` the event branch, chained with `ELSEIF`. A
+  `check_on_init( )` branch comes FIRST and only when something must happen
+  once (`model_init( )`, or one or two control-state flags seeded inline) —
+  `check_on_init( )` true implies `check_on_navigated( )` true, so an init
+  branch that only calls `view_display( )` decides nothing, and
+  `IF check_on_init( ) OR check_on_navigated( ).` is the same redundancy in
+  another spelling. `pattern-lint`'s `redundant-init-display` fails both.
+- **A mock table is a table.** In a `VALUE #( )` of three or more rows with the
+  same field list, every cell is padded to the width of its column; the LAST
+  cell of a row stays unpadded so no spaces pile up before the closing `)`.
+  A padded row that would break the 255-character limit is wrapped instead — at
+  the same field boundaries in EVERY row (app 571 is the reference: 123 rows,
+  all `3+4+4`). Rows with differing field lists (an optional field, a nested
+  child table) have no column to align and are left alone.
+  `scripts/json-to-abap.mjs` emits the padded form; `pattern-lint`'s
+  `ragged-value-table` catches a hand-written one that drifted.
+- **A call that fits on one line goes on one line** (budget 120 characters).
+  Stacking parameters is for calls that do not fit, not for calls that happen
+  to have two: `client->popover_display( xml = popup->stringify( ) by_id = by_id ).`
+  is 71 characters. Outside the view chain only — the chain has its own layout
+  (`view-chain-layout`), and a wrapped `t_arg` list stays wrapped, hanging under
+  its first element.
 - Build views with `z2ui5_cl_ui5_view_builder` (see the `port-a-sample` guide — the only
   view builder used in this repo; the class itself lives in the **abap2UI5 core
   repo** under *its* `src/02/` — not this repo's `src/02/`, which is the

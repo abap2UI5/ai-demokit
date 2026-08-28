@@ -347,12 +347,9 @@ CLASS z2ui5_cl_smpc_app_363 IMPLEMENTATION.
       " port kept the previous value for empty too, which left no way to
       " un-freeze at all. Only a non-empty, non-numeric entry keeps the last
       " value - there the original's parseInt hands the setter a NaN.
-      fixed_column_count     = count_read( text = column_count_text
-                                           last = fixed_column_count ).
-      fixed_top_row_count    = count_read( text = top_row_count_text
-                                           last = fixed_top_row_count ).
-      fixed_bottom_row_count = count_read( text = bottom_row_count_text
-                                           last = fixed_bottom_row_count ).
+      fixed_column_count = count_read( text = column_count_text last = fixed_column_count ).
+      fixed_top_row_count = count_read( text = top_row_count_text last = fixed_top_row_count ).
+      fixed_bottom_row_count = count_read( text = bottom_row_count_text last = fixed_bottom_row_count ).
 
       IF fixed_column_count > cv_total_columns.
         fixed_column_count = cv_total_columns.

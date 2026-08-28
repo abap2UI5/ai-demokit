@@ -25,9 +25,7 @@ CLASS z2ui5_cl_smpc_app_435 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
-      view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    IF client->check_on_navigated( ).
       view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
@@ -136,8 +134,7 @@ CLASS z2ui5_cl_smpc_app_435 IMPLEMENTATION.
       DATA(indicator) = substring( val = source_id len = offset - 1 ).
       DATA(value)     = CONV i( substring( val = source_id off = offset + 6 ) ).
 
-      DATA(previous) = COND string( WHEN indicator CS `pi-with-animation` THEN display_animated
-                                    ELSE display_plain ).
+      DATA(previous) = COND string( WHEN indicator CS `pi-with-animation` THEN display_animated ELSE display_plain ).
 
       IF indicator CS `pi-with-animation`.
         value_animated   = value.

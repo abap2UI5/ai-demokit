@@ -19,9 +19,7 @@ CLASS z2ui5_cl_smpc_app_149 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
-      view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    IF client->check_on_navigated( ).
       view_display( ).
     ENDIF.
 
@@ -53,7 +51,7 @@ CLASS z2ui5_cl_smpc_app_149 IMPLEMENTATION.
                 " urlhelper REDIRECT frontend action (same relative target as the Link)
                 )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-urlhelper
                                                                 t_arg = VALUE #( ( `REDIRECT` )
-                                                                              ( |\{ URL: 'test-resources/sap/ui/integration/demokit/cardExplorer/index.html', NEW_WINDOW: true \}| ) ) ) ).
+                                                                                 ( |\{ URL: 'test-resources/sap/ui/integration/demokit/cardExplorer/index.html', NEW_WINDOW: true \}| ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 

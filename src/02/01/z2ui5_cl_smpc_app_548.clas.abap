@@ -825,8 +825,8 @@ CLASS z2ui5_cl_smpc_app_548 IMPLEMENTATION.
           ( date_at = `2019-09-01T00:00:00` start_at = `04:30` end_at = `04:45` valueformat = `HH:mm` recurrencetype = `Daily` recurrencepattern = 1 recurrenceenddate = `2019-10-01T00:00:00` )
         )
         t_headers = VALUE #(
-          ( start_at = `2017-01-15T08:00:00` end_at = `2017-01-15T10:00:00` title = `Reminder` type = `Type06` )
-          ( start_at = `2017-01-15T17:00:00` end_at = `2017-01-15T19:00:00` title = `Reminder` type = `Type06` )
+          ( start_at = `2017-01-15T08:00:00` end_at = `2017-01-15T10:00:00` title = `Reminder`    type = `Type06` )
+          ( start_at = `2017-01-15T17:00:00` end_at = `2017-01-15T19:00:00` title = `Reminder`    type = `Type06` )
           ( start_at = `2017-09-01T00:00:00` end_at = `2017-11-30T23:59:00` title = `New quarter` type = `Type10` )
           ( start_at = `2018-02-01T00:00:00` end_at = `2018-04-30T23:59:00` title = `New quarter` type = `Type10` )
         )

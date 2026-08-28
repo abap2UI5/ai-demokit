@@ -694,12 +694,12 @@ CLASS z2ui5_cl_smpc_app_555 IMPLEMENTATION.
         t_recurrence_day = VALUE #( ( 6 ) ) )
       ( date_at = `2024-01-07T00:00:00` start_at = `00:00` end_at = `23:59` valueformat = `HH:mm` title = `Weekend - Sunday` recurrencetype = `Weekly` recurrencepattern = 1 recurrenceenddate = `2024-12-31T00:00:00`
         t_recurrence_day = VALUE #( ( 0 ) ) )
-      ( date_at = `2024-01-01T00:00:00` start_at = `02:00` end_at = `02:30` valueformat = `HH:mm` title = `Server Backup` recurrencetype = `Daily` recurrencepattern = 1 recurrenceenddate = `2024-12-31T00:00:00` )
+      ( date_at = `2024-01-01T00:00:00` start_at = `02:00` end_at = `02:30` valueformat = `HH:mm` title = `Server Backup`       recurrencetype = `Daily`   recurrencepattern = 1 recurrenceenddate = `2024-12-31T00:00:00` )
       ( date_at = `2024-01-01T00:00:00` start_at = `06:00` end_at = `08:00` valueformat = `HH:mm` title = `Monthly Maintenance` recurrencetype = `Monthly` recurrencepattern = 1 recurrenceenddate = `2026-12-31T00:00:00` )
-      ( date_at = `2024-01-15T00:00:00` start_at = `08:00` end_at = `12:00` valueformat = `HH:mm` title = `Monthly Inventory` recurrencetype = `Monthly` recurrencepattern = 1 recurrenceenddate = `2026-12-31T00:00:00` )
-      ( date_at = `2024-01-01T00:00:00` start_at = `00:00` end_at = `23:59` valueformat = `HH:mm` title = `New Year's Day` recurrencetype = `Yearly` recurrencepattern = 1 recurrenceenddate = `2026-12-31T00:00:00` )
-      ( date_at = `2024-07-04T00:00:00` start_at = `00:00` end_at = `23:59` valueformat = `HH:mm` title = `Independence Day` recurrencetype = `Yearly` recurrencepattern = 1 recurrenceenddate = `2026-12-31T00:00:00` )
-      ( date_at = `2024-12-25T00:00:00` start_at = `00:00` end_at = `23:59` valueformat = `HH:mm` title = `Christmas Day` recurrencetype = `Yearly` recurrencepattern = 1 recurrenceenddate = `2026-12-31T00:00:00` )
+      ( date_at = `2024-01-15T00:00:00` start_at = `08:00` end_at = `12:00` valueformat = `HH:mm` title = `Monthly Inventory`   recurrencetype = `Monthly` recurrencepattern = 1 recurrenceenddate = `2026-12-31T00:00:00` )
+      ( date_at = `2024-01-01T00:00:00` start_at = `00:00` end_at = `23:59` valueformat = `HH:mm` title = `New Year's Day`      recurrencetype = `Yearly`  recurrencepattern = 1 recurrenceenddate = `2026-12-31T00:00:00` )
+      ( date_at = `2024-07-04T00:00:00` start_at = `00:00` end_at = `23:59` valueformat = `HH:mm` title = `Independence Day`    recurrencetype = `Yearly`  recurrencepattern = 1 recurrenceenddate = `2026-12-31T00:00:00` )
+      ( date_at = `2024-12-25T00:00:00` start_at = `00:00` end_at = `23:59` valueformat = `HH:mm` title = `Christmas Day`       recurrencetype = `Yearly`  recurrencepattern = 1 recurrenceenddate = `2026-12-31T00:00:00` )
     ).
 
   ENDMETHOD.

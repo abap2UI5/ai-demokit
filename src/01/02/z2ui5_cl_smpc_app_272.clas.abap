@@ -399,8 +399,7 @@ CLASS z2ui5_cl_smpc_app_272 IMPLEMENTATION.
             discount_text    = |Group '{ lv_group }' Validation:Success|.
             discount_visible = abap_true.
         ENDCASE.
-        client->message_toast_display( text     = |Validation of field group '{ lv_group }' triggered.|
-                                       duration = `500` ).
+        client->message_toast_display( text = |Validation of field group '{ lv_group }' triggered.| duration = `500` ).
 
       WHEN `CLOSE_BILLING`.
         billing_visible = abap_false.

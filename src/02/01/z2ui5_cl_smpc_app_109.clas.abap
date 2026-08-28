@@ -235,17 +235,17 @@ CLASS z2ui5_cl_smpc_app_109 IMPLEMENTATION.
 
     start_date = `2018-07-09T00:00:00`.
     t_appointments = VALUE #(
-      ( title = `Discussion of the plan` text = `` type = `Type01` icon = `` start_date = `2018-07-09T00:00:00` end_date = `2018-07-09T00:00:00` )
-      ( title = `Meet John Miller` text = `` type = `Type05` icon = `` start_date = `2018-07-08T05:00:00` end_date = `2018-07-08T06:00:00` )
-      ( title = `Lunch` text = `canteen` type = `Type05` icon = `` start_date = `2018-07-08T07:00:00` end_date = `2018-07-08T08:00:00` )
-      ( title = `New Product` text = `room 105` type = `Type01` icon = `sap-icon://meeting-room` start_date = `2018-07-08T08:00:00` end_date = `2018-07-08T09:00:00` )
-      ( title = `Discussion with clients for the new release dates` text = `Online meeting` type = `Type08` icon = `` start_date = `2018-07-09T09:00:00` end_date = `2018-07-09T10:00:00` )
-      ( title = `Meeting with the manager` text = `` type = `Type03` icon = `` start_date = `2018-07-06T09:00:00` end_date = `2018-07-06T10:00:00` )
-      ( title = `Daily standup meeting` text = `` type = `Type01` icon = `` start_date = `2018-07-07T10:00:00` end_date = `2018-07-07T10:30:00` )
-      ( title = `Private meeting` text = `` type = `Type03` icon = `` start_date = `2018-07-06T11:30:00` end_date = `2018-07-06T12:00:00` )
-      ( title = `Lunch` text = `` type = `Type05` icon = `` start_date = `2018-07-06T12:00:00` end_date = `2018-07-06T13:00:00` )
-      ( title = `Discussion of the plan` text = `` type = `Type01` icon = `` start_date = `2018-07-16T11:00:00` end_date = `2018-07-16T12:00:00` )
-      ( title = `Lunch` text = `canteen` type = `Type05` icon = `` start_date = `2018-07-16T12:00:00` end_date = `2018-07-16T13:00:00` ) ).
+      ( title = `Discussion of the plan`                            text = ``               type = `Type01` icon = ``                        start_date = `2018-07-09T00:00:00` end_date = `2018-07-09T00:00:00` )
+      ( title = `Meet John Miller`                                  text = ``               type = `Type05` icon = ``                        start_date = `2018-07-08T05:00:00` end_date = `2018-07-08T06:00:00` )
+      ( title = `Lunch`                                             text = `canteen`        type = `Type05` icon = ``                        start_date = `2018-07-08T07:00:00` end_date = `2018-07-08T08:00:00` )
+      ( title = `New Product`                                       text = `room 105`       type = `Type01` icon = `sap-icon://meeting-room` start_date = `2018-07-08T08:00:00` end_date = `2018-07-08T09:00:00` )
+      ( title = `Discussion with clients for the new release dates` text = `Online meeting` type = `Type08` icon = ``                        start_date = `2018-07-09T09:00:00` end_date = `2018-07-09T10:00:00` )
+      ( title = `Meeting with the manager`                          text = ``               type = `Type03` icon = ``                        start_date = `2018-07-06T09:00:00` end_date = `2018-07-06T10:00:00` )
+      ( title = `Daily standup meeting`                             text = ``               type = `Type01` icon = ``                        start_date = `2018-07-07T10:00:00` end_date = `2018-07-07T10:30:00` )
+      ( title = `Private meeting`                                   text = ``               type = `Type03` icon = ``                        start_date = `2018-07-06T11:30:00` end_date = `2018-07-06T12:00:00` )
+      ( title = `Lunch`                                             text = ``               type = `Type05` icon = ``                        start_date = `2018-07-06T12:00:00` end_date = `2018-07-06T13:00:00` )
+      ( title = `Discussion of the plan`                            text = ``               type = `Type01` icon = ``                        start_date = `2018-07-16T11:00:00` end_date = `2018-07-16T12:00:00` )
+      ( title = `Lunch`                                             text = `canteen`        type = `Type05` icon = ``                        start_date = `2018-07-16T12:00:00` end_date = `2018-07-16T13:00:00` ) ).
 
   ENDMETHOD.
 

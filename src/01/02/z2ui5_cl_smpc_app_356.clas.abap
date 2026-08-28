@@ -100,7 +100,7 @@ CLASS z2ui5_cl_smpc_app_356 IMPLEMENTATION.
                             )->a( n = `selectionMode`      v = client->_bind( selection_mode )
                             )->a( n = `selectionChange`    v = client->_event( val   = `SELECTION_CHANGE`
                                                                                t_arg = VALUE #( ( `${$parameters>/limitReached}` )
-                                                                             ( `${$source>}.getSelectedIndices().length` ) ) )
+                                                                                                ( `${$source>}.getSelectedIndices().length` ) ) )
 
                     )->end(
                     )->ele( `extension`
@@ -265,9 +265,7 @@ CLASS z2ui5_cl_smpc_app_356 IMPLEMENTATION.
         IF limit_text CO ` 0123456789` AND limit_text IS NOT INITIAL
            AND strlen( condense( limit_text ) ) <= 9.
           limit = limit_text.
-          client->message_toast_display( COND #( WHEN limit = 0
-                                                 THEN `Limit disabled`
-                                                 ELSE |Limit set to { limit }| ) ).
+          client->message_toast_display( COND #( WHEN limit = 0 THEN `Limit disabled` ELSE |Limit set to { limit }| ) ).
         ELSE.
           limit_text = |{ limit }|.
           client->message_toast_display( |The Limit accepts positive integer values. To disable it set its value to 0. \nCurrent limit is { limit }| ).

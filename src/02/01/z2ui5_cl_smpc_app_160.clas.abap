@@ -20,9 +20,7 @@ CLASS z2ui5_cl_smpc_app_160 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
-      view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    IF client->check_on_navigated( ).
       view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
@@ -96,8 +94,7 @@ CLASS z2ui5_cl_smpc_app_160 IMPLEMENTATION.
 
     IF client->get_event( ) = `LINK_PRESSED`.
       " MessageBox.alert( ) - type 'alert' with the original's text, verbatim
-      client->message_box_display( text = `Link was clicked!`
-                                   type = `alert` ).
+      client->message_box_display( text = `Link was clicked!` type = `alert` ).
     ENDIF.
 
   ENDMETHOD.

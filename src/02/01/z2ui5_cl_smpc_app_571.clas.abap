@@ -288,8 +288,7 @@ CLASS z2ui5_cl_smpc_app_571 IMPLEMENTATION.
         IF order = `None`.
           product_indicator = `None`.
         ELSE.
-          table_sort( field      = `NAME`
-                      descending = xsdbool( order = `Descending` ) ).
+          table_sort( field = `NAME` descending = xsdbool( order = `Descending` ) ).
           product_indicator = order.
           " the original passes a ONE-element sorter list to oBinding.sort( ),
           " which REPLACES the grouper - so sorting drops the grouping. Without
@@ -312,8 +311,7 @@ CLASS z2ui5_cl_smpc_app_571 IMPLEMENTATION.
         view_display( ).
 
       WHEN `SORT_PRICE_ASC`.
-        table_sort( field      = `PRICE`
-                    descending = abap_false ).
+        table_sort( field = `PRICE` descending = abap_false ).
         price_indicator = `Ascending`.
         product_indicator = `None`.
         " sort( [Sorter] ) replaces the grouper
@@ -321,8 +319,7 @@ CLASS z2ui5_cl_smpc_app_571 IMPLEMENTATION.
         view_display( ).
 
       WHEN `SORT_PRICE_DESC`.
-        table_sort( field      = `PRICE`
-                    descending = abap_true ).
+        table_sort( field = `PRICE` descending = abap_true ).
         price_indicator = `Descending`.
         product_indicator = `None`.
         " sort( [Sorter] ) replaces the grouper

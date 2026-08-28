@@ -62,9 +62,9 @@ CLASS z2ui5_cl_smpc_app_242 IMPLEMENTATION.
                 " - client-composed toast, the {0} placeholder filled by the resolved page title
                 )->a( n = `navigationFinished` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                              t_arg = VALUE #( ( `MESSAGE_TOAST` )
-                                                                                           ( `show` )
-                                                                                           ( `Navigation to page '{0}' finished` )
-                                                                                           ( `${$parameters>/to}.getTitle()` ) ) )
+                                                                                              ( `show` )
+                                                                                              ( `Navigation to page '{0}' finished` )
+                                                                                              ( `${$parameters>/to}.getTitle()` ) ) )
 
                 )->ele( `Page`
                     )->a( n = `id`    v = `p1`

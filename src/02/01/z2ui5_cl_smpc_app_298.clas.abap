@@ -121,7 +121,7 @@ CLASS z2ui5_cl_smpc_app_298 IMPLEMENTATION.
                     " UI5 expression, so the two getters resolve in the client.
                     )->a( n = `change` v = client->_event( val   = `MENU_SORT`
                                                            t_arg = VALUE #( ( `${$parameters>/item}.getKey()` )
-                                                                           ( `${$parameters>/item}.getSortOrder()` ) ) )
+                                                                            ( `${$parameters>/item}.getSortOrder()` ) ) )
 
                     )->ele( n = `items` ns = `tcm`
                         )->tag( n = `QuickSortItem` ns = `tcm`

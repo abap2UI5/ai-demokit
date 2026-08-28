@@ -438,8 +438,7 @@ CLASS z2ui5_cl_smpc_app_203 IMPLEMENTATION.
           client->message_toast_display( `Please enter a token text.` ).
           RETURN.
         ENDIF.
-        INSERT VALUE #( text = new_token
-                        key  = new_token ) INTO TABLE t_tokens.
+        INSERT VALUE #( text = new_token key = new_token ) INTO TABLE t_tokens.
         client->message_toast_display( |Token added: { new_token }| ).
         CLEAR new_token.
 

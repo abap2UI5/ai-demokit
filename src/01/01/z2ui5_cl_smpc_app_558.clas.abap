@@ -465,9 +465,7 @@ CLASS z2ui5_cl_smpc_app_558 IMPLEMENTATION.
         selected_tab = client->get_event_arg( ).
         " _handleTabContainerItemSelect: the buttons follow the tab's modified flag
         DATA(is_modified) = xsdbool( line_exists( t_tabs[ product_id = selected_tab modified = abap_true ] ) ).
-        buttons_state( edit   = xsdbool( is_modified = abap_false )
-                       save   = is_modified
-                       cancel = is_modified ).
+        buttons_state( edit = xsdbool( is_modified = abap_false ) save = is_modified cancel = is_modified ).
 
       WHEN `TAB_EDIT`.
         " handleTabContainerEditItem: the tab goes into edit mode over its own copy
@@ -476,8 +474,7 @@ CLASS z2ui5_cl_smpc_app_558 IMPLEMENTATION.
           RETURN.
         ENDIF.
         <tab>-modified = abap_true.
-        buttons_state( save   = abap_true
-                       cancel = abap_true ).
+        buttons_state( save = abap_true cancel = abap_true ).
 
       WHEN `TAB_SAVE`.
         tab_save( ).
@@ -529,12 +526,9 @@ CLASS z2ui5_cl_smpc_app_558 IMPLEMENTATION.
                         currencycode = `EUR`
                         selected     = abap_true
                         unsaved      = abap_true ) TO t_products.
-        APPEND VALUE #( product_id   = new_id
-                        currencycode = `EUR`
-                        modified     = abap_true ) TO t_tabs.
+        APPEND VALUE #( product_id = new_id currencycode = `EUR` modified = abap_true ) TO t_tabs.
         selected_tab = new_id.
-        buttons_state( save   = abap_true
-                       cancel = abap_true ).
+        buttons_state( save = abap_true cancel = abap_true ).
         view_display( ).
 
       WHEN `NEW_ITEM_ADD`.

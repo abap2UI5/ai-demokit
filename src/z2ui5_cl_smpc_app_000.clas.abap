@@ -361,8 +361,7 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
               )->a( n = `class`     v = `sapUiSmallMarginTop` ).
         ENDIF.
 
-        client->popover_display( xml   = links->stringify( )
-                                 by_id = client->get_event_arg( 2 ) ).
+        client->popover_display( xml = links->stringify( ) by_id = client->get_event_arg( 2 ) ).
 
       WHEN `INFO`.
         " everything the generator knows ABOUT the port (as opposed to where it
@@ -428,8 +427,7 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
               )->a( n = `htmlText` v = lv_html ).
         ENDIF.
 
-        client->popover_display( xml   = info->stringify( )
-                                 by_id = client->get_event_arg( 2 ) ).
+        client->popover_display( xml = info->stringify( ) by_id = client->get_event_arg( 2 ) ).
 
       WHEN `INSTALL`.
         " a header icon whose repository is not on this system - anchor class,
@@ -452,8 +450,7 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
             " can give, and it is what the silent catch here used to produce.
             " Only the running system knows why the overview app of the other
             " repository did not start, so let it say so.
-            client->message_box_display( text = |{ lv_nav }: { lx_nav->get_text( ) }|
-                                         type = `error` ).
+            client->message_box_display( text = |{ lv_nav }: { lx_nav->get_text( ) }| type = `error` ).
         ENDTRY.
 
     ENDCASE.
@@ -526,8 +523,7 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
 
     " title and back button come with the custom header (render_header), not
     " with the page - a Page renders either its own header or a custom one
-    render_header( page  = page
-                   title = |abap2UI5 Demo Kit ({ lines( t_app ) })| ).
+    render_header( page = page title = |abap2UI5 Demo Kit ({ lines( t_app ) })| ).
 
     page->ele( `subHeader`
         )->ele( `OverflowToolbar`
@@ -8657,8 +8653,8 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
 
     result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.core.theming.Parameters`        name = `BasicThemeParameters`                          class = `z2ui5_cl_smpc_app_131` path = `src/01/02/z2ui5_cl_smpc_app_131.clas.abap`
-        score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: The sample itself is just a MessageStrip + Link pointing at the Theme Parameter Toolbox (the real demo content lives in that external tool); reproduced 1:1. The Link href is the original's` &&
                  ` host-relative 'test-resources/sap/m/demokit/theming/webapp/index.html' rewritten to the OpenUI5 host https://sdk.openui5.org/test-resources/sap/m/demokit/theming/webapp/index.html per the runtime` &&
                  ` asset-URL rule (an abap2UI5 system does not serve the demokit path; app 152 precedent).` ) ).
@@ -12303,8 +12299,8 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` it.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageSubSection`         name = `ObjectPageSubSectionWithActions`               class = `z2ui5_cl_smpc_app_178` path = `src/01/03/z2ui5_cl_smpc_app_178.clas.abap`
-        score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
         notes = lv_text1 ) ).
 
@@ -12412,8 +12408,7 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                     )->a( n = `target` v = `_blank`
                     )->a( n = `class`  v = `sapUiSmallMarginTop` ).
 
-    client->popover_display( xml   = info->stringify( )
-                             by_id = anchor ).
+    client->popover_display( xml = info->stringify( ) by_id = anchor ).
 
   ENDMETHOD.
 

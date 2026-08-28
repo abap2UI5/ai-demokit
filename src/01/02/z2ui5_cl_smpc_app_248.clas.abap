@@ -189,37 +189,37 @@ CLASS z2ui5_cl_smpc_app_248 IMPLEMENTATION.
           ( name = `Women` categories = VALUE #(
               ( name = `Clothing` categories = VALUE #(
                   ( name = `Dresses` categories = VALUE #(
-                      ( name = `Casual Red Dress` amount = `16.99` currency = `EUR` size = `S` )
-                      ( name = `Short Black Dress` amount = `47.99` currency = `EUR` size = `M` )
+                      ( name = `Casual Red Dress`       amount = `16.99`  currency = `EUR` size = `S` )
+                      ( name = `Short Black Dress`      amount = `47.99`  currency = `EUR` size = `M` )
                       ( name = `Long Blue Dinner Dress` amount = `103.99` currency = `USD` size = `L` ) ) )
                   ( name = `Tops` categories = VALUE #(
                       ( name = `Printed Shirt` amount = `24.99` currency = `USD` size = `M` )
                       ( name = `Tank Top` amount = `14.99` currency = `USD` size = `S` ) ) )
                   ( name = `Pants` categories = VALUE #(
-                      ( name = `Red Pant` amount = `32.99` currency = `USD` size = `M` )
-                      ( name = `Skinny Jeans` amount = `44.99` currency = `USD` size = `S` )
-                      ( name = `Black Jeans` amount = `99.99` currency = `USD` size = `XS` )
+                      ( name = `Red Pant`          amount = `32.99` currency = `USD` size = `M` )
+                      ( name = `Skinny Jeans`      amount = `44.99` currency = `USD` size = `S` )
+                      ( name = `Black Jeans`       amount = `99.99` currency = `USD` size = `XS` )
                       ( name = `Relaxed Fit Jeans` amount = `56.99` currency = `USD` size = `L` ) ) )
                   ( name = `Skirts` categories = VALUE #(
                       ( name = `Striped Skirt` amount = `24.99` currency = `USD` size = `M` )
                       ( name = `Black Skirt` amount = `44.99` currency = `USD` size = `S` ) ) ) ) )
               ( name = `Jewelry` categories = VALUE #(
-                  ( name = `Necklace` amount = `16.99` currency = `USD` )
-                  ( name = `Bracelet` amount = `47.99` currency = `USD` )
+                  ( name = `Necklace`  amount = `16.99`  currency = `USD` )
+                  ( name = `Bracelet`  amount = `47.99`  currency = `USD` )
                   ( name = `Gold Ring` amount = `399.99` currency = `USD` ) ) )
               ( name = `Handbags` categories = VALUE #(
                   ( name = `Little Black Bag` amount = `16.99` currency = `USD` size = `S` )
                   ( name = `Grey Shopper` amount = `47.99` currency = `USD` size = `M` ) ) )
               ( name = `Shoes` categories = VALUE #(
-                  ( name = `Pumps` amount = `89.99` currency = `USD` )
-                  ( name = `Sport Shoes` amount = `47.99` currency = `USD` )
-                  ( name = `Boots` amount = `103.99` currency = `USD` ) ) ) ) )
+                  ( name = `Pumps`       amount = `89.99`  currency = `USD` )
+                  ( name = `Sport Shoes` amount = `47.99`  currency = `USD` )
+                  ( name = `Boots`       amount = `103.99` currency = `USD` ) ) ) ) )
           ( name = `Men` categories = VALUE #(
               ( name = `Clothing` categories = VALUE #(
                   ( name = `Shirts` categories = VALUE #(
-                      ( name = `Black T-shirt` amount = `9.99` currency = `USD` size = `XL` )
-                      ( name = `Polo T-shirt` amount = `47.99` currency = `USD` size = `M` )
-                      ( name = `White Shirt` amount = `103.99` currency = `USD` size = `L` ) ) )
+                      ( name = `Black T-shirt` amount = `9.99`   currency = `USD` size = `XL` )
+                      ( name = `Polo T-shirt`  amount = `47.99`  currency = `USD` size = `M` )
+                      ( name = `White Shirt`   amount = `103.99` currency = `USD` size = `L` ) ) )
                   ( name = `Pants` categories = VALUE #(
                       ( name = `Blue Jeans` amount = `78.99` currency = `USD` size = `M` )
                       ( name = `Stretch Pant` amount = `54.99` currency = `USD` size = `S` ) ) )
@@ -227,18 +227,18 @@ CLASS z2ui5_cl_smpc_app_248 IMPLEMENTATION.
                       ( name = `Trouser Short` amount = `62.99` currency = `USD` size = `M` )
                       ( name = `Slim Short` amount = `44.99` currency = `USD` size = `S` ) ) ) ) )
               ( name = `Accessories` categories = VALUE #(
-                  ( name = `Tie` amount = `36.99` currency = `USD` )
-                  ( name = `Wallet` amount = `47.99` currency = `USD` )
+                  ( name = `Tie`        amount = `36.99`  currency = `USD` )
+                  ( name = `Wallet`     amount = `47.99`  currency = `USD` )
                   ( name = `Sunglasses` amount = `199.99` currency = `USD` ) ) )
               ( name = `Shoes` categories = VALUE #(
-                  ( name = `Fashion Sneaker` amount = `89.99` currency = `USD` )
-                  ( name = `Sport Shoe` amount = `47.99` currency = `USD` )
-                  ( name = `Boots` amount = `103.99` currency = `USD` ) ) ) ) )
+                  ( name = `Fashion Sneaker` amount = `89.99`  currency = `USD` )
+                  ( name = `Sport Shoe`      amount = `47.99`  currency = `USD` )
+                  ( name = `Boots`           amount = `103.99` currency = `USD` ) ) ) ) )
           ( name = `Girls` categories = VALUE #(
               ( name = `Clothing` categories = VALUE #(
                   ( name = `Shirts` categories = VALUE #(
-                      ( name = `Red T-shirt` amount = `16.99` currency = `USD` size = `S` )
-                      ( name = `Tunic Top` amount = `47.99` currency = `USD` size = `M` )
+                      ( name = `Red T-shirt`   amount = `16.99`  currency = `USD` size = `S` )
+                      ( name = `Tunic Top`     amount = `47.99`  currency = `USD` size = `M` )
                       ( name = `Fuzzy Sweater` amount = `103.99` currency = `USD` size = `L` ) ) )
                   ( name = `Pants` categories = VALUE #(
                       ( name = `Blue Jeans` amount = `24.99` currency = `USD` size = `M` )
@@ -248,18 +248,18 @@ CLASS z2ui5_cl_smpc_app_248 IMPLEMENTATION.
                       ( name = `Sport Short` amount = `14.99` currency = `USD` size = `S` ) ) ) ) )
               ( name = `Accessories` categories = VALUE #(
                   ( name = `Necklace` amount = `26.99` currency = `USD` )
-                  ( name = `Gloves` amount = `7.99` currency = `USD` )
-                  ( name = `Beanie` amount = `12.99` currency = `USD` ) ) )
+                  ( name = `Gloves`   amount = `7.99`  currency = `USD` )
+                  ( name = `Beanie`   amount = `12.99` currency = `USD` ) ) )
               ( name = `Shoes` categories = VALUE #(
                   ( name = `Sport Shoes` amount = `39.99` currency = `USD` )
-                  ( name = `Boots` amount = `87.99` currency = `USD` )
-                  ( name = `Sandals` amount = `63.99` currency = `USD` ) ) ) ) )
+                  ( name = `Boots`       amount = `87.99` currency = `USD` )
+                  ( name = `Sandals`     amount = `63.99` currency = `USD` ) ) ) ) )
           ( name = `Boys` categories = VALUE #(
               ( name = `Clothing` categories = VALUE #(
                   ( name = `Shirts` categories = VALUE #(
                       ( name = `Black T-shirt with Print` amount = `16.99` currency = `USD` size = `S` )
-                      ( name = `Blue Shirt` amount = `47.99` currency = `USD` size = `M` )
-                      ( name = `Yellow Sweater` amount = `63.99` currency = `USD` size = `L` ) ) )
+                      ( name = `Blue Shirt`               amount = `47.99` currency = `USD` size = `M` )
+                      ( name = `Yellow Sweater`           amount = `63.99` currency = `USD` size = `L` ) ) )
                   ( name = `Pants` categories = VALUE #(
                       ( name = `Blue Jeans` amount = `44.99` currency = `USD` size = `M` )
                       ( name = `Brown Pant` amount = `89.99` currency = `USD` size = `S` ) ) )
@@ -269,19 +269,19 @@ CLASS z2ui5_cl_smpc_app_248 IMPLEMENTATION.
                       ( name = `Black Short` amount = `56.99` currency = `USD` size = `L` ) ) ) ) )
               ( name = `Accessories` categories = VALUE #(
                   ( name = `Sunglasses` amount = `36.99` currency = `USD` )
-                  ( name = `Beanie` amount = `17.99` currency = `USD` )
-                  ( name = `Scarf` amount = `15.99` currency = `USD` ) ) )
+                  ( name = `Beanie`     amount = `17.99` currency = `USD` )
+                  ( name = `Scarf`      amount = `15.99` currency = `USD` ) ) )
               ( name = `Shoes` categories = VALUE #(
-                  ( name = `Sneaker` amount = `89.99` currency = `USD` )
-                  ( name = `Sport Shoe` amount = `47.99` currency = `USD` )
-                  ( name = `Boots` amount = `103.99` currency = `USD` ) ) ) ) ) ).
+                  ( name = `Sneaker`    amount = `89.99`  currency = `USD` )
+                  ( name = `Sport Shoe` amount = `47.99`  currency = `USD` )
+                  ( name = `Boots`      amount = `103.99` currency = `USD` ) ) ) ) ) ).
 
     " /sizes - the shared Select item list
     sizes = VALUE #(
       ( key = `XS` value = `Extra Small` )
-      ( key = `S` value = `Small` )
-      ( key = `M` value = `Medium` )
-      ( key = `L` value = `Large` ) ).
+      ( key = `S`  value = `Small` )
+      ( key = `M`  value = `Medium` )
+      ( key = `L`  value = `Large` ) ).
 
   ENDMETHOD.
 

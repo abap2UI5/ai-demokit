@@ -125,9 +125,7 @@ CLASS z2ui5_cl_smpc_app_494 IMPLEMENTATION.
     " onInit builds 100 items (key item<n>, text Item <n>) to make the picker scroll
     DO 100 TIMES.
       DATA(index) = sy-index.
-      INSERT VALUE #( key  = |item{ index }|
-                      text = |Item { index }| )
-             INTO TABLE t_items.
+      INSERT VALUE #( key = |item{ index }| text = |Item { index }| ) INTO TABLE t_items.
     ENDDO.
 
   ENDMETHOD.

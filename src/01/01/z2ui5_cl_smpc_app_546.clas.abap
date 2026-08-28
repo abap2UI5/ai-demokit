@@ -205,9 +205,7 @@ CLASS z2ui5_cl_smpc_app_546 IMPLEMENTATION.
       WHEN `ROLE_CHANGE`.
         " getUserRole( ) maps the Select key through the roles table
         role_key  = client->get_event_arg( ).
-        user_role = SWITCH string( role_key
-                                   WHEN `donna` THEN `Donna Moore`
-                                   ELSE role_key ).
+        user_role = SWITCH string( role_key WHEN `donna` THEN `Donna Moore` ELSE role_key ).
 
       WHEN `APPT_DROP`.
         DATA(drop_start) = iso_of( 1 ).
@@ -282,8 +280,7 @@ CLASS z2ui5_cl_smpc_app_546 IMPLEMENTATION.
                           type     = `Type01`
                           start_at = new_start
                           end_at   = new_end ) INTO TABLE <target>-t_appointments.
-          client->message_toast_display(
-              |New Appointment is created at \n{ new_start }\n and end at \n{ new_end }.| ).
+          client->message_toast_display( |New Appointment is created at \n{ new_start }\n and end at \n{ new_end }.| ).
         ENDIF.
 
     ENDCASE.

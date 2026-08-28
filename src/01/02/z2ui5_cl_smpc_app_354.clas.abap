@@ -294,8 +294,7 @@ CLASS z2ui5_cl_smpc_app_354 IMPLEMENTATION.
         " price column needs no call: its filter event is vetoed, so
         " Column.filter returns before setFiltered and it never carries an
         " indicator in the first place.
-        LOOP AT VALUE string_table( ( `name` ) ( `category` )
-                                    ( `availability` ) ( `quantity` ) ) INTO DATA(lv_col).
+        LOOP AT VALUE string_table( ( `name` ) ( `category` ) ( `availability` ) ( `quantity` ) ) INTO DATA(lv_col).
           client->follow_up_action( val   = client->cs_event-control_by_id
                                     t_arg = VALUE #( ( lv_col ) ( `filter` ) ( `` ) ) ).
         ENDLOOP.

@@ -320,7 +320,7 @@ CLASS z2ui5_cl_smpc_app_412 IMPLEMENTATION.
                                 )->a( n = `text`  v = `Status`
                                 )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                                 t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` )
-                                                                                              ( `Navigate to another page in the same application (List of delivery items)` ) ) )
+                                                                                                 ( `Navigate to another page in the same application (List of delivery items)` ) ) )
 
                         )->end(
 
@@ -914,8 +914,7 @@ CLASS z2ui5_cl_smpc_app_412 IMPLEMENTATION.
             )->end(
         )->end( ).
 
-    client->popover_display( xml   = popup->stringify( )
-                             by_id = by_id ).
+    client->popover_display( xml = popup->stringify( ) by_id = by_id ).
 
   ENDMETHOD.
 

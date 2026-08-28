@@ -82,10 +82,16 @@ export function rowsToAbapValue(rows, fields = inferFields(rows), { indent = 6, 
   // count, and an importing caller deserves odd indentation rather than a
   // RangeError out of a formatting helper
   const pad = ' '.repeat(Math.max(0, indent));
-  const body = rows.map((row) => {
-    const cells = fields.map((f) => `${f.abap} = ${cell(row?.[f.json], f.type)}`).join(' ');
-    return `${pad}( ${cells} )`;
-  }).join('\n');
+  // Spalten ausrichten: jede Zelle wird auf die breiteste ihrer Spalte
+  // aufgefuellt, damit die Tabelle als Tabelle lesbar ist. Die LETZTE Spalte
+  // bleibt ungepolstert - sonst stuenden Leerzeichen vor dem schliessenden ")".
+  // Reisst eine Zeile damit das 255-Zeichen-Limit (AGENTS 6), wird ohne
+  // Polsterung ausgegeben und der Aufrufer bricht die Zeile von Hand um.
+  const grid = rows.map((row) => fields.map((f) => `${f.abap} = ${cell(row?.[f.json], f.type)}`));
+  const width = fields.map((_, j) => Math.max(...grid.map((r) => r[j].length)));
+  const line = (cells) => `${pad}( ${cells.join(' ')} )`;
+  const padded = grid.map((r) => line(r.map((c, j) => (j === r.length - 1 ? c : c.padEnd(width[j])))));
+  const body = (padded.some((l) => l.length > 255) ? grid.map(line) : padded).join('\n');
   const value = `VALUE #(\n${body}\n${' '.repeat(Math.max(0, indent - 2))})`;
   return varName ? `${varName} = ${value}.` : value;
 }

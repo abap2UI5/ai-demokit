@@ -301,8 +301,8 @@ CLASS z2ui5_cl_smpc_app_541 IMPLEMENTATION.
           ( start_at = `2017-03-30T10:00:00` end_at = `2017-06-02T12:00:00` title = `Working out of the building` type = `Type07` pic = `sap-icon://sap-ui5` tentative = abap_false )
         )
         t_headers = VALUE #(
-          ( start_at = `2017-01-15T08:00:00` end_at = `2017-01-15T10:00:00` title = `Reminder` type = `Type06` )
-          ( start_at = `2017-01-15T17:00:00` end_at = `2017-01-15T19:00:00` title = `Reminder` type = `Type06` )
+          ( start_at = `2017-01-15T08:00:00` end_at = `2017-01-15T10:00:00` title = `Reminder`    type = `Type06` )
+          ( start_at = `2017-01-15T17:00:00` end_at = `2017-01-15T19:00:00` title = `Reminder`    type = `Type06` )
           ( start_at = `2017-09-01T00:00:00` end_at = `2017-11-30T23:59:00` title = `New quarter` type = `Type10` )
           ( start_at = `2018-02-01T00:00:00` end_at = `2018-04-30T23:59:00` title = `New quarter` type = `Type10` )
         )  )
@@ -367,11 +367,11 @@ CLASS z2ui5_cl_smpc_app_541 IMPLEMENTATION.
     ).
 
     t_legend_appt_items = VALUE #(
-      ( text = `Reminder` type = `Type06` )
-      ( text = `Client meeting` type = `Type02` )
-      ( text = `Team meeting` type = `Type01` )
-      ( text = `Planning` type = `Type04` )
-      ( text = `Out of office` type = `Type03` )
+      ( text = `Reminder`            type = `Type06` )
+      ( text = `Client meeting`      type = `Type02` )
+      ( text = `Team meeting`        type = `Type01` )
+      ( text = `Planning`            type = `Type04` )
+      ( text = `Out of office`       type = `Type03` )
       ( text = `Customer Initiative` type = `Type07` )
     ).
 

@@ -164,8 +164,8 @@ CLASS z2ui5_cl_smpc_app_364 IMPLEMENTATION.
         ) )
       ( nodeid = 2 hierarchylevel = 0 description = `2` parentnodeid = `` drillstate = `expanded`
         children = VALUE #(
-          ( nodeid = 8 hierarchylevel = 1 description = `2.1` parentnodeid = `2` drillstate = `leaf` )
-          ( nodeid = 9 hierarchylevel = 1 description = `2.2` parentnodeid = `2` drillstate = `leaf` )
+          ( nodeid = 8  hierarchylevel = 1 description = `2.1` parentnodeid = `2` drillstate = `leaf` )
+          ( nodeid = 9  hierarchylevel = 1 description = `2.2` parentnodeid = `2` drillstate = `leaf` )
           ( nodeid = 10 hierarchylevel = 1 description = `2.3` parentnodeid = `2` drillstate = `leaf` )
         ) )
       ( nodeid = 3 hierarchylevel = 0 description = `3` parentnodeid = `` drillstate = `expanded`

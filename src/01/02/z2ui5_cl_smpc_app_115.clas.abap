@@ -319,9 +319,7 @@ CLASS z2ui5_cl_smpc_app_115 IMPLEMENTATION.
       DATA(update_type) = client->get_event_arg( ).
       DATA(removed_key) = client->get_event_arg( 2 ).
       DATA(row_path) = client->get_event_arg( 3 ).
-      DATA(row_index) = CONV i( substring_after( val = row_path
-                                                 sub = `/`
-                                                 occ = -1 ) ).
+      DATA(row_index) = CONV i( substring_after( val = row_path sub = `/` occ = -1 ) ).
       " the row is addressed through a field symbol, not a table expression:
       " abaplint's downport leaves an itab[ ] TARGET of INSERT/DELETE in
       " place, and the 702 parser rejects it
