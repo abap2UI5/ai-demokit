@@ -29,46 +29,28 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
 
 ## Open findings (backlog)
 
-- [x] **Apps 612 and 613 now build their tokens on the client — closed
-  2026-08-23.** `z2ui5.cc.MultiInputExt` gained `TokenKeyCell` /
-  `TokenTextCells` upstream (see the Implemented table in
-  [docs/upstream-requests.md](docs/upstream-requests.md)), the linter's render
-  harness learned the two properties in `@abap2ui5/linter` 0.3.0 (its
-  companion-control mirrors moved into `lib/cc-controls.mjs` and
-  `check-upstream` compares them against `app/webapp/cc/<Name>.js`, so they
-  cannot rot again). The pin here does NOT automatically follow, and that is
-  the one thing this entry used to get wrong: `A2UI5_PIN` moves only when
-  `bump-a2ui5.yaml` runs and its full-corpus e2e is green, so between the
-  upstream landing and that run the reproducible builds — and any local
-  checkout — still resolve a framework without the two properties, where these
-  two ports can produce nothing but `Property "TokenKeyCell" does not exist`.
-  That is what kept both `LIVE_TEST`s open while everything else about them was
-  closed. Both were verified and closed on 2026-08-26 without waiting for the
-  pin, by building the backend the way the nightly does — `A2UI5_BRANCH=main`,
-  the canary path, which bypasses `A2UI5_PIN` rather than changing it — against
-  main tip `ddbdd13`; four consecutive green runs each. That was a statement
-  about the reproducible builds, not about these two ports, and it has since
-  expired: `bump-a2ui5` advanced `A2UI5_PIN` to `2567ee10` on 2026-08-28, and
-  that commit carries `TokenKeyCell` / `TokenTextCells`, so the pinned path now
-  resolves a framework with both properties too. Both ports drop the `tokens`
-  binding, the `tokens` aggregation and the `suggestionItemSelected` wire, and
-  carry one `MultiInputExt` per tabular input (`TokenKeyCell="0"`,
-  `TokenTextCells="3"` — Name and the Price cell, the `Name(Price Currency)`
-  shape the original builds in JavaScript). 613 handles no event at all any
-  more; 612 keeps only its Link toast. Both `IMPROVISED` deviations became
-  NOTEs, and the render gate accepts both on the published linter: **637 files,
-  0 failing**.
+_Open items only. A finding that is CLOSED belongs in the journal, not here:
+the nine `[x]` entries that had accumulated in this list (10 of 15 at the
+2026-08-28 clear-out) turned a backlog into a second journal, and a reader
+looking for what is left had to skip past what is done to find it. They moved
+verbatim to [docs/history.md](docs/history.md) under "closed findings" — the
+same cut AGENTS §10 already makes between the rule and the war story._
 
-- [x] **`generate-keywords.mjs` sees both builder call shapes — found and
-  fixed 2026-08-23.** The control matcher only accepted the POSITIONAL form
-  `)->tag( \`Label\` )`, never `)->tag( n = \`Label\` ns = \`z2ui5\` )` — the named
-  one, and the only shape that can carry a namespace, so a companion control
-  could never reach a keyword line at all. Measured before the fix: **469 of
-  622 ports** write the named form somewhere and **7051 control occurrences**
-  were invisible. The matcher now takes an optional `n =`, `npm run keywords`
-  rewrote **431 of 636** lines, and `multiinputext` reaches apps 040, 612 and
-  613. The 12-word cap is unchanged, so a few lines traded a weaker term for a
-  control that is actually built.
+- [ ] **The `checked` rung is thinning, and only a human on a real system can
+  thicken it (standing).** 59 of 622 ports (9.5%) are `checked`, against 355
+  `reviewed` and 208 `generated`, and the share falls with every batch because
+  a batch adds ports and a live check does not scale with it. Nothing in this
+  repository can close this: `checked` certifies that a person ran the port on
+  a real SAP system, which no gate, probe or headless harness stands in for —
+  and AGENTS §10 makes it worse in the right direction, because a behavioural
+  change to a `checked` port RESETS it.
+  Two things do reduce the cost of the check without replacing it, and both
+  are worth doing first: the e2e interaction modules (see the advisory
+  `validate-meta` prints — 42 of the 59 `checked` ports have none, so the
+  rung with the most claimed verification carries the least automated proof
+  of it), and keeping the sidecar's `checked.note` specific enough that a
+  re-check knows what to re-check. Neither promotes a port; both make a live
+  session shorter.
 
 - [ ] **UI5 version skew forces app 611's two escape hatches, and no bump can
   close them yet (measured 2026-08-28).** `ui5/universe.json` is 1.152.0,
@@ -568,20 +550,6 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   limitations that do not exist.
   **What is left: 136 `reviewed` and 206 `generated` ports above 271.**
 
-- [x] **CAPABILITIES.md's stale class citations — DONE.** Both halves of this
-  are closed, and neither closed the way the entry predicted. The shared
-  script's `PROSE` list now carries `CAPABILITIES.md` (and `E2E.md`) outright,
-  so no one has to weigh "widening it in all three repositories at once"
-  against leaving the file unchecked — the gate simply checks it. And the file
-  no longer names a single `z2ui5_cl_demo_app_<n>`: it cites five classes, three
-  `z2ui5_cl_smp_app_<n>` in samples and two `z2ui5_cl_smps_app_<n>` in
-  samples-stack, all current. `node scripts/check-prose-names.mjs` resolves
-  **36 class names across 8 prose files**, every one of them existing —
-  including the foreign ones, which it looks up in the owning repository's
-  generated `SAMPLES.md` rather than exempting. Re-verified from the source
-  2026-08-21. The four names the entry expected to need a maintainer decision
-  (038, 172, 369, 458) are simply not cited any more, so there is nothing left
-  to decide.
 - [ ] **Two open-abap defects are patched in the build and open upstream.**
   Both are written up in full — analysis, emitted JS, proposed change — in
   `abap2UI5/abap2UI5`'s
@@ -605,112 +573,6 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
     (`web/ci/patch_follow_up_action.mjs`); the committed corpus keeps
     `follow_up_action( )`, which is right on a real server. **On merge:** drop
     the patch script and its two call sites.
-- [x] **Linter bump done — the corpus is green on `@abap2ui5/linter` 0.1.0,
-  taken from npm instead of a git SHA.** Everything below was decided before
-  the bump landed: the six icons carry `POST_171` deviations (042, 109, 128,
-  376) or were changed where the file is ours, the `ToolbarSeparator` is out of
-  `scripts/generate-overview.mjs`, and `node scripts/view-gates.mjs --strict`
-  reports **416 ports, 0 failing, 4 skipped, 45 advisory** with the new rules
-  live. Kept for the reasoning, which is the durable part. The
-  linter grew icon rules (`unknown-icon` / `icon-too-new` / `icon-removed`,
-  from a per-icon `since` scanned across every OpenUI5 minor since 1.71), a
-  layout rule (`toolbar-control-in-bar`) and a severity split
-  (`aggregation-too-new`, the aggregation-TAG half of `member-too-new`, now an
-  error because UI5 resolves an unknown tag as a control class and the 404
-  takes the whole view down). This repo is already prepared for it —
-  `VERSION_TYPES` knows the two new version types and `declares()` now reads a
-  finding's `value`, so an icon can be named in a deviation at all. Measured
-  against the working linter over all 416 ports, the bump surfaces:
-  **24 `aggregation-too-new`** — every one already carrying a `POST_171`
-  deviation, so they pass untouched (without the `VERSION_TYPES` entry they
-  would all have failed at once); **1 `toolbar-control-in-bar`**, in
-  `z2ui5_cl_smpc_app_000`'s header — a real defect, not a port fidelity
-  question: the separator in the `sap.m.Bar` deletes every icon after it on
-  1.71–1.75, and the file is GENERATED, so the fix belongs in
-  `scripts/generate-overview.mjs`; and **6 `icon-too-new`** — `information`
-  (@1.80) in apps 042, 376 and the overview, `select-appointments` in 109,
-  `people-connected` in 128, `da` in 134. Those six need the deviation-or-fix
-  decision per port: a 1:1 port of a sample that uses a post-1.71 glyph is a
-  legitimate `POST_171` deviation (changing the literal would be a
-  data-fidelity question), while the overview is ours and should just use
-  `message-information`. Such a deviation has to spell the **full
-  `sap-icon://<name>`** — `declares()` matches by substring, and icon names go
-  down to two letters, so the bare name would let a NOTE about "data" excuse a
-  finding about `da` (which is exactly what app 134 did before the match was
-  tightened). **0 `source-line-too-long`.**
-- [x] **LIVE_TEST debt → e2e interactions — reached zero 2026-08-26.** The open `LIVE_TEST` count (see
-  the generated table) is the corpus' unverified-behaviour backlog. The
-  systematic close path is the e2e harness: add a per-port interaction module
-  under `meta/interactions/<class>.mjs` (one generic assertion per LIVE_TEST
-  class — client-composed toast, popup/popover open, binding_call; the
-  directory's README carries the coverage catalogue) and, after a green
-  run, `node scripts/close-live-tests.mjs --close <nums>` converts the
-  verified entries into `NOTE`s mechanically (text kept verbatim, so gate
-  declarations keep matching). A red nightly opens/updates an issue instead of
-  hiding in the Actions tab. Every green interaction is human live-check time
-  saved.
-  **2026-08-21: the interaction gap is closed and the backlog is down from 25
-  ports to 7.** The 19 ports that shipped a LIVE_TEST without an interaction
-  (apps 356–366, 401–417) have one now, all 19 run green under
-  `--strict`, and 18 were converted to `NOTE`s. `validate-meta` reports no gap
-  count any more.
-  **App 359 is the one that stayed open, deliberately.** Its module closes the
-  bound-`rowActionCount` half; the two-placeholder toast on a row-action press
-  cannot be driven here, because the row actions never render in the smoke at
-  all — calling `setRowActionCount(2)` + `invalidate()` DIRECTLY on the table
-  through its own API, bypassing the port, still leaves every row without a
-  `_rowAction`. That rules the port out as the cause and leaves the leg to the
-  human live run.
-  **The open set is EMPTY since 2026-08-26** - the backlog went 122 ports to 0,
-  and the generated table at the top of this file is the live count. The last
-  two, 612 and 613, were never blocked by their modules: A2UI5_PIN predated the
-  TokenKeyCell / TokenTextCells properties they need, so a pinned checkout could
-  only produce `Property "TokenKeyCell" does not exist`. They were closed on the
-  canary path (A2UI5_BRANCH=main against ddbdd13), four consecutive green runs
-  each - see the 612/613 entry above. The sentence below records the state this
-  paragraph described while the backlog was still open, and the composition
-  changed in both directions on 2026-08-21. 351 closed once its module was
-  rewritten from a DOM dump into a real test. 362 was REOPENED: it had been
-  closed as live-verified, but its module only presses the three toolbar
-  buttons and never opens a column header menu, so the sort event and its
-  prevented default were never fired — the toolbar legs it does drive are
-  genuinely covered, and the deviation now says exactly that.
-  Three of the seven are known not to be closable by this harness as it stands,
-  and each says so in its own module rather than quietly asserting less:
-  354's is the COLUMN filter's prevented default, which needs a `sap.ui.table`
-  column header menu (its module reaches `filter_apply( )` instead); 359's is
-  the row-action press, and the row actions never render here at all (proven by
-  driving `setRowActionCount(2)` + `invalidate()` on the table directly);
-  353's four drag & drop wires ride on HTML5 dnd, which Playwright's `dragTo`
-  cannot produce for `sap.ui.table`'s pointer extension — dispatching the
-  DataTransfer events by hand would test the harness, not the port.
-  **A closure is only as good as the branch the module actually reaches.** Four
-  were found resting on modules that never executed the wire their deviation
-  named (341's refresh loop runs on a LATER press; 344's module asserted a Text
-  was visible, which is true whether the toggle works or not; 362 and 356/361's
-  modules sidestep the exact case their defect lives in). Before running
-  `close-live-tests.mjs`, read the module against the deviation sentence by
-  sentence.
-- [x] **Post-1.71 declaration debt in the gate's blind spots — DONE, and it is
-  a probe now.** Surfaced by the review sweep (2026-08-21), and NOT a
-  batch-freshness problem: the same gap appeared in old ports and was correctly
-  declared in others, so it was inconsistent policy application across the
-  corpus. Every case sits where AGENTS §5 already says the property gate is
-  blind, which is why a green `view_gates` said nothing: **a member relocated
-  to a newer base class** (`NavigationListItem.expanded` reads @1.121 off
-  `sap.tnt.NavigationListItemBase`), **an aggregation-level member**
-  (`sap.m.IconTabFilter.items` @1.77), **an enum VALUE**
-  (`CalendarDayType.NonWorking` @1.121), and a plain miss
-  (`sap.tnt.SideNavigation.width` @1.120).
-  The sweep read 30 ports; rather than promote that sample to a verdict, the
-  four shapes became **`scripts/probes/post171-blindspot-probe.mjs`**, which
-  scans all 416. It found **10 undeclared uses across 7 ports** — including
-  241, 301 and 303, which the sweep never looked at. Every `@since` was
-  re-verified against the OpenUI5 sources before declaring, all seven ports
-  already sat in `src/02` with a `POST_171` (so no folder moved), and the probe
-  now reports 0. It is a probe, not a gate: it reports, a human decides. **Add
-  a row whenever a new blind-spot member turns up** — that table is what stops
-  this from having to be rediscovered by the next review.
 - [ ] **Property-gate residual limits** (documented in AGENTS §5): enum
   *values* newer than 1.71 are invisible at the attribute-name level; a
   member relocated to a newer base class reads as that base's version; and a
@@ -719,89 +581,6 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   green property-check still does not prove a port ≤ 1.71-clean — the
   control-level `scope-of` check plus by-policy POST_171 declarations remain
   required.
-- [x] **Review-sweep rework backlog — DONE.** The last member, app 118, was
-  closed by its own 2026-08-06 rebuild and the 2026-08-10 manifest fix without
-  this entry being ticked — the same way apps 298 and 089 were, so it was
-  re-verified from the source on 2026-08-21 rather than trusted: the sidecar
-  carries no `IMPROVISED` any more, all five `action` wires transport
-  `${$parameters>/parameters}.url` instead of a constant, and
-  `node scripts/probes/faked-event-value-audit.mjs` reports **0 candidates**
-  over the whole corpus (it found the two real cases, 133 and 100, when it was
-  written). Re-run that probe after any batch that adds toast wires. What is
-  NOT closed with it is the broader ladder: 209 sidecars still read
-  `generated`, but those are ports awaiting their FIRST review, not ports with
-  a known headline gap — a different piece of work from this one. The history
-  below is kept because it is the record of what "rework" meant.
-  The 2026-07-27 sweep
-  promoted 152 of 201 `generated` ports to `reviewed`; the rest stayed
-  `generated` with **corrected, honest sidecars** and need real view/logic
-  rework. **Closed 2026-07-28:** the whole dead-`_event`-wire class (138, 143,
-  145, 146, 148, 150 — pattern-lint `dead-event-wire`, BASELINE now empty) and
-  the app-220 crash. Each was rebuilt the thin-frontend way where the
-  capability exists — two-way binding + expression binding for 146/150/145,
-  a real `on_event` dispatcher for 143/138, and the full drag & drop reorder
-  for 148 (CAPABILITIES marks it ✅, so the earlier "not reproduced" was a
-  wrong improvisation). Only 138's slider (a jQuery DOM width on a
-  `sap.m.Page`, which has no width property) and 145's `RevealGrid` overlay
-  (a sample-local helper module) stay dropped, now declared as such. Also closed in the
-  same pass: 124 (a `liveChange` round-trip per drag step → the expression
-  binding), 160 (toast → the real `MessageBox.alert`, which its own sidecar had
-  already flagged as a wrong improvisation), 163 (hardcoded button captions →
-  `${$source>/text}`, and the dropped `ActionSheet.fragment.xml` rebuilt and
-  anchored via `popover_display`), 109 (`weekNumber` / `date` event parameters
-  now transported into the toast texts) and 127 (`$event.oSource.sId` instead
-  of a bare "Pressed"). **Still open:** the rest of the toast-substitution
-  class (URLHELPER, timers, generalized `control_by_id`, the remaining
-  controller-built popups — 106/107/112/147/149/170/218/244/246) and faked
-  event values in the ports not listed above. The dropped sample CSS of 122/124
-  is **closed** (2026-07-28): both stylesheets are archived (closing that `§4`
-  gap) and injected through a `core:HTML` `<style>` leaf.
-  Find the rest: sidecar status `generated` minus the 5 scope-exception ports
-  (newer ports still awaiting their first review are `generated` too). Note the
-  reworked ports keep status `generated`: the headline gap is closed and
-  gate-verified, a full end-to-end re-review per port is not done.
-  **Closed 2026-07-30:** the whole remaining toast-substitution class —
-  106/107 (MultiSelect toggle state + the MessagesIndicator MessagePopover
-  over the `message>` model via the cc.MessageManager bridge), 112 (the
-  ResponsivePopover-with-ColorPicker via `popover_display`), 147 (the global
-  BusyIndicator show/hide reproduced with `BUSY_INDICATOR` + `START_TIMER`),
-  149 (URLHELPER REDIRECT instead of the toast), 170 (the Card popover
-  fragment 1:1 + the Edit `areaShrinkRatio` toggle via two-way binding),
-  218 (the dropped `oSF.suggest()` popup-reopen wired as a second
-  `control_by_id` follow-up), 244 (`breakpointChange` → bound Avatar
-  `displaySize`, POST_171 @1.147) and 246 (the original `handleUploadPress`
-  empty-check/upload/clear instead of the tooltip-derived toast).
-  **Closed 2026-08-01 — the residual faked-event-value audit.** It is a script
-  now: `scripts/probes/faked-event-value-audit.mjs` compares every sample's own
-  `MessageToast.show(… + oEvent…)` against the port's wire and reports a port
-  whose text is a CONSTANT. It found **two** real cases, both fixed — app 133
-  (all four GridList toasts had dropped the item id; now
-  `{0?Selected:Unselected} item with ID {1}` and friends over
-  `${$parameters>/listItem}.getId()` / `$event.oSource.sId`) and app 100 (a
-  constant instead of *"Link 'X' was clicked"*, with the back-button branch
-  missing entirely; the navigate event now transports the navOrigin text and
-  an ABAP `COND` rebuilds the original if/else). The two remaining hits
-  (118/203) are deliberately dropped interactions, declared IMPROVISED.
-  Re-run the probe after any batch that adds toast wires.
-  **Closed 2026-08-05 — app 115**, the larger of the two rebuilds the harvest
-  left in REWORK. It was a 3-column breadth probe over 5 seeded rows with a
-  `structural_diff` skip; it is now the full `sap.ui.table.sample.Basic`:
-  all **13** columns (Text/Input/Label/ObjectStatus/`u:Currency`/ComboBox/
-  Link/Button/CheckBox/Select/MultiInput/`c:Icon`/DatePicker templates) over
-  the complete 123-row mock, with the Suppliers/Categories arrays
-  `initSampleDataModel` derives and the two Available formatters computed in
-  ABAP (`AVAILABLESTATE`/`AVAILABLEICON`, thin-frontend rule). The skip is
-  **gone** — structural-diff now runs it and the only difference left is the
-  declared `p:ColumnAIAction` (`sap.m.plugins` @1.136, DROPPED_171). The two
-  display-only handlers (`handleDetailsPress`, `onPaste`) resolve on the
-  client through `control_global MESSAGE_TOAST` with the row/parameter value
-  as an event argument; only `updateMultipleSelection`, which mutates the
-  model, stays a round-trip. The original's `key="{ProductId}"` on the
-  `/Categories`-bound suggestion template is ported **verbatim** (it yields an
-  empty key there — the sample's own quirk) rather than repaired, and the
-  handler mirrors its filter-by-removed-key. One more `IMPROVISED` closed
-  with it (deviation totals are never repeated here — the generated state
-  block above is the count); the REWORK family is down to app **118** alone.
 - [ ] **App 203 out of scope via `@ui5-experimental-since`** —
   `sap.m.OverflowToolbarTokenizer` is experimental since 1.139 with no plain
   `@since`, which the scanners misread as base-version until 2026-07-27
@@ -814,12 +593,3 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   closing it means renumbering the ~60 ports above (class names, sidecars,
   e2e INTERACTIONS keys, history references) — a maintainer decision, not a
   gate side effect. Any NEW gap fails the gate.
-- [x] **App 298's dimensions — DONE.** The row type declares `Width`/`Depth`/
-  `Height` as `TYPE string`, so the text template `{WIDTH} x {DEPTH} x
-  {HEIGHT} {DIM_UNIT}` renders `30 x 18 x 3 cm` the way the original does. The
-  fix landed without this entry being ticked, which is why it was re-verified
-  from the source on 2026-08-17 rather than trusted.
-- [x] **App 089's device path — DONE.** The port binds
-  `{= !${device>/system/phone} }`, the same expression apps 030 and 378–381
-  use; the demo kit's `isNoPhone` helper property is not bound anywhere. Also
-  re-verified from the source on 2026-08-17.
