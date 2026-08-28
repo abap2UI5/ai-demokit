@@ -117,7 +117,7 @@ CLASS z2ui5_cl_smpc_app_444 IMPLEMENTATION.
         " added children. Bound here, so the limit has to be raised explicitly
         " (the app-252 / app-094 idiom).
         client->follow_up_action( val   = client->cs_event-set_size_limit
-                                  t_arg = VALUE #( ( `400` ) ( `MAIN` ) ) ).
+                                  t_arg = VALUE #( ( `400` ) ( client->cs_view-main ) ) ).
 
       WHEN `ITEM_CLOSE`.
         DATA(closed_id) = CONV i( client->get_event_arg( ) ).

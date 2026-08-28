@@ -517,7 +517,7 @@ CLASS z2ui5_cl_smpc_app_579 IMPLEMENTATION.
     " and the JSONModel caps a bound aggregation at 100, so the table would stop 23
     " rows short of the count its own title reports
     client->follow_up_action( val   = client->cs_event-set_size_limit
-                              t_arg = VALUE #( ( `1000` ) ( `MAIN` ) ) ).
+                              t_arg = VALUE #( ( `1000` ) ( client->cs_view-main ) ) ).
 
   ENDMETHOD.
 

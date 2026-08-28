@@ -74,7 +74,7 @@ CLASS z2ui5_cl_smpc_app_509 IMPLEMENTATION.
     " size limit applies to; this port binds the aggregation, so the limit has to be
     " raised - a one-character term matches over 100 of the 123 products
     client->follow_up_action( val   = client->cs_event-set_size_limit
-                              t_arg = VALUE #( ( `100000` ) ( `MAIN` ) ) ).
+                              t_arg = VALUE #( ( `100000` ) ( client->cs_view-main ) ) ).
 
   ENDMETHOD.
 

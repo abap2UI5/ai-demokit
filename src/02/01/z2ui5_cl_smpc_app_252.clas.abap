@@ -219,7 +219,7 @@ CLASS z2ui5_cl_smpc_app_252 IMPLEMENTATION.
 
     " onInit: oProductsModel.setSizeLimit(10) - the model-level limit 1:1
     client->follow_up_action( val   = client->cs_event-set_size_limit
-                              t_arg = VALUE #( ( `10` ) ( `MAIN` ) ) ).
+                              t_arg = VALUE #( ( `10` ) ( client->cs_view-main ) ) ).
 
   ENDMETHOD.
 

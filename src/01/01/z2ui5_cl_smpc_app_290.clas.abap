@@ -125,7 +125,7 @@ CLASS z2ui5_cl_smpc_app_290 IMPLEMENTATION.
     " The SelectDialog beside it needs nothing: SelectDialog.growing defaults
     " true and growing always passes a length, which skips the cap
     client->follow_up_action( val   = client->cs_event-set_size_limit
-                              t_arg = VALUE #( ( `1000000` ) ( `MAIN` ) ) ).
+                              t_arg = VALUE #( ( `1000000` ) ( client->cs_view-main ) ) ).
 
   ENDMETHOD.
 
