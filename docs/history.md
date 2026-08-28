@@ -94,7 +94,7 @@ in this file.
 - [x] **Apps 612 and 613 now build their tokens on the client — closed
   2026-08-23.** `z2ui5.cc.MultiInputExt` gained `TokenKeyCell` /
   `TokenTextCells` upstream (see the Implemented table in
-  [docs/upstream-requests.md](docs/upstream-requests.md)), the linter's render
+  [docs/upstream-requests.md](upstream-requests.md)), the linter's render
   harness learned the two properties in `@abap2ui5/linter` 0.3.0 (its
   companion-control mirrors moved into `lib/cc-controls.mjs` and
   `check-upstream` compares them against `app/webapp/cc/<Name>.js`, so they
