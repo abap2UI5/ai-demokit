@@ -28,7 +28,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { readDescript } from './lib/descript.mjs';
-import { isSkippedDir } from './lib/src-tree.mjs';
+import { walkFiles } from './lib/src-tree.mjs';
 import { universe, libraryOf, descriptLibrary } from './lib/ui5-libs.mjs';
 import { sampleNames } from './lib/sample-names.mjs';
 
@@ -37,23 +37,13 @@ const OUT = path.join(ROOT, 'catalogue.json');
 const CHECK = process.argv.includes('--check');
 const nameOf = sampleNames(ROOT);
 
-const walk = (dir, out = []) => {
-  for (const name of fs.readdirSync(dir).sort()) {
-    const full = path.join(dir, name);
-    if (isSkippedDir(name)) continue;
-    if (fs.statSync(full).isDirectory()) walk(full, out);
-    else if (full.endsWith('.clas.abap')) out.push(full);
-  }
-  return out;
-};
-
 /* The in-system overview app implements z2ui5_if_app like every port, but it
  * rebuilds no demo kit original — it is the table that lists them. Same
  * exclusion as the search index. */
 const OVERVIEW = 'z2ui5_cl_smpc_app_000';
 
 const entries = [];
-for (const file of walk(path.join(ROOT, 'src'))) {
+for (const file of walkFiles(path.join(ROOT, 'src'), '.clas.abap')) {
   const source = fs.readFileSync(file, 'utf8');
   if (!/INTERFACES\s+z2ui5_if_app\s*\./i.test(source)) continue;
 

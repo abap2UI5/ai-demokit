@@ -51,7 +51,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { screenshotFiles } from '@abap2ui5/linter';
-import { isSkippedDir } from './lib/src-tree.mjs';
+import { walkFiles } from './lib/src-tree.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const argOut = process.argv.indexOf('--out');
@@ -74,18 +74,8 @@ const SIZE = { width: 800, height: 600 };
  * would take all pictures with it. */
 const CHUNK = 25;
 
-const walk = (dir, out = []) => {
-  for (const name of fs.readdirSync(dir).sort()) {
-    const full = path.join(dir, name);
-    if (isSkippedDir(name)) continue;
-    if (fs.statSync(full).isDirectory()) walk(full, out);
-    else if (full.endsWith('.clas.abap')) out.push(full);
-  }
-  return out;
-};
-
 const ports = [];
-for (const file of walk(path.join(ROOT, 'src'))) {
+for (const file of walkFiles(path.join(ROOT, 'src'), '.clas.abap')) {
   const cls = path.basename(file, '.clas.abap');
   if (cls === 'z2ui5_cl_smpc_app_000') continue;          // the overview app
   if (file.split(path.sep).includes('03')

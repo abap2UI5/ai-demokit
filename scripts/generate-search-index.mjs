@@ -49,7 +49,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { checkAbapSource } from '@abap2ui5/linter';
 import { readDescript } from './lib/descript.mjs';
-import { isSkippedDir } from './lib/src-tree.mjs';
+import { walkFiles } from './lib/src-tree.mjs';
 import { universe, libraryOf, descriptLibrary } from './lib/ui5-libs.mjs';
 import { sampleNames } from './lib/sample-names.mjs';
 
@@ -115,16 +115,6 @@ function cmpVersion(a, b) {
 /** "1.77.0" / "1.77" -> "1.77" — the minor is what a system is called by. */
 const shortVersion = (v) => String(v).split('.').slice(0, 2).join('.');
 
-const walk = (dir, out = []) => {
-  for (const name of fs.readdirSync(dir).sort()) {
-    const full = path.join(dir, name);
-    if (isSkippedDir(name)) continue;
-    if (fs.statSync(full).isDirectory()) walk(full, out);
-    else if (full.endsWith('.clas.abap')) out.push(full);
-  }
-  return out;
-};
-
 const descriptions = JSON.parse(fs.readFileSync(path.join(ROOT, 'ui5', 'descriptions.json'), 'utf8'));
 const demokit = descriptions.demokit || {};
 const written = descriptions.written || {};
@@ -132,7 +122,7 @@ const nameOf = sampleNames(ROOT);
 
 /* ---------------------------------------------------------------- collect */
 
-const files = walk(path.join(ROOT, 'src'));
+const files = walkFiles(path.join(ROOT, 'src'), '.clas.abap');
 const controlIds = new Map();          // control name -> index in `controls`
 const idOf = (name) => {
   if (!controlIds.has(name)) controlIds.set(name, controlIds.size);

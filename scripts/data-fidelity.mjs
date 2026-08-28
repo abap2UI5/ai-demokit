@@ -64,6 +64,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { walkFiles } from './lib/src-tree.mjs';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const META = path.join(ROOT, 'meta');
@@ -77,15 +78,6 @@ const TEXT_EXT = ['.json', '.xml', '.js', '.html', '.properties', '.css', '.ts']
 
 let errors = 0;
 const err = (m) => { console.log(`ERROR ${m}`); errors++; };
-
-function walk(dir, out = []) {
-  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
-    const p = path.join(dir, e.name);
-    if (e.isDirectory()) walk(p, out);
-    else out.push(p);
-  }
-  return out;
-}
 
 // a token is checkable when its basename carries a real name before the
 // extension (template-composed tails like `}.jpg` reduce to just `.jpg`
@@ -201,7 +193,7 @@ for (const mf of fs.readdirSync(META).sort()) {
   const lib = meta.sample.slice(0, i);
   const name = meta.sample.slice(i + '.sample.'.length);
   const sampleDir = path.join(UI5, lib, name);
-  const corpusFiles = fs.existsSync(sampleDir) ? walk(sampleDir) : [];
+  const corpusFiles = fs.existsSync(sampleDir) ? walkFiles(sampleDir) : [];
   const corpusTexts = [];
   for (const f of corpusFiles) {
     if (TEXT_EXT.includes(path.extname(f).toLowerCase())) corpusTexts.push(fs.readFileSync(f, 'utf8'));

@@ -22,7 +22,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { loadUniverseSnapshot, loadPropertiesControls, enrichFromProperties } from './lib-universe.mjs';
 import { formatSource } from './lib/format-chain.mjs';
-import { isSkippedDir } from './lib/src-tree.mjs';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'src');
@@ -30,16 +29,6 @@ const META = path.join(ROOT, 'meta');
 const CLASS = 'z2ui5_cl_smpc_app_000';
 const OUT_ABAP = path.join(SRC, `${CLASS}.clas.abap`);
 const OUT_XML = path.join(SRC, `${CLASS}.clas.xml`);
-
-function walk(dir, out = []) {
-  for (const name of fs.readdirSync(dir)) {
-    const full = path.join(dir, name);
-    if (isSkippedDir(name)) continue;
-    if (fs.statSync(full).isDirectory()) walk(full, out);
-    else out.push(full);
-  }
-  return out;
-}
 
 // control availability from the sample-universe snapshot (same source as the
 // coverage docs): the release a control appeared in + whether it is deprecated

@@ -19,7 +19,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { portPath, catFolder, libFolder, sampleLib, CAT_CTEXT, LIB_CTEXT } from './lib-packages.mjs';
-import { isSkippedDir } from './lib/src-tree.mjs';
+import { walkFiles } from './lib/src-tree.mjs';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'src');
@@ -99,19 +99,9 @@ let errors = 0;
 const err = (m) => { console.log(`ERROR ${m}`); errors++; };
 const liveTestClasses = [];
 
-function walk(dir, out = []) {
-  for (const name of fs.readdirSync(dir)) {
-    const full = path.join(dir, name);
-    if (isSkippedDir(name)) continue;
-    if (fs.statSync(full).isDirectory()) walk(full, out);
-    else out.push(full);
-  }
-  return out;
-}
-
 // port classes = every class in a library package src/<cc>/<ll>/ (the overview
 // app sits directly under src/ and is not a port)
-const ports = walk(SRC)
+const ports = walkFiles(SRC)
   .filter((f) => f.endsWith('.clas.abap') && /src\/\d+\/\d+\/[^/]+$/.test(f.split(path.sep).join('/')))
   .map((f) => path.basename(f, '.clas.abap'));
 

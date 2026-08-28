@@ -52,7 +52,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { isSkippedDir } from './lib/src-tree.mjs';
+import { walkFiles } from './lib/src-tree.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CHECK = process.argv.includes('--check');
@@ -127,16 +127,6 @@ function fit(text, budget = BUDGET) {
   return `${head.slice(0, word)}...`;
 }
 
-const walk = (dir, out = []) => {
-  for (const name of fs.readdirSync(dir)) {
-    const full = path.join(dir, name);
-    if (isSkippedDir(name)) continue;
-    if (fs.statSync(full).isDirectory()) walk(full, out);
-    else if (full.endsWith('.clas.abap')) out.push(full);
-  }
-  return out;
-};
-
 const DESCRIPTIONS = path.join(ROOT, 'ui5', 'descriptions.json');
 if (!fs.existsSync(DESCRIPTIONS)) {
   console.error('ui5/descriptions.json missing — the summary line comes from that snapshot.');
@@ -150,7 +140,7 @@ const from = { demokit: 0, written: 0, derived: 0 };
 let write = 0;
 let already = 0;
 
-for (const file of walk(path.join(ROOT, 'src'))) {
+for (const file of walkFiles(path.join(ROOT, 'src'), '.clas.abap')) {
   const cls = path.basename(file, '.clas.abap');
   if (cls === GENERATED) continue;
   const source = fs.readFileSync(file, 'utf8');

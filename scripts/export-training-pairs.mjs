@@ -22,6 +22,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { walkFiles } from './lib/src-tree.mjs';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const META = path.join(ROOT, 'meta');
@@ -42,15 +43,6 @@ const holdout = fs.existsSync(path.join(UI5, 'holdout.json'))
   ? new Set(JSON.parse(fs.readFileSync(path.join(UI5, 'holdout.json'), 'utf8')).samples)
   : new Set();
 
-function walk(dir, out = []) {
-  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
-    const p = path.join(dir, e.name);
-    if (e.isDirectory()) walk(p, out);
-    else out.push(p);
-  }
-  return out;
-}
-
 const lines = [];
 let skippedStatus = 0;
 let skippedHoldout = 0;
@@ -67,7 +59,7 @@ for (const mf of fs.readdirSync(META).sort()) {
   if (!fs.existsSync(sampleDir)) continue; // validate-meta reports this
 
   const input = {};
-  for (const f of walk(sampleDir)) {
+  for (const f of walkFiles(sampleDir)) {
     if (!TEXT_EXT.includes(path.extname(f).toLowerCase())) continue;
     input[path.relative(UI5, f).split(path.sep).join('/')] = fs.readFileSync(f, 'utf8');
   }

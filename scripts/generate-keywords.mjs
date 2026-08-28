@@ -37,7 +37,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { readDescript } from './lib/descript.mjs';
-import { isSkippedDir } from './lib/src-tree.mjs';
+import { walkFiles } from './lib/src-tree.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CHECK = process.argv.includes('--check');
@@ -55,16 +55,6 @@ const NOISE = new Set([
   'like', 'when', 'how', 'you', 'your', 'has', 'have', 'will', 'if', 'so',
   'also', 'other', 'some', 'more', 'one', 'two', 'their', 'them', 'which',
 ]);
-
-const walk = (dir, out = []) => {
-  for (const name of fs.readdirSync(dir)) {
-    const full = path.join(dir, name);
-    if (isSkippedDir(name)) continue;
-    if (fs.statSync(full).isDirectory()) walk(full, out);
-    else if (full.endsWith('.clas.abap')) out.push(full);
-  }
-  return out;
-};
 
 /** camelCase and dotted names split into the words somebody would type. */
 function terms(entity) {
@@ -87,7 +77,7 @@ let already = 0;
  * `entity` and no DESCRIPT to derive from, so there is nothing to derive. */
 const GENERATED = 'z2ui5_cl_smpc_app_000';
 
-for (const file of walk(path.join(ROOT, 'src'))) {
+for (const file of walkFiles(path.join(ROOT, 'src'), '.clas.abap')) {
   const cls = path.basename(file, '.clas.abap');
   if (cls === GENERATED) continue;
   const source = fs.readFileSync(file, 'utf8');
