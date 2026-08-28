@@ -333,7 +333,7 @@ CLASS z2ui5_cl_smpc_app_558 IMPLEMENTATION.
     " JSONModel caps a bound aggregation at 100, so without this the table
     " stops 23 rows short (the app-252 / app-444 idiom)
     client->follow_up_action( val   = client->cs_event-set_size_limit
-                              t_arg = VALUE #( ( `200` ) ( `MAIN` ) ) ).
+                              t_arg = VALUE #( ( `200` ) ( client->cs_view-main ) ) ).
 
   ENDMETHOD.
 

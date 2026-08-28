@@ -107,7 +107,7 @@ CLASS z2ui5_cl_smpc_app_515 IMPLEMENTATION.
     " to 100. We want to show all the entries." Without it both Inputs' bound
     " suggestionItems stop at 100 of the 123 products (the app-252 / app-444 idiom)
     client->follow_up_action( val   = client->cs_event-set_size_limit
-                              t_arg = VALUE #( ( `100000` ) ( `MAIN` ) ) ).
+                              t_arg = VALUE #( ( `100000` ) ( client->cs_view-main ) ) ).
 
   ENDMETHOD.
 

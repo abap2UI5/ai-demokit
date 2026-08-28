@@ -104,7 +104,7 @@ CLASS z2ui5_cl_smpc_app_521 IMPLEMENTATION.
     " aggregation at 100 and the last 23 of the 123 products never reach the
     " suggestion list (the app-252 / app-444 idiom)
     client->follow_up_action( val   = client->cs_event-set_size_limit
-                              t_arg = VALUE #( ( `100000` ) ( `MAIN` ) ) ).
+                              t_arg = VALUE #( ( `100000` ) ( client->cs_view-main ) ) ).
 
   ENDMETHOD.
 
@@ -178,7 +178,7 @@ CLASS z2ui5_cl_smpc_app_521 IMPLEMENTATION.
     " the popup slot keeps its own model, so the raised limit has to be repeated
     " for it or the dialog itself stops at 100 rows
     client->follow_up_action( val   = client->cs_event-set_size_limit
-                              t_arg = VALUE #( ( `100000` ) ( `POPUP` ) ) ).
+                              t_arg = VALUE #( ( `100000` ) ( client->cs_view-popup ) ) ).
 
   ENDMETHOD.
 

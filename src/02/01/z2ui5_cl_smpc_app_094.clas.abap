@@ -40,7 +40,7 @@ CLASS z2ui5_cl_smpc_app_094 IMPLEMENTATION.
       " onInit: oModel.setSizeLimit( 10 ) - the model-level limit 1:1, so the
       " table renders the ten rows the original shows, not all 123
       client->follow_up_action( val   = client->cs_event-set_size_limit
-                                t_arg = VALUE #( ( `10` ) ( `MAIN` ) ) ).
+                                t_arg = VALUE #( ( `10` ) ( client->cs_view-main ) ) ).
       view_display( ).
     ELSEIF client->check_on_navigated( ).
       view_display( ).

@@ -165,7 +165,7 @@ CLASS z2ui5_cl_smpc_app_613 IMPLEMENTATION.
     " aggregation, not the transport, so shipping all 123 rows with the view does
     " not make it moot: both suggestion aggregations stop at 100 without this
     client->follow_up_action( val   = client->cs_event-set_size_limit
-                              t_arg = VALUE #( ( `1000000` ) ( `MAIN` ) ) ).
+                              t_arg = VALUE #( ( `1000000` ) ( client->cs_view-main ) ) ).
 
   ENDMETHOD.
 

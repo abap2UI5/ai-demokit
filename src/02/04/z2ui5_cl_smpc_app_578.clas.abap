@@ -507,7 +507,7 @@ CLASS z2ui5_cl_smpc_app_578 IMPLEMENTATION.
     " and the JSONModel caps a bound aggregation at 100, so the table would stop 23
     " rows short of the count its own title reports
     client->follow_up_action( val   = client->cs_event-set_size_limit
-                              t_arg = VALUE #( ( `1000` ) ( `MAIN` ) ) ).
+                              t_arg = VALUE #( ( `1000` ) ( client->cs_view-main ) ) ).
     " The column position of a FlexibleColumnLayout is LIVE control state:
     " view_display( ) destroys the MAIN slot and XMLView.create builds a fresh
     " tree, so the begin column comes back on the first beginColumnPages entry
