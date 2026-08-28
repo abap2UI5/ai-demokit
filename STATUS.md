@@ -70,6 +70,31 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   613. The 12-word cap is unchanged, so a few lines traded a weaker term for a
   control that is actually built.
 
+- [ ] **UI5 version skew forces app 611's two escape hatches, and no bump can
+  close them yet (measured 2026-08-28).** `ui5/universe.json` is 1.152.0,
+  `ui5/properties.json` 1.152.0-SNAPSHOT, and the `@openui5/*` /`@sapui5/*`
+  runtime packages 1.151.0 — so `sap.ui.unified.DateTypeRange.ariaHasPopup`
+  (@since 1.152.0), which is the whole point of `sap.ui.unified.sample.CalendarAriaHasPopup`,
+  does not exist for either half of `view_gates`. That is not a version
+  verdict a `POST_171` deviation can excuse: an unknown member reads as
+  `unknown-property` ("typo?") plus a view that fails to load, which is the
+  shape a real typo has. Hence `property_gate.skip` **and**
+  `render_smoke.skip` on one port.
+  **Neither is closable today, for two different reasons.** `@openui5/*`
+  1.152.0 is **not published** — npm's newest is 1.151.0 — so the render half
+  has no bump to take. And the property half would not move with one anyway:
+  the property gate judges against `@abap2ui5/linter`'s own
+  `data/properties.json`, which ships inside that package and changes only
+  with a linter release regenerated at 1.152. So this needs an upstream
+  OpenUI5 release AND a linter release, in that order.
+  What is done: the runtime packages are pinned EXACTLY (half of them carried
+  `^1.151.0`, which would have moved the render harness the day 1.152 publishes
+  with no diff to read), `check_pins` policy 5 holds the runtime packages and
+  the linter's metadata to one version and NOTES when the universe is ahead of
+  them, and both skip reasons say which release each is waiting on. The skips
+  are re-verified against the real render on every run, so they cannot outlive
+  the gap.
+
 - [~] **Two ports gave up on a capability that already exists — 607 done,
   600 awaiting its live check (found 2026-08-22, reworked 2026-08-23).**
   Neither was a framework gap; both sidecars reasoned from an older state of

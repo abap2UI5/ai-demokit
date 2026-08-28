@@ -65,7 +65,26 @@
  *      the other two weekly without ever touching it.
  *      Compared on major.minor: both snapshots are built from an OpenUI5
  *      master checkout and call themselves `-SNAPSHOT`, the same release line.
- *   5. Prose AGREES with the pin. A sentence that asserts a commit SHA IS the
+ *   5. The UI5 RUNTIME pins are one exact version, and it is the version the
+ *      linter judges against. Three things have to agree for `view_gates` to
+ *      hold a single opinion: the `@openui5/*` packages the render harness
+ *      loads the runtime from, the `@sapui5/*` packages `scope-of.mjs` reads
+ *      `@since` out of, and `@abap2ui5/linter`'s own `data/properties.json`,
+ *      which is what the property gate calls "exists". When they disagree the
+ *      failure is not a version verdict a `POST_171` deviation can excuse: a
+ *      member released after the metadata is `unknown-property` ("typo?") plus
+ *      a render load failure, and the only way out is a `property_gate` skip.
+ *      App 611 carries exactly that pair today.
+ *      Exact pins, not ranges: half of these carried `^1.151.0`, so a fresh
+ *      `npm install` the day 1.152 publishes would move the render harness's
+ *      runtime — and with it which skips are stale — without a diff. The
+ *      linter's metadata version cannot move that way (it ships inside the
+ *      package), so a caret here is a promise that only one side can keep.
+ *      `ui5/universe.json` is deliberately NOT part of the equality: it is
+ *      harvested from an OpenUI5 CHECKOUT and legitimately runs ahead of what
+ *      npm has published. A gap there is reported as a note, because it is
+ *      the state that forces the skips above.
+ *   6. Prose AGREES with the pin. A sentence that asserts a commit SHA IS the
  *      pin — in a markdown document or in a `meta/` sidecar's long-form text —
  *      must name A2UI5_PIN's actual value. Nothing checked this, and
  *      `bump-a2ui5.yaml` moves the pin on a schedule: the 2026-08-28 bump to
@@ -285,7 +304,63 @@ let snapshotNote = 'snapshot/universe unread';
   }
 }
 
-// --- 5. prose agrees with the pin -------------------------------------------
+// --- 5. the UI5 runtime pins are one exact version -------------------------
+let runtimeNote = 'runtime pins unread';
+{
+  const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
+  const dev = pkg.devDependencies || {};
+  const ui5 = Object.entries(dev).filter(([n]) => /^@(openui5|sapui5)\//.test(n));
+  if (!ui5.length) {
+    err('package.json declares no @openui5/@sapui5 devDependency — the render harness has no runtime to load');
+  } else {
+    const ranged = ui5.filter(([, v]) => !/^\d+\.\d+\.\d+$/.test(v));
+    if (ranged.length) {
+      err(`${ranged.length} UI5 runtime package(s) carry a RANGE, not a pin (${ranged.map(([n, v]) => `${n} ${v}`).join(', ')}) `
+        + '— a caret moves the render harness the day the next release publishes, with no diff to read');
+    }
+    const versions = [...new Set(ui5.map(([, v]) => v))];
+    if (versions.length > 1) {
+      err(`the UI5 runtime packages name ${versions.length} different versions (${versions.join(', ')}) `
+        + '— a partial bump leaves the render harness on one release and scope-of.mjs on another:\n'
+        + ui5.map(([n, v]) => `        ${v}  ${n}`).join('\n'));
+    }
+    const runtime = versions[0];
+    /* The linter's metadata ships inside the package, so this half only
+     * answers with node_modules present. Absent is a NOTE: check-pins is the
+     * offline gate and must not require an install to run at all. */
+    const lintProps = path.join(ROOT, 'node_modules', '@abap2ui5', 'linter', 'data', 'properties.json');
+    let judged = null;
+    if (fs.existsSync(lintProps)) {
+      judged = JSON.parse(fs.readFileSync(lintProps, 'utf8')).ui5Version;
+      if (versions.length === 1 && line(judged) && line(runtime)
+          && (line(judged)[0] !== line(runtime)[0] || line(judged)[1] !== line(runtime)[1])) {
+        err(`@abap2ui5/linter judges against control metadata ${judged} while the runtime packages are pinned at ${runtime} `
+          + '— the property gate and the render gate then disagree about what exists, and the difference surfaces as '
+          + '`unknown-property` plus a view that fails to load, which no POST_171 deviation can excuse');
+      }
+    }
+    runtimeNote = `UI5 runtime ${runtime}${judged ? ` = linter metadata ${judged}` : ' (linter metadata unread — no node_modules)'}`;
+    /* A NOTE, never an error. The universe is harvested from an OpenUI5
+     * CHECKOUT and runs ahead of npm by design — 1.152.0 was in the checkout
+     * for weeks while `npm view @openui5/sap.ui.core versions` ended at
+     * 1.151.0. The gap is not a defect to fix here; it is the state that
+     * FORCES a `property_gate` / `render_smoke` skip on any port using a
+     * member released in between, and saying so is how the next such skip is
+     * read as a pin consequence instead of as a port defect. */
+    const uniFile = path.join(ROOT, 'ui5', 'universe.json');
+    if (fs.existsSync(uniFile)) {
+      const uniRel = JSON.parse(fs.readFileSync(uniFile, 'utf8')).release;
+      const u = line(uniRel);
+      const r = line(runtime);
+      if (u && r && (u[0] > r[0] || (u[0] === r[0] && u[1] > r[1]))) {
+        runtimeNote += `; note: the sample universe is ${uniRel}, ahead of the runtime — a member released in between is `
+          + 'unknown-property + a failed render here, which only a property_gate/render_smoke skip can carry (app 611)';
+      }
+    }
+  }
+}
+
+// --- 6. prose agrees with the pin -------------------------------------------
 /* The markdown a reader arrives at. `docs/history.md` is deliberately absent:
  * a journal records what was true when the entry was written, which is history
  * and not drift — the same cut check-prose-names.mjs makes. */
@@ -368,4 +443,4 @@ if (errors) {
   console.log(`check-pins: ${errors} error(s).`);
   process.exit(1);
 }
-console.log(`check-pins: ok (A2UI5_PIN well-formed, ${checked} abap2UI5 dependency entr${checked === 1 ? 'y' : 'ies'} on release ${distinct[0] ?? 'none'}, ${snapshotNote}, ${pinProseNote})`);
+console.log(`check-pins: ok (A2UI5_PIN well-formed, ${checked} abap2UI5 dependency entr${checked === 1 ? 'y' : 'ies'} on release ${distinct[0] ?? 'none'}, ${snapshotNote}, ${runtimeNote}, ${pinProseNote})`);

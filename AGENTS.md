@@ -277,9 +277,11 @@ So **declaring the first `POST_171` deviation on a port moves it from
 which is where a port with no deviations belongs.
 
 Below the library there is **no further level**: the former batch subpackages
-`src/<NN>/b<nn>/` were flattened away (2026-08-12): 67 packages for 365 ports,
-20 of them holding a single class, most of them carrying the CTEXT
-`faithful ports`. A batch is a property of the generation run, not of the port,
+`src/<NN>/b<nn>/` were flattened away on 2026-08-12, when the corpus stood at
+67 packages for 365 ports — 20 of them holding a single class, most carrying
+the CTEXT `faithful ports`. Those two numbers are the STATE THAT WAS
+FLATTENED, not a current count; the live ones are in
+[`STATUS.md`](STATUS.md). A batch is a property of the generation run, not of the port,
 so it stays where it belongs — in the port's `meta/<class>.json` as the `batch`
 field. It is **not derivable from the path**; `scaffold.mjs` reads the next
 batch number back from the sidecars of the library, across both of that
@@ -577,6 +579,23 @@ Three abaplint checks run on every pull request; all must report **0 issues**:
 | `abap-cloud`    | `abaplint .github/abaplint/abap_cloud.jsonc`    | `Cloud` |
 | `abap-702`      | `npm run downport` → `abaplint .github/abaplint/abap_702.jsonc` | `v702` |
 
+#### Which framework version is authoritative for which claim
+
+Three different abap2UI5 versions govern this corpus at once, and each answers
+exactly one question. Reading a claim against the wrong one is how a sidecar
+comes to say a port is blocked when it is not (and the reverse):
+
+| Pin | Where | Answers |
+|---|---|---|
+| `A2UI5_PIN` is a **commit** on main and reads `2567ee10` | root file; `node-setup`, the web/Pages build and `bump-a2ui5.yaml` read it | **What a port DOES.** The transpiled backend, the e2e smoke and every reproducible build run this framework, so it decides whether a frontend action, an event-arg projection or a `control_by_id` method exists at all. A sidecar sentence about a wire working or not working is a statement about THIS pin, and `check_pins` policy 6 holds those sentences to it. |
+| a **release tag** (`1.143.0`) | `"branch"` on the abap2UI5 dependency in `abaplint.jsonc` and `abap_cloud.jsonc` | **Whether the corpus COMPILES for a reader.** A reader installs a release, not a commit, so the two syntax builds resolve the framework at the tag. It is deliberately behind the pin: a port using API that exists only on main must fail here. |
+| the **`702` branch** | `"branch"` on the abap2UI5 dependency in `.github/abaplint/abap_702.jsonc` | **Whether the corpus DOWNPORTS.** The framework's own `auto_downport` rebuilds that branch from main, so it is the one moving target in the build set — an allowlisted, reasoned exception in `check-pins.mjs` (policy 2) because `"branch"` feeds `git clone --branch`, which takes a branch or a tag and never a commit. The 702 build is therefore not byte-reproducible, and a 702-only failure that nothing here changed is the first thing to suspect on a branch-head move. |
+
+A fourth version is *not* abap2UI5 at all and is worth naming beside them so it
+is not mistaken for one: the **UI5 runtime** (`@openui5/*`, the linter's
+control metadata, `ui5/universe.json`) answers what a CONTROL is, and
+`check_pins` policy 5 holds its three halves together.
+
 **The rule block below the marker in the root `abaplint.jsonc` is a CHECKED
 COPY of the shared app rule set, and its source is
 [abap2UI5/abap2UI5](https://github.com/abap2UI5/abap2UI5)
@@ -700,7 +719,7 @@ The deterministic gates run on every PR, one workflow each; the heavy
 | Workflow | Job | What it gates |
 |----------|-----|---------------|
 | `pattern-lint.yaml` | `pattern_lint` | the distilled corpus-policy rules |
-| `check-pins.yaml` | `check_pins` | A2UI5_PIN well-formed, no stray/duplicate `"branch"` on the abap2UI5 dependency in any abaplint config |
+| `check-pins.yaml` | `check_pins` | the whole pin policy: `A2UI5_PIN` well-formed, no stray/duplicate `"branch"` on the abap2UI5 dependency in any abaplint config, `ui5/properties.json` and `ui5/descriptions.json` not older than `ui5/universe.json`, the `@openui5`/`@sapui5` runtime pinned exactly and to the version `@abap2ui5/linter` judges against, and **prose that cites the pin naming the pin's actual value** |
 | `chain-format.yaml` | `chain_format` | the view-chain layout (`npm run fmt:chains` fixes it) |
 | `structural-diff.yaml` | `structural_diff` | port vs. archived original, binding values included |
 | `data-fidelity.yaml` | `data_fidelity` | seeded values vs. the archived sample mocks |
@@ -708,6 +727,8 @@ The deterministic gates run on every PR, one workflow each; the heavy
 | `meta-valid.yaml` | `meta_valid` | sidecar schema + referential integrity, the archive the sidecars point at (`check-archive`, §4), and that every generated artefact (overview app, `README.md`, `api.md`, `STATUS.md`, `SAMPLES.md`) is in sync |
 | `tooling-tests.yaml` | `tooling_tests` | the gate/generator tooling's own fixture tests |
 | `check-prose-names.yaml` | `prose_names` | every `z2ui5_cl_*` class named in prose exists, here or in the repository that owns it |
+| `check-mcp-contract.yaml` | `check-mcp-contract` | the file paths and shapes abap2UI5/mcp-server reads out of this checkout (§5, the generation prompt) |
+| `check-family-nav.yaml` | `check-family-nav` | the shared navigation blocks of the sap.ui.layout Form family (apps 312–337) are intact |
 | `check-app-rules.yaml`, `check-keywords.yaml`, `check-summary.yaml` | same | the shared abaplint app rules, the `@keywords` and the `@summary` lines |
 
 What each gate checks, what a failure means and every legitimate escape hatch
@@ -731,8 +752,16 @@ at the bump PR, where the debt decision belongs.
 
 **Run before every commit:**
 ```bash
-npm run gates        # full offline gate set, fail-fast; needs NO node_modules and no network
+npm run gates        # full offline gate set, fail-fast; needs node_modules, no network
 ```
+It needs `npm ci` twice over, and the repository says so in two places: the
+chain opens with `check:chains`, which is the `abap2ui5lint` binary, and it
+runs `generate-overview.mjs`, whose `scripts/lib/format-chain.mjs` is an
+adapter over `@abap2ui5/linter` — that file's own header says it makes the
+overview generator, and the pre-commit hook that runs it, need node_modules,
+and `meta-valid.yaml` carries the same note next to its `npm ci`. What `gates`
+does not need is the **network**: every step reads this checkout and the
+installed packages, nothing else.
 It chains: chain-format → check-prose-names → pattern-lint → check-pins →
 check-archive → validate-meta → structural-diff → data-fidelity →
 check-mcp-contract →
@@ -1159,7 +1188,7 @@ this repository: it lives in the OpenUI5 sources in
 | | |
 |---|---|
 | `npm run descriptions -- --openui5 <checkout>` | snapshots all 793 demo kit descriptions into [`ui5/descriptions.json`](ui5/descriptions.json), with the OpenUI5 commit they came from |
-| `npm run summary` | writes them onto the classes — 413 ports from the demo kit, 3 from the snapshot's `written` block, 14 derived (the SAPUI5-only collection in `src/03` has no upstream sample) |
+| `npm run summary` | writes them onto the classes — the split is printed by the run itself (`617 from the demo kit, 5 written by hand, 14 derived`, 2026-08-28) rather than retyped here, since it moves with every batch; the derived ones are the SAPUI5-only collection in `src/03`, which has no upstream sample |
 | `npm run check:summary` | holds every line to the snapshot |
 
 A snapshot rather than a live read, for the same reason `ui5/` archives the
@@ -1167,9 +1196,11 @@ sample sources: a port batch and a CI run both have to work without a 43k-file
 OpenUI5 checkout, and an upstream edit must show up as a diff somebody reads
 rather than silently rewrite 400 class files.
 
-Three samples the demo kit does not describe — two shared "base" pages that are
-not samples of their own, one whose upstream description is empty — sit in the
-snapshot's `written` block, each with a `why`. A port that matches none of the
+A handful of samples the demo kit does not describe — shared "base" pages that
+are not samples of their own, and one whose upstream description is empty —
+sit in the snapshot's `written` block, each with a `why`. The block only ever
+shrinks by itself: app 611's entry said the demo kit did not carry
+`CalendarAriaHasPopup` *yet*, and the 2026-08-28 snapshot refresh retired it. A port that matches none of the
 sources **fails** `check:summary` instead of being skipped: the point is that a
 new undescribed sample gets noticed.
 
