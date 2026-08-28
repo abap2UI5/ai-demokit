@@ -369,10 +369,13 @@ for (const cls of sidecarSet) if (!portSet.has(cls)) err(`meta/${cls}.json has n
 const INTERACTIONS_DIR = path.join(META, 'interactions');
 const OVERVIEW_CLASS = 'z2ui5_cl_smpc_app_000';
 let interactionGaps = [];
-if (fs.existsSync(INTERACTIONS_DIR)) {
-  const mods = fs.readdirSync(INTERACTIONS_DIR)
-    .filter((f) => f.endsWith('.mjs'))
-    .map((f) => f.replace(/\.mjs$/, ''));
+{
+  /* Not guarded on the directory EXISTING: an absent meta/interactions/ is
+   * 100% coverage debt, which is the one state the advisory most has to say
+   * out loud. Only the per-module checks below need the files. */
+  const mods = fs.existsSync(INTERACTIONS_DIR)
+    ? fs.readdirSync(INTERACTIONS_DIR).filter((f) => f.endsWith('.mjs')).map((f) => f.replace(/\.mjs$/, ''))
+    : [];
   const validClasses = new Set([...sidecars.map((f) => f.replace(/\.json$/, '')), OVERVIEW_CLASS]);
   /* An escape hatch keyed on free prose must be UNAMBIGUOUS (STATUS.md, the
    * lesson two prior incidents wrote). `waitFor` was a bare substring test

@@ -26,7 +26,7 @@
     "e2e": "node scripts/e2e-smoke.mjs --strict",
     "syfixes": "find src -type f -name '*.abap' -exec sed -i -e 's/ RAISE EXCEPTION TYPE cx_sy_itab_line_not_found/ ASSERT 1 = 0/g' {} + ",
     "abaplintpathfix": "sed -i 's|\"files\": \"/\\.\\.\\/\\.\\.\\/src\\/\\*\\*\\/\\*\\.\\*\"|\"files\": \"/src/**/*.*\"|g' abaplint.jsonc",
-    "downport": "abaplint --fix .github/abaplint/abap_702.jsonc && npm run syfixes && cp -f .github/abaplint/abap_702.jsonc abaplint.jsonc && npm run abaplintpathfix",
+    "downport": "node scripts/downport-guard.mjs && abaplint --fix .github/abaplint/abap_702.jsonc && npm run syfixes && cp -f .github/abaplint/abap_702.jsonc abaplint.jsonc && npm run abaplintpathfix",
     "check:app-rules": "node scripts/check-app-rules.mjs",
     "check:family-nav": "node scripts/check-family-nav.mjs",
     "check:prose": "node scripts/check-prose-names.mjs",

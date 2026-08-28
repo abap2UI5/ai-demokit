@@ -1008,6 +1008,13 @@ e2e gotchas in `e2e-debugging`, generator gotchas in `regenerate-artefacts`).
   the 702 config. Never run it on the tree you intend to commit; run it in a
   throwaway `git worktree` (or copy) and check `abap_702.jsonc` there. If you did
   run it in place, `git checkout -- .` to restore before committing.
+  **`scripts/downport-guard.mjs` now makes that mistake impossible to make by
+  accident**: the script REFUSES to start when `git status` shows uncommitted
+  work under `src/` or in `abaplint.jsonc`, and names the paths. CI runs on a
+  fresh checkout, so it never sees the guard. The escape is
+  `DOWNPORT_FORCE=1 npm run downport` — an environment variable and not a flag,
+  because npm appends `-- <args>` to the END of the script chain, where the
+  guard never sees them.
   **A file with a parser error poisons the whole run**: the `--fix` `&&`-chain
   exits non-zero, later steps never run, and the copy is left half-rewritten —
   every file then reports downport errors, including clean ones. Fix (or drop)
