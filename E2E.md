@@ -86,6 +86,23 @@ npm run e2e:build            # (re)build the transpiled backend — a port edite
 npm run e2e                  # boots each port headless, asserts boot+render+no-error
 ```
 
+`npm run e2e` takes two subsetting flags, and CI uses both:
+
+```bash
+node scripts/e2e-smoke.mjs --only 462,350   # named ports (debugging, and the PR job)
+node scripts/e2e-smoke.mjs --shard 2/4      # the 2nd of 4 round-robin slices
+```
+
+The shard is taken round-robin over the SORTED class list, not in contiguous
+blocks: the ports are numbered in batch order, so blocks would put a whole
+library — and its whole class of failure — in one shard, and a shard that is
+always red stops being read. It is deterministic, so a red shard is
+reproducible with the same flag. The overview app rides with shard 1.
+
+`e2e-pr.yaml` runs the ports a pull request touches (`--only`, from
+`scripts/e2e-changed.mjs`) and `e2e-nightly.yaml` runs the corpus in four
+shards (`--shard i/4`).
+
 See `scripts/e2e-build.mjs` / `scripts/e2e-smoke.mjs` for details, and AGENTS.md
 (`e2e_smoke` gate) for where it fits among the checks.
 

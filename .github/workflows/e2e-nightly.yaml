@@ -21,6 +21,9 @@ permissions:
   contents: read
   issues: write
 
+# Workflow level, so it bounds RUNS and not the four shards of one run: every
+# matrix job belongs to the same run and shares this group without queueing
+# behind its siblings.
 concurrency:
   group: e2e-nightly
   cancel-in-progress: true
@@ -28,12 +31,27 @@ concurrency:
 jobs:
   e2e:
     runs-on: ubuntu-latest
-    # Wall clock grows with the corpus: ~19 min transpile + ~4 s per port.
-    # At 416 ports the 45 min this job used to allow was already too short —
-    # 2026-08-02/04/06/07/10/12 all died mid-smoke as "cancelled", i.e. the
-    # badge went grey for a timeout, not for a regression. Sized for roughly
-    # twice today's ~40 min so a growing corpus does not silently re-hit it.
-    timeout-minutes: 90
+    # SHARDED since 2026-08-28. The corpus ran in ONE job at ~19 min transpile
+    # + ~4 s per port, which had reached 68 minutes of the 90-minute budget and
+    # grows with every batch — the same budget that had already been re-sized
+    # once after 2026-08-02/04/06/07/10/12 all died mid-smoke as "cancelled",
+    # i.e. the badge went grey for a timeout rather than for a regression.
+    # Four shards halve the wall clock and, more usefully, isolate a failure:
+    # one flaky port now reddens one shard instead of the whole nightly, and
+    # the shard is reproducible with the same flag.
+    #
+    # Each shard rebuilds the backend rather than downloading one artifact.
+    # That repeats the ~19-minute transpile four times, which is the cost
+    # deliberately paid: the build's product is `.abap2UI5/node/output` PLUS
+    # that checkout's node_modules and its express shim, so the artifact would
+    # be the whole framework tree — slower to move than to rebuild, and a
+    # cache key nobody would notice going stale. Revisit if the transpile
+    # grows past the smoke.
+    strategy:
+      fail-fast: false        # one red shard must not hide the other three
+      matrix:
+        shard: [1, 2, 3, 4]
+    timeout-minutes: 60
     steps:
     - name: Checkout samples-controls
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -69,13 +87,13 @@ jobs:
     # `bash -e {0}` WITHOUT pipefail, so without it `tee`'s exit code (always 0)
     # masks the smoke's and this gate reports green while failing. The log lives
     # in RUNNER_TEMP, outside the work tree.
-    - name: Run every port as the real app
+    - name: Run this shard's ports as the real app
       id: smoke
       env:
         A2UI5_HOME: ${{ github.workspace }}/.abap2UI5
       run: |
         set -o pipefail
-        node scripts/e2e-smoke.mjs --strict 2>&1 | tee "$RUNNER_TEMP/e2e-smoke.log"
+        node scripts/e2e-smoke.mjs --strict --shard ${{ matrix.shard }}/4 2>&1 | tee "$RUNNER_TEMP/e2e-smoke.log"
 
     # A red nightly is a regression in a LIVE_TEST-class wire — it must reach
     # someone, not sit in the Actions tab until the next release.
@@ -118,6 +136,7 @@ jobs:
       if: ${{ !cancelled() }}
       env:
         SMOKE: ${{ steps.smoke.outcome }}
+        SHARD: ${{ matrix.shard }}
         RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       run: |
         set -euo pipefail
@@ -129,15 +148,15 @@ jobs:
         # report exists to stop.
         case "$SMOKE" in
           success)
-            heading='e2e-nightly is green'
+            heading="e2e-nightly shard $SHARD/4 is green"
             verdict='Every port booted as the real app and every interaction wire held.'
             ;;
           failure)
-            heading='e2e-nightly is RED — a live wire regressed'
+            heading="e2e-nightly shard $SHARD/4 is RED — a live wire regressed"
             verdict='**The strict e2e smoke FAILED.** Every `FAIL` line below is a port whose live wire regressed — or a harness effect, see `.claude/skills/e2e-debugging`. Fix the port or record it in STATUS.md: a nightly that stays red for days stops being read.'
             ;;
           *)
-            heading='e2e-nightly is RED — the smoke never ran'
+            heading="e2e-nightly shard $SHARD/4 is RED — the smoke never ran"
             verdict='**The e2e smoke did not run.** `npm ci`, the Playwright install, the abap2UI5 clone or `npm run e2e:build` died first, so nothing about the ports is known yet — but a backend that no longer builds against the pinned framework is itself the finding.'
             ;;
         esac
@@ -173,10 +192,14 @@ jobs:
       env:
         GH_TOKEN: ${{ github.token }}
         SMOKE: ${{ steps.smoke.outcome }}
+        SHARD: ${{ matrix.shard }}
         RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       run: |
         set -uo pipefail
-        title='e2e-nightly is red'
+        # ONE ISSUE PER SHARD. A single title across the matrix would have four
+        # jobs racing on the same item, and the green ones would close what the
+        # red one had just filed.
+        title="e2e-nightly shard $SHARD/4 is red"
         existing="$(gh issue list --state open --search "$title in:title" \
                       --json number --jq '.[0].number' 2>/dev/null || true)"
 

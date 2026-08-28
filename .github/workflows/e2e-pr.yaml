@@ -1,0 +1,126 @@
+name: e2e-pr
+
+# The ports a pull request TOUCHES, run as the real app.
+#
+# Nothing in the PR gate set exercised a port in a browser. Every gate that
+# runs there is static — structural-diff compares trees, view_gates
+# reconstructs a view and renders it with no backend behind it — so a batch
+# merged on static evidence alone and its first real execution was
+# `e2e-nightly`, up to 24 hours later, in a run over 623 apps where one FAIL
+# line is easy to attribute to the wrong change. Half the defects this
+# repository has recorded were only ever visible in a running app (a dead
+# `backToPage`, a lost NavContainer position, a value cast to the literal
+# word "false").
+#
+# The whole corpus does not fit in a PR gate (~19 min transpile plus ~4 s per
+# port), but the touched ports do, and that is almost always a handful.
+# `scripts/e2e-changed.mjs` maps the diff to classes and is unit-tested
+# (`npm test`), so the mapping is not shell guesswork.
+#
+# Two deliberate properties, both from `abap-scope.mjs`'s shape:
+#
+#   - A change the map cannot attribute to a subset — A2UI5_PIN, the harness,
+#     package.json, this workflow — answers `all`, and the job then SAYS the
+#     corpus-wide run is the nightly's job rather than pretending a subset
+#     covered it. A subset that quietly misses the change it should have
+#     caught is worse than no PR job.
+#   - The job ALWAYS runs and always reports; only its expensive steps are
+#     skipped. Branch protection tracks a job name, and a required check that
+#     never reports blocks the merge.
+#
+# The nightly stays the full-corpus run — this is a first execution, not a
+# replacement for it.
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: e2e-pr-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e_pr:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        # the merge-base has to be reachable to diff against it
+        fetch-depth: 0
+
+    - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      with:
+        node-version: '22'
+
+    - name: Which ports does this pull request touch
+      id: scope
+      env:
+        BASE: ${{ github.event.pull_request.base.sha }}
+        HEAD: ${{ github.event.pull_request.head.sha }}
+      run: |
+        set -euo pipefail
+        git diff --name-only "$BASE" "$HEAD" > "$RUNNER_TEMP/changed.txt"
+        ports="$(xargs -a "$RUNNER_TEMP/changed.txt" -r node scripts/e2e-changed.mjs)"
+        if [ "$ports" = "all" ]; then
+          echo "run=false" >> "$GITHUB_OUTPUT"
+          echo "reason=the change reaches every port (framework pin, harness or build) — the full corpus is e2e-nightly's job, not a subset's" >> "$GITHUB_OUTPUT"
+        elif [ -z "$ports" ]; then
+          echo "run=false" >> "$GITHUB_OUTPUT"
+          echo "reason=no port, sidecar or interaction module changed" >> "$GITHUB_OUTPUT"
+        else
+          echo "run=true" >> "$GITHUB_OUTPUT"
+          echo "only=$(echo "$ports" | paste -sd, -)" >> "$GITHUB_OUTPUT"
+          echo "reason=$(echo "$ports" | wc -l) port(s) touched" >> "$GITHUB_OUTPUT"
+        fi
+        echo "$ports"
+
+    - if: steps.scope.outputs.run == 'true'
+      run: npm ci
+
+    - if: steps.scope.outputs.run == 'true'
+      run: npx playwright install --with-deps chromium
+
+    - name: Clone abap2UI5 at the pinned commit
+      if: steps.scope.outputs.run == 'true'
+      run: |
+        set -euo pipefail
+        git clone --depth 1 https://github.com/abap2UI5/abap2UI5.git .abap2UI5
+        # the PIN, not main: a pull request is judged against the framework a
+        # reproducible build resolves. e2e-nightly is the one that runs main
+        # tip, deliberately, as the upstream canary.
+        cd .abap2UI5
+        git fetch --depth 1 origin "$(cat ../A2UI5_PIN)"
+        git checkout FETCH_HEAD
+        npm ci
+
+    - name: Build the transpiled backend
+      if: steps.scope.outputs.run == 'true'
+      env:
+        A2UI5_HOME: ${{ github.workspace }}/.abap2UI5
+      run: npm run e2e:build
+
+    # Never softened: a touched port that no longer runs is the correct reason
+    # for this job to be red, and it is the whole point of running it here
+    # rather than tomorrow.
+    - name: Run the touched ports as the real app
+      if: steps.scope.outputs.run == 'true'
+      env:
+        A2UI5_HOME: ${{ github.workspace }}/.abap2UI5
+      run: node scripts/e2e-smoke.mjs --strict --only "${{ steps.scope.outputs.only }}"
+
+    - name: Report
+      if: ${{ !cancelled() }}
+      run: |
+        set -euo pipefail
+        {
+          printf '## e2e-pr\n\n'
+          printf '%s\n\n' "${{ steps.scope.outputs.reason }}"
+          if [ "${{ steps.scope.outputs.run }}" = "true" ]; then
+            printf 'Ran: `%s`\n' "${{ steps.scope.outputs.only }}"
+          else
+            printf 'No port was booted here. The full-corpus run is `e2e-nightly`.\n'
+          fi
+        } >> "$GITHUB_STEP_SUMMARY"

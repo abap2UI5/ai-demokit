@@ -713,8 +713,15 @@ broken view. Splitting cost nothing: the jobs never shared a setup step (each
 one checks out and installs node for itself, and only `view_gates` runs
 `npm ci`), so they were already seven runners in parallel and still are.
 
-The deterministic gates run on every PR, one workflow each; the heavy
-`e2e_smoke` runs in `e2e-nightly.yaml` (scheduled + on demand):
+The deterministic gates run on every PR, one workflow each. The heavy
+`e2e_smoke` runs twice: `e2e-pr.yaml` boots the ports a pull request TOUCHES
+(derived from the diff by `scripts/e2e-changed.mjs`, unit-tested; a change
+reaching every port — the pin, the harness, the build — says so and leaves the
+corpus to the nightly rather than pretending a subset covered it), and
+`e2e-nightly.yaml` runs the whole corpus in four shards (scheduled + on
+demand). Until 2026-08-28 nothing in the PR set exercised a port in a browser
+at all, so a batch merged on static evidence and its first real execution was
+up to 24 hours later:
 
 | Workflow | Job | What it gates |
 |----------|-----|---------------|
@@ -728,6 +735,7 @@ The deterministic gates run on every PR, one workflow each; the heavy
 | `tooling-tests.yaml` | `tooling_tests` | the gate/generator tooling's own fixture tests |
 | `check-prose-names.yaml` | `prose_names` | every `z2ui5_cl_*` class named in prose exists, here or in the repository that owns it |
 | `check-mcp-contract.yaml` | `check-mcp-contract` | the file paths and shapes abap2UI5/mcp-server reads out of this checkout (§5, the generation prompt) |
+| `e2e-pr.yaml` | `e2e_pr` | the ports this pull request touches, booted as the real app (transpiled backend + headless Chromium) |
 | `check-family-nav.yaml` | `check-family-nav` | the shared navigation blocks of the sap.ui.layout Form family (apps 312–337) are intact |
 | `check-app-rules.yaml`, `check-keywords.yaml`, `check-summary.yaml` | same | the shared abaplint app rules, the `@keywords` and the `@summary` lines |
 

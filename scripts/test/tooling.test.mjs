@@ -933,3 +933,65 @@ test('pattern-lint: an ABAP Doc header on a port is an error, and the clean fixt
     fs.rmSync(root, { recursive: true, force: true });
   }
 });
+
+/* ------------------------------------------------------- e2e-changed.mjs */
+
+/*
+ * Which ports a pull request boots. Same shape as abap-scope.mjs and the same
+ * safety property: a change the map cannot attribute to a subset answers
+ * `all`, never "nothing" — a subset that quietly misses the change it should
+ * have caught is worse than no PR job.
+ */
+test('e2e-changed: a port, its sidecar and its interaction module all name the port', async () => {
+  const { portsToRun } = await import('../e2e-changed.mjs');
+
+  assert.deepEqual(
+    portsToRun(['src/01/01/z2ui5_cl_smpc_app_462.clas.abap']).classes,
+    ['z2ui5_cl_smpc_app_462'],
+  );
+  assert.deepEqual(portsToRun(['meta/z2ui5_cl_smpc_app_101.json']).classes, ['z2ui5_cl_smpc_app_101']);
+  assert.deepEqual(
+    portsToRun(['meta/interactions/z2ui5_cl_smpc_app_350.mjs']).classes,
+    ['z2ui5_cl_smpc_app_350'],
+  );
+
+  // deduplicated and sorted, so the --only list is stable
+  assert.deepEqual(
+    portsToRun([
+      'meta/interactions/z2ui5_cl_smpc_app_350.mjs',
+      'src/02/02/z2ui5_cl_smpc_app_350.clas.abap',
+      'meta/z2ui5_cl_smpc_app_101.json',
+    ]).classes,
+    ['z2ui5_cl_smpc_app_101', 'z2ui5_cl_smpc_app_350'],
+  );
+
+  // the overview app is a port for this purpose — it sits directly under src/
+  assert.deepEqual(portsToRun(['src/z2ui5_cl_smpc_app_000.clas.abap']).classes, ['z2ui5_cl_smpc_app_000']);
+});
+
+test('e2e-changed: prose and generated artefacts boot nothing', async () => {
+  const { portsToRun } = await import('../e2e-changed.mjs');
+
+  const inert = ['README.md', 'AGENTS.md', 'api.md', 'catalogue.json', 'SAMPLES.md',
+    'ui5/sap.m/FixtureGood/V.view.xml', 'docs/history.md', 'scripts/generate-overview.mjs'];
+  const r = portsToRun(inert);
+  assert.equal(r.all, false);
+  assert.deepEqual(r.classes, []);
+  assert.match(r.reason, /no port, sidecar or interaction module changed/);
+});
+
+test('e2e-changed: a corpus-wide change answers `all` rather than a subset', async () => {
+  const { portsToRun } = await import('../e2e-changed.mjs');
+
+  for (const f of ['A2UI5_PIN', 'package.json', 'package-lock.json', 'scripts/e2e-build.mjs',
+    'scripts/e2e-smoke.mjs', 'scripts/lib-e2e.mjs', 'web/ci/patch_open_abap_xml.mjs',
+    '.github/workflows/e2e-pr.yaml']) {
+    assert.equal(portsToRun([f]).all, true, `${f} reaches every port`);
+  }
+
+  // and it wins over a port that happens to be in the same change: the subset
+  // would be a guess about which ports the pin moved
+  const mixed = portsToRun(['A2UI5_PIN', 'src/01/01/z2ui5_cl_smpc_app_462.clas.abap']);
+  assert.equal(mixed.all, true);
+  assert.match(mixed.reason, /A2UI5_PIN reaches every port/);
+});
