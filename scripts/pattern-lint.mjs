@@ -257,10 +257,19 @@ const RULES = [
       if (or) {
         out.push({ line: lineOf(content, or.index), text: 'IF check_on_init( ) OR check_on_navigated( ) — the OR is redundant' });
       }
-      const fork = content.match(
-        /^([ \t]*)IF client->check_on_init\( \)\.\n\1[ \t]+view_display\( \)\.\n\1ELSEIF client->check_on_navigated\( \)\./m);
+      // BOTH arms have to be the bare view_display( ) — where the navigated
+      // branch does something else (samples' app 488/012 call on_navigation( ),
+      // app 024 handles an app return first) the fork DOES decide something and
+      // the init branch stays. Blank lines between the branches are the samples
+      // dispatcher style and must not hide the finding.
+      const B = '(?:[ \\t]*\\n)*';
+      const fork = content.match(new RegExp(
+        '^([ \\t]*)IF client->check_on_init\\( \\)\\.\\n' + B +
+        '\\1([ \\t]+)view_display\\( \\)\\.\\n' + B +
+        '\\1ELSEIF client->check_on_navigated\\( \\)\\.\\n' + B +
+        '\\1\\2view_display\\( \\)\\.$', 'm'));
       if (fork) {
-        out.push({ line: lineOf(content, fork.index), text: 'the check_on_init branch only calls view_display( ) — drop it, check_on_navigated( ) already covers the first start' });
+        out.push({ line: lineOf(content, fork.index), text: 'both arms of the fork only call view_display( ) — drop the check_on_init branch, check_on_navigated( ) already covers the first start' });
       }
       return out;
     },
@@ -347,8 +356,11 @@ const RULES = [
         if (l.includes('"')) return true;
         if (l.includes(')->') || l.includes('->a(') || l.includes('->ele(') || l.includes('->tag(')) return true;
         if (l.includes('t_arg')) return true;
-        // a classic call's parameter SECTIONS carry meaning stacked
-        if (/\b(EXPORTING|IMPORTING|CHANGING|EXCEPTIONS|RECEIVING|TABLES)\b/.test(l)) return true;
+        // the SECTIONS of a classic or RAP statement carry meaning stacked
+        if (/\b(EXPORTING|IMPORTING|CHANGING|EXCEPTIONS|RECEIVING|TABLES|FAILED|REPORTED|MAPPED|RESPONSE|ENTITIES|ENTITY)\b/.test(l)) return true;
+        // a string template split with && is a deliberate break for a long
+        // literal - joined, abaplint then demands reduce_string_templates
+        if (/&&\s*$/.test(l) || /^\s*&&/.test(l)) return true;
         if (/^\s*\( [a-z_0-9]+ = /.test(l)) return true;
         if (l.includes('VALUE #( (')) return true;
         return false;
