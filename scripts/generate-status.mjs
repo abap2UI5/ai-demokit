@@ -42,8 +42,19 @@ const devCount = {};
 const liveTestPorts = new Set();
 const catCount = {}; // src/01 -> n  (UI5 flavour x release, AGENTS §3)
 const libCount = {}; // sap.m -> n
-let sdiffSkips = 0;
-let rsmokeSkips = 0;
+/* Every escape hatch validate-meta accepts, counted. This block used to count
+ * two — structural_diff and render_smoke — and printed "2 structural-diff · 6
+ * render-smoke", which read as the complete set. It was not: `property_gate`
+ * is the fourth hatch and the NARROWEST of them (it names the finding TYPES it
+ * suppresses, never the gate), which is exactly why it is the one whose use is
+ * worth seeing — apps 592 (invalid-aggregation-child) and 611 (unknown-
+ * property) carry one each and neither appeared in the generated state at all.
+ * `data_fidelity` is accepted too and is unused today; it is listed here so
+ * that the first port to declare one shows up in the state block rather than
+ * in nobody's field of view. The list is the KNOWN_KEYS hatch set, so adding a
+ * hatch to validate-meta and forgetting it here is one place to notice. */
+const HATCHES = ['structural_diff', 'render_smoke', 'data_fidelity', 'property_gate'];
+const skipCount = Object.fromEntries(HATCHES.map((h) => [h, 0]));
 for (const p of ports) {
   statusCount[p.status] = (statusCount[p.status] || 0) + 1;
   for (const d of p.deviations || []) {
@@ -56,8 +67,7 @@ for (const p of ports) {
     const lib = LIB_CTEXT[m[2]] || `src/../${m[2]}`;
     libCount[lib] = (libCount[lib] || 0) + 1;
   }
-  if (p.structural_diff?.skip) sdiffSkips++;
-  if (p.render_smoke?.skip) rsmokeSkips++;
+  for (const h of HATCHES) if (p[h]?.skip) skipCount[h] += 1;
 }
 
 // --- scope verdict per ported sample (same fallback as generate-coverage,
@@ -99,7 +109,8 @@ lines.push(`| Per library | ${libLine} |`);
 lines.push(`| Status ladder | ${statusCount.generated} \`generated\` · ${statusCount.reviewed} \`reviewed\` · ${statusCount.checked} \`checked\` (live-verified) |`);
 lines.push(`| Deviations | ${devLine} |`);
 lines.push(`| Open LIVE_TESTs | **${liveTestPorts.size} ports** carry at least one \`LIVE_TEST\` deviation — the automated close path is the e2e interaction harness (AGENTS §6 \`e2e_smoke\`) |`);
-lines.push(`| Declared gate skips | ${sdiffSkips} structural-diff · ${rsmokeSkips} render-smoke (each re-verified per run — a stale skip FAILS) |`);
+const skipLine = HATCHES.map((h) => `${skipCount[h]} ${h.replace('_', '-')}`).join(' · ');
+lines.push(`| Declared gate skips | ${skipLine} (each re-verified per run — a stale skip FAILS) |`);
 lines.push(`| Out-of-scope ported samples | ${outOfScope.length === 0 ? 'none' : outOfScope.map((s) => `\`${s}\``).join(' · ')}${outOfScope.length ? ' — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries' : ''} |`);
 lines.push('');
 lines.push('_Coverage per library (ported / in scope) is generated into the [README](README.md#coverage); one row per sample in [api.md](api.md)._');
