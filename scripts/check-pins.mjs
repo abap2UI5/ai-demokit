@@ -56,6 +56,22 @@
  *      never render (sap.f.HeroBanner, @1.152, is the case that named this).
  *      Compared on major.minor: the snapshot is built from an OpenUI5 master
  *      checkout and calls itself `-SNAPSHOT`, which is the same release line.
+ *   5. Prose AGREES with the pin. A sentence that asserts a commit SHA IS the
+ *      pin — in a markdown document or in a `meta/` sidecar's long-form text —
+ *      must name A2UI5_PIN's actual value. Nothing checked this, and
+ *      `bump-a2ui5.yaml` moves the pin on a schedule: the 2026-08-28 bump to
+ *      `2567ee10` left SEVEN documents saying the pin was still `bf92a79c`,
+ *      six of them the sidecars of ports that were "blocked on the pin" and
+ *      had not been for hours. That is the same failure mode
+ *      `check-prose-names.mjs` exists for one noun over, so it reads the same
+ *      two scopes: the prose files, and every sidecar's `deviations[].what` /
+ *      `audit.note` / `checked.note` / skip `reason`.
+ *      Only an ASSERTION is judged — "A2UI5_PIN is <sha>", "the pin moved to
+ *      <sha>", "the pin caught up (<sha>)". A past-tense sentence is HISTORY
+ *      and is left alone ("A2UI5_PIN sat at bf92a79c while main moved 61
+ *      commits" is a true record of a run that happened), exactly as the
+ *      journal is: `docs/history.md` is out of scope for the same reason
+ *      check-prose-names leaves it out.
  *
  * A deliberate, temporary feature-branch re-point (the documented re-pin
  * flow) must therefore edit ALLOWED_BRANCHES below in the same change — the
@@ -240,8 +256,87 @@ let snapshotNote = 'snapshot/universe unread';
   }
 }
 
+// --- 5. prose agrees with the pin -------------------------------------------
+/* The markdown a reader arrives at. `docs/history.md` is deliberately absent:
+ * a journal records what was true when the entry was written, which is history
+ * and not drift — the same cut check-prose-names.mjs makes. */
+const PROSE = [
+  'README.md', 'AGENTS.md', 'CLAUDE.md', 'CONTRIBUTING.md', 'TRAINING.md',
+  'STATUS.md', 'CAPABILITIES.md', 'E2E.md', 'docs/upstream-requests.md',
+];
+
+/* The other half of the prose, and in a sample repository the bigger half —
+ * the shape check-prose-names.mjs reads, plus the skip reasons, which are
+ * prose about a gate and cite the pin exactly as a deviation does. */
+function sidecarProse(file) {
+  const out = [];
+  let doc;
+  try { doc = JSON.parse(fs.readFileSync(file, 'utf8')); } catch { return out; }
+  const at = path.relative(ROOT, file).split(path.sep).join('/');
+  (doc.deviations ?? []).forEach((d, i) => {
+    if (typeof d?.what === 'string') out.push({ label: `${at} deviations[${i}].what`, text: d.what });
+  });
+  for (const [key, holder] of [['audit', doc.audit], ['checked', doc.checked]]) {
+    if (typeof holder?.note === 'string') out.push({ label: `${at} ${key}.note`, text: holder.note });
+  }
+  for (const key of ['render_smoke', 'structural_diff', 'data_fidelity', 'property_gate']) {
+    if (typeof doc[key]?.reason === 'string') out.push({ label: `${at} ${key}.reason`, text: doc[key].reason });
+  }
+  return out;
+}
+
+/* An ASSERTION that some SHA is the pin, in either word order. Present tense
+ * and completed moves count ("is", "moved to", "caught up … (<sha>)"); a past
+ * state does not ("was", "sat at", "used to be", "predated") — that is a
+ * record of a run, and rewriting it would falsify the history instead. */
+const PIN_SUBJECT = '(?:`?\\bA2UI5_PIN\\b`?|\\bthe pin\\b)';
+const PIN_VERB = '(?:is|are|reads|now reads|stands|remains|sits|points|moved|advanced|bumped|caught up|now)';
+let pinProseNote = 'prose unread';
+const PIN_CLAIMS = [
+  // "A2UI5_PIN is `2567ee10`", "the pin is still at `bf92a79c`",
+  // "the pin caught up on 2026-08-28 (`2567ee10`)"
+  new RegExp(`${PIN_SUBJECT}[^.\\n]{0,20}?\\b${PIN_VERB}\\b[^.\\n]{0,45}?\`?\\b([0-9a-f]{7,40})\\b`, 'gi'),
+  // "bump-a2ui5 advanced `A2UI5_PIN` to `2567ee10`"
+  new RegExp(`\\b(?:moved|advanced|bumped|set)\\s+${PIN_SUBJECT}\\s+to\\s+\`?\\b([0-9a-f]{7,40})\\b`, 'gi'),
+];
+
+{
+  const pin = fs.existsSync(pinFile) ? fs.readFileSync(pinFile, 'utf8').trim().toLowerCase() : '';
+  const sources = [];
+  for (const rel of PROSE) {
+    const at = path.join(ROOT, rel);
+    if (fs.existsSync(at)) sources.push({ label: rel, text: fs.readFileSync(at, 'utf8') });
+  }
+  const metaDir = path.join(ROOT, 'meta');
+  if (fs.existsSync(metaDir)) {
+    for (const name of fs.readdirSync(metaDir).sort()) {
+      if (name.endsWith('.json')) sources.push(...sidecarProse(path.join(metaDir, name)));
+    }
+  }
+  let claims = 0;
+  for (const { label, text } of sources) {
+    const seen = new Set();
+    for (const re of PIN_CLAIMS) {
+      re.lastIndex = 0;
+      for (const m of text.matchAll(re)) {
+        const sha = m[1].toLowerCase();
+        if (seen.has(sha)) continue;
+        seen.add(sha);
+        claims++;
+        if (pin && !pin.startsWith(sha)) {
+          err(`${label}: says the pin is \`${sha}\`, but A2UI5_PIN is \`${pin.slice(0, sha.length)}\` `
+            + `(${pin})\n        …${m[0].replace(/\s+/g, ' ').slice(-110)}\n`
+            + '        the bump moved the pin and this sentence did not follow — correct it, or, if the '
+            + 'sentence is about a state that has PASSED, write it in the past tense so it reads as history');
+        }
+      }
+    }
+  }
+  pinProseNote = `${claims} pin citation(s) in ${sources.length} prose source(s)`;
+}
+
 if (errors) {
   console.log(`check-pins: ${errors} error(s).`);
   process.exit(1);
 }
-console.log(`check-pins: ok (A2UI5_PIN well-formed, ${checked} abap2UI5 dependency entr${checked === 1 ? 'y' : 'ies'} on release ${distinct[0] ?? 'none'}, ${snapshotNote})`);
+console.log(`check-pins: ok (A2UI5_PIN well-formed, ${checked} abap2UI5 dependency entr${checked === 1 ? 'y' : 'ies'} on release ${distinct[0] ?? 'none'}, ${snapshotNote}, ${pinProseNote})`);
