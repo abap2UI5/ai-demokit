@@ -128,6 +128,29 @@ for (const sf of sidecars.sort()) {
   for (const k of ['class', 'sample', 'entity', 'file', 'batch', 'audit', 'status', 'deviations']) {
     if (m[k] === undefined) err(`${sf}: missing field "${k}"`);
   }
+  /* Every string in a sidecar is ONE LINE. `generate-overview.mjs` bakes this
+   * prose into ABAP backtick literals, and an ABAP string literal cannot span
+   * lines: a newline in a `what` is emitted RAW, which produces a class that
+   * does not parse and desyncs every downstream reader of that file — measured
+   * 2026-08-28, when a two-paragraph deviation on app 109 made the linter read
+   * a class name inside the broken literal as real code and `check:chains`
+   * reported `non-released-api` on the generated overview, 350 lines away from
+   * the sidecar that caused it. Zero of the 622 sidecars had one before, so
+   * this is an invariant that held by luck until it did not. Paragraphs belong
+   * in docs/history.md; a deviation is one sentence-stream. */
+  {
+    const scan = (v, at) => {
+      if (typeof v === 'string') {
+        const bad = /[\u0000-\u001f\u007f]/.exec(v);
+        if (bad) {
+          err(`${sf}: ${at} carries a control character (\\u${bad[0].charCodeAt(0).toString(16).padStart(4, '0')}) `
+            + '— sidecar text is one line: it is baked into an ABAP string literal, which cannot span lines');
+        }
+      } else if (Array.isArray(v)) v.forEach((x, i) => scan(x, `${at}[${i}]`));
+      else if (v && typeof v === 'object') for (const [k, x] of Object.entries(v)) scan(x, at ? `${at}.${k}` : k);
+    };
+    scan(m, '');
+  }
   for (const k of Object.keys(m)) {
     if (!KNOWN_KEYS.has(k)) err(`${sf}: unknown field "${k}" (known: ${[...KNOWN_KEYS].join(', ')})`);
   }

@@ -5,15 +5,16 @@
   "file": "src/01/01/z2ui5_cl_smpc_app_462.clas.abap",
   "batch": "b36",
   "audit": {
-    "frontend_action": false,
-    "event_t_arg": true
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "follow_up_action control_by_id getValue/setText carries the keystroke value; no backend event at all"
   },
   "status": "generated",
   "checked": null,
   "deviations": [
     {
       "type": "NOTE",
-      "what": "onLiveChange calls this.byId('getValue').setText(newValue) on every keystroke. That is the one leg of this sample that cannot become a binding: the Text has to show what oInput.getValue() returns even while valueLiveUpdate is off and the model value lags behind, which is exactly what the sample compares. The port therefore keeps a real round-trip per keystroke (the value travels as ${$parameters>/value}), and abap2UI5 serializes round-trips: while one is in flight the next liveChange is DROPPED, so under fast typing the Text shows the last completed trip and catches up as soon as typing pauses. **Re-verified 2026-08-23, and the alternative was measured rather than assumed.** The roundtrip-free form exists on paper - setText is not on the frontend denylist, so `follow_up_action( control_by_id, getValue / setText / ${$parameters>/value} )` wired in the view would set the Text on every keystroke with no trip and no dropping. It is NOT used for one reason: castArgAuto maps an empty argument to the BOOLEAN false, and UI5 casts a non-string implicitly for a string-typed property ( + oValue in ManagedObject.validateProperty), so the moment the user clears the input the Text would read the literal word 'false' instead of going empty - which is the one keystroke this sample is about. The lossy round-trip is the lesser defect. Filed as control-action-empty-string-arg in abap2UI5's backlog, and CLOSED there on 2026-08-24: a setXxx whose property UI5 declares as `string` now has its first argument passed through untouched instead of inferred, so an empty argument reaches the control as \"\" and not as the boolean false. The roundtrip-free wire above is therefore correct code today. It is NOT swapped in yet, deliberately: A2UI5_PIN still points at a framework commit without that fix, and against THAT runtime the wire renders the literal word 'false' on the one keystroke this sample is about - strictly worse than the lossy round-trip. Swap it in once the framework change reaches main and bump-a2ui5 advances the pin; the port then loses this deviation and its on_event with it."
+      "what": "onLiveChange calls this.byId('getValue').setText(newValue) on every keystroke. That is the one leg of this sample that cannot become a binding: the Text has to show what oInput.getValue() returns even while valueLiveUpdate is off and the model value lags behind, which is exactly what the sample compares. The port wires it ROUND-TRIP-FREE since 2026-08-28 - `follow_up_action( control_by_id, getValue / setText / ${$parameters>/value} )` on the Input's liveChange - so the Text is written on the client on every keystroke, the way the original's controller writes it, and the port has no on_event and no backend event left. The Text carries no `text` of its own, exactly as `<Text id=\"getValue\"/>` in the original. This replaces a real round-trip per keystroke (the value travelled as ${$parameters>/value}), which was LOSSY: abap2UI5 serializes round-trips, so while one was in flight the next liveChange was DROPPED and under fast typing the Text showed the last completed trip and caught up as soon as typing paused. The round-trip-free form was measured and rejected on 2026-08-23 for one reason: castArgAuto mapped an empty argument to the BOOLEAN false, and UI5 casts a non-string implicitly for a string-typed property ( + oValue in ManagedObject.validateProperty), so clearing the input rendered the literal word 'false' - the one keystroke this sample is about. Filed as control-action-empty-string-arg in abap2UI5's backlog and CLOSED there on 2026-08-24: a setXxx whose property UI5 declares as `string` has its first argument passed through untouched, so an empty argument reaches the control as \"\". The fix reached the reproducible builds when A2UI5_PIN moved to `2567ee10` on 2026-08-28, which is what unblocked the swap."
     },
     {
       "type": "NOTE",
@@ -21,7 +22,7 @@
     },
     {
       "type": "NOTE",
-      "what": "The per-keystroke liveChange round-trip and the valueLiveUpdate switch driving when the model value follows are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_462.mjs)."
+      "what": "The per-keystroke liveChange wire and the valueLiveUpdate switch driving when the model value follows are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_462.mjs). **Rewritten 2026-08-28** for the round-trip-free wire: the module now types with no delay (there is no trip to drop an event any more) and asserts the empty-input case explicitly - the Text must go EMPTY, not read the literal word 'false', which is the defect the old wire existed to avoid."
     }
   ]
 }

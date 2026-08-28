@@ -23,10 +23,23 @@ CLASS z2ui5_cl_smpc_app_109 DEFINITION PUBLIC.
     DATA start_date TYPE string.
 
   PROTECTED SECTION.
+    " one entry per DateRange the frontend marshalled out of the event's
+    " selectedDates parameter - startDate arrives as an ISO LOCAL timestamp
+    " (no Z), so its first ten characters are the day the user picked
+    TYPES: BEGIN OF ty_s_event_range,
+             startdate TYPE string,
+           END OF ty_s_event_range.
+    TYPES ty_t_event_range TYPE STANDARD TABLE OF ty_s_event_range WITH EMPTY KEY.
+
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
     METHODS on_event.
+    METHODS event_ranges
+      IMPORTING
+        val           TYPE string
+      RETURNING
+        VALUE(result) TYPE ty_t_event_range.
     METHODS model_init.
 
   PRIVATE SECTION.
@@ -93,7 +106,12 @@ CLASS z2ui5_cl_smpc_app_109 IMPLEMENTATION.
                 )->a( n = `title`               v = `My Calendar`
                 )->a( n = `dateSelectionMode`   v = client->_bind( date_selection_mode )
                 )->a( n = `viewChange`          v = client->_event( `VIEW_CHANGE` )
-                )->a( n = `selectedDatesChange` v = client->_event( `SELECTED_DATE` )
+                " the WHOLE selectedDates parameter travels in one arg: the
+                " frontend marshals each DateRange into its public properties
+                " (Lib.normalizeEventArgs), which is the loop the client
+                " expression grammar does not have
+                )->a( n = `selectedDatesChange` v = client->_event( val   = `SELECTED_DATE`
+                                                                    t_arg = VALUE #( ( `${$parameters>/selectedDates}` ) ) )
                 )->a( n = `weekNumberPress`     v = client->_event( val   = `WEEK`
                                                                     t_arg = VALUE #( ( `${$parameters>/weekNumber}` ) ) )
                 )->a( n = `startDateChange`     v = client->_event( val   = `START_DATE`
@@ -149,7 +167,18 @@ CLASS z2ui5_cl_smpc_app_109 IMPLEMENTATION.
         client->message_toast_display( |'viewChange' event fired.| ).
 
       WHEN `SELECTED_DATE`.
-        client->message_toast_display( |'selectedDatesChange' event fired.| ).
+        " handleSelectedDateChange numbers every selected range and appends its
+        " start date, one per line - the array arrives marshalled, so the loop
+        " the original writes in JavaScript is an ABAP loop here
+        DATA(output) = ``.
+        DATA(ranges) = event_ranges( client->get_event_arg( ) ).
+        LOOP AT ranges REFERENCE INTO DATA(lr_range).
+          IF strlen( lr_range->startdate ) < 10.
+            CONTINUE.
+          ENDIF.
+          output = |{ output }{ sy-tabix }: { lr_range->startdate(10) }\n|.
+        ENDLOOP.
+        client->message_toast_display( |'selectedDatesChange' event fired.\n\nNew selected dates: \n{ output }| ).
 
       WHEN `WEEK`.
         " the original appends the pressed week number, which the event carries
@@ -160,6 +189,39 @@ CLASS z2ui5_cl_smpc_app_109 IMPLEMENTATION.
         client->message_toast_display( |'startDateChange' event fired.\n\nNew start date is { client->get_event_arg( ) }| ).
 
     ENDCASE.
+
+  ENDMETHOD.
+
+
+  METHOD event_ranges.
+
+    DATA(lv_json) = condense( val ).
+    IF lv_json IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    IF lv_json(1) <> `[`.
+      lv_json = |[{ lv_json }]|.
+    ENDIF.
+
+    TRY.
+        " a marshalled DateRange carries ALL its public properties (ID,
+        " startDate, endDate), so only the one field this port models is
+        " mapped - a plain to_abap( ) fails on the first extra one
+        "
+        " z2ui5_cl_ajson is the framework's VENDORED ajson copy and lives
+        " outside the released API (src/02), so it may be renamed or
+        " restructured without notice - the linter says so, and it is right.
+        " There is no released JSON reader to use instead, the same reasoning
+        " as apps 103 and 298; declared as a deviation in the sidecar
+        " abap2ui5lint-disable-next-line non-released-api -- no released JSON reader exists; see the comment above and the sidecar deviation
+        z2ui5_cl_ajson=>parse( lv_json
+          )->to_abap_corresponding_only(
+          )->to_abap( IMPORTING ev_container = result ).
+        " abap2ui5lint-disable-next-line non-released-api -- the exception of the call above
+      CATCH z2ui5_cx_ajson_error.
+        CLEAR result.
+    ENDTRY.
 
   ENDMETHOD.
 

@@ -5,11 +5,16 @@
   "file": "src/02/02/z2ui5_cl_smpc_app_350.clas.abap",
   "batch": "b19",
   "audit": {
-    "frontend_action": false,
-    "event_t_arg": true
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "control_global ICON_POOL registerFont in the init branch registers the SAP-icons-TNT collection"
   },
   "status": "reviewed",
   "checked": null,
+  "render_smoke": {
+    "skip": true,
+    "reason": "the Group2 tile uses an icon from the SAP-icons-TNT collection (sap-icon://SAP-icons-TNT/application-service, verbatim from the sample) and the render harness has no registration for it - 'The font configuration for collection SAP-icons-TNT is not registered'. The view itself reconstructs and the rest of it renders. Rewritten 2026-08-28: this is now a HARNESS boundary and no longer a defect. The port registers the collection through the ICON_POOL global target in its init branch (see the deviation), which is a follow_up_action - and the linter's render harness reconstructs the VIEW and does not execute frontend actions, so it cannot see the registration and never will. The registration is proven where it can be: the e2e interaction module resolves sap-icon://SAP-icons-TNT/application-service through IconPool against the real backend and the real frontend. Before 2026-08-28 this skip said the icon was missing in a real system too, which was true and is not any more."
+  },
   "deviations": [
     {
       "type": "NOTE",
@@ -44,16 +49,12 @@
       "what": "Unverified in a running system: the layoutChange and columnsChange round-trips re-laying out the four groups and widening the two group-1 cards, and whether the two card manifest URLs load from the OpenUI5 host (their images are relative to the manifest, which is what an absolute manifest URL makes resolvable). **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_350.mjs)."
     },
     {
-      "type": "IMPROVISED",
-      "what": "The original's Component.js init calls IconPool.registerFont({ fontFamily: 'SAP-icons-TNT', fontURI: sap.ui.require.toUrl('sap/tnt/themes/base/fonts/') }), and that registration is the only thing that makes the sap-icon://SAP-icons-TNT/... URI in Group2.fragment.xml resolvable. An abap2UI5 app has no Component of its own to run that in, and no wire reaches IconPool (it is a module-level singleton, not a control, so control_by_id cannot address it and no global target exists for it). The port keeps the icon URI verbatim, so the first Frequent Operations tile renders without its glyph - in a real system as well as in the harness, since neither sap.tnt's library.js nor abap2UI5 registers the collection (both grepped 2026-08-21, zero hits). The render_smoke skip beside this used to call the missing icon a harness artefact; it now says what this says. Closing it needed an upstream registerFont-style global target, and that now EXISTS: abap2UI5 gained an ICON_POOL global target on 2026-08-24 (control_global, t_arg = fontFamily, fontURI; the frontend resolves a module path through sap.ui.require.toUrl and registers a family once per session). The wire this port needs is therefore a four-line follow_up_action in the init branch. It is NOT wired yet, deliberately: A2UI5_PIN still points at a framework commit without the target, and the pinned linter's GLOBAL_TARGETS mirror does not carry it either - so the wire would be rejected by view-gates and would not run against the pinned runtime. Add it once the framework change reaches main and bump-a2ui5 advances the pin. (The earlier version of this sentence claimed the gap had already been filed like pr/card-manifest-object when no such item existed.)"
+      "type": "NOTE",
+      "what": "The original's Component.js init calls IconPool.registerFont({ fontFamily: 'SAP-icons-TNT', fontURI: sap.ui.require.toUrl('sap/tnt/themes/base/fonts/') }), and that registration is the only thing that makes the sap-icon://SAP-icons-TNT/... URI in Group2.fragment.xml resolvable. An abap2UI5 app has no Component of its own to run that in, and IconPool is a module-level SINGLETON rather than a control, so control_by_id cannot address it. The port issues it as a four-line follow_up_action( control_global, ICON_POOL / registerFont / SAP-icons-TNT / sap/tnt/themes/base/fonts/ ) from the init branch since 2026-08-28 - the frontend resolves the module path through sap.ui.require.toUrl and registers a family once per session, so a repeat call costs nothing. The tile therefore renders its glyph. This was an IMPROVISED deviation until then: the URI was kept verbatim and the first Frequent Operations tile rendered without its glyph - in a real system as well as in the harness, since neither sap.tnt's library.js nor abap2UI5 registers the collection (both grepped 2026-08-21, zero hits). Closing it needed an upstream registerFont-style global target, which abap2UI5 gained on 2026-08-24 and which reached the reproducible builds when A2UI5_PIN moved to `2567ee10` on 2026-08-28; the pinned linter's GLOBAL_TARGETS mirror carries ICON_POOL as of @abap2ui5/linter 0.5.1. The render_smoke skip beside this stays, and for a NEW reason it now states: a follow_up_action is not part of the view, so the linter's render harness cannot execute it and the harness alone still sees an unregistered collection. The e2e interaction module is where the registration is proven."
     },
     {
       "type": "NOTE",
       "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the sentence used to claim the rewrite was 'declared by all 77 ports that do it', which had stopped being true as the corpus grew past that day's snapshot - 126 ports do it now, and 17 of them declared it nowhere. Those 17 carry the declaration since today, so the claim holds again; a stale absolute count is what made it wrong, so this wording names the date the count was taken."
     }
-  ],
-  "render_smoke": {
-    "skip": true,
-    "reason": "the Group2 tile uses an icon from the SAP-icons-TNT collection (sap-icon://SAP-icons-TNT/application-service, verbatim from the sample) and nothing registers that font collection here - 'The font configuration for collection SAP-icons-TNT is not registered'. The view itself reconstructs and the rest of it renders. Corrected 2026-08-21: this is NOT merely a harness asset gap. The sample registers the collection in its own Component.js init, which the port has no counterpart for (see the IMPROVISED deviation), and neither sap.tnt's library.js nor abap2UI5 registers it - both greppped for registerFont, zero hits - so the icon is missing in a real system too."
-  }
+  ]
 }

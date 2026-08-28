@@ -7,13 +7,11 @@ CLASS z2ui5_cl_smpc_app_462 DEFINITION PUBLIC.
 
     DATA value_live_update TYPE abap_bool.
     DATA input_value       TYPE string.
-    DATA get_value         TYPE string.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
-    METHODS on_event.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -28,8 +26,6 @@ CLASS z2ui5_cl_smpc_app_462 IMPLEMENTATION.
       view_display( ).
     ELSEIF client->check_on_navigated( ).
       view_display( ).
-    ELSEIF client->check_on_event( ).
-      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -56,32 +52,26 @@ CLASS z2ui5_cl_smpc_app_462 IMPLEMENTATION.
                 )->a( n = `text` v = `Type here`
             " onLiveChange writes the value into the Text below - the only leg of the
             " sample that cannot be a binding, since it must show what getValue( )
-            " returns even while valueLiveUpdate keeps the model value behind
+            " returns even while valueLiveUpdate keeps the model value behind.
+            " It needs no round-trip either: setText on the Text by id, with the
+            " keystroke value as the argument, is the same write done on the client
             )->tag( `Input`
                 )->a( n = `value`            v = client->_bind( input_value )
                 )->a( n = `valueLiveUpdate`  v = client->_bind( value_live_update )
-                )->a( n = `liveChange`       v = client->_event( val   = `LIVE_CHANGE`
-                                                                 t_arg = VALUE #( ( `${$parameters>/value}` ) ) )
+                )->a( n = `liveChange`       v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                           t_arg = VALUE #( ( `getValue` ) ( `setText` ) ( `${$parameters>/value}` ) ) )
             )->tag( `Label`
                 )->a( n = `text` v = `oInput.getValue()`
+            " no text of its own, exactly as the original: the Text is written
+            " by the liveChange wire alone
             )->tag( `Text`
                 )->a( n = `id`   v = `getValue`
-                )->a( n = `text` v = client->_bind( get_value )
             )->tag( `Label`
                 )->a( n = `text` v = `oModel.getProperty()`
             )->tag( `Text`
                 )->a( n = `text` v = client->_bind( input_value ) ).
 
     client->view_display( view->stringify( ) ).
-
-  ENDMETHOD.
-
-
-  METHOD on_event.
-
-    IF client->get_event( ) = `LIVE_CHANGE`.
-      get_value = client->get_event_arg( ).
-    ENDIF.
 
   ENDMETHOD.
 

@@ -188,6 +188,11 @@ const ADVISORY_BUDGET = {
   // the sample exists to COMPARE oInput.getValue() with the model property, so
   // the getValue Text has to follow every keystroke; a final-value event would
   // erase the difference the sample demonstrates
+  // ratcheted down 2026-08-28 to 10: app 462 no longer round-trips at all. Its
+  // liveChange is a roundtrip-free follow_up_action control_by_id setText since
+  // the A2UI5_PIN bump to 2567ee10 carried abap2UI5's control-action-empty-
+  // string-arg fix, so the entry above is spent - the port kept the live wire
+  // and lost the round trip
   // raised 2026-08-22 (batch b40, app 499 ListSelectionSearch): the sample's own
   // SearchField wires liveChange to the list filter, so the search IS the live
   // wire; a final-value event would change what the sample demonstrates
@@ -197,7 +202,19 @@ const ADVISORY_BUDGET = {
   // wizard samples whose per-keystroke liveChange IS the step validation
   // (validateStep/invalidateStep at three characters); a final-value event
   // would gate the Next button one keystroke late
-  'live-event-roundtrip': 11,
+  'live-event-roundtrip': 10,
+  // raised 2026-08-28 (app 462 InputValueUpdate): the rule asks for a two-way
+  // binding instead of a setText action, and this is the one port where that
+  // would break the sample. InputValueUpdate exists to COMPARE
+  // oInput.getValue() with the model property while valueLiveUpdate is off -
+  // i.e. exactly while the two disagree - so a bound Text would show the model
+  // value and the sample would demonstrate nothing. The original's own
+  // controller writes it imperatively (`this.byId('getValue').setText(...)`),
+  // which is what this port now does on the client with no round trip. The
+  // "survives a view rebuild" half of the rule's reasoning does not apply
+  // either: the value is a keystroke echo, and the original loses it on a
+  // rebuild too
+  'settable-property-via-action': 1,
   // apps 005/080/121/127/236 — a press/post wired next to a LITERAL
   // enabled="false". The rule doc grants this exact case ("a 1:1 port of a
   // sample demonstrating the disabled STATE legitimately carries the original's
