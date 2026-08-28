@@ -1,1 +1,3 @@
-{}
+{
+  "z2ui5_cl_smpc_app_overview": "The overview app's name before the 2026-08 rename to z2ui5_cl_smpc_app_000. It is named in the PAST TENSE twice: three times in docs/history.md, in journal entries written while it was still called that (a journal records what a class was called when the entry was written, which is history and not drift), and once in STATUS.md's open finding about check-prose-names.mjs, which cites those three occurrences as the MEASUREMENT that docs/history.md must stay outside the gate when docs/ is brought into it. Deliberately absent: the class exists nowhere and must not."
+}

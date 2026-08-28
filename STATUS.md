@@ -36,6 +36,33 @@ looking for what is left had to skip past what is done to find it. They moved
 verbatim to [docs/history.md](docs/history.md) under "closed findings" — the
 same cut AGENTS §10 already makes between the rule and the war story._
 
+- [ ] **`check-prose-names.mjs` carries a dead exclusion and does not read
+  `docs/` — and the fix belongs upstream (found 2026-08-28).** Two things,
+  one file:
+  - `const HISTORY = /STATUS-history\.md$/;` names a file that no longer
+    exists. The journal moved to `docs/history.md` on 2026-08-22, so the
+    constant excludes nothing and the thing it was written to exclude is not
+    in `PROSE` either — it is dead twice over.
+  - `PROSE` lists eight root-level markdown files and nothing under `docs/`,
+    so `docs/upstream-requests.md` — which cites class and control names in
+    almost every row — is outside the gate.
+  The correct shape is the one the dead constant already implies: add
+  `docs/upstream-requests.md` to `PROSE` and re-point `HISTORY` at
+  `docs/history.md`, which must STAY excluded. Measured before proposing it:
+  `docs/history.md` names `z2ui5_cl_smpc_app_overview` three times, in entries
+  written before the 2026-08 rename to `z2ui5_cl_smpc_app_000` — a journal
+  recording what a class was called when the entry was written is history and
+  not drift, which is the whole reason that constant exists.
+  **Not changed here, deliberately.** `scripts/check-prose-names.mjs` is a
+  byte-equal COPY whose source is abap2UI5's
+  `.github/shared/check-prose-names.mjs`; `sync-shared.yaml` pulls it every
+  Tuesday, so an edit here is reverted within a week and turns abap2UI5's
+  `check:shared` red in the meantime. Change it there, then let the sync carry
+  it across. A `PROSE` entry that does not exist in a consumer is skipped, so
+  the addition is safe for `samples` and `samples-stack`.
+  Nothing is currently hiding behind the gap: `docs/upstream-requests.md`
+  names four classes and all four exist.
+
 - [ ] **The `checked` rung is thinning, and only a human on a real system can
   thicken it (standing).** 59 of 622 ports (9.5%) are `checked`, against 355
   `reviewed` and 208 `generated`, and the share falls with every batch because
