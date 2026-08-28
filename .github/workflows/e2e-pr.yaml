@@ -63,7 +63,9 @@ jobs:
       run: |
         set -euo pipefail
         git diff --name-only "$BASE" "$HEAD" > "$RUNNER_TEMP/changed.txt"
-        ports="$(xargs -a "$RUNNER_TEMP/changed.txt" -r node scripts/e2e-changed.mjs)"
+        # --from, not xargs: xargs splits a long list across invocations and a
+        # per-chunk verdict is wrong in the one direction that matters
+        ports="$(node scripts/e2e-changed.mjs --from "$RUNNER_TEMP/changed.txt")"
         if [ "$ports" = "all" ]; then
           echo "run=false" >> "$GITHUB_OUTPUT"
           echo "reason=the change reaches every port (framework pin, harness or build) — the full corpus is e2e-nightly's job, not a subset's" >> "$GITHUB_OUTPUT"

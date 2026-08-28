@@ -28,11 +28,18 @@
  * caught is worse than no PR job at all.
  *
  *   node scripts/e2e-changed.mjs <file> [<file> …]
- *   git diff --name-only origin/main... | xargs node scripts/e2e-changed.mjs
+ *   node scripts/e2e-changed.mjs --from <a file with one path per line>
+ *
+ * `--from` is what CI uses, and not `xargs`: xargs SPLITS a long list across
+ * several invocations, and a verdict computed per chunk is wrong in the one
+ * direction that matters — the chunk holding `A2UI5_PIN` would print `all`
+ * while the others printed class names, and the caller would take the union
+ * as a subset.
  *
  * Prints one class per line, or the single word `all`. Always exits 0 — it
  * answers a question, it does not gate.
  */
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -85,6 +92,10 @@ export function portsToRun(files) {
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const { all, classes } = portsToRun(process.argv.slice(2));
+  const i = process.argv.indexOf('--from');
+  const files = i === -1
+    ? process.argv.slice(2)
+    : fs.readFileSync(process.argv[i + 1], 'utf8').split('\n');
+  const { all, classes } = portsToRun(files);
   console.log(all ? 'all' : classes.join('\n'));
 }
