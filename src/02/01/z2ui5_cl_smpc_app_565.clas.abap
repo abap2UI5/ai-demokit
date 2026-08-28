@@ -160,8 +160,7 @@ CLASS z2ui5_cl_smpc_app_565 IMPLEMENTATION.
                             )->a( n = `class` v = `sapUiSmallMargin`
                             )->a( n = `text`  v = client->_bind( d_description ) ).
 
-    client->popover_display( xml   = popup->stringify( )
-                             by_id = by_id ).
+    client->popover_display( xml = popup->stringify( ) by_id = by_id ).
 
   ENDMETHOD.
 

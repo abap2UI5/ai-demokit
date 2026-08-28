@@ -121,9 +121,9 @@ CLASS z2ui5_cl_smpc_app_049 IMPLEMENTATION.
                             )->a( n = `validationMode`        v = `{VALIDATIONMODE}`
                             )->a( n = `change`                v = client->follow_up_action( val   = client->cs_event-control_global
                                                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` )
-                                                                                                          ( `show` )
-                                                                                                          ( `Value changed to '{0}'` )
-                                                                                                          ( `${$parameters>/value}` ) ) ) ).
+                                                                                                             ( `show` )
+                                                                                                             ( `Value changed to '{0}'` )
+                                                                                                             ( `${$parameters>/value}` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 

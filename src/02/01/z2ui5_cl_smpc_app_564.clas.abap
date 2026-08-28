@@ -145,8 +145,7 @@ CLASS z2ui5_cl_smpc_app_564 IMPLEMENTATION.
                     )->a( n = `class` v = `sapUiTinyMarginEnd`
                     )->a( n = `press` v = client->_event( `CLOSE` ) ).
 
-    client->popover_display( xml   = popup->stringify( )
-                             by_id = by_id ).
+    client->popover_display( xml = popup->stringify( ) by_id = by_id ).
 
   ENDMETHOD.
 

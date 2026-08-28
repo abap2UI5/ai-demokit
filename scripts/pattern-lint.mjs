@@ -240,6 +240,143 @@ const RULES = [
       return out;
     },
   },
+  {
+    // check_on_init( ) true implies check_on_navigated( ) true: every path to
+    // an instance's first main( ) sets the flag (factory_first_start for a
+    // fresh start AND a draft restore, factory_system_startup,
+    // prepare_app_stack for nav_app_call and nav_app_leave). So an init branch
+    // whose only statement is view_display( ) has an ELSEIF twin that does the
+    // same thing, and the OR form says it in one line instead of four. 201
+    // classes carried one of the two until 2026-08-28.
+    id: 'redundant-init-display',
+    level: 'error',
+    doc: 'check_on_init( ) is the SEED branch, not a display branch — an init branch whose only statement is view_display( ), or an "init OR navigated" condition, decides nothing because init true implies navigated true (AGENTS §5)',
+    find(content) {
+      const out = [];
+      const or = content.match(/^[ \t]*IF client->check_on_init\( \) OR client->check_on_navigated\( \)\./m);
+      if (or) {
+        out.push({ line: lineOf(content, or.index), text: 'IF check_on_init( ) OR check_on_navigated( ) — the OR is redundant' });
+      }
+      const fork = content.match(
+        /^([ \t]*)IF client->check_on_init\( \)\.\n\1[ \t]+view_display\( \)\.\n\1ELSEIF client->check_on_navigated\( \)\./m);
+      if (fork) {
+        out.push({ line: lineOf(content, fork.index), text: 'the check_on_init branch only calls view_display( ) — drop it, check_on_navigated( ) already covers the first start' });
+      }
+      return out;
+    },
+  },
+  {
+    // A mock table is read as a table, so its columns have to line up.
+    // scripts/json-to-abap.mjs emits the padded form; this catches a
+    // hand-written or hand-edited block that drifted. Only tables whose rows
+    // carry the SAME field list are judged — where one row has a field the
+    // next does not (an optional key, a nested child table) there is no column
+    // to align. A block that would break the 255-character limit once padded
+    // is wrapped by hand instead and is left alone here.
+    id: 'ragged-value-table',
+    level: 'error',
+    doc: 'VALUE #( ) rows with the same field list are padded into columns, the last cell of a row unpadded (AGENTS §5); node scripts/json-to-abap.mjs emits that form',
+    find(content) {
+      const BT = String.fromCharCode(96);
+      const ROW = new RegExp('^(\\s*)\\(((?: [a-z_0-9]+ = (?:' + BT + '[^' + BT + ']*' + BT + '|[^\\s()]+))+) \\)(.*)$');
+      const CELL = new RegExp('([a-z_0-9]+) = (' + BT + '[^' + BT + ']*' + BT + '|[^\\s()]+)', 'g');
+      const parse = (l) => {
+        const m = l.match(ROW);
+        if (!m) return null;
+        const cells = [...m[2].matchAll(CELL)].map((c) => [c[1], c[2]]);
+        return cells.length ? { indent: m[1], cells, suffix: m[3] } : null;
+      };
+      const L = content.split('\n');
+      const out = [];
+      let blk = [];
+      const flush = () => {
+        if (blk.length >= 3) {
+          const rows = blk.map((i) => parse(L[i]));
+          const keys = rows[0].cells.map((c) => c[0]).join('|');
+          if (rows.every((r) => r.cells.map((c) => c[0]).join('|') === keys)) {
+            const w = rows[0].cells.map((_, j) =>
+              Math.max(...rows.map((r) => (r.cells[j][0] + ' = ' + r.cells[j][1]).length)));
+            const built = rows.map((r) => r.indent + '( ' + r.cells
+              .map(([k, v], j) => (j === r.cells.length - 1 ? k + ' = ' + v : (k + ' = ' + v).padEnd(w[j])))
+              .join(' ') + ' )' + r.suffix);
+            if (built.every((b) => b.length <= 255) && built.some((b, i) => b !== L[blk[i]])) {
+              out.push({ line: blk[0] + 1, text: `${blk.length} rows of ${rows[0].cells.length} fields are not column-aligned` });
+            }
+          }
+        }
+        blk = [];
+      };
+      for (let i = 0; i < L.length; i++) { if (parse(L[i])) blk.push(i); else flush(); }
+      flush();
+      return out;
+    },
+  },
+  {
+    // Two parameters are not a reason for two lines. Outside the view chain,
+    // which has its own layout, a statement that fits the budget is written on
+    // one line — popover_display was split in all 35 of its call sites while
+    // popup_display, its shorter sibling, was split in none of 43.
+    // A wrapped t_arg list is deliberately exempt: it stays wrapped.
+    id: 'stacked-short-call',
+    level: 'error',
+    doc: 'a statement outside the view chain that fits in 120 characters is written on ONE line (AGENTS §5)',
+    find(content) {
+      const BT = String.fromCharCode(96);
+      const BUDGET = 120;
+      const balanced = (s) => {
+        let par = 0, bt = 0, pipe = 0;
+        for (const ch of s) {
+          if (ch === BT) bt++;
+          else if (ch === '|') pipe++;
+          else if (bt % 2 === 0 && pipe % 2 === 0) { if (ch === '(') par++; else if (ch === ')') par--; }
+        }
+        return par === 0 && bt % 2 === 0 && pipe % 2 === 0;
+      };
+      const squeeze = (s) => {
+        let o = '', bt = false, pipe = false;
+        for (const ch of s) {
+          if (ch === BT) bt = !bt; else if (ch === '|') pipe = !pipe;
+          if (ch === ' ' && !bt && !pipe && o.endsWith(' ')) continue;
+          o += ch;
+        }
+        return o;
+      };
+      const forbidden = (l) => {
+        const s = l.trim();
+        if (!s || s.startsWith('"') || s.startsWith('*')) return true;
+        if (l.includes('"')) return true;
+        if (l.includes(')->') || l.includes('->a(') || l.includes('->ele(') || l.includes('->tag(')) return true;
+        if (l.includes('t_arg')) return true;
+        // a classic call's parameter SECTIONS carry meaning stacked
+        if (/\b(EXPORTING|IMPORTING|CHANGING|EXCEPTIONS|RECEIVING|TABLES)\b/.test(l)) return true;
+        if (/^\s*\( [a-z_0-9]+ = /.test(l)) return true;
+        if (l.includes('VALUE #( (')) return true;
+        return false;
+      };
+      const L = content.split('\n');
+      const out = [];
+      for (let i = 0; i < L.length; i++) {
+        const a = L[i];
+        const t = a.trim();
+        if (forbidden(a) || t.endsWith('.') || !t.includes('(')) continue;
+        for (const span of [2, 3]) {
+          if (i + span > L.length) break;
+          const block = L.slice(i, i + span);
+          if (block.some(forbidden)) continue;
+          if (block.slice(0, -1).some((l) => l.trim().endsWith('.'))) continue;
+          if (!block[span - 1].trim().endsWith('.')) continue;
+          const text = squeeze(block.map((l) => l.trim()).join(' '));
+          if (!balanced(text)) continue;
+          const line = ' '.repeat(a.length - a.trimStart().length) + text;
+          if (line.length > BUDGET) continue;
+          out.push({ line: i + 1, text: `${span} lines, ${line.length} characters on one — ${line.trim().slice(0, 70)}` });
+          i += span - 1;
+          break;
+        }
+      }
+      return out;
+    },
+  },
 ];
 
 function grepLines(re) {

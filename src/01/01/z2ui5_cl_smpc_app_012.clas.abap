@@ -542,25 +542,25 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
 
     " the original iterates the first selected product's JSON keys (except ProductPicUrl); here the same keys as a fixed list
     DATA(t_keys) = VALUE ty_t_key(
-      ( key = `ProductId` field = `PRODUCT_ID` )
-      ( key = `Category` field = `CATEGORY` )
-      ( key = `MainCategory` field = `MAIN_CATEGORY` )
-      ( key = `TaxTarifCode` field = `TAX_TARIF_CODE` )
-      ( key = `SupplierName` field = `SUPPLIER_NAME` )
+      ( key = `ProductId`     field = `PRODUCT_ID` )
+      ( key = `Category`      field = `CATEGORY` )
+      ( key = `MainCategory`  field = `MAIN_CATEGORY` )
+      ( key = `TaxTarifCode`  field = `TAX_TARIF_CODE` )
+      ( key = `SupplierName`  field = `SUPPLIER_NAME` )
       ( key = `WeightMeasure` field = `WEIGHT_MEASURE` )
-      ( key = `WeightUnit` field = `WEIGHT_UNIT` )
-      ( key = `Description` field = `DESCRIPTION` )
-      ( key = `Name` field = `NAME` )
-      ( key = `DateOfSale` field = `DATE_OF_SALE` )
-      ( key = `Status` field = `STATUS` )
-      ( key = `Quantity` field = `QUANTITY` )
-      ( key = `UoM` field = `UOM` )
-      ( key = `CurrencyCode` field = `CURRENCY_CODE` )
-      ( key = `Price` field = `PRICE` )
-      ( key = `Width` field = `WIDTH` )
-      ( key = `Depth` field = `DEPTH` )
-      ( key = `Height` field = `HEIGHT` )
-      ( key = `DimUnit` field = `DIM_UNIT` ) ).
+      ( key = `WeightUnit`    field = `WEIGHT_UNIT` )
+      ( key = `Description`   field = `DESCRIPTION` )
+      ( key = `Name`          field = `NAME` )
+      ( key = `DateOfSale`    field = `DATE_OF_SALE` )
+      ( key = `Status`        field = `STATUS` )
+      ( key = `Quantity`      field = `QUANTITY` )
+      ( key = `UoM`           field = `UOM` )
+      ( key = `CurrencyCode`  field = `CURRENCY_CODE` )
+      ( key = `Price`         field = `PRICE` )
+      ( key = `Width`         field = `WIDTH` )
+      ( key = `Depth`         field = `DEPTH` )
+      ( key = `Height`        field = `HEIGHT` )
+      ( key = `DimUnit`       field = `DIM_UNIT` ) ).
 
     DATA(from_item) = first_item + 1.
     DATA(last_item) = first_item + pages_count.

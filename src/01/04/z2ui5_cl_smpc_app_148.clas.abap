@@ -137,8 +137,7 @@ CLASS z2ui5_cl_smpc_app_148 IMPLEMENTATION.
       DATA(drop_pos) = CONV i( client->get_event_arg( 2 ) ).
       DATA(position) = client->get_event_arg( 3 ).
 
-      IF drag_pos < 0 OR drag_pos >= lines( t_items )
-      OR drop_pos < 0 OR drop_pos >= lines( t_items ).
+      IF drag_pos < 0 OR drag_pos >= lines( t_items ) OR drop_pos < 0 OR drop_pos >= lines( t_items ).
         RETURN.
       ENDIF.
 
@@ -155,8 +154,7 @@ CLASS z2ui5_cl_smpc_app_148 IMPLEMENTATION.
       " moment ago would be gone. Reachable: GridDragOver falls back to the LAST
       " item with "After" when the pointer is over no item at all, which can be
       " the dragged one, giving drag_pos = drop_pos = lines - 1
-      DATA(insert_at) = COND i( WHEN position = `Before` THEN drop_pos + 1
-                                                        ELSE drop_pos + 2 ).
+      DATA(insert_at) = COND i( WHEN position = `Before` THEN drop_pos + 1 ELSE drop_pos + 2 ).
       IF insert_at > lines( t_items ) + 1.
         insert_at = lines( t_items ) + 1.
       ENDIF.

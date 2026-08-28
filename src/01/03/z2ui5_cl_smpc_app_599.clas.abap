@@ -2828,9 +2828,7 @@ CLASS z2ui5_cl_smpc_app_599 IMPLEMENTATION.
 
       WHEN `TOGGLE_TITLE`.
         " toggleTitle: ConfigModel>/subSectionLayout flips TitleOnTop <-> TitleOnLeft
-        subsection_layout = COND #( WHEN subsection_layout = `TitleOnTop`
-                                    THEN `TitleOnLeft`
-                                    ELSE `TitleOnTop` ).
+        subsection_layout = COND #( WHEN subsection_layout = `TitleOnTop` THEN `TitleOnLeft` ELSE `TitleOnTop` ).
 
       WHEN `TOGGLE_TWO_COLUMNS`.
         " toggleUseTwoColumns: ConfigModel>/useTwoColumnsForLargeScreen flips

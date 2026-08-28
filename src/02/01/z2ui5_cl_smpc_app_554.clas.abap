@@ -247,10 +247,10 @@ CLASS z2ui5_cl_smpc_app_554 IMPLEMENTATION.
     ).
 
     t_legend_appt_items = VALUE #(
-      ( text = `Team Meeting` type = `Type01` )
-      ( text = `Personal` type = `Type05` )
-      ( text = `Discussions` type = `Type08` )
-      ( text = `Out of office` type = `Type09` )
+      ( text = `Team Meeting`    type = `Type01` )
+      ( text = `Personal`        type = `Type05` )
+      ( text = `Discussions`     type = `Type08` )
+      ( text = `Out of office`   type = `Type09` )
       ( text = `Private meeting` type = `Type03` )
     ).
 

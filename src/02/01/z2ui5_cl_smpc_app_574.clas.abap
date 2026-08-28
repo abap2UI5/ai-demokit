@@ -227,8 +227,7 @@ CLASS z2ui5_cl_smpc_app_574 IMPLEMENTATION.
           CLEAR t_rows.
           LOOP AT t_products INTO DATA(product).
             IF to_upper( product-name ) CS query
-                OR to_upper( product-suppliername ) CS query
-                OR to_upper( product-productid ) CS query.
+                OR to_upper( product-suppliername ) CS query OR to_upper( product-productid ) CS query.
               APPEND product TO t_rows.
             ENDIF.
           ENDLOOP.

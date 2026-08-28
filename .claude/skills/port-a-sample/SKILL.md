@@ -78,14 +78,28 @@ ENDMETHOD.
   bottom stops that data from interrupting the reading flow of the dispatcher,
   view and event methods. pattern-lint checks that main comes first and that
   model_init comes last.
-- A **fully static sample** (no data, no events — app 051's class) drops the
-  `on_event` branch and the `model_init`/`on_event` methods, but keeps both
-  display branches: `IF client->check_on_init( ). view_display( ). ELSEIF
-  client->check_on_navigated( ). view_display( ). ENDIF.`
-- `check_on_init( )` fires once when the app starts — seed the data, draw the view.
+- A sample with **nothing to seed** drops the `check_on_init( )` branch
+  altogether, and a **fully static** one (no data, no events — app 051's class)
+  drops `on_event` with it, down to:
+
+  ```abap
+  me->client = client.
+  IF client->check_on_navigated( ).
+    view_display( ).
+  ENDIF.
+  ```
+
+- `check_on_init( )` fires once when the app instance starts — seed the data
+  there, and **nothing else**. It is not a display branch: it being true implies
+  `check_on_navigated( )` is true (every path to a first `main( )` sets that
+  flag — `factory_first_start` for a fresh start and for a draft restore,
+  `factory_system_startup`, `prepare_app_stack` for call and leave), so an init
+  branch whose only statement is `view_display( )` decides nothing, and
+  `IF check_on_init( ) OR check_on_navigated( ).` is the same redundancy in
+  another spelling. `pattern-lint`'s `redundant-init-display` fails both.
 - `check_on_event( )` fires on every user interaction — dispatch in `on_event( )`.
-- `check_on_navigated( )` fires when the app *regains* the screen — re-run
-  `view_display( )`, nothing else.
+- `check_on_navigated( )` fires on the first start AND whenever the app *regains*
+  the screen — it is where `view_display( )` lives, in every port.
 - Add `model_init( )` / `on_event( )` **only when the app actually has data /
   events** — never a pass-through method with a single statement. A static app
   (like app 051) has just `view_display( )` in each of its two display
@@ -136,6 +150,31 @@ every row. Where the original itself binds a single record
 (`/ProductCollectionStats/Filters`), reproduce exactly that — that is the 1:1
 data, not a shortening. A packed field must carry enough `DECIMALS` for the mock
 (e.g. `Price` has 2-decimal values, so `TYPE p … DECIMALS 2`).
+
+**Line the columns up.** A mock table of three or more rows with the same field
+list is written as a table: every cell padded to the width of its column, the
+LAST cell of a row left unpadded so no spaces pile up before the closing `)`.
+`node scripts/json-to-abap.mjs` emits exactly that, so a generated block needs
+no touching; `pattern-lint`'s `ragged-value-table` catches a hand-written one
+that drifted.
+
+```abap
+t_fixed_navigation = VALUE #(
+    ( title = `Fixed Item 1` icon = `sap-icon://employee` enabled = abap_true )
+    ( title = `Fixed Item 2` icon = `sap-icon://building` enabled = abap_true )
+    ( title = `Fixed Item 3` icon = `sap-icon://card`     enabled = abap_true ) ).
+```
+
+Two exceptions, both of them real:
+
+- **A padded row that would break the 255-character limit is wrapped instead** —
+  at the SAME field boundaries in every row, so the columns still read down the
+  page. App 571 is the reference: 123 rows, every one of them `3+4+4` (identity /
+  dimensions / weight+price). Padding is then applied inside each group.
+- **Rows whose field list differs are left alone.** Where one row carries a
+  `key` and the next does not, or some rows nest a child table
+  (app 585's `t_navigation`), there is no column to align — that is different
+  data, not sloppiness.
 
 **abap2UI5 serves a single default model — there are no named models.** A sample
 that binds against a named model (`img>/products/pic1`, a separate `JSONModel`,
@@ -294,8 +333,10 @@ load-bearing rather than cosmetic. The full rule set with a worked example is
 the **`view-chain-layout` skill**, kept byte-identical in `abap2UI5` and
 `abap2UI5/samples`. The first four rules below are **identical in
 `abap2UI5/samples`** — the two corpora were unified in one pass after a survey
-found them following opposite conventions — and `node scripts/chain-format.mjs`
-(first step of `npm run gates`) checks them; `npm run fmt:chains` applies them.
+found them following opposite conventions — and the linter's
+`chain-house-layout` rule checks them (`npm run check:chains`, the first step of
+`npm run gates`); `npm run fmt:chains` applies them. The local
+`scripts/chain-format.mjs` that used to do this a second time is gone.
 
 - **One call per line.** Every `ele( )`, `tag( )`, `a( )` and `end( )` opens its
   own line with `)->`. A control never shares its line with the container it
@@ -323,6 +364,17 @@ found them following opposite conventions — and `node scripts/chain-format.mjs
   - a blank **before** every `end`; **none** after an `end` or between `end`s;
   - **none** between a control and its own `a()`s.
 - Long text/binding values split with `&&` at ~255 chars max per line (§6).
+- **A wrapped `t_arg` list hangs under its FIRST element** — every continuation
+  line of a `_event( )` / `follow_up_action( )` argument table starts in the
+  column of the first `( … )`, not under the `#` of `VALUE #(` three columns to
+  its left. Rule 7 of `view-chain-layout`.
+
+**Outside the chain: a call that fits on one line goes on one line** (budget 120
+characters). Stacking parameters is for calls that do not fit, not for calls that
+happen to have two — `client->popover_display( xml = popup->stringify( ) by_id = by_id ).`
+is 71 characters and needs no second line. This is the one formatting rule that
+does NOT apply inside the view chain, where one call per line wins, and it never
+re-joins a wrapped `t_arg`.
 
 #### Data binding & events
 

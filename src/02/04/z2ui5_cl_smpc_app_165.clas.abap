@@ -139,8 +139,7 @@ CLASS z2ui5_cl_smpc_app_165 IMPLEMENTATION.
                           )->a( n = `targetSrc` v = `{TARGETSRC}`
                           )->a( n = `target`    v = `{TARGET}` ).
 
-      client->popover_display( xml   = popover->stringify( )
-                               by_id = `pSwitchBtn` ).
+      client->popover_display( xml = popover->stringify( ) by_id = `pSwitchBtn` ).
     ENDIF.
 
   ENDMETHOD.

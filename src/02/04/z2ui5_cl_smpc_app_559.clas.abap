@@ -416,8 +416,7 @@ CLASS z2ui5_cl_smpc_app_559 IMPLEMENTATION.
                                 )->a( n = `unit`   v = `%`
                                 )->a( n = `title`  v = `Deviation` ).
 
-    client->popover_display( xml   = popup->stringify( )
-                             by_id = by_id ).
+    client->popover_display( xml = popup->stringify( ) by_id = by_id ).
 
   ENDMETHOD.
 

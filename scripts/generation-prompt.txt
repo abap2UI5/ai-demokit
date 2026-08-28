@@ -54,6 +54,30 @@ Rules:
   z2ui5_cl_pop_* value help hands control back, or when a bookmarked state is
   restored. Those roundtrips fire check_on_navigated alone, and without the
   branch the browser silently keeps showing the previous app's view.
+  The check_on_init branch, by contrast, IS optional and exists only to seed:
+  check_on_init true implies check_on_navigated true, so an init branch whose
+  only statement is view_display( ) decides nothing. An app with nothing to
+  seed writes just:
+    me->client = client.
+    IF client->check_on_navigated( ).
+      view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
+    ENDIF.
+  Never IF client->check_on_init( ) OR client->check_on_navigated( ). - the OR
+  is the same redundancy spelled differently. pattern-lint fails both forms
+  (redundant-init-display).
+- A mock table is a table: in a VALUE #( ) of three or more rows with the same
+  field list, pad every cell to the width of its column, leaving the LAST cell
+  of a row unpadded. Use node scripts/json-to-abap.mjs, which emits that form.
+  If a padded row would exceed 255 characters, wrap it at the SAME field
+  boundaries in every row instead. Rows with differing field lists are left
+  alone - there is no column to align.
+- Outside the view chain, a call that fits within 120 characters goes on ONE
+  line: client->popover_display( xml = popup->stringify( ) by_id = by_id ).
+  Stacking parameters is for calls that do not fit. Inside the chain the chain
+  rules win, and a wrapped t_arg list stays wrapped, hanging under its first
+  element.
   z2ui5_if_app~main is always the FIRST method in the implementation; the
   remaining methods follow in the order they are called from main, EXCEPT
   model_init which always goes LAST (after every other method, and declared

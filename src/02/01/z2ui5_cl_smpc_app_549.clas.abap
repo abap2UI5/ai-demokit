@@ -337,8 +337,7 @@ CLASS z2ui5_cl_smpc_app_549 IMPLEMENTATION.
                     )->a( n = `id`   v = `appTypeText`
                     )->a( n = `text` v = client->_bind( sel_typetxt ) ).
 
-    client->popover_display( xml   = popup->stringify( )
-                             by_id = `SPC1` ).
+    client->popover_display( xml = popup->stringify( ) by_id = `SPC1` ).
 
   ENDMETHOD.
 
@@ -484,8 +483,7 @@ CLASS z2ui5_cl_smpc_app_549 IMPLEMENTATION.
                         )->a( n = `type`    v = `{TYPE}`
                         )->a( n = `tooltip` v = `{TEXT}` ).
 
-    client->popover_display( xml   = popup->stringify( )
-                             by_id = `legendButton` ).
+    client->popover_display( xml = popup->stringify( ) by_id = `legendButton` ).
 
   ENDMETHOD.
 
@@ -767,10 +765,10 @@ CLASS z2ui5_cl_smpc_app_549 IMPLEMENTATION.
     ).
 
     t_types = VALUE #(
-      ( text = `Team Meeting` type = `Type01` )
-      ( text = `Personal` type = `Type05` )
-      ( text = `Discussions` type = `Type08` )
-      ( text = `Out of office` type = `Type09` )
+      ( text = `Team Meeting`    type = `Type01` )
+      ( text = `Personal`        type = `Type05` )
+      ( text = `Discussions`     type = `Type08` )
+      ( text = `Out of office`   type = `Type09` )
       ( text = `Private meeting` type = `Type03` )
     ).
 

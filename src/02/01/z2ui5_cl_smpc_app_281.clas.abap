@@ -92,9 +92,7 @@ CLASS z2ui5_cl_smpc_app_281 IMPLEMENTATION.
           names = |{ names }{ COND string( WHEN sy-tabix > 1 THEN `,` ) }'{ VALUE #( t_products[ productid = key ]-name OPTIONAL ) }'|.
         ENDLOOP.
 
-        client->message_toast_display(
-          text  = |Event 'selectionFinished': [{ names }]|
-          width = `auto` ).
+        client->message_toast_display( text = |Event 'selectionFinished': [{ names }]| width = `auto` ).
 
     ENDCASE.
 

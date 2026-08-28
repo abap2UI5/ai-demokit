@@ -144,8 +144,7 @@ CLASS z2ui5_cl_smpc_app_600 IMPLEMENTATION.
     ENDIF.
 
     " onDrop's own guard: never move a node into one of its own children
-    IF is_descendant( node     = dropped_text
-                      ancestor = dragged_text ) = abap_true.
+    IF is_descendant( node = dropped_text ancestor = dragged_text ) = abap_true.
       RETURN.
     ENDIF.
 
@@ -182,28 +181,23 @@ CLASS z2ui5_cl_smpc_app_600 IMPLEMENTATION.
     CLEAR t_nodes.
 
     LOOP AT t_flat INTO DATA(row1) WHERE parent IS INITIAL.
-      DATA(node1) = VALUE ty_s_node_level1( text = row1-text
-                                            ref  = row1-ref ).
+      DATA(node1) = VALUE ty_s_node_level1( text = row1-text ref = row1-ref ).
       DATA(parent1) = row1-text.
 
       LOOP AT t_flat INTO DATA(row2) WHERE parent = parent1.
-        DATA(node2) = VALUE ty_s_node_level2( text = row2-text
-                                              ref  = row2-ref ).
+        DATA(node2) = VALUE ty_s_node_level2( text = row2-text ref = row2-ref ).
         DATA(parent2) = row2-text.
 
         LOOP AT t_flat INTO DATA(row3) WHERE parent = parent2.
-          DATA(node3) = VALUE ty_s_node_level3( text = row3-text
-                                                ref  = row3-ref ).
+          DATA(node3) = VALUE ty_s_node_level3( text = row3-text ref = row3-ref ).
           DATA(parent3) = row3-text.
 
           LOOP AT t_flat INTO DATA(row4) WHERE parent = parent3.
-            DATA(node4) = VALUE ty_s_node_level4( text = row4-text
-                                                  ref  = row4-ref ).
+            DATA(node4) = VALUE ty_s_node_level4( text = row4-text ref = row4-ref ).
             DATA(parent4) = row4-text.
 
             LOOP AT t_flat INTO DATA(row5) WHERE parent = parent4.
-              INSERT VALUE #( text = row5-text
-                              ref  = row5-ref ) INTO TABLE node4-nodes.
+              INSERT VALUE #( text = row5-text ref = row5-ref ) INTO TABLE node4-nodes.
             ENDLOOP.
 
             INSERT node4 INTO TABLE node3-nodes.

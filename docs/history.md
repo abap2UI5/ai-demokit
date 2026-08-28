@@ -7,6 +7,81 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-28 — four formatting drifts, and the rules that stop them coming back
+
+Four cleanups out of one pass over all 637 ports. None of them changes what an
+app does — every one is whitespace or a branch that decided nothing — so no
+`checked` status resets (AGENTS §10 invalidates a check on *behavioural* rework;
+21 of the 201 classes below are `checked` and keep their stamp). Each one ships
+with the rule that makes it stick, because all four had been invisible to every
+gate the repository runs.
+
+**1. The `check_on_init( )` fork that decided nothing — 201 classes.**
+`check_on_init( )` being true IMPLIES `check_on_navigated( )` is true, and that
+is a property of the framework, not a habit: all four paths to an instance's
+first `main( )` set the flag — `factory_first_start` for a fresh start *and* for
+a draft restore (`z2ui5_cl_ui5_action.clas.abap:88, 115`),
+`factory_system_startup` (:208) and `prepare_app_stack`, which serves both
+`nav_app_call` and `nav_app_leave` (:253). The ABAP Doc on
+`z2ui5_if_client~check_on_navigated` says so in as many words and adds that "the
+samples and documentation are written that way". They were not: 195 classes
+carried `IF check_on_init( ). view_display( ). ELSEIF check_on_navigated( ).
+view_display( ).`, whose two arms do the same thing, and 6 more carried the
+same redundancy as `IF check_on_init( ) OR check_on_navigated( ).`. Both forms
+are gone; the 376 ports that seed a model in `check_on_init( )` and the 59 that
+seed flags inline keep their branch, because there the branch carries
+information.
+
+**2. A wrapped `t_arg` list that hung under the wrong column — 146 lines.**
+The house form is that continuation lines start under the FIRST element of the
+`VALUE #( )`; 231 lines did that and 146 did not — 134 of them three columns
+left, aligned on the `#` of `VALUE #(`, and 120 of those 134 in apps 076 and
+077 alone, written once and copied once. `chain-house-layout` cannot see this:
+it moves whitespace *between* chain segments and the indent of a continuation
+line that is not itself content, and `( \`removeItem\` )` is content. It is now
+rule 7 of the shared `view-chain-layout` skill, whose source is abap2UI5.
+
+**3. Mock tables that were not tables — 145 blocks, 7064 rows.**
+`scripts/json-to-abap.mjs` emitted every row with its cells joined by a single
+space, while `rowsToAbapType( )` eleven lines below it padded the type
+declaration — so the types lined up and the data under them did not. The
+generator pads now (last cell of a row excluded, so no spaces pile up before the
+closing `)`), and the corpus was brought to the same form. Two exceptions are
+deliberate and are in the rule: 14 blocks would break the 255-character limit
+once padded and are left for the hand-wrapped form app 571 demonstrates (123
+rows, every one of them `3+4+4`), and 53 blocks whose rows carry *different*
+field lists have no column to align — app 585's `t_navigation`, where one row
+has a `key` and the next does not and some nest a child table, is the reference
+counter-case.
+
+**4. Two parameters are not a reason for two lines — 78 statements.**
+Nothing in AGENTS.md or `port-a-sample` ever asked for one parameter per line
+outside the view chain, and the corpus proved it was habit rather than rule:
+`popover_display` was split across two lines in **all 35** of its call sites
+while `popup_display`, its sibling, was split in **none of 43** — and the split
+popover calls are on average *shorter* (median 92 characters collapsed) than the
+single-line toasts (median 79). Statements that fit 120 characters are now on
+one line. Wrapped `t_arg` lists are exempt by construction, and so are classic
+calls with `EXPORTING`/`EXCEPTIONS` sections, where the stacking carries
+meaning.
+
+**What enforces each of them.** Three new `pattern-lint` rules —
+`redundant-init-display`, `ragged-value-table`, `stacked-short-call` — plus rule
+7 in the shared layout skill. The three were run against the corpus as it stood
+before this change and reported 201 / 145 / 77 findings, exactly the sets that
+were fixed: a rule that cannot fail is worth nothing, and these were checked
+against the very drift they were written for. The prose followed too:
+`AGENTS.md` §5, `port-a-sample`, `scripts/generation-prompt.txt`, and — in
+abap2UI5, so consumers inherit it — `docs/agents/building-apps.md` and the
+`build-an-app` skill, whose "compounds keep the shape" example had been
+`IF check_on_init( ) OR check_on_navigated( ).`, i.e. the framework's own
+documentation recommending the form this change removes.
+
+One side effect worth recording: the overview app's attention score is partly a
+line-count proxy (`loc > 220 / 120 / 60` in `scripts/lib/overview-model.mjs`),
+so two ports dropped a point when their dispatcher lost two lines. The classes
+really are shorter; nothing about them got simpler.
+
 ## 2026-08-28 — closed findings moved out of the backlog
 
 STATUS.md had grown to 798 lines with **10 of its 15 backlog items already

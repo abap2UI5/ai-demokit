@@ -115,8 +115,8 @@ CLASS z2ui5_cl_smpc_app_015 IMPLEMENTATION.
                       ( text = `Node1-1-1-1` ref = `sap-icon://attachment-video` )
                       ( text = `Node1-1-1-2` ref = `sap-icon://attachment-zip-file` )
                       ( text = `Node1-1-1-3` ref = `sap-icon://course-program` ) ) ) ) ) ) )
-          ( text = `Node1-2` ref = `sap-icon://create` ) ) )
-      ( text = `Node2` ref = `sap-icon://customer-financial-fact-sheet` ) ).
+          ( text = `Node1-2`     ref = `sap-icon://create` ) ) )
+      ( text = `Node2`       ref = `sap-icon://customer-financial-fact-sheet` ) ).
 
   ENDMETHOD.
 

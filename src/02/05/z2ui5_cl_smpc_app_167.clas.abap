@@ -409,15 +409,15 @@ CLASS z2ui5_cl_smpc_app_167 IMPLEMENTATION.
         items = VALUE #( ) )
       ( title = `Root Item 3` icon = `sap-icon://card` enabled = abap_true expanded = abap_false key = `` selectable = abap_true
         items = VALUE #(
-          ( title = `Child Item 1` key = `` enabled = abap_true )
-          ( title = `Child Item 2` key = `` enabled = abap_true )
-          ( title = `Child Item 3` key = `` enabled = abap_true )
-          ( title = `Child Item 4` key = `` enabled = abap_true )
-          ( title = `Child Item 5` key = `` enabled = abap_true )
-          ( title = `Child Item 6` key = `` enabled = abap_true )
-          ( title = `Child Item 7` key = `` enabled = abap_true )
-          ( title = `Child Item 8` key = `` enabled = abap_true )
-          ( title = `Child Item 9` key = `` enabled = abap_true )
+          ( title = `Child Item 1`  key = `` enabled = abap_true )
+          ( title = `Child Item 2`  key = `` enabled = abap_true )
+          ( title = `Child Item 3`  key = `` enabled = abap_true )
+          ( title = `Child Item 4`  key = `` enabled = abap_true )
+          ( title = `Child Item 5`  key = `` enabled = abap_true )
+          ( title = `Child Item 6`  key = `` enabled = abap_true )
+          ( title = `Child Item 7`  key = `` enabled = abap_true )
+          ( title = `Child Item 8`  key = `` enabled = abap_true )
+          ( title = `Child Item 9`  key = `` enabled = abap_true )
           ( title = `Child Item 10` key = `` enabled = abap_true )
           ( title = `Child Item 11` key = `` enabled = abap_true )
           ( title = `Child Item 12` key = `` enabled = abap_true )
@@ -512,10 +512,10 @@ CLASS z2ui5_cl_smpc_app_167 IMPLEMENTATION.
     " defaults (None, Default) are seeded explicitly because an empty string
     " would be rejected by the enum validation (AGENTS section 5)
     fixednavigation = VALUE #(
-      ( title = `Quick Create` icon = `sap-icon://write-new` ariahaspopup = `Dialog` design = `Action` selectable = abap_false )
-      ( title = `Fixed Item 1` icon = `sap-icon://employee` ariahaspopup = `None` design = `Default` selectable = abap_true )
-      ( title = `Fixed Item 2` icon = `sap-icon://building` ariahaspopup = `None` design = `Default` selectable = abap_true )
-      ( title = `Fixed Item 3` icon = `sap-icon://card` ariahaspopup = `None` design = `Default` selectable = abap_true )
+      ( title = `Quick Create` icon = `sap-icon://write-new` ariahaspopup = `Dialog` design = `Action`  selectable = abap_false )
+      ( title = `Fixed Item 1` icon = `sap-icon://employee`  ariahaspopup = `None`   design = `Default` selectable = abap_true )
+      ( title = `Fixed Item 2` icon = `sap-icon://building`  ariahaspopup = `None`   design = `Default` selectable = abap_true )
+      ( title = `Fixed Item 3` icon = `sap-icon://card`      ariahaspopup = `None`   design = `Default` selectable = abap_true )
       ).
 
   ENDMETHOD.

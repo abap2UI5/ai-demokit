@@ -343,9 +343,7 @@ CLASS z2ui5_cl_smpc_app_604 IMPLEMENTATION.
 
     ind_border_design     = COND #( WHEN ind_border_idx = 0 THEN `Solid` ELSE `None` ).
 
-    scroll_mode           = COND #( WHEN scroll_visible_pages = abap_true
-                                    THEN `VisiblePages`
-                                    ELSE `SinglePage` ).
+    scroll_mode = COND #( WHEN scroll_visible_pages = abap_true THEN `VisiblePages` ELSE `SinglePage` ).
 
   ENDMETHOD.
 

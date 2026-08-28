@@ -20,9 +20,7 @@ CLASS z2ui5_cl_smpc_app_278 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
-      view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    IF client->check_on_navigated( ).
       view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
@@ -110,9 +108,7 @@ CLASS z2ui5_cl_smpc_app_278 IMPLEMENTATION.
 
       WHEN `CONFIRM`.
 
-        client->message_box_display(
-          text = `Approve purchase order 12345?`
-          type = `confirm` ).
+        client->message_box_display( text = `Approve purchase order 12345?` type = `confirm` ).
 
       WHEN `ALERT`.
 
@@ -128,15 +124,11 @@ CLASS z2ui5_cl_smpc_app_278 IMPLEMENTATION.
 
       WHEN `INFO`.
 
-        client->message_box_display(
-          text = `Your booking will be reserved for 24 hours.`
-          type = `information` ).
+        client->message_box_display( text = `Your booking will be reserved for 24 hours.` type = `information` ).
 
       WHEN `WARNING`.
 
-        client->message_box_display(
-          text = `The project schedule was last updated over a year ago.`
-          type = `warning` ).
+        client->message_box_display( text = `The project schedule was last updated over a year ago.` type = `warning` ).
 
       WHEN `SUCCESS`.
 

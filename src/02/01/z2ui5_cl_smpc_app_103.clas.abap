@@ -362,8 +362,7 @@ CLASS z2ui5_cl_smpc_app_103 IMPLEMENTATION.
         ELSE.
           DATA(sel_names) = ``.
           LOOP AT sel_items REFERENCE INTO DATA(lr_sel).
-            sel_names = COND #( WHEN sel_names IS INITIAL THEN lr_sel->title
-                                ELSE |{ sel_names }, { lr_sel->title }| ).
+            sel_names = COND #( WHEN sel_names IS INITIAL THEN lr_sel->title ELSE |{ sel_names }, { lr_sel->title }| ).
           ENDLOOP.
           client->message_toast_display( |You have chosen { sel_names }| ).
         ENDIF.

@@ -443,14 +443,14 @@ CLASS z2ui5_cl_smpc_app_168 IMPLEMENTATION.
       ( text = `London` key = `LN` )
       ( text = `Madrid` key = `MD` )
       ( text = `Prague` key = `PR` )
-      ( text = `Paris` key = `PS` )
-      ( text = `Sofia` key = `SF` )
+      ( text = `Paris`  key = `PS` )
+      ( text = `Sofia`  key = `SF` )
       ( text = `Vienna` key = `VN` )
     ).
 
     productitems = VALUE #(
-      ( title = `Notebook HT` subtitle = `ID23452256-D44` revenue = `27.25K EUR` statusschema = `Success` )
-      ( title = `Notebook XT` subtitle = `ID27852256-D47` revenue = `7.35K EUR` statusschema = `Error` )
+      ( title = `Notebook HT` subtitle = `ID23452256-D44`  revenue = `27.25K EUR` statusschema = `Success` )
+      ( title = `Notebook XT` subtitle = `ID27852256-D47`  revenue = `7.35K EUR`  statusschema = `Error` )
       ( title = `Notebook ST` subtitle = `ID123555587-I05` revenue = `22.89K EUR` statusschema = `Warning` )
     ).
 

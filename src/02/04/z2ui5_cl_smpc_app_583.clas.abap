@@ -107,8 +107,7 @@ CLASS z2ui5_cl_smpc_app_583 IMPLEMENTATION.
                         )->a( n = `targetSrc` v = `{TARGETSRC}`
                         )->a( n = `target`    v = `{TARGET}` ).
 
-    client->popover_display( xml   = popup->stringify( )
-                             by_id = by_id ).
+    client->popover_display( xml = popup->stringify( ) by_id = by_id ).
 
   ENDMETHOD.
 
@@ -129,20 +128,20 @@ CLASS z2ui5_cl_smpc_app_583 IMPLEMENTATION.
     " subTitle, targetSrc and target too; the mock sets only src, title and a
     " subtitle on some rows, so the rest stay empty here as they are undefined there
     t_items = VALUE #(
-      ( src = `sap-icon://home` title = `Home` subtitle = `Central Home` )
-      ( src = `sap-icon://business-objects-experience` title = `Analytics Cloud` subtitle = `Analytics Cloud` )
-      ( src = `sap-icon://contacts` title = `Catalog` subtitle = `Ariba` )
-      ( src = `sap-icon://credit-card` title = `Guided Buying` subtitle = `` )
-      ( src = `sap-icon://cart-3` title = `Strategic Procurement` subtitle = `` )
-      ( src = `sap-icon://flight` title = `Travel & Expense` subtitle = `Concur` )
-      ( src = `sap-icon://shipping-status` title = `Vendor Management` subtitle = `Fieldglass` )
-      ( src = `sap-icon://customer` title = `Human Capital Management` subtitle = `` )
-      ( src = `sap-icon://sales-notification` title = `Sales Cloud` subtitle = `Sales Cloud` )
-      ( src = `sap-icon://retail-store` title = `Commerce Cloud` subtitle = `Commerce cloud` )
-      ( src = `sap-icon://marketing-campaign` title = `Marketing Cloud` subtitle = `Marketing Cloud` )
-      ( src = `sap-icon://family-care` title = `Service Cloud` subtitle = `` )
-      ( src = `sap-icon://customer-briefing` title = `Customer Data Cloud` subtitle = `` )
-      ( src = `sap-icon://batch-payments` title = `S/4HANA` subtitle = `` ) ).
+      ( src = `sap-icon://home`                        title = `Home`                     subtitle = `Central Home` )
+      ( src = `sap-icon://business-objects-experience` title = `Analytics Cloud`          subtitle = `Analytics Cloud` )
+      ( src = `sap-icon://contacts`                    title = `Catalog`                  subtitle = `Ariba` )
+      ( src = `sap-icon://credit-card`                 title = `Guided Buying`            subtitle = `` )
+      ( src = `sap-icon://cart-3`                      title = `Strategic Procurement`    subtitle = `` )
+      ( src = `sap-icon://flight`                      title = `Travel & Expense`         subtitle = `Concur` )
+      ( src = `sap-icon://shipping-status`             title = `Vendor Management`        subtitle = `Fieldglass` )
+      ( src = `sap-icon://customer`                    title = `Human Capital Management` subtitle = `` )
+      ( src = `sap-icon://sales-notification`          title = `Sales Cloud`              subtitle = `Sales Cloud` )
+      ( src = `sap-icon://retail-store`                title = `Commerce Cloud`           subtitle = `Commerce cloud` )
+      ( src = `sap-icon://marketing-campaign`          title = `Marketing Cloud`          subtitle = `Marketing Cloud` )
+      ( src = `sap-icon://family-care`                 title = `Service Cloud`            subtitle = `` )
+      ( src = `sap-icon://customer-briefing`           title = `Customer Data Cloud`      subtitle = `` )
+      ( src = `sap-icon://batch-payments`              title = `S/4HANA`                  subtitle = `` ) ).
 
   ENDMETHOD.
 

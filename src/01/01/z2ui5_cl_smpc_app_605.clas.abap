@@ -151,16 +151,16 @@ CLASS z2ui5_cl_smpc_app_605 IMPLEMENTATION.
 
     " data.json /ContentData - the eleven tiles the HeaderContainer starts with
     t_content = VALUE #(
-      ( value = `1.75` color = `Good` growth = `Up` )
+      ( value = `1.75` color = `Good`    growth = `Up` )
       ( value = `0.52` color = `Neutral` growth = `Up` )
-      ( value = `1.62` color = `Good` growth = `Down` )
-      ( value = `0.65` color = `Good` growth = `Up` )
-      ( value = `2.84` color = `Error` growth = `Down` )
-      ( value = `0.73` color = `Good` growth = `Up` )
-      ( value = `0.32` color = `Good` growth = `Up` )
-      ( value = `0.97` color = `Error` growth = `Down` )
+      ( value = `1.62` color = `Good`    growth = `Down` )
+      ( value = `0.65` color = `Good`    growth = `Up` )
+      ( value = `2.84` color = `Error`   growth = `Down` )
+      ( value = `0.73` color = `Good`    growth = `Up` )
+      ( value = `0.32` color = `Good`    growth = `Up` )
+      ( value = `0.97` color = `Error`   growth = `Down` )
       ( value = `2.25` color = `Neutral` growth = `Down` )
-      ( value = `3.27` color = `Error` growth = `Up` )
+      ( value = `3.27` color = `Error`   growth = `Up` )
       ( value = `1.15` color = `Neutral` growth = `Up` )
     ).
 
