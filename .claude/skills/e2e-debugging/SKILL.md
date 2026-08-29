@@ -29,6 +29,19 @@ verdicts below turned out to be harness effects.
   names `e2e-build.mjs` kills your own shell (exit 144, no output). Grep the
   build log for `e2e-build: done`; kill by a PID noted in a SEPARATE, earlier
   command.
+- **A green run that names no ports is a hollow gate — read the count.**
+  `e2e-smoke` prints `e2e-smoke: <n> port(s)` before the first check and
+  `<n> app(s), <f> failing` after the last, and between 2026-08-28 and
+  2026-08-29 both read **0** on every run without `--shard`. The sharding slice
+  aliased the very list it then cleared — `const sharded = SHARD ? metas.filter(…)
+  : metas;` followed by `metas.length = 0; metas.push(...sharded);` — so
+  `npm run e2e`, `--only <class>` and the unsharded `--strict` run that
+  `bump-a2ui5.yaml` reports as *"the strict e2e smoke over all ports"* each
+  exited 0 having checked nothing. The nightly never saw it because it always
+  passes `--shard i/4`; the flagless callers carried it alone. The list is
+  rebuilt only under `--shard` now, and the lesson outlives the fix: a run you
+  are about to trust should print the port count you expect, and a `--only` run
+  that reports `0 port(s)` is a harness bug, not a filter that missed.
 - **A PRIVATE instance attribute 500s every roundtrip.** The app's state is
   persisted with `CALL TRANSFORMATION id`, and the transpiled runtime's
   re-implementation walks the class's attributes with a dynamic

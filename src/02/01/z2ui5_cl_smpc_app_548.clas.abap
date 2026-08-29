@@ -235,7 +235,10 @@ CLASS z2ui5_cl_smpc_app_548 IMPLEMENTATION.
                             )->ele( n = `RecurringNonWorkingPeriod` ns = `unified`
                                 )->a( n = `recurrenceType`    v = |\{= $\{RECURRENCETYPE\} \|\| null \}|
                                 )->a( n = `recurrenceEndDate` v = `{ path: 'RECURRENCEENDDATE', formatter: 'Formatter.DateCreateObject' }`
-                                )->a( n = `recurrencePattern` v = `{RECURRENCEPATTERN}`
+                                " setRecurrencePattern raises "recurrencePattern must be >= 1" here too,
+                                " and no ABAP writes a non-working row - the appointments get their 1
+                                " from CREATE_SAVE, these get it from the binding (see sidecar)
+                                )->a( n = `recurrencePattern` v = `{= ${RECURRENCEPATTERN} || 1 }`
                                 )->a( n = `date`              v = `{ path: 'DATE_AT', formatter: 'Formatter.DateCreateObject' }`
 
                                 )->tag( n = `TimeRange` ns = `unified`
@@ -663,11 +666,17 @@ CLASS z2ui5_cl_smpc_app_548 IMPLEMENTATION.
         ENDIF.
 
       WHEN `CREATE_SAVE`.
-        DATA(new_appointment) = VALUE ty_s_appointment( start_at = c_start
-                                                        end_at   = c_end
-                                                        title    = c_title
-                                                        text     = c_text
-                                                        type     = c_type ).
+        " the new row carries the CONTROL's own default recurrence pattern:
+        " setRecurrencePattern raises "recurrencePattern must be >= 1", and the
+        " original keeps the default by leaving the property off a non-recurring
+        " appointment - a serialized ABAP structure cannot leave a field out, so
+        " the initial 0 would reach the setter and terminate the app
+        DATA(new_appointment) = VALUE ty_s_appointment( start_at          = c_start
+                                                        end_at            = c_end
+                                                        title             = c_title
+                                                        text              = c_text
+                                                        type              = c_type
+                                                        recurrencepattern = 1 ).
         IF c_rec_type IS NOT INITIAL.
           new_appointment-recurrencetype    = c_rec_type.
           " guarded on characters AND length: c_rec_pattern comes straight from a
