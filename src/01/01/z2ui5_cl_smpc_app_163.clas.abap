@@ -96,8 +96,7 @@ CLASS z2ui5_cl_smpc_app_163 IMPLEMENTATION.
                         )->a( n = `visible` v = `{= ${device>/media/range} !== 'Phone' && ${device>/media/range} !== 'Tablet' }`
                     )->tag( `Button`
                         )->a( n = `icon`    v = `sap-icon://overflow`
-                        )->a( n = `press`   v = client->_event( val   = `OPEN_SHEET`
-                                                                t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+                        )->a( n = `press`   v = client->_event( val = `OPEN_SHEET` arg = `$event.oSource.sId` )
                         )->a( n = `visible` v = `{= ${device>/media/range} === 'Phone' || ${device>/media/range} === 'Tablet' }` ).
 
     client->view_display( view->stringify( ) ).

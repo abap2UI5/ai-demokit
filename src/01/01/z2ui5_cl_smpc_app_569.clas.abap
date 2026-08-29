@@ -108,8 +108,8 @@ CLASS z2ui5_cl_smpc_app_569 IMPLEMENTATION.
     " groups; both bind the SAME collection, exactly as the sample's two views do
     DATA(items) = COND string(
         WHEN selected = abap_true
-        THEN |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', filters: \{path: 'RANK', operator: 'GT', value1: '0'\}, sorter: \{path: 'RANK', descending: true\} \}|
-        ELSE |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', filters: \{path: 'RANK', operator: 'EQ', value1: '0'\} \}| ).
+        THEN |\{ path: '{ client->_bind_path( t_products ) }', filters: \{path: 'RANK', operator: 'GT', value1: '0'\}, sorter: \{path: 'RANK', descending: true\} \}|
+        ELSE |\{ path: '{ client->_bind_path( t_products ) }', filters: \{path: 'RANK', operator: 'EQ', value1: '0'\} \}| ).
 
     DATA(table) = node->ele( `Table`
         )->a( n = `id`               v = COND #( WHEN selected = abap_true THEN `selectedTable` ELSE `availableTable` )
@@ -212,8 +212,7 @@ CLASS z2ui5_cl_smpc_app_569 IMPLEMENTATION.
           )->a( n = `sourceAggregation` v = `items`
           )->tag( n = `DropInfo` ns = `dnd`
               )->a( n = `groupName`         v = `selected2available`
-              )->a( n = `drop`              v = client->_event( val   = `DROP_AVAILABLE`
-                                                                t_arg = VALUE #( ( `${$parameters>/draggedControl}.getBindingContext().getProperty('NAME')` ) ) ) ).
+              )->a( n = `drop`              v = client->_event( val = `DROP_AVAILABLE` arg = `${$parameters>/draggedControl}.getBindingContext().getProperty('NAME')` ) ).
     ENDIF.
 
     table->ele( `items`

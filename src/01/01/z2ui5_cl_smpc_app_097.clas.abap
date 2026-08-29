@@ -154,17 +154,17 @@ CLASS z2ui5_cl_smpc_app_097 IMPLEMENTATION.
                             )->a( n = `title`     v = `To Detail 1`
                             )->a( n = `type`      v = `Active`
                             )->a( n = `custom:to` v = `detail`
-                            )->a( n = `press`     v = client->_event( val = `NAV_DETAIL` t_arg = VALUE #( ( `detail` ) ) )
+                            )->a( n = `press`     v = client->_event( val = `NAV_DETAIL` arg = `detail` )
                         )->tag( `StandardListItem`
                             )->a( n = `title`     v = `To Detail 2`
                             )->a( n = `type`      v = `Active`
                             )->a( n = `custom:to` v = `detailDetail`
-                            )->a( n = `press`     v = client->_event( val = `NAV_DETAIL` t_arg = VALUE #( ( `detailDetail` ) ) )
+                            )->a( n = `press`     v = client->_event( val = `NAV_DETAIL` arg = `detailDetail` )
                         )->tag( `StandardListItem`
                             )->a( n = `title`     v = `To Detail 3`
                             )->a( n = `type`      v = `Active`
                             )->a( n = `custom:to` v = `detail2`
-                            )->a( n = `press`     v = client->_event( val = `NAV_DETAIL` t_arg = VALUE #( ( `detail2` ) ) ) ).
+                            )->a( n = `press`     v = client->_event( val = `NAV_DETAIL` arg = `detail2` ) ).
 
     client->view_display( view->stringify( ) ).
 

@@ -60,7 +60,7 @@ CLASS z2ui5_cl_smpc_app_457 IMPLEMENTATION.
                 )->a( n = `id`             v = `multiinput1`
                 )->a( n = `showValueHelp`  v = `false`
                 )->a( n = `showSuggestion` v = `false`
-                )->a( n = `tokens`         v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                )->a( n = `tokens`         v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
                 )->ele( `tokens`
                     )->tag( `Token`

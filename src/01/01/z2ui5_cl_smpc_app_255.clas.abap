@@ -47,7 +47,7 @@ CLASS z2ui5_cl_smpc_app_255 IMPLEMENTATION.
         )->a( n = `xmlns`     v = `sap.m`
 
         )->ele( `FlexBox`
-            )->a( n = `items`     v = |\{ path: '{ client->_bind( val = modeldata path = abap_true ) }' \}|
+            )->a( n = `items`     v = |\{ path: '{ client->_bind_path( modeldata ) }' \}|
             )->a( n = `direction` v = `Column`
 
             )->ele( `VBox`

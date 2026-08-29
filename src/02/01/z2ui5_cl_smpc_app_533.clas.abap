@@ -126,8 +126,7 @@ CLASS z2ui5_cl_smpc_app_533 IMPLEMENTATION.
                         )->a( n = `renderMode`       v = `Page`
                         " handleNavigationChange reads the step off the event and
                         " recomputes the index; the step TITLE travels here
-                        )->a( n = `navigationChange` v = client->_event( val   = `NAVIGATION_CHANGE`
-                                                                         t_arg = VALUE #( ( `${$parameters>/step}.getTitle()` ) ) )
+                        )->a( n = `navigationChange` v = client->_event( val = `NAVIGATION_CHANGE` arg = `${$parameters>/step}.getTitle()` )
 
                         )->ele( `WizardStep`
                             )->a( n = `id`        v = `ProductTypeStep`

@@ -99,9 +99,9 @@ CLASS z2ui5_cl_smpc_app_218 IMPLEMENTATION.
                     )->a( n = `search`            v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} search event is fired` ) ( `$event.oSource.sId` ) ) )
                     )->a( n = `liveChange`        v = client->follow_up_action( val = client->cs_event-control_global
                                                                                 t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} liveChange event value is: {1}` ) ( `$event.oSource.sId` ) ( `${$parameters>/newValue}` ) ) )
-                    )->a( n = `suggest`           v = client->_event( val = `SUGGEST` t_arg = VALUE #( ( `${$parameters>/suggestValue}` ) ) )
+                    )->a( n = `suggest`           v = client->_event( val = `SUGGEST` arg = `${$parameters>/suggestValue}` )
                     )->a( n = `enableSuggestions` v = `true`
-                    )->a( n = `suggestionItems`   v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                    )->a( n = `suggestionItems`   v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
                     )->ele( `suggestionItems`
                         )->tag( n = `SuggestionItem` ns = `m`

@@ -155,8 +155,7 @@ CLASS z2ui5_cl_smpc_app_096 IMPLEMENTATION.
                     )->a( n = `navButtonPress`   v = client->_event( `MASTER_BACK` )
 
                     )->ele( `List`
-                        )->a( n = `itemPress` v = client->_event( val   = `NAV_DETAIL`
-                                                                  t_arg = VALUE #( ( `${$parameters>/listItem}.getCustomData()[0].getValue()` ) ) )
+                        )->a( n = `itemPress` v = client->_event( val = `NAV_DETAIL` arg = `${$parameters>/listItem}.getCustomData()[0].getValue()` )
 
                         )->tag( `StandardListItem`
                             )->a( n = `title`     v = `To Detail 1`

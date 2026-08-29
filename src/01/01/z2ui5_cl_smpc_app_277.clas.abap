@@ -74,7 +74,7 @@ CLASS z2ui5_cl_smpc_app_277 IMPLEMENTATION.
                         )->a( n = `contextualWidth` v = `Auto`
                         )->a( n = `popinLayout`     v = `GridSmall`
                         )->a( n = `headerText`      v = `Products`
-                        )->a( n = `items`           v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }' \}|
+                        )->a( n = `items`           v = |\{ path: '{ client->_bind_path( t_products ) }' \}|
 
                         )->ele( `columns`
                             )->ele( `Column`
@@ -147,7 +147,7 @@ CLASS z2ui5_cl_smpc_app_277 IMPLEMENTATION.
                         )->a( n = `contextualWidth` v = `Auto`
                         )->a( n = `popinLayout`     v = `GridSmall`
                         )->a( n = `headerText`      v = `Products`
-                        )->a( n = `items`           v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }' \}|
+                        )->a( n = `items`           v = |\{ path: '{ client->_bind_path( t_products ) }' \}|
 
                         )->ele( `columns`
                             )->ele( `Column`

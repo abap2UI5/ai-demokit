@@ -130,8 +130,7 @@ CLASS z2ui5_cl_smpc_app_617 IMPLEMENTATION.
         " first round trip (apps 548/555/604 idiom)
         )->a( n = `backgroundDesign`        v = |\{= ${ client->_bind( background_design ) } \|\| null \}|
         )->a( n = `headerBackgroundDesign`  v = |\{= ${ client->_bind( header_background ) } \|\| null \}|
-        )->a( n = `select`                  v = client->_event( val   = `FILTER`
-                                                                 t_arg = VALUE #( ( `${$parameters>/key}` ) ) ) ).
+        )->a( n = `select`                  v = client->_event( val = `FILTER` arg = `${$parameters>/key}` ) ).
 
     bar->ele( `items`
         )->tag( `IconTabFilter`

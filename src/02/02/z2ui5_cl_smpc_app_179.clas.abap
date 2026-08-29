@@ -59,7 +59,7 @@ CLASS z2ui5_cl_smpc_app_179 IMPLEMENTATION.
                 )->tag( `Label`
                     )->a( n = `text` v = `Number`
                 )->tag( `Input`
-                    )->a( n = `value` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'FloatType' \}|
+                    )->a( n = `value` v = |\{ path: '{ client->_bind_path( number ) }', type: 'FloatType' \}|
 
             )->end(
         )->end(
@@ -80,11 +80,11 @@ CLASS z2ui5_cl_smpc_app_179 IMPLEMENTATION.
                 )->tag( `Label`
                     )->a( n = `text` v = `3 digits`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'FloatType', formatOptions: \{ minIntegerDigits: 3 \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( number ) }', type: 'FloatType', formatOptions: \{ minIntegerDigits: 3 \} \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `5 digits`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'FloatType', formatOptions: \{ minIntegerDigits: 5 \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( number ) }', type: 'FloatType', formatOptions: \{ minIntegerDigits: 5 \} \}|
 
             )->end(
         )->end(
@@ -105,11 +105,11 @@ CLASS z2ui5_cl_smpc_app_179 IMPLEMENTATION.
                 )->tag( `Label`
                     )->a( n = `text` v = `2 digits`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'FloatType', formatOptions: \{ maxIntegerDigits: 2 \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( number ) }', type: 'FloatType', formatOptions: \{ maxIntegerDigits: 2 \} \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `5 digits`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'FloatType', formatOptions: \{ maxIntegerDigits: 5 \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( number ) }', type: 'FloatType', formatOptions: \{ maxIntegerDigits: 5 \} \}|
 
             )->end(
         )->end(
@@ -130,11 +130,11 @@ CLASS z2ui5_cl_smpc_app_179 IMPLEMENTATION.
                 )->tag( `Label`
                     )->a( n = `text` v = `2 digits`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'FloatType', formatOptions: \{ minFractionDigits: 2 \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( number ) }', type: 'FloatType', formatOptions: \{ minFractionDigits: 2 \} \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `5 digits`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'FloatType', formatOptions: \{ minFractionDigits: 5 \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( number ) }', type: 'FloatType', formatOptions: \{ minFractionDigits: 5 \} \}|
 
             )->end(
         )->end(
@@ -155,19 +155,19 @@ CLASS z2ui5_cl_smpc_app_179 IMPLEMENTATION.
                 )->tag( `Label`
                     )->a( n = `text` v = `2 digits, default preserveDecimals (true)`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'FloatType', formatOptions: \{ maxFractionDigits: 2 \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( number ) }', type: 'FloatType', formatOptions: \{ maxFractionDigits: 2 \} \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `5 digits, default preserveDecimals (true)`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'FloatType', formatOptions: \{ maxFractionDigits: 5 \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( number ) }', type: 'FloatType', formatOptions: \{ maxFractionDigits: 5 \} \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `2 digits, preserveDecimals=false`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'FloatType', formatOptions: \{ maxFractionDigits: 2, preserveDecimals: false \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( number ) }', type: 'FloatType', formatOptions: \{ maxFractionDigits: 2, preserveDecimals: false \} \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `5 digits, preserveDecimals=false`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'FloatType', formatOptions: \{ maxFractionDigits: 5, preserveDecimals: false \} \}| ).
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( number ) }', type: 'FloatType', formatOptions: \{ maxFractionDigits: 5, preserveDecimals: false \} \}| ).
 
     client->view_display( view->stringify( ) ).
 

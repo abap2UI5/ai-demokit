@@ -117,10 +117,8 @@ CLASS z2ui5_cl_smpc_app_609 IMPLEMENTATION.
                             ( `${$parameters>/date}.getMonth() + 1` )
                             ( `${$parameters>/date}.getDate()` ) ) )
                 " handleStartDateChange names the new start date in a toast
-                )->a( n = `startDateChange`               v = client->_event(
-                          val   = `START_DATE_CHANGE`
-                          t_arg = VALUE #( ( `${$parameters>/date}.toString()` ) ) )
-                )->a( n = `startDate`                     v = |\{ path: '{ client->_bind( val = start_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
+                )->a( n = `startDateChange`               v = client->_event( val = `START_DATE_CHANGE` arg = `${$parameters>/date}.toString()` )
+                )->a( n = `startDate`                     v = |\{ path: '{ client->_bind_path( start_date ) }', formatter: 'Formatter.DateCreateObject' \}|
                 )->a( n = `appointments`                  v = client->_bind( t_appointments )
 
                 )->ele( `actions`

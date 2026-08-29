@@ -260,7 +260,7 @@ CLASS z2ui5_cl_smpc_app_361 IMPLEMENTATION.
                             )->ele( `template`
                                 )->ele( n = `ComboBox` ns = `m`
                                     )->a( n = `value` v = `{SUPPLIERNAME}`
-                                    )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_suppliers path = abap_true ) }', templateShareable: false \}|
+                                    )->a( n = `items` v = |\{ path: '{ client->_bind_path( t_suppliers ) }', templateShareable: false \}|
 
                                     )->tag( n = `Item` ns = `c`
                                         )->a( n = `text` v = `{NAME}`
@@ -321,7 +321,7 @@ CLASS z2ui5_cl_smpc_app_361 IMPLEMENTATION.
                             )->ele( `template`
                                 )->ele( n = `Select` ns = `m`
                                     )->a( n = `selectedKey` v = `{CATEGORY}`
-                                    )->a( n = `items`       v = |\{ path: '{ client->_bind( val = t_categories path = abap_true ) }', templateShareable: false \}|
+                                    )->a( n = `items`       v = |\{ path: '{ client->_bind_path( t_categories ) }', templateShareable: false \}|
 
                                     )->tag( n = `Item` ns = `c`
                                         )->a( n = `text` v = `{NAME}`
@@ -400,7 +400,7 @@ CLASS z2ui5_cl_smpc_app_361 IMPLEMENTATION.
         " last selected row, which renders as its model path
         client->message_toast_display( COND #( WHEN selected_indices IS INITIAL OR selected_indices = `[]`
                                                THEN `no item selected`
-                                               ELSE |{ client->_bind( val = t_products path = abap_true ) }/{ selected_index }| ) ).
+                                               ELSE |{ client->_bind_path( t_products ) }/{ selected_index }| ) ).
 
       WHEN `CLEAR_SELECTION`.
         " clearSelection: the selection lives in the control, so it is cleared

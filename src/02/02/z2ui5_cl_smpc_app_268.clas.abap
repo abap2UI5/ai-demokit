@@ -61,31 +61,26 @@ CLASS z2ui5_cl_smpc_app_268 IMPLEMENTATION.
                     )->a( n = `id`          v = `oColorPickerPopover`
                     )->a( n = `colorString` v = `blue`
                     )->a( n = `mode`        v = `HSL`
-                    )->a( n = `change`      v = client->_event( val   = `CHANGE_D`
-                                                                t_arg = VALUE #( ( `${$parameters>/colorString}` ) ) )
+                    )->a( n = `change`      v = client->_event( val = `CHANGE_D` arg = `${$parameters>/colorString}` )
                 )->tag( n = `ColorPickerPopover` ns = `u`
                     )->a( n = `id`          v = `oColorPickerLargePopover`
                     )->a( n = `colorString` v = `green`
                     )->a( n = `displayMode` v = `Large`
                     )->a( n = `mode`        v = `HSL`
-                    )->a( n = `change`      v = client->_event( val   = `CHANGE_L`
-                                                                t_arg = VALUE #( ( `${$parameters>/colorString}` ) ) )
+                    )->a( n = `change`      v = client->_event( val = `CHANGE_L` arg = `${$parameters>/colorString}` )
                 )->tag( n = `ColorPickerPopover` ns = `u`
                     )->a( n = `id`          v = `oColorPickerSimpplifiedPopover`
                     )->a( n = `colorString` v = `pink`
                     )->a( n = `displayMode` v = `Simplified`
                     )->a( n = `mode`        v = `HSL`
-                    )->a( n = `change`      v = client->_event( val   = `CHANGE_S`
-                                                                t_arg = VALUE #( ( `${$parameters>/colorString}` ) ) )
+                    )->a( n = `change`      v = client->_event( val = `CHANGE_S` arg = `${$parameters>/colorString}` )
                 )->tag( n = `ColorPickerPopover` ns = `u`
                     )->a( n = `id`          v = `oColorPickerLiveChangePopover`
                     )->a( n = `colorString` v = `orange`
                     )->a( n = `displayMode` v = `Large`
                     )->a( n = `mode`        v = `HSL`
-                    )->a( n = `change`      v = client->_event( val   = `CHANGE_LC`
-                                                                t_arg = VALUE #( ( `${$parameters>/colorString}` ) ) )
-                    )->a( n = `liveChange`  v = client->_event( val   = `LIVE_CHANGE`
-                                                                t_arg = VALUE #( ( `${$parameters>/colorString}` ) ) )
+                    )->a( n = `change`      v = client->_event( val = `CHANGE_LC` arg = `${$parameters>/colorString}` )
+                    )->a( n = `liveChange`  v = client->_event( val = `LIVE_CHANGE` arg = `${$parameters>/colorString}` )
 
             )->end(
 

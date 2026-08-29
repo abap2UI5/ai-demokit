@@ -69,8 +69,7 @@ CLASS z2ui5_cl_smpc_app_417 IMPLEMENTATION.
             )->a( n = `sideContentPosition` v = `End`
             )->a( n = `containerQuery`      v = `true`
             )->a( n = `showSideContent`     v = client->_bind( show_side )
-            )->a( n = `breakpointChanged`   v = client->_event( val   = `BP_CHANGED`
-                                                                t_arg = VALUE #( ( `${$parameters>/currentBreakpoint}` ) ) )
+            )->a( n = `breakpointChanged`   v = client->_event( val = `BP_CHANGED` arg = `${$parameters>/currentBreakpoint}` )
 
             )->ele( n = `mainContent` ns = `l`
                 )->ele( `ObjectPageLayout`

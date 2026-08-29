@@ -56,12 +56,10 @@ CLASS z2ui5_cl_smpc_app_229 IMPLEMENTATION.
                 )->tag( `Button`
                     )->a( n = `text`         v = `Show Popover`
                     " handlePopoverPress: the popover is built + anchored to the pressed button
-                    )->a( n = `press`        v = client->_event( val   = `SHOW_POPOVER`
-                                                                 t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+                    )->a( n = `press`        v = client->_event( val = `SHOW_POPOVER` arg = `$event.oSource.sId` )
                     )->a( n = `ariaHasPopup` v = `Dialog`
                 )->tag( `Button`
-                    )->a( n = `press`        v = client->_event( val   = `SHOW_RESIZABLE`
-                                                                 t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+                    )->a( n = `press`        v = client->_event( val = `SHOW_RESIZABLE` arg = `$event.oSource.sId` )
                     )->a( n = `text`         v = `Show Resizable Popover`
                     )->a( n = `ariaHasPopup` v = `Dialog`
 

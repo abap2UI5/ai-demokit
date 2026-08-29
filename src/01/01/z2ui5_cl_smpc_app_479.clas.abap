@@ -73,7 +73,7 @@ CLASS z2ui5_cl_smpc_app_479 IMPLEMENTATION.
                         " so the text is composed in ABAP; the change wire is what tells
                         " the backend to recompute it
                         )->a( n = `change`                v = client->_event( `CHANGE` )
-                        )->a( n = `items`                 v = |\{ path: '{ client->_bind( val = t_countries path = abap_true ) }', sorter: \{ path: 'TEXT' \} \}|
+                        )->a( n = `items`                 v = |\{ path: '{ client->_bind_path( t_countries ) }', sorter: \{ path: 'TEXT' \} \}|
 
                         )->tag( n = `ListItem` ns = `core`
                             )->a( n = `key`            v = `{KEY}`

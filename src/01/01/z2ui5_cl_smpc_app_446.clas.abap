@@ -55,7 +55,7 @@ CLASS z2ui5_cl_smpc_app_446 IMPLEMENTATION.
         )->ele( `Table`
             )->a( n = `id`    v = `idProductsTable`
             )->a( n = `inset` v = `false`
-            )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+            )->a( n = `items` v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
             )->ele( `headerToolbar`
                 )->ele( `Toolbar`

@@ -54,7 +54,7 @@ CLASS z2ui5_cl_smpc_app_199 IMPLEMENTATION.
 
             )->ele( `content`
                 )->ele( `ComboBox`
-                    )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'SUPPLIERNAME', descending: false, group: true \} \}|
+                    )->a( n = `items` v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'SUPPLIERNAME', descending: false, group: true \} \}|
 
                     )->tag( n = `Item` ns = `core`
                         )->a( n = `key`  v = `{PRODUCTID}`

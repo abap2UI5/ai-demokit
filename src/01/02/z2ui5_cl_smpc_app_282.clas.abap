@@ -66,7 +66,7 @@ CLASS z2ui5_cl_smpc_app_282 IMPLEMENTATION.
                 )->tag( `Label`
                     )->a( n = `text` v = `Date`
                 )->tag( `DatePicker`
-                    )->a( n = `value` v = |\{ path: '{ client->_bind( val = date path = abap_true ) }', type: 'DateType', formatOptions: \{ source: \{ pattern: 'yyyy-MM-dd' \} \} \}|
+                    )->a( n = `value` v = |\{ path: '{ client->_bind_path( date ) }', type: 'DateType', formatOptions: \{ source: \{ pattern: 'yyyy-MM-dd' \} \} \}|
 
             )->end(
         )->end(
@@ -87,19 +87,19 @@ CLASS z2ui5_cl_smpc_app_282 IMPLEMENTATION.
                 )->tag( `Label`
                     )->a( n = `text` v = `Short`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = date path = abap_true ) }', type: 'DateType', formatOptions: \{ style: 'short', source: \{ pattern: 'yyyy-MM-dd' \} \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( date ) }', type: 'DateType', formatOptions: \{ style: 'short', source: \{ pattern: 'yyyy-MM-dd' \} \} \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `Medium`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = date path = abap_true ) }', type: 'DateType', formatOptions: \{ style: 'medium', source: \{ pattern: 'yyyy-MM-dd' \} \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( date ) }', type: 'DateType', formatOptions: \{ style: 'medium', source: \{ pattern: 'yyyy-MM-dd' \} \} \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `Long`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = date path = abap_true ) }', type: 'DateType', formatOptions: \{ style: 'long', source: \{ pattern: 'yyyy-MM-dd' \} \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( date ) }', type: 'DateType', formatOptions: \{ style: 'long', source: \{ pattern: 'yyyy-MM-dd' \} \} \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `Full`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = date path = abap_true ) }', type: 'DateType', formatOptions: \{ style: 'full', source: \{ pattern: 'yyyy-MM-dd' \} \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( date ) }', type: 'DateType', formatOptions: \{ style: 'full', source: \{ pattern: 'yyyy-MM-dd' \} \} \}|
 
             )->end(
         )->end(
@@ -120,7 +120,7 @@ CLASS z2ui5_cl_smpc_app_282 IMPLEMENTATION.
                 )->tag( `Label`
                     )->a( n = `text` v = `Relative Time`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = date path = abap_true ) }', type: 'DateType', formatOptions: \{ relative: true, relativeScale: 'auto', source: \{ pattern: 'yyyy-MM-dd' \} \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( date ) }', type: 'DateType', formatOptions: \{ relative: true, relativeScale: 'auto', source: \{ pattern: 'yyyy-MM-dd' \} \} \}|
 
             )->end(
         )->end( ).

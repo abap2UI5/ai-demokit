@@ -81,8 +81,8 @@ CLASS z2ui5_cl_smpc_app_220 IMPLEMENTATION.
 
             )->ele( n = `Calendar` ns = `u`
                 )->a( n = `id`              v = `calendar`
-                )->a( n = `minDate`         v = |\{ path: '{ client->_bind( val = min_date path = abap_true ) }', formatter: 'Formatter.DateAbapDateToDateObject' \}|
-                )->a( n = `maxDate`         v = |\{ path: '{ client->_bind( val = max_date path = abap_true ) }', formatter: 'Formatter.DateAbapDateToDateObject' \}|
+                )->a( n = `minDate`         v = |\{ path: '{ client->_bind_path( min_date ) }', formatter: 'Formatter.DateAbapDateToDateObject' \}|
+                )->a( n = `maxDate`         v = |\{ path: '{ client->_bind_path( max_date ) }', formatter: 'Formatter.DateAbapDateToDateObject' \}|
                 )->a( n = `disabledDates`   v = client->_bind( t_disabled )
                 )->a( n = `showWeekNumbers` v = client->_bind( show_week_numbers )
                 )->a( n = `select`          v = client->_event( val   = `CAL_SELECT`

@@ -73,8 +73,8 @@ CLASS z2ui5_cl_smpc_app_615 IMPLEMENTATION.
             " opened anchored to the pressed control, roundtrip-free
             )->a( n = `titlePress`          v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                           t_arg = VALUE #( ( `myPopover` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
-            )->a( n = `number`              v = |\{ parts:[\{path:'{ client->_bind( val = price path = abap_true ) }'\},| &&
-                                                 |\{path:'{ client->_bind( val = currencycode path = abap_true ) }'\}],| &&
+            )->a( n = `number`              v = |\{ parts:[\{path:'{ client->_bind_path( price ) }'\},| &&
+                                                 |\{path:'{ client->_bind_path( currencycode ) }'\}],| &&
                                                  | type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
             )->a( n = `numberUnit`          v = client->_bind( currencycode )
             )->a( n = `showTitleSelector`   v = `true`

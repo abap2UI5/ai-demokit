@@ -115,8 +115,7 @@ CLASS z2ui5_cl_smpc_app_559 IMPLEMENTATION.
                     )->a( n = `status` v = `Error`
                     )->a( n = `design` v = `StatusIconHidden`
                     " onGenericTagPress anchors the card popover on the pressed tag
-                    )->a( n = `press`  v = client->_event( val   = `GENERIC_TAG`
-                                                           t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+                    )->a( n = `press`  v = client->_event( val = `GENERIC_TAG` arg = `$event.oSource.sId` )
 
                     )->tag( `ObjectNumber`
                         )->a( n = `number`     v = `2`
@@ -271,7 +270,7 @@ CLASS z2ui5_cl_smpc_app_559 IMPLEMENTATION.
             )->ele( n = `template` ns = `t`
                 )->ele( `ComboBox`
                     )->a( n = `value` v = `{SUPPLIERNAME}`
-                    )->a( n = `items` v = |\{ path: '{ client->_bind( val = suppliers path = abap_true ) }', templateShareable: false \}|
+                    )->a( n = `items` v = |\{ path: '{ client->_bind_path( suppliers ) }', templateShareable: false \}|
 
                     )->tag( n = `Item` ns = `c`
                         )->a( n = `text` v = `{NAME}`
@@ -326,7 +325,7 @@ CLASS z2ui5_cl_smpc_app_559 IMPLEMENTATION.
             )->ele( n = `template` ns = `t`
                 )->ele( `Select`
                     )->a( n = `selectedKey` v = `{CATEGORY}`
-                    )->a( n = `items`       v = |\{ path: '{ client->_bind( val = categories path = abap_true ) }', templateShareable: false \}|
+                    )->a( n = `items`       v = |\{ path: '{ client->_bind_path( categories ) }', templateShareable: false \}|
 
                     )->tag( n = `Item` ns = `c`
                         )->a( n = `text` v = `{NAME}`

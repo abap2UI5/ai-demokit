@@ -58,8 +58,7 @@ CLASS z2ui5_cl_smpc_app_497 IMPLEMENTATION.
             )->a( n = `items`      v = client->_bind( t_products )
             " handleSwipe rewrites the swipe button and toasts the direction - the
             " direction travels to the backend, which writes the two bound properties
-            )->a( n = `swipe`      v = client->_event( val   = `SWIPE`
-                                                       t_arg = VALUE #( ( `${$parameters>/swipeDirection}` ) ) )
+            )->a( n = `swipe`      v = client->_event( val = `SWIPE` arg = `${$parameters>/swipeDirection}` )
 
             )->tag( `StandardListItem`
                 )->a( n = `title`            v = `{NAME}`
@@ -74,8 +73,7 @@ CLASS z2ui5_cl_smpc_app_497 IMPLEMENTATION.
                 )->tag( `Button`
                     )->a( n = `text`  v = client->_bind( swipe_text )
                     )->a( n = `type`  v = client->_bind( swipe_type )
-                    )->a( n = `press` v = client->_event( val   = `REJECT`
-                                                          t_arg = VALUE #( ( `$event.oSource.getParent().indexOfItem($event.oSource.getParent().getSwipedItem())` ) ) ) ).
+                    )->a( n = `press` v = client->_event( val = `REJECT` arg = `$event.oSource.getParent().indexOfItem($event.oSource.getParent().getSwipedItem())` ) ).
 
     client->view_display( view->stringify( ) ).
 

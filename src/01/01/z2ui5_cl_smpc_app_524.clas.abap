@@ -55,8 +55,7 @@ CLASS z2ui5_cl_smpc_app_524 IMPLEMENTATION.
             )->a( n = `mode`                v = `Delete`
             " handleDelete sends an OData remove for the row's path - here the row is
             " deleted from the bound table, which is the same disappearance
-            )->a( n = `delete`              v = client->_event( val   = `DELETE`
-                                                                t_arg = VALUE #( ( `${$parameters>/listItem}.getDescription()` ) ) )
+            )->a( n = `delete`              v = client->_event( val = `DELETE` arg = `${$parameters>/listItem}.getDescription()` )
             )->a( n = `enableBusyIndicator` v = `true`
             )->a( n = `headerText`          v = `Products`
             )->a( n = `growing`             v = `true`

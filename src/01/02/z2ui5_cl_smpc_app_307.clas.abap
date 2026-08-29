@@ -77,8 +77,7 @@ CLASS z2ui5_cl_smpc_app_307 IMPLEMENTATION.
                 " frontend marshals each DateRange into its public properties
                 " (Lib.normalizeEventArgs), which is the loop the client
                 " expression grammar does not have
-                )->a( n = `select`            v = client->_event( val   = `CAL_SELECT`
-                                                                  t_arg = VALUE #( ( `$event.oSource.getSelectedDates()` ) ) )
+                )->a( n = `select`            v = client->_event( val = `CAL_SELECT` arg = `$event.oSource.getSelectedDates()` )
                 )->a( n = `intervalSelection` v = `false`
                 )->a( n = `singleSelection`   v = `false`
             )->tag( `Button`
@@ -90,7 +89,7 @@ CLASS z2ui5_cl_smpc_app_307 IMPLEMENTATION.
                 )->a( n = `class`      v = `labelMarginLeft`
                 )->a( n = `noDataText` v = `No Dates Selected`
                 )->a( n = `headerText` v = `Selected Dates (yyyy-mm-dd)`
-                )->a( n = `items`      v = |\{path: '{ client->_bind( val = selecteddates path = abap_true ) }'\}|
+                )->a( n = `items`      v = |\{path: '{ client->_bind_path( selecteddates ) }'\}|
 
                 )->tag( `StandardListItem`
                     )->a( n = `title` v = `{DATE}` ).

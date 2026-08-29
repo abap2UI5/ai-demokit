@@ -127,8 +127,7 @@ CLASS z2ui5_cl_smpc_app_271 IMPLEMENTATION.
                 )->ele( n = `customLayout` ns = `grid`
                     )->ele( n = `GridResponsiveLayout` ns = `grid`
                         )->a( n = `containerQuery` v = |\{= ${ client->_bind( container_query ) } === 'true' \}|
-                        )->a( n = `layoutChange`   v = client->_event( val   = `LAYOUT_CHANGE`
-                                                                       t_arg = VALUE #( ( `${$parameters>/layout}` ) ) )
+                        )->a( n = `layoutChange`   v = client->_event( val = `LAYOUT_CHANGE` arg = `${$parameters>/layout}` )
 
                         )->ele( n = `layoutS` ns = `grid`
                             )->tag( n = `GridSettings` ns = `grid`

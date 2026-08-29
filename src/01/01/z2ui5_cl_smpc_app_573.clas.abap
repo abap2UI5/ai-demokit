@@ -62,7 +62,7 @@ CLASS z2ui5_cl_smpc_app_573 IMPLEMENTATION.
         )->ele( `Table`
             )->a( n = `headerText` v = `Products`
             )->a( n = `mode`       v = `MultiSelect`
-            )->a( n = `items`      v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'SUPPLIERNAME', descending: false \} \}|
+            )->a( n = `items`      v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'SUPPLIERNAME', descending: false \} \}|
 
             )->ele( `columns`
                 )->ele( `Column`

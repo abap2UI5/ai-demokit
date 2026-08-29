@@ -228,7 +228,7 @@ CLASS z2ui5_cl_smpc_app_363 IMPLEMENTATION.
                             )->ele( `template`
                                 )->ele( n = `ComboBox` ns = `m`
                                     )->a( n = `value` v = `{SUPPLIERNAME}`
-                                    )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_suppliers path = abap_true ) }', templateShareable: false \}|
+                                    )->a( n = `items` v = |\{ path: '{ client->_bind_path( t_suppliers ) }', templateShareable: false \}|
 
                                     )->tag( n = `Item` ns = `c`
                                         )->a( n = `text` v = `{NAME}`
@@ -289,7 +289,7 @@ CLASS z2ui5_cl_smpc_app_363 IMPLEMENTATION.
                             )->ele( `template`
                                 )->ele( n = `Select` ns = `m`
                                     )->a( n = `selectedKey` v = `{CATEGORY}`
-                                    )->a( n = `items`       v = |\{ path: '{ client->_bind( val = t_categories path = abap_true ) }', templateShareable: false \}|
+                                    )->a( n = `items`       v = |\{ path: '{ client->_bind_path( t_categories ) }', templateShareable: false \}|
 
                                     )->tag( n = `Item` ns = `c`
                                         )->a( n = `text` v = `{NAME}`

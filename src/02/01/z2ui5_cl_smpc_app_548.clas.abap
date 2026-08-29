@@ -134,12 +134,10 @@ CLASS z2ui5_cl_smpc_app_548 IMPLEMENTATION.
 
             )->ele( `PlanningCalendar`
                 )->a( n = `id`                        v = `PC1`
-                )->a( n = `startDate`                 v = |\{ path: '{ client->_bind( val = start_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
+                )->a( n = `startDate`                 v = |\{ path: '{ client->_bind_path( start_date ) }', formatter: 'Formatter.DateCreateObject' \}|
                 )->a( n = `rows`                      v = client->_bind( t_people )
                 )->a( n = `appointmentsVisualization` v = `Filled`
-                )->a( n = `rowHeaderPress`            v = client->_event(
-                          val   = `ROW_HEADER_PRESS`
-                          t_arg = VALUE #( ( `${$parameters>/row}.getId()` ) ) )
+                )->a( n = `rowHeaderPress`            v = client->_event( val = `ROW_HEADER_PRESS` arg = `${$parameters>/row}.getId()` )
                 )->a( n = `showEmptyIntervalHeaders`  v = `false`
                 )->a( n = `builtInViews`              v = `Hour,Day,Week,Month,One Month`
                 )->a( n = `viewKey`                   v = client->_bind( view_key )

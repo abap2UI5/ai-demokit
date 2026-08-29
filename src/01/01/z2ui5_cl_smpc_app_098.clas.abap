@@ -44,7 +44,7 @@ CLASS z2ui5_cl_smpc_app_098 IMPLEMENTATION.
 
             )->ele( `ViewSettingsDialog`
                 )->a( n = `id`      v = `vsd`
-                )->a( n = `confirm` v = client->_event( val = `CONFIRM` t_arg = VALUE #( ( `${$parameters>/filterString}` ) ) )
+                )->a( n = `confirm` v = client->_event( val = `CONFIRM` arg = `${$parameters>/filterString}` )
 
                 )->ele( `sortItems`
                     )->tag( `ViewSettingsItem`
@@ -132,7 +132,7 @@ CLASS z2ui5_cl_smpc_app_098 IMPLEMENTATION.
                 )->a( n = `title`            v = `Preselected Settings`
                 )->a( n = `sortDescending`   v = `true`
                 )->a( n = `groupDescending`  v = `true`
-                )->a( n = `confirm`          v = client->_event( val = `CONFIRM` t_arg = VALUE #( ( `${$parameters>/filterString}` ) ) )
+                )->a( n = `confirm`          v = client->_event( val = `CONFIRM` arg = `${$parameters>/filterString}` )
                 )->a( n = `selectedSortItem` v = `sortItem3`
 
                 )->ele( `sortItems`
@@ -230,7 +230,7 @@ CLASS z2ui5_cl_smpc_app_098 IMPLEMENTATION.
 
             )->ele( `ViewSettingsDialog`
                 )->a( n = `id`      v = `vsdPreset`
-                )->a( n = `confirm` v = client->_event( val = `CONFIRM` t_arg = VALUE #( ( `${$parameters>/filterString}` ) ) )
+                )->a( n = `confirm` v = client->_event( val = `CONFIRM` arg = `${$parameters>/filterString}` )
 
                 )->ele( `sortItems`
                     )->tag( `ViewSettingsItem`

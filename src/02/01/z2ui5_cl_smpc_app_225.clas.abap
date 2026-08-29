@@ -62,7 +62,7 @@ CLASS z2ui5_cl_smpc_app_225 IMPLEMENTATION.
             )->a( n = `autoPopinMode`   v = `true`
             )->a( n = `contextualWidth` v = `Auto`
             )->a( n = `growing`         v = `true`
-            )->a( n = `items`           v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+            )->a( n = `items`           v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
             )->ele( `dependents`
                 )->tag( n = `ColumnResizer` ns = `plugins`

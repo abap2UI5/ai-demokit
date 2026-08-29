@@ -76,7 +76,7 @@ CLASS z2ui5_cl_smpc_app_538 IMPLEMENTATION.
                 )->a( n = `id`                        v = `PC1`
                 )->a( n = `singleSelection`           v = `false`
                 )->a( n = `showIntervalHeaders`       v = `false`
-                )->a( n = `startDate`                 v = |\{ path: '{ client->_bind( val = start_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
+                )->a( n = `startDate`                 v = |\{ path: '{ client->_bind_path( start_date ) }', formatter: 'Formatter.DateCreateObject' \}|
                 )->a( n = `rows`                      v = client->_bind( t_people )
                 )->a( n = `appointmentsVisualization` v = `Filled`
                 " handleAppointmentSelect: MessageBox with the appointment title, its

@@ -83,7 +83,7 @@ CLASS z2ui5_cl_smpc_app_252 IMPLEMENTATION.
                 " field - the toggles drive the carousel client-side (007/128)
                 )->tag( `Input`
                     )->a( n = `type`            v = `Number`
-                    )->a( n = `value`           v = |\{ path: '{ client->_bind( val = pages_count path = abap_true ) }', type: 'IntegerType' \}|
+                    )->a( n = `value`           v = |\{ path: '{ client->_bind_path( pages_count ) }', type: 'IntegerType' \}|
                     )->a( n = `valueLiveUpdate` v = `true`
                     )->a( n = `width`           v = `320px`
                 )->tag( `Label`
@@ -102,7 +102,7 @@ CLASS z2ui5_cl_smpc_app_252 IMPLEMENTATION.
                 )->a( n = `id`             v = `carouselSample`
                 )->a( n = `ariaLabelledBy` v = `carouselTitle`
                 )->a( n = `height`         v = `auto`
-                )->a( n = `pages`          v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }' \}|
+                )->a( n = `pages`          v = |\{ path: '{ client->_bind_path( t_products ) }' \}|
 
                 )->ele( `customLayout`
                     )->tag( `CarouselLayout`

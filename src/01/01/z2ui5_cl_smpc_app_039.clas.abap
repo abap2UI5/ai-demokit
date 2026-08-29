@@ -55,7 +55,7 @@ CLASS z2ui5_cl_smpc_app_039 IMPLEMENTATION.
 
             )->ele( `MultiComboBox`
                 )->a( n = `width` v = `500px`
-                )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'SUPPLIER_NAME', descending: false, group: true \} \}|
+                )->a( n = `items` v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'SUPPLIER_NAME', descending: false, group: true \} \}|
 
                 )->tag( n = `Item` ns = `core`
                     )->a( n = `key`  v = `{PRODUCT_ID}`

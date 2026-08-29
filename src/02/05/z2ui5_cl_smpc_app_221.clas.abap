@@ -57,8 +57,7 @@ CLASS z2ui5_cl_smpc_app_221 IMPLEMENTATION.
                 " DOM; here each button knows it statically, and selectedKey is a
                 " BINDABLE property - so the reset is a bound value, not a frontend
                 " action (the recipe's "prefer a bindable property" rule)
-                )->a( n = `press` v = client->_event( val   = `HOME_PRESS`
-                                                      t_arg = VALUE #( ( `1` ) ) )
+                )->a( n = `press` v = client->_event( val = `HOME_PRESS` arg = `1` )
                 )->a( n = `type` v = `Transparent`
                 )->ele( `layoutData`
                     )->tag( `OverflowToolbarLayoutData`
@@ -145,8 +144,7 @@ CLASS z2ui5_cl_smpc_app_221 IMPLEMENTATION.
                 " DOM; here each button knows it statically, and selectedKey is a
                 " BINDABLE property - so the reset is a bound value, not a frontend
                 " action (the recipe's "prefer a bindable property" rule)
-                )->a( n = `press` v = client->_event( val   = `HOME_PRESS`
-                                                      t_arg = VALUE #( ( `2` ) ) )
+                )->a( n = `press` v = client->_event( val = `HOME_PRESS` arg = `2` )
                 )->a( n = `type` v = `Transparent`
                 )->ele( `layoutData`
                     )->tag( `OverflowToolbarLayoutData`
@@ -269,8 +267,7 @@ CLASS z2ui5_cl_smpc_app_221 IMPLEMENTATION.
                 " DOM; here each button knows it statically, and selectedKey is a
                 " BINDABLE property - so the reset is a bound value, not a frontend
                 " action (the recipe's "prefer a bindable property" rule)
-                )->a( n = `press` v = client->_event( val   = `HOME_PRESS`
-                                                      t_arg = VALUE #( ( `3` ) ) )
+                )->a( n = `press` v = client->_event( val = `HOME_PRESS` arg = `3` )
                 )->a( n = `type` v = `Transparent`
                 )->ele( `layoutData`
                     )->tag( `OverflowToolbarLayoutData`

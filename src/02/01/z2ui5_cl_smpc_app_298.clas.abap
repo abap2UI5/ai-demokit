@@ -132,8 +132,7 @@ CLASS z2ui5_cl_smpc_app_298 IMPLEMENTATION.
                 )->end(
                 )->ele( n = `QuickResize` ns = `tcm`
                     )->a( n = `id`     v = `quickResize`
-                    )->a( n = `change` v = client->_event( val   = `MENU_RESIZE`
-                                                           t_arg = VALUE #( ( `${$parameters>/width}` ) ) )
+                    )->a( n = `change` v = client->_event( val = `MENU_RESIZE` arg = `${$parameters>/width}` )
 
                 )->end(
                 )->ele( n = `items` ns = `tcm`
@@ -170,8 +169,7 @@ CLASS z2ui5_cl_smpc_app_298 IMPLEMENTATION.
 
             )->ele( `ViewSettingsDialog`
                 )->a( n = `id`      v = `groupDialog`
-                )->a( n = `confirm` v = client->_event( val   = `GROUP_CONFIRM`
-                                                        t_arg = VALUE #( ( `${$parameters>/groupItem}` ) ) )
+                )->a( n = `confirm` v = client->_event( val = `GROUP_CONFIRM` arg = `${$parameters>/groupItem}` )
                 )->a( n = `reset`   v = client->_event( `GROUP_RESET` )
 
                 )->ele( `groupItems`
