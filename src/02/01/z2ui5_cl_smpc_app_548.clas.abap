@@ -237,7 +237,10 @@ CLASS z2ui5_cl_smpc_app_548 IMPLEMENTATION.
                             )->ele( n = `RecurringNonWorkingPeriod` ns = `unified`
                                 )->a( n = `recurrenceType`    v = |\{= $\{RECURRENCETYPE\} \|\| null \}|
                                 )->a( n = `recurrenceEndDate` v = `{ path: 'RECURRENCEENDDATE', formatter: 'Formatter.DateCreateObject' }`
-                                )->a( n = `recurrencePattern` v = `{RECURRENCEPATTERN}`
+                                " setRecurrencePattern raises "recurrencePattern must be >= 1" here too,
+                                " and no ABAP writes a non-working row - the appointments get their 1
+                                " from CREATE_SAVE, these get it from the binding (see sidecar)
+                                )->a( n = `recurrencePattern` v = `{= ${RECURRENCEPATTERN} || 1 }`
                                 )->a( n = `date`              v = `{ path: 'DATE_AT', formatter: 'Formatter.DateCreateObject' }`
 
                                 )->tag( n = `TimeRange` ns = `unified`

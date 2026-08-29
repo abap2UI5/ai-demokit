@@ -5472,20 +5472,23 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` NON-recurring new appointment carries no such key at all and the control keeps its default. An ABAP structure always serializes every field, so the port's initial 0 reached the setter through the`.
     lv_text1 = lv_text1 && ` ``{RECURRENCEPATTERN}`` binding and terminated the app the first time an appointment was created without a recurrence (reported 2026-08-29 from a Developer Tools export on UI5 1.150 -` &&
                ` ``_processAfterRendering: unexpected error - recurrencePattern must be >= 1``; reproduced standalone on OpenUI5 1.151, where pattern 0 throws while the view is created and pattern 1 renders three` &&
-               ` appointments). The port therefore seeds the new row with the control's own default, ``recurrencepattern = 1``, and the recurrence branch overwrites it as before. // NOTE: onAppointmentDrop shifts the` &&
-               ` appointment by the dragged DELTA and then copies it, moves it to another row, or just reschedules it in place - the three branches and their three toasts are kept. The new start and end already carry` &&
-               ` the delta, so the port re-dates the row from the two interval bounds the event hands it; the appointment's and the row's binding paths name the source and the target. // IMPROVISED:` &&
-               ` onCreateAppointment seeds the dialog with the CLIENT's next full hour (UI5Date.getInstance() with minutes zeroed). A backend has no client clock, so the port seeds the SERVER's local date and next`.
-    lv_text1 = lv_text1 && ` full hour instead. Same shape, a different clock - which matters only if the two are in different time zones. // NOTE: The row images are the demo kit's own test-resources files, re-hosted on` &&
-               ` sdk.openui5.org. // NOTE: The recurring appointments and non-working periods, the create dialog with its recurrence branches, the drag-create and the drop's copy / move / reschedule branches are` &&
-               ` unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_548.mjs). The dialog's save path - creating an appointment with NO` &&
-               ` recurrence, the case that used to terminate the app - is covered by the same interaction since 2026-08-29. // NOTE: The two DateTimePickers and the recurrence DatePicker bind their value UNTYPED,` &&
-               ` where the original binds them with type sap.ui.model.type.DateTime / sap.ui.model.type.Date and formatOptions { pattern: 'yyyy-MM-dd HH:mm' } / { pattern: 'yyyy-MM-dd' }` &&
-               ` (CreateAppointmentDialog.fragment.xml:34,40,118). The port keeps the path and carries the pattern as valueFormat + displayFormat instead, which is not a cosmetic choice: a typed binding with a source`.
-    lv_text1 = lv_text1 && ` pattern raises on the EMPTY value the recurrence picker seeds with and a cleared picker sends, which is why apps 549 and 609 settled on the same form. Until 2026-08-26 the port declared neither, and` &&
-               ` that was a real defect rather than a simplification - an unformatted picker writes a LOCALE string back through the two-way binding. Measured in de-DE: picking 4 March 2025 stored '04.03.2025,` &&
-               ` 10:15:00', which Formatter.DateCreateObject's new Date( ) reads month-first, so the appointment was drawn on 3 April. structural-diff cannot see this class at all - the port HAS a value attribute, so` &&
-               ` nothing reads as missing.`.
+               ` appointments). The port therefore seeds the new row with the control's own default, ``recurrencepattern = 1``, and the recurrence branch overwrites it as before. The sibling` &&
+               ` ``sap.ui.unified.RecurringNonWorkingPeriod.recurrencePattern`` has the identical setter (``RecurringNonWorkingPeriod.js:145``), but no ABAP writes a non-working row - they are only seeded - so that` &&
+               ` one carries the default in the BINDING instead: the port writes ``recurrencePattern="{= ${RECURRENCEPATTERN} || 1 }"`` where the original writes ``{recurrencePattern}``, which is the ``binding` &&
+               ` value`` difference structural-diff reports for it. Measured on OpenUI5 1.151: bound 0 throws, the expression renders 0 as the control's 1 and leaves a real 2 alone, and an EMPTY non-working table is`.
+    lv_text1 = lv_text1 && ` safe either way because a template with no row behind it keeps the default. // NOTE: onAppointmentDrop shifts the appointment by the dragged DELTA and then copies it, moves it to another row, or just` &&
+               ` reschedules it in place - the three branches and their three toasts are kept. The new start and end already carry the delta, so the port re-dates the row from the two interval bounds the event hands` &&
+               ` it; the appointment's and the row's binding paths name the source and the target. // IMPROVISED: onCreateAppointment seeds the dialog with the CLIENT's next full hour (UI5Date.getInstance() with` &&
+               ` minutes zeroed). A backend has no client clock, so the port seeds the SERVER's local date and next full hour instead. Same shape, a different clock - which matters only if the two are in different` &&
+               ` time zones. // NOTE: The row images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org. // NOTE: The recurring appointments and non-working periods, the create dialog with its` &&
+               ` recurrence branches, the drag-create and the drop's copy / move / reschedule branches are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction,`.
+    lv_text1 = lv_text1 && ` meta/interactions/z2ui5_cl_smpc_app_548.mjs). The dialog's save path - creating an appointment with NO recurrence, the case that used to terminate the app - is covered by the same interaction since` &&
+               ` 2026-08-29. // NOTE: The two DateTimePickers and the recurrence DatePicker bind their value UNTYPED, where the original binds them with type sap.ui.model.type.DateTime / sap.ui.model.type.Date and` &&
+               ` formatOptions { pattern: 'yyyy-MM-dd HH:mm' } / { pattern: 'yyyy-MM-dd' } (CreateAppointmentDialog.fragment.xml:34,40,118). The port keeps the path and carries the pattern as valueFormat +` &&
+               ` displayFormat instead, which is not a cosmetic choice: a typed binding with a source pattern raises on the EMPTY value the recurrence picker seeds with and a cleared picker sends, which is why apps` &&
+               ` 549 and 609 settled on the same form. Until 2026-08-26 the port declared neither, and that was a real defect rather than a simplification - an unformatted picker writes a LOCALE string back through` &&
+               ` the two-way binding. Measured in de-DE: picking 4 March 2025 stored '04.03.2025, 10:15:00', which Formatter.DateCreateObject's new Date( ) reads month-first, so the appointment was drawn on 3 April.`.
+    lv_text1 = lv_text1 && ` structural-diff cannot see this class at all - the port HAS a value attribute, so nothing reads as missing.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.PlanningCalendar`                name = `PlanningCalendarRecurringItem`                 class = `z2ui5_cl_smpc_app_548` path = `src/02/01/z2ui5_cl_smpc_app_548.clas.abap`
         score = 5
@@ -6372,18 +6375,21 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` writes the property only inside its ``if (oData.recurrenceType)`` branch, so a NON-recurring new appointment carries no such key at all and the control keeps its default. An ABAP structure always` &&
                ` serializes every field, so the port's initial 0 reached the setter through the ``{RECURRENCEPATTERN}`` binding and terminated the app the first time an appointment was created without a recurrence`.
     lv_text1 = lv_text1 && ` (found 2026-08-29 on app 548, which builds its new appointment the same way; reproduced standalone on OpenUI5 1.151, where pattern 0 throws while the view is created and pattern 1 renders three` &&
-               ` appointments). The port therefore seeds the new row with the control's own default, ``recurrencepattern = 1``, and the recurrence branch overwrites it as before. // IMPROVISED: onCreateAppointment` &&
-               ` seeds the dialog with the CLIENT's next full hour and the hour after it (UI5Date.getInstance() with minutes zeroed). A backend has no client clock, so the port seeds the SERVER's local date and next` &&
-               ` full hour instead. Same shape, a different clock - which matters only if the two are in different time zones. // NOTE: handleViewChange toasts a constant text; the toast is composed on the client, so` &&
-               ` the view change needs no round-trip. // NOTE: The nine recurring appointments with their rules, the eleven recurring non-working periods, and the create dialog with its recurrence branches are` &&
-               ` unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_555.mjs). The dialog's save path - creating an appointment with NO`.
-    lv_text1 = lv_text1 && ` recurrence, the case that used to terminate the app - is covered by the same interaction since 2026-08-29. // NOTE: The two DateTimePickers and the recurrence DatePicker bind their value UNTYPED,` &&
-               ` where the original binds them with type sap.ui.model.type.DateTime / sap.ui.model.type.Date and formatOptions { pattern: 'yyyy-MM-dd HH:mm' } / { pattern: 'yyyy-MM-dd' }` &&
-               ` (CreateAppointmentDialog.fragment.xml:34,40,118). The port keeps the path and carries the pattern as valueFormat + displayFormat instead, which is not a cosmetic choice: a typed binding with a source` &&
-               ` pattern raises on the EMPTY value the recurrence picker seeds with and a cleared picker sends, which is why apps 549 and 609 settled on the same form. Until 2026-08-26 the port declared neither, and` &&
-               ` that was a real defect rather than a simplification - an unformatted picker writes a LOCALE string back through the two-way binding. Measured in de-DE: picking 4 March 2025 stored '04.03.2025,` &&
-               ` 10:15:00', which Formatter.DateCreateObject's new Date( ) reads month-first, so the appointment was drawn on 3 April. structural-diff cannot see this class at all - the port HAS a value attribute, so` &&
-               ` nothing reads as missing.`.
+               ` appointments). The port therefore seeds the new row with the control's own default, ``recurrencepattern = 1``, and the recurrence branch overwrites it as before. The sibling` &&
+               ` ``sap.ui.unified.RecurringNonWorkingPeriod.recurrencePattern`` has the identical setter (``RecurringNonWorkingPeriod.js:145``), but no ABAP writes a non-working row - they are only seeded - so that` &&
+               ` one carries the default in the BINDING instead: the port writes ``recurrencePattern="{= ${RECURRENCEPATTERN} || 1 }"`` where the original writes ``{recurrencePattern}``, which is the ``binding` &&
+               ` value`` difference structural-diff reports for it. Measured on OpenUI5 1.151: bound 0 throws, the expression renders 0 as the control's 1 and leaves a real 2 alone, and an EMPTY non-working table is` &&
+               ` safe either way because a template with no row behind it keeps the default. // IMPROVISED: onCreateAppointment seeds the dialog with the CLIENT's next full hour and the hour after it`.
+    lv_text1 = lv_text1 && ` (UI5Date.getInstance() with minutes zeroed). A backend has no client clock, so the port seeds the SERVER's local date and next full hour instead. Same shape, a different clock - which matters only if` &&
+               ` the two are in different time zones. // NOTE: handleViewChange toasts a constant text; the toast is composed on the client, so the view change needs no round-trip. // NOTE: The nine recurring` &&
+               ` appointments with their rules, the eleven recurring non-working periods, and the create dialog with its recurrence branches are unverified in a running system. **e2e-verified 2026-08-25** (nightly` &&
+               ` e2e interaction, meta/interactions/z2ui5_cl_smpc_app_555.mjs). The dialog's save path - creating an appointment with NO recurrence, the case that used to terminate the app - is covered by the same` &&
+               ` interaction since 2026-08-29. // NOTE: The two DateTimePickers and the recurrence DatePicker bind their value UNTYPED, where the original binds them with type sap.ui.model.type.DateTime /` &&
+               ` sap.ui.model.type.Date and formatOptions { pattern: 'yyyy-MM-dd HH:mm' } / { pattern: 'yyyy-MM-dd' } (CreateAppointmentDialog.fragment.xml:34,40,118). The port keeps the path and carries the pattern`.
+    lv_text1 = lv_text1 && ` as valueFormat + displayFormat instead, which is not a cosmetic choice: a typed binding with a source pattern raises on the EMPTY value the recurrence picker seeds with and a cleared picker sends,` &&
+               ` which is why apps 549 and 609 settled on the same form. Until 2026-08-26 the port declared neither, and that was a real defect rather than a simplification - an unformatted picker writes a LOCALE` &&
+               ` string back through the two-way binding. Measured in de-DE: picking 4 March 2025 stored '04.03.2025, 10:15:00', which Formatter.DateCreateObject's new Date( ) reads month-first, so the appointment` &&
+               ` was drawn on 3 April. structural-diff cannot see this class at all - the port HAS a value attribute, so nothing reads as missing.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.SinglePlanningCalendar`          name = `SinglePlanningCalendarRecurringItem`           class = `z2ui5_cl_smpc_app_555` path = `src/02/01/z2ui5_cl_smpc_app_555.clas.abap`
         score = 5
