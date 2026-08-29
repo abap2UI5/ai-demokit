@@ -64,7 +64,7 @@ CLASS z2ui5_cl_smpc_app_215 IMPLEMENTATION.
                 )->ele( `ObjectHeader`
                     )->a( n = `responsive`          v = `true`
                     )->a( n = `fullScreenOptimized` v = `true`
-                    )->a( n = `binding`             v = |\{{ client->_bind( val = t_product_collection path = abap_true ) }/0\}|
+                    )->a( n = `binding`             v = |\{{ client->_bind_path( t_product_collection ) }/0\}|
                     )->a( n = `intro`               v = `{DESCRIPTION}`
                     )->a( n = `title`               v = `Long title truncated to 80 chars on all devices and to 50 chars on phone portrait`
                     )->a( n = `number`              v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCYCODE'\}], type:'sap.ui.model.type.Currency', formatOptions:\{showMeasure:false\} \}|
@@ -100,7 +100,7 @@ CLASS z2ui5_cl_smpc_app_215 IMPLEMENTATION.
             )->ele( n = `flexContent` ns = `l`
                 )->ele( `Table`
                     )->a( n = `id`               v = `idProductsTable`
-                    )->a( n = `items`            v = |\{ path: '{ client->_bind( val = t_product_collection path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                    )->a( n = `items`            v = |\{ path: '{ client->_bind_path( t_product_collection ) }', sorter: \{ path: 'NAME' \} \}|
                     )->a( n = `growing`          v = `true`
                     )->a( n = `growingThreshold` v = `50`
 

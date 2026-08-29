@@ -77,8 +77,7 @@ CLASS z2ui5_cl_smpc_app_203 IMPLEMENTATION.
                 " whole selection, not one token - so the ARRAY travels and ABAP
                 " loops. The frontend marshals each control into its properties
                 " (Lib.normalizeEventArgs), the same route app 103 uses
-                )->a( n = `tokenDelete` v = client->_event( val   = `TOKEN_DELETE`
-                                                            t_arg = VALUE #( ( `${$parameters>/tokens}` ) ) )
+                )->a( n = `tokenDelete` v = client->_event( val = `TOKEN_DELETE` arg = `${$parameters>/tokens}` )
                 )->ele( `tokens`
                     )->tag( `Token`
                         )->a( n = `text` v = `{TEXT}`

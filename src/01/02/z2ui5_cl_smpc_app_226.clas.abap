@@ -52,7 +52,7 @@ CLASS z2ui5_cl_smpc_app_226 IMPLEMENTATION.
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
         )->ele( n = `Grid` ns = `l`
-            )->a( n = `binding`     v = |\{{ client->_bind( val = informationcollection path = abap_true ) }\}|
+            )->a( n = `binding`     v = |\{{ client->_bind_path( informationcollection ) }\}|
             )->a( n = `hSpacing`    v = `0`
             )->a( n = `defaultSpan` v = `XL6 L6 M6 S12`
             )->a( n = `class`       v = `sapUiSmallMargin`
@@ -93,7 +93,7 @@ CLASS z2ui5_cl_smpc_app_226 IMPLEMENTATION.
         )->ele( n = `Grid` ns = `l`
             )->a( n = `hSpacing`      v = `0`
             )->a( n = `vSpacing`      v = `0`
-            )->a( n = `binding`       v = |\{{ client->_bind( val = informationcollection path = abap_true ) }\}|
+            )->a( n = `binding`       v = |\{{ client->_bind_path( informationcollection ) }\}|
             )->a( n = `class`         v = `sapUiSmallMargin`
             )->a( n = `defaultSpan`   v = `XL5 L5 M5 S12`
             )->a( n = `defaultIndent` v = `XL1 L1 M1`
@@ -135,7 +135,7 @@ CLASS z2ui5_cl_smpc_app_226 IMPLEMENTATION.
         )->end(
 
         )->ele( n = `Grid` ns = `l`
-            )->a( n = `binding`     v = |\{{ client->_bind( val = informationcollection path = abap_true ) }\}|
+            )->a( n = `binding`     v = |\{{ client->_bind_path( informationcollection ) }\}|
             )->a( n = `hSpacing`    v = `0`
             )->a( n = `defaultSpan` v = `XL3 L5 M5 S12`
             )->a( n = `class`       v = `sapUiSmallMargin`

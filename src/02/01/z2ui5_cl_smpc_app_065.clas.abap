@@ -235,9 +235,7 @@ CLASS z2ui5_cl_smpc_app_065 IMPLEMENTATION.
                                 )->a( n = `groupItems`      v = `true`
                                 " activeTitlePress is a MessagePopover event (not MessageItem); it ships the
                                 " pressed message's target control id so the handler can scroll+focus it
-                                )->a( n = `activeTitlePress` v = client->_event(
-                                         val   = `ACTIVE_TITLE`
-                                         t_arg = VALUE #( ( `${$parameters>/item}.getBindingContext('message').getObject().getControlIds()[0]` ) ) )
+                                )->a( n = `activeTitlePress` v = client->_event( val = `ACTIVE_TITLE` arg = `${$parameters>/item}.getBindingContext('message').getObject().getControlIds()[0]` )
                                 )->tag( `MessageItem`
                                     )->a( n = `title`       v = `{message>message}`
                                     )->a( n = `subtitle`    v = `{message>additionalText}`

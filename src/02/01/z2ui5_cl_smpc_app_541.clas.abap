@@ -149,7 +149,7 @@ CLASS z2ui5_cl_smpc_app_541 IMPLEMENTATION.
                 )->ele( `PlanningCalendar`
                     )->a( n = `id`                        v = `PC1`
                     )->a( n = `class`                     v = `sapMPlanCalSuppressAlternatingRowColors`
-                    )->a( n = `startDate`                 v = |\{ path: '{ client->_bind( val = start_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
+                    )->a( n = `startDate`                 v = |\{ path: '{ client->_bind_path( start_date ) }', formatter: 'Formatter.DateCreateObject' \}|
                     )->a( n = `rows`                      v = client->_bind( t_people )
                     )->a( n = `appointmentsVisualization` v = `Filled`
                     )->a( n = `showEmptyIntervalHeaders`  v = `false`
@@ -165,7 +165,7 @@ CLASS z2ui5_cl_smpc_app_541 IMPLEMENTATION.
                     " ROOT-level aggregation - a bare 'T_' path is RELATIVE and resolves
                     " against nothing outside a row context, and an unbound table is not
                     " serialized at all (app 553 has the same two fixes)
-                    )->a( n = `specialDates`              v = |\{ path: '{ client->_bind( val = t_special_dates path = abap_true ) }', templateShareable: false \}|
+                    )->a( n = `specialDates`              v = |\{ path: '{ client->_bind_path( t_special_dates ) }', templateShareable: false \}|
 
                     )->ele( `toolbarContent`
                         )->tag( `ToggleButton`
@@ -233,8 +233,8 @@ CLASS z2ui5_cl_smpc_app_541 IMPLEMENTATION.
                     " ROOT-level aggregations - a bare 'T_' path is RELATIVE and resolves
                     " against nothing outside a row context, and an unbound table is not
                     " serialized at all (app 553 has the same two fixes)
-                    )->a( n = `items`            v = |\{ path: '{ client->_bind( val = t_legend_items path = abap_true ) }', templateShareable: true \}|
-                    )->a( n = `appointmentItems` v = |\{ path: '{ client->_bind( val = t_legend_appt_items path = abap_true ) }', templateShareable: true \}|
+                    )->a( n = `items`            v = |\{ path: '{ client->_bind_path( t_legend_items ) }', templateShareable: true \}|
+                    )->a( n = `appointmentItems` v = |\{ path: '{ client->_bind_path( t_legend_appt_items ) }', templateShareable: true \}|
                     " changeStandardItemsPerView swaps Selected for WorkingDay off the
                     " OneMonth view; the property is bindable, so the expression over
                     " the shared view key carries the same switch

@@ -92,7 +92,7 @@ CLASS z2ui5_cl_smpc_app_364 IMPLEMENTATION.
             )->a( n = `id`                     v = `treeTable`
             )->a( n = `selectionMode`          v = `Single`
             )->a( n = `enableColumnReordering` v = `false`
-            )->a( n = `rows`                   v = |\{ path: '{ client->_bind( val = t_nodes path = abap_true ) }', parameters: \{ arrayNames: ['CHILDREN'] \} \}|
+            )->a( n = `rows`                   v = |\{ path: '{ client->_bind_path( t_nodes ) }', parameters: \{ arrayNames: ['CHILDREN'] \} \}|
 
             )->ele( `columns`
                 )->ele( `Column`

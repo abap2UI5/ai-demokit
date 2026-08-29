@@ -63,7 +63,7 @@ CLASS z2ui5_cl_smpc_app_048 IMPLEMENTATION.
                     )->ele( `Select`
                         )->a( n = `forceSelection` v = `false`
                         )->a( n = `selectedKey`    v = client->_bind( selected_product )
-                        )->a( n = `items`          v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                        )->a( n = `items`          v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
                         )->tag( n = `Item` ns = `core`
                             )->a( n = `key`  v = `{PRODUCT_ID}`
@@ -82,7 +82,7 @@ CLASS z2ui5_cl_smpc_app_048 IMPLEMENTATION.
                         )->a( n = `editable`       v = client->_bind( editable )
                         )->a( n = `forceSelection` v = `false`
                         )->a( n = `selectedKey`    v = client->_bind( selected_product2 )
-                        )->a( n = `items`          v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                        )->a( n = `items`          v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
                         )->tag( n = `Item` ns = `core`
                             )->a( n = `key`  v = `{PRODUCT_ID}`
@@ -126,7 +126,7 @@ CLASS z2ui5_cl_smpc_app_048 IMPLEMENTATION.
                         )->a( n = `type`            v = `IconOnly`
                         )->a( n = `icon`            v = `sap-icon://filter`
                         )->a( n = `autoAdjustWidth` v = `true`
-                        )->a( n = `items`           v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                        )->a( n = `items`           v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
                         )->tag( n = `Item` ns = `core`
                             )->a( n = `key`  v = `{PRODUCT_ID}`

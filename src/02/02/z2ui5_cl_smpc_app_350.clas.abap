@@ -140,8 +140,7 @@ CLASS z2ui5_cl_smpc_app_350 IMPLEMENTATION.
 
                         )->ele( n = `customLayout` ns = `cssgrid`
                             )->tag( n = `ResponsiveColumnLayout` ns = `cssgrid`
-                                )->a( n = `layoutChange` v = client->_event( val   = `LAYOUT_CHANGE`
-                                                                             t_arg = VALUE #( ( `${$parameters>/layout}` ) ) )
+                                )->a( n = `layoutChange` v = client->_event( val = `LAYOUT_CHANGE` arg = `${$parameters>/layout}` )
 
                         )->end(
                         )->ele( `VBox`
@@ -159,8 +158,7 @@ CLASS z2ui5_cl_smpc_app_350 IMPLEMENTATION.
 
                             )->ele( n = `GridContainer` ns = `f`
                                 )->a( n = `id`            v = `group1`
-                                )->a( n = `columnsChange` v = client->_event( val   = `COLUMNS_CHANGE`
-                                                                              t_arg = VALUE #( ( `${$parameters>/columns}` ) ) )
+                                )->a( n = `columnsChange` v = client->_event( val = `COLUMNS_CHANGE` arg = `${$parameters>/columns}` )
 
                                 )->ele( n = `layout` ns = `f`
                                     )->tag( n = `GridContainerSettings` ns = `f`

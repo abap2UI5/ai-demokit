@@ -82,9 +82,7 @@ CLASS z2ui5_cl_smpc_app_588 IMPLEMENTATION.
             " every Edit press, so the flag always matches the current edit mode -
             " which is exactly what the controller's early 'if (!this.bEditMode)
             " return' does. The event is still sent, so the backend stays in charge.
-            )->a( n = `beforeNavigate`           v = client->_event( val    = `BEFORE_NAVIGATE`
-                                                                     t_arg  = VALUE #( ( `${$parameters>/section}.getId()` ) )
-                                                                     s_ctrl = VALUE #( check_prevent_default = edit_mode ) )
+            )->a( n = `beforeNavigate`           v = client->_event( val = `BEFORE_NAVIGATE` arg = `${$parameters>/section}.getId()`s_ctrl = VALUE #( check_prevent_default = edit_mode ) )
             )->a( n = `useIconTabBar`            v = `true`
             )->a( n = `showTitleInHeaderContent` v = `true`
             )->a( n = `upperCaseAnchorBar`       v = `false`

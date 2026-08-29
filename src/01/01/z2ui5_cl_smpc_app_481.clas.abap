@@ -58,7 +58,7 @@ CLASS z2ui5_cl_smpc_app_481 IMPLEMENTATION.
             )->ele( `MultiComboBox`
                 )->a( n = `id`    v = `multiCombo1`
                 )->a( n = `width` v = `500px`
-                )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                )->a( n = `items` v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
                 )->tag( n = `Item` ns = `core`
                     )->a( n = `key`  v = `{PRODUCTID}`
@@ -72,7 +72,7 @@ CLASS z2ui5_cl_smpc_app_481 IMPLEMENTATION.
             )->ele( `MultiComboBox`
                 )->a( n = `id`    v = `multiCombo2`
                 )->a( n = `width` v = `500px`
-                )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                )->a( n = `items` v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
                 )->tag( n = `Item` ns = `core`
                     )->a( n = `key`  v = `{PRODUCTID}`

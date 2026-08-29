@@ -172,8 +172,7 @@ CLASS z2ui5_cl_smpc_app_168 IMPLEMENTATION.
                 )->a( n = `allowDenseFill`    v = client->_bind( allow_dense_fill )
                 )->a( n = `inlineBlockLayout` v = client->_bind( inline_block_layout )
                 " onGridColumnsChange: the bound columnsCountText is recomputed
-                )->a( n = `columnsChange`     v = client->_event( val   = `COLUMNS_CHANGE`
-                                                                  t_arg = VALUE #( ( `${$parameters>/columns}` ) ) )
+                )->a( n = `columnsChange`     v = client->_event( val = `COLUMNS_CHANGE` arg = `${$parameters>/columns}` )
                 )->ele( n = `layout` ns = `f`
                     )->tag( n = `GridContainerSettings` ns = `f`
                         )->a( n = `rowSize` v = `84px`
@@ -261,7 +260,7 @@ CLASS z2ui5_cl_smpc_app_168 IMPLEMENTATION.
                                     )->a( n = `width`       v = `120px`
                                     )->a( n = `placeholder` v = `From City`
                                     " sorter kept 1:1 from the original binding-info (CAPABILITIES 'Binding sorter')
-                                    )->a( n = `items`       v = |\{ path: '{ client->_bind( val = cities path = abap_true ) }', sorter: \{ path: 'TEXT' \} \}|
+                                    )->a( n = `items`       v = |\{ path: '{ client->_bind_path( cities ) }', sorter: \{ path: 'TEXT' \} \}|
                                     )->tag( n = `Item` ns = `core`
                                         )->a( n = `key` v = `{KEY}`
                                         )->a( n = `text` v = `{TEXT}`
@@ -270,7 +269,7 @@ CLASS z2ui5_cl_smpc_app_168 IMPLEMENTATION.
                                 )->ele( `ComboBox`
                                     )->a( n = `width`       v = `120px`
                                     )->a( n = `placeholder` v = `To City`
-                                    )->a( n = `items`       v = |\{ path: '{ client->_bind( val = cities path = abap_true ) }', sorter: \{ path: 'TEXT' \} \}|
+                                    )->a( n = `items`       v = |\{ path: '{ client->_bind_path( cities ) }', sorter: \{ path: 'TEXT' \} \}|
                                     )->tag( n = `Item` ns = `core`
                                         )->a( n = `key` v = `{KEY}`
                                         )->a( n = `text` v = `{TEXT}`

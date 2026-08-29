@@ -176,8 +176,7 @@ CLASS z2ui5_cl_smpc_app_308 IMPLEMENTATION.
             )->tag( `ToggleButton`
                 )->a( n = `text`    v = `Special Days`
                 )->a( n = `pressed` v = client->_bind( pressed )
-                )->a( n = `press`   v = client->_event( val   = `SHOW_SPECIAL_DAYS`
-                                                        t_arg = VALUE #( ( `${$parameters>/pressed}` ) ) ) ).
+                )->a( n = `press`   v = client->_event( val = `SHOW_SPECIAL_DAYS` arg = `${$parameters>/pressed}` ) ).
 
     client->view_display( view->stringify( ) ).
 

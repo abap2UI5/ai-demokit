@@ -68,8 +68,8 @@ CLASS z2ui5_cl_smpc_app_500 IMPLEMENTATION.
 
         )->ele( `ObjectHeader`
             )->a( n = `title`      v = client->_bind( p1_name )
-            )->a( n = `number`     v = |\{ parts:[\{path:'{ client->_bind( val = p1_price path = abap_true ) }'\},| &&
-                                        |\{path:'{ client->_bind( val = p1_currencycode path = abap_true ) }'\}],| &&
+            )->a( n = `number`     v = |\{ parts:[\{path:'{ client->_bind_path( p1_price ) }'\},| &&
+                                        |\{path:'{ client->_bind_path( p1_currencycode ) }'\}],| &&
                                         | type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
             )->a( n = `numberUnit` v = client->_bind( p1_currencycode )
             )->a( n = `class`      v = `sapUiNoMarginTop sapUiNoMarginEnd`
@@ -103,8 +103,8 @@ CLASS z2ui5_cl_smpc_app_500 IMPLEMENTATION.
 
         )->ele( `ObjectHeader`
             )->a( n = `title`      v = client->_bind( p2_name )
-            )->a( n = `number`     v = |\{ parts:[\{path:'{ client->_bind( val = p2_price path = abap_true ) }'\},| &&
-                                        |\{path:'{ client->_bind( val = p2_currencycode path = abap_true ) }'\}],| &&
+            )->a( n = `number`     v = |\{ parts:[\{path:'{ client->_bind_path( p2_price ) }'\},| &&
+                                        |\{path:'{ client->_bind_path( p2_currencycode ) }'\}],| &&
                                         | type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
             )->a( n = `numberUnit` v = client->_bind( p2_currencycode )
             )->a( n = `class`      v = `sapUiNoMarginBottom sapUiNoMarginBegin`

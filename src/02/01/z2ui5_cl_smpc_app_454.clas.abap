@@ -129,13 +129,12 @@ CLASS z2ui5_cl_smpc_app_454 IMPLEMENTATION.
             )->a( n = `id`           v = `myDialog`
             )->a( n = `noDataText`   v = `No Products Found`
             )->a( n = `title`        v = `Select Product`
-            )->a( n = `search`       v = client->_event( val   = `SEARCH`
-                                                         t_arg = VALUE #( ( `${$parameters>/value}` ) ) )
+            )->a( n = `search`       v = client->_event( val = `SEARCH` arg = `${$parameters>/value}` )
             )->a( n = `multiSelect`  v = `true`
             " the two buttons differ only in these two properties
             )->a( n = `growing`      b = growing
             )->a( n = `initialFocus` v = COND #( WHEN growing = abap_true THEN `SearchField` ELSE `List` )
-            )->a( n = `items`        v = |\{ path : '{ client->_bind( val = t_products path = abap_true ) }', sorter : \{ path : 'NAME', descending : false \} \}|
+            )->a( n = `items`        v = |\{ path : '{ client->_bind_path( t_products ) }', sorter : \{ path : 'NAME', descending : false \} \}|
 
             )->ele( `columns`
                 )->ele( `Column`

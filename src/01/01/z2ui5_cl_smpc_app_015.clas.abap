@@ -77,7 +77,7 @@ CLASS z2ui5_cl_smpc_app_015 IMPLEMENTATION.
 
         )->ele( `Tree`
             )->a( n = `id`    v = `Tree`
-            )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_tree path = abap_true ) }' \}|
+            )->a( n = `items` v = |\{ path: '{ client->_bind_path( t_tree ) }' \}|
             )->a( n = `mode`  v = `MultiSelect`
 
             )->ele( `CustomTreeItem`

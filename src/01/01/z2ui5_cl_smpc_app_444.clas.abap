@@ -94,8 +94,7 @@ CLASS z2ui5_cl_smpc_app_444 IMPLEMENTATION.
                         )->a( n = `datetime`        v = `{DATETIME}`
                         )->a( n = `unread`          v = `{UNREAD}`
                         )->a( n = `priority`        v = `{PRIORITY}`
-                        )->a( n = `close`           v = client->_event( val   = `ITEM_CLOSE`
-                                                                        t_arg = VALUE #( ( `${ID}` ) ) ) ).
+                        )->a( n = `close`           v = client->_event( val = `ITEM_CLOSE` arg = `${ID}` ) ).
 
     client->view_display( view->stringify( ) ).
 

@@ -103,7 +103,7 @@ CLASS z2ui5_cl_smpc_app_290 IMPLEMENTATION.
                 )->a( n = `id`               v = `multiInput`
                 )->a( n = `value`            v = client->_bind( value )
                 )->a( n = `tokens`           v = client->_bind( t_tokens )
-                )->a( n = `suggestionItems`  v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                )->a( n = `suggestionItems`  v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
                 )->a( n = `valueHelpRequest` v = client->_event( `VALUE_HELP` )
 
                 )->ele( `tokens`

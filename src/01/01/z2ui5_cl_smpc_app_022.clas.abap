@@ -130,7 +130,7 @@ CLASS z2ui5_cl_smpc_app_022 IMPLEMENTATION.
                 )->a( n = `inset`       v = `false`
                 " popinLayout mirrors the original's setPopinLayout controller switch - an empty ComboBox selection maps to the Block default
                 )->a( n = `popinLayout` v = |\{= ${ client->_bind( popin_layout ) } \|\| 'Block' \}|
-                )->a( n = `items`       v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                )->a( n = `items`       v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
                 )->ele( `headerToolbar`
                     )->ele( `OverflowToolbar`

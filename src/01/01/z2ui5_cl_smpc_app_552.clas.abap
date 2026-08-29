@@ -62,7 +62,7 @@ CLASS z2ui5_cl_smpc_app_552 IMPLEMENTATION.
             )->ele( `SinglePlanningCalendar`
                 )->a( n = `id`           v = `SPC1`
                 )->a( n = `title`        v = `My Calendar`
-                )->a( n = `startDate`    v = |\{ path: '{ client->_bind( val = start_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
+                )->a( n = `startDate`    v = |\{ path: '{ client->_bind_path( start_date ) }', formatter: 'Formatter.DateCreateObject' \}|
                 )->a( n = `appointments` v = client->_bind( t_appointments )
 
                 " onInit adds five views: three built-in ones and two JS subclasses

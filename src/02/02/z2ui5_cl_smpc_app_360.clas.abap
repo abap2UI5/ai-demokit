@@ -86,8 +86,7 @@ CLASS z2ui5_cl_smpc_app_360 IMPLEMENTATION.
                     )->a( n = `threshold`           v = `15`
                     )->a( n = `enableBusyIndicator` v = `true`
                     )->a( n = `ariaLabelledBy`      v = `title`
-                    )->a( n = `paste`               v = client->_event( val   = `PASTE`
-                                                                        t_arg = VALUE #( ( `${$parameters>/data}` ) ) )
+                    )->a( n = `paste`               v = client->_event( val = `PASTE` arg = `${$parameters>/data}` )
 
                     )->ele( `dependents`
                         )->tag( n = `MultiSelectionPlugin` ns = `tp`

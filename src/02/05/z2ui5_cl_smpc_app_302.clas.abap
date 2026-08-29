@@ -211,9 +211,8 @@ CLASS z2ui5_cl_smpc_app_302 IMPLEMENTATION.
 
                     )->ele( `IconTabHeader`
                         )->a( n = `selectedKey` v = client->_bind( selectedkey )
-                        )->a( n = `items`       v = |\{path: '{ client->_bind( val = navigation path = abap_true ) }'\}|
-                        )->a( n = `select`      v = client->_event( val   = `ITEM_SELECT`
-                                                                    t_arg = VALUE #( ( `${$parameters>/item}.getKey()` ) ) )
+                        )->a( n = `items`       v = |\{path: '{ client->_bind_path( navigation ) }'\}|
+                        )->a( n = `select`      v = client->_event( val = `ITEM_SELECT` arg = `${$parameters>/item}.getKey()` )
                         )->a( n = `mode`        v = `Inline`
 
                         )->ele( `layoutData`
@@ -248,11 +247,10 @@ CLASS z2ui5_cl_smpc_app_302 IMPLEMENTATION.
                     )->a( n = `visible`     v = `{= ${device>/system/phone}}`
                     )->a( n = `expanded`    v = `true`
                     )->a( n = `selectedKey` v = client->_bind( selectedkey )
-                    )->a( n = `itemSelect`  v = client->_event( val   = `ITEM_SELECT`
-                                                                t_arg = VALUE #( ( `${$parameters>/item}.getKey()` ) ) )
+                    )->a( n = `itemSelect`  v = client->_event( val = `ITEM_SELECT` arg = `${$parameters>/item}.getKey()` )
 
                     )->ele( n = `NavigationList` ns = `tnt`
-                        )->a( n = `items` v = |\{path: '{ client->_bind( val = navigation path = abap_true ) }'\}|
+                        )->a( n = `items` v = |\{path: '{ client->_bind_path( navigation ) }'\}|
 
                         )->ele( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text`     v = `{TITLE}`

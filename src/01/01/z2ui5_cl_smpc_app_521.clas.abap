@@ -79,8 +79,7 @@ CLASS z2ui5_cl_smpc_app_521 IMPLEMENTATION.
                 )->a( n = `valueHelpRequest`       v = client->_event( `VALUE_HELP` )
                 )->a( n = `suggestionItems`        v = client->_bind( t_products )
                 " onSuggestionItemSelected shows the picked item's key
-                )->a( n = `suggestionItemSelected` v = client->_event( val   = `ITEM_SELECTED`
-                                                                       t_arg = VALUE #( ( `${$parameters>/selectedItem}.getKey()` ) ) )
+                )->a( n = `suggestionItemSelected` v = client->_event( val = `ITEM_SELECTED` arg = `${$parameters>/selectedItem}.getKey()` )
 
                 )->ele( `suggestionItems`
                     )->tag( n = `ListItem` ns = `core`
@@ -160,10 +159,8 @@ CLASS z2ui5_cl_smpc_app_521 IMPLEMENTATION.
             )->a( n = `id`      v = `selectDialog`
             )->a( n = `title`   v = `Products`
             )->a( n = `items`   v = client->_bind( t_products )
-            )->a( n = `search`  v = client->_event( val   = `VALUE_HELP_SEARCH`
-                                                    t_arg = VALUE #( ( `${$parameters>/value}` ) ) )
-            )->a( n = `confirm` v = client->_event( val   = `VALUE_HELP_CLOSE`
-                                                    t_arg = VALUE #( ( `${$parameters>/selectedItem}.getDescription()` ) ) )
+            )->a( n = `search`  v = client->_event( val = `VALUE_HELP_SEARCH` arg = `${$parameters>/value}` )
+            )->a( n = `confirm` v = client->_event( val = `VALUE_HELP_CLOSE` arg = `${$parameters>/selectedItem}.getDescription()` )
             )->a( n = `cancel`  v = client->_event( `VALUE_HELP_CLOSE` )
 
             )->tag( `StandardListItem`

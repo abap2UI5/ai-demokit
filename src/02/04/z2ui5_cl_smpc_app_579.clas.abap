@@ -144,7 +144,7 @@ CLASS z2ui5_cl_smpc_app_579 IMPLEMENTATION.
                 )->ele( n = `DynamicPageTitle` ns = `f`
                     )->ele( n = `heading` ns = `f`
                         )->tag( `Title`
-                            )->a( n = `text` v = |Products (\{{ client->_bind( val = total_count path = abap_true ) }\})|
+                            )->a( n = `text` v = |Products (\{{ client->_bind_path( total_count ) }\})|
 
                     )->end(
                 )->end(
@@ -157,16 +157,14 @@ CLASS z2ui5_cl_smpc_app_579 IMPLEMENTATION.
                     )->a( n = `class` v = `sapFDynamicPageAlignContent`
                     )->a( n = `width` v = `auto`
                     )->a( n = `items` v = client->_bind( t_rows )
-                    )->a( n = `itemPress` v = client->_event( val   = `LIST_ITEM`
-                                                              t_arg = VALUE #( ( `${$parameters>/listItem}.getBindingContext().getProperty('PRODUCTID')` ) ) )
+                    )->a( n = `itemPress` v = client->_event( val = `LIST_ITEM` arg = `${$parameters>/listItem}.getBindingContext().getProperty('PRODUCTID')` )
 
                     )->ele( `headerToolbar`
                         )->ele( `OverflowToolbar`
                             )->tag( `ToolbarSpacer`
                             )->tag( `SearchField`
                                 )->a( n = `width`  v = `17.5rem`
-                                )->a( n = `search` v = client->_event( val   = `SEARCH`
-                                                                       t_arg = VALUE #( ( `${$parameters>/query}` ) ) )
+                                )->a( n = `search` v = client->_event( val = `SEARCH` arg = `${$parameters>/query}` )
                             )->tag( `OverflowToolbarButton`
                                 )->a( n = `icon`    v = `sap-icon://add`
                                 )->a( n = `type`    v = `Transparent`
@@ -414,8 +412,7 @@ CLASS z2ui5_cl_smpc_app_579 IMPLEMENTATION.
                         )->a( n = `id`    v = `suppliersTable`
                         )->a( n = `mode`  v = `SingleSelectMaster`
                         )->a( n = `items` v = client->_bind( t_suppliers )
-                        )->a( n = `itemPress` v = client->_event( val   = `SUPPLIER_ITEM`
-                                                                  t_arg = VALUE #( ( `${$parameters>/listItem}.getBindingContext().getProperty('TEXT')` ) ) )
+                        )->a( n = `itemPress` v = client->_event( val = `SUPPLIER_ITEM` arg = `${$parameters>/listItem}.getBindingContext().getProperty('TEXT')` )
 
                         )->ele( `columns`
                             )->tag( `Column`

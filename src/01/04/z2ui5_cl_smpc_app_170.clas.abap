@@ -128,8 +128,7 @@ CLASS z2ui5_cl_smpc_app_170 IMPLEMENTATION.
                                 )->a( n = `text`   v = `SR`
                                 )->a( n = `status` v = `Error`
                                 )->a( n = `design` v = `StatusIconHidden`
-                                )->a( n = `press`  v = client->_event( val   = `OPEN_POPOVER`
-                                                                       t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+                                )->a( n = `press`  v = client->_event( val = `OPEN_POPOVER` arg = `$event.oSource.sId` )
                                 )->tag( `ObjectNumber`
                                     )->a( n = `number`     v = `2`
                                     )->a( n = `unit`       v = `M`
@@ -162,8 +161,7 @@ CLASS z2ui5_cl_smpc_app_170 IMPLEMENTATION.
                         )->ele( `Button`
                             )->a( n = `text`  v = `Button with layoutData`
                             )->a( n = `type`  v = `Transparent`
-                            )->a( n = `press` v = client->_event( val   = `OPEN_POPOVER`
-                                                                  t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+                            )->a( n = `press` v = client->_event( val = `OPEN_POPOVER` arg = `$event.oSource.sId` )
                             )->ele( `layoutData`
                                 )->tag( `OverflowToolbarLayoutData`
                                     )->a( n = `priority`                  v = `AlwaysOverflow`
@@ -222,7 +220,7 @@ CLASS z2ui5_cl_smpc_app_170 IMPLEMENTATION.
                     )->a( n = `id`     v = `idProductsTable`
                     )->a( n = `sticky` v = `HeaderToolbar,ColumnHeaders`
                     )->a( n = `inset`  v = `false`
-                    )->a( n = `items`  v = |\{ path: '{ client->_bind( val = productcollection path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                    )->a( n = `items`  v = |\{ path: '{ client->_bind_path( productcollection ) }', sorter: \{ path: 'NAME' \} \}|
                     )->a( n = `class`  v = `sapFDynamicPageAlignContent`
                     )->a( n = `width`  v = `auto`
 

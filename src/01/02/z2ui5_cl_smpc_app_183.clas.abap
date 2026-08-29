@@ -70,13 +70,13 @@ CLASS z2ui5_cl_smpc_app_183 IMPLEMENTATION.
                 )->tag( `Label`
                     )->a( n = `text` v = `DateTime in DateTimePicker`
                 )->tag( `DateTimePicker`
-                    )->a( n = `value` v = |\{ path: '{ client->_bind( val = dtvalue path = abap_true ) }', type: 'DateTimeType', formatOptions: \{ source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
+                    )->a( n = `value` v = |\{ path: '{ client->_bind_path( dtvalue ) }', type: 'DateTimeType', formatOptions: \{ source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `DateTime in Input`
                 )->tag( `Input`
                     )->a( n = `id`          v = `dtInput`
                     )->a( n = `placeholder` v = client->_bind( dtpattern )
-                    )->a( n = `value`       v = |\{ path: '{ client->_bind( val = dtvalue path = abap_true ) }', type: 'DateTimeType', formatOptions: \{ source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
+                    )->a( n = `value`       v = |\{ path: '{ client->_bind_path( dtvalue ) }', type: 'DateTimeType', formatOptions: \{ source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
 
             )->end(
         )->end(
@@ -97,15 +97,15 @@ CLASS z2ui5_cl_smpc_app_183 IMPLEMENTATION.
                 )->tag( `Label`
                     )->a( n = `text` v = `Short`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = dtvalue path = abap_true ) }', type: 'DateTimeType', formatOptions: \{ style: 'short', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( dtvalue ) }', type: 'DateTimeType', formatOptions: \{ style: 'short', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `Medium`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = dtvalue path = abap_true ) }', type: 'DateTimeType', formatOptions: \{ style: 'medium', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( dtvalue ) }', type: 'DateTimeType', formatOptions: \{ style: 'medium', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `Long`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = dtvalue path = abap_true ) }', type: 'DateTimeType', formatOptions: \{ style: 'long', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( dtvalue ) }', type: 'DateTimeType', formatOptions: \{ style: 'long', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
 
             )->end(
         )->end(
@@ -126,15 +126,15 @@ CLASS z2ui5_cl_smpc_app_183 IMPLEMENTATION.
                 )->tag( `Label`
                     )->a( n = `text` v = `yyyy-MM-dd'T'HH:mm:ss`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = dtvalue path = abap_true ) }', type: 'DateTimeType', formatOptions: \{ pattern: 'yyyy-MM-dd\\'T\\'HH:mm:ss', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( dtvalue ) }', type: 'DateTimeType', formatOptions: \{ pattern: 'yyyy-MM-dd\\'T\\'HH:mm:ss', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `yyyyMMdd HHmmss`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = dtvalue path = abap_true ) }', type: 'DateTimeType', formatOptions: \{ pattern: 'yyyyMMdd HHmmss', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( dtvalue ) }', type: 'DateTimeType', formatOptions: \{ pattern: 'yyyyMMdd HHmmss', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `HH:mm`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = dtvalue path = abap_true ) }', type: 'DateTimeType', formatOptions: \{ pattern: 'HH:mm', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( dtvalue ) }', type: 'DateTimeType', formatOptions: \{ pattern: 'HH:mm', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
 
             )->end(
         )->end(
@@ -155,7 +155,7 @@ CLASS z2ui5_cl_smpc_app_183 IMPLEMENTATION.
                 )->tag( `Label`
                     )->a( n = `text` v = `UTC`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = dtvalue path = abap_true ) }', type: 'DateTimeType', formatOptions: \{ pattern: 'yyyy-MM-dd\\'T\\'HH:mm:ss', UTC: true, source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( dtvalue ) }', type: 'DateTimeType', formatOptions: \{ pattern: 'yyyy-MM-dd\\'T\\'HH:mm:ss', UTC: true, source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
 
             )->end(
         )->end(
@@ -176,7 +176,7 @@ CLASS z2ui5_cl_smpc_app_183 IMPLEMENTATION.
                 )->tag( `Label`
                     )->a( n = `text` v = `Relative Time`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = dtvalue path = abap_true ) }', type: 'DateTimeType', formatOptions: \{ relative: true, relativeScale: 'auto', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( dtvalue ) }', type: 'DateTimeType', formatOptions: \{ relative: true, relativeScale: 'auto', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
 
             )->end(
         )->end( ).

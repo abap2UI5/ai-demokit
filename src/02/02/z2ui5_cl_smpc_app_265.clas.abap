@@ -104,7 +104,7 @@ CLASS z2ui5_cl_smpc_app_265 IMPLEMENTATION.
                         )->ele( `Select`
                             )->a( n = `forceSelection` v = `false`
                             )->a( n = `selectedKey`    v = `{ACCOUNTMANAGERID}`
-                            )->a( n = `items`          v = |\{ path: '{ client->_bind( val = t_accountmanagers path = abap_true ) }', | &&
+                            )->a( n = `items`          v = |\{ path: '{ client->_bind_path( t_accountmanagers ) }', | &&
                                                            |templateShareable: false, boundFilters: [\{ path: 'REGION', operator: 'EQ', | &&
                                                            |value1: '\{REGION\}' \}] \}|
 

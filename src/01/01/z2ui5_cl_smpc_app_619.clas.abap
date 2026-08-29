@@ -77,8 +77,7 @@ CLASS z2ui5_cl_smpc_app_619 IMPLEMENTATION.
     DATA(bar) = panel->ele( `IconTabBar`
         )->a( n = `id`                      v = `idIconTabBar`
         )->a( n = `class`                   v = `sapUiResponsivePadding--header sapUiResponsivePadding--content`
-        )->a( n = `select`                  v = client->_event( val   = `FILTER`
-                                                                 t_arg = VALUE #( ( `${$parameters>/key}` ) ) ) ).
+        )->a( n = `select`                  v = client->_event( val = `FILTER` arg = `${$parameters>/key}` ) ).
 
     bar->ele( `items`
         )->tag( `IconTabFilter`

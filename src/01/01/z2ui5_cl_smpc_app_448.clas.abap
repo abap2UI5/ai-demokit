@@ -67,20 +67,17 @@ CLASS z2ui5_cl_smpc_app_448 IMPLEMENTATION.
             " prefix stripped - the class name travels, the strip happens in ABAP
             )->ele( n = `addAction` ns = `semantic`
                 )->tag( n = `AddAction` ns = `semantic`
-                    )->a( n = `press` v = client->_event( val   = `SEMANTIC_PRESS`
-                                                          t_arg = VALUE #( ( `$event.oSource.getMetadata().getName()` ) ) )
+                    )->a( n = `press` v = client->_event( val = `SEMANTIC_PRESS` arg = `$event.oSource.getMetadata().getName()` )
 
             )->end(
             )->ele( n = `flagAction` ns = `semantic`
                 )->tag( n = `FlagAction` ns = `semantic`
-                    )->a( n = `press` v = client->_event( val   = `SEMANTIC_PRESS`
-                                                          t_arg = VALUE #( ( `$event.oSource.getMetadata().getName()` ) ) )
+                    )->a( n = `press` v = client->_event( val = `SEMANTIC_PRESS` arg = `$event.oSource.getMetadata().getName()` )
 
             )->end(
             )->ele( n = `favoriteAction` ns = `semantic`
                 )->tag( n = `FavoriteAction` ns = `semantic`
-                    )->a( n = `press` v = client->_event( val   = `SEMANTIC_PRESS`
-                                                          t_arg = VALUE #( ( `$event.oSource.getMetadata().getName()` ) ) )
+                    )->a( n = `press` v = client->_event( val = `SEMANTIC_PRESS` arg = `$event.oSource.getMetadata().getName()` )
 
             )->end(
             )->ele( n = `messagesIndicator` ns = `semantic`

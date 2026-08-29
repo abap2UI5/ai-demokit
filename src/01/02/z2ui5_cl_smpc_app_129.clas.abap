@@ -59,7 +59,7 @@ CLASS z2ui5_cl_smpc_app_129 IMPLEMENTATION.
                 )->tag( `Label`
                     )->a( n = `text` v = `Number`
                 )->tag( `Input`
-                    )->a( n = `value` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'IntegerType' \}|
+                    )->a( n = `value` v = |\{ path: '{ client->_bind_path( number ) }', type: 'IntegerType' \}|
 
             )->end(
         )->end(
@@ -80,11 +80,11 @@ CLASS z2ui5_cl_smpc_app_129 IMPLEMENTATION.
                 )->tag( `Label`
                     )->a( n = `text` v = `3 digits`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'IntegerType', formatOptions: \{ minIntegerDigits: 3 \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( number ) }', type: 'IntegerType', formatOptions: \{ minIntegerDigits: 3 \} \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `5 digits`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'IntegerType', formatOptions: \{ minIntegerDigits: 5 \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( number ) }', type: 'IntegerType', formatOptions: \{ minIntegerDigits: 5 \} \}|
 
             )->end(
         )->end(
@@ -105,11 +105,11 @@ CLASS z2ui5_cl_smpc_app_129 IMPLEMENTATION.
                 )->tag( `Label`
                     )->a( n = `text` v = `2 digits`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'IntegerType', formatOptions: \{ maxIntegerDigits: 2 \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( number ) }', type: 'IntegerType', formatOptions: \{ maxIntegerDigits: 2 \} \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `5 digits`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'IntegerType', formatOptions: \{ maxIntegerDigits: 5 \} \}| ).
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( number ) }', type: 'IntegerType', formatOptions: \{ maxIntegerDigits: 5 \} \}| ).
 
     client->view_display( view->stringify( ) ).
 

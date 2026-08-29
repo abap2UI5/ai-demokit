@@ -81,8 +81,7 @@ CLASS z2ui5_cl_smpc_app_516 IMPLEMENTATION.
 
         )->ele( `ViewSettingsDialog`
             )->a( n = `id`      v = `mySettingsDialog`
-            )->a( n = `confirm` v = client->_event( val   = `CONFIRM`
-                                                    t_arg = VALUE #( ( `${$parameters>/filterString}` ) ) )
+            )->a( n = `confirm` v = client->_event( val = `CONFIRM` arg = `${$parameters>/filterString}` )
 
             )->ele( `sortItems`
                 )->tag( `ViewSettingsItem`

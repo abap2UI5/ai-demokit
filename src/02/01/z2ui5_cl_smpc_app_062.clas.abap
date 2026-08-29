@@ -113,7 +113,7 @@ CLASS z2ui5_cl_smpc_app_062 IMPLEMENTATION.
                     )->a( n = `class`               v = `sapUiMediumMarginBottom`
                 )->tag( `MessageStrip`
                     " the controller-built inline-icon string is stored with icon placeholders and expanded by Formatter.expandInlineIcons (see sidecar)
-                    )->a( n = `text`                v = |\{ path: '{ client->_bind( val = inline_icons_helper path = abap_true ) }', formatter: 'Formatter.expandInlineIcons' \}|
+                    )->a( n = `text`                v = |\{ path: '{ client->_bind_path( inline_icons_helper ) }', formatter: 'Formatter.expandInlineIcons' \}|
                     )->a( n = `type`                v = `Success`
                     )->a( n = `enableFormattedText` v = `true`
                     )->a( n = `showIcon`            v = `true`

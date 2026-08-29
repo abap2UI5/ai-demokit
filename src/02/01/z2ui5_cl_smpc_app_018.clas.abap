@@ -87,7 +87,7 @@ CLASS z2ui5_cl_smpc_app_018 IMPLEMENTATION.
             )->tag( `DateTimePicker`
                 )->a( n = `id`                      v = `DTP6`
                 )->a( n = `placeholder`             v = `Enter Date`
-                )->a( n = `initialFocusedDateValue` v = |\{ path: '{ client->_bind( val = init_focus_dtp6 path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
+                )->a( n = `initialFocusedDateValue` v = |\{ path: '{ client->_bind_path( init_focus_dtp6 ) }', formatter: 'Formatter.DateCreateObject' \}|
                 )->a( n = `valueState`              v = client->_bind( vs_dtp6 )
                 )->a( n = `change`                  v = client->_event( val   = `CHANGE`
                                                                         t_arg = VALUE #( ( `$event.oSource.sId` ) ( `${$parameters>/value}` ) ( `${$parameters>/valid}` ) ) )
@@ -101,7 +101,7 @@ CLASS z2ui5_cl_smpc_app_018 IMPLEMENTATION.
                 )->a( n = `showCurrentDateButton` v = `true`
                 )->a( n = `showCurrentTimeButton` v = `true`
                 )->a( n = `value`
-                         v = |\{ 'path': '{ client->_bind( val = value_dtp2 path = abap_true ) }', 'type': 'sap.ui.model.type.DateTime', 'formatOptions': \{ 'style': 'long', 'source': \{ 'pattern': 'yyyy-MM-dd HH:mm:ss' \} \} \}|
+                         v = |\{ 'path': '{ client->_bind_path( value_dtp2 ) }', 'type': 'sap.ui.model.type.DateTime', 'formatOptions': \{ 'style': 'long', 'source': \{ 'pattern': 'yyyy-MM-dd HH:mm:ss' \} \} \}|
                 )->a( n = `valueState`            v = client->_bind( vs_dtp2 )
                 )->a( n = `change`                v = client->_event( val   = `CHANGE`
                                                                       t_arg = VALUE #( ( `$event.oSource.sId` ) ( `${$parameters>/value}` ) ( `${$parameters>/valid}` ) ) )
@@ -112,7 +112,7 @@ CLASS z2ui5_cl_smpc_app_018 IMPLEMENTATION.
             )->tag( `DateTimePicker`
                 )->a( n = `id`         v = `DTP3`
                 )->a( n = `value`
-                         v = |\{ 'path': '{ client->_bind( val = value_dtp3 path = abap_true ) }', 'type': 'sap.ui.model.type.DateTime', 'formatOptions': \{ 'pattern': 'M/d/yy h:mm a', 'source': \{ 'pattern': 'yyyy-MM-dd HH:mm:ss' \} \} \}|
+                         v = |\{ 'path': '{ client->_bind_path( value_dtp3 ) }', 'type': 'sap.ui.model.type.DateTime', 'formatOptions': \{ 'pattern': 'M/d/yy h:mm a', 'source': \{ 'pattern': 'yyyy-MM-dd HH:mm:ss' \} \} \}|
                 )->a( n = `valueState` v = client->_bind( vs_dtp3 )
                 )->a( n = `change`     v = client->_event( val   = `CHANGE`
                                                            t_arg = VALUE #( ( `$event.oSource.sId` ) ( `${$parameters>/value}` ) ( `${$parameters>/valid}` ) ) )
@@ -123,7 +123,7 @@ CLASS z2ui5_cl_smpc_app_018 IMPLEMENTATION.
             )->tag( `DateTimePicker`
                 )->a( n = `id`                    v = `DTP4`
                 )->a( n = `value`
-                         v = |\{ 'path': '{ client->_bind( val = value_dtp4 path = abap_true ) }', 'type': 'sap.ui.model.type.DateTime',| &&
+                         v = |\{ 'path': '{ client->_bind_path( value_dtp4 ) }', 'type': 'sap.ui.model.type.DateTime',| &&
                              | 'formatOptions': \{ 'calendarType': 'Islamic', 'style': 'short', 'source': \{ 'pattern': 'yyyy-MM-dd HH:mm:ss' \} \} \}|
                 )->a( n = `secondaryCalendarType` v = `Gregorian`
                 )->a( n = `valueState`            v = client->_bind( vs_dtp4 )
@@ -160,7 +160,7 @@ CLASS z2ui5_cl_smpc_app_018 IMPLEMENTATION.
             )->tag( `DateTimePicker`
                 )->a( n = `id`    v = `DTP5`
                 )->a( n = `value`
-                         v = |\{ path: '{ client->_bind( val = value_dtp5 path = abap_true ) }', type: 'sap.ui.model.type.DateTime', formatOptions: \{ style: 'medium', strictParsing: true, source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
+                         v = |\{ path: '{ client->_bind_path( value_dtp5 ) }', type: 'sap.ui.model.type.DateTime', formatOptions: \{ style: 'medium', strictParsing: true, source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
             )->tag( `Label`
                 )->a( n = `text`     v = `DateTimePicker using DataBinding with value and timezone`
@@ -169,8 +169,8 @@ CLASS z2ui5_cl_smpc_app_018 IMPLEMENTATION.
             )->tag( `DateTimePicker`
                 )->a( n = `id`    v = `DTP10`
                 )->a( n = `value`
-                         v = |\{ parts: [ \{ path: '{ client->_bind( val = value_dtp10 path = abap_true ) }', type: 'sap.ui.model.odata.type.DateTimeOffset', constraints: \{ V4: true \} \},| &&
-                             | \{ path: '{ client->_bind( val = timezone_dtp10 path = abap_true ) }', type: 'sap.ui.model.odata.type.String' \} ], type: 'sap.ui.model.odata.type.DateTimeWithTimezone' \}|
+                         v = |\{ parts: [ \{ path: '{ client->_bind_path( value_dtp10 ) }', type: 'sap.ui.model.odata.type.DateTimeOffset', constraints: \{ V4: true \} \},| &&
+                             | \{ path: '{ client->_bind_path( timezone_dtp10 ) }', type: 'sap.ui.model.odata.type.String' \} ], type: 'sap.ui.model.odata.type.DateTimeWithTimezone' \}|
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
             )->tag( `Label`
                 )->a( n = `text`     v = `DateTimePicker using DataBinding with null value and timezone`
@@ -180,8 +180,8 @@ CLASS z2ui5_cl_smpc_app_018 IMPLEMENTATION.
                 )->a( n = `showTimezone`          v = `true`
                 )->a( n = `showCurrentTimeButton` v = `true`
                 )->a( n = `value`
-                         v = |\{ parts: [ \{ path: '{ client->_bind( val = value_dtp11 path = abap_true ) }', type: 'sap.ui.model.odata.type.DateTimeOffset', constraints: \{ V4: true \} \},| &&
-                             | \{ path: '{ client->_bind( val = timezone_dtp11 path = abap_true ) }', type: 'sap.ui.model.odata.type.String' \} ], type: 'sap.ui.model.odata.type.DateTimeWithTimezone' \}|
+                         v = |\{ parts: [ \{ path: '{ client->_bind_path( value_dtp11 ) }', type: 'sap.ui.model.odata.type.DateTimeOffset', constraints: \{ V4: true \} \},| &&
+                             | \{ path: '{ client->_bind_path( timezone_dtp11 ) }', type: 'sap.ui.model.odata.type.String' \} ], type: 'sap.ui.model.odata.type.DateTimeWithTimezone' \}|
                 )->a( n = `class`                 v = `sapUiSmallMarginBottom`
 
         )->end(
@@ -203,7 +203,7 @@ CLASS z2ui5_cl_smpc_app_018 IMPLEMENTATION.
             )->tag( `DateTimePicker`
                 )->a( n = `id`           v = `DTP8`
                 )->a( n = `value`
-                         v = |\{ path: '{ client->_bind( val = value_dtp8 path = abap_true ) }', type: 'sap.ui.model.type.DateTime', formatOptions: \{ 'style': 'medium', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
+                         v = |\{ path: '{ client->_bind_path( value_dtp8 ) }', type: 'sap.ui.model.type.DateTime', formatOptions: \{ 'style': 'medium', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
                 )->a( n = `showTimezone` v = `true`
                 )->a( n = `timezone`     v = `America/New_York`
                 )->a( n = `class`        v = `sapUiSmallMarginBottom` ).

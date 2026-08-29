@@ -99,8 +99,7 @@ CLASS z2ui5_cl_smpc_app_534 IMPLEMENTATION.
                                     )->a( n = `text` v = `Set current step: `
 
                                 )->ele( `Select`
-                                    )->a( n = `change`      v = client->_event( val   = `CURRENT_STEP_LINEAR`
-                                                                                t_arg = VALUE #( ( `${$parameters>/selectedItem}.getKey()` ) ) )
+                                    )->a( n = `change`      v = client->_event( val = `CURRENT_STEP_LINEAR` arg = `${$parameters>/selectedItem}.getKey()` )
                                     )->a( n = `selectedKey` v = client->_bind( linearwizardselectedstep )
                                     )->a( n = `visible`     v = |\{= ${ client->_bind( selectedshowcase ) } === 'linear'\}|
 
@@ -121,8 +120,7 @@ CLASS z2ui5_cl_smpc_app_534 IMPLEMENTATION.
 
                                 )->ele( `Select`
                                     )->a( n = `id`          v = `selectBranchingCurrentStep`
-                                    )->a( n = `change`      v = client->_event( val   = `CURRENT_STEP_BRANCHING`
-                                                                                t_arg = VALUE #( ( `${$parameters>/selectedItem}.getKey()` ) ) )
+                                    )->a( n = `change`      v = client->_event( val = `CURRENT_STEP_BRANCHING` arg = `${$parameters>/selectedItem}.getKey()` )
                                     )->a( n = `selectedKey` v = client->_bind( branchingselectedstep )
                                     )->a( n = `visible`     v = |\{= ${ client->_bind( selectedshowcase ) } === 'branching'\}|
 
@@ -176,8 +174,7 @@ CLASS z2ui5_cl_smpc_app_534 IMPLEMENTATION.
                             )->ele( `WizardStep`
                                 )->a( n = `id`       v = `ProductTypeStep`
                                 )->a( n = `title`    v = `Product Type`
-                                )->a( n = `activate` v = client->_event( val   = `ACTIVATE_LINEAR`
-                                                                         t_arg = VALUE #( ( `ProductTypeStep` ) ) )
+                                )->a( n = `activate` v = client->_event( val = `ACTIVATE_LINEAR` arg = `ProductTypeStep` )
 
                                 )->tag( `MessageStrip`
                                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
@@ -219,8 +216,7 @@ CLASS z2ui5_cl_smpc_app_534 IMPLEMENTATION.
                                 )->a( n = `id`        v = `ProductInfoStep`
                                 )->a( n = `title`     v = `Product Information`
                                 )->a( n = `validated` v = client->_bind( step2_validated )
-                                )->a( n = `activate`  v = client->_event( val   = `ACTIVATE_LINEAR`
-                                                                          t_arg = VALUE #( ( `ProductInfoStep` ) ) )
+                                )->a( n = `activate`  v = client->_event( val = `ACTIVATE_LINEAR` arg = `ProductInfoStep` )
 
                                 )->tag( `MessageStrip`
                                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
@@ -295,8 +291,7 @@ CLASS z2ui5_cl_smpc_app_534 IMPLEMENTATION.
                                 )->a( n = `id`       v = `OptionalInfoStep`
                                 )->a( n = `optional` v = `true`
                                 )->a( n = `title`    v = `Additional Information`
-                                )->a( n = `activate` v = client->_event( val   = `ACTIVATE_LINEAR`
-                                                                         t_arg = VALUE #( ( `OptionalInfoStep` ) ) )
+                                )->a( n = `activate` v = client->_event( val = `ACTIVATE_LINEAR` arg = `OptionalInfoStep` )
 
                                 )->tag( `MessageStrip`
                                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
@@ -366,8 +361,7 @@ CLASS z2ui5_cl_smpc_app_534 IMPLEMENTATION.
                             )->ele( `WizardStep`
                                 )->a( n = `id`       v = `PricingStep`
                                 )->a( n = `title`    v = `Pricing`
-                                )->a( n = `activate` v = client->_event( val   = `ACTIVATE_LINEAR`
-                                                                         t_arg = VALUE #( ( `PricingStep` ) ) )
+                                )->a( n = `activate` v = client->_event( val = `ACTIVATE_LINEAR` arg = `PricingStep` )
 
                                 )->tag( `MessageStrip`
                                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
@@ -426,8 +420,7 @@ CLASS z2ui5_cl_smpc_app_534 IMPLEMENTATION.
 
                                 )->ele( `RadioButtonGroup`
                                     )->a( n = `id`     v = `PathSelection`
-                                    )->a( n = `select` v = client->_event( val   = `APPLY_PATH`
-                                                                           t_arg = VALUE #( ( `${$parameters>/selectedIndex}` ) ) )
+                                    )->a( n = `select` v = client->_event( val = `APPLY_PATH` arg = `${$parameters>/selectedIndex}` )
 
                                     )->ele( `buttons`
                                         )->tag( `RadioButton`
@@ -491,8 +484,7 @@ CLASS z2ui5_cl_smpc_app_534 IMPLEMENTATION.
                                     )->a( n = `text` v = `Set background design: `
 
                                 )->ele( `Select`
-                                    )->a( n = `change`      v = client->_event( val   = `BACKGROUND_DESIGN`
-                                                                                t_arg = VALUE #( ( `${$parameters>/selectedItem}.getKey()` ) ) )
+                                    )->a( n = `change`      v = client->_event( val = `BACKGROUND_DESIGN` arg = `${$parameters>/selectedItem}.getKey()` )
                                     )->a( n = `selectedKey` v = client->_bind( selectedbackgrounddesign )
 
                                     )->tag( n = `Item` ns = `core`

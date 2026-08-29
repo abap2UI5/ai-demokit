@@ -103,8 +103,7 @@ CLASS z2ui5_cl_smpc_app_272 IMPLEMENTATION.
                     " as the JSON array (["Billing Information"]), so the arg
                     " indexes it exactly like the original's aFieldGroup[0]
                     " (measured 2026-08-01 - the expression grammar allows [n])
-                    )->a( n = `validateFieldGroup` v = client->_event( val   = `VALIDATE_FIELD_GROUP`
-                                                                       t_arg = VALUE #( ( `${$parameters>/fieldGroupIds}[0]` ) ) )
+                    )->a( n = `validateFieldGroup` v = client->_event( val = `VALIDATE_FIELD_GROUP` arg = `${$parameters>/fieldGroupIds}[0]` )
 
                     )->ele( n = `content` ns = `f`
 

@@ -121,7 +121,7 @@ CLASS z2ui5_cl_smpc_app_570 IMPLEMENTATION.
                         )->a( n = `id`      v = `editButton`
                         )->a( n = `text`    v = `Edit`
                         )->a( n = `type`    v = `Transparent`
-                        )->a( n = `visible` v = |\{= !$\{{ client->_bind( val = edit_mode path = abap_true ) }\} \}|
+                        )->a( n = `visible` v = |\{= !$\{{ client->_bind_path( edit_mode ) }\} \}|
                         )->a( n = `press`   v = client->_event( `EDIT` )
                     )->tag( `Button`
                         )->a( n = `id`      v = `saveButton`

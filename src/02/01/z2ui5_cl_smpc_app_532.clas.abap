@@ -124,9 +124,8 @@ CLASS z2ui5_cl_smpc_app_532 IMPLEMENTATION.
 
         )->ele( `QuickView`
             )->a( n = `id`    v = `quickViewNavOrigin`
-            )->a( n = `pages` v = |\{ path: '{ client->_bind( val = t_pages path = abap_true ) }', templateShareable: true \}|
-            )->a( n = `navigate` v = client->_event( val   = `NAVIGATE`
-                                                     t_arg = VALUE #( ( `${$parameters>/navOrigin} ? ${$parameters>/navOrigin}.getText() : ''` ) ) )
+            )->a( n = `pages` v = |\{ path: '{ client->_bind_path( t_pages ) }', templateShareable: true \}|
+            )->a( n = `navigate` v = client->_event( val = `NAVIGATE` arg = `${$parameters>/navOrigin} ? ${$parameters>/navOrigin}.getText() : ''` )
 
             )->ele( `QuickViewPage`
                 )->a( n = `pageId`      v = `{PAGEID}`

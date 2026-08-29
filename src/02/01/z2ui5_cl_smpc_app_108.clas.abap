@@ -82,7 +82,7 @@ CLASS z2ui5_cl_smpc_app_108 IMPLEMENTATION.
                 " (@since 1.50), so the ToggleButton and the calendar share the field
                 )->a( n = `showDayNamesLine`          v = client->_bind( show_day_names )
                 )->a( n = `showRowHeaders`            v = `false`
-                )->a( n = `startDate`                 v = |\{ path: '{ client->_bind( val = start_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
+                )->a( n = `startDate`                 v = |\{ path: '{ client->_bind_path( start_date ) }', formatter: 'Formatter.DateCreateObject' \}|
                 )->a( n = `viewKey`                   v = `Day`
                 )->a( n = `rows`                      v = client->_bind( t_people )
                 )->a( n = `appointmentsVisualization` v = `Filled`

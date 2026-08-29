@@ -81,8 +81,7 @@ CLASS z2ui5_cl_smpc_app_565 IMPLEMENTATION.
                     )->a( n = `text`         v = `Open Popover`
                     )->a( n = `ariaHasPopup` v = `Dialog`
                     " onOpenPopover anchors the popover on the pressed button
-                    )->a( n = `press`        v = client->_event( val   = `OPEN_POPOVER`
-                                                                 t_arg = VALUE #( ( `$event.oSource.sId` ) ) ) ).
+                    )->a( n = `press`        v = client->_event( val = `OPEN_POPOVER` arg = `$event.oSource.sId` ) ).
 
     client->view_display( view->stringify( ) ).
 
@@ -131,8 +130,7 @@ CLASS z2ui5_cl_smpc_app_565 IMPLEMENTATION.
                             " detail page stayed empty (e2e-caught 2026-08-22). The
                             " id is on the item as its bound description, which is
                             " what every other $source> wire in the corpus reads.
-                            )->a( n = `press`            v = client->_event( val   = `NAV_TO_PRODUCT`
-                                                                             t_arg = VALUE #( ( `${$source>/description}` ) ) )
+                            )->a( n = `press`            v = client->_event( val = `NAV_TO_PRODUCT` arg = `${$source>/description}` )
 
                     )->end(
                 )->end(

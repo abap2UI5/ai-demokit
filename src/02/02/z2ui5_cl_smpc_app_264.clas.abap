@@ -76,7 +76,7 @@ CLASS z2ui5_cl_smpc_app_264 IMPLEMENTATION.
 
         )->ele( n = `Table` ns = `table`
             )->a( n = `id`   v = `myTable`
-            )->a( n = `rows` v = |\{ path: '{ client->_bind( val = t_teammembers path = abap_true ) }', | &&
+            )->a( n = `rows` v = |\{ path: '{ client->_bind_path( t_teammembers ) }', | &&
                                  |boundFilters: [{ lv_boundfilters }] \}|
 
             )->ele( n = `extension` ns = `table`
@@ -92,7 +92,7 @@ CLASS z2ui5_cl_smpc_app_264 IMPLEMENTATION.
                     )->tag( `Input`
                         )->a( n = `id`      v = `departmentInput`
                         )->a( n = `width`   v = `200px`
-                        )->a( n = `value`   v = |\{ path: '{ client->_bind( val = departmentprefix path = abap_true ) }', type: 'StringType' \}|
+                        )->a( n = `value`   v = |\{ path: '{ client->_bind_path( departmentprefix ) }', type: 'StringType' \}|
                         )->a( n = `visible` v = client->_bind( showorganizational )
                     )->tag( `Label`
                         )->a( n = `text`     v = `Location prefix`
@@ -101,7 +101,7 @@ CLASS z2ui5_cl_smpc_app_264 IMPLEMENTATION.
                     )->tag( `Input`
                         )->a( n = `id`      v = `locationInput`
                         )->a( n = `width`   v = `200px`
-                        )->a( n = `value`   v = |\{ path: '{ client->_bind( val = locationprefix path = abap_true ) }', type: 'StringType' \}|
+                        )->a( n = `value`   v = |\{ path: '{ client->_bind_path( locationprefix ) }', type: 'StringType' \}|
                         )->a( n = `visible` v = client->_bind( showorganizational )
                     )->tag( `Label`
                         )->a( n = `text`     v = `First name prefix`
@@ -110,7 +110,7 @@ CLASS z2ui5_cl_smpc_app_264 IMPLEMENTATION.
                     )->tag( `Input`
                         )->a( n = `id`      v = `firstNameInput`
                         )->a( n = `width`   v = `200px`
-                        )->a( n = `value`   v = |\{ path: '{ client->_bind( val = firstname path = abap_true ) }', type: 'StringType' \}|
+                        )->a( n = `value`   v = |\{ path: '{ client->_bind_path( firstname ) }', type: 'StringType' \}|
                         )->a( n = `visible` v = |\{= !%{ client->_bind( showorganizational ) }\}|
                     )->tag( `Label`
                         )->a( n = `text`     v = `Last name prefix`
@@ -119,7 +119,7 @@ CLASS z2ui5_cl_smpc_app_264 IMPLEMENTATION.
                     )->tag( `Input`
                         )->a( n = `id`      v = `lastNameInput`
                         )->a( n = `width`   v = `200px`
-                        )->a( n = `value`   v = |\{ path: '{ client->_bind( val = lastname path = abap_true ) }', type: 'StringType' \}|
+                        )->a( n = `value`   v = |\{ path: '{ client->_bind_path( lastname ) }', type: 'StringType' \}|
                         )->a( n = `visible` v = |\{= !%{ client->_bind( showorganizational ) }\}|
                     )->tag( `ToolbarSpacer`
                     )->tag( `Button`

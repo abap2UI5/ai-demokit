@@ -182,8 +182,7 @@ CLASS z2ui5_cl_smpc_app_407 IMPLEMENTATION.
             )->ele( n = `sideContent` ns = `tnt`
                 )->ele( n = `SideNavigation` ns = `tnt`
                     )->a( n = `id`         v = `sideNavigation`
-                    )->a( n = `itemSelect` v = client->_event( val   = `ITEM_SELECT`
-                                                               t_arg = VALUE #( ( `${$parameters>/item}.getKey()` ) ) )
+                    )->a( n = `itemSelect` v = client->_event( val = `ITEM_SELECT` arg = `${$parameters>/item}.getKey()` )
 
                     )->ele( n = `filterSection` ns = `tnt`
                         " value is two-way bound so the filter state survives the round-trip;
@@ -192,10 +191,8 @@ CLASS z2ui5_cl_smpc_app_407 IMPLEMENTATION.
                             )->a( n = `id`           v = `sideNavigationSearchField`
                             )->a( n = `ariaControls` v = `sideNavigation`
                             )->a( n = `value`        v = client->_bind( search_value )
-                            )->a( n = `liveChange`   v = client->_event( val   = `LIVE_CHANGE`
-                                                                         t_arg = VALUE #( ( `${$parameters>/newValue}` ) ) )
-                            )->a( n = `search`       v = client->_event( val   = `SEARCH`
-                                                                         t_arg = VALUE #( ( `${$parameters>/query}` ) ) )
+                            )->a( n = `liveChange`   v = client->_event( val = `LIVE_CHANGE` arg = `${$parameters>/newValue}` )
+                            )->a( n = `search`       v = client->_event( val = `SEARCH` arg = `${$parameters>/query}` )
 
                     )->end(
                     )->ele( n = `item` ns = `tnt`

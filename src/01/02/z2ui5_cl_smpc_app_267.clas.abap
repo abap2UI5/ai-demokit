@@ -77,8 +77,7 @@ CLASS z2ui5_cl_smpc_app_267 IMPLEMENTATION.
                     )->a( n = `class`             v = `sapUiDSCExplored sapUiContentPadding`
                     )->a( n = `containerQuery`    v = `true`
                     )->a( n = `equalSplit`        v = `true`
-                    )->a( n = `breakpointChanged` v = client->_event( val   = `BREAKPOINT_CHANGED`
-                                                                      t_arg = VALUE #( ( `${$parameters>/currentBreakpoint}` ) ) )
+                    )->a( n = `breakpointChanged` v = client->_event( val = `BREAKPOINT_CHANGED` arg = `${$parameters>/currentBreakpoint}` )
 
                     )->ele( `VBox`
                         )->tag( `Title`

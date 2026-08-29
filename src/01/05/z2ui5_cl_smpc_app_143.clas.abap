@@ -148,7 +148,7 @@ CLASS z2ui5_cl_smpc_app_143 IMPLEMENTATION.
                         )->a( n = `icon`    v = `sap-icon://message-popup`
                         )->a( n = `text`    v = client->_bind( messageslength )
                         )->a( n = `type`    v = `Emphasized`
-                        )->a( n = `visible` v = |\{= !!$\{{ client->_bind( val = messageslength path = abap_true ) }\} \}|
+                        )->a( n = `visible` v = |\{= !!$\{{ client->_bind_path( messageslength ) }\} \}|
 
                     )->end(
                     )->tag( `ToolbarSpacer`

@@ -70,8 +70,7 @@ CLASS z2ui5_cl_smpc_app_414 IMPLEMENTATION.
                     )->a( n = `markFlagged`                   v = `true`
                     )->a( n = `markChanges`                   v = `true`
                     " handleMarkChangesPress: unsaved-changes popover, anchored at the pressed control
-                    )->a( n = `markChangesPress`              v = client->_event( val   = `MARK_CHANGES_PRESS`
-                                                                                  t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+                    )->a( n = `markChangesPress`              v = client->_event( val = `MARK_CHANGES_PRESS` arg = `$event.oSource.sId` )
                     )->a( n = `objectSubtitle`                v = `Senior Developer`
                     " asset URI absolutized to the OpenUI5 host per the offline asset-URL rule
                     )->a( n = `objectImageURI`                v = `https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_273624.png`

@@ -229,8 +229,7 @@ CLASS z2ui5_cl_smpc_sapui5_012 IMPLEMENTATION.
                         )->a( n = `vizType`       v = client->_bind( ms_screen-viztype )
                         )->a( n = `height`        v = `500px`
                         )->a( n = `width`         v = `100%`
-                        )->a( n = `selectData`    v = client->_event( val   = `EVT_DATA_SELECT`
-                                                                      t_arg = VALUE #( ( `${$parameters>/data/0/data/}` ) ) )
+                        )->a( n = `selectData`    v = client->_event( val = `EVT_DATA_SELECT` arg = `${$parameters>/data/0/data/}` )
 
                         )->ele( n = `dataset` ns = `viz`
                             )->ele( n = `FlattenedDataset` ns = `viz.data`
