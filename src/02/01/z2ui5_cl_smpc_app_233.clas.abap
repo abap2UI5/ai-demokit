@@ -94,10 +94,8 @@ CLASS z2ui5_cl_smpc_app_233 IMPLEMENTATION.
                 " and SupplierName. The compound binding_call payload is one JSON
                 " string, so the value cannot be substituted client-side - the search
                 " round-trips and the backend issues the compound filter (app 022 idiom)
-                )->a( n = `search`  v = client->_event( val   = `VH_SEARCH`
-                                                        t_arg = VALUE #( ( `${$parameters>/value}` ) ) )
-                )->a( n = `confirm` v = client->_event( val   = `VH_CONFIRM`
-                                                        t_arg = VALUE #( ( `${$parameters>/selectedItem}.getDescription()` ) ) )
+                )->a( n = `search`  v = client->_event( val = `VH_SEARCH` arg = `${$parameters>/value}` )
+                )->a( n = `confirm` v = client->_event( val = `VH_CONFIRM` arg = `${$parameters>/selectedItem}.getDescription()` )
 
                 )->tag( `StandardListItem`
                     )->a( n = `title`       v = `{SUPPLIERNAME}`
@@ -150,8 +148,7 @@ CLASS z2ui5_cl_smpc_app_233 IMPLEMENTATION.
                                                        ( `open` )
                                                        ( `$event.oSource.getValue()` ) ) )
                             )->a( n = `suggestionItems` v = client->_bind( t_purchases )
-                            )->a( n = `suggestionItemSelected` v = client->_event( val   = `SUGGEST`
-                                                                                   t_arg = VALUE #( ( `${$parameters>/selectedItem}.getKey()` ) ) )
+                            )->a( n = `suggestionItemSelected` v = client->_event( val = `SUGGEST` arg = `${$parameters>/selectedItem}.getKey()` )
 
                             )->ele( `suggestionItems`
                                 )->tag( n = `ListItem` ns = `core`

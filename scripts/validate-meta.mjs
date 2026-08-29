@@ -66,8 +66,15 @@ function parenBody(src, open) {
   return src.slice(open + 1);
 }
 
-/** audit.event_t_arg, derived: does the class pass t_arg in ANY client event
- *  wire (backend `_event`, frontend `_event_client` / `follow_up_action`)?
+/** audit.event_t_arg, derived: does the class pass ARGUMENTS in ANY client
+ *  event wire (backend `_event`, frontend `_event_client` /
+ *  `follow_up_action`)? `arg` counts as much as `t_arg`: it is the ONE-VALUE
+ *  spelling of the same parameter (`arg = x` is `t_arg = VALUE #( ( x ) )`,
+ *  folded into the same table by the framework), so a wire carries an
+ *  argument under either spelling. Reading only `t_arg` would have flipped
+ *  the flag false on the 274 wires the 2026-08-29 sweep converted, and 47
+ *  sidecars would have had to be edited to record a fact that had not
+ *  changed.
  *  The stored flags had drifted beyond repair — a 2026-08-04 sweep found 44
  *  sidecars contradicting every plausible reading — so the fact is now
  *  derived-checked like audit.frontend_action. */
@@ -75,7 +82,7 @@ function usesEventTArg(src) {
   const re = /client->(?:_event|_event_client|follow_up_action)\(/g;
   let m;
   while ((m = re.exec(src)) !== null) {
-    if (/\bt_arg\s*=/.test(parenBody(src, m.index + m[0].length - 1))) return true;
+    if (/\b(?:t_arg|arg)\s*=/.test(parenBody(src, m.index + m[0].length - 1))) return true;
   }
   return false;
 }

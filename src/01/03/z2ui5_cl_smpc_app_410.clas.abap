@@ -92,8 +92,7 @@ CLASS z2ui5_cl_smpc_app_410 IMPLEMENTATION.
 
                                         )->tag( n = `Button` ns = `m`
                                             )->a( n = `text`  v = `press me to fire an event`
-                                            )->a( n = `press` v = client->_event( val   = `DUMMY`
-                                                                                  t_arg = VALUE #( ( `$event.oSource.getParent().getParent().sId` ) ) ) ).
+                                            )->a( n = `press` v = client->_event( val = `DUMMY` arg = `$event.oSource.getParent().getParent().sId` ) ).
 
     client->view_display( view->stringify( ) ).
 

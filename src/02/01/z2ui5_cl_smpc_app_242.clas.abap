@@ -119,7 +119,7 @@ CLASS z2ui5_cl_smpc_app_242 IMPLEMENTATION.
             )->ele( `HBox`
                 )->ele( `Button`
                     )->a( n = `text`  v = `To 1`
-                    )->a( n = `press` v = client->_event( val = `NAV` t_arg = VALUE #( ( `p1` ) ) )
+                    )->a( n = `press` v = client->_event( val = `NAV` arg = `p1` )
 
                     )->ele( `layoutData`
                         )->tag( `FlexItemData`
@@ -136,7 +136,7 @@ CLASS z2ui5_cl_smpc_app_242 IMPLEMENTATION.
                 )->end(
                 )->ele( `Button`
                     )->a( n = `text`  v = `To 2`
-                    )->a( n = `press` v = client->_event( val = `NAV` t_arg = VALUE #( ( `p2` ) ) )
+                    )->a( n = `press` v = client->_event( val = `NAV` arg = `p2` )
 
                     )->ele( `layoutData`
                         )->tag( `FlexItemData`
@@ -153,7 +153,7 @@ CLASS z2ui5_cl_smpc_app_242 IMPLEMENTATION.
                 )->end(
                 )->ele( `Button`
                     )->a( n = `text`  v = `To 3`
-                    )->a( n = `press` v = client->_event( val = `NAV` t_arg = VALUE #( ( `p3` ) ) )
+                    )->a( n = `press` v = client->_event( val = `NAV` arg = `p3` )
 
                     )->ele( `layoutData`
                         )->tag( `FlexItemData`
@@ -170,7 +170,7 @@ CLASS z2ui5_cl_smpc_app_242 IMPLEMENTATION.
                 )->end(
                 )->ele( `Button`
                     )->a( n = `text`  v = `To 4`
-                    )->a( n = `press` v = client->_event( val = `NAV` t_arg = VALUE #( ( `p4` ) ) )
+                    )->a( n = `press` v = client->_event( val = `NAV` arg = `p4` )
 
                     )->ele( `layoutData`
                         )->tag( `FlexItemData`

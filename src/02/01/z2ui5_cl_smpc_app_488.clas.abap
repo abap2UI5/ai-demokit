@@ -100,8 +100,7 @@ CLASS z2ui5_cl_smpc_app_488 IMPLEMENTATION.
                     )->a( n = `type`      v = `Active`
                     )->a( n = `vAlign`    v = `Middle`
                     )->a( n = `navigated` v = `{NAVIGATED}`
-                    )->a( n = `press`     v = client->_event( val   = `PRESS`
-                                                              t_arg = VALUE #( ( `${PRODUCTID}` ) ) )
+                    )->a( n = `press`     v = client->_event( val = `PRESS` arg = `${PRODUCTID}` )
 
                     )->ele( `cells`
                         )->tag( `ObjectIdentifier`

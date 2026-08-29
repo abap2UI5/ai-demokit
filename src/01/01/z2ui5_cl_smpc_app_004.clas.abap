@@ -103,8 +103,7 @@ CLASS z2ui5_cl_smpc_app_004 IMPLEMENTATION.
             )->a( n = `title`            v = `Loading Data`
             )->a( n = `text`             v = `... now loading the data from a far away server`
             )->a( n = `showCancelButton` v = `true`
-            )->a( n = `close`            v = client->_event( val   = `DIALOG_CLOSED`
-                                                             t_arg = VALUE #( ( `${$parameters>/cancelPressed}` ) ) ) ).
+            )->a( n = `close`            v = client->_event( val = `DIALOG_CLOSED` arg = `${$parameters>/cancelPressed}` ) ).
 
     client->popup_display( popup->stringify( ) ).
 

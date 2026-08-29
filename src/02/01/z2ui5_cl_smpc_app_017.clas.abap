@@ -73,8 +73,8 @@ CLASS z2ui5_cl_smpc_app_017 IMPLEMENTATION.
                 )->a( n = `id`         v = `DRS1`
                 )->a( n = `class`      v = `DRS1`
                 )->a( n = `value`      v = |\{ 'type': 'sap.ui.model.type.DateInterval', 'formatOptions': \{ 'pattern': 'yyyy/MM/dd' \}, 'parts': [| &&
-                                           | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind( val = drs1_start path = abap_true ) }' \},| &&
-                                           | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind( val = drs1_end path = abap_true ) }' \} ] \}|
+                                           | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind_path( drs1_start ) }' \},| &&
+                                           | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind_path( drs1_end ) }' \} ] \}|
                 )->a( n = `change`     v = client->_event( val   = `CHANGE`
                                                            t_arg = VALUE #( ( `$event.oSource.sId` )
                                                                             ( `${$parameters>/from}` )
@@ -103,10 +103,10 @@ CLASS z2ui5_cl_smpc_app_017 IMPLEMENTATION.
                                                                             ( `${$parameters>/to}` )
                                                                             ( `${$parameters>/valid}` ) ) )
                 )->a( n = `value`      v = |\{ 'type': 'sap.ui.model.type.DateInterval', 'parts': [| &&
-                                           | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind( val = drs2_start path = abap_true ) }' \},| &&
-                                           | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind( val = drs2_end path = abap_true ) }' \} ] \}|
-                )->a( n = `minDate`    v = |\{ path: '{ client->_bind( val = drs2_min_date path = abap_true ) }', formatter: 'Formatter.DateAbapDateToDateObject' \}|
-                )->a( n = `maxDate`    v = |\{ path: '{ client->_bind( val = drs2_max_date path = abap_true ) }', formatter: 'Formatter.DateAbapDateToDateObject' \}|
+                                           | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind_path( drs2_start ) }' \},| &&
+                                           | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind_path( drs2_end ) }' \} ] \}|
+                )->a( n = `minDate`    v = |\{ path: '{ client->_bind_path( drs2_min_date ) }', formatter: 'Formatter.DateAbapDateToDateObject' \}|
+                )->a( n = `maxDate`    v = |\{ path: '{ client->_bind_path( drs2_max_date ) }', formatter: 'Formatter.DateAbapDateToDateObject' \}|
                 )->a( n = `valueState` v = client->_bind( drs2_value_state )
             )->tag( `Label`
                 )->a( n = `text`     v = `DateRangeSelection with OK button in the footer and with shortcut for today:`
@@ -122,8 +122,8 @@ CLASS z2ui5_cl_smpc_app_017 IMPLEMENTATION.
                                                                                        ( `${$parameters>/to}` )
                                                                                        ( `${$parameters>/valid}` ) ) )
                 )->a( n = `value`                 v = |\{ 'type': 'sap.ui.model.type.DateInterval', 'parts': [| &&
-                                                      | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind( val = drs3_start path = abap_true ) }' \},| &&
-                                                      | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind( val = drs3_end path = abap_true ) }' \} ] \}|
+                                                      | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind_path( drs3_start ) }' \},| &&
+                                                      | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind_path( drs3_end ) }' \} ] \}|
                 )->a( n = `valueState`            v = client->_bind( drs3_value_state )
             )->tag( `Label`
                 )->a( n = `text`     v = `DateRangeSelection with displayFormat 'MM/yyyy':`
@@ -136,8 +136,8 @@ CLASS z2ui5_cl_smpc_app_017 IMPLEMENTATION.
                                                                             ( `${$parameters>/to}` )
                                                                             ( `${$parameters>/valid}` ) ) )
                 )->a( n = `value`      v = |\{ 'type': 'sap.ui.model.type.DateInterval', 'formatOptions': \{ 'pattern': 'MM/yyyy' \}, 'parts': [| &&
-                                           | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind( val = drs4_start path = abap_true ) }' \},| &&
-                                           | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind( val = drs4_end path = abap_true ) }' \} ] \}|
+                                           | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind_path( drs4_start ) }' \},| &&
+                                           | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind_path( drs4_end ) }' \} ] \}|
                 )->a( n = `valueState` v = client->_bind( drs4_value_state )
             )->tag( `Label`
                 )->a( n = `text`     v = `DateRangeSelection with displayFormat 'yyyy':`
@@ -151,8 +151,8 @@ CLASS z2ui5_cl_smpc_app_017 IMPLEMENTATION.
                                                                                ( `${$parameters>/to}` )
                                                                                ( `${$parameters>/valid}` ) ) )
                 )->a( n = `value`         v = |\{ 'type': 'sap.ui.model.type.DateInterval', 'formatOptions': \{ 'pattern': 'yyyy' \}, 'parts': [| &&
-                                              | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind( val = drs5_start path = abap_true ) }' \},| &&
-                                              | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind( val = drs5_end path = abap_true ) }' \} ] \}|
+                                              | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind_path( drs5_start ) }' \},| &&
+                                              | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind_path( drs5_end ) }' \} ] \}|
                 )->a( n = `valueState`    v = client->_bind( drs5_value_state )
             )->tag( `Label`
                 )->a( n = `text`     v = `Change event`

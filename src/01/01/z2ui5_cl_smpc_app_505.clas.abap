@@ -128,7 +128,7 @@ CLASS z2ui5_cl_smpc_app_505 IMPLEMENTATION.
                 " control - none of these apps re-renders after an event
                 " (e2e-caught on app 505, 2026-08-22)
                 )->a( n = `showOverlay` v = client->_bind( overlay )
-                )->a( n = `items`       v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                )->a( n = `items`       v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
                 )->ele( `columns`
                     )->ele( `Column`

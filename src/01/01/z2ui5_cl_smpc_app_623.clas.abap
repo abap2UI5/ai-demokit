@@ -167,10 +167,8 @@ CLASS z2ui5_cl_smpc_app_623 IMPLEMENTATION.
         )->ele( `SelectDialog`
             )->a( n = `title`   v = `Products`
             )->a( n = `items`   v = client->_bind( t_products )
-            )->a( n = `search`  v = client->_event( val   = `VH_SEARCH`
-                                                     t_arg = VALUE #( ( `${$parameters>/value}` ) ) )
-            )->a( n = `confirm` v = client->_event( val   = `VH_CONFIRM`
-                                                     t_arg = VALUE #( ( `${$parameters>/selectedItem}.getTitle()` ) ) )
+            )->a( n = `search`  v = client->_event( val = `VH_SEARCH` arg = `${$parameters>/value}` )
+            )->a( n = `confirm` v = client->_event( val = `VH_CONFIRM` arg = `${$parameters>/selectedItem}.getTitle()` )
             )->a( n = `cancel`  v = client->_event( `VH_CANCEL` )
 
             )->ele( `items`

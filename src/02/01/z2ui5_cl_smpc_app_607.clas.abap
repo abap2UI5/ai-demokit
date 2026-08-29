@@ -157,8 +157,7 @@ CLASS z2ui5_cl_smpc_app_607 IMPLEMENTATION.
                                                                                 t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `beforeMenuOpen is fired` ) ) )
                 )->ele( `menu`
                     )->ele( `Menu`
-                        )->a( n = `itemSelected` v = client->_event( val   = `MENU_ACTION`
-                                                                      t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->_event( val = `MENU_ACTION` arg = `${$parameters>/item}.getText()` )
                         )->tag( `MenuItem`
                             )->a( n = `text` v = `Export as PDF`
                             )->a( n = `icon` v = `sap-icon://pdf-attachment`

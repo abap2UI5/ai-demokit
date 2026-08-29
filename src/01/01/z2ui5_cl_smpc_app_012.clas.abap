@@ -115,7 +115,7 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
                         )->a( n = `selectionChange` v = client->_event( `SELECTION` )
                         )->a( n = `mode`            v = `MultiSelect`
                         )->a( n = `inset`           v = `false`
-                        )->a( n = `items`           v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                        )->a( n = `items`           v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
                         )->ele( `headerToolbar`
                             )->ele( `Toolbar`
@@ -218,8 +218,7 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
                                 )->a( n = `height`                 v = `auto`
                                 )->a( n = `class`                  v = `sapUiSmallMarginBottom`
                                 )->a( n = `id`                     v = `carousel-snapped`
-                                )->a( n = `pageChanged`            v = client->_event( val   = `PAGE_CHANGED`
-                                                                                       t_arg = VALUE #( ( `${$parameters>/activePages/0}` ) ) )
+                                )->a( n = `pageChanged`            v = client->_event( val = `PAGE_CHANGED` arg = `${$parameters>/activePages/0}` )
                                 )->a( n = `pageIndicatorPlacement` v = `Top`
                                 )->a( n = `showPageIndicator`      v = |\{= !${ client->_bind( is_desktop ) } \}|
                                 )->a( n = `pages`                  v = client->_bind( t_comp_products )
@@ -254,8 +253,7 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
                             )->a( n = `height`                 v = `auto`
                             )->a( n = `class`                  v = `sapUiSmallMarginBottom`
                             )->a( n = `id`                     v = `carousel-expanded`
-                            )->a( n = `pageChanged`            v = client->_event( val   = `PAGE_CHANGED`
-                                                                                   t_arg = VALUE #( ( `${$parameters>/activePages/0}` ) ) )
+                            )->a( n = `pageChanged`            v = client->_event( val = `PAGE_CHANGED` arg = `${$parameters>/activePages/0}` )
                             )->a( n = `pageIndicatorPlacement` v = `Top`
                             )->a( n = `showPageIndicator`      v = |\{= !${ client->_bind( is_desktop ) } \}|
                             )->a( n = `pages`                  v = client->_bind( t_comp_products )

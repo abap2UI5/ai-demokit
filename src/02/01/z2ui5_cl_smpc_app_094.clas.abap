@@ -78,7 +78,7 @@ CLASS z2ui5_cl_smpc_app_094 IMPLEMENTATION.
                             )->a( n = `id`        v = `idProductsTable`
                             )->a( n = `mode`      v = `MultiSelect`
                             )->a( n = `inset`     v = `false`
-                            )->a( n = `items`     v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                            )->a( n = `items`     v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
                             )->a( n = `itemPress` v = client->_event( `DRILL` )
 
                             )->ele( `headerToolbar`

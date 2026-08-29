@@ -52,7 +52,7 @@ CLASS z2ui5_cl_smpc_app_374 IMPLEMENTATION.
             )->a( n = `width`         v = `300px`
             )->a( n = `wrapItemsText` v = `true`
             )->a( n = `class`         v = `sapUiLargeMargin`
-            )->a( n = `items`         v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+            )->a( n = `items`         v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
             )->tag( n = `Item` ns = `core`
                 )->a( n = `key`  v = `{PRODUCT_ID}`
@@ -64,7 +64,7 @@ CLASS z2ui5_cl_smpc_app_374 IMPLEMENTATION.
             )->a( n = `width`         v = `300px`
             )->a( n = `wrapItemsText` v = `true`
             )->a( n = `class`         v = `sapUiLargeMargin`
-            )->a( n = `items`         v = |\{ path: '{ client->_bind( val = t_products2 path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+            )->a( n = `items`         v = |\{ path: '{ client->_bind_path( t_products2 ) }', sorter: \{ path: 'NAME' \} \}|
 
             )->tag( n = `Item` ns = `core`
                 )->a( n = `key`  v = `{PRODUCT_ID}`

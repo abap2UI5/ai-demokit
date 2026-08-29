@@ -56,7 +56,7 @@ CLASS z2ui5_cl_smpc_app_492 IMPLEMENTATION.
         " has no backend equivalent, so the default group header renders instead
         )->ele( `List`
             )->a( n = `id`    v = `idList`
-            )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'SUPPLIERNAME', descending: false, group: true \} \}| ).
+            )->a( n = `items` v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'SUPPLIERNAME', descending: false, group: true \} \}| ).
 
     list->ele( `headerToolbar`
         )->ele( `OverflowToolbar`
@@ -76,8 +76,7 @@ CLASS z2ui5_cl_smpc_app_492 IMPLEMENTATION.
                 " control - none of these apps re-renders after an event
                 " (e2e-caught on app 505, 2026-08-22)
                 )->a( n = `pressed` v = client->_bind( menu_on )
-                )->a( n = `press`   v = client->_event( val   = `TOGGLE_CONTEXT_MENU`
-                                                        t_arg = VALUE #( ( `${$parameters>/pressed}` ) ) ) ).
+                )->a( n = `press`   v = client->_event( val = `TOGGLE_CONTEXT_MENU` arg = `${$parameters>/pressed}` ) ).
 
     IF menu_on = abap_true.
       list->ele( `contextMenu`

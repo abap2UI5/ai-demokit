@@ -54,8 +54,7 @@ CLASS z2ui5_cl_smpc_app_007 IMPLEMENTATION.
                 )->a( n = `text`              v = `select / deselect all`
                 )->a( n = `selected`          v = |\{= ${ client->_bind( child1 ) } \|\| ${ client->_bind( child2 ) } \|\| ${ client->_bind( child3 ) } \}|
                 )->a( n = `partiallySelected` v = |\{= !(${ client->_bind( child1 ) } && ${ client->_bind( child2 ) } && ${ client->_bind( child3 ) })\}|
-                )->a( n = `select`            v = client->_event( val   = `PARENT_CLICKED`
-                                                                  t_arg = VALUE #( ( `${$parameters>/selected}` ) ) )
+                )->a( n = `select`            v = client->_event( val = `PARENT_CLICKED` arg = `${$parameters>/selected}` )
             )->tag( n = `HTML` ns = `c`
                 )->a( n = `content` v = `<hr>`
             )->tag( `CheckBox`

@@ -72,10 +72,8 @@ CLASS z2ui5_cl_smpc_app_025 IMPLEMENTATION.
                     )->ele( `FeedListItem`
                         )->a( n = `sender`                   v = `{AUTHOR}`
                         )->a( n = `icon`                     v = `{AUTHOR_PIC_URL}`
-                        )->a( n = `senderPress`              v = client->_event( val   = `PRESSED`
-                                                                                 t_arg = VALUE #( ( `${AUTHOR}` ) ) )
-                        )->a( n = `iconPress`                v = client->_event( val   = `PRESSED`
-                                                                                 t_arg = VALUE #( ( `${AUTHOR}` ) ) )
+                        )->a( n = `senderPress`              v = client->_event( val = `PRESSED` arg = `${AUTHOR}` )
+                        )->a( n = `iconPress`                v = client->_event( val = `PRESSED` arg = `${AUTHOR}` )
                         )->a( n = `info`                     v = `{TYPE}`
                         )->a( n = `timestamp`                v = `{DATE}`
                         )->a( n = `text`                     v = `{TEXT}`

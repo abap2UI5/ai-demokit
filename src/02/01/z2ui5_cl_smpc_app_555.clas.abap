@@ -126,15 +126,15 @@ CLASS z2ui5_cl_smpc_app_555 IMPLEMENTATION.
                 )->a( n = `viewChange`        v = client->follow_up_action(
                           val   = client->cs_event-control_global
                           t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'viewChange' event fired.` ) ) )
-                )->a( n = `startDate`         v = |\{ path: '{ client->_bind( val = start_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
+                )->a( n = `startDate`         v = |\{ path: '{ client->_bind_path( start_date ) }', formatter: 'Formatter.DateCreateObject' \}|
                 " ROOT-level aggregations: the path has to be the model path
-                " client->_bind( path = abap_true ) resolves to. A bare 'T_' is
+                " client->_bind_path( ) resolves to. A bare 'T_' is
                 " RELATIVE, which is right only inside a row-bound aggregation
                 " (apps 536/545 bind their rows' tables that way) - here it
                 " resolved against nothing and the calendar came up with zero
                 " appointments (e2e-caught 2026-08-22)
-                )->a( n = `nonWorkingPeriods` v = |\{ path: '{ client->_bind( val = t_non_working path = abap_true ) }', templateShareable: false \}|
-                )->a( n = `appointments`      v = |\{ path: '{ client->_bind( val = t_appointments path = abap_true ) }', templateShareable: false \}|
+                )->a( n = `nonWorkingPeriods` v = |\{ path: '{ client->_bind_path( t_non_working ) }', templateShareable: false \}|
+                )->a( n = `appointments`      v = |\{ path: '{ client->_bind_path( t_appointments ) }', templateShareable: false \}|
 
                 )->ele( `nonWorkingPeriods`
                     )->ele( n = `RecurringNonWorkingPeriod` ns = `unified`

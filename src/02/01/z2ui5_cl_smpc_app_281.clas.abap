@@ -61,7 +61,7 @@ CLASS z2ui5_cl_smpc_app_281 IMPLEMENTATION.
                 )->a( n = `selectionFinish` v = client->_event( `SELECTION_FINISH` )
                 )->a( n = `showSelectAll`   v = `true`
                 )->a( n = `width`           v = `350px`
-                )->a( n = `items`           v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                )->a( n = `items`           v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
                 " added binding: the selected keys must reach the backend for the
                 " selectionFinish text (the original reads getSelectedItems in the controller)
                 )->a( n = `selectedKeys`    v = client->_bind( t_selected_keys )

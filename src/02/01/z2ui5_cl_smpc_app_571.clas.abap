@@ -77,8 +77,7 @@ CLASS z2ui5_cl_smpc_app_571 IMPLEMENTATION.
             )->a( n = `id` v = `productMenu`
 
             )->ele( n = `QuickSort` ns = `tcm`
-                )->a( n = `change` v = client->_event( val   = `SORT_PRODUCT`
-                                                       t_arg = VALUE #( ( `${$parameters>/item}.getSortOrder()` ) ) )
+                )->a( n = `change` v = client->_event( val = `SORT_PRODUCT` arg = `${$parameters>/item}.getSortOrder()` )
 
                 )->ele( n = `items` ns = `tcm`
                     )->tag( n = `QuickSortItem` ns = `tcm`
@@ -137,18 +136,15 @@ CLASS z2ui5_cl_smpc_app_571 IMPLEMENTATION.
                         )->tag( `Button`
                             )->a( n = `icon`  v = `sap-icon://text-align-left`
                             )->a( n = `text`  v = `Align Left`
-                            )->a( n = `press` v = client->_event( val   = `ALIGN`
-                                                                  t_arg = VALUE #( ( `Left` ) ) )
+                            )->a( n = `press` v = client->_event( val = `ALIGN` arg = `Left` )
                         )->tag( `Button`
                             )->a( n = `icon`  v = `sap-icon://text-align-center`
                             )->a( n = `text`  v = `Align Middle`
-                            )->a( n = `press` v = client->_event( val   = `ALIGN`
-                                                                  t_arg = VALUE #( ( `Center` ) ) )
+                            )->a( n = `press` v = client->_event( val = `ALIGN` arg = `Center` )
                         )->tag( `Button`
                             )->a( n = `icon`  v = `sap-icon://text-align-right`
                             )->a( n = `text`  v = `Align Right`
-                            )->a( n = `press` v = client->_event( val   = `ALIGN`
-                                                                  t_arg = VALUE #( ( `Right` ) ) )
+                            )->a( n = `press` v = client->_event( val = `ALIGN` arg = `Right` )
 
                     )->end(
                 )->end(
@@ -159,7 +155,7 @@ CLASS z2ui5_cl_smpc_app_571 IMPLEMENTATION.
     " Toggle Grouping switches the items binding between a plain one and one that
     " groups on SupplierName - the declarative form of oBinding.sort( grouper )
     DATA(items) = COND string( WHEN grouped = abap_true
-                               THEN |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'SUPPLIERNAME', group: true \} \}|
+                               THEN |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'SUPPLIERNAME', group: true \} \}|
                                ELSE client->_bind( t_products ) ).
 
     root->ele( `Table`

@@ -92,8 +92,7 @@ CLASS z2ui5_cl_smpc_app_436 IMPLEMENTATION.
                 " control - none of these apps re-renders after an event
                 " (e2e-caught on app 505, 2026-08-22)
                 )->a( n = `pressed` v = client->_bind( menu_on )
-                )->a( n = `press`   v = client->_event( val   = `TOGGLE_CONTEXT_MENU`
-                                                        t_arg = VALUE #( ( `${$parameters>/pressed}` ) ) ) ).
+                )->a( n = `press`   v = client->_event( val = `TOGGLE_CONTEXT_MENU` arg = `${$parameters>/pressed}` ) ).
 
     IF menu_on = abap_true.
       tree->ele( `contextMenu`

@@ -86,8 +86,7 @@ CLASS z2ui5_cl_smpc_app_269 IMPLEMENTATION.
                     )->a( n = `containerQuery`      v = `true`
                     )->a( n = `showSideContent`     v = client->_bind( show_side_content )
                     )->a( n = `sideContentFallDown` v = `BelowM`
-                    )->a( n = `breakpointChanged`   v = client->_event( val   = `BREAKPOINT_CHANGED`
-                                                                        t_arg = VALUE #( ( `${$parameters>/currentBreakpoint}` ) ) )
+                    )->a( n = `breakpointChanged`   v = client->_event( val = `BREAKPOINT_CHANGED` arg = `${$parameters>/currentBreakpoint}` )
 
                     )->ele( `VBox`
                         )->tag( `Title`

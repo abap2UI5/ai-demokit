@@ -71,7 +71,7 @@ CLASS z2ui5_cl_smpc_app_612 IMPLEMENTATION.
             )->a( n = `class`           v = `sapUiSmallMarginBottom`
             )->a( n = `width`           v = `100%`
             )->a( n = `showValueHelp`   v = `false`
-            )->a( n = `suggestionItems` v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+            )->a( n = `suggestionItems` v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
             )->ele( `suggestionItems`
                 )->tag( n = `Item` ns = `core`

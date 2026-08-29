@@ -61,8 +61,7 @@ CLASS z2ui5_cl_smpc_app_583 IMPLEMENTATION.
             )->a( n = `showCopilot`         v = `true`
             )->a( n = `showProductSwitcher` v = `true`
             " fnOpen anchors the popover on the product-switcher button the event ships
-            )->a( n = `productSwitcherPressed` v = client->_event( val   = `OPEN_SWITCHER`
-                                                                   t_arg = VALUE #( ( `${$parameters>/button}.getId()` ) ) )
+            )->a( n = `productSwitcherPressed` v = client->_event( val = `OPEN_SWITCHER` arg = `${$parameters>/button}.getId()` )
 
             )->ele( `profile`
                 )->tag( n = `Avatar` ns = `m`

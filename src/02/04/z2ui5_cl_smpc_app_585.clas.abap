@@ -115,8 +115,7 @@ CLASS z2ui5_cl_smpc_app_585 IMPLEMENTATION.
         )->ele( n = `SideNavigation` ns = `tnt`
             )->a( n = `expanded`    v = `true`
             )->a( n = `selectedKey` v = client->_bind( selected_key )
-            )->a( n = `itemSelect`  v = client->_event( val   = `ITEM_SELECT`
-                                                        t_arg = VALUE #( ( `${$parameters>/item}.getKey()` ) ) ) ).
+            )->a( n = `itemSelect`  v = client->_event( val = `ITEM_SELECT` arg = `${$parameters>/item}.getKey()` ) ).
 
     nav_list( node = side items = client->_bind( t_navigation ) ).
 

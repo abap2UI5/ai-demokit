@@ -89,7 +89,7 @@ CLASS z2ui5_cl_smpc_app_539 IMPLEMENTATION.
                 )->a( n = `showIntervalHeaders`           v = `true`
                 )->a( n = `showEmptyIntervalHeaders`      v = `false`
                 )->a( n = `appointmentHeight`             v = `Automatic`
-                )->a( n = `startDate`                     v = |\{ path: '{ client->_bind( val = start_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
+                )->a( n = `startDate`                     v = |\{ path: '{ client->_bind_path( start_date ) }', formatter: 'Formatter.DateCreateObject' \}|
                 )->a( n = `rows`                          v = client->_bind( t_people )
                 )->a( n = `appointmentsVisualization`     v = `Filled`
                 " onPress flips setMultipleAppointmentsSelection; the property is
@@ -145,9 +145,7 @@ CLASS z2ui5_cl_smpc_app_539 IMPLEMENTATION.
                     )->end(
 
                     )->ele( `Select`
-                        )->a( n = `change` v = client->_event(
-                                  val   = `SORT_CHANGE`
-                                  t_arg = VALUE #( ( `${$parameters>/selectedItem}.getKey()` ) ) )
+                        )->a( n = `change` v = client->_event( val = `SORT_CHANGE` arg = `${$parameters>/selectedItem}.getKey()` )
                         )->a( n = `width`  v = `230px`
 
                         )->ele( `items`

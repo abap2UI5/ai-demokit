@@ -57,7 +57,7 @@ CLASS z2ui5_cl_smpc_app_020 IMPLEMENTATION.
             )->ele( n = `content` ns = `l`
                 " element binding to the first supplier record, like the original's binding="{/SupplierCollection/0}"
                 )->ele( `List`
-                    )->a( n = `binding`    v = |\{{ client->_bind( val = t_suppliers path = abap_true ) }/0\}|
+                    )->a( n = `binding`    v = |\{{ client->_bind_path( t_suppliers ) }/0\}|
                     )->a( n = `headerText` v = `Address`
 
                     )->tag( `DisplayListItem`

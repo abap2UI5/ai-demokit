@@ -72,8 +72,7 @@ CLASS z2ui5_cl_smpc_app_503 IMPLEMENTATION.
                 " onSuggestionItemSelected reads the Input's selectedKey, which the JS
                 " suggestionRowValidator fills from the row's second cell - the same
                 " cell travels straight from the selected row instead
-                )->a( n = `suggestionItemSelected`      v = client->_event( val   = `ITEM_SELECTED`
-                                                                            t_arg = VALUE #( ( `${$parameters>/selectedRow}.getCells()[1].getText()` ) ) )
+                )->a( n = `suggestionItemSelected`      v = client->_event( val = `ITEM_SELECTED` arg = `${$parameters>/selectedRow}.getCells()[1].getText()` )
 
                 )->ele( `suggestionColumns`
                     )->ele( `Column`

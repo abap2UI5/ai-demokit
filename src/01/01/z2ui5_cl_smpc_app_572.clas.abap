@@ -59,7 +59,7 @@ CLASS z2ui5_cl_smpc_app_572 IMPLEMENTATION.
 
         )->ele( `Table`
             )->a( n = `fixedLayout` v = client->_bind( fixed_layout )
-            )->a( n = `items`       v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+            )->a( n = `items`       v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
             )->ele( `headerToolbar`
                 )->ele( `OverflowToolbar`
@@ -132,7 +132,7 @@ CLASS z2ui5_cl_smpc_app_572 IMPLEMENTATION.
                 )->ele( `Table`
                     )->a( n = `mode`        v = `MultiSelect`
                     )->a( n = `fixedLayout` v = client->_bind( dialog_fixed )
-                    )->a( n = `items`       v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                    )->a( n = `items`       v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
                     )->ele( `headerToolbar`
                         )->ele( `Toolbar`
