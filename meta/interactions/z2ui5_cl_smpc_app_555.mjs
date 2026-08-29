@@ -29,4 +29,19 @@ export default async (page, expect) => {
   });
   await waitForUi5(page, () => ui5All().some((c) => c.getMetadata().getName() === 'sap.m.Dialog'),
     'the Create Appointment press never opened the dialog (popup_display)');
+  // saving the dialog with NO recurrence is the regression this step exists for.
+  // `recurrencePattern` defaults to 1 and its setter REJECTS anything below it,
+  // the original leaves the property off a non-recurring appointment, and an
+  // ABAP structure cannot leave a field out - so the initial 0 used to reach the
+  // setter and terminate the app on the very next render (2026-08-29, found on
+  // app 548, which builds its new appointment the same way).
+  await page.evaluate(() => {
+    const reg = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
+    reg.find((c) => c.getMetadata().getName() === 'sap.m.Button' && (c.getText() || '') === 'Create').firePress();
+  });
+  await waitForUi5(page, () => {
+    const spc = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.SinglePlanningCalendar');
+    const appts = spc && spc.getAppointments();
+    return appts && appts.length === 10 && appts.every((a) => a.getRecurrencePattern() >= 1);
+  }, 'the appointment created without a recurrence never reached the calendar - recurrencePattern below 1 terminates the app');
 };
