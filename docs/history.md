@@ -61,8 +61,18 @@ attribute set from the other seven. `bindingOf` resolves both spellings now.
 Also in this pass: a CAPABILITIES row for the cell binding, naming these five
 ports as the proof.
 
-**Left alone on purpose:** 261, 401 and 587 carry the same shape at two rows
-(`emp1`/`emp2` only) and were not part of this batch.
+**261, 401 and 587 came with it** — the same family at two rows (`emp1`/`emp2`,
+name and job, `/Employee/0..1`), so eight ports in total.
+
+**Where this does NOT apply, checked rather than assumed.** The other ports
+with numbered sibling attributes are not the same case: 017's five
+`DateRangeSelection`s carry a typed binding with its own `parts` each, 345's
+eleven sliders, 018's seven date pickers, 045's five range sliders, 169's eight
+and 343's six are all N separately declared controls with N model paths, and
+their originals carry no collection at all (no mock JSON in the sample folder,
+no `items=` over an array). Folding those into a table would INVENT an array
+the sample does not have — the flat fields are the faithful shape there. The
+discriminator is the original's model, not the repetition in the port.
 
 ## 2026-08-28 — four formatting drifts, and the rules that stop them coming back
 
