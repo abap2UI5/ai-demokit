@@ -2529,7 +2529,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` box was rendered and confined nothing. The port now issues the call once with the view (the app-285 idiom) rather than per press, because a follow-up action runs after the popup of the same` &&
                ` round-trip has already opened - so onExit's reset is dropped, and this app opens no other popup, which makes the effect the same. setWithinArea is @since 1.89, already cleared by this class's` &&
                ` ariaHasPopup @1.84 filing. // NOTE: The three dialogs and their resizable / draggable flags are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction,` &&
-               ` meta/interactions/z2ui5_cl_smpc_app_561.mjs).`.
+               ` meta/interactions/z2ui5_cl_smpc_app_561.mjs). // POST-1.71: POPUP.setWithinArea is a control_global frontend action since UI5 1.89 - newer than the 1.71 floor but kept for the 1:1 port, and already` &&
+               ` noted in the method's own comment. Below 1.89 the lazy require returns undefined and the dispatch hits its "not available" guard, so the popup is not confined to the within-area. This class is filed` &&
+               ` under src/02 for Button.ariaHasPopup @1.84 already; 1.89 is the higher of the two floors it needs.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Dialog`                          name = `DialogWithinArea`                              class = `z2ui5_cl_smpc_app_561` path = `src/02/01/z2ui5_cl_smpc_app_561.clas.abap`
         score = 5
@@ -2537,7 +2539,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` look.`
         is_post171 = abap_true
         notes = lv_text1
-        post171 = `sap.m.Button ariaHasPopup is @since 1.84.0 - newer than the 1.71 floor. All three buttons carry it in the sample, so it is kept and the port is filed under src/02.` ) ).
+        post171 = `sap.m.Button ariaHasPopup is @since 1.84.0 - newer than the 1.71 floor. All three buttons carry it in the sample, so it is kept and the port is filed under src/02. // POPUP.setWithinArea is a` &&
+                 ` control_global frontend action since UI5 1.89 - newer than the 1.71 floor but kept for the 1:1 port, and already noted in the method's own comment. Below 1.89 the lazy require returns undefined and` &&
+                 ` the dispatch hits its "not available" guard, so the popup is not confined to the within-area. This class is filed under src/02 for Button.ariaHasPopup @1.84 already; 1.89 is the higher of the two` &&
+                 ` floors it needs.` ) ).
 
     lv_text1 = `POST-1.71: four post-1.71 members are kept for the 1:1 port: Button.ariaHasPopup (since UI5 1.84) on the page button, the message-popover button and the Reject button; MessagePopover.groupItems (since` &&
                ` UI5 1.73); the Dialog footer aggregation (sap.m.Dialog.footer, since UI5 1.110) which is exactly how MPDialog.fragment.xml puts its Toolbar under the dialog; and the sap-icon://information glyph (in` &&
@@ -4192,13 +4197,21 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` because an empty string is rejected on an enum property. // NOTE: the accessibility announcement is reproduced since 2026-08-05: onInit takes an sap.ui.core.InvisibleMessage instance and` &&
                ` _generateMsgStrip calls announce('New Information Bar of type ...', Assertive) on it. InvisibleMessage is a JS singleton, not a control in the view, so no CONTROL_BY_ID wire can address it - the` &&
                ` INVISIBLE_MESSAGE global target added for exactly that (pr/invisible-message-announce) carries the announcement instead: follow_up_action( control_global, INVISIBLE_MESSAGE / announce / <text> /` &&
-               ` Assertive ) right after the model update, with the same text the original composes. It is lazy-required, so a runtime older than UI5 1.78 logs 'not available' instead of failing the app.`.
+               ` Assertive ) right after the model update, with the same text the original composes. It is lazy-required, so a runtime older than UI5 1.78 logs 'not available' instead of failing the app. //`.
+    lv_text1 = lv_text1 && ` POST-1.71: INVISIBLE_MESSAGE.announce is a control_global frontend action since UI5 1.78 - newer than the 1.71 floor but kept for the 1:1 port: the sample's whole point is that adding a message bar` &&
+               ` is announced to a screen reader. Below 1.78 the lazy require returns undefined and the dispatch hits its "not available" guard, so the announcement is silently skipped while the rest of the app works` &&
+               ` - the port needs a UI5 release >= 1.78 for the behaviour the sample demonstrates.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.MessageStrip`                    name = `DynamicMessageStripGenerator`                  class = `z2ui5_cl_smpc_app_289` path = `src/01/01/z2ui5_cl_smpc_app_289.clas.abap`
+      ( module = `sap.m`              control = `sap.m.MessageStrip`                    name = `DynamicMessageStripGenerator`                  class = `z2ui5_cl_smpc_app_289` path = `src/02/01/z2ui5_cl_smpc_app_289.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
         since = `1.30`
-        notes = lv_text1 ) ).
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `INVISIBLE_MESSAGE.announce is a control_global frontend action since UI5 1.78 - newer than the 1.71 floor but kept for the 1:1 port: the sample's whole point is that adding a message bar is announced` &&
+                 ` to a screen reader. Below 1.78 the lazy require returns undefined and the dispatch hits its "not available" guard, so the announcement is silently skipped while the rest of the app works - the port` &&
+                 ` needs a UI5 release >= 1.78 for the behaviour the sample demonstrates.` ) ).
 
     lv_text1 = `POST-1.71: the MessageStrip ``controls`` aggregation (since UI5 1.129) is kept 1:1 for the fifth strip's %%0/%%1/%%2 multi-link formatted text (three sap.m.Link). enableFormattedText itself is since` &&
                ` 1.50 (<= 1.71). // POST-1.71: core:require="{Formatter: 'z2ui5/model/formatter'}" wires the curated formatter module (since UI5 1.74) so the inlineIconsHelper strip can use` &&
@@ -5718,7 +5731,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency, and RE-COUNTED` &&
                ` 2026-08-23: the sentence used to claim the rewrite was 'declared by all 77 ports that do it', which had stopped being true as the corpus grew past that day's snapshot - 128 ports do it now` &&
                ` (re-measured 2026-08-23, one day after the count above - the drift this note warns about, in one day), and 17 of them declared it nowhere. Those 17 carry the declaration since today, so the claim` &&
-               ` holds again; a stale absolute count is what made it wrong, so this wording names the date the count was taken.`.
+               ` holds again; a stale absolute count is what made it wrong, so this wording names the date the count was taken. // POST-1.71: POPUP.setWithinArea is a control_global frontend action since UI5 1.89 -` &&
+               ` newer than the 1.71 floor but kept for the 1:1 port: it is what confines the popover to the sample's own area. Below 1.89 the lazy require returns undefined and the dispatch hits its "not available"` &&
+               ` guard, so the popover opens unconfined rather than not at all - the app needs a UI5 release >= 1.89 for the sample's behaviour.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Popover`                         name = `PopoverWithinArea`                             class = `z2ui5_cl_smpc_app_285` path = `src/02/01/z2ui5_cl_smpc_app_285.clas.abap`
         score = 5
@@ -5726,7 +5741,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                  ` look.`
         is_post171 = abap_true
         notes = lv_text1
-        post171 = `sap.m.Button.ariaHasPopup (since UI5 1.84) is kept 1:1 on all three buttons - the app needs a UI5 release >= 1.84 for the aria-haspopup attribute.` ) ).
+        post171 = `sap.m.Button.ariaHasPopup (since UI5 1.84) is kept 1:1 on all three buttons - the app needs a UI5 release >= 1.84 for the aria-haspopup attribute. // POPUP.setWithinArea is a control_global frontend` &&
+                 ` action since UI5 1.89 - newer than the 1.71 floor but kept for the 1:1 port: it is what confines the popover to the sample's own area. Below 1.89 the lazy require returns undefined and the dispatch` &&
+                 ` hits its "not available" guard, so the popover opens unconfined rather than not at all - the app needs a UI5 release >= 1.89 for the sample's behaviour.` ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ProgressIndicator`               name = `ProgressIndicator`                             class = `z2ui5_cl_smpc_app_070` path = `src/02/01/z2ui5_cl_smpc_app_070.clas.abap`
@@ -5746,7 +5763,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` through the global INVISIBLE_MESSAGE target (the singleton has no control id) with the same 'Previous value was X. New value is Y%.' text, composed in ABAP because the previous value is backend` &&
                ` state. The original defers the announcement with setTimeout to let the value change land first; the port announces it in the same round-trip that writes the new value, and passes no mode (the`.
     lv_text1 = lv_text1 && ` original passes none either, so it stays Polite). // NOTE: The six button wires (id split -> bound displayValue/percentValue) and the screen-reader announcement are unverified in a running system.` &&
-               ` **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_435.mjs).`.
+               ` **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_435.mjs). // POST-1.71: INVISIBLE_MESSAGE.announce is a control_global frontend action since UI5 1.78 - newer` &&
+               ` than the 1.71 floor but kept for the 1:1 port: the slider's value change is announced to a screen reader, which is what the original demonstrates. Below 1.78 the lazy require returns undefined and` &&
+               ` the dispatch hits its "not available" guard, so the announcement is silently skipped - the app needs a UI5 release >= 1.78.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ProgressIndicator`               name = `ProgressIndicatorWithAnnouncement`             class = `z2ui5_cl_smpc_app_435` path = `src/02/01/z2ui5_cl_smpc_app_435.clas.abap`
         score = 4
@@ -5755,7 +5774,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         is_post171 = abap_true
         notes = lv_text1
         post171 = `sap.m.ProgressIndicator.displayAnimation is @since 1.73; the second indicator of the sample exists precisely to show it switched off, so the property is kept 1:1 and the port needs a UI5 runtime >=` &&
-                 ` 1.73.` ) ).
+                 ` 1.73. // INVISIBLE_MESSAGE.announce is a control_global frontend action since UI5 1.78 - newer than the 1.71 floor but kept for the 1:1 port: the slider's value change is announced to a screen` &&
+                 ` reader, which is what the original demonstrates. Below 1.78 the lazy require returns undefined and the dispatch hits its "not available" guard, so the announcement is silently skipped - the app needs` &&
+                 ` a UI5 release >= 1.78.` ) ).
 
     lv_text1 = `NOTE: the incremental backend load is reproduced 1:1: the model starts with the first product and each pull-to-refresh (REFRESH) appends the next until the full /ProductCollection is shown (fill_all +` &&
                ` shown counter). // NOTE: handleRefresh's this.byId('pullToRefresh').hide( ) is reproduced since 2026-08-21 through follow_up_action( cs_event-control_by_id, hide ) - an allowed unlisted control` &&
@@ -8633,7 +8654,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` a constant - a faked event value found by the review sweep. The announce( ) call itself was dropped until 2026-08-23 on the claim that it has no control_global entry; that was wrong - ControlCall.js`.
     lv_text1 = lv_text1 && ` defines INVISIBLE_MESSAGE with announce: ["string","string"], CAPABILITIES.md marks the idiom expressible, and apps 289/435 use it. on_event now fires follow_up_action( control_global,` &&
                ` INVISIBLE_MESSAGE / announce / <the composed sentence> / Assertive ), matching InvisibleMessageMode.Assertive in the original. Nothing of the sample is dropped any more - which matters here more than` &&
-               ` elsewhere, since ui5/scope-exceptions.json keeps this post-1.71 sample precisely because the accessibility-announcement idiom exists nowhere else in the corpus.`.
+               ` elsewhere, since ui5/scope-exceptions.json keeps this post-1.71 sample precisely because the accessibility-announcement idiom exists nowhere else in the corpus. // POST-1.71:` &&
+               ` INVISIBLE_MESSAGE.announce is a control_global frontend action since UI5 1.78 - newer than the 1.71 floor and the reason ui5/scope-exceptions.json keeps this post-1.71 sample at all. Below 1.78 the` &&
+               ` lazy require returns undefined and the dispatch hits its "not available" guard: the status Text still updates, the announcement itself does not happen. The app needs a UI5 release >= 1.78 - which` &&
+               ` sap.ui.core.InvisibleMessage, @since 1.78 itself, already requires.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.core.InvisibleMessage`          name = `InvisibleMessage`                              class = `z2ui5_cl_smpc_app_141` path = `src/02/02/z2ui5_cl_smpc_app_141.clas.abap`
         score = 4
@@ -8641,7 +8665,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.78`
         since_post171 = abap_true
         is_post171 = abap_true
-        notes = lv_text1 ) ).
+        notes = lv_text1
+        post171 = `INVISIBLE_MESSAGE.announce is a control_global frontend action since UI5 1.78 - newer than the 1.71 floor and the reason ui5/scope-exceptions.json keeps this post-1.71 sample at all. Below 1.78 the` &&
+                 ` lazy require returns undefined and the dispatch hits its "not available" guard: the status Text still updates, the announcement itself does not happen. The app needs a UI5 release >= 1.78 - which` &&
+                 ` sap.ui.core.InvisibleMessage, @since 1.78 itself, already requires.` ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.core.InvisibleText`             name = `InvisibleText`                                 class = `z2ui5_cl_smpc_app_127` path = `src/01/02/z2ui5_cl_smpc_app_127.clas.abap`
@@ -11059,13 +11086,20 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` (JSON strings) and the customCurrency array (JSON numbers bound to the string property stringValue, so UI5 coerces them) are ABAP string fields keeping the exact literals (123.45676 has 5 decimals).` &&
                ` listSix binds the numeric variousNumberDataModel/price to stringValue (number coerced to string, as in the original). **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled` &&
                ` backend + real browser): the serialized model reaches the controls: the lists render, the u:Currency controls come up and their currencies (EUR, JPY) are on screen. Residual: the exact digit` &&
-               ` formatting per list (maxPrecision, the custom BGN4/WWWW digits), which is the browser's locale formatting rather than the port's data.`.
+               ` formatting per list (maxPrecision, the custom BGN4/WWWW digits), which is the browser's locale formatting rather than the port's data. // POST-1.71: FORMATTING.setCustomCurrencies is a control_global`.
+    lv_text1 = lv_text1 && ` frontend action since UI5 1.120 - newer than the 1.71 floor but kept for the 1:1 port: registering BGN4 and WWWW is what the sample is about, and there is no pre-1.120 spelling of it. Below 1.120 the` &&
+               ` lazy require returns undefined and the dispatch hits its "not available" guard, so the two custom currencies are simply never registered and their amounts format with the stock digits - the app needs` &&
+               ` a UI5 release >= 1.120.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.unified`     control = `sap.ui.unified.Currency`               name = `Currency`                                      class = `z2ui5_cl_smpc_app_196` path = `src/01/02/z2ui5_cl_smpc_app_196.clas.abap`
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Currency`               name = `Currency`                                      class = `z2ui5_cl_smpc_app_196` path = `src/02/02/z2ui5_cl_smpc_app_196.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.21.1`
-        notes = lv_text1 ) ).
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `FORMATTING.setCustomCurrencies is a control_global frontend action since UI5 1.120 - newer than the 1.71 floor but kept for the 1:1 port: registering BGN4 and WWWW is what the sample is about, and` &&
+                 ` there is no pre-1.120 spelling of it. Below 1.120 the lazy require returns undefined and the dispatch hits its "not available" guard, so the two custom currencies are simply never registered and` &&
+                 ` their amounts format with the stock digits - the app needs a UI5 release >= 1.120.` ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Currency`               name = `CurrencyInTable`                               class = `z2ui5_cl_smpc_app_171` path = `src/01/02/z2ui5_cl_smpc_app_171.clas.abap`

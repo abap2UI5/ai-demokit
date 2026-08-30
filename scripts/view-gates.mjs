@@ -87,9 +87,24 @@ function withinFloor(since) {
  * version finding like the others, so a POST_171 deviation naming the
  * aggregation excuses it exactly as before — 24 ports on this corpus depend
  * on that, and without this entry a linter bump would fail every one of them.
- * `icon-too-new` joins for the same reason: same floor, same deviation. */
+ * `icon-too-new` joins for the same reason: same floor, same deviation.
+ *
+ * `frontend-action-too-new` (linter 0.6.0) is the same finding read from the
+ * other side. The six above judge what the VIEW writes; this one judges what
+ * the CLASS SENDS - a follow_up_action( control_global, … ) whose target the
+ * frontend resolves with a lazy require, so below its release the require
+ * returns undefined, the dispatch hits its "not available" guard and the wire
+ * does NOTHING. Silently: no console error, no failed render, just a control
+ * that never hears about it.
+ *
+ * That is a floor question with a deliberate answer, which is exactly what a
+ * POST_171 is for - and without this entry the sidecar mechanism does not
+ * apply to it at all, so six ports fail with no way to declare them. The
+ * match works on the member name (`announce`, `setWithinArea`,
+ * `setCustomCurrencies`), which `declares( )` already reads off the finding. */
 const VERSION_TYPES = new Set(['control-too-new', 'member-too-new', 'aggregation-too-new',
-  'event-parameter-too-new', 'enum-value-too-new', 'icon-too-new']);
+  'event-parameter-too-new', 'enum-value-too-new', 'icon-too-new',
+  'frontend-action-too-new']);
 
 /* Reported, never gating per finding: rules the linter grew after this corpus
  * was built. They are worth seeing on every run - an icon-only button really
@@ -235,6 +250,36 @@ const ADVISORY_BUDGET = {
   // Measured on the 0.5.1 bump; the count was already 4 on 0.4.1, so this is
   // pre-existing slack the bump surfaced rather than anything the bump moved.
   'event-on-disabled-control': 4,
+
+  // raised 2026-08-30 with the 0.6.0 bump: `unresolved-attribute-value` is new
+  // in that release. It does not claim the value is wrong - it says the gate
+  // could not FOLLOW it, so the enum check that would have caught a bad one
+  // did not run. On this corpus that is a limit of static resolution, not a
+  // defect, and all four were read by hand against the snapshot's enum:
+  //
+  //   app 273  sap.m.Dialog.state          a method parameter, filled at five
+  //            call sites with ``, Success, Warning, Error and Information.
+  //            The four non-empty ones are the enum; the empty one never
+  //            reaches the view, because the builder guards it
+  //            (`IF state IS NOT INITIAL.`) - the default dialog is the one
+  //            the original builds without a state.
+  //   app 445  sap.m.Text.wrappingType     an EXPRESSION binding, resolved in
+  //            the client: `{= … ? 'Hyphenated' : 'Normal' }`. Both arms are
+  //            sap.m.WrappingType, and switching the property live is what the
+  //            sample demonstrates - a statically resolvable value would mean
+  //            deleting the subject.
+  //   app 452  sap.m.MessageStrip.colorSet  the same shape:
+  //            `{= … ? 'ColorSet1' : 'ColorSet2' }`, both in
+  //            sap.m.MessageStripColorSet.
+  //   app 454  sap.m.TableSelectDialog.initialFocus  a `COND #( WHEN growing
+  //            = abap_true THEN `SearchField` ELSE `List` )`; both arms are
+  //            literal and both are the enum. The property is also @since
+  //            1.117, which its POST_171 already declares.
+  //
+  // So the budget records four values that were checked the way the rule
+  // would have, not four unchecked ones. A FIFTH finding is new debt and must
+  // be read the same way before this number moves again.
+  'unresolved-attribute-value': 4,
 };
 
 const metas = fs.readdirSync(META)

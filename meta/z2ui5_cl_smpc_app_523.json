@@ -27,5 +27,12 @@
       "type": "NOTE",
       "what": "The CellSelector and the three CheckBoxes are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_523.mjs)."
     }
-  ]
+  ],
+  "property_gate": {
+    "skip": true,
+    "types": [
+      "escape-sequence-in-backtick"
+    ],
+    "reason": "The '\\n' in the app:template CustomData on the ProductId/Name column is a 1:1 copy of the sample and reaches nobody. escape-sequence-in-backtick is scoped to text that REACHES THE USER, and this value is neither rendered nor read: app:template is CustomData for sap.m.plugins.CopyProvider's extractData callback, and the IMPROVISED deviation above records that the CopyProvider is DROPPED (abap2UI5 cannot register a JS callback, and the control refuses to be created without one). The four app: attributes stay on the columns precisely so the sample's data description is not lost - that is the deviation's own words - so the string is documentation of the original, not a template anything expands. Rewriting it as `\\{1\\}` && |\\n| && `\\{0\\}` would be worse on both counts: it drops the 1:1 value the deviation promises, and an XML attribute normalises a literal #xA to a space on parse anyway, so the line break would not survive into the CustomData either. The skip covers that one finding type, and view-gates fails this port if it stops firing - which is what restoring a real CopyProvider would have to do."
+  }
 }

@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_smpc_app_289",
   "sample": "sap.m.sample.DynamicMessageStripGenerator",
   "entity": "sap.m.MessageStrip",
-  "file": "src/01/01/z2ui5_cl_smpc_app_289.clas.abap",
+  "file": "src/02/01/z2ui5_cl_smpc_app_289.clas.abap",
   "batch": "b22",
   "audit": {
     "frontend_action": true,
@@ -22,6 +22,10 @@
     {
       "type": "NOTE",
       "what": "the accessibility announcement is reproduced since 2026-08-05: onInit takes an sap.ui.core.InvisibleMessage instance and _generateMsgStrip calls announce('New Information Bar of type ...', Assertive) on it. InvisibleMessage is a JS singleton, not a control in the view, so no CONTROL_BY_ID wire can address it - the INVISIBLE_MESSAGE global target added for exactly that (pr/invisible-message-announce) carries the announcement instead: follow_up_action( control_global, INVISIBLE_MESSAGE / announce / <text> / Assertive ) right after the model update, with the same text the original composes. It is lazy-required, so a runtime older than UI5 1.78 logs 'not available' instead of failing the app."
+    },
+    {
+      "type": "POST_171",
+      "what": "INVISIBLE_MESSAGE.announce is a control_global frontend action since UI5 1.78 - newer than the 1.71 floor but kept for the 1:1 port: the sample's whole point is that adding a message bar is announced to a screen reader. Below 1.78 the lazy require returns undefined and the dispatch hits its \"not available\" guard, so the announcement is silently skipped while the rest of the app works - the port needs a UI5 release >= 1.78 for the behaviour the sample demonstrates."
     }
   ]
 }
