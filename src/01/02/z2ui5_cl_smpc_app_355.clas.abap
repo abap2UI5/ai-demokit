@@ -122,8 +122,7 @@ CLASS z2ui5_cl_smpc_app_355 IMPLEMENTATION.
                 )->a( n = `icon`    v = `sap-icon://menu`
                 )->a( n = `tooltip` v = `Enable / Disable Custom Context Menu`
                 )->a( n = `pressed` v = client->_bind( custom_context_menu )
-                )->a( n = `press`   v = client->_event( val   = `TOGGLE_CONTEXT_MENU`
-                                                        t_arg = VALUE #( ( `${$parameters>/pressed}` ) ) )
+                )->a( n = `press`   v = client->_event( val = `TOGGLE_CONTEXT_MENU` arg = `${$parameters>/pressed}` )
 
         )->end( ).
 

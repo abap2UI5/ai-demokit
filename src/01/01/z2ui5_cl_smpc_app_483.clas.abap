@@ -51,7 +51,7 @@ CLASS z2ui5_cl_smpc_app_483 IMPLEMENTATION.
         )->ele( `List`
             )->a( n = `id`         v = `ShortProductList`
             )->a( n = `headerText` v = `Products`
-            )->a( n = `binding`    v = |\{{ client->_bind( val = t_products path = abap_true ) }\}|
+            )->a( n = `binding`    v = |\{{ client->_bind_path( t_products ) }\}|
 
             )->ele( `items`
                 )->tag( `StandardListItem`

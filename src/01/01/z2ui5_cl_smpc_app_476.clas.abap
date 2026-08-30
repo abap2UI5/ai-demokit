@@ -55,8 +55,8 @@ CLASS z2ui5_cl_smpc_app_476 IMPLEMENTATION.
             )->a( n = `titleActive`         v = `true`
             )->a( n = `titleHref`           v = `http://www.sap.com`
             )->a( n = `titleTarget`         v = `_blank`
-            )->a( n = `number`              v = |\{ parts:[\{path:'{ client->_bind( val = price path = abap_true ) }'\},| &&
-                                                 |\{path:'{ client->_bind( val = currencycode path = abap_true ) }'\}],| &&
+            )->a( n = `number`              v = |\{ parts:[\{path:'{ client->_bind_path( price ) }'\},| &&
+                                                 |\{path:'{ client->_bind_path( currencycode ) }'\}],| &&
                                                  | type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
             )->a( n = `numberUnit`          v = client->_bind( currencycode )
             )->a( n = `numberState`         v = `Success`

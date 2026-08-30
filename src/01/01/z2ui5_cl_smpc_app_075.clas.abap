@@ -52,7 +52,7 @@ CLASS z2ui5_cl_smpc_app_075 IMPLEMENTATION.
 
             )->ele( `content`
                 )->ele( `SelectList`
-                    )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                    )->a( n = `items` v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
                     )->tag( n = `Item` ns = `core`
                         )->a( n = `key`  v = `{PRODUCT_ID}`

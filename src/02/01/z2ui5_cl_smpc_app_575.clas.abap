@@ -95,8 +95,7 @@ CLASS z2ui5_cl_smpc_app_575 IMPLEMENTATION.
             " original's handler guards on - it fires once the begin column's
             " resize has completed, which is when the pressed row has to be
             " scrolled back into view
-            )->a( n = `columnResize`                v = client->_event( val   = `COLUMN_RESIZE`
-                                                                        t_arg = VALUE #( ( `${$parameters>/beginColumn}` ) ) )
+            )->a( n = `columnResize`                v = client->_event( val = `COLUMN_RESIZE` arg = `${$parameters>/beginColumn}` )
             )->a( n = `layout`                      v = client->_bind( layout ) ).
 
     " Master.view.xml - the DynamicPage with the products table
@@ -109,7 +108,7 @@ CLASS z2ui5_cl_smpc_app_575 IMPLEMENTATION.
                 )->ele( n = `DynamicPageTitle` ns = `f`
                     )->ele( n = `heading` ns = `f`
                         )->tag( `Title`
-                            )->a( n = `text` v = |Products (\{{ client->_bind( val = total_count path = abap_true ) }\})|
+                            )->a( n = `text` v = |Products (\{{ client->_bind_path( total_count ) }\})|
 
                     )->end(
                 )->end(
@@ -123,15 +122,14 @@ CLASS z2ui5_cl_smpc_app_575 IMPLEMENTATION.
                     )->a( n = `growing` v = `true`
                     )->a( n = `class`   v = `sapFDynamicPageAlignContent`
                     )->a( n = `width`   v = `auto`
-                    )->a( n = `items`   v = |\{ path: '{ client->_bind( val = t_rows path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                    )->a( n = `items`   v = |\{ path: '{ client->_bind_path( t_rows ) }', sorter: \{ path: 'NAME' \} \}|
 
                     )->ele( `headerToolbar`
                         )->ele( `OverflowToolbar`
                             )->tag( `ToolbarSpacer`
                             )->tag( `SearchField`
                                 )->a( n = `width`  v = `17.5rem`
-                                )->a( n = `search` v = client->_event( val   = `SEARCH`
-                                                                       t_arg = VALUE #( ( `${$parameters>/query}` ) ) )
+                                )->a( n = `search` v = client->_event( val = `SEARCH` arg = `${$parameters>/query}` )
 
                         )->end(
                     )->end(
@@ -170,8 +168,7 @@ CLASS z2ui5_cl_smpc_app_575 IMPLEMENTATION.
                         )->ele( `ColumnListItem`
                             )->a( n = `type`   v = `Navigation`
                             )->a( n = `vAlign` v = `Middle`
-                            )->a( n = `press`  v = client->_event( val   = `LIST_ITEM`
-                                                                   t_arg = VALUE #( ( `${PRODUCTID}` ) ) )
+                            )->a( n = `press`  v = client->_event( val = `LIST_ITEM` arg = `${PRODUCTID}` )
 
                             )->ele( `cells`
                                 )->tag( `ObjectIdentifier`

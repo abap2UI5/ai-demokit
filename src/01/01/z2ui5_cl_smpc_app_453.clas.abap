@@ -62,8 +62,8 @@ CLASS z2ui5_cl_smpc_app_453 IMPLEMENTATION.
             )->a( n = `fullScreenOptimized` v = `true`
             )->a( n = `intro`               v = client->_bind( description )
             )->a( n = `title`               v = `Long title truncated to 80 chars on all devices and to 50 chars on phone portrait`
-            )->a( n = `number`              v = |\{ parts:[\{path:'{ client->_bind( val = price path = abap_true ) }'\},| &&
-                                                 |\{path:'{ client->_bind( val = currencycode path = abap_true ) }'\}],| &&
+            )->a( n = `number`              v = |\{ parts:[\{path:'{ client->_bind_path( price ) }'\},| &&
+                                                 |\{path:'{ client->_bind_path( currencycode ) }'\}],| &&
                                                  | type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
             )->a( n = `numberUnit`          v = client->_bind( currencycode )
             )->a( n = `numberState`         v = `Success`

@@ -70,8 +70,7 @@ CLASS z2ui5_cl_smpc_app_422 IMPLEMENTATION.
                 )->a( n = `search`           v = client->follow_up_action( val   = client->cs_event-binding_call
                                                                            t_arg = VALUE #( ( `mySelectDialog` ) ( `items` ) ( `filter` ) ( `NAME` ) ( `Contains` ) ( `${$parameters>/value}` ) ) )
                 )->a( n = `growingThreshold` v = `30`
-                )->a( n = `updateStarted`    v = client->_event( val   = `UPDATE_STARTED`
-                                                                 t_arg = VALUE #( ( `${$parameters>/reason}` ) ) )
+                )->a( n = `updateStarted`    v = client->_event( val = `UPDATE_STARTED` arg = `${$parameters>/reason}` )
                 )->a( n = `items`            v = client->_bind( t_products )
 
                 )->tag( `StandardListItem`

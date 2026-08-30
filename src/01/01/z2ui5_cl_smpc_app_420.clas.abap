@@ -68,9 +68,8 @@ CLASS z2ui5_cl_smpc_app_420 IMPLEMENTATION.
                                                                                              ( `show` )
                                                                                              ( `{0}` )
                                                                                              ( `${$parameters>/suggestionItem} ? 'Search for: ' + ${$parameters>/suggestionItem}.getText() : 'Search is fired!'` ) ) )
-                )->a( n = `suggest`           v = client->_event( val   = `SUGGEST`
-                                                                  t_arg = VALUE #( ( `${$parameters>/suggestValue}` ) ) )
-                )->a( n = `suggestionItems`   v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                )->a( n = `suggest`           v = client->_event( val = `SUGGEST` arg = `${$parameters>/suggestValue}` )
+                )->a( n = `suggestionItems`   v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
                 )->ele( `suggestionItems`
                     )->tag( `SuggestionItem`

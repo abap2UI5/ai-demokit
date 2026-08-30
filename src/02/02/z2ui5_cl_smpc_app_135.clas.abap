@@ -61,15 +61,15 @@ CLASS z2ui5_cl_smpc_app_135 IMPLEMENTATION.
                 )->tag( `Label`
                     )->a( n = `text` v = `One field`
                 )->tag( `Input`
-                    )->a( n = `value` v = |\{ parts: ['{ client->_bind( val = amount path = abap_true ) }', '{ client->_bind( val = currency path = abap_true ) }'], type: 'CurrencyType' \}|
+                    )->a( n = `value` v = |\{ parts: ['{ client->_bind_path( amount ) }', '{ client->_bind_path( currency ) }'], type: 'CurrencyType' \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `Two field`
                 )->tag( `Input`
-                    )->a( n = `value` v = |\{ parts: ['{ client->_bind( val = amount path = abap_true ) }', '{ client->_bind( val = currency path = abap_true ) }'], type: 'CurrencyType', formatOptions: \{ showMeasure: false \} \}|
+                    )->a( n = `value` v = |\{ parts: ['{ client->_bind_path( amount ) }', '{ client->_bind_path( currency ) }'], type: 'CurrencyType', formatOptions: \{ showMeasure: false \} \}|
                 )->tag( `Input`
                     " POST_171: the showNumber format option is @since 1.89 - below
                     " that it is ignored and this Input shows the amount too
-                    )->a( n = `value` v = |\{ parts: ['{ client->_bind( val = amount path = abap_true ) }', '{ client->_bind( val = currency path = abap_true ) }'], type: 'CurrencyType', formatOptions: \{ showNumber: false \} \}|
+                    )->a( n = `value` v = |\{ parts: ['{ client->_bind_path( amount ) }', '{ client->_bind_path( currency ) }'], type: 'CurrencyType', formatOptions: \{ showNumber: false \} \}|
 
             )->end(
         )->end(
@@ -90,23 +90,23 @@ CLASS z2ui5_cl_smpc_app_135 IMPLEMENTATION.
                 )->tag( `Label`
                     )->a( n = `text` v = `Default`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ parts: ['{ client->_bind( val = amount path = abap_true ) }', '{ client->_bind( val = currency path = abap_true ) }'], type: 'CurrencyType' \}|
+                    )->a( n = `text` v = |\{ parts: ['{ client->_bind_path( amount ) }', '{ client->_bind_path( currency ) }'], type: 'CurrencyType' \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `preserveDecimals:false`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ parts: ['{ client->_bind( val = amount path = abap_true ) }', '{ client->_bind( val = currency path = abap_true ) }'], type: 'CurrencyType', formatOptions: \{ preserveDecimals : false \} \}|
+                    )->a( n = `text` v = |\{ parts: ['{ client->_bind_path( amount ) }', '{ client->_bind_path( currency ) }'], type: 'CurrencyType', formatOptions: \{ preserveDecimals : false \} \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `currencyCode:false`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ parts: ['{ client->_bind( val = amount path = abap_true ) }', '{ client->_bind( val = currency path = abap_true ) }'], type: 'CurrencyType', formatOptions: \{ currencyCode : false \} \}|
+                    )->a( n = `text` v = |\{ parts: ['{ client->_bind_path( amount ) }', '{ client->_bind_path( currency ) }'], type: 'CurrencyType', formatOptions: \{ currencyCode : false \} \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `style:'short'`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ parts: ['{ client->_bind( val = amount path = abap_true ) }', '{ client->_bind( val = currency path = abap_true ) }'], type: 'CurrencyType', formatOptions: \{ style : 'short' \} \}|
+                    )->a( n = `text` v = |\{ parts: ['{ client->_bind_path( amount ) }', '{ client->_bind_path( currency ) }'], type: 'CurrencyType', formatOptions: \{ style : 'short' \} \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `style:'long'`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ parts: ['{ client->_bind( val = amount path = abap_true ) }', '{ client->_bind( val = currency path = abap_true ) }'], type: 'CurrencyType', formatOptions: \{ style : 'long' \} \}| ).
+                    )->a( n = `text` v = |\{ parts: ['{ client->_bind_path( amount ) }', '{ client->_bind_path( currency ) }'], type: 'CurrencyType', formatOptions: \{ style : 'long' \} \}| ).
 
     client->view_display( view->stringify( ) ).
 

@@ -108,7 +108,7 @@ CLASS z2ui5_cl_smpc_app_236 IMPLEMENTATION.
             )->ele( `actions`
                 )->tag( `Button`
                     )->a( n = `icon`  v = `sap-icon://action`
-                    )->a( n = `press` v = client->_event( val = `ACTION_PRESS` t_arg = VALUE #( ( `feedActionPlain` ) ) )
+                    )->a( n = `press` v = client->_event( val = `ACTION_PRESS` arg = `feedActionPlain` )
 
             )->end(
         )->end(
@@ -124,7 +124,7 @@ CLASS z2ui5_cl_smpc_app_236 IMPLEMENTATION.
             )->ele( `actions`
                 )->tag( `Button`
                     )->a( n = `icon`  v = `sap-icon://action`
-                    )->a( n = `press` v = client->_event( val = `ACTION_PRESS` t_arg = VALUE #( ( `feedActionIcon` ) ) ) ).
+                    )->a( n = `press` v = client->_event( val = `ACTION_PRESS` arg = `feedActionIcon` ) ).
 
     client->view_display( view->stringify( ) ).
 

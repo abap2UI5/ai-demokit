@@ -56,14 +56,12 @@ CLASS z2ui5_cl_smpc_app_243 IMPLEMENTATION.
                 )->tag( `Button`
                     )->a( n = `text`         v = `Show Dialog (phone) or Popover (Other)`
                     " handleResponsivePopoverPress: Fragment.load(Popover) -> openBy(button)
-                    )->a( n = `press`        v = client->_event( val   = `SHOW_POPOVER`
-                                                                 t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+                    )->a( n = `press`        v = client->_event( val = `SHOW_POPOVER` arg = `$event.oSource.sId` )
                     )->a( n = `ariaHasPopup` v = `Dialog`
                 )->tag( `Button`
                     )->a( n = `text`         v = `Popover with Custom Footer`
                     " handleResponsivePopoverFooterPress: Fragment.load(PopoverFooter) -> openBy(button)
-                    )->a( n = `press`        v = client->_event( val   = `SHOW_POPOVER_FOOTER`
-                                                                 t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+                    )->a( n = `press`        v = client->_event( val = `SHOW_POPOVER_FOOTER` arg = `$event.oSource.sId` )
                     )->a( n = `ariaHasPopup` v = `Dialog`
 
             )->end(

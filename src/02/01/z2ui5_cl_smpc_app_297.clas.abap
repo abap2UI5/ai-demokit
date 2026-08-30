@@ -58,8 +58,7 @@ CLASS z2ui5_cl_smpc_app_297 IMPLEMENTATION.
 
             )->ele( `ViewSettingsDialog`
                 )->a( n = `id`      v = `settingsDialog`
-                )->a( n = `confirm` v = client->_event( val   = `CONFIRM`
-                                                        t_arg = VALUE #( ( `${$parameters>/filterString}` ) ) )
+                )->a( n = `confirm` v = client->_event( val = `CONFIRM` arg = `${$parameters>/filterString}` )
 
                 )->ele( `sortItems`
                     )->tag( `ViewSettingsItem`
@@ -234,8 +233,7 @@ CLASS z2ui5_cl_smpc_app_297 IMPLEMENTATION.
 
             )->ele( `ViewSettingsDialog`
                 )->a( n = `id`      v = `settingsDialogCustomTab`
-                )->a( n = `confirm` v = client->_event( val   = `CONFIRM`
-                                                        t_arg = VALUE #( ( `${$parameters>/filterString}` ) ) )
+                )->a( n = `confirm` v = client->_event( val = `CONFIRM` arg = `${$parameters>/filterString}` )
 
                 )->ele( `customTabs`
                     )->ele( `ViewSettingsCustomTab`
@@ -318,8 +316,7 @@ CLASS z2ui5_cl_smpc_app_297 IMPLEMENTATION.
 
             )->ele( `ViewSettingsDialog`
                 )->a( n = `id`          v = `settingsDialogDatePicker`
-                )->a( n = `confirm`     v = client->_event( val   = `CONFIRM`
-                                                            t_arg = VALUE #( ( `${$parameters>/filterString}` ) ) )
+                )->a( n = `confirm`     v = client->_event( val = `CONFIRM` arg = `${$parameters>/filterString}` )
                 )->a( n = `beforeClose` v = client->_event(
                           val    = `BEFORE_CLOSE`
                           " _bind( ) - NOT path = abap_true: an ABAP template eats the
@@ -343,9 +340,7 @@ CLASS z2ui5_cl_smpc_app_297 IMPLEMENTATION.
                                 )->a( n = `width`          v = `80%`
                                 )->a( n = `valueState`     v = client->_bind( date_value_state )
                                 )->a( n = `valueStateText` v = client->_bind( date_value_state_text )
-                                )->a( n = `change`         v = client->_event(
-                                          val   = `DATE_CHANGE`
-                                          t_arg = VALUE #( ( `${$parameters>/valid}` ) ) )
+                                )->a( n = `change`         v = client->_event( val = `DATE_CHANGE` arg = `${$parameters>/valid}` )
 
                         )->end(
                     )->end(

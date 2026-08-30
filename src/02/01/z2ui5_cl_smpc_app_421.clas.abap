@@ -136,8 +136,7 @@ CLASS z2ui5_cl_smpc_app_421 IMPLEMENTATION.
                     )->a( n = `id`     v = `showHideHeaderSwitch`
                     )->a( n = `state`  v = `true`
                     )->a( n = `class`  v = `sapUiSmallMarginBottom`
-                    )->a( n = `change` v = client->_event( val   = `HEADER_TOGGLE`
-                                                           t_arg = VALUE #( ( `${$parameters>/state}` ) ) )
+                    )->a( n = `change` v = client->_event( val = `HEADER_TOGGLE` arg = `${$parameters>/state}` )
                     )->ele( `layoutData`
                         )->tag( n = `GridData` ns = `l`
                             )->a( n = `span` v = `L9 M6 S4`
@@ -154,14 +153,13 @@ CLASS z2ui5_cl_smpc_app_421 IMPLEMENTATION.
 
                 )->ele( `QuickViewCard`
                     )->a( n = `id`                    v = `quickViewCard`
-                    )->a( n = `pages`                 v = |\{ path: '{ client->_bind( val = t_pages path = abap_true ) }', templateShareable: true \}|
+                    )->a( n = `pages`                 v = |\{ path: '{ client->_bind_path( t_pages ) }', templateShareable: true \}|
                     )->a( n = `showVerticalScrollBar` v = client->_bind( show_scroll )
                     " isTopPage travels as the string tokens top/sub: the transpiled
                     " runtime hands a JSON boolean arg through as 'false' where a real
                     " system normalizes it to abap_bool, so a token is the one form
                     " both runtimes read the same
-                    )->a( n = `afterNavigate`         v = client->_event( val   = `AFTER_NAV`
-                                                                          t_arg = VALUE #( ( `${$parameters>/isTopPage} ? 'top' : 'sub'` ) ) )
+                    )->a( n = `afterNavigate`         v = client->_event( val = `AFTER_NAV` arg = `${$parameters>/isTopPage} ? 'top' : 'sub'` )
 
                     )->ele( `QuickViewPage`
                         )->a( n = `pageId`      v = `{PAGEID}`

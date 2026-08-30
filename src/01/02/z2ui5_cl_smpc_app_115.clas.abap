@@ -174,7 +174,7 @@ CLASS z2ui5_cl_smpc_app_115 IMPLEMENTATION.
                             )->ele( `template`
                                 )->ele( n = `ComboBox` ns = `m`
                                     )->a( n = `value` v = `{SUPPLIERNAME}`
-                                    )->a( n = `items` v = |\{ path: '{ client->_bind( val = suppliers path = abap_true ) }', templateShareable: false \}|
+                                    )->a( n = `items` v = |\{ path: '{ client->_bind_path( suppliers ) }', templateShareable: false \}|
 
                                     )->ele( n = `items` ns = `m`
                                         )->tag( n = `Item` ns = `c`
@@ -231,7 +231,7 @@ CLASS z2ui5_cl_smpc_app_115 IMPLEMENTATION.
                             )->ele( `template`
                                 )->ele( n = `Select` ns = `m`
                                     )->a( n = `selectedKey` v = `{CATEGORY}`
-                                    )->a( n = `items`       v = |\{ path: '{ client->_bind( val = categories path = abap_true ) }', templateShareable: false \}|
+                                    )->a( n = `items`       v = |\{ path: '{ client->_bind_path( categories ) }', templateShareable: false \}|
 
                                     )->ele( n = `items` ns = `m`
                                         )->tag( n = `Item` ns = `c`
@@ -261,7 +261,7 @@ CLASS z2ui5_cl_smpc_app_115 IMPLEMENTATION.
                                                                ( `$event.oSource.getBindingContext().getPath()` ) ) )
                                     )->a( n = `value`            v = `{ADDITIONALCATEGORY}`
                                     )->a( n = `tokens`           v = |\{ path: 'ADDITIONALCATEGORIESSELECTION', templateShareable: false \}|
-                                    )->a( n = `suggestionItems`  v = |\{ path: '{ client->_bind( val = categories path = abap_true ) }', templateShareable: false, sorter: \{ path: 'NAME' \} \}|
+                                    )->a( n = `suggestionItems`  v = |\{ path: '{ client->_bind_path( categories ) }', templateShareable: false, sorter: \{ path: 'NAME' \} \}|
                                     )->a( n = `showValueHelp`    v = `false`
 
                                     )->ele( n = `tokens` ns = `m`

@@ -52,7 +52,7 @@ CLASS z2ui5_cl_smpc_app_482 IMPLEMENTATION.
         )->ele( `List`
             )->a( n = `id`         v = `ShortProductList`
             )->a( n = `headerText` v = `Products (Click on an item to set as navigated)`
-            )->a( n = `items`      v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+            )->a( n = `items`      v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
             )->ele( `items`
                 " isNavigated compares the pressed ProductId with the one the settings
@@ -62,8 +62,7 @@ CLASS z2ui5_cl_smpc_app_482 IMPLEMENTATION.
                     )->a( n = `type`      v = `Active`
                     )->a( n = `title`     v = `{NAME}`
                     )->a( n = `navigated` v = `{NAVIGATED}`
-                    )->a( n = `press`     v = client->_event( val   = `PRESS`
-                                                              t_arg = VALUE #( ( `${PRODUCTID}` ) ) ) ).
+                    )->a( n = `press`     v = client->_event( val = `PRESS` arg = `${PRODUCTID}` ) ).
 
     client->view_display( view->stringify( ) ).
 

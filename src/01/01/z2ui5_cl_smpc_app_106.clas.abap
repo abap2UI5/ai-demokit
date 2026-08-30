@@ -69,7 +69,7 @@ CLASS z2ui5_cl_smpc_app_106 IMPLEMENTATION.
                         )->ele( n = `SortSelect` ns = `semantic`
                             )->a( n = `change`      v = client->_event( `SELECT_CHANGE` )
                             )->a( n = `selectedKey` v = client->_bind( sort_key )
-                            )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_filters path = abap_true ) }', sorter: \{ path: 'Name' \} \}|
+                            )->a( n = `items` v = |\{ path: '{ client->_bind_path( t_filters ) }', sorter: \{ path: 'Name' \} \}|
 
                             )->tag( n = `Item` ns = `core`
                                 )->a( n = `key`  v = `{TYPE}`
@@ -79,23 +79,22 @@ CLASS z2ui5_cl_smpc_app_106 IMPLEMENTATION.
                     )->end(
                     )->ele( n = `filter` ns = `semantic`
                         )->tag( n = `FilterAction` ns = `semantic`
-                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.FilterAction` ) ) )
+                            )->a( n = `press` v = client->_event( val = `SEM` arg = `semantic.FilterAction` )
 
                     )->end(
                     )->ele( n = `group` ns = `semantic`
                         )->tag( n = `GroupAction` ns = `semantic`
-                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.GroupAction` ) ) )
+                            )->a( n = `press` v = client->_event( val = `SEM` arg = `semantic.GroupAction` )
 
                     )->end(
                     )->ele( n = `addAction` ns = `semantic`
                         )->tag( n = `AddAction` ns = `semantic`
-                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.AddAction` ) ) )
+                            )->a( n = `press` v = client->_event( val = `SEM` arg = `semantic.AddAction` )
 
                     )->end(
                     )->ele( n = `multiSelectAction` ns = `semantic`
                         )->tag( n = `MultiSelectAction` ns = `semantic`
-                            )->a( n = `press` v = client->_event( val   = `MULTI`
-                                                                  t_arg = VALUE #( ( `${$source>/pressed}` ) ) )
+                            )->a( n = `press` v = client->_event( val = `MULTI` arg = `${$source>/pressed}` )
 
                     )->end(
                 )->end(
@@ -108,53 +107,53 @@ CLASS z2ui5_cl_smpc_app_106 IMPLEMENTATION.
                     )->ele( n = `positiveAction` ns = `semantic`
                         )->tag( n = `PositiveAction` ns = `semantic`
                             )->a( n = `text`  v = `Positive`
-                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.PositiveAction` ) ) )
+                            )->a( n = `press` v = client->_event( val = `SEM` arg = `semantic.PositiveAction` )
 
                     )->end(
                     )->ele( n = `negativeAction` ns = `semantic`
                         )->tag( n = `NegativeAction` ns = `semantic`
                             )->a( n = `text`  v = `Negative`
-                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.NegativeAction` ) ) )
+                            )->a( n = `press` v = client->_event( val = `SEM` arg = `semantic.NegativeAction` )
 
                     )->end(
                     )->ele( n = `forwardAction` ns = `semantic`
                         )->tag( n = `ForwardAction` ns = `semantic`
-                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.ForwardAction` ) ) )
+                            )->a( n = `press` v = client->_event( val = `SEM` arg = `semantic.ForwardAction` )
 
                     )->end(
                     )->ele( n = `flagAction` ns = `semantic`
                         )->tag( n = `FlagAction` ns = `semantic`
-                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.FlagAction` ) ) )
+                            )->a( n = `press` v = client->_event( val = `SEM` arg = `semantic.FlagAction` )
 
                     )->end(
                     )->ele( n = `favoriteAction` ns = `semantic`
                         )->tag( n = `FavoriteAction` ns = `semantic`
-                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.FavoriteAction` ) ) )
+                            )->a( n = `press` v = client->_event( val = `SEM` arg = `semantic.FavoriteAction` )
 
                     )->end(
                     )->ele( n = `sendEmailAction` ns = `semantic`
                         )->tag( n = `SendEmailAction` ns = `semantic`
-                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.SendEmailAction` ) ) )
+                            )->a( n = `press` v = client->_event( val = `SEM` arg = `semantic.SendEmailAction` )
 
                     )->end(
                     )->ele( n = `sendMessageAction` ns = `semantic`
                         )->tag( n = `SendMessageAction` ns = `semantic`
-                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.SendMessageAction` ) ) )
+                            )->a( n = `press` v = client->_event( val = `SEM` arg = `semantic.SendMessageAction` )
 
                     )->end(
                     )->ele( n = `discussInJamAction` ns = `semantic`
                         )->tag( n = `DiscussInJamAction` ns = `semantic`
-                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.DiscussInJamAction` ) ) )
+                            )->a( n = `press` v = client->_event( val = `SEM` arg = `semantic.DiscussInJamAction` )
 
                     )->end(
                     )->ele( n = `shareInJamAction` ns = `semantic`
                         )->tag( n = `ShareInJamAction` ns = `semantic`
-                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.ShareInJamAction` ) ) )
+                            )->a( n = `press` v = client->_event( val = `SEM` arg = `semantic.ShareInJamAction` )
 
                     )->end(
                     )->ele( n = `printAction` ns = `semantic`
                         )->tag( n = `PrintAction` ns = `semantic`
-                            )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `semantic.PrintAction` ) ) )
+                            )->a( n = `press` v = client->_event( val = `SEM` arg = `semantic.PrintAction` )
 
                     )->end(
                     )->ele( n = `messagesIndicator` ns = `semantic`
@@ -181,18 +180,18 @@ CLASS z2ui5_cl_smpc_app_106 IMPLEMENTATION.
                     )->ele( n = `pagingAction` ns = `semantic`
                         )->tag( `PagingButton`
                             )->a( n = `count`          v = `5`
-                            )->a( n = `positionChange` v = client->_event( val = `POSITION` t_arg = VALUE #( ( `${$parameters>/newPosition}` ) ) )
+                            )->a( n = `positionChange` v = client->_event( val = `POSITION` arg = `${$parameters>/newPosition}` )
 
                     )->end(
                     )->ele( n = `customFooterContent` ns = `semantic`
                         )->tag( `OverflowToolbarButton`
                             )->a( n = `icon`  v = `sap-icon://settings`
                             )->a( n = `text`  v = `Settings`
-                            )->a( n = `press` v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+                            )->a( n = `press` v = client->_event( val = `PRESS` arg = `$event.oSource.sId` )
                         )->tag( `OverflowToolbarButton`
                             )->a( n = `icon`  v = `sap-icon://video`
                             )->a( n = `text`  v = `Video`
-                            )->a( n = `press` v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+                            )->a( n = `press` v = client->_event( val = `PRESS` arg = `$event.oSource.sId` )
 
                     )->end(
                     )->ele( n = `content` ns = `semantic`
@@ -206,11 +205,11 @@ CLASS z2ui5_cl_smpc_app_106 IMPLEMENTATION.
                         )->tag( `Button`
                             )->a( n = `text`  v = `CustomShareBtn1`
                             )->a( n = `icon`  v = `sap-icon://color-fill`
-                            )->a( n = `press` v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+                            )->a( n = `press` v = client->_event( val = `PRESS` arg = `$event.oSource.sId` )
                         )->tag( `Button`
                             )->a( n = `text`  v = `CustomShareBtn2`
                             )->a( n = `icon`  v = `sap-icon://crop`
-                            )->a( n = `press` v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) ) ).
+                            )->a( n = `press` v = client->_event( val = `PRESS` arg = `$event.oSource.sId` ) ).
 
     client->view_display( view->stringify( ) ).
 

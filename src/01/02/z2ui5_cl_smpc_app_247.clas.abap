@@ -179,7 +179,7 @@ CLASS z2ui5_cl_smpc_app_247 IMPLEMENTATION.
                             )->ele( n = `SegmentedButton` ns = `m`
                                 )->a( n = `id`              v = `columnWidths`
                                 )->a( n = `selectedKey`     v = `Static`
-                                )->a( n = `selectionChange` v = client->_event( val = `WIDTHS_CHANGE` t_arg = VALUE #( ( `${$parameters>/item}.getKey()` ) ) )
+                                )->a( n = `selectionChange` v = client->_event( val = `WIDTHS_CHANGE` arg = `${$parameters>/item}.getKey()` )
 
                                 )->ele( n = `items` ns = `m`
                                     )->tag( n = `SegmentedButtonItem` ns = `m`

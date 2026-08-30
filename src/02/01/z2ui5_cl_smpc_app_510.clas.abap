@@ -117,10 +117,8 @@ CLASS z2ui5_cl_smpc_app_510 IMPLEMENTATION.
             )->a( n = `id`      v = `valueHelpDialog`
             )->a( n = `title`   v = `Products`
             )->a( n = `items`   v = client->_bind( t_products )
-            )->a( n = `search`  v = client->_event( val   = `VALUE_HELP_SEARCH`
-                                                    t_arg = VALUE #( ( `${$parameters>/value}` ) ) )
-            )->a( n = `confirm` v = client->_event( val   = `VALUE_HELP_CLOSE`
-                                                    t_arg = VALUE #( ( `${$parameters>/selectedItem}.getTitle()` ) ) )
+            )->a( n = `search`  v = client->_event( val = `VALUE_HELP_SEARCH` arg = `${$parameters>/value}` )
+            )->a( n = `confirm` v = client->_event( val = `VALUE_HELP_CLOSE` arg = `${$parameters>/selectedItem}.getTitle()` )
             )->a( n = `cancel`  v = client->_event( `VALUE_HELP_CLOSE` )
 
             )->tag( `StandardListItem`

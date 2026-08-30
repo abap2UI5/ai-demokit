@@ -56,7 +56,7 @@ CLASS z2ui5_cl_smpc_app_376 IMPLEMENTATION.
         )->ele( `List`
             )->a( n = `id`    v = `myList`
             )->a( n = `mode`  v = `MultiSelect`
-            )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_names path = abap_true ) }' \}|
+            )->a( n = `items` v = |\{ path: '{ client->_bind_path( t_names ) }' \}|
 
             )->ele( `headerToolbar`
                 )->ele( `Toolbar`

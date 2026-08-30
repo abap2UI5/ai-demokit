@@ -80,8 +80,7 @@ CLASS z2ui5_cl_smpc_app_501 IMPLEMENTATION.
                             )->a( n = `showValueHelp`  v = `false`
                             )->a( n = `value`          v = client->_bind( value1 )
                             )->a( n = `tokens`         v = client->_bind( t_tokens1 )
-                            )->a( n = `change`         v = client->_event( val   = `VALIDATE1`
-                                                                           t_arg = VALUE #( ( `${$parameters>/value}` ) ) )
+                            )->a( n = `change`         v = client->_event( val = `VALIDATE1` arg = `${$parameters>/value}` )
 
                             )->ele( `tokens`
                                 )->tag( `Token`
@@ -113,8 +112,7 @@ CLASS z2ui5_cl_smpc_app_501 IMPLEMENTATION.
                     )->a( n = `showValueHelp`  v = `false`
                     )->a( n = `value`          v = client->_bind( value2 )
                     )->a( n = `tokens`         v = client->_bind( t_tokens2 )
-                    )->a( n = `change`         v = client->_event( val   = `VALIDATE2`
-                                                                   t_arg = VALUE #( ( `${$parameters>/value}` ) ) )
+                    )->a( n = `change`         v = client->_event( val = `VALIDATE2` arg = `${$parameters>/value}` )
 
                     )->ele( `tokens`
                         )->tag( `Token`
@@ -136,8 +134,7 @@ CLASS z2ui5_cl_smpc_app_501 IMPLEMENTATION.
                     )->a( n = `showValueHelp`  v = `false`
                     )->a( n = `value`          v = client->_bind( value3 )
                     )->a( n = `tokens`         v = client->_bind( t_tokens3 )
-                    )->a( n = `change`         v = client->_event( val   = `VALIDATE3`
-                                                                   t_arg = VALUE #( ( `${$parameters>/value}` ) ) )
+                    )->a( n = `change`         v = client->_event( val = `VALIDATE3` arg = `${$parameters>/value}` )
 
                     )->ele( `tokens`
                         )->tag( `Token`

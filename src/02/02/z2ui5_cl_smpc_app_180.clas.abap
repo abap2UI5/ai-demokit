@@ -64,7 +64,7 @@ CLASS z2ui5_cl_smpc_app_180 IMPLEMENTATION.
                 )->tag( `Label`
                     )->a( n = `text` v = `FileSize`
                 )->tag( `Input`
-                    )->a( n = `value` v = |\{ path: '{ client->_bind( val = filesize path = abap_true ) }', type: 'FileSizeType' \}|
+                    )->a( n = `value` v = |\{ path: '{ client->_bind_path( filesize ) }', type: 'FileSizeType' \}|
 
             )->end(
         )->end(
@@ -84,11 +84,11 @@ CLASS z2ui5_cl_smpc_app_180 IMPLEMENTATION.
                 )->tag( `Label`
                     )->a( n = `text` v = `3 digits`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = filesize path = abap_true ) }', type: 'FileSizeType', formatOptions: \{ minIntegerDigits: 3 \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( filesize ) }', type: 'FileSizeType', formatOptions: \{ minIntegerDigits: 3 \} \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `5 digits`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = filesize path = abap_true ) }', type: 'FileSizeType', formatOptions: \{ minIntegerDigits: 5 \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( filesize ) }', type: 'FileSizeType', formatOptions: \{ minIntegerDigits: 5 \} \}|
 
             )->end(
         )->end(
@@ -109,11 +109,11 @@ CLASS z2ui5_cl_smpc_app_180 IMPLEMENTATION.
                 )->tag( `Label`
                     )->a( n = `text` v = `2 digits`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = filesize path = abap_true ) }', type: 'FileSizeType', formatOptions: \{ maxIntegerDigits: 2 \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( filesize ) }', type: 'FileSizeType', formatOptions: \{ maxIntegerDigits: 2 \} \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `5 digits`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = filesize path = abap_true ) }', type: 'FileSizeType', formatOptions: \{ maxIntegerDigits: 5 \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( filesize ) }', type: 'FileSizeType', formatOptions: \{ maxIntegerDigits: 5 \} \}|
 
             )->end(
         )->end(
@@ -134,11 +134,11 @@ CLASS z2ui5_cl_smpc_app_180 IMPLEMENTATION.
                 )->tag( `Label`
                     )->a( n = `text` v = `2 digits`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = filesize path = abap_true ) }', type: 'FileSizeType', formatOptions: \{ minFractionDigits: 2 \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( filesize ) }', type: 'FileSizeType', formatOptions: \{ minFractionDigits: 2 \} \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `5 digits`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = filesize path = abap_true ) }', type: 'FileSizeType', formatOptions: \{ minFractionDigits: 5 \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( filesize ) }', type: 'FileSizeType', formatOptions: \{ minFractionDigits: 5 \} \}|
 
             )->end(
         )->end(
@@ -159,11 +159,11 @@ CLASS z2ui5_cl_smpc_app_180 IMPLEMENTATION.
                 )->tag( `Label`
                     )->a( n = `text` v = `2 digits`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = filesize path = abap_true ) }', type: 'FileSizeType', formatOptions: \{ maxFractionDigits: 2 \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( filesize ) }', type: 'FileSizeType', formatOptions: \{ maxFractionDigits: 2 \} \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `5 digits`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = filesize path = abap_true ) }', type: 'FileSizeType', formatOptions: \{ maxFractionDigits: 5 \} \}| ).
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( filesize ) }', type: 'FileSizeType', formatOptions: \{ maxFractionDigits: 5 \} \}| ).
 
     client->view_display( view->stringify( ) ).
 

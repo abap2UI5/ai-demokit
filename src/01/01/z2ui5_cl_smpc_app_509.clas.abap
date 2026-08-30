@@ -62,8 +62,7 @@ CLASS z2ui5_cl_smpc_app_509 IMPLEMENTATION.
                 )->a( n = `placeholder`     v = `Enter product`
                 )->a( n = `showSuggestion`  v = `true`
                 )->a( n = `suggestionItems` v = client->_bind( t_suggestions )
-                )->a( n = `suggest`         v = client->_event( val   = `SUGGEST`
-                                                                t_arg = VALUE #( ( `${$parameters>/suggestValue}` ) ) )
+                )->a( n = `suggest`         v = client->_event( val = `SUGGEST` arg = `${$parameters>/suggestValue}` )
 
                 )->ele( `suggestionItems`
                     )->tag( n = `Item` ns = `core`

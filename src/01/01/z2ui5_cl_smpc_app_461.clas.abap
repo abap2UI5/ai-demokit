@@ -62,7 +62,7 @@ CLASS z2ui5_cl_smpc_app_461 IMPLEMENTATION.
                 )->a( n = `id`              v = `multiInput1`
                 )->a( n = `width`           v = `70%`
                 )->a( n = `maxTokens`       v = `2`
-                )->a( n = `suggestionItems` v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                )->a( n = `suggestionItems` v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
                 )->a( n = `showValueHelp`   v = `false`
 
                 )->tag( n = `Item` ns = `core`

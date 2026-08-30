@@ -59,8 +59,7 @@ CLASS z2ui5_cl_smpc_app_295 IMPLEMENTATION.
 
             )->ele( `ViewSettingsDialog`
                 )->a( n = `id`           v = `settingsDialog`
-                )->a( n = `confirm`      v = client->_event( val   = `CONFIRM`
-                                                             t_arg = VALUE #( ( `${$parameters>/filterString}` ) ) )
+                )->a( n = `confirm`      v = client->_event( val = `CONFIRM` arg = `${$parameters>/filterString}` )
                 )->a( n = `cancel`       v = client->_event( `CANCEL` )
                 )->a( n = `resetFilters` v = client->_event( `RESET_FILTERS` )
 
@@ -76,8 +75,7 @@ CLASS z2ui5_cl_smpc_app_295 IMPLEMENTATION.
                             )->tag( `Slider`
                                 )->a( n = `step`   v = `10`
                                 )->a( n = `value`  v = client->_bind( slider_value )
-                                )->a( n = `change` v = client->_event( val   = `SLIDER_CHANGE`
-                                                                       t_arg = VALUE #( ( `${$parameters>/value}` ) ) )
+                                )->a( n = `change` v = client->_event( val = `SLIDER_CHANGE` arg = `${$parameters>/value}` )
 
                         )->end(
                     )->end(

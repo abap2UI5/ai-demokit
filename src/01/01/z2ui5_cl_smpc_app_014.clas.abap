@@ -71,8 +71,7 @@ CLASS z2ui5_cl_smpc_app_014 IMPLEMENTATION.
                         )->tag( `Link`
                             )->a( n = `text`   v = `{NAME}`
                             )->a( n = `target` v = `{PRODUCT_PIC_URL}`
-                            )->a( n = `press`  v = client->_event( val   = `LINK_PRESS`
-                                                                   t_arg = VALUE #( ( `${PRODUCT_PIC_URL}` ) ) )
+                            )->a( n = `press`  v = client->_event( val = `LINK_PRESS` arg = `${PRODUCT_PIC_URL}` )
                         )->tag( `Label`
                             )->a( n = `text` v = `{PRODUCT_ID}` ).
 

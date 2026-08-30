@@ -81,8 +81,7 @@ CLASS z2ui5_cl_smpc_app_377 IMPLEMENTATION.
         )->ele( `IconTabBar`
             )->a( n = `id`          v = `idIconTabBar`
             )->a( n = `selectedKey` v = client->_bind( selected_tab )
-            )->a( n = `select` v = client->_event( val   = `FILTER_SELECT`
-                                                   t_arg = VALUE #( ( `${$parameters>/key}` ) ) )
+            )->a( n = `select` v = client->_event( val = `FILTER_SELECT` arg = `${$parameters>/key}` )
             )->a( n = `class`  v = `sapUiResponsiveContentPadding`
 
             )->ele( `items`
@@ -119,7 +118,7 @@ CLASS z2ui5_cl_smpc_app_377 IMPLEMENTATION.
                     )->a( n = `inset`          v = `false`
                     )->a( n = `showSeparators` v = `Inner`
                     )->a( n = `headerText`     v = `Products`
-                    )->a( n = `items`          v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                    )->a( n = `items`          v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
                     )->ele( `infoToolbar`
                         )->ele( `OverflowToolbar`

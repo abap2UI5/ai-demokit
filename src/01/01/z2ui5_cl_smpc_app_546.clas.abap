@@ -95,7 +95,7 @@ CLASS z2ui5_cl_smpc_app_546 IMPLEMENTATION.
 
             )->ele( `PlanningCalendar`
                 )->a( n = `id`                        v = `PC1`
-                )->a( n = `startDate`                 v = |\{ path: '{ client->_bind( val = start_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
+                )->a( n = `startDate`                 v = |\{ path: '{ client->_bind_path( start_date ) }', formatter: 'Formatter.DateCreateObject' \}|
                 )->a( n = `rows`                      v = client->_bind( t_people )
                 )->a( n = `appointmentsVisualization` v = `Filled`
 
@@ -108,8 +108,7 @@ CLASS z2ui5_cl_smpc_app_546 IMPLEMENTATION.
 
                     )->ele( `Select`
                         )->a( n = `id`          v = `userRole`
-                        )->a( n = `change`      v = client->_event( val   = `ROLE_CHANGE`
-                                                                    t_arg = VALUE #( ( `${$parameters>/selectedItem}.getKey()` ) ) )
+                        )->a( n = `change`      v = client->_event( val = `ROLE_CHANGE` arg = `${$parameters>/selectedItem}.getKey()` )
                         )->a( n = `selectedKey` v = client->_bind( role_key )
                         )->a( n = `width`       v = `230px`
 

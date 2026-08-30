@@ -73,8 +73,7 @@ CLASS z2ui5_cl_smpc_app_301 IMPLEMENTATION.
                         )->a( n = `notificationsNumber` v = `2`
                         " onToggleSideNav opens the side-navigation popover anchored
                         " to the menu button the event carries as parameter 'button'
-                        )->a( n = `menuButtonPressed`   v = client->_event( val   = `TOGGLE_SIDE_NAV`
-                                                                            t_arg = VALUE #( ( `${$parameters>/button}.getId()` ) ) )
+                        )->a( n = `menuButtonPressed`   v = client->_event( val = `TOGGLE_SIDE_NAV` arg = `${$parameters>/button}.getId()` )
 
                         )->ele( n = `profile` ns = `f`
                             )->tag( `Avatar`

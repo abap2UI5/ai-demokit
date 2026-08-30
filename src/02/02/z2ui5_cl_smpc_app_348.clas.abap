@@ -94,8 +94,7 @@ CLASS z2ui5_cl_smpc_app_348 IMPLEMENTATION.
 
                 )->ele( n = `customLayout` ns = `grid`
                     )->tag( n = `ResponsiveColumnLayout` ns = `grid`
-                        )->a( n = `layoutChange` v = client->_event( val   = `LAYOUT_CHANGE`
-                                                                     t_arg = VALUE #( ( `${$parameters>/layout}` ) ) )
+                        )->a( n = `layoutChange` v = client->_event( val = `LAYOUT_CHANGE` arg = `${$parameters>/layout}` )
 
                 )->end(
                 )->ele( n = `Card` ns = `f`

@@ -82,8 +82,7 @@ CLASS z2ui5_cl_smpc_app_611 IMPLEMENTATION.
                 " onInit adds the three DateTypeRanges in JavaScript; specialDates
                 " IS a bindable aggregation, so the port binds the same three rows
                 )->a( n = `specialDates` v = client->_bind( t_special )
-                )->a( n = `select`       v = client->_event( val   = `DATE_SELECT`
-                                                             t_arg = VALUE #( ( `${$source>/selectedDates}[0].getStartDate().getTime()` ) ) )
+                )->a( n = `select`       v = client->_event( val = `DATE_SELECT` arg = `${$source>/selectedDates}[0].getStartDate().getTime()` )
 
                 )->ele( n = `specialDates` ns = `u`
                     )->tag( n = `DateTypeRange` ns = `u`

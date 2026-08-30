@@ -94,9 +94,8 @@ CLASS z2ui5_cl_smpc_app_099 IMPLEMENTATION.
                     )->a( n = `pages`         v = client->_bind( t_pages )
                     " onNavigate reads the navOrigin link and names it in the toast;
                     " a BACK navigation has no navOrigin, which the ternary reproduces
-                    )->a( n = `navigate`      v = client->_event( val   = `NAVIGATE`
-                                                                  t_arg = VALUE #( ( `${$parameters>/navOrigin} ? ${$parameters>/navOrigin}.getText() : ''` ) ) )
-                    )->a( n = `afterNavigate` v = client->_event( val = `AFTER_NAV` t_arg = VALUE #( ( `${$parameters>/isTopPage}` ) ) )
+                    )->a( n = `navigate`      v = client->_event( val = `NAVIGATE` arg = `${$parameters>/navOrigin} ? ${$parameters>/navOrigin}.getText() : ''` )
+                    )->a( n = `afterNavigate` v = client->_event( val = `AFTER_NAV` arg = `${$parameters>/isTopPage}` )
 
                     )->ele( `QuickViewPage`
                         )->a( n = `pageId`      v = `{PAGEID}`

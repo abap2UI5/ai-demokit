@@ -254,8 +254,7 @@ CLASS z2ui5_cl_smpc_app_412 IMPLEMENTATION.
                             " at the pressed link, transported via $event.oSource.sId
                             )->tag( n = `Link` ns = `m`
                                 )->a( n = `text`  v = `Julie Armstrong`
-                                )->a( n = `press` v = client->_event( val   = `TITLE_SELECTOR`
-                                                                      t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+                                )->a( n = `press` v = client->_event( val = `TITLE_SELECTOR` arg = `$event.oSource.sId` )
 
                         )->end(
 
@@ -279,8 +278,7 @@ CLASS z2ui5_cl_smpc_app_412 IMPLEMENTATION.
                                 )->a( n = `class` v = `sapUiSmallMarginEnd`
                             )->tag( n = `Link` ns = `m`
                                 )->a( n = `text`  v = `John Miller`
-                                )->a( n = `press` v = client->_event( val   = `TITLE_SELECTOR`
-                                                                      t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+                                )->a( n = `press` v = client->_event( val = `TITLE_SELECTOR` arg = `$event.oSource.sId` )
 
                         )->end(
 

@@ -85,7 +85,7 @@ CLASS z2ui5_cl_smpc_app_536 IMPLEMENTATION.
 
             )->ele( `PlanningCalendar`
                 )->a( n = `id`                        v = `PC1`
-                )->a( n = `startDate`                 v = |\{ path: '{ client->_bind( val = start_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
+                )->a( n = `startDate`                 v = |\{ path: '{ client->_bind_path( start_date ) }', formatter: 'Formatter.DateCreateObject' \}|
                 )->a( n = `rows`                      v = client->_bind( t_people )
                 )->a( n = `appointmentsVisualization` v = `Filled`
                 " handleAppointmentSelect: MessageBox with the appointment title, its
@@ -100,9 +100,7 @@ CLASS z2ui5_cl_smpc_app_536 IMPLEMENTATION.
                             ( `$event.oSource.getSelectedAppointments().length` )
                             ( `${$parameters>/appointments} ? ${$parameters>/appointments}.length : 0` ) ) )
                 " handleRowHeaderPress names the pressed row's id in a MessageBox
-                )->a( n = `rowHeaderPress`            v = client->_event(
-                          val   = `ROW_HEADER_PRESS`
-                          t_arg = VALUE #( ( `${$parameters>/row}.getId()` ) ) )
+                )->a( n = `rowHeaderPress`            v = client->_event( val = `ROW_HEADER_PRESS` arg = `${$parameters>/row}.getId()` )
                 )->a( n = `showEmptyIntervalHeaders`  v = `false`
                 )->a( n = `showWeekNumbers`           v = `true`
                 " onCalendarTypeSelect / onCalendarSecondaryTypeSelect call the two
@@ -212,9 +210,7 @@ CLASS z2ui5_cl_smpc_app_536 IMPLEMENTATION.
                 )->a( n = `text` v = `Add available built-in views to the example:`
 
             )->ele( `MultiComboBox`
-                )->a( n = `selectionFinish` v = client->_event(
-                          val   = `BUILT_IN_VIEWS`
-                          t_arg = VALUE #( ( `$event.oSource.getSelectedKeys().join(',')` ) ) )
+                )->a( n = `selectionFinish` v = client->_event( val = `BUILT_IN_VIEWS` arg = `$event.oSource.getSelectedKeys().join(',')` )
                 )->a( n = `width`           v = `230px`
                 )->a( n = `placeholder`     v = `Choose built-in views`
 

@@ -97,10 +97,8 @@ CLASS z2ui5_cl_smpc_app_121 IMPLEMENTATION.
                                                                                           ( `STATE` )
                                                                                           ( `ICON` ) ) )
                 )->a( n = `mode`          v = `MultiSelect`
-                )->a( n = `selectionChanged`  v = client->_event( val   = `SELECTION`
-                                                                  t_arg = VALUE #( ( `$event.oSource.getSelectedItems().length` ) ) )
-                )->a( n = `afterItemRemoved`  v = client->_event( val   = `REMOVED`
-                                                                  t_arg = VALUE #( ( `${$parameters>/item}.getFileName()` ) ) )
+                )->a( n = `selectionChanged`  v = client->_event( val = `SELECTION` arg = `$event.oSource.getSelectedItems().length` )
+                )->a( n = `afterItemRemoved`  v = client->_event( val = `REMOVED` arg = `${$parameters>/item}.getFileName()` )
 
                 )->ele( n = `toolbar` ns = `upload`
                     )->ele( `OverflowToolbar`

@@ -130,8 +130,7 @@ CLASS z2ui5_cl_smpc_app_535 IMPLEMENTATION.
                                     )->a( n = `mode`                v = `Delete`
                                     )->a( n = `items`               v = client->_bind( productcollection )
                                     )->a( n = `enableBusyIndicator` v = `true`
-                                    )->a( n = `delete`              v = client->_event( val   = `DELETE_ITEM`
-                                                                                        t_arg = VALUE #( ( `${$parameters>/listItem}.getTitle()` ) ) )
+                                    )->a( n = `delete`              v = client->_event( val = `DELETE_ITEM` arg = `${$parameters>/listItem}.getTitle()` )
                                     )->a( n = `headerText`          v = `Items`
 
                                     )->tag( `StandardListItem`

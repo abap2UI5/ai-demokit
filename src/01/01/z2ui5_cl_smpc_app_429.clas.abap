@@ -52,7 +52,7 @@ CLASS z2ui5_cl_smpc_app_429 IMPLEMENTATION.
         " items address the first three records relative to it - 1:1 with the original
         )->ele( `List`
             )->a( n = `headerText` v = `Products`
-            )->a( n = `binding`    v = |\{{ client->_bind( val = t_products path = abap_true ) }\}|
+            )->a( n = `binding`    v = |\{{ client->_bind_path( t_products ) }\}|
 
             )->tag( `StandardListItem`
                 )->a( n = `title`            v = `{0/NAME}`

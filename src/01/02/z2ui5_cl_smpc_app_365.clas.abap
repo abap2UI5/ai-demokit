@@ -99,7 +99,7 @@ CLASS z2ui5_cl_smpc_app_365 IMPLEMENTATION.
             )->ele( n = `content` ns = `m`
                 )->ele( `TreeTable`
                     )->a( n = `id`              v = `TreeTable`
-                    )->a( n = `rows`            v = |\{ path: '{ client->_bind( val = catalog-clothing path = abap_true ) }', parameters: \{ arrayNames: ['CATEGORIES'] \} \}|
+                    )->a( n = `rows`            v = |\{ path: '{ client->_bind_path( catalog-clothing ) }', parameters: \{ arrayNames: ['CATEGORIES'] \} \}|
                     )->a( n = `selectionMode`   v = `MultiToggle`
                     )->a( n = `enableSelectAll` v = `false`
                     )->a( n = `ariaLabelledBy`  v = `title`
@@ -189,7 +189,7 @@ CLASS z2ui5_cl_smpc_app_365 IMPLEMENTATION.
 
                             )->ele( `template`
                                 )->ele( n = `Select` ns = `m`
-                                    )->a( n = `items`          v = |\{ path: '{ client->_bind( val = sizes path = abap_true ) }', templateShareable: true \}|
+                                    )->a( n = `items`          v = |\{ path: '{ client->_bind_path( sizes ) }', templateShareable: true \}|
                                     )->a( n = `selectedKey`    v = `{SIZE}`
                                     )->a( n = `visible`        v = `{= !!${SIZE} }`
                                     )->a( n = `forceSelection` v = `false`

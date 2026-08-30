@@ -76,7 +76,7 @@ CLASS z2ui5_cl_smpc_app_343 IMPLEMENTATION.
             )->ele( n = `BlockLayoutRow` ns = `l`
                 )->ele( n = `BlockLayoutCell` ns = `l`
                     )->a( n = `id`                   v = `cell-1`
-                    )->a( n = `binding`              v = |\{{ client->_bind( val = cell1 path = abap_true ) }\}|
+                    )->a( n = `binding`              v = |\{{ client->_bind_path( cell1 ) }\}|
                     )->a( n = `title`                v = `Select Cells' Custom Color`
                     )->a( n = `backgroundColorSet`   v = `{COLORSET}`
                     )->a( n = `backgroundColorShade` v = `{COLORSHADE}`
@@ -162,7 +162,7 @@ CLASS z2ui5_cl_smpc_app_343 IMPLEMENTATION.
                 )->end(
                 )->ele( n = `BlockLayoutCell` ns = `l`
                     )->a( n = `id`                   v = `cell-2`
-                    )->a( n = `binding`              v = |\{{ client->_bind( val = cell2 path = abap_true ) }\}|
+                    )->a( n = `binding`              v = |\{{ client->_bind_path( cell2 ) }\}|
                     )->a( n = `title`                v = `An Icon`
                     )->a( n = `backgroundColorSet`   v = `{COLORSET}`
                     )->a( n = `backgroundColorShade` v = `{COLORSHADE}`
@@ -242,7 +242,7 @@ CLASS z2ui5_cl_smpc_app_343 IMPLEMENTATION.
             )->ele( n = `BlockLayoutRow` ns = `l`
                 )->ele( n = `BlockLayoutCell` ns = `l`
                     )->a( n = `id`                   v = `cell-3`
-                    )->a( n = `binding`              v = |\{{ client->_bind( val = cell3 path = abap_true ) }\}|
+                    )->a( n = `binding`              v = |\{{ client->_bind_path( cell3 ) }\}|
                     )->a( n = `title`                v = `Simple Form`
                     )->a( n = `backgroundColorSet`   v = `{COLORSET}`
                     )->a( n = `backgroundColorShade` v = `{COLORSHADE}`
@@ -346,7 +346,7 @@ CLASS z2ui5_cl_smpc_app_343 IMPLEMENTATION.
             )->ele( n = `BlockLayoutRow` ns = `l`
                 )->ele( n = `BlockLayoutCell` ns = `l`
                     )->a( n = `id`                   v = `cell-4`
-                    )->a( n = `binding`              v = |\{{ client->_bind( val = cell4 path = abap_true ) }\}|
+                    )->a( n = `binding`              v = |\{{ client->_bind_path( cell4 ) }\}|
                     )->a( n = `title`                v = `Right Aligned Title`
                     )->a( n = `titleAlignment`       v = `Right`
                     )->a( n = `backgroundColorSet`   v = `{COLORSET}`
@@ -429,7 +429,7 @@ CLASS z2ui5_cl_smpc_app_343 IMPLEMENTATION.
             )->ele( n = `BlockLayoutRow` ns = `l`
                 )->ele( n = `BlockLayoutCell` ns = `l`
                     )->a( n = `id`                   v = `cell-5`
-                    )->a( n = `binding`              v = |\{{ client->_bind( val = cell5 path = abap_true ) }\}|
+                    )->a( n = `binding`              v = |\{{ client->_bind_path( cell5 ) }\}|
                     )->a( n = `title`                v = `Left Aligned Title`
                     )->a( n = `titleAlignment`       v = `Left`
                     )->a( n = `backgroundColorSet`   v = `{COLORSET}`
@@ -512,7 +512,7 @@ CLASS z2ui5_cl_smpc_app_343 IMPLEMENTATION.
             )->ele( n = `BlockLayoutRow` ns = `l`
                 )->ele( n = `BlockLayoutCell` ns = `l`
                     )->a( n = `id`                   v = `cell-6`
-                    )->a( n = `binding`              v = |\{{ client->_bind( val = cell6 path = abap_true ) }\}|
+                    )->a( n = `binding`              v = |\{{ client->_bind_path( cell6 ) }\}|
                     )->a( n = `title`                v = `Default Aligned Title`
                     )->a( n = `backgroundColorSet`   v = `{COLORSET}`
                     )->a( n = `backgroundColorShade` v = `{COLORSHADE}`

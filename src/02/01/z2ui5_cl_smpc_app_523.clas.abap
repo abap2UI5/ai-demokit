@@ -61,7 +61,7 @@ CLASS z2ui5_cl_smpc_app_523 IMPLEMENTATION.
             )->a( n = `id`      v = `idProductsTable`
             )->a( n = `growing` v = `true`
             )->a( n = `mode`    v = `MultiSelect`
-            )->a( n = `items`   v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+            )->a( n = `items`   v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
             " only the CellSelector - the CopyProvider is dropped, it refuses to be
             " created without the extractData JS callback (see sidecar)

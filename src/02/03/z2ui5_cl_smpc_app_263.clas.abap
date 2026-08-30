@@ -66,8 +66,7 @@ CLASS z2ui5_cl_smpc_app_263 IMPLEMENTATION.
 
         )->ele( n = `NavContainer` ns = `m`
             )->a( n = `id`       v = `navigationContainer`
-            )->a( n = `navigate` v = client->_event( val   = `NAVIGATE`
-                                                     t_arg = VALUE #( ( `${$parameters>/toId}` ) ) )
+            )->a( n = `navigate` v = client->_event( val = `NAVIGATE` arg = `${$parameters>/toId}` )
 
             )->ele( n = `Page` ns = `m`
                 )->a( n = `id`    v = `page1`

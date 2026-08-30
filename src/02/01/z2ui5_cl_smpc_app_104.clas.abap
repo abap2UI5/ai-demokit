@@ -94,7 +94,7 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
                 )->a( n = `resizable`          v = client->_bind( resizable )
                 )->a( n = `rememberSelections` v = client->_bind( remember )
                 )->a( n = `confirmButtonText`  v = client->_bind( confirm_text )
-                )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME', descending: false \} \}|
+                )->a( n = `items` v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME', descending: false \} \}|
 
                 )->ele( `ColumnListItem`
                     )->a( n = `vAlign` v = `Middle`
@@ -171,12 +171,11 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
                 )->a( n = `search`            v = client->follow_up_action( val   = client->cs_event-binding_call
                                                                             t_arg = VALUE #( ( `valueHelpDialog` ) ( `items` ) ( `filter` ) ( `NAME` ) ( `Contains` ) ( `${$parameters>/value}` ) ) )
                 )->a( n = `searchPlaceholder` v = `Search Products`
-                )->a( n = `confirm`           v = client->_event( val   = `VH_CLOSE`
-                                                                  t_arg = VALUE #( ( `${$parameters>/selectedItem} ? ${$parameters>/selectedItem}.getCells()[0].getTitle() : ''` ) ) )
+                )->a( n = `confirm`           v = client->_event( val = `VH_CLOSE` arg = `${$parameters>/selectedItem} ? ${$parameters>/selectedItem}.getCells()[0].getTitle() : ''` )
                 )->a( n = `cancel`            v = client->_event( `VH_CLOSE` )
                 )->a( n = `showClearButton`   v = `true`
                 )->a( n = `id`                v = `valueHelpDialog`
-                )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME', descending: false \} \}|
+                )->a( n = `items` v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME', descending: false \} \}|
 
                 )->ele( `ColumnListItem`
                     )->a( n = `selected` v = `{SELECTED}`

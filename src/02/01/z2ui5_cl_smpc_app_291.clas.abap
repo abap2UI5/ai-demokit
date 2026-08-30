@@ -120,8 +120,7 @@ CLASS z2ui5_cl_smpc_app_291 IMPLEMENTATION.
                         )->a( n = `datetime`          v = `{CREATIONDATE}`
                         )->a( n = `unread`            v = `{UNREAD}`
                         )->a( n = `priority`          v = `{PRIORITY}`
-                        )->a( n = `close`             v = client->_event( val   = `ITEM_CLOSE`
-                                                                          t_arg = VALUE #( ( `${TITLE}` ) ) )
+                        )->a( n = `close`             v = client->_event( val = `ITEM_CLOSE` arg = `${TITLE}` )
                         )->a( n = `press`             v = client->follow_up_action( val   = client->cs_event-control_global
                                                                                     t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorPicture`     v = `{AUTHORPICTURE}`

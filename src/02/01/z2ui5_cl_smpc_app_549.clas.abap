@@ -167,9 +167,7 @@ CLASS z2ui5_cl_smpc_app_549 IMPLEMENTATION.
                             ( `${$parameters>/date}.getMonth() + 1` )
                             ( `${$parameters>/date}.getDate()` ) ) )
                 " handleStartDateChange names the new start date in a toast
-                )->a( n = `startDateChange`               v = client->_event(
-                          val   = `START_DATE_CHANGE`
-                          t_arg = VALUE #( ( `${$parameters>/date}.toString()` ) ) )
+                )->a( n = `startDateChange`               v = client->_event( val = `START_DATE_CHANGE` arg = `${$parameters>/date}.toString()` )
                 )->a( n = `appointmentDrop`               v = client->_event(
                           val   = `APPT_DROP`
                           t_arg = VALUE #(
@@ -219,7 +217,7 @@ CLASS z2ui5_cl_smpc_app_549 IMPLEMENTATION.
                             ( `${$parameters>/date}.getFullYear()` )
                             ( `${$parameters>/date}.getMonth() + 1` )
                             ( `${$parameters>/date}.getDate()` ) ) )
-                )->a( n = `startDate`                     v = |\{ path: '{ client->_bind( val = start_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
+                )->a( n = `startDate`                     v = |\{ path: '{ client->_bind_path( start_date ) }', formatter: 'Formatter.DateCreateObject' \}|
                 )->a( n = `enableAppointmentsDragAndDrop` v = client->_bind( enable_dnd )
                 )->a( n = `enableAppointmentsResize`      v = client->_bind( enable_size )
                 )->a( n = `enableAppointmentsCreate`      v = client->_bind( enable_new )
@@ -475,7 +473,7 @@ CLASS z2ui5_cl_smpc_app_549 IMPLEMENTATION.
             )->a( n = `showHeader` v = `true`
 
             )->ele( `PlanningCalendarLegend`
-                )->a( n = `appointmentItems` v = |\{ path: '{ client->_bind( val = t_types path = abap_true ) }', templateShareable: true \}|
+                )->a( n = `appointmentItems` v = |\{ path: '{ client->_bind_path( t_types ) }', templateShareable: true \}|
 
                 )->ele( `appointmentItems`
                     )->tag( n = `CalendarLegendItem` ns = `u`

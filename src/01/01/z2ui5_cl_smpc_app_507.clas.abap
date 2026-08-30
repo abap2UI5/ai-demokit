@@ -62,7 +62,7 @@ CLASS z2ui5_cl_smpc_app_507 IMPLEMENTATION.
                 )->a( n = `id`              v = `productInputWithList`
                 )->a( n = `placeholder`     v = `Enter product`
                 )->a( n = `showSuggestion`  v = `true`
-                )->a( n = `suggestionItems` v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'SUPPLIERNAME', group: true, ascending: false \} \}|
+                )->a( n = `suggestionItems` v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'SUPPLIERNAME', group: true, ascending: false \} \}|
 
                 )->ele( `suggestionItems`
                     )->tag( n = `Item` ns = `core`
@@ -79,7 +79,7 @@ CLASS z2ui5_cl_smpc_app_507 IMPLEMENTATION.
                 )->a( n = `placeholder`                  v = `Enter product`
                 )->a( n = `showSuggestion`               v = `true`
                 )->a( n = `showTableSuggestionValueHelp` v = `false`
-                )->a( n = `suggestionRows`               v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'SUPPLIERNAME', group: true, ascending: false \} \}|
+                )->a( n = `suggestionRows`               v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'SUPPLIERNAME', group: true, ascending: false \} \}|
 
                 )->ele( `suggestionColumns`
                     )->ele( `Column`
