@@ -41,25 +41,6 @@ CLASS z2ui5_cl_smpc_app_594 IMPLEMENTATION.
 
   METHOD view_display.
 
-    " The view is ONE statement, so every /Employee row it binds has to be
-    " assigned before the chain starts. Assigned rather than read inside the
-    " chain with t_employees[ n ]-field: _bind identifies the cell by data
-    " reference, and the downport lowers a component-level table expression
-    " to a work-area copy, which the reference match then refuses.
-    FIELD-SYMBOLS <emp1> TYPE ty_s_employee.
-    FIELD-SYMBOLS <emp2> TYPE ty_s_employee.
-    FIELD-SYMBOLS <emp3> TYPE ty_s_employee.
-    FIELD-SYMBOLS <emp4> TYPE ty_s_employee.
-    FIELD-SYMBOLS <emp5> TYPE ty_s_employee.
-    FIELD-SYMBOLS <emp6> TYPE ty_s_employee.
-
-    ASSIGN t_employees[ 1 ] TO <emp1>.
-    ASSIGN t_employees[ 2 ] TO <emp2>.
-    ASSIGN t_employees[ 3 ] TO <emp3>.
-    ASSIGN t_employees[ 4 ] TO <emp4>.
-    ASSIGN t_employees[ 5 ] TO <emp5>.
-    ASSIGN t_employees[ 6 ] TO <emp6>.
-
     DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
@@ -606,9 +587,9 @@ CLASS z2ui5_cl_smpc_app_594 IMPLEMENTATION.
                                                     )->ele( n = `content` ns = `layout`
                                                         )->ele( n = `VerticalLayout` ns = `layout`
                                                             )->tag( n = `Label` ns = `m`
-                                                                )->a( n = `text` v = client->_bind( val = <emp1>-name tab = t_employees tab_index = 1 )
+                                                                )->a( n = `text` v = client->_bind( val = t_employees[ 1 ]-name tab = t_employees tab_index = 1 )
                                                             )->tag( n = `Label` ns = `m`
-                                                                )->a( n = `text` v = client->_bind( val = <emp1>-job tab = t_employees tab_index = 1 )
+                                                                )->a( n = `text` v = client->_bind( val = t_employees[ 1 ]-job tab = t_employees tab_index = 1 )
 
                                                             )->ele( n = `layoutData` ns = `layout`
                                                                 )->tag( n = `GridData` ns = `layout`
@@ -634,9 +615,9 @@ CLASS z2ui5_cl_smpc_app_594 IMPLEMENTATION.
 
                                                     )->ele( n = `VerticalLayout` ns = `layout`
                                                         )->tag( n = `Label` ns = `m`
-                                                            )->a( n = `text` v = client->_bind( val = <emp2>-name tab = t_employees tab_index = 2 )
+                                                            )->a( n = `text` v = client->_bind( val = t_employees[ 2 ]-name tab = t_employees tab_index = 2 )
                                                         )->tag( n = `Label` ns = `m`
-                                                            )->a( n = `text` v = client->_bind( val = <emp2>-job tab = t_employees tab_index = 2 )
+                                                            )->a( n = `text` v = client->_bind( val = t_employees[ 2 ]-job tab = t_employees tab_index = 2 )
 
                                                         )->ele( n = `layoutData` ns = `layout`
                                                             )->tag( n = `GridData` ns = `layout`
@@ -672,11 +653,11 @@ CLASS z2ui5_cl_smpc_app_594 IMPLEMENTATION.
                                 )->ele( n = `Panel` ns = `m`
                                     )->ele( n = `VBox` ns = `m`
                                         )->tag( n = `Image` ns = `m`
-                                            )->a( n = `src` v = client->_bind( val = <emp1>-picture tab = t_employees tab_index = 1 )
+                                            )->a( n = `src` v = client->_bind( val = t_employees[ 1 ]-picture tab = t_employees tab_index = 1 )
                                         )->tag( n = `Label` ns = `m`
-                                            )->a( n = `text` v = client->_bind( val = <emp1>-name tab = t_employees tab_index = 1 )
+                                            )->a( n = `text` v = client->_bind( val = t_employees[ 1 ]-name tab = t_employees tab_index = 1 )
                                         )->tag( n = `Label` ns = `m`
-                                            )->a( n = `text` v = client->_bind( val = <emp1>-job tab = t_employees tab_index = 1 )
+                                            )->a( n = `text` v = client->_bind( val = t_employees[ 1 ]-job tab = t_employees tab_index = 1 )
 
                                     )->end(
                                 )->end(
@@ -684,11 +665,11 @@ CLASS z2ui5_cl_smpc_app_594 IMPLEMENTATION.
                                 )->ele( n = `Panel` ns = `m`
                                     )->ele( n = `VBox` ns = `m`
                                         )->tag( n = `Image` ns = `m`
-                                            )->a( n = `src` v = client->_bind( val = <emp2>-picture tab = t_employees tab_index = 2 )
+                                            )->a( n = `src` v = client->_bind( val = t_employees[ 2 ]-picture tab = t_employees tab_index = 2 )
                                         )->tag( n = `Label` ns = `m`
-                                            )->a( n = `text` v = client->_bind( val = <emp2>-name tab = t_employees tab_index = 2 )
+                                            )->a( n = `text` v = client->_bind( val = t_employees[ 2 ]-name tab = t_employees tab_index = 2 )
                                         )->tag( n = `Label` ns = `m`
-                                            )->a( n = `text` v = client->_bind( val = <emp2>-job tab = t_employees tab_index = 2 )
+                                            )->a( n = `text` v = client->_bind( val = t_employees[ 2 ]-job tab = t_employees tab_index = 2 )
 
                                     )->end(
                                 )->end(
@@ -696,11 +677,11 @@ CLASS z2ui5_cl_smpc_app_594 IMPLEMENTATION.
                                 )->ele( n = `Panel` ns = `m`
                                     )->ele( n = `VBox` ns = `m`
                                         )->tag( n = `Image` ns = `m`
-                                            )->a( n = `src` v = client->_bind( val = <emp3>-picture tab = t_employees tab_index = 3 )
+                                            )->a( n = `src` v = client->_bind( val = t_employees[ 3 ]-picture tab = t_employees tab_index = 3 )
                                         )->tag( n = `Label` ns = `m`
-                                            )->a( n = `text` v = client->_bind( val = <emp3>-name tab = t_employees tab_index = 3 )
+                                            )->a( n = `text` v = client->_bind( val = t_employees[ 3 ]-name tab = t_employees tab_index = 3 )
                                         )->tag( n = `Label` ns = `m`
-                                            )->a( n = `text` v = client->_bind( val = <emp3>-job tab = t_employees tab_index = 3 )
+                                            )->a( n = `text` v = client->_bind( val = t_employees[ 3 ]-job tab = t_employees tab_index = 3 )
 
                                     )->end(
                                 )->end(
@@ -708,11 +689,11 @@ CLASS z2ui5_cl_smpc_app_594 IMPLEMENTATION.
                                 )->ele( n = `Panel` ns = `m`
                                     )->ele( n = `VBox` ns = `m`
                                         )->tag( n = `Image` ns = `m`
-                                            )->a( n = `src` v = client->_bind( val = <emp4>-picture tab = t_employees tab_index = 4 )
+                                            )->a( n = `src` v = client->_bind( val = t_employees[ 4 ]-picture tab = t_employees tab_index = 4 )
                                         )->tag( n = `Label` ns = `m`
-                                            )->a( n = `text` v = client->_bind( val = <emp4>-name tab = t_employees tab_index = 4 )
+                                            )->a( n = `text` v = client->_bind( val = t_employees[ 4 ]-name tab = t_employees tab_index = 4 )
                                         )->tag( n = `Label` ns = `m`
-                                            )->a( n = `text` v = client->_bind( val = <emp4>-job tab = t_employees tab_index = 4 )
+                                            )->a( n = `text` v = client->_bind( val = t_employees[ 4 ]-job tab = t_employees tab_index = 4 )
 
                                     )->end(
                                 )->end(
@@ -720,11 +701,11 @@ CLASS z2ui5_cl_smpc_app_594 IMPLEMENTATION.
                                 )->ele( n = `Panel` ns = `m`
                                     )->ele( n = `VBox` ns = `m`
                                         )->tag( n = `Image` ns = `m`
-                                            )->a( n = `src` v = client->_bind( val = <emp5>-picture tab = t_employees tab_index = 5 )
+                                            )->a( n = `src` v = client->_bind( val = t_employees[ 5 ]-picture tab = t_employees tab_index = 5 )
                                         )->tag( n = `Label` ns = `m`
-                                            )->a( n = `text` v = client->_bind( val = <emp5>-name tab = t_employees tab_index = 5 )
+                                            )->a( n = `text` v = client->_bind( val = t_employees[ 5 ]-name tab = t_employees tab_index = 5 )
                                         )->tag( n = `Label` ns = `m`
-                                            )->a( n = `text` v = client->_bind( val = <emp5>-job tab = t_employees tab_index = 5 )
+                                            )->a( n = `text` v = client->_bind( val = t_employees[ 5 ]-job tab = t_employees tab_index = 5 )
 
                                     )->end(
                                 )->end(
@@ -732,11 +713,11 @@ CLASS z2ui5_cl_smpc_app_594 IMPLEMENTATION.
                                 )->ele( n = `Panel` ns = `m`
                                     )->ele( n = `VBox` ns = `m`
                                         )->tag( n = `Image` ns = `m`
-                                            )->a( n = `src` v = client->_bind( val = <emp6>-picture tab = t_employees tab_index = 6 )
+                                            )->a( n = `src` v = client->_bind( val = t_employees[ 6 ]-picture tab = t_employees tab_index = 6 )
                                         )->tag( n = `Label` ns = `m`
-                                            )->a( n = `text` v = client->_bind( val = <emp6>-name tab = t_employees tab_index = 6 )
+                                            )->a( n = `text` v = client->_bind( val = t_employees[ 6 ]-name tab = t_employees tab_index = 6 )
                                         )->tag( n = `Label` ns = `m`
-                                            )->a( n = `text` v = client->_bind( val = <emp6>-job tab = t_employees tab_index = 6 )
+                                            )->a( n = `text` v = client->_bind( val = t_employees[ 6 ]-job tab = t_employees tab_index = 6 )
         ).
 
     client->view_display( view->stringify( ) ).
@@ -748,7 +729,8 @@ CLASS z2ui5_cl_smpc_app_594 IMPLEMENTATION.
 
     " SharedJSONData/HRData.json /Employee rows 0-5, the records the block
     " ModelMapping elements map onto the internal models emp1>..emp6> - one
-    " table, so the model keeps the array shape the original addresses
+    " table, so the model keeps the array shape the original addresses and the
+    " view addresses it per row (client->_bind( tab / tab_index ))
     t_employees = VALUE #(
       ( name    = `Michael Adams`
         job     = `Scrum Master`

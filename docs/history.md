@@ -18,26 +18,35 @@ renders identically while losing that shape. They now seed **one table**
 (`t_employees`, row type `name/job/picture`) and bind cells:
 
 ```abap
-ASSIGN t_employees[ 1 ] TO <emp1>.
-...
-)->a( n = `text` v = client->_bind( val = <emp1>-name tab = t_employees tab_index = 1 )
+)->a( n = `text` v = client->_bind( val = t_employees[ 1 ]-name tab = t_employees tab_index = 1 )
 ```
 
 which renders `{/T_EMPLOYEES/0/NAME}`. The named-model deviation in each
 sidecar shrank accordingly: what is gone is the ModelMapping indirection, not
 the array.
 
-**Why the assigned row and not `t_employees[ 1 ]-name` inside the chain.**
+**The detour it took to get there, because the second half is a defect.**
 `_bind( tab / tab_index )` identifies the bound cell by DATA REFERENCE
 (`z2ui5_cl_ui5_srv_bind->bind_tab_cell`), and abaplint's downport lowers a
 component-level table expression to `READ TABLE … INTO <wa>` — a copy. The
 reference match then refuses the cell on code that is correct at the v750
-target, so the natural spelling dies in every downported build, the transpiled
-backend behind `npm run e2e` included. The WHOLE-ROW expression is lowered to
-`READ TABLE … ASSIGNING` and keeps the row, which is why the rows are assigned
-before the chain. Measured through both pipelines rather than assumed, and
-filed as `abaplint-downport-table-expression-copy` in abap2UI5's backlog with
-the patch it was written from (upstream `packages/core` green with it).
+target, so the natural spelling died in every downported build, the transpiled
+backend behind `npm run e2e` included. The first version of this batch worked
+around it on the caller's side: assign each row to a field symbol before the
+chain (the whole-row expression IS lowered with ASSIGNING) and bind
+`<empN>-field`. Six field symbols and six ASSIGNs per port — which for a
+six-row table is the entire gain of using a table, so it was thrown away
+again.
+
+The lowering is patched where it is wrong instead:
+`node/setup/patch-abaplint-downport.mjs` in abap2UI5 applies the upstream
+patch to the installed abaplint bundle, `npm run downport` runs it, and
+`scripts/e2e-build.mjs` here calls it before downporting the corpus. A shim
+with a stated end: it fails the build once its anchors stop matching, and
+`test_bind_tab_cell` upstream in the framework is the canary that it still
+works. Filed as `abaplint-downport-table-expression-copy` in abap2UI5's
+backlog with the patch it was written from (upstream `packages/core` green
+with it: 10885 passing).
 
 **What had to move first.** The framework's `_bind( tab / tab_index )` had no
 ABAP Doc, no test and no caller in any of the three corpora; it now has all

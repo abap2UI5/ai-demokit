@@ -106,6 +106,15 @@ function main() {
   base.global = { files: '/node/downport/**/*.*' };
   const cfg = path.join(A2, 'e2e-downport.jsonc');
   fs.writeFileSync(cfg, JSON.stringify(base, null, 2));
+  // abap2UI5's downport shim, run against ITS abaplint because that is the
+  // install this downport uses: stock abaplint outlines a component-level
+  // table expression into a work AREA, which loses the row reference that
+  // `client->_bind( tab / tab_index )` matches the bound cell by - so every
+  // cell-binding port would boot into BINDING_ERROR_TAB_CELL_LEVEL here while
+  // being correct on a system. Temporary, filed upstream; the script fails
+  // loudly when its anchors stop matching. See abap2UI5
+  // node/setup/patch-abaplint-downport.mjs.
+  execSync(`node ${path.join(A2, 'node/setup/patch-abaplint-downport.mjs')}`, { stdio: 'inherit' });
   console.log('e2e-build: downporting the copy to v702 …');
   for (let i = 0; i < 3; i++) fix(`npx abaplint e2e-downport.jsonc --fix`);
   // the framework's two fixups, done in Node so they are portable (BSD/macOS sed
