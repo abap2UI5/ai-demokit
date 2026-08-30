@@ -16,8 +16,30 @@
  * (control-by-id-empty-view-slot), binding-type-mismatch
  * (numeric-bound-as-string), relative-binding-without-context
  * (relative-bind-on-root-field), duplicate-for-iterator, ui5-internal-access
- * (private-mproperties) and commercial-ui5-host. Do NOT re-add a
- * rule here that the linter can express — one rule set, two enforcement
+ * (private-mproperties) and commercial-ui5-host.
+ *
+ * The 2026-08-30 round took three more, and one of them is worth reading twice:
+ *   redundant-init-display  -> the linter's rule of the same name, in its
+ *                              lifecycle family, where it belongs: the fact it
+ *                              rests on (check_on_init implies
+ *                              check_on_navigated) is a framework fact, not a
+ *                              corpus convention.
+ *   redundant-conv-i        -> the linter, scope boundaries and all. abap-check
+ *                              had it filed as "the finished rule sitting in
+ *                              the wrong repository", which it was.
+ *   unguarded-date-formatter-> RETIRED, not promoted. The framework closed the
+ *                              defect at the source: Formatter.DateCreateObject
+ *                              returns null for a falsy input now, and
+ *                              isNoAbapDate rejects anything that is not eight
+ *                              digits, so the empty-seed case can no longer
+ *                              produce an Invalid Date and a rule for it would
+ *                              report correct code. What IS still live is the
+ *                              TYPE mismatch — an ABAP `TYPE d` reaches the
+ *                              model as `20240101`, which new Date( ) does not
+ *                              parse either — and the linter carries that as
+ *                              abap-date-formatter-mismatch.
+ *
+ * Do NOT re-add a rule here that the linter can express — one rule set, two enforcement
  * points was exactly how the editor and CI drifted apart before.
  *
  * Levels: 'error' rules fail the run (exit 1) unless the exact file is listed
@@ -86,47 +108,6 @@ const RULES = [
     level: 'error',
     doc: 'raw <tag> inside ABAP Doc ("!) — ABAP Doc is parsed as HTML; write it plain — AGENTS §8/§10',
     find: grepLines(/^"!.*<[a-zA-Z][^ >]*>/),
-  },
-  {
-    // SLIN's "Redundant conversion for type I", which abaplint does not model
-    // (measured on 2.120.24) and which therefore only ever surfaced from a
-    // user's system: nine findings across 534/546/547/548/549/566/609 on
-    // 2026-08-23, after a single one in 295 on 2026-08-17. An assignment
-    // converts by itself, so CONV i( ) into a target that is already TYPE i
-    // says nothing and reads as if a conversion were needed.
-    //
-    // Scoped to targets this file DECLARES as TYPE i - a DATA/CLASS-DATA line,
-    // or a RETURNING/CHANGING/EXPORTING parameter. Anything whose type lives
-    // in another class is left alone rather than guessed at: a false error
-    // here costs more than a missed hint, and the CONV inside a string
-    // template (|{ CONV i( ... ) WIDTH = 2 }|) is a real conversion that must
-    // not be caught.
-    id: 'redundant-conv-i',
-    level: 'error',
-    doc: 'CONV i( ) assigned to a target already TYPE i - the assignment converts by itself; SLIN reports "Redundant conversion for type I" (abap-check §3)',
-    find(content) {
-      const typed = new Set();
-      const decl = /^\s*(?:CLASS-)?DATA\s+([a-z_][a-z_0-9]*)\s+TYPE\s+i\s*(?:VALUE\b[^.]*)?\./gim;
-      let m;
-      while ((m = decl.exec(content)) !== null) typed.add(m[1].toLowerCase());
-      const param = /^\s*(?:VALUE\()?([a-z_][a-z_0-9]*)\)?\s+TYPE\s+i\s*$/gim;
-      while ((m = param.exec(content)) !== null) typed.add(m[1].toLowerCase());
-      if (typed.size === 0) return [];
-      const out = [];
-      // The CONV must be the WHOLE right-hand side: `<name> = CONV i( x ).`
-      // That is the shape SLIN flags and the only one that is provably
-      // pointless. A CONV inside a comparison (`COND #( WHEN CONV i( x ) < 14`)
-      // or an arithmetic expression (`CONV i( x ) + 1`) is load-bearing or at
-      // least arguable, and both were in the first draft of this rule as false
-      // errors - apps 350 and 353, neither of which SLIN reported.
-      const assign = /^[ \t]*([a-z_][a-z_0-9]*)[ \t]*=[ \t]*CONV[ \t]+i\([^()|]*\)[ \t]*\.[ \t]*$/gim;
-      while ((m = assign.exec(content)) !== null) {
-        if (!typed.has(m[1].toLowerCase())) continue;
-        const line = lineOf(content, m.index);
-        out.push({ line, text: content.split('\n')[line - 1].trim().slice(0, 90) });
-      }
-      return out;
-    },
   },
   {
     id: 'header-in-port',
@@ -220,57 +201,6 @@ const RULES = [
       if (new RegExp('IF\\s+[^\\n]*(?:' + EVENT_READ.source + ')\\s*=').test(content)) return out;
       const m = content.match(/->_event\(/);
       out.push({ line: lineOf(content, m.index), text: '_event( ) wired but no on_event/check_on_event dispatcher and no CASE or IF on get_event( )' });
-      return out;
-    },
-  },
-  {
-    id: 'unguarded-date-formatter',
-    level: 'error',
-    doc: "a { path: 'X', formatter: 'Formatter.DateCreateObject' } binding over a field the SAME class seeds empty somewhere — Formatter.DateCreateObject('') is new Date('') = Invalid Date, and an Invalid Date is TRUTHY, so a consumer that branches on the property (sap.ui.unified Month._checkDateEnabled -> CalendarDate.fromLocalJSDate) throws and the view dies. One bound template cannot omit an attribute per row, so guard the conversion in the binding instead: `{= ${X} ? Formatter.DateCreateObject(${X}) : null }` in a BACKTICK literal. App 220, probe-verified 2026-07-28 (scripts/probes/calendar-empty-enddate-probe.mjs)",
-    find(content) {
-      const out = [];
-      for (const m of content.matchAll(/path:\s*'(\w+)'\s*,\s*formatter:\s*'Formatter\.DateCreateObject'/g)) {
-        const field = m[1];
-        // the same class seeds that field with an empty literal in a VALUE block
-        const seeded = new RegExp('\\b' + field + '\\s*=\\s*(``|\\|\\||\'\')(?![^\\n]*[`\'|])', 'i');
-        if (seeded.test(content)) {
-          out.push({ line: lineOf(content, m.index), text: `${field} is converted with Formatter.DateCreateObject but seeded empty — guard it with an expression binding` });
-        }
-      }
-      return out;
-    },
-  },
-  {
-    // check_on_init( ) true implies check_on_navigated( ) true: every path to
-    // an instance's first main( ) sets the flag (factory_first_start for a
-    // fresh start AND a draft restore, factory_system_startup,
-    // prepare_app_stack for nav_app_call and nav_app_leave). So an init branch
-    // whose only statement is view_display( ) has an ELSEIF twin that does the
-    // same thing, and the OR form says it in one line instead of four. 201
-    // classes carried one of the two until 2026-08-28.
-    id: 'redundant-init-display',
-    level: 'error',
-    doc: 'check_on_init( ) is the SEED branch, not a display branch — an init branch whose only statement is view_display( ), or an "init OR navigated" condition, decides nothing because init true implies navigated true (AGENTS §5)',
-    find(content) {
-      const out = [];
-      const or = content.match(/^[ \t]*IF client->check_on_init\( \) OR client->check_on_navigated\( \)\./m);
-      if (or) {
-        out.push({ line: lineOf(content, or.index), text: 'IF check_on_init( ) OR check_on_navigated( ) — the OR is redundant' });
-      }
-      // BOTH arms have to be the bare view_display( ) — where the navigated
-      // branch does something else (samples' app 488/012 call on_navigation( ),
-      // app 024 handles an app return first) the fork DOES decide something and
-      // the init branch stays. Blank lines between the branches are the samples
-      // dispatcher style and must not hide the finding.
-      const B = '(?:[ \\t]*\\n)*';
-      const fork = content.match(new RegExp(
-        '^([ \\t]*)IF client->check_on_init\\( \\)\\.\\n' + B +
-        '\\1([ \\t]+)view_display\\( \\)\\.\\n' + B +
-        '\\1ELSEIF client->check_on_navigated\\( \\)\\.\\n' + B +
-        '\\1\\2view_display\\( \\)\\.$', 'm'));
-      if (fork) {
-        out.push({ line: lineOf(content, fork.index), text: 'both arms of the fork only call view_display( ) — drop the check_on_init branch, check_on_navigated( ) already covers the first start' });
-      }
       return out;
     },
   },
