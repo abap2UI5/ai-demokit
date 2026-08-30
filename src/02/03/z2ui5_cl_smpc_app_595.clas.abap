@@ -5,6 +5,13 @@ CLASS z2ui5_cl_smpc_app_595 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
+    TYPES:
+      BEGIN OF ty_s_employee,
+        name    TYPE string,
+        job     TYPE string,
+        picture TYPE string,
+      END OF ty_s_employee.
+
     TYPES: BEGIN OF ty_s_product,
              productid    TYPE string,
              " the field the rows binding's sorter uses; no column shows it
@@ -17,24 +24,7 @@ CLASS z2ui5_cl_smpc_app_595 DEFINITION PUBLIC.
 
     DATA t_products TYPE ty_t_product.
 
-    DATA emp1_name    TYPE string.
-    DATA emp1_job     TYPE string.
-    DATA emp1_picture TYPE string.
-    DATA emp2_name    TYPE string.
-    DATA emp2_job     TYPE string.
-    DATA emp2_picture TYPE string.
-    DATA emp3_name    TYPE string.
-    DATA emp3_job     TYPE string.
-    DATA emp3_picture TYPE string.
-    DATA emp4_name    TYPE string.
-    DATA emp4_job     TYPE string.
-    DATA emp4_picture TYPE string.
-    DATA emp5_name    TYPE string.
-    DATA emp5_job     TYPE string.
-    DATA emp5_picture TYPE string.
-    DATA emp6_name    TYPE string.
-    DATA emp6_job     TYPE string.
-    DATA emp6_picture TYPE string.
+    DATA t_employees TYPE STANDARD TABLE OF ty_s_employee WITH EMPTY KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -62,6 +52,17 @@ CLASS z2ui5_cl_smpc_app_595 IMPLEMENTATION.
 
 
   METHOD view_display.
+
+    " The view is ONE statement, so every /Employee row it binds has to be
+    " assigned before the chain starts. Assigned rather than read inside the
+    " chain with t_employees[ n ]-field: _bind identifies the cell by data
+    " reference, and the downport lowers a component-level table expression
+    " to a work-area copy, which the reference match then refuses.
+    FIELD-SYMBOLS <emp1> TYPE ty_s_employee.
+    FIELD-SYMBOLS <emp2> TYPE ty_s_employee.
+
+    ASSIGN t_employees[ 1 ] TO <emp1>.
+    ASSIGN t_employees[ 2 ] TO <emp2>.
 
     DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
@@ -584,8 +585,8 @@ CLASS z2ui5_cl_smpc_app_595 IMPLEMENTATION.
 
                                 " employment:EmploymentBlockJob inlined
                                 " with its Collapsed view (the block's
-                                " initial mode); emp1>/emp2> fold onto
-                                " default-model root fields
+                                " initial mode); emp1>/emp2> are rows
+                                " 1-2 of the one seeded table
                                 )->ele( n = `Grid` ns = `layout`
                                     )->a( n = `defaultSpan` v = `L4 M6 S12`
                                     )->a( n = `hSpacing`    v = `0`
@@ -602,9 +603,9 @@ CLASS z2ui5_cl_smpc_app_595 IMPLEMENTATION.
                                                     )->ele( n = `content` ns = `layout`
                                                         )->ele( n = `VerticalLayout` ns = `layout`
                                                             )->tag( n = `Label` ns = `m`
-                                                                )->a( n = `text` v = client->_bind( emp1_name )
+                                                                )->a( n = `text` v = client->_bind( val = <emp1>-name tab = t_employees tab_index = 1 )
                                                             )->tag( n = `Label` ns = `m`
-                                                                )->a( n = `text` v = client->_bind( emp1_job )
+                                                                )->a( n = `text` v = client->_bind( val = <emp1>-job tab = t_employees tab_index = 1 )
 
                                                             )->ele( n = `layoutData` ns = `layout`
                                                                 )->tag( n = `GridData` ns = `layout`
@@ -630,9 +631,9 @@ CLASS z2ui5_cl_smpc_app_595 IMPLEMENTATION.
 
                                                     )->ele( n = `VerticalLayout` ns = `layout`
                                                         )->tag( n = `Label` ns = `m`
-                                                            )->a( n = `text` v = client->_bind( emp2_name )
+                                                            )->a( n = `text` v = client->_bind( val = <emp2>-name tab = t_employees tab_index = 2 )
                                                         )->tag( n = `Label` ns = `m`
-                                                            )->a( n = `text` v = client->_bind( emp2_job )
+                                                            )->a( n = `text` v = client->_bind( val = <emp2>-job tab = t_employees tab_index = 2 )
 
                                                         )->ele( n = `layoutData` ns = `layout`
                                                             )->tag( n = `GridData` ns = `layout`
@@ -712,25 +713,27 @@ CLASS z2ui5_cl_smpc_app_595 IMPLEMENTATION.
   METHOD model_init.
 
     " SharedJSONData/HRData.json /Employee rows 0-5, the records the block
-    " ModelMapping elements map onto the internal models emp1>..emp6>
-    emp1_name    = `Michael Adams`.
-    emp1_job     = `Scrum Master`.
-    emp1_picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png`.
-    emp2_name    = `John Miller`.
-    emp2_job     = `Product Owner`.
-    emp2_picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png`.
-    emp3_name    = `Richard Wilson`.
-    emp3_job     = `Ux Designer`.
-    emp3_picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png`.
-    emp4_name    = `Julie Armstrong`.
-    emp4_job     = `Quality Engineer`.
-    emp4_picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png`.
-    emp5_name    = `Denise Smith`.
-    emp5_job     = `Team Member`.
-    emp5_picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png`.
-    emp6_name    = `Richard Adams`.
-    emp6_job     = `Team Member`.
-    emp6_picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png`.
+    " ModelMapping elements map onto the internal models emp1>..emp6> - one
+    " table, so the model keeps the array shape the original addresses
+    t_employees = VALUE #(
+      ( name    = `Michael Adams`
+        job     = `Scrum Master`
+        picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png` )
+      ( name    = `John Miller`
+        job     = `Product Owner`
+        picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png` )
+      ( name    = `Richard Wilson`
+        job     = `Ux Designer`
+        picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png` )
+      ( name    = `Julie Armstrong`
+        job     = `Quality Engineer`
+        picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png` )
+      ( name    = `Denise Smith`
+        job     = `Team Member`
+        picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png` )
+      ( name    = `Richard Adams`
+        job     = `Team Member`
+        picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png` ) ).
 
     " sap/ui/demo/mock/products.json /ProductCollection, already in the order the
     " rows binding's sorter puts it in (path 'Name', ascending) - a thin frontend

@@ -7,6 +7,54 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-30 — the UxAP employee family binds a table, not eighteen fields
+
+The five ObjectPage ports that carry the SharedBlocks employee records —
+**263, 588, 594, 595, 596** — each declared `emp1_name/_job/_picture` through
+`emp6_*` and bound the eighteen fields one by one. The original model is an
+ARRAY (`SharedJSONData/HRData.json` `/Employee/0..5`, which is exactly what the
+twelve `uxap:ModelMapping` elements per port address), and a flat field series
+renders identically while losing that shape. They now seed **one table**
+(`t_employees`, row type `name/job/picture`) and bind cells:
+
+```abap
+ASSIGN t_employees[ 1 ] TO <emp1>.
+...
+)->a( n = `text` v = client->_bind( val = <emp1>-name tab = t_employees tab_index = 1 )
+```
+
+which renders `{/T_EMPLOYEES/0/NAME}`. The named-model deviation in each
+sidecar shrank accordingly: what is gone is the ModelMapping indirection, not
+the array.
+
+**Why the assigned row and not `t_employees[ 1 ]-name` inside the chain.**
+`_bind( tab / tab_index )` identifies the bound cell by DATA REFERENCE
+(`z2ui5_cl_ui5_srv_bind->bind_tab_cell`), and abaplint's downport lowers a
+component-level table expression to `READ TABLE … INTO <wa>` — a copy. The
+reference match then refuses the cell on code that is correct at the v750
+target, so the natural spelling dies in every downported build, the transpiled
+backend behind `npm run e2e` included. The WHOLE-ROW expression is lowered to
+`READ TABLE … ASSIGNING` and keeps the row, which is why the rows are assigned
+before the chain. Measured through both pipelines rather than assumed, and
+filed as `abaplint-downport-table-expression-copy` in abap2UI5's backlog with
+the patch it was written from (upstream `packages/core` green with it).
+
+**What had to move first.** The framework's `_bind( tab / tab_index )` had no
+ABAP Doc, no test and no caller in any of the three corpora; it now has all
+three. And the linter's reconstructor deliberately refused every call carrying
+`tab`/`tab_index`, so the whole expression came back unresolved — which takes
+the **attribute** out of the reconstructed view and leaves the property gate,
+the render gate and structural-diff with nothing to look at. Measured on 263
+before the fix: `<m:Image src="…"/>` reconstructed as a bare `<m:Image/>`, and
+the port stayed green because it has eight Images and `src` was still in the
+attribute set from the other seven. `bindingOf` resolves both spellings now.
+
+Also in this pass: a CAPABILITIES row for the cell binding, naming these five
+ports as the proof.
+
+**Left alone on purpose:** 261, 401 and 587 carry the same shape at two rows
+(`emp1`/`emp2` only) and were not part of this batch.
+
 ## 2026-08-28 — four formatting drifts, and the rules that stop them coming back
 
 Four cleanups out of one pass over all 637 ports. None of them changes what an
