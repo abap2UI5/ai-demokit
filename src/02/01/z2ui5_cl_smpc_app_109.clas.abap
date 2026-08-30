@@ -110,13 +110,10 @@ CLASS z2ui5_cl_smpc_app_109 IMPLEMENTATION.
                 " frontend marshals each DateRange into its public properties
                 " (Lib.normalizeEventArgs), which is the loop the client
                 " expression grammar does not have
-                )->a( n = `selectedDatesChange` v = client->_event( val   = `SELECTED_DATE`
-                                                                    t_arg = VALUE #( ( `${$parameters>/selectedDates}` ) ) )
-                )->a( n = `weekNumberPress`     v = client->_event( val   = `WEEK`
-                                                                    t_arg = VALUE #( ( `${$parameters>/weekNumber}` ) ) )
-                )->a( n = `startDateChange`     v = client->_event( val   = `START_DATE`
-                                                                    t_arg = VALUE #( ( `${$parameters>/date}` ) ) )
-                )->a( n = `startDate`           v = |\{ path: '{ client->_bind( val = start_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
+                )->a( n = `selectedDatesChange` v = client->_event( val = `SELECTED_DATE` arg = `${$parameters>/selectedDates}` )
+                )->a( n = `weekNumberPress`     v = client->_event( val = `WEEK` arg = `${$parameters>/weekNumber}` )
+                )->a( n = `startDateChange`     v = client->_event( val = `START_DATE` arg = `${$parameters>/date}` )
+                )->a( n = `startDate`           v = |\{ path: '{ client->_bind_path( start_date ) }', formatter: 'Formatter.DateCreateObject' \}|
                 )->a( n = `appointments`        v = client->_bind( t_appointments )
 
                 )->ele( `views`

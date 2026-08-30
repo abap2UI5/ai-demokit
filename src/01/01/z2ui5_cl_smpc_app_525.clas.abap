@@ -61,7 +61,7 @@ CLASS z2ui5_cl_smpc_app_525 IMPLEMENTATION.
             )->a( n = `enableBusyIndicator` v = `true`
             )->a( n = `growingTriggerText`  v = `Previous Products`
             )->a( n = `noDataText`          v = `No products available`
-            )->a( n = `items`               v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: [\{ path: 'INITIAL', descending: false, group: true \}, \{ path: 'NAME', descending: false \}] \}|
+            )->a( n = `items`               v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: [\{ path: 'INITIAL', descending: false, group: true \}, \{ path: 'NAME', descending: false \}] \}|
 
             )->tag( `StandardListItem`
                 )->a( n = `title`       v = `{NAME}`

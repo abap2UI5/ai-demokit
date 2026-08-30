@@ -184,8 +184,7 @@ CLASS z2ui5_cl_smpc_app_167 IMPLEMENTATION.
                     )->ele( `Button`
                         )->a( n = `text`         v = `Alan Smith`
                         )->a( n = `type`         v = `Transparent`
-                        )->a( n = `press`        v = client->_event( val   = `USER_POPOVER`
-                                                                     t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+                        )->a( n = `press`        v = client->_event( val = `USER_POPOVER` arg = `$event.oSource.sId` )
                         )->a( n = `ariaHasPopup` v = `Menu`
                         )->ele( `layoutData`
                             )->tag( `OverflowToolbarLayoutData`
@@ -231,8 +230,7 @@ CLASS z2ui5_cl_smpc_app_167 IMPLEMENTATION.
                                 )->a( n = `icon`         v = `{ICON}`
                                 )->a( n = `ariaHasPopup` v = `{ARIAHASPOPUP}`
                                 )->a( n = `design`       v = `{DESIGN}`
-                                )->a( n = `press`        v = client->_event( val   = `QUICK_ACTION`
-                                                                             t_arg = VALUE #( ( `${$source>/design}` ) ) )
+                                )->a( n = `press`        v = client->_event( val = `QUICK_ACTION` arg = `${$source>/design}` )
                                 )->a( n = `selectable`   v = `{SELECTABLE}`
 
                         )->end(

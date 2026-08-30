@@ -68,7 +68,7 @@ CLASS z2ui5_cl_smpc_app_176 IMPLEMENTATION.
 
             )->ele( n = `GridList` ns = `f`
                 )->a( n = `id`               v = `gridList`
-                )->a( n = `items`            v = |\{ path: '{ client->_bind( val = t_items path = abap_true ) }', sorter: \{ path: 'GROUP', descending: false, group: true \} \}|
+                )->a( n = `items`            v = |\{ path: '{ client->_bind_path( t_items ) }', sorter: \{ path: 'GROUP', descending: false, group: true \} \}|
                 )->a( n = `growing`          v = `true`
                 )->a( n = `growingThreshold` v = `9`
 

@@ -104,7 +104,7 @@ CLASS z2ui5_cl_smpc_app_554 IMPLEMENTATION.
                     " zoomIn / zoomOut step setScaleFactor; the property is bindable
                     " and the two presses do the same increment in ABAP
                     )->a( n = `scaleFactor`  v = client->_bind( scale_factor )
-                    )->a( n = `startDate`    v = |\{ path: '{ client->_bind( val = start_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
+                    )->a( n = `startDate`    v = |\{ path: '{ client->_bind_path( start_date ) }', formatter: 'Formatter.DateCreateObject' \}|
                     )->a( n = `appointments` v = client->_bind( t_appointments )
                     )->a( n = `specialDates` v = client->_bind( t_special_dates )
                     )->a( n = `legend`       v = `SinglePlanningCalendarLegend`
@@ -168,8 +168,8 @@ CLASS z2ui5_cl_smpc_app_554 IMPLEMENTATION.
                     " ROOT-level aggregations - a bare 'T_' path is RELATIVE and resolves
                     " against nothing outside a row context, and an unbound table is not
                     " serialized at all (app 553 has the same two fixes)
-                    )->a( n = `items`            v = |\{ path: '{ client->_bind( val = t_legend_items path = abap_true ) }', templateShareable: true \}|
-                    )->a( n = `appointmentItems` v = |\{ path: '{ client->_bind( val = t_legend_appt_items path = abap_true ) }', templateShareable: true \}|
+                    )->a( n = `items`            v = |\{ path: '{ client->_bind_path( t_legend_items ) }', templateShareable: true \}|
+                    )->a( n = `appointmentItems` v = |\{ path: '{ client->_bind_path( t_legend_appt_items ) }', templateShareable: true \}|
                     )->a( n = `class`            v = `sapUiSmallMarginTop`
 
                     )->ele( `items`

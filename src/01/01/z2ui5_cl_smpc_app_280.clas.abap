@@ -60,7 +60,7 @@ CLASS z2ui5_cl_smpc_app_280 IMPLEMENTATION.
                 )->a( n = `id`              v = `TypeHere`
                 )->a( n = `value`           v = client->_bind( input_value )
                 )->a( n = `valueLiveUpdate` v = client->_bind( value_live_update )
-                )->a( n = `liveChange`      v = client->_event( val = `LIVE_CHANGE` t_arg = VALUE #( ( `${$parameters>/value}` ) ) )
+                )->a( n = `liveChange`      v = client->_event( val = `LIVE_CHANGE` arg = `${$parameters>/value}` )
 
             )->tag( `Label`
                 )->a( n = `text` v = `input.getValue()`

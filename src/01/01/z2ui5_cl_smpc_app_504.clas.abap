@@ -63,10 +63,8 @@ CLASS z2ui5_cl_smpc_app_504 IMPLEMENTATION.
                 )->a( n = `showSuggestion` v = `false`
                 )->a( n = `value`          v = client->_bind( value )
                 )->a( n = `tokens`         v = client->_bind( t_tokens )
-                )->a( n = `change`         v = client->_event( val   = `VALIDATE`
-                                                               t_arg = VALUE #( ( `${$parameters>/value}` ) ) )
-                )->a( n = `tokenUpdate`    v = client->_event( val   = `TOKEN_UPDATE`
-                                                               t_arg = VALUE #( ( `${$parameters>/type}` ) ) )
+                )->a( n = `change`         v = client->_event( val = `VALIDATE` arg = `${$parameters>/value}` )
+                )->a( n = `tokenUpdate`    v = client->_event( val = `TOKEN_UPDATE` arg = `${$parameters>/type}` )
 
                 )->ele( `tokens`
                     )->tag( `Token`

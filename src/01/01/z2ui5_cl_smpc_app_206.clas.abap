@@ -60,8 +60,8 @@ CLASS z2ui5_cl_smpc_app_206 IMPLEMENTATION.
             )->a( n = `iconDensityAware` v = `false`
             )->a( n = `iconAlt`          v = client->_bind( name )
             )->a( n = `title`            v = client->_bind( name )
-            )->a( n = `number`           v = |\{ parts:[\{path:'{ client->_bind( val = price path = abap_true ) }'\},| &&
-                                             |\{path:'{ client->_bind( val = currencycode path = abap_true ) }'\}], | &&
+            )->a( n = `number`           v = |\{ parts:[\{path:'{ client->_bind_path( price ) }'\},| &&
+                                             |\{path:'{ client->_bind_path( currencycode ) }'\}], | &&
                                              |type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
             )->a( n = `numberUnit`       v = client->_bind( currencycode )
             )->a( n = `class`            v = `sapUiResponsivePadding--header`

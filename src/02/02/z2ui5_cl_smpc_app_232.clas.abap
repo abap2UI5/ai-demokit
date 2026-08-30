@@ -162,7 +162,7 @@ CLASS z2ui5_cl_smpc_app_232 IMPLEMENTATION.
 
                     )->ele( `Select`
                         )->a( n = `selectedKey` v = client->_bind( selected )
-                        )->a( n = `items`       v = |\{ path: '{ client->_bind( val = t_countries path = abap_true ) }', sorter: \{ path: 'TEXT' \} \}|
+                        )->a( n = `items`       v = |\{ path: '{ client->_bind_path( t_countries ) }', sorter: \{ path: 'TEXT' \} \}|
 
                         )->tag( n = `Item` ns = `core`
                             )->a( n = `key`  v = `{KEY}`

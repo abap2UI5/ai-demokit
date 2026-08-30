@@ -64,7 +64,7 @@ CLASS z2ui5_cl_smpc_app_010 IMPLEMENTATION.
         )->ele( `Table`
             )->a( n = `id`          v = `idProductsTable`
             )->a( n = `inset`       v = `false`
-            )->a( n = `items`       v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+            )->a( n = `items`       v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
             " the controller's onPopinLayoutChanged switch lives in this expression binding (as app 009) - never emits an empty enum value
             )->a( n = `popinLayout` v = |\{= ${ client->_bind( popin_layout ) } === 'GridLarge' \|\| ${ client->_bind( popin_layout ) } === 'GridSmall' ? ${ client->_bind( popin_layout ) } : 'Block' \}|
 

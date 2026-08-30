@@ -62,10 +62,7 @@ CLASS z2ui5_cl_smpc_app_136 IMPLEMENTATION.
                     " RENDER time, the Switches carry no event, and a flipped switch
                     " therefore only reached the wire on the NEXT render - one toggle
                     " too late (corrected 2026-08-23)
-                    )->a( n = `toggle` v = client->_event(
-                              val    = `TOGGLE`
-                              t_arg  = VALUE #( ( `${$parameters>/expanded}` ) )
-                              s_ctrl = VALUE #( prevent_default_expr = veto_expr ) )
+                    )->a( n = `toggle` v = client->_event( val = `TOGGLE` arg = `${$parameters>/expanded}`s_ctrl = VALUE #( prevent_default_expr = veto_expr ) )
 
                     )->ele( n = `mainContent` ns = `f`
                         )->tag( `Button`

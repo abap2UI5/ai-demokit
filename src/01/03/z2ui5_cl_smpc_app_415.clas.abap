@@ -79,14 +79,12 @@ CLASS z2ui5_cl_smpc_app_415 IMPLEMENTATION.
                     )->a( n = `id`                   v = `headerForTest`
                     )->a( n = `objectTitle`          v = `Long title that wraps and goes over more lines`
                     )->a( n = `showTitleSelector`    v = `true`
-                    )->a( n = `titleSelectorPress`   v = client->_event( val   = `TITLE_SELECTOR`
-                                                                         t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+                    )->a( n = `titleSelectorPress`   v = client->_event( val = `TITLE_SELECTOR` arg = `$event.oSource.sId` )
                     )->a( n = `showMarkers`          v = `true`
                     )->a( n = `markFavorite`         v = `true`
                     )->a( n = `markLocked`           v = `true`
                     )->a( n = `markFlagged`          v = `true`
-                    )->a( n = `markLockedPress`      v = client->_event( val   = `MARK_LOCKED`
-                                                                         t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+                    )->a( n = `markLockedPress`      v = client->_event( val = `MARK_LOCKED` arg = `$event.oSource.sId` )
                     )->a( n = `objectSubtitle`       v = `Long subtitle that wraps and goes over more lines`
                     )->a( n = `objectImageShape`     v = `Circle`
                     )->a( n = `objectImageURI`       v = `https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png`

@@ -71,7 +71,7 @@ CLASS z2ui5_cl_smpc_app_373 IMPLEMENTATION.
                         )->a( n = `valueState`     v = `Error`
                         )->a( n = `valueStateText` v = `error value state text`
                         " the four Selects share one product table (see the sidecar NOTE)
-                        )->a( n = `items`          v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                        )->a( n = `items`          v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
                         )->tag( n = `Item` ns = `core`
                             )->a( n = `key`  v = `{PRODUCT_ID}`
@@ -94,7 +94,7 @@ CLASS z2ui5_cl_smpc_app_373 IMPLEMENTATION.
                         )->a( n = `selectedKey`    v = client->_bind( selected_warning )
                         )->a( n = `valueState`     v = `Warning`
                         )->a( n = `valueStateText` v = `This is a Level 1 explanation. The items Lorem and Ipsum are not recommended from the system.`
-                        )->a( n = `items`          v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                        )->a( n = `items`          v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
                         )->tag( n = `Item` ns = `core`
                             )->a( n = `key`  v = `{PRODUCT_ID}`
@@ -117,7 +117,7 @@ CLASS z2ui5_cl_smpc_app_373 IMPLEMENTATION.
                         )->a( n = `selectedKey`    v = client->_bind( selected_success )
                         )->a( n = `valueState`     v = `Success`
                         )->a( n = `valueStateText` v = `success value state text`
-                        )->a( n = `items`          v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                        )->a( n = `items`          v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
                         )->tag( n = `Item` ns = `core`
                             )->a( n = `key`  v = `{PRODUCT_ID}`
@@ -140,7 +140,7 @@ CLASS z2ui5_cl_smpc_app_373 IMPLEMENTATION.
                         )->a( n = `selectedKey`    v = client->_bind( selected_information )
                         )->a( n = `valueState`     v = `Information`
                         )->a( n = `valueStateText` v = `information value state text`
-                        )->a( n = `items`          v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                        )->a( n = `items`          v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
                         )->tag( n = `Item` ns = `core`
                             )->a( n = `key`  v = `{PRODUCT_ID}`

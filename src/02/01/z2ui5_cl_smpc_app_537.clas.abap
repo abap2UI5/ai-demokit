@@ -97,7 +97,7 @@ CLASS z2ui5_cl_smpc_app_537 IMPLEMENTATION.
 
             )->ele( `PlanningCalendar`
                 )->a( n = `id`                        v = `PC1`
-                )->a( n = `startDate`                 v = |\{ path: '{ client->_bind( val = start_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
+                )->a( n = `startDate`                 v = |\{ path: '{ client->_bind_path( start_date ) }', formatter: 'Formatter.DateCreateObject' \}|
                 " handleViewChange only recomputes the two visibilities; viewKey is
                 " bindable, so the key itself is the shared field and the two
                 " expressions below read it - the handler is dropped
@@ -247,9 +247,7 @@ CLASS z2ui5_cl_smpc_app_537 IMPLEMENTATION.
                 )->a( n = `text` v = `Add available built-in views to the example:`
 
             )->ele( `MultiComboBox`
-                )->a( n = `selectionFinish` v = client->_event(
-                          val   = `BUILT_IN_VIEWS`
-                          t_arg = VALUE #( ( `$event.oSource.getSelectedKeys().join(',')` ) ) )
+                )->a( n = `selectionFinish` v = client->_event( val = `BUILT_IN_VIEWS` arg = `$event.oSource.getSelectedKeys().join(',')` )
                 )->a( n = `width`           v = `230px`
                 )->a( n = `placeholder`     v = `Choose built-in views`
 

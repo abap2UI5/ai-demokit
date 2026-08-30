@@ -68,7 +68,7 @@ CLASS z2ui5_cl_smpc_app_475 IMPLEMENTATION.
             " so it happens in ABAP and the two value-state properties are bound
             )->ele( `ComboBox`
                 )->a( n = `id`             v = `idComboBox`
-                )->a( n = `items`          v = |\{ path: '{ client->_bind( val = t_countries path = abap_true ) }', sorter: \{ path: 'TEXT' \} \}|
+                )->a( n = `items`          v = |\{ path: '{ client->_bind_path( t_countries ) }', sorter: \{ path: 'TEXT' \} \}|
                 )->a( n = `selectedKey`    v = client->_bind( selected_key )
                 )->a( n = `value`          v = client->_bind( value )
                 )->a( n = `valueState`     v = client->_bind( value_state )

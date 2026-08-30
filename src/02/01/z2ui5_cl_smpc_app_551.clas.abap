@@ -132,7 +132,7 @@ CLASS z2ui5_cl_smpc_app_551 IMPLEMENTATION.
                 )->a( n = `id`                    v = `SPC1`
                 )->a( n = `class`                 v = `sapUiSmallMarginTop`
                 )->a( n = `title`                 v = `My Calendar`
-                )->a( n = `startDate`             v = |\{ path: '{ client->_bind( val = start_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
+                )->a( n = `startDate`             v = |\{ path: '{ client->_bind_path( start_date ) }', formatter: 'Formatter.DateCreateObject' \}|
                 )->a( n = `stickyMode`            v = client->_bind( sticky_mode )
                 " firstDayOfWeek is an INT property and the Select's key is a string,
                 " so the expression multiplies by 1 - the Number( ) the original calls

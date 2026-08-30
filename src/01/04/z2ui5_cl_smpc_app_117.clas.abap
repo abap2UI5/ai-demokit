@@ -84,7 +84,7 @@ CLASS z2ui5_cl_smpc_app_117 IMPLEMENTATION.
                         )->ele( `ComboBox`
                             )->a( n = `width`       v = `120px`
                             )->a( n = `placeholder` v = `From City`
-                            )->a( n = `items`       v = |\{ path: '{ client->_bind( val = t_cities path = abap_true ) }', sorter: \{ path: 'TEXT' \} \}|
+                            )->a( n = `items`       v = |\{ path: '{ client->_bind_path( t_cities ) }', sorter: \{ path: 'TEXT' \} \}|
 
                             )->ele( `items`
                                 )->tag( n = `Item` ns = `core`
@@ -96,7 +96,7 @@ CLASS z2ui5_cl_smpc_app_117 IMPLEMENTATION.
                         )->ele( `ComboBox`
                             )->a( n = `width`       v = `120px`
                             )->a( n = `placeholder` v = `To City`
-                            )->a( n = `items`       v = |\{ path: '{ client->_bind( val = t_cities path = abap_true ) }', sorter: \{ path: 'TEXT' \} \}|
+                            )->a( n = `items`       v = |\{ path: '{ client->_bind_path( t_cities ) }', sorter: \{ path: 'TEXT' \} \}|
 
                             )->ele( `items`
                                 )->tag( n = `Item` ns = `core`

@@ -54,8 +54,7 @@ CLASS z2ui5_cl_smpc_app_309 IMPLEMENTATION.
 
                 )->tag( n = `Button` ns = `m`
                     )->a( n = `text`  v = `Open ColorPicker in a ResponsivePopover`
-                    )->a( n = `press` v = client->_event( val   = `OPEN_POPOVER`
-                                                          t_arg = VALUE #( ( `$event.oSource.sId` ) ) ) ).
+                    )->a( n = `press` v = client->_event( val = `OPEN_POPOVER` arg = `$event.oSource.sId` ) ).
 
     client->view_display( view->stringify( ) ).
 

@@ -67,7 +67,7 @@ CLASS z2ui5_cl_smpc_app_182 IMPLEMENTATION.
                 )->tag( `Label`
                     )->a( n = `text` v = `Time`
                 )->tag( `TimePicker`
-                    )->a( n = `value` v = |\{ path: '{ client->_bind( val = time path = abap_true ) }', type: 'TimeType', formatOptions: \{ source: \{ pattern: 'HH:mm:ss' \} \} \}|
+                    )->a( n = `value` v = |\{ path: '{ client->_bind_path( time ) }', type: 'TimeType', formatOptions: \{ source: \{ pattern: 'HH:mm:ss' \} \} \}|
 
             )->end(
         )->end(
@@ -88,15 +88,15 @@ CLASS z2ui5_cl_smpc_app_182 IMPLEMENTATION.
                 )->tag( `Label`
                     )->a( n = `text` v = `Short`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = time path = abap_true ) }', type: 'TimeType', formatOptions: \{ style: 'short', source: \{ pattern: 'HH:mm:ss' \} \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( time ) }', type: 'TimeType', formatOptions: \{ style: 'short', source: \{ pattern: 'HH:mm:ss' \} \} \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `Medium`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = time path = abap_true ) }', type: 'TimeType', formatOptions: \{ style: 'medium', source: \{ pattern: 'HH:mm:ss' \} \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( time ) }', type: 'TimeType', formatOptions: \{ style: 'medium', source: \{ pattern: 'HH:mm:ss' \} \} \}|
                 )->tag( `Label`
                     )->a( n = `text` v = `Long`
                 )->tag( `Text`
-                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = time path = abap_true ) }', type: 'TimeType', formatOptions: \{ style: 'long', source: \{ pattern: 'HH:mm:ss' \} \} \}|
+                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( time ) }', type: 'TimeType', formatOptions: \{ style: 'long', source: \{ pattern: 'HH:mm:ss' \} \} \}|
 
             )->end(
         )->end( ).

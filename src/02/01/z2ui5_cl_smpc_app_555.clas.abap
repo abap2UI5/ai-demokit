@@ -126,21 +126,24 @@ CLASS z2ui5_cl_smpc_app_555 IMPLEMENTATION.
                 )->a( n = `viewChange`        v = client->follow_up_action(
                           val   = client->cs_event-control_global
                           t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'viewChange' event fired.` ) ) )
-                )->a( n = `startDate`         v = |\{ path: '{ client->_bind( val = start_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
+                )->a( n = `startDate`         v = |\{ path: '{ client->_bind_path( start_date ) }', formatter: 'Formatter.DateCreateObject' \}|
                 " ROOT-level aggregations: the path has to be the model path
-                " client->_bind( path = abap_true ) resolves to. A bare 'T_' is
+                " client->_bind_path( ) resolves to. A bare 'T_' is
                 " RELATIVE, which is right only inside a row-bound aggregation
                 " (apps 536/545 bind their rows' tables that way) - here it
                 " resolved against nothing and the calendar came up with zero
                 " appointments (e2e-caught 2026-08-22)
-                )->a( n = `nonWorkingPeriods` v = |\{ path: '{ client->_bind( val = t_non_working path = abap_true ) }', templateShareable: false \}|
-                )->a( n = `appointments`      v = |\{ path: '{ client->_bind( val = t_appointments path = abap_true ) }', templateShareable: false \}|
+                )->a( n = `nonWorkingPeriods` v = |\{ path: '{ client->_bind_path( t_non_working ) }', templateShareable: false \}|
+                )->a( n = `appointments`      v = |\{ path: '{ client->_bind_path( t_appointments ) }', templateShareable: false \}|
 
                 )->ele( `nonWorkingPeriods`
                     )->ele( n = `RecurringNonWorkingPeriod` ns = `unified`
                         )->a( n = `date`              v = `{ path: 'DATE_AT', formatter: 'Formatter.DateCreateObject' }`
                         )->a( n = `recurrenceType`    v = |\{= $\{RECURRENCETYPE\} \|\| null \}|
-                        )->a( n = `recurrencePattern` v = `{RECURRENCEPATTERN}`
+                        " setRecurrencePattern raises "recurrencePattern must be >= 1" here too,
+                        " and no ABAP writes a non-working row - the appointments get their 1
+                        " from CREATE_SAVE, these get it from the binding (see sidecar)
+                        )->a( n = `recurrencePattern` v = `{= ${RECURRENCEPATTERN} || 1 }`
                         )->a( n = `recurrenceEndDate` v = `{ path: 'RECURRENCEENDDATE', formatter: 'Formatter.DateCreateObject' }`
 
                         )->ele( n = `timeRange` ns = `unified`
@@ -584,12 +587,18 @@ CLASS z2ui5_cl_smpc_app_555 IMPLEMENTATION.
         ENDIF.
 
       WHEN `CREATE_SAVE`.
-        " onCreateDialogSave pushes the dialog's model into the appointments
-        DATA(new_appointment) = VALUE ty_s_appointment( start_at = c_start
-                                                        end_at   = c_end
-                                                        title    = c_title
-                                                        text     = c_text
-                                                        type     = c_type ).
+        " onCreateDialogSave pushes the dialog's model into the appointments.
+        " The new row carries the CONTROL's own default recurrence pattern:
+        " setRecurrencePattern raises "recurrencePattern must be >= 1", and the
+        " original keeps the default by leaving the property off a non-recurring
+        " appointment - a serialized ABAP structure cannot leave a field out, so
+        " the initial 0 would reach the setter and terminate the app
+        DATA(new_appointment) = VALUE ty_s_appointment( start_at          = c_start
+                                                        end_at            = c_end
+                                                        title             = c_title
+                                                        text              = c_text
+                                                        type              = c_type
+                                                        recurrencepattern = 1 ).
         IF c_rec_type IS NOT INITIAL.
           new_appointment-recurrencetype    = c_rec_type.
           " guarded on characters AND length: c_rec_pattern comes straight from a

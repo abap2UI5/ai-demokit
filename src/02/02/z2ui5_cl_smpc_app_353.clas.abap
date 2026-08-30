@@ -95,11 +95,9 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
                         )->a( n = `id`                    v = `table1`
                         )->a( n = `selectionMode`         v = `Single`
                         )->a( n = `ariaLabelledBy`        v = `title`
-                        )->a( n = `beforeOpenContextMenu` v = client->_event( val   = `CTX_MENU_1`
-                                                                              t_arg = VALUE #( ( `${$parameters>/rowIndex}` ) ) )
+                        )->a( n = `beforeOpenContextMenu` v = client->_event( val = `CTX_MENU_1` arg = `${$parameters>/rowIndex}` )
                         )->a( n = `rows`                  v = client->_bind( t_available )
-                        )->a( n = `rowSelectionChange`    v = client->_event( val   = `SELECT_1`
-                                                                              t_arg = VALUE #( ( `${$parameters>/rowIndex}` ) ) )
+                        )->a( n = `rowSelectionChange`    v = client->_event( val = `SELECT_1` arg = `${$parameters>/rowIndex}` )
 
                         )->ele( `extension`
                             )->ele( n = `OverflowToolbar` ns = `m`
@@ -176,8 +174,7 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
 
                             )->tag( n = `DropInfo` ns = `dnd`
                                 )->a( n = `groupName` v = `moveToTable1`
-                                )->a( n = `drop`      v = client->_event( val   = `DROP_TO_1`
-                                                                          t_arg = VALUE #( ( `${$parameters>/draggedControl}.getIndex()` ) ) )
+                                )->a( n = `drop`      v = client->_event( val = `DROP_TO_1` arg = `${$parameters>/draggedControl}.getIndex()` )
 
                         )->end(
                     )->end(
@@ -201,11 +198,9 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
                         )->a( n = `id`                    v = `table2`
                         )->a( n = `selectionMode`         v = `Single`
                         )->a( n = `ariaLabelledBy`        v = `title2`
-                        )->a( n = `beforeOpenContextMenu` v = client->_event( val   = `CTX_MENU_2`
-                                                                              t_arg = VALUE #( ( `${$parameters>/rowIndex}` ) ) )
+                        )->a( n = `beforeOpenContextMenu` v = client->_event( val = `CTX_MENU_2` arg = `${$parameters>/rowIndex}` )
                         )->a( n = `rows`                  v = client->_bind( t_selected )
-                        )->a( n = `rowSelectionChange`    v = client->_event( val   = `SELECT_2`
-                                                                              t_arg = VALUE #( ( `${$parameters>/rowIndex}` ) ) )
+                        )->a( n = `rowSelectionChange`    v = client->_event( val = `SELECT_2` arg = `${$parameters>/rowIndex}` )
                         )->a( n = `noData`                v = `Please drag-and-drop products here.`
 
                         )->ele( `dependents`

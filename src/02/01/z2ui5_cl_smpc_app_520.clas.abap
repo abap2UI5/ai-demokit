@@ -80,8 +80,7 @@ CLASS z2ui5_cl_smpc_app_520 IMPLEMENTATION.
           " (e2e-caught 2026-08-22, the app 421 idiom).
           )->a( n = `onCollapse`                    v = client->_event( val   = `TOGGLE_COLLAPSE`
                                                                         t_arg = VALUE #( ( |{ group }| ) ( `${$parameters>/collapsed} ? 'collapsed' : 'expanded'` ) ) )
-          )->a( n = `close`                         v = client->_event( val   = `GROUP_CLOSE`
-                                                                        t_arg = VALUE #( ( |{ group }| ) ) )
+          )->a( n = `close`                         v = client->_event( val = `GROUP_CLOSE` arg = |{ group }| )
           )->a( n = `showEmptyGroup`                v = `true`
           )->a( n = `enableCollapseButtonWhenEmpty` v = `true`
           )->a( n = `items`                         v = items
@@ -97,8 +96,7 @@ CLASS z2ui5_cl_smpc_app_520 IMPLEMENTATION.
                                                                   t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reject Button Pressed` ) ) )
               )->tag( `Button`
                   )->a( n = `text`  v = `Get items count`
-                  )->a( n = `press` v = client->_event( val   = `ITEMS_COUNT`
-                                                        t_arg = VALUE #( ( |{ group }| ) ) )
+                  )->a( n = `press` v = client->_event( val = `ITEMS_COUNT` arg = |{ group }| )
 
           )->end(
 

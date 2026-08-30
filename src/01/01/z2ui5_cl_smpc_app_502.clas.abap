@@ -76,8 +76,8 @@ CLASS z2ui5_cl_smpc_app_502 IMPLEMENTATION.
             " anchored to the pressed control
             )->a( n = `titleSelectorPress` v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                          t_arg = VALUE #( ( `myPopover` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
-            )->a( n = `number`             v = |\{ parts:[\{path:'{ client->_bind( val = sel_price path = abap_true ) }'\},| &&
-                                                |\{path:'{ client->_bind( val = sel_currencycode path = abap_true ) }'\}],| &&
+            )->a( n = `number`             v = |\{ parts:[\{path:'{ client->_bind_path( sel_price ) }'\},| &&
+                                                |\{path:'{ client->_bind_path( sel_currencycode ) }'\}],| &&
                                                 | type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
             )->a( n = `numberUnit`         v = client->_bind( sel_currencycode )
             )->a( n = `class`              v = `sapUiResponsivePadding--header`
@@ -98,8 +98,7 @@ CLASS z2ui5_cl_smpc_app_502 IMPLEMENTATION.
                         )->a( n = `includeItemInSelection` v = `true`
                         " handleItemSelect moves the header to the picked row and closes
                         " the popover - the row name travels, ABAP copies the record
-                        )->a( n = `selectionChange`        v = client->_event( val   = `ITEM_SELECT`
-                                                                               t_arg = VALUE #( ( `${$parameters>/listItem}.getTitle()` ) ) )
+                        )->a( n = `selectionChange`        v = client->_event( val = `ITEM_SELECT` arg = `${$parameters>/listItem}.getTitle()` )
                         )->a( n = `items`                  v = client->_bind( t_products )
 
                         )->tag( `StandardListItem`

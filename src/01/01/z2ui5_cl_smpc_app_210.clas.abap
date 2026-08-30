@@ -54,7 +54,7 @@ CLASS z2ui5_cl_smpc_app_210 IMPLEMENTATION.
             )->a( n = `id`                 v = `idProductsTable`
             )->a( n = `inset`              v = `false`
             )->a( n = `alternateRowColors` v = `true`
-            )->a( n = `items`              v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+            )->a( n = `items`              v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
             )->ele( `headerToolbar`
                 )->ele( `OverflowToolbar`

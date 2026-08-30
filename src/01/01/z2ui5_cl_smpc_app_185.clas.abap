@@ -179,8 +179,8 @@ CLASS z2ui5_cl_smpc_app_185 IMPLEMENTATION.
 
                             )->ele( n = `fields` ns = `f`
                                 )->tag( `Token`
-                                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = t_items path = abap_true ) }/9/TEXT' \}|
-                                    )->a( n = `key`  v = |\{ path: '{ client->_bind( val = t_items path = abap_true ) }/9/KEY' \}|
+                                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( t_items ) }/9/TEXT' \}|
+                                    )->a( n = `key`  v = |\{ path: '{ client->_bind_path( t_items ) }/9/KEY' \}|
 
                             )->end(
                         )->end(
@@ -190,7 +190,7 @@ CLASS z2ui5_cl_smpc_app_185 IMPLEMENTATION.
 
                             )->ele( n = `fields` ns = `f`
                                 )->tag( `ObjectStatus`
-                                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = t_items path = abap_true ) }/9/TEXT' \}|
+                                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( t_items ) }/9/TEXT' \}|
 
                             )->end(
                         )->end(
@@ -200,7 +200,7 @@ CLASS z2ui5_cl_smpc_app_185 IMPLEMENTATION.
 
                             )->ele( n = `fields` ns = `f`
                                 )->tag( `ObjectNumber`
-                                    )->a( n = `number` v = |\{ path: '{ client->_bind( val = t_items path = abap_true ) }/9/TEXT' \}|
+                                    )->a( n = `number` v = |\{ path: '{ client->_bind_path( t_items ) }/9/TEXT' \}|
 
                             )->end(
                         )->end(
@@ -210,7 +210,7 @@ CLASS z2ui5_cl_smpc_app_185 IMPLEMENTATION.
 
                             )->ele( n = `fields` ns = `f`
                                 )->tag( `Title`
-                                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = t_items path = abap_true ) }/9/TEXT' \}|
+                                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( t_items ) }/9/TEXT' \}|
 
                             )->end(
                         )->end(
@@ -220,7 +220,7 @@ CLASS z2ui5_cl_smpc_app_185 IMPLEMENTATION.
 
                             )->ele( n = `fields` ns = `f`
                                 )->tag( `Label`
-                                    )->a( n = `text` v = |\{ path: '{ client->_bind( val = t_items path = abap_true ) }/9/TEXT' \}| ).
+                                    )->a( n = `text` v = |\{ path: '{ client->_bind_path( t_items ) }/9/TEXT' \}| ).
 
     client->view_display( view->stringify( ) ).
 

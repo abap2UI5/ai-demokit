@@ -187,10 +187,8 @@ CLASS z2ui5_cl_smpc_app_558 IMPLEMENTATION.
         )->a( n = `id`                v = `idTabContainer`
         )->a( n = `showAddNewButton`  v = `true`
         )->a( n = `addNewButtonPress` v = client->_event( `TAB_ADD_NEW` )
-        )->a( n = `itemClose`         v = client->_event( val   = `TAB_CLOSE`
-                                                          t_arg = VALUE #( ( `${$parameters>/item}.getKey()` ) ) )
-        )->a( n = `itemSelect`        v = client->_event( val   = `TAB_SELECT`
-                                                          t_arg = VALUE #( ( `${$parameters>/item}.getKey()` ) ) )
+        )->a( n = `itemClose`         v = client->_event( val = `TAB_CLOSE` arg = `${$parameters>/item}.getKey()` )
+        )->a( n = `itemSelect`        v = client->_event( val = `TAB_SELECT` arg = `${$parameters>/item}.getKey()` )
         )->a( n = `items`             v = client->_bind( t_tabs )
 
         )->ele( `items`

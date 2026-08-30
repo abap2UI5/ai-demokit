@@ -294,10 +294,19 @@ const metas = fs.readdirSync(META).filter((f) => f.endsWith('.json'))
 metas.sort((a, b) => a.class.localeCompare(b.class));
 
 /* the shard is taken AFTER the sort, so the slice is a property of the corpus
- * and not of readdir order */
-const sharded = SHARD ? metas.filter((_, i) => i % SHARD.total === SHARD.index - 1) : metas;
-metas.length = 0;
-metas.push(...sharded);
+ * and not of readdir order.
+ *
+ * Only under `--shard`: the unsharded branch used to alias `metas` itself, so
+ * `metas.length = 0` emptied the very array the push then read back and EVERY
+ * run without the flag checked zero ports while reporting green - `npm run
+ * e2e`, `--only <class>`, and the full unsharded `--strict` run that
+ * bump-a2ui5.yaml reads as "the e2e smoke over all ports" (2026-08-28 to
+ * 2026-08-29). Rebuild the list only when there is a slice to take. */
+if (SHARD) {
+  const sharded = metas.filter((_, i) => i % SHARD.total === SHARD.index - 1);
+  metas.length = 0;
+  metas.push(...sharded);
+}
 
 console.log(`e2e-smoke: ${metas.length} port(s)${SHARD ? ` (shard ${SHARD.index}/${SHARD.total})` : ''}, backend from ${A2}`);
 const backend = await startBackend();

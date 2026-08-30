@@ -120,7 +120,7 @@ CLASS z2ui5_cl_smpc_app_610 IMPLEMENTATION.
                 )->a( n = `enableAppointmentsResize`      v = client->_bind( enable_resize )
                 )->a( n = `enableAppointmentsCreate`      v = client->_bind( enable_create )
                 )->a( n = `appointments`                  v = client->_bind( t_appointments )
-                )->a( n = `startDate`                     v = |\{ path: '{ client->_bind( val = start_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
+                )->a( n = `startDate`                     v = |\{ path: '{ client->_bind_path( start_date ) }', formatter: 'Formatter.DateCreateObject' \}|
 
                 )->a( n = `appointmentDrop`               v = client->_event(
                           val   = `APPT_DROP`

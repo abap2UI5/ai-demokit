@@ -66,7 +66,7 @@ CLASS z2ui5_cl_smpc_app_622 IMPLEMENTATION.
                 )->a( n = `placeholder`    v = `Enter name`
                 )->a( n = `valueStateText` v = `Name must not be empty. Maximum 10 characters.`
                 )->a( n = `valueState`     v = client->_bind( name_state )
-                )->a( n = `value`          v = |\{ path: '{ client->_bind( val = name path = abap_true ) }', type: 'sap.ui.model.type.String', constraints: \{ minLength: 1, maxLength: 10 \} \}|
+                )->a( n = `value`          v = |\{ path: '{ client->_bind_path( name ) }', type: 'sap.ui.model.type.String', constraints: \{ minLength: 1, maxLength: 10 \} \}|
                 )->a( n = `change`         v = client->_event( `NAME_CHANGE` )
 
             )->tag( `Label`

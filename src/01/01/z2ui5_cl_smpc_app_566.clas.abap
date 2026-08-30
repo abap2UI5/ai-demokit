@@ -119,8 +119,7 @@ CLASS z2ui5_cl_smpc_app_566 IMPLEMENTATION.
 
                         )->tag( `Link`
                             )->a( n = `text`  v = `{TEXT}`
-                            )->a( n = `press` v = client->_event( val   = `CRUMB`
-                                                                  t_arg = VALUE #( ( `${LEVEL}` ) ) )
+                            )->a( n = `press` v = client->_event( val = `CRUMB` arg = `${LEVEL}` )
 
                     )->end(
                 )->end(
@@ -130,7 +129,7 @@ CLASS z2ui5_cl_smpc_app_566 IMPLEMENTATION.
                     )->a( n = `visible` v = client->_bind( has_counts )
 
                     )->tag( `Label`
-                        )->a( n = `text` v = |\{{ client->_bind( val = order_count path = abap_true ) }\} Products Selected|
+                        )->a( n = `text` v = |\{{ client->_bind_path( order_count ) }\} Products Selected|
 
                 )->end(
             )->end(

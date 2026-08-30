@@ -57,7 +57,7 @@ CLASS z2ui5_cl_smpc_app_458 IMPLEMENTATION.
             )->ele( `MultiComboBox`
                 )->a( n = `showSecondaryValues` v = `true`
                 )->a( n = `width`               v = `500px`
-                )->a( n = `items`               v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                )->a( n = `items`               v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
                 )->tag( n = `ListItem` ns = `core`
                     )->a( n = `key`            v = `{PRODUCTID}`

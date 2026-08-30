@@ -68,8 +68,7 @@ CLASS z2ui5_cl_smpc_app_138 IMPLEMENTATION.
                     )->a( n = `class`               v = `sapUiDSCExplored sapUiContentPadding`
                     )->a( n = `sideContentFallDown` v = `BelowM`
                     )->a( n = `containerQuery`      v = `true`
-                    )->a( n = `breakpointChanged`   v = client->_event( val   = `BP_CHANGED`
-                                                                        t_arg = VALUE #( ( `${$parameters>/currentBreakpoint}` ) ) )
+                    )->a( n = `breakpointChanged`   v = client->_event( val = `BP_CHANGED` arg = `${$parameters>/currentBreakpoint}` )
 
                     )->tag( `Title`
                         )->a( n = `level` v = `H1`

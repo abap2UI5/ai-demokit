@@ -61,30 +61,30 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                 " element binding kept 1:1 - each ObjectNumber index-binds a record of the default-model table T_PRODUCTS (see sidecar)
                 )->tag( `ObjectNumber`
                     )->a( n = `class`   v = `sapUiSmallMarginBottom`
-                    )->a( n = `binding` v = |\{{ client->_bind( val = t_products path = abap_true ) }/0\}|
+                    )->a( n = `binding` v = |\{{ client->_bind_path( t_products ) }/0\}|
                     )->a( n = `number`  v = num
                     )->a( n = `unit`    v = `{CURRENCY_CODE}`
                 )->tag( `ObjectNumber`
                     )->a( n = `class`   v = `sapUiSmallMarginBottom`
-                    )->a( n = `binding` v = |\{{ client->_bind( val = t_products path = abap_true ) }/1\}|
+                    )->a( n = `binding` v = |\{{ client->_bind_path( t_products ) }/1\}|
                     )->a( n = `number`  v = num
                     )->a( n = `unit`    v = `{CURRENCY_CODE}`
                     )->a( n = `state`   v = `Error`
                 )->tag( `ObjectNumber`
                     )->a( n = `class`   v = `sapUiSmallMarginBottom`
-                    )->a( n = `binding` v = |\{{ client->_bind( val = t_products path = abap_true ) }/2\}|
+                    )->a( n = `binding` v = |\{{ client->_bind_path( t_products ) }/2\}|
                     )->a( n = `number`  v = num
                     )->a( n = `unit`    v = `{CURRENCY_CODE}`
                     )->a( n = `state`   v = `Warning`
                 )->tag( `ObjectNumber`
                     )->a( n = `class`   v = `sapUiSmallMarginBottom`
-                    )->a( n = `binding` v = |\{{ client->_bind( val = t_products path = abap_true ) }/3\}|
+                    )->a( n = `binding` v = |\{{ client->_bind_path( t_products ) }/3\}|
                     )->a( n = `number`  v = num
                     )->a( n = `unit`    v = `{CURRENCY_CODE}`
                     )->a( n = `state`   v = `Success`
                 )->tag( `ObjectNumber`
                     )->a( n = `class`   v = `sapUiSmallMarginBottom`
-                    )->a( n = `binding` v = |\{{ client->_bind( val = t_products path = abap_true ) }/4\}|
+                    )->a( n = `binding` v = |\{{ client->_bind_path( t_products ) }/4\}|
                     )->a( n = `number`  v = num
                     )->a( n = `unit`    v = `{CURRENCY_CODE}`
                     )->a( n = `state`   v = `Information`
@@ -105,34 +105,34 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                 )->tag( `ObjectNumber`
                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
                     )->a( n = `inverted` v = `true`
-                    )->a( n = `binding`  v = |\{{ client->_bind( val = t_products path = abap_true ) }/0\}|
+                    )->a( n = `binding`  v = |\{{ client->_bind_path( t_products ) }/0\}|
                     )->a( n = `number`   v = num
                     )->a( n = `unit`     v = `{CURRENCY_CODE}`
                 )->tag( `ObjectNumber`
                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
                     )->a( n = `inverted` v = `true`
-                    )->a( n = `binding`  v = |\{{ client->_bind( val = t_products path = abap_true ) }/1\}|
+                    )->a( n = `binding`  v = |\{{ client->_bind_path( t_products ) }/1\}|
                     )->a( n = `number`   v = num
                     )->a( n = `unit`     v = `{CURRENCY_CODE}`
                     )->a( n = `state`    v = `Error`
                 )->tag( `ObjectNumber`
                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
                     )->a( n = `inverted` v = `true`
-                    )->a( n = `binding`  v = |\{{ client->_bind( val = t_products path = abap_true ) }/2\}|
+                    )->a( n = `binding`  v = |\{{ client->_bind_path( t_products ) }/2\}|
                     )->a( n = `number`   v = num
                     )->a( n = `unit`     v = `{CURRENCY_CODE}`
                     )->a( n = `state`    v = `Warning`
                 )->tag( `ObjectNumber`
                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
                     )->a( n = `inverted` v = `true`
-                    )->a( n = `binding`  v = |\{{ client->_bind( val = t_products path = abap_true ) }/3\}|
+                    )->a( n = `binding`  v = |\{{ client->_bind_path( t_products ) }/3\}|
                     )->a( n = `number`   v = num
                     )->a( n = `unit`     v = `{CURRENCY_CODE}`
                     )->a( n = `state`    v = `Success`
                 )->tag( `ObjectNumber`
                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
                     )->a( n = `inverted` v = `true`
-                    )->a( n = `binding`  v = |\{{ client->_bind( val = t_products path = abap_true ) }/4\}|
+                    )->a( n = `binding`  v = |\{{ client->_bind_path( t_products ) }/4\}|
                     )->a( n = `number`   v = num
                     )->a( n = `unit`     v = `{CURRENCY_CODE}`
                     )->a( n = `state`    v = `Information`
@@ -152,7 +152,7 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                 )->tag( `ObjectNumber`
                     )->a( n = `class`   v = `sapUiSmallMarginBottom`
                     )->a( n = `active`  v = `true`
-                    )->a( n = `binding` v = |\{{ client->_bind( val = t_products path = abap_true ) }/0\}|
+                    )->a( n = `binding` v = |\{{ client->_bind_path( t_products ) }/0\}|
                     )->a( n = `press`   v = client->follow_up_action( val   = client->cs_event-control_global
                                                                       t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
                     )->a( n = `number`  v = num
@@ -160,7 +160,7 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                 )->tag( `ObjectNumber`
                     )->a( n = `class`   v = `sapUiSmallMarginBottom`
                     )->a( n = `active`  v = `true`
-                    )->a( n = `binding` v = |\{{ client->_bind( val = t_products path = abap_true ) }/1\}|
+                    )->a( n = `binding` v = |\{{ client->_bind_path( t_products ) }/1\}|
                     )->a( n = `press`   v = client->follow_up_action( val   = client->cs_event-control_global
                                                                       t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
                     )->a( n = `number`  v = num
@@ -169,7 +169,7 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                 )->tag( `ObjectNumber`
                     )->a( n = `class`   v = `sapUiSmallMarginBottom`
                     )->a( n = `active`  v = `true`
-                    )->a( n = `binding` v = |\{{ client->_bind( val = t_products path = abap_true ) }/2\}|
+                    )->a( n = `binding` v = |\{{ client->_bind_path( t_products ) }/2\}|
                     )->a( n = `press`   v = client->follow_up_action( val   = client->cs_event-control_global
                                                                       t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
                     )->a( n = `number`  v = num
@@ -178,7 +178,7 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                 )->tag( `ObjectNumber`
                     )->a( n = `class`   v = `sapUiSmallMarginBottom`
                     )->a( n = `active`  v = `true`
-                    )->a( n = `binding` v = |\{{ client->_bind( val = t_products path = abap_true ) }/3\}|
+                    )->a( n = `binding` v = |\{{ client->_bind_path( t_products ) }/3\}|
                     )->a( n = `press`   v = client->follow_up_action( val   = client->cs_event-control_global
                                                                       t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
                     )->a( n = `number`  v = num
@@ -187,7 +187,7 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                 )->tag( `ObjectNumber`
                     )->a( n = `class`   v = `sapUiSmallMarginBottom`
                     )->a( n = `active`  v = `true`
-                    )->a( n = `binding` v = |\{{ client->_bind( val = t_products path = abap_true ) }/4\}|
+                    )->a( n = `binding` v = |\{{ client->_bind_path( t_products ) }/4\}|
                     )->a( n = `press`   v = client->follow_up_action( val   = client->cs_event-control_global
                                                                       t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
                     )->a( n = `number`  v = num
@@ -210,7 +210,7 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
                     )->a( n = `active`   v = `true`
                     )->a( n = `inverted` v = `true`
-                    )->a( n = `binding`  v = |\{{ client->_bind( val = t_products path = abap_true ) }/0\}|
+                    )->a( n = `binding`  v = |\{{ client->_bind_path( t_products ) }/0\}|
                     )->a( n = `press`    v = client->follow_up_action( val   = client->cs_event-control_global
                                                                        t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
                     )->a( n = `number`   v = num
@@ -219,7 +219,7 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
                     )->a( n = `active`   v = `true`
                     )->a( n = `inverted` v = `true`
-                    )->a( n = `binding`  v = |\{{ client->_bind( val = t_products path = abap_true ) }/1\}|
+                    )->a( n = `binding`  v = |\{{ client->_bind_path( t_products ) }/1\}|
                     )->a( n = `press`    v = client->follow_up_action( val   = client->cs_event-control_global
                                                                        t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
                     )->a( n = `number`   v = num
@@ -229,7 +229,7 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
                     )->a( n = `active`   v = `true`
                     )->a( n = `inverted` v = `true`
-                    )->a( n = `binding`  v = |\{{ client->_bind( val = t_products path = abap_true ) }/2\}|
+                    )->a( n = `binding`  v = |\{{ client->_bind_path( t_products ) }/2\}|
                     )->a( n = `press`    v = client->follow_up_action( val   = client->cs_event-control_global
                                                                        t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
                     )->a( n = `number`   v = num
@@ -239,7 +239,7 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
                     )->a( n = `active`   v = `true`
                     )->a( n = `inverted` v = `true`
-                    )->a( n = `binding`  v = |\{{ client->_bind( val = t_products path = abap_true ) }/3\}|
+                    )->a( n = `binding`  v = |\{{ client->_bind_path( t_products ) }/3\}|
                     )->a( n = `press`    v = client->follow_up_action( val   = client->cs_event-control_global
                                                                        t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
                     )->a( n = `number`   v = num
@@ -249,7 +249,7 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
                     )->a( n = `active`   v = `true`
                     )->a( n = `inverted` v = `true`
-                    )->a( n = `binding`  v = |\{{ client->_bind( val = t_products path = abap_true ) }/4\}|
+                    )->a( n = `binding`  v = |\{{ client->_bind_path( t_products ) }/4\}|
                     )->a( n = `press`    v = client->follow_up_action( val   = client->cs_event-control_global
                                                                        t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
                     )->a( n = `number`   v = num
@@ -269,7 +269,7 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                 )->a( n = `design` v = `Bold`
             )->tag( `ObjectNumber`
                 )->a( n = `class`      v = `sapMObjectNumberLarge`
-                )->a( n = `binding`    v = |\{{ client->_bind( val = t_products path = abap_true ) }/5\}|
+                )->a( n = `binding`    v = |\{{ client->_bind_path( t_products ) }/5\}|
                 )->a( n = `number`     v = num
                 )->a( n = `unit`       v = `{CURRENCY_CODE}`
                 )->a( n = `emphasized` v = `false`
@@ -282,7 +282,7 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
             )->tag( `ObjectNumber`
                 )->a( n = `class`      v = `sapMObjectNumberLarge`
                 )->a( n = `active`     v = `true`
-                )->a( n = `binding`    v = |\{{ client->_bind( val = t_products path = abap_true ) }/5\}|
+                )->a( n = `binding`    v = |\{{ client->_bind_path( t_products ) }/5\}|
                 )->a( n = `press`      v = client->follow_up_action( val   = client->cs_event-control_global
                                                                      t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
                 )->a( n = `number`     v = num
@@ -301,7 +301,7 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                     )->tag( `ObjectNumber`
                         )->a( n = `class`      v = `sapMObjectNumberLongText`
                         )->a( n = `active`     v = `true`
-                        )->a( n = `binding`    v = |\{{ client->_bind( val = t_products path = abap_true ) }/5\}|
+                        )->a( n = `binding`    v = |\{{ client->_bind_path( t_products ) }/5\}|
                         )->a( n = `press`      v = client->follow_up_action( val   = client->cs_event-control_global
                                                                              t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
                         )->a( n = `number`     v = `12345678901234567890`

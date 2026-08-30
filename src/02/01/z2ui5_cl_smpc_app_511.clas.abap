@@ -59,7 +59,7 @@ CLASS z2ui5_cl_smpc_app_511 IMPLEMENTATION.
                 )->ele( `Select`
                     )->a( n = `forceSelection` v = `false`
                     )->a( n = `selectedKey`    v = client->_bind( selected_product )
-                    )->a( n = `items`          v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                    )->a( n = `items`          v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
                     )->a( n = `change`         v = client->follow_up_action( val   = client->cs_event-control_global
                                                                              t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` )
                                                                                               ( `change event fired! ` && |\n| && ` Selected Item id: {0}` && |\n| && `Previously Selected Item id: {1}` )

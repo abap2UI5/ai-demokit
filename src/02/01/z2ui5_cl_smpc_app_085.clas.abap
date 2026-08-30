@@ -76,8 +76,7 @@ CLASS z2ui5_cl_smpc_app_085 IMPLEMENTATION.
                 )->a( n = `id`          v = `tokenizer`
                 )->a( n = `width`       v = `65%`
                 )->a( n = `editable`    v = client->_bind( editable )
-                )->a( n = `tokenDelete` v = client->_event( val   = `DELETE`
-                                                            t_arg = VALUE #( ( `$event.getParameter('tokens')[0].getKey()` ) ) )
+                )->a( n = `tokenDelete` v = client->_event( val = `DELETE` arg = `$event.getParameter('tokens')[0].getKey()` )
                 )->a( n = `tokens`      v = client->_bind( t_tokens )
 
                 )->tag( `Token`

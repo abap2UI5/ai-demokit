@@ -126,8 +126,7 @@ CLASS z2ui5_cl_smpc_app_238 IMPLEMENTATION.
                             )->ele( `GenericTag`
                                 )->a( n = `text`   v = `SR`
                                 )->a( n = `status` v = `Error`
-                                )->a( n = `press`  v = client->_event( val   = `GENERIC_TAG_PRESS`
-                                                                       t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+                                )->a( n = `press`  v = client->_event( val = `GENERIC_TAG_PRESS` arg = `$event.oSource.sId` )
                                 )->a( n = `design` v = `StatusIconHidden`
                                 )->tag( `ObjectNumber`
                                     )->a( n = `number`     v = `2`
@@ -216,7 +215,7 @@ CLASS z2ui5_cl_smpc_app_238 IMPLEMENTATION.
                                 )->a( n = `id`     v = `idProductsTable`
                                 )->a( n = `inset`  v = `false`
                                 )->a( n = `sticky` v = `HeaderToolbar,ColumnHeaders`
-                                )->a( n = `items`  v = |\{ path: '{ client->_bind( val = productcollection path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                                )->a( n = `items`  v = |\{ path: '{ client->_bind_path( productcollection ) }', sorter: \{ path: 'NAME' \} \}|
                                 )->a( n = `class`  v = `sapUiSmallNegativeMarginBeginEnd`
                                 )->a( n = `width`  v = `auto`
 

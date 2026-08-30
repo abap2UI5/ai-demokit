@@ -73,14 +73,13 @@ CLASS z2ui5_cl_smpc_app_574 IMPLEMENTATION.
         )->ele( `Table`
             )->a( n = `id`                 v = `idProductsTable`
             )->a( n = `mode`               v = `MultiSelect`
-            )->a( n = `items`              v = |\{ path: '{ client->_bind( val = t_rows path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+            )->a( n = `items`              v = |\{ path: '{ client->_bind_path( t_rows ) }', sorter: \{ path: 'NAME' \} \}|
             )->a( n = `itemActionCount`    v = `1`
             )->a( n = `rememberSelections` v = `false`
             )->a( n = `selectionChange`    v = client->_event( `ROW_SELECTION` )
             " onItemActionPress deletes the row the action was fired on; the event
             " ships the list item, so its ProductId travels with it
-            )->a( n = `itemActionPress`    v = client->_event( val   = `ITEM_ACTION`
-                                                               t_arg = VALUE #( ( `${$parameters>/listItem}.getBindingContext().getProperty('PRODUCTID')` ) ) )
+            )->a( n = `itemActionPress`    v = client->_event( val = `ITEM_ACTION` arg = `${$parameters>/listItem}.getBindingContext().getProperty('PRODUCTID')` )
             " onSelectionChange of the ComboBox calls setMultiSelectionMode - see
             " the sidecar; the real property is multiSelectMode and it is bindable
             )->a( n = `multiSelectMode`    v = client->_bind( select_mode )
@@ -104,8 +103,7 @@ CLASS z2ui5_cl_smpc_app_574 IMPLEMENTATION.
                         )->a( n = `id`          v = `idSearchField`
                         )->a( n = `width`       v = `15rem`
                         )->a( n = `placeholder` v = `Search products...`
-                        )->a( n = `search`      v = client->_event( val   = `SEARCH`
-                                                                    t_arg = VALUE #( ( `${$parameters>/query}` ) ) )
+                        )->a( n = `search`      v = client->_event( val = `SEARCH` arg = `${$parameters>/query}` )
                     )->tag( `Label`
                         )->a( n = `text`     v = `Extended view`
                         )->a( n = `labelFor` v = `extViewSwitch`

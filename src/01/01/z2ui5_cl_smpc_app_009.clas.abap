@@ -66,7 +66,7 @@ CLASS z2ui5_cl_smpc_app_009 IMPLEMENTATION.
         )->ele( `Table`
             )->a( n = `id`          v = `idProductsTable`
             )->a( n = `inset`       v = `false`
-            )->a( n = `items`       v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+            )->a( n = `items`       v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
             )->a( n = `sticky`      v = client->_bind( t_sticky )
             )->a( n = `popinLayout` v = |\{= ${ client->_bind( popin_key ) } === 'GridLarge' \|\| ${ client->_bind( popin_key ) } === 'GridSmall' ? ${ client->_bind( popin_key ) } : 'Block' \}|
 

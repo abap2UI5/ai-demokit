@@ -144,7 +144,7 @@ CLASS z2ui5_cl_smpc_app_186 IMPLEMENTATION.
                                 )->ele( `Select`
                                     )->a( n = `forceSelection` v = `false`
                                     )->a( n = `selectedKey`    v = `1239102`
-                                    )->a( n = `items`          v = |\{ path: '{ client->_bind( val = productcollection path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                                    )->a( n = `items`          v = |\{ path: '{ client->_bind_path( productcollection ) }', sorter: \{ path: 'NAME' \} \}|
 
                                     )->tag( n = `Item` ns = `core`
                                         )->a( n = `key`  v = `{PRODUCTID}`

@@ -71,7 +71,7 @@ CLASS z2ui5_cl_smpc_app_490 IMPLEMENTATION.
                 )->a( n = `selectionFinish` v = client->_event( `SELECTION_FINISH` )
                 )->a( n = `selectedKeys`    v = client->_bind( t_selected_key )
                 )->a( n = `width`           v = `350px`
-                )->a( n = `items`           v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                )->a( n = `items`           v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
 
                 )->tag( n = `Item` ns = `core`
                     )->a( n = `key`  v = `{PRODUCTID}`

@@ -62,8 +62,7 @@ CLASS z2ui5_cl_smpc_app_499 IMPLEMENTATION.
                     " onSearch filters the items binding by Name - the same declarative
                     " filter on the aggregation binding, the model untouched
                     )->tag( `SearchField`
-                        )->a( n = `liveChange` v = client->_event( val   = `SEARCH`
-                                                                   t_arg = VALUE #( ( `${$parameters>/newValue}` ) ) )
+                        )->a( n = `liveChange` v = client->_event( val = `SEARCH` arg = `${$parameters>/newValue}` )
                         )->a( n = `width`      v = `80%`
 
                 )->end(

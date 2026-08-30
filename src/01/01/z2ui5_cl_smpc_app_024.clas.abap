@@ -52,8 +52,7 @@ CLASS z2ui5_cl_smpc_app_024 IMPLEMENTATION.
         )->a( n = `xmlns`     v = `sap.m`
 
         )->tag( `FeedInput`
-            )->a( n = `post`  v = client->_event( val   = `POST`
-                                                  t_arg = VALUE #( ( `${$parameters>/value}` ) ) )
+            )->a( n = `post`  v = client->_event( val = `POST` arg = `${$parameters>/value}` )
             )->a( n = `icon`  v = `https://sdk.openui5.org/test-resources/sap/m/images/dronning_victoria.jpg`
             )->a( n = `class` v = `sapUiSmallMarginTopBottom`
 
@@ -64,10 +63,8 @@ CLASS z2ui5_cl_smpc_app_024 IMPLEMENTATION.
             )->tag( `FeedListItem`
                 )->a( n = `sender`                   v = `{AUTHOR}`
                 )->a( n = `icon`                     v = `{AUTHOR_PIC_URL}`
-                )->a( n = `senderPress`              v = client->_event( val   = `SENDER_PRESS`
-                                                                         t_arg = VALUE #( ( `${$source>/sender}` ) ) )
-                )->a( n = `iconPress`                v = client->_event( val   = `ICON_PRESS`
-                                                                         t_arg = VALUE #( ( `${$source>/sender}` ) ) )
+                )->a( n = `senderPress`              v = client->_event( val = `SENDER_PRESS` arg = `${$source>/sender}` )
+                )->a( n = `iconPress`                v = client->_event( val = `ICON_PRESS` arg = `${$source>/sender}` )
                 )->a( n = `info`                     v = `{TYPE}`
                 )->a( n = `timestamp`                v = `{DATE}`
                 )->a( n = `text`                     v = `{TEXT}`

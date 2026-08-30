@@ -1112,7 +1112,7 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` before it - so the begin-column swap needs abap2UI5 at 977474af or later. **Updated 2026-08-27, later the same day:** that commit was squash-merged into abap2UI5 main as ``56ff2a10`` (#2669), which`.
     lv_text1 = lv_text1 && ` means ``977474af`` is now on NO branch at all - it is reachable only as a dangling object, so cite ``56ff2a10`` for where the fix lives and ``977474af`` only for what was measured above. The corpus` &&
                ` harness (``.abap2UI5``, cloned with A2UI5_BRANCH=main) therefore no longer carries the broken cast, and the ``ddbdd136`` reading is what it held before the merge, not what it holds now. **Closed` &&
-               ` 2026-08-28:** the PIN was the separate question and it has caught up - ``A2UI5_PIN`` is ``2567ee10``, which carries the ``pageId`` kind, so the reproducible builds do the begin-column swap too. The` &&
+               ` 2026-08-28:** the PIN was the separate question and it has caught up - ``A2UI5_PIN`` is ``c10edf1a``, which carries the ``pageId`` kind, so the reproducible builds do the begin-column swap too. The` &&
                ` port was never changed by any of this. // NOTE: the begin column's page is LIVE control state, and view_display( ) loses it. A FlexibleColumnLayout column position lives in the control tree, which` &&
                ` view_display( ) destroys and XMLView.create rebuilds, so the begin column falls back to the FIRST beginColumnPages entry (categoriesPage) - while layout, t_rows and the D_* detail fields are class` &&
                ` state that survive the round trip and the draft. Measured 2026-08-27 against a framework carrying the FCL ``to`` fix (abap2UI5 977474af): press a category (begin column on dynamicPageId, eleven`.
@@ -1146,11 +1146,11 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` sentence, 'the ``to`` never moved the BEGIN column onto the products page'. What 2026-08-25 verified stands for the mid and end columns and the layout states; the begin-column swap is verified as of` &&
                ` 2026-08-27 against a framework built at abap2UI5 977474af, and remains UNVERIFIED against the framework the nightly actually runs (main), where it cannot pass. **Updated 2026-08-27, later the same` &&
                ` day:** ``977474af`` merged to main as ``56ff2a10`` (#2669), so that clause expired - the canary path (A2UI5_BRANCH=main) builds a framework that CARRIES the fix. **Closed 2026-08-28:** so does the`.
-    lv_text1 = lv_text1 && ` PINNED path. The 2026-08-27 bump-a2ui5 run had failed on app 233 (``boot: the PurchaseID input did not render``), which #157 fixed as a real port defect; the next run moved ``A2UI5_PIN`` to` &&
-               ` ``2567ee10``, and the begin-column leg is verified against both paths from now on. // NOTE: mvc:View displayBlock="true" has no counterpart: it is a Component-app setting that makes the view fill the` &&
-               ` page when it is the root of a Component, and abap2UI5 owns the view container itself. FlexibleColumnLayout stateChange is wired in the sample only to rewrite the URL through the router after a` &&
-               ` navigation arrow was used; there is no URL to rewrite here, so the port drops it. // NOTE: Component.js raises the model size limit; the port issues cs_event-set_size_limit for MAIN. The collection` &&
-               ` is 123 rows and the JSONModel caps a bound aggregation at 100, so without it the table stopped 23 rows short of the count its own title reports.`.
+    lv_text1 = lv_text1 && ` PINNED path. The 2026-08-27 bump-a2ui5 run had failed on app 233 (``boot: the PurchaseID input did not render``), which #157 fixed as a real port defect; the next run moved ``A2UI5_PIN`` on, and the` &&
+               ` begin-column leg is verified against both paths from now on. // NOTE: mvc:View displayBlock="true" has no counterpart: it is a Component-app setting that makes the view fill the page when it is the` &&
+               ` root of a Component, and abap2UI5 owns the view container itself. FlexibleColumnLayout stateChange is wired in the sample only to rewrite the URL through the router after a navigation arrow was used;` &&
+               ` there is no URL to rewrite here, so the port drops it. // NOTE: Component.js raises the model size limit; the port issues cs_event-set_size_limit for MAIN. The collection is 123 rows and the` &&
+               ` JSONModel caps a bound aggregation at 100, so without it the table stopped 23 rows short of the count its own title reports.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.FlexibleColumnLayout`            name = `FlexibleColumnLayoutWithFullscreenPage`        class = `z2ui5_cl_smpc_app_578` path = `src/02/04/z2ui5_cl_smpc_app_578.clas.abap`
         score = 5
@@ -3627,11 +3627,11 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` completed trip and caught up as soon as typing paused. The round-trip-free form was measured and rejected on 2026-08-23 for one reason: castArgAuto mapped an empty argument to the BOOLEAN false, and`.
     lv_text1 = lv_text1 && ` UI5 casts a non-string implicitly for a string-typed property ( + oValue in ManagedObject.validateProperty), so clearing the input rendered the literal word 'false' - the one keystroke this sample is` &&
                ` about. Filed as control-action-empty-string-arg in abap2UI5's backlog and CLOSED there on 2026-08-24: a setXxx whose property UI5 declares as ``string`` has its first argument passed through` &&
-               ` untouched, so an empty argument reaches the control as "". The fix reached the reproducible builds when A2UI5_PIN moved to ``2567ee10`` on 2026-08-28, which is what unblocked the swap. // NOTE:` &&
-               ` /ValueLiveUpdate and /InputValue are plain model fields in the original too; the port binds the same three fields two-way (Switch state, Input value/valueLiveUpdate, the second Text), so only the` &&
-               ` getValue Text needs the wire. // NOTE: The per-keystroke liveChange wire and the valueLiveUpdate switch driving when the model value follows are unverified in a running system. **e2e-verified` &&
-               ` 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_462.mjs). **Rewritten 2026-08-28** for the round-trip-free wire: the module now types with no delay (there is no trip to`.
-    lv_text1 = lv_text1 && ` drop an event any more) and asserts the empty-input case explicitly - the Text must go EMPTY, not read the literal word 'false', which is the defect the old wire existed to avoid.`.
+               ` untouched, so an empty argument reaches the control as "". The fix reached the reproducible builds when A2UI5_PIN moved on 2026-08-28, which is what unblocked the swap. // NOTE: /ValueLiveUpdate and` &&
+               ` /InputValue are plain model fields in the original too; the port binds the same three fields two-way (Switch state, Input value/valueLiveUpdate, the second Text), so only the getValue Text needs the` &&
+               ` wire. // NOTE: The per-keystroke liveChange wire and the valueLiveUpdate switch driving when the model value follows are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e` &&
+               ` interaction, meta/interactions/z2ui5_cl_smpc_app_462.mjs). **Rewritten 2026-08-28** for the round-trip-free wire: the module now types with no delay (there is no trip to drop an event any more) and`.
+    lv_text1 = lv_text1 && ` asserts the empty-input case explicitly - the Text must go EMPTY, not read the literal word 'false', which is the defect the old wire existed to avoid.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Input`                           name = `InputValueUpdate`                              class = `z2ui5_cl_smpc_app_462` path = `src/01/01/z2ui5_cl_smpc_app_462.clas.abap`
         score = 3
@@ -4492,10 +4492,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` message fires its preventDefault wire and raises the toast (2026-08-23, headless). What stays unverified in a running system is the interaction a person performs: opening the suggestion popover and`.
     lv_text1 = lv_text1 && ` picking a row so that MultiInput itself calls the registered validator - the assertion reaches the validator's code through the companion rather than through the popup, which measures zero unthemed.` &&
                ` **e2e-verified 2026-08-26** (meta/interactions/z2ui5_cl_smpc_app_612.mjs, four consecutive green runs against a backend built from abap2UI5 main tip ddbdd13 via A2UI5_BRANCH=main - the canary path` &&
-               ` the nightly uses, not the A2UI5_PIN one, because the pinned framework of that day predated the TokenKeyCell/TokenTextCells properties this port needs; the pin caught up on 2026-08-28 (``2567ee10``)).` &&
-               ` // NOTE: The price cell keeps the original's composite sap.ui.model.type.Currency binding rather than binding the raw field. The type is not a pass-through: NumberFormat's currency instance applies` &&
-               ` grouping and the currency's own fraction digits, so EUR renders 956.00 / 1,249.00 where the bare field renders 956 / 1249. The earlier justification - that the fold is what the formatter renders` &&
-               ` because the mock's prices are plain numbers - was wrong on both halves.`.
+               ` the nightly uses, not the A2UI5_PIN one, because the pinned framework of that day predated the TokenKeyCell/TokenTextCells properties this port needs; the pin caught up on 2026-08-28). // NOTE: The` &&
+               ` price cell keeps the original's composite sap.ui.model.type.Currency binding rather than binding the raw field. The type is not a pass-through: NumberFormat's currency instance applies grouping and` &&
+               ` the currency's own fraction digits, so EUR renders 956.00 / 1,249.00 where the bare field renders 956 / 1249. The earlier justification - that the fold is what the formatter renders because the` &&
+               ` mock's prices are plain numbers - was wrong on both halves.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputFilteringSuggestions`                class = `z2ui5_cl_smpc_app_612` path = `src/02/01/z2ui5_cl_smpc_app_612.clas.abap`
         score = 5
@@ -4518,9 +4518,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` empty, unbound tokens aggregation behind it (2026-08-23, headless). What stays unverified in a running system is the interaction a person performs: opening either suggestion popover, seeing the grey` &&
                ` supplier group headers rendered in it, and picking a row so that MultiInput itself calls the registered validator. **e2e-verified 2026-08-26** (meta/interactions/z2ui5_cl_smpc_app_613.mjs, four` &&
                ` consecutive green runs against a backend built from abap2UI5 main tip ddbdd13 via A2UI5_BRANCH=main - the canary path the nightly uses, not the A2UI5_PIN one, because the pinned framework of that day`.
-    lv_text1 = lv_text1 && ` predated the TokenKeyCell/TokenTextCells properties this port needs; the pin caught up on 2026-08-28 (``2567ee10``)). // NOTE: The price cell keeps the original's composite sap.ui.model.type.Currency` &&
-               ` binding rather than binding the raw field. The type is not a pass-through: NumberFormat's currency instance applies grouping and the currency's own fraction digits, so EUR renders 956.00 / 1,249.00` &&
-               ` where the bare field renders 956 / 1249. The earlier justification - that the fold is what the formatter renders because the mock's prices are plain numbers - was wrong on both halves.`.
+    lv_text1 = lv_text1 && ` predated the TokenKeyCell/TokenTextCells properties this port needs; the pin caught up on 2026-08-28). // NOTE: The price cell keeps the original's composite sap.ui.model.type.Currency binding rather` &&
+               ` than binding the raw field. The type is not a pass-through: NumberFormat's currency instance applies grouping and the currency's own fraction digits, so EUR renders 956.00 / 1,249.00 where the bare` &&
+               ` field renders 956 / 1249. The earlier justification - that the fold is what the formatter renders because the mock's prices are plain numbers - was wrong on both halves.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputGrouping`                            class = `z2ui5_cl_smpc_app_613` path = `src/01/01/z2ui5_cl_smpc_app_613.clas.abap`
         score = 4
@@ -5467,18 +5467,28 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` fields here and every visibility expression the fragment carries reads them directly. // NOTE: _openCreateDialog fills the person Select by ADDING an Item per row of the people table in the` &&
                ` controller. The port binds a small key/text table built from the same rows instead, so the Select carries the same entries declaratively. // NOTE: onAppointmentCreate opens the create dialog pre-set` &&
                ` to the row the drag started in and to the dragged interval; the row's binding path and the interval's LOCAL date parts travel with the event. onCreateDialogSave assembles the appointment and pushes` &&
-               ` it into the picked person's row, with the same recurrence branches the original applies. // NOTE: onAppointmentDrop shifts the appointment by the dragged DELTA and then copies it, moves it to another` &&
-               ` row, or just reschedules it in place - the three branches and their three toasts are kept. The new start and end already carry the delta, so the port re-dates the row from the two interval bounds the` &&
-               ` event hands it; the appointment's and the row's binding paths name the source and the target. // IMPROVISED: onCreateAppointment seeds the dialog with the CLIENT's next full hour`.
-    lv_text1 = lv_text1 && ` (UI5Date.getInstance() with minutes zeroed). A backend has no client clock, so the port seeds the SERVER's local date and next full hour instead. Same shape, a different clock - which matters only if` &&
-               ` the two are in different time zones. // NOTE: The row images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org. // NOTE: The recurring appointments and non-working periods,` &&
-               ` the create dialog with its recurrence branches, the drag-create and the drop's copy / move / reschedule branches are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e` &&
-               ` interaction, meta/interactions/z2ui5_cl_smpc_app_548.mjs). // NOTE: The two DateTimePickers and the recurrence DatePicker bind their value UNTYPED, where the original binds them with type` &&
-               ` sap.ui.model.type.DateTime / sap.ui.model.type.Date and formatOptions { pattern: 'yyyy-MM-dd HH:mm' } / { pattern: 'yyyy-MM-dd' } (CreateAppointmentDialog.fragment.xml:34,40,118). The port keeps the` &&
-               ` path and carries the pattern as valueFormat + displayFormat instead, which is not a cosmetic choice: a typed binding with a source pattern raises on the EMPTY value the recurrence picker seeds with`.
-    lv_text1 = lv_text1 && ` and a cleared picker sends, which is why apps 549 and 609 settled on the same form. Until 2026-08-26 the port declared neither, and that was a real defect rather than a simplification - an` &&
-               ` unformatted picker writes a LOCALE string back through the two-way binding. Measured in de-DE: picking 4 March 2025 stored '04.03.2025, 10:15:00', which Formatter.DateCreateObject's new Date( ) reads` &&
-               ` month-first, so the appointment was drawn on 3 April. structural-diff cannot see this class at all - the port HAS a value attribute, so nothing reads as missing.`.
+               ` it into the picked person's row, with the same recurrence branches the original applies. // NOTE: ``recurrencePattern`` carries ``defaultValue: 1`` and ``setRecurrencePattern`` REJECTS anything below` &&
+               ` it (``throw new Error("recurrencePattern must be >= 1")``, RecurringCalendarAppointment.js:163). onCreateDialogSave writes the property only inside its ``if (oData.recurrenceType)`` branch, so a` &&
+               ` NON-recurring new appointment carries no such key at all and the control keeps its default. An ABAP structure always serializes every field, so the port's initial 0 reached the setter through the`.
+    lv_text1 = lv_text1 && ` ``{RECURRENCEPATTERN}`` binding and terminated the app the first time an appointment was created without a recurrence (reported 2026-08-29 from a Developer Tools export on UI5 1.150 -` &&
+               ` ``_processAfterRendering: unexpected error - recurrencePattern must be >= 1``; reproduced standalone on OpenUI5 1.151, where pattern 0 throws while the view is created and pattern 1 renders three` &&
+               ` appointments). The port therefore seeds the new row with the control's own default, ``recurrencepattern = 1``, and the recurrence branch overwrites it as before. The sibling` &&
+               ` ``sap.ui.unified.RecurringNonWorkingPeriod.recurrencePattern`` has the identical setter (``RecurringNonWorkingPeriod.js:145``), but no ABAP writes a non-working row - they are only seeded - so that` &&
+               ` one carries the default in the BINDING instead: the port writes ``recurrencePattern="{= ${RECURRENCEPATTERN} || 1 }"`` where the original writes ``{recurrencePattern}``, which is the ``binding` &&
+               ` value`` difference structural-diff reports for it. Measured on OpenUI5 1.151: bound 0 throws, the expression renders 0 as the control's 1 and leaves a real 2 alone, and an EMPTY non-working table is`.
+    lv_text1 = lv_text1 && ` safe either way because a template with no row behind it keeps the default. // NOTE: onAppointmentDrop shifts the appointment by the dragged DELTA and then copies it, moves it to another row, or just` &&
+               ` reschedules it in place - the three branches and their three toasts are kept. The new start and end already carry the delta, so the port re-dates the row from the two interval bounds the event hands` &&
+               ` it; the appointment's and the row's binding paths name the source and the target. // IMPROVISED: onCreateAppointment seeds the dialog with the CLIENT's next full hour (UI5Date.getInstance() with` &&
+               ` minutes zeroed). A backend has no client clock, so the port seeds the SERVER's local date and next full hour instead. Same shape, a different clock - which matters only if the two are in different` &&
+               ` time zones. // NOTE: The row images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org. // NOTE: The recurring appointments and non-working periods, the create dialog with its` &&
+               ` recurrence branches, the drag-create and the drop's copy / move / reschedule branches are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction,`.
+    lv_text1 = lv_text1 && ` meta/interactions/z2ui5_cl_smpc_app_548.mjs). The dialog's save path - creating an appointment with NO recurrence, the case that used to terminate the app - is covered by the same interaction since` &&
+               ` 2026-08-29. // NOTE: The two DateTimePickers and the recurrence DatePicker bind their value UNTYPED, where the original binds them with type sap.ui.model.type.DateTime / sap.ui.model.type.Date and` &&
+               ` formatOptions { pattern: 'yyyy-MM-dd HH:mm' } / { pattern: 'yyyy-MM-dd' } (CreateAppointmentDialog.fragment.xml:34,40,118). The port keeps the path and carries the pattern as valueFormat +` &&
+               ` displayFormat instead, which is not a cosmetic choice: a typed binding with a source pattern raises on the EMPTY value the recurrence picker seeds with and a cleared picker sends, which is why apps` &&
+               ` 549 and 609 settled on the same form. Until 2026-08-26 the port declared neither, and that was a real defect rather than a simplification - an unformatted picker writes a LOCALE string back through` &&
+               ` the two-way binding. Measured in de-DE: picking 4 March 2025 stored '04.03.2025, 10:15:00', which Formatter.DateCreateObject's new Date( ) reads month-first, so the appointment was drawn on 3 April.`.
+    lv_text1 = lv_text1 && ` structural-diff cannot see this class at all - the port HAS a value attribute, so nothing reads as missing.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.PlanningCalendar`                name = `PlanningCalendarRecurringItem`                 class = `z2ui5_cl_smpc_app_548` path = `src/02/01/z2ui5_cl_smpc_app_548.clas.abap`
         score = 5
@@ -6293,10 +6303,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` scripts/probes/control-valued-event-arg-probe.mjs (candidate dateRange-array, real OpenUI5) showed DateRange.startDate is a Date-typed property, which JSON.stringify wrote through toISOString(), so` &&
                ` LOCAL midnight of 2018-07-09 arrived as "2018-07-08T22:00:00.000Z" in a browser at Europe/Berlin - a day early, where the original prints a LOCAL rendering (west of Greenwich and in UTC it was` &&
                ` correct, so a CI run in UTC reported a false all-clear). abap2UI5 closed that on 2026-08-24 (backlog item event-arg-date-utc-shift): projectValue serializes a Date as its LOCAL parts, an ISO local`.
-    lv_text1 = lv_text1 && ` timestamp with no Z, because these properties carry a calendar day and not an instant. The fix reached the reproducible builds when A2UI5_PIN moved to ``2567ee10`` on 2026-08-28, and the array is` &&
-               ` transported since. App 060's parent-chain breadcrumb is a different boundary and stays open on its own reasoning. What still differs is the RENDERING of the one line: the port prints the yyyy-MM-dd` &&
-               ` day taken from the marshalled ISO local timestamp, the original prints getStartDate().toDateString() ('Mon Jul 09 2018') - a JS locale rendering, not a value, and rebuilding it in ABAP would put a` &&
-               ` formatting decision in the backend that the sample does not depend on. // POST-1.71: Formatter.DateCreateObject is referenced via core:require (UI5 >= 1.74). sap.m.SinglePlanningCalendar and its` &&
+    lv_text1 = lv_text1 && ` timestamp with no Z, because these properties carry a calendar day and not an instant. The fix reached the reproducible builds when A2UI5_PIN moved on 2026-08-28, and the array is transported since.` &&
+               ` App 060's parent-chain breadcrumb is a different boundary and stays open on its own reasoning. What still differs is the RENDERING of the one line: the port prints the yyyy-MM-dd day taken from the` &&
+               ` marshalled ISO local timestamp, the original prints getStartDate().toDateString() ('Mon Jul 09 2018') - a JS locale rendering, not a value, and rebuilding it in ABAP would put a formatting decision` &&
+               ` in the backend that the sample does not depend on. // POST-1.71: Formatter.DateCreateObject is referenced via core:require (UI5 >= 1.74). sap.m.SinglePlanningCalendar and its` &&
                ` DayView/WorkWeekView/WeekView are since 1.61 and MonthView since 1.69 (corrected 2026-08-23 - all four had been listed at 1.61; both figures sit inside the 1.71 floor, so scope and the version floor` &&
                ` are unaffected, but the pinned fact was wrong). Also the SinglePlanningCalendar events weekNumberPress and selectedDatesChange (@since 1.123) are kept 1:1 from the original view; newer than 1.71,`.
     lv_text1 = lv_text1 && ` declared per the property-171 policy. // POST-1.71: the icon ``sap-icon://select-appointments`` reached the SAP icon font in 1.96 and is kept 1:1 from the original Page.view.xml, which names it on` &&
@@ -6360,17 +6370,26 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` fragment with its own named model (create>). abap2UI5 keeps one default model, so the dialog's fourteen fields are folded to flat fields here and every visibility expression the fragment carries`.
     lv_text1 = lv_text1 && ` reads them directly - the fragment's own expression bindings survive one-to-one. // NOTE: onCreateDialogSave assembles the new appointment from the dialog model, pushes it into the appointments` &&
                ` array, closes the dialog and toasts. All four are reproduced on the round-trip, including the recurrence branches (the weekly day list only when Weekly, the rule fields only for Monthly / Yearly and` &&
-               ` the month only for Yearly) and the parseInt fallbacks the original applies. onRecurrenceTypeChange clears the parts the picked recurrence does not use, also 1:1. // IMPROVISED: onCreateAppointment` &&
-               ` seeds the dialog with the CLIENT's next full hour and the hour after it (UI5Date.getInstance() with minutes zeroed). A backend has no client clock, so the port seeds the SERVER's local date and next` &&
-               ` full hour instead. Same shape, a different clock - which matters only if the two are in different time zones. // NOTE: handleViewChange toasts a constant text; the toast is composed on the client, so` &&
-               ` the view change needs no round-trip. // NOTE: The nine recurring appointments with their rules, the eleven recurring non-working periods, and the create dialog with its recurrence branches are`.
-    lv_text1 = lv_text1 && ` unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_555.mjs). // NOTE: The two DateTimePickers and the recurrence DatePicker bind` &&
-               ` their value UNTYPED, where the original binds them with type sap.ui.model.type.DateTime / sap.ui.model.type.Date and formatOptions { pattern: 'yyyy-MM-dd HH:mm' } / { pattern: 'yyyy-MM-dd' }` &&
-               ` (CreateAppointmentDialog.fragment.xml:34,40,118). The port keeps the path and carries the pattern as valueFormat + displayFormat instead, which is not a cosmetic choice: a typed binding with a source` &&
-               ` pattern raises on the EMPTY value the recurrence picker seeds with and a cleared picker sends, which is why apps 549 and 609 settled on the same form. Until 2026-08-26 the port declared neither, and` &&
-               ` that was a real defect rather than a simplification - an unformatted picker writes a LOCALE string back through the two-way binding. Measured in de-DE: picking 4 March 2025 stored '04.03.2025,` &&
-               ` 10:15:00', which Formatter.DateCreateObject's new Date( ) reads month-first, so the appointment was drawn on 3 April. structural-diff cannot see this class at all - the port HAS a value attribute, so`.
-    lv_text1 = lv_text1 && ` nothing reads as missing.`.
+               ` the month only for Yearly) and the parseInt fallbacks the original applies. onRecurrenceTypeChange clears the parts the picked recurrence does not use, also 1:1. // NOTE: ``recurrencePattern``` &&
+               ` carries ``defaultValue: 1`` and ``setRecurrencePattern`` REJECTS anything below it (``throw new Error("recurrencePattern must be >= 1")``, RecurringCalendarAppointment.js:163). onCreateDialogSave` &&
+               ` writes the property only inside its ``if (oData.recurrenceType)`` branch, so a NON-recurring new appointment carries no such key at all and the control keeps its default. An ABAP structure always` &&
+               ` serializes every field, so the port's initial 0 reached the setter through the ``{RECURRENCEPATTERN}`` binding and terminated the app the first time an appointment was created without a recurrence`.
+    lv_text1 = lv_text1 && ` (found 2026-08-29 on app 548, which builds its new appointment the same way; reproduced standalone on OpenUI5 1.151, where pattern 0 throws while the view is created and pattern 1 renders three` &&
+               ` appointments). The port therefore seeds the new row with the control's own default, ``recurrencepattern = 1``, and the recurrence branch overwrites it as before. The sibling` &&
+               ` ``sap.ui.unified.RecurringNonWorkingPeriod.recurrencePattern`` has the identical setter (``RecurringNonWorkingPeriod.js:145``), but no ABAP writes a non-working row - they are only seeded - so that` &&
+               ` one carries the default in the BINDING instead: the port writes ``recurrencePattern="{= ${RECURRENCEPATTERN} || 1 }"`` where the original writes ``{recurrencePattern}``, which is the ``binding` &&
+               ` value`` difference structural-diff reports for it. Measured on OpenUI5 1.151: bound 0 throws, the expression renders 0 as the control's 1 and leaves a real 2 alone, and an EMPTY non-working table is` &&
+               ` safe either way because a template with no row behind it keeps the default. // IMPROVISED: onCreateAppointment seeds the dialog with the CLIENT's next full hour and the hour after it`.
+    lv_text1 = lv_text1 && ` (UI5Date.getInstance() with minutes zeroed). A backend has no client clock, so the port seeds the SERVER's local date and next full hour instead. Same shape, a different clock - which matters only if` &&
+               ` the two are in different time zones. // NOTE: handleViewChange toasts a constant text; the toast is composed on the client, so the view change needs no round-trip. // NOTE: The nine recurring` &&
+               ` appointments with their rules, the eleven recurring non-working periods, and the create dialog with its recurrence branches are unverified in a running system. **e2e-verified 2026-08-25** (nightly` &&
+               ` e2e interaction, meta/interactions/z2ui5_cl_smpc_app_555.mjs). The dialog's save path - creating an appointment with NO recurrence, the case that used to terminate the app - is covered by the same` &&
+               ` interaction since 2026-08-29. // NOTE: The two DateTimePickers and the recurrence DatePicker bind their value UNTYPED, where the original binds them with type sap.ui.model.type.DateTime /` &&
+               ` sap.ui.model.type.Date and formatOptions { pattern: 'yyyy-MM-dd HH:mm' } / { pattern: 'yyyy-MM-dd' } (CreateAppointmentDialog.fragment.xml:34,40,118). The port keeps the path and carries the pattern`.
+    lv_text1 = lv_text1 && ` as valueFormat + displayFormat instead, which is not a cosmetic choice: a typed binding with a source pattern raises on the EMPTY value the recurrence picker seeds with and a cleared picker sends,` &&
+               ` which is why apps 549 and 609 settled on the same form. Until 2026-08-26 the port declared neither, and that was a real defect rather than a simplification - an unformatted picker writes a LOCALE` &&
+               ` string back through the two-way binding. Measured in de-DE: picking 4 March 2025 stored '04.03.2025, 10:15:00', which Formatter.DateCreateObject's new Date( ) reads month-first, so the appointment` &&
+               ` was drawn on 3 April. structural-diff cannot see this class at all - the port HAS a value attribute, so nothing reads as missing.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.SinglePlanningCalendar`          name = `SinglePlanningCalendarRecurringItem`           class = `z2ui5_cl_smpc_app_555` path = `src/02/01/z2ui5_cl_smpc_app_555.clas.abap`
         score = 5
@@ -7718,19 +7737,19 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` "mainView--wizardReviewPage"], the Edit link fired ``backToPage("wizardContentPage")``, and UI5 answered "Cannot navigate backToPage('wizardContentPage') because target page was not found among the` &&
                ` previous pages." with the review page still on screen. A SILENT no-op - no wrong target, no exception - which is why nothing here caught it. The four Edit links and the Cancel/Submit reset therefore` &&
                ` left the review page up; only the Wizard-complete ``to`` leg, and the ``goToStep``/``discardProgress`` that follow the dead back-navigation, did anything. The fix is the ``pageId`` argument kind,`.
-    lv_text1 = lv_text1 && ` which resolves the control and hands over ``control.getId()``; it reached the reproducible builds when ``A2UI5_PIN`` moved to ``2567ee10`` on 2026-08-28 (``329e0c84`` is its parent), so all six legs` &&
-               ` are live here now. **The PORT was never changed by any of this** - it was correct on both sides of the fix and simply could not work before it. Note also which way this cuts: the 2026-08-23` &&
-               ` correction ABOVE, which switched Edit and Cancel/Submit from ``to`` to ``backToPage`` for fidelity with the original, is what made them stop working - ``to`` was listed and normalised its argument,` &&
-               ` so the pre-2026-08-23 port navigated (with the wrong transition direction). Fidelity was bought with function for five days, and this is the record of that. The e2e interaction module asserts the` &&
-               ` NavContainer's CURRENT page after an Edit link since 2026-08-28, which is the only thing that separates a working back-navigation from a dead one - a ``goToStep`` assertion passes on both. // NOTE:` &&
-               ` the cancel leg is closed: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the first wizard step renders and the footer Cancel really round-trips -`.
-    lv_text1 = lv_text1 && ` message_box_display opens the MessageBox 'Are you sure you want to cancel your report?' with its question text (restated 2026-08-23: the module asserts the dialog text only; it never locates a YES or` &&
-               ` NO button and never exercises onclose, so that leg is not covered). Still needs an in-system check: step validation gating the Next button, the complete/edit navigation, the goToStep scroll and the` &&
-               ` submit/cancel reset itself. **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_101.mjs). **Extended 2026-08-28:** the module now completes the wizard, asserts` &&
-               ` the review page, presses the first Edit link and asserts the NavContainer is back on the wizard content page with the wizard on ProductTypeStep - the backToPage leg the pin bump made live. // NOTE:` &&
-               ` Two step body Texts had been TRUNCATED and are restored 2026-08-23: ProductInfoStep's ran 475 of the original's 955 characters and OptionalInfoStep's 385 of 575, each a clean prefix that stopped` &&
-               ` mid-paragraph. OptionalInfoStep had also silently corrected the original's own typo "Donec ppellentesque" to "pellentesque". Both now carry the full text; the original's trailing TAB is written as`.
-    lv_text1 = lv_text1 && ` the single space XML attribute-value normalisation turns it into. No gate compares long text bodies, which is why this survived.`.
+    lv_text1 = lv_text1 && ` which resolves the control and hands over ``control.getId()``; it reached the reproducible builds when ``A2UI5_PIN`` moved on 2026-08-28, so all six legs are live here now. **The PORT was never` &&
+               ` changed by any of this** - it was correct on both sides of the fix and simply could not work before it. Note also which way this cuts: the 2026-08-23 correction ABOVE, which switched Edit and` &&
+               ` Cancel/Submit from ``to`` to ``backToPage`` for fidelity with the original, is what made them stop working - ``to`` was listed and normalised its argument, so the pre-2026-08-23 port navigated (with` &&
+               ` the wrong transition direction). Fidelity was bought with function for five days, and this is the record of that. The e2e interaction module asserts the NavContainer's CURRENT page after an Edit link` &&
+               ` since 2026-08-28, which is the only thing that separates a working back-navigation from a dead one - a ``goToStep`` assertion passes on both. // NOTE: the cancel leg is closed: **e2e-verified` &&
+               ` 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the first wizard step renders and the footer Cancel really round-trips - message_box_display opens the MessageBox`.
+    lv_text1 = lv_text1 && ` 'Are you sure you want to cancel your report?' with its question text (restated 2026-08-23: the module asserts the dialog text only; it never locates a YES or NO button and never exercises onclose,` &&
+               ` so that leg is not covered). Still needs an in-system check: step validation gating the Next button, the complete/edit navigation, the goToStep scroll and the submit/cancel reset itself.` &&
+               ` **e2e-verified 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_101.mjs). **Extended 2026-08-28:** the module now completes the wizard, asserts the review page, presses the` &&
+               ` first Edit link and asserts the NavContainer is back on the wizard content page with the wizard on ProductTypeStep - the backToPage leg the pin bump made live. // NOTE: Two step body Texts had been` &&
+               ` TRUNCATED and are restored 2026-08-23: ProductInfoStep's ran 475 of the original's 955 characters and OptionalInfoStep's 385 of 575, each a clean prefix that stopped mid-paragraph. OptionalInfoStep` &&
+               ` had also silently corrected the original's own typo "Donec ppellentesque" to "pellentesque". Both now carry the full text; the original's trailing TAB is written as the single space XML`.
+    lv_text1 = lv_text1 && ` attribute-value normalisation turns it into. No gate compares long text bodies, which is why this survived.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Wizard`                          name = `Wizard`                                        class = `z2ui5_cl_smpc_app_101` path = `src/01/01/z2ui5_cl_smpc_app_101.clas.abap`
         score = 5
@@ -9147,10 +9166,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` control_global, ICON_POOL / registerFont / SAP-icons-TNT / sap/tnt/themes/base/fonts/ ) from the init branch since 2026-08-28 - the frontend resolves the module path through sap.ui.require.toUrl and` &&
                ` registers a family once per session, so a repeat call costs nothing. The tile therefore renders its glyph. This was an IMPROVISED deviation until then: the URI was kept verbatim and the first` &&
                ` Frequent Operations tile rendered without its glyph - in a real system as well as in the harness, since neither sap.tnt's library.js nor abap2UI5 registers the collection (both grepped 2026-08-21,` &&
-               ` zero hits). Closing it needed an upstream registerFont-style global target, which abap2UI5 gained on 2026-08-24 and which reached the reproducible builds when A2UI5_PIN moved to ``2567ee10`` on`.
-    lv_text1 = lv_text1 && ` 2026-08-28; the pinned linter's GLOBAL_TARGETS mirror carries ICON_POOL as of @abap2ui5/linter 0.5.1. The render_smoke skip beside this stays, and for a NEW reason it now states: a follow_up_action` &&
-               ` is not part of the view, so the linter's render harness cannot execute it and the harness alone still sees an unregistered collection. The e2e interaction module is where the registration is proven.` &&
-               ` // NOTE: The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at` &&
+               ` zero hits). Closing it needed an upstream registerFont-style global target, which abap2UI5 gained on 2026-08-24 and which reached the reproducible builds when A2UI5_PIN moved on 2026-08-28; the`.
+    lv_text1 = lv_text1 && ` pinned linter's GLOBAL_TARGETS mirror carries ICON_POOL as of @abap2ui5/linter 0.5.1. The render_smoke skip beside this stays, and for a NEW reason it now states: a follow_up_action is not part of` &&
+               ` the view, so the linter's render harness cannot execute it and the harness alone still sees an unregistered collection. The e2e interaction module is where the registration is proven. // NOTE: The` &&
+               ` sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at` &&
                ` https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the sentence used to claim the rewrite was 'declared by` &&
                ` all 77 ports that do it', which had stopped being true as the corpus grew past that day's snapshot - 126 ports do it now, and 17 of them declared it nowhere. Those 17 carry the declaration since` &&
                ` today, so the claim holds again; a stale absolute count is what made it wrong, so this wording names the date the count was taken.`.
@@ -10777,7 +10796,7 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` property - was serialized by JSON.stringify through toISOString(), so LOCAL midnight of 2018-07-09 arrived as "2018-07-08T22:00:00.000Z" (measured 2026-08-23 with`.
     lv_text1 = lv_text1 && ` scripts/probes/control-valued-event-arg-probe.mjs, candidate dateRange-array, real OpenUI5, browser timezone Europe/Berlin; correct in UTC and west of it, which is why a CI run in UTC reported a` &&
                ` false all-clear). abap2UI5 closed that on 2026-08-24 (backlog item event-arg-date-utc-shift): projectValue serializes a Date as its LOCAL parts, an ISO local timestamp with no Z. The fix reached the` &&
-               ` reproducible builds when A2UI5_PIN moved to ``2567ee10`` on 2026-08-28, which is what unblocked this rewrite - the cap is gone and no day can be dropped any more. // NOTE: e2e-verified 2026-08-10` &&
+               ` reproducible builds when A2UI5_PIN moved on 2026-08-28, which is what unblocked this rewrite - the cap is gone and no day can be dropped any more. // NOTE: e2e-verified 2026-08-10` &&
                ` (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): a day is selected the keyboard way (the day cell carries no clickable layout box headless), the round-trip fills the List, and` &&
                ` "Remove All Selected Dates" clears BOTH sides - the List returns to its "No Dates Selected" noData text AND .sapUiCalItemSel drops to zero, which is the removeAllSelectedDates follow-up action doing` &&
                ` what no model write could: sap.ui.unified.Calendar writes selectedDates itself. The assertion has real discriminating power - before abap2UI5 #2535 the list emptied and the days stayed highlighted,`.
