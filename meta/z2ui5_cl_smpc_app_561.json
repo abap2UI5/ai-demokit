@@ -26,6 +26,10 @@
     {
       "type": "NOTE",
       "what": "The three dialogs and their resizable / draggable flags are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_561.mjs)."
+    },
+    {
+      "type": "POST_171",
+      "what": "POPUP.setWithinArea is a control_global frontend action since UI5 1.89 - newer than the 1.71 floor but kept for the 1:1 port, and already noted in the method's own comment. Below 1.89 the lazy require returns undefined and the dispatch hits its \"not available\" guard, so the popup is not confined to the within-area. This class is filed under src/02 for Button.ariaHasPopup @1.84 already; 1.89 is the higher of the two floors it needs."
     }
   ]
 }

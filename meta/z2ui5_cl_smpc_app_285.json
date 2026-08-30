@@ -35,6 +35,10 @@
     {
       "type": "NOTE",
       "what": "The sample's asset paths are host-absolutized. The demo kit serves them relative (test-resources/...), which an abap2UI5 app has no document root to resolve against, so the port points at https://sdk.openui5.org/... instead. The values are otherwise the mock's own. Declared 2026-08-21 for consistency, and RE-COUNTED 2026-08-23: the sentence used to claim the rewrite was 'declared by all 77 ports that do it', which had stopped being true as the corpus grew past that day's snapshot - 128 ports do it now (re-measured 2026-08-23, one day after the count above - the drift this note warns about, in one day), and 17 of them declared it nowhere. Those 17 carry the declaration since today, so the claim holds again; a stale absolute count is what made it wrong, so this wording names the date the count was taken."
+    },
+    {
+      "type": "POST_171",
+      "what": "POPUP.setWithinArea is a control_global frontend action since UI5 1.89 - newer than the 1.71 floor but kept for the 1:1 port: it is what confines the popover to the sample's own area. Below 1.89 the lazy require returns undefined and the dispatch hits its \"not available\" guard, so the popover opens unconfined rather than not at all - the app needs a UI5 release >= 1.89 for the sample's behaviour."
     }
   ]
 }

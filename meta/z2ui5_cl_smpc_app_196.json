@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_smpc_app_196",
   "sample": "sap.ui.unified.sample.Currency",
   "entity": "sap.ui.unified.Currency",
-  "file": "src/01/02/z2ui5_cl_smpc_app_196.clas.abap",
+  "file": "src/02/02/z2ui5_cl_smpc_app_196.clas.abap",
   "batch": "b10",
   "audit": {
     "frontend_action": true,
@@ -18,6 +18,10 @@
     {
       "type": "NOTE",
       "what": "The various/nonDecimal arrays back the u:Currency value property (float) as ABAP packed fields, matching the sample's JSON numbers; the bigNumber array (JSON strings) and the customCurrency array (JSON numbers bound to the string property stringValue, so UI5 coerces them) are ABAP string fields keeping the exact literals (123.45676 has 5 decimals). listSix binds the numeric variousNumberDataModel/price to stringValue (number coerced to string, as in the original). **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the serialized model reaches the controls: the lists render, the u:Currency controls come up and their currencies (EUR, JPY) are on screen. Residual: the exact digit formatting per list (maxPrecision, the custom BGN4/WWWW digits), which is the browser's locale formatting rather than the port's data."
+    },
+    {
+      "type": "POST_171",
+      "what": "FORMATTING.setCustomCurrencies is a control_global frontend action since UI5 1.120 - newer than the 1.71 floor but kept for the 1:1 port: registering BGN4 and WWWW is what the sample is about, and there is no pre-1.120 spelling of it. Below 1.120 the lazy require returns undefined and the dispatch hits its \"not available\" guard, so the two custom currencies are simply never registered and their amounts format with the stock digits - the app needs a UI5 release >= 1.120."
     }
   ]
 }

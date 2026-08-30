@@ -18,6 +18,10 @@
     {
       "type": "NOTE",
       "what": "The pressed button's identity is transported since 2026-08-21: each press carries $event.oSource.getType() and $event.oSource.getText(), and ABAP composes the original's sentence verbatim. Before that the status text was a constant - a faked event value found by the review sweep. The announce( ) call itself was dropped until 2026-08-23 on the claim that it has no control_global entry; that was wrong - ControlCall.js defines INVISIBLE_MESSAGE with announce: [\"string\",\"string\"], CAPABILITIES.md marks the idiom expressible, and apps 289/435 use it. on_event now fires follow_up_action( control_global, INVISIBLE_MESSAGE / announce / <the composed sentence> / Assertive ), matching InvisibleMessageMode.Assertive in the original. Nothing of the sample is dropped any more - which matters here more than elsewhere, since ui5/scope-exceptions.json keeps this post-1.71 sample precisely because the accessibility-announcement idiom exists nowhere else in the corpus."
+    },
+    {
+      "type": "POST_171",
+      "what": "INVISIBLE_MESSAGE.announce is a control_global frontend action since UI5 1.78 - newer than the 1.71 floor and the reason ui5/scope-exceptions.json keeps this post-1.71 sample at all. Below 1.78 the lazy require returns undefined and the dispatch hits its \"not available\" guard: the status Text still updates, the announcement itself does not happen. The app needs a UI5 release >= 1.78 - which sap.ui.core.InvisibleMessage, @since 1.78 itself, already requires."
     }
   ]
 }

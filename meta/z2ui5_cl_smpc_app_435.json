@@ -26,6 +26,10 @@
     {
       "type": "NOTE",
       "what": "The six button wires (id split -> bound displayValue/percentValue) and the screen-reader announcement are unverified in a running system. **e2e-verified 2026-08-22** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_435.mjs)."
+    },
+    {
+      "type": "POST_171",
+      "what": "INVISIBLE_MESSAGE.announce is a control_global frontend action since UI5 1.78 - newer than the 1.71 floor but kept for the 1:1 port: the slider's value change is announced to a screen reader, which is what the original demonstrates. Below 1.78 the lazy require returns undefined and the dispatch hits its \"not available\" guard, so the announcement is silently skipped - the app needs a UI5 release >= 1.78."
     }
   ]
 }
