@@ -47,12 +47,12 @@
     "enum-value-too-new": { "severity": "hint" },
     "icon-too-new": { "severity": "hint" },
 
-    // Each class links its control's SAPUI5 demo kit page, which is on
-    // ui5.sap.com because SAPUI5 has no other home — the same reason the
-    // collection's assets legitimately come from ui5.sap.com/test-resources
-    // (AGENTS §3). The rule is about an app loading its RUNTIME from the
-    // commercial host; a documentation hyperlink is not that.
-    "commercial-ui5-host": false
+    // Re-enabled 2026-08-30: the rule is scoped to a RUNTIME load now (a
+    // `/resources/` path or the bootstrap script), so the demo-kit hyperlink
+    // every class carries and the collection's `/test-resources/` assets are
+    // no longer reported — which is what this entry was switched off for.
+    // Measured over the corpus at zero findings before the switch flipped.
+    "commercial-ui5-host": "error"
   },
 
   // Hints stay visible and decide nothing. An error is a view UI5 would fail
