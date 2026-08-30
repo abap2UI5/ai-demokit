@@ -11674,20 +11674,22 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column assignment, and the` &&
                ` block ids and view roots go with it. // IMPROVISED: EmploymentBlockJob is a two-view BlockBase (Collapsed / Expanded, selected by the block mode, with showSubSectionMore='true' offering the toggle)` &&
                ` whose views bind six internal named models emp1>..emp6> that six uxap:ModelMapping elements map onto ObjectPageModel>/Employee/0..5. abap2UI5 serves one default model and has no BlockBase mode` &&
-               ` toggle, so the Collapsed view (the block's initial state, two employees) is inlined and emp1>/emp2> are folded onto default-model root fields bound via client->_bind (app 230/261/401 precedent).`.
-    lv_text1 = lv_text1 && ` Lost: the six ModelMapping config controls (the ModelMapping 6 vs 0 line), the Expanded view with employees 3-6, the more/less toggle behind showSubSectionMore, and the mapping indirection - the two` &&
-               ` records resolve statically to HRData.json /Employee/0 (Michael Adams, Scrum Master) and /Employee/1 (John Miller, Product Owner). // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1` &&
-               ` fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'), both on sap-icon://picture rather than an image file` &&
-               ` here. Needs a UI5 runtime >= 1.73. // NOTE: what this sample adds over app 401 (same blocks, same data) is the anchor-bar NUMBERS: two of the three section titles end in a parenthesised count -` &&
-               ` 'Personal (2)' and 'Employment (3)' - which is how the sample shows that the anchor bar simply renders the title it is given, subsection count included, rather than computing anything. Both are` &&
-               ` carried literally. Its ObjectPageLayout also sets subSectionLayout='TitleOnLeft' where app 401 leaves the default, and neither section carries the heading MessageStrip or the importance levels app`.
-    lv_text1 = lv_text1 && ` 401's sample writes. // NOTE: in the Connect subsection the four personal blocks are DIRECT children of the ObjectPageSubSection rather than nested in a <blocks> element - blocks is that control's` &&
-               ` default aggregation, so the two forms are identical. The port writes the aggregation explicitly, and keeps the sample's own order (Adresses, PhoneNumber, Social, Mailing), which differs from app` &&
-               ` 401's. // NOTE: The two asset paths (linkedin.png and Twitter.png) are absolutized to the sdk.openui5.org host per the offline asset-URL rule (corrected 2026-08-24). They were kept in the original's` &&
-               ` './test-resources/...' form, justified as "matching app 261" - which is false: 261 was rewritten to the absolute form on 2026-08-23 for exactly this reason, and its own sidecar records that both` &&
-               ` icons had rendered broken. A relative path resolves against the demo kit's document root; an abap2UI5 app is served from the ABAP ICF node and has no such root, so the request 404s and the control` &&
-               ` falls back to its placeholder. No gate sees it - data-fidelity only rejects a non-OpenUI5 HOST, and a relative path has none. // NOTE: not yet verified in a running system: that the anchor bar lists`.
-    lv_text1 = lv_text1 && ` the three section titles with their numbers and scrolls to each section. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_587.mjs).`.
+               ` toggle, so the Collapsed view (the block's initial state, two employees) is inlined and emp1>/emp2> are folded onto ONE table (t_employees, the row type name/job) whose rows the view addresses`.
+    lv_text1 = lv_text1 && ` individually - client->_bind( val = t_employees[ N ]-field tab = t_employees tab_index = N ), rendering {/T_EMPLOYEES/(N-1)/FIELD} (app 230/261/401/263 precedent). So the ModelMapping indirection is` &&
+               ` what goes, not the /Employee array shape the elements address. Lost: the six ModelMapping config controls (the ModelMapping 6 vs 0 line), the Expanded view with employees 3-6, the more/less toggle` &&
+               ` behind showSubSectionMore, and the mapping indirection - the two records resolve statically to HRData.json /Employee/0 (Michael Adams, Scrum Master) and /Employee/1 (John Miller, Product Owner). //` &&
+               ` POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar` &&
+               ` (displaySize='L'), both on sap-icon://picture rather than an image file here. Needs a UI5 runtime >= 1.73. // NOTE: what this sample adds over app 401 (same blocks, same data) is the anchor-bar` &&
+               ` NUMBERS: two of the three section titles end in a parenthesised count - 'Personal (2)' and 'Employment (3)' - which is how the sample shows that the anchor bar simply renders the title it is given,`.
+    lv_text1 = lv_text1 && ` subsection count included, rather than computing anything. Both are carried literally. Its ObjectPageLayout also sets subSectionLayout='TitleOnLeft' where app 401 leaves the default, and neither` &&
+               ` section carries the heading MessageStrip or the importance levels app 401's sample writes. // NOTE: in the Connect subsection the four personal blocks are DIRECT children of the ObjectPageSubSection` &&
+               ` rather than nested in a <blocks> element - blocks is that control's default aggregation, so the two forms are identical. The port writes the aggregation explicitly, and keeps the sample's own order` &&
+               ` (Adresses, PhoneNumber, Social, Mailing), which differs from app 401's. // NOTE: The two asset paths (linkedin.png and Twitter.png) are absolutized to the sdk.openui5.org host per the offline` &&
+               ` asset-URL rule (corrected 2026-08-24). They were kept in the original's './test-resources/...' form, justified as "matching app 261" - which is false: 261 was rewritten to the absolute form on` &&
+               ` 2026-08-23 for exactly this reason, and its own sidecar records that both icons had rendered broken. A relative path resolves against the demo kit's document root; an abap2UI5 app is served from the`.
+    lv_text1 = lv_text1 && ` ABAP ICF node and has no such root, so the request 404s and the control falls back to its placeholder. No gate sees it - data-fidelity only rejects a non-OpenUI5 HOST, and a relative path has none.` &&
+               ` // NOTE: not yet verified in a running system: that the anchor bar lists the three section titles with their numbers and scrolls to each section. **e2e-verified 2026-08-25** (nightly e2e interaction,` &&
+               ` meta/interactions/z2ui5_cl_smpc_app_587.mjs).`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `AnchorBarWithNumbers`                          class = `z2ui5_cl_smpc_app_587` path = `src/02/03/z2ui5_cl_smpc_app_587.clas.abap`
         score = 5
@@ -11709,25 +11711,29 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column assignment, and the` &&
                ` block ids and view roots go with it. // IMPROVISED: Named-model fold (app 230/263 precedent): EmploymentBlockJob and ConnectionsBlock each carry six uxap:ModelMapping elements mapping` &&
                ` ObjectPageModel>/Employee/0..5 onto the internal models emp1>..emp6>. abap2UI5 serves one default model, so the twelve ModelMapping config controls are gone (the ModelMapping 12 vs 0 line) and the` &&
-               ` six employee records are seeded as default-model root fields (emp1_name/_job/_picture .. emp6_*) bound via client->_bind. EmploymentBlockJob is additionally a two-view BlockBase (Collapsed / Expanded`.
-    lv_text1 = lv_text1 && ` with showSubSectionMore='true'); only the Collapsed view (employees 1-2) is inlined - the Expanded view with employees 3-6 and the more/less toggle are lost. // POST-1.71:` &&
-               ` sap.uxap.ObjectPageLayout.beforeNavigate is @since 1.118 - newer than the 1.71 floor but kept for the 1:1 port, since the event IS this sample. The app needs a UI5 release >= 1.118 for the guard to` &&
-               ` fire at all; below it the anchor bar simply navigates. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the` &&
-               ` snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs a UI5 runtime >= 1.73. // NOTE: onBeforeNavigate calls oEvent.preventDefault() whenever the page is in edit mode. That veto` &&
-               ` is expressible: the wire carries s_ctrl-check_prevent_default (app 241 idiom), which is baked per WIRE at RENDER time - and here that is exactly right, because the flag it needs is bEditMode, which` &&
-               ` the backend owns. onEdit therefore redraws the view, so every fresh beforeNavigate wire carries the veto that matches the mode the toast just announced. The event is still sent when vetoed, so the`.
-    lv_text1 = lv_text1 && ` backend stays in charge of what happens instead, which is the sample's whole point. // NOTE: the controller keeps oSelectedSection / oPreviousSelectedSection as CONTROL references and compares them` &&
-               ` by identity; the port keeps the two section IDs instead and compares those - ${$parameters>/section}.getId() is what travels with the event. The OK button's oOPL.setSelectedSection(oSelectedSection)` &&
-               ` becomes follow_up_action( control_by_id, ObjectPageLayout / setSelectedSection / <section id> ), the controlIdOrNull argument kind resolving the id back to the control exactly like the original's` &&
-               ` reference (app 263 precedent). Cancel reverts the remembered id, as the original reverts the reference. // NOTE: the confirm Dialog is built imperatively by the controller (new Dialog({title,` &&
-               ` content, beginButton, endButton}), added as a view dependent and reused on every later veto). The port expresses it as a core:FragmentDefinition shown through client->popup_display (app 300 idiom)` &&
-               ` and destroyed on either button. Its attachAfterClose handler - oSelectedSection.getDomRef().focus() - has no counterpart: it reaches into the section's DOM node, which a thin frontend never holds. //`.
-    lv_text1 = lv_text1 && ` NOTE: the four asset paths (the imageID_275314.png avatar twice, linkedin.png, Twitter.png) and HRData.json's person.png point at the sdk.openui5.org host per the offline asset-URL rule, matching app` &&
-               ` 263 which carries the same view; the original writes them relative as './test-resources/sap/uxap/images/...'. // NOTE: not yet verified in a running system: that Edit toasts the mode and re-bakes the` &&
-               ` veto, that an icon-tab press in edit mode is cancelled and raises the dialog, and that OK then navigates through setSelectedSection while Cancel leaves the page where it was. **e2e-verified` &&
-               ` 2026-08-25**, before the 2026-08-27 render-time re-issue - that half needs a fresh e2e build before the nightly can confirm it; (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_588.mjs).` &&
-               ` // NOTE: The Connections subsection carries title="Connections" as the original does. The port's ObjectPageLayout subtree was built from app 263, whose own sample has no title on that subsection, so` &&
-               ` the attribute was lost in the copy. structural-diff cannot see it: attribute presence is a union per control TYPE, and other ObjectPageSubSection instances do carry title.`.
+               ` six employee records are seeded as ONE table (t_employees, the row type name/job/picture) and each block binds the cell it needs - client->_bind( val = t_employees[ N ]-field tab = t_employees`.
+    lv_text1 = lv_text1 && ` tab_index = N ), which renders as {/T_EMPLOYEES/(N-1)/FIELD}. So what is lost is the ModelMapping indirection, not the /Employee ARRAY the elements address: the model keeps that shape and only the` &&
+               ` named-model names are gone. The cell is matched by data reference, which a stock abaplint downport loses for a component-level table expression (it outlines into a work area); abap2UI5 patches that` &&
+               ` lowering back to ASSIGNING (node/setup/patch-abaplint-downport.mjs, filed upstream and run by this repo's e2e build), so the port writes the natural t_employees[ N ]-field and needs no field symbols.` &&
+               ` EmploymentBlockJob is additionally a two-view BlockBase (Collapsed / Expanded with showSubSectionMore='true'); only the Collapsed view (employees 1-2) is inlined - the Expanded view with employees` &&
+               ` 3-6 and the more/less toggle are lost. // POST-1.71: sap.uxap.ObjectPageLayout.beforeNavigate is @since 1.118 - newer than the 1.71 floor but kept for the 1:1 port, since the event IS this sample.` &&
+               ` The app needs a UI5 release >= 1.118 for the guard to fire at all; below it the anchor bar simply navigates. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample`.
+    lv_text1 = lv_text1 && ` entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs a UI5 runtime >= 1.73. // NOTE: onBeforeNavigate calls` &&
+               ` oEvent.preventDefault() whenever the page is in edit mode. That veto is expressible: the wire carries s_ctrl-check_prevent_default (app 241 idiom), which is baked per WIRE at RENDER time - and here` &&
+               ` that is exactly right, because the flag it needs is bEditMode, which the backend owns. onEdit therefore redraws the view, so every fresh beforeNavigate wire carries the veto that matches the mode the` &&
+               ` toast just announced. The event is still sent when vetoed, so the backend stays in charge of what happens instead, which is the sample's whole point. // NOTE: the controller keeps oSelectedSection /` &&
+               ` oPreviousSelectedSection as CONTROL references and compares them by identity; the port keeps the two section IDs instead and compares those - ${$parameters>/section}.getId() is what travels with the` &&
+               ` event. The OK button's oOPL.setSelectedSection(oSelectedSection) becomes follow_up_action( control_by_id, ObjectPageLayout / setSelectedSection / <section id> ), the controlIdOrNull argument kind`.
+    lv_text1 = lv_text1 && ` resolving the id back to the control exactly like the original's reference (app 263 precedent). Cancel reverts the remembered id, as the original reverts the reference. // NOTE: the confirm Dialog is` &&
+               ` built imperatively by the controller (new Dialog({title, content, beginButton, endButton}), added as a view dependent and reused on every later veto). The port expresses it as a` &&
+               ` core:FragmentDefinition shown through client->popup_display (app 300 idiom) and destroyed on either button. Its attachAfterClose handler - oSelectedSection.getDomRef().focus() - has no counterpart:` &&
+               ` it reaches into the section's DOM node, which a thin frontend never holds. // NOTE: the four asset paths (the imageID_275314.png avatar twice, linkedin.png, Twitter.png) and HRData.json's person.png` &&
+               ` point at the sdk.openui5.org host per the offline asset-URL rule, matching app 263 which carries the same view; the original writes them relative as './test-resources/sap/uxap/images/...'. // NOTE:` &&
+               ` not yet verified in a running system: that Edit toasts the mode and re-bakes the veto, that an icon-tab press in edit mode is cancelled and raises the dialog, and that OK then navigates through`.
+    lv_text1 = lv_text1 && ` setSelectedSection while Cancel leaves the page where it was. **e2e-verified 2026-08-25**, before the 2026-08-27 render-time re-issue - that half needs a fresh e2e build before the nightly can` &&
+               ` confirm it; (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_588.mjs). // NOTE: The Connections subsection carries title="Connections" as the original does. The port's ObjectPageLayout` &&
+               ` subtree was built from app 263, whose own sample has no title on that subsection, so the attribute was lost in the copy. structural-diff cannot see it: attribute presence is a union per control TYPE,` &&
+               ` and other ObjectPageSubSection instances do carry title.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageBeforeNavigate`                      class = `z2ui5_cl_smpc_app_588` path = `src/02/03/z2ui5_cl_smpc_app_588.clas.abap`
         score = 5
@@ -11873,22 +11879,24 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` assignment, and the block ids and view roots go with it. // IMPROVISED: EmploymentBlockJob is a two-view BlockBase (Collapsed / Expanded, selected by the block mode, with showSubSectionMore='true'` &&
                ` offering the toggle) whose views bind six internal named models emp1>..emp6> that six uxap:ModelMapping elements map onto ObjectPageModel>/Employee/0..5. abap2UI5 serves one default model and has no` &&
                ` BlockBase mode toggle, so: the Collapsed view (the block's initial state, two employees - a layout:Grid / layout:VerticalLayout tree with layout:GridData layoutData) is inlined, and emp1>/emp2> are` &&
-               ` folded onto default-model root fields bound via client->_bind (app 230/261 precedent). Lost: the six ModelMapping config controls, the Expanded view with employees 3-6, the more/less toggle behind`.
-    lv_text1 = lv_text1 && ` showSubSectionMore, and the mapping indirection - the two records are resolved statically to HRData.json /Employee/0 (Michael Adams, Scrum Master) and /Employee/1 (John Miller, Product Owner). //` &&
-               ` POST-1.71: headerContentPinned on sap.uxap.ObjectPageLayout (since UI5 1.93) is newer than 1.71 but kept for the 1:1 port - the sample opens with a pinned header content. The app needs a UI5 release` &&
-               ` >= 1.93 for it to take effect. // POST-1.71: the heading aggregation of sap.uxap.ObjectPageSection (since UI5 1.106) is newer than 1.71 but kept for the 1:1 port - the Goals and Personal sections` &&
-               ` each carry an m:MessageStrip in it. The app needs a UI5 release >= 1.106 to show those two strips. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity` &&
-               ` sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'), both on the sample's own imageID_275314.png. Needs a UI5 runtime >= 1.73. // NOTE:` &&
-               ` The controller's three constant-text MessageToast handlers (handleLink1Press, handleLink2Press, handleEditBtnPress) are wired as round-trip-free client toasts (follow_up_action`.
-    lv_text1 = lv_text1 && ` cs_event-control_global MESSAGE_TOAST.show, app 005 idiom), so the two breadcrumb Links and the edit-header button behave exactly as in the original without a backend round-trip. // NOTE:` &&
-               ` toggleFooter does oObjectPageLayout.setShowFooter(!getShowFooter()). showFooter IS a bindable property, so the port binds it two-way (client->_bind on the abap_bool flag; the first draft wrote a` &&
-               ` static as_bool literal the round-trip could never reach, caught by the e2e interaction before its first run) and flips the ABAP flag in on_event instead of calling the setter through a frontend` &&
-               ` action - the bindable-property-beats-frontend-action rule. The showFooter attribute is therefore present in the port where the original view does not write it, and the footer starts hidden as it does` &&
-               ` in the original. The round-trip toggle itself is not verified in a running system yet. **e2e-verified 2026-08-21** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_401.mjs). // NOTE: The` &&
-               ` four asset paths (the imageID_275314.png avatar twice, linkedin.png and Twitter.png) are absolutized to the sdk.openui5.org host per the offline asset-URL rule (corrected 2026-08-24). They were kept`.
-    lv_text1 = lv_text1 && ` in the original's './test-resources/...' form, justified as "matching app 261" - which is false: 261 was rewritten to the absolute form on 2026-08-23 for exactly this reason, and its own sidecar` &&
-               ` records that both icons had rendered broken. A relative path resolves against the demo kit's document root; an abap2UI5 app is served from the ABAP ICF node and has no such root, so the request 404s` &&
-               ` and the control falls back to its placeholder. No gate sees it - data-fidelity only rejects a non-OpenUI5 HOST, and a relative path has none.`.
+               ` folded onto ONE table (t_employees, the row type name/job) whose rows the view addresses individually - client->_bind( val = t_employees[ N ]-field tab = t_employees tab_index = N ), rendering`.
+    lv_text1 = lv_text1 && ` {/T_EMPLOYEES/(N-1)/FIELD} (app 230/261/263 precedent). So the ModelMapping indirection is what goes, not the /Employee array shape the elements address. Lost: the six ModelMapping config controls,` &&
+               ` the Expanded view with employees 3-6, the more/less toggle behind showSubSectionMore, and the mapping indirection - the two records are resolved statically to HRData.json /Employee/0 (Michael Adams,` &&
+               ` Scrum Master) and /Employee/1 (John Miller, Product Owner). // POST-1.71: headerContentPinned on sap.uxap.ObjectPageLayout (since UI5 1.93) is newer than 1.71 but kept for the 1:1 port - the sample` &&
+               ` opens with a pinned header content. The app needs a UI5 release >= 1.93 for it to take effect. // POST-1.71: the heading aggregation of sap.uxap.ObjectPageSection (since UI5 1.106) is newer than 1.71` &&
+               ` but kept for the 1:1 port - the Goals and Personal sections each carry an m:MessageStrip in it. The app needs a UI5 release >= 1.106 to show those two strips. // POST-1.71: sap.m.Avatar is a control` &&
+               ` @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'), both on the sample's own`.
+    lv_text1 = lv_text1 && ` imageID_275314.png. Needs a UI5 runtime >= 1.73. // NOTE: The controller's three constant-text MessageToast handlers (handleLink1Press, handleLink2Press, handleEditBtnPress) are wired as` &&
+               ` round-trip-free client toasts (follow_up_action cs_event-control_global MESSAGE_TOAST.show, app 005 idiom), so the two breadcrumb Links and the edit-header button behave exactly as in the original` &&
+               ` without a backend round-trip. // NOTE: toggleFooter does oObjectPageLayout.setShowFooter(!getShowFooter()). showFooter IS a bindable property, so the port binds it two-way (client->_bind on the` &&
+               ` abap_bool flag; the first draft wrote a static as_bool literal the round-trip could never reach, caught by the e2e interaction before its first run) and flips the ABAP flag in on_event instead of` &&
+               ` calling the setter through a frontend action - the bindable-property-beats-frontend-action rule. The showFooter attribute is therefore present in the port where the original view does not write it,` &&
+               ` and the footer starts hidden as it does in the original. The round-trip toggle itself is not verified in a running system yet. **e2e-verified 2026-08-21** (nightly e2e interaction,`.
+    lv_text1 = lv_text1 && ` meta/interactions/z2ui5_cl_smpc_app_401.mjs). // NOTE: The four asset paths (the imageID_275314.png avatar twice, linkedin.png and Twitter.png) are absolutized to the sdk.openui5.org host per the` &&
+               ` offline asset-URL rule (corrected 2026-08-24). They were kept in the original's './test-resources/...' form, justified as "matching app 261" - which is false: 261 was rewritten to the absolute form` &&
+               ` on 2026-08-23 for exactly this reason, and its own sidecar records that both icons had rendered broken. A relative path resolves against the demo kit's document root; an abap2UI5 app is served from` &&
+               ` the ABAP ICF node and has no such root, so the request 404s and the control falls back to its placeholder. No gate sees it - data-fidelity only rejects a non-OpenUI5 HOST, and a relative path has` &&
+               ` none.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageOnJSON`                              class = `z2ui5_cl_smpc_app_401` path = `src/02/03/z2ui5_cl_smpc_app_401.clas.abap`
         score = 5
@@ -11934,23 +11942,27 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` even a zero-visual-output one - is a loss regardless of a pixel-identical render. 26 of the 31 sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a` &&
                ` real BlockBase instance, so an inlined form falls back to automatic column assignment, and the block ids and view roots go with it. // IMPROVISED: Named-model fold (app 230 precedent):` &&
                ` EmploymentBlockJob and ConnectionsBlock each carry six uxap:ModelMapping elements mapping an external model onto the internal models emp1>..emp6> (/Employee/0..5). abap2UI5 serves one default model,` &&
-               ` so the twelve ModelMapping config controls are gone and the six employee records are seeded as default-model root fields (emp1_name/_job/_picture .. emp6_*) bound via client->_bind.` &&
-               ` EmploymentBlockJob is additionally a two-view BlockBase (Collapsed / Expanded with showSubSectionMore='true'); only the Collapsed view (employees 1-2) is inlined - the Expanded view with employees`.
-    lv_text1 = lv_text1 && ` 3-6 and the more/less toggle are lost. // NOTE: The ModelMapping elements in this sample name externalModelName='data' while the controller registers the JSONModel as 'ObjectPageModel' - upstream` &&
-               ` those block labels therefore resolve to nothing. The port seeds the evidently intended SharedJSONData/HRData.json /Employee rows (Michael Adams / Scrum Master, John Miller / Product Owner, Richard` &&
-               ` Wilson / Ux Designer, Julie Armstrong / Quality Engineer, Denise Smith / Team Member, Richard Adams / Team Member) and the person.png picture, i.e. it renders the data the sample means rather than` &&
-               ` the empty labels the name mismatch produces. // NOTE: onNavigate's setSelectedSection(null): sap.uxap.ObjectPageLayout.selectedSection is an ASSOCIATION, so it cannot be data-bound and the reset must` &&
-               ` go through the frontend action. Since 2026-08-05 an EMPTY argument reaches the setter as null (the controlIdOrNull argument kind, pr/control-method-null-arg; the framework pads a trailing empty` &&
-               ` argument for that kind, because the wire drops trailing empties), so the NAVIGATE round-trip - the NavContainer's navigate event, transporting ${$parameters>/toId} - issues follow_up_action(`.
-    lv_text1 = lv_text1 && ` control_by_id, ObjectPageLayout / setSelectedSection / ```` ) and clears the association exactly like the original. The earlier substitute (naming the first section 'goals', which is what UI5's` &&
-               ` _adjustSelectedSectionByUXRules falls back to) is gone. The checkbox that guards the reset is two-way bound ({/RESET_CHECK}, seeded true like the original selected='true'), so the backend can read it` &&
-               ` without touching the DOM. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the` &&
-               ` headerContent avatar (displaySize='L'). Needs a UI5 runtime >= 1.73. // NOTE: The page navigation is roundtrip-free follow_up_action( control_by_id, navigationContainer / to / page1|page2 ) - the` &&
-               ` client-side equivalent of the controller's _navTo (oNavContainer.to(oPage)); 'to' is whitelisted in CONTROL_METHODS. Neither the navigation, the NAVIGATE round-trip nor the setSelectedSection` &&
-               ` follow-up was verified in a running system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the 'To ObjectPage' list item navigates to page 2`.
-    lv_text1 = lv_text1 && ` (NavContainer.to via follow_up_action control_by_id, ObjectPage with 'Denise Smith' renders) and the nav-back button returns to page 1. Residual: the setSelectedSection reset itself (NAVIGATE` &&
-               ` round-trip with the checkbox ticked) is not asserted - the page has no icon tab bar, so the selected section has no stable DOM marker. // NOTE: The Avatar / Image src values point at the` &&
-               ` sdk.openui5.org host (imageID_275314.png, linkedin.png, Twitter.png, person.png) per the offline asset-URL rule; the original and HRData.json use the relative ./test-resources path.`.
+               ` so the twelve ModelMapping config controls are gone and the six employee records are seeded as ONE table (t_employees, the row type name/job/picture) and each block binds the cell it needs -` &&
+               ` client->_bind( val = t_employees[ N ]-field tab = t_employees tab_index = N ), which renders as {/T_EMPLOYEES/(N-1)/FIELD}. So what is lost is the ModelMapping indirection, not the /Employee ARRAY`.
+    lv_text1 = lv_text1 && ` the elements address: the model keeps that shape and only the named-model names are gone. The cell is matched by data reference, which a stock abaplint downport loses for a component-level table` &&
+               ` expression (it outlines into a work area); abap2UI5 patches that lowering back to ASSIGNING (node/setup/patch-abaplint-downport.mjs, filed upstream and run by this repo's e2e build), so the port` &&
+               ` writes the natural t_employees[ N ]-field and needs no field symbols. EmploymentBlockJob is additionally a two-view BlockBase (Collapsed / Expanded with showSubSectionMore='true'); only the Collapsed` &&
+               ` view (employees 1-2) is inlined - the Expanded view with employees 3-6 and the more/less toggle are lost. // NOTE: The ModelMapping elements in this sample name externalModelName='data' while the` &&
+               ` controller registers the JSONModel as 'ObjectPageModel' - upstream those block labels therefore resolve to nothing. The port seeds the evidently intended SharedJSONData/HRData.json /Employee rows` &&
+               ` (Michael Adams / Scrum Master, John Miller / Product Owner, Richard Wilson / Ux Designer, Julie Armstrong / Quality Engineer, Denise Smith / Team Member, Richard Adams / Team Member) and the`.
+    lv_text1 = lv_text1 && ` person.png picture, i.e. it renders the data the sample means rather than the empty labels the name mismatch produces. // NOTE: onNavigate's setSelectedSection(null):` &&
+               ` sap.uxap.ObjectPageLayout.selectedSection is an ASSOCIATION, so it cannot be data-bound and the reset must go through the frontend action. Since 2026-08-05 an EMPTY argument reaches the setter as` &&
+               ` null (the controlIdOrNull argument kind, pr/control-method-null-arg; the framework pads a trailing empty argument for that kind, because the wire drops trailing empties), so the NAVIGATE round-trip -` &&
+               ` the NavContainer's navigate event, transporting ${$parameters>/toId} - issues follow_up_action( control_by_id, ObjectPageLayout / setSelectedSection / ```` ) and clears the association exactly like` &&
+               ` the original. The earlier substitute (naming the first section 'goals', which is what UI5's _adjustSelectedSectionByUXRules falls back to) is gone. The checkbox that guards the reset is two-way bound` &&
+               ` ({/RESET_CHECK}, seeded true like the original selected='true'), so the backend can read it without touching the DOM. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the`.
+    lv_text1 = lv_text1 && ` sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs a UI5 runtime >= 1.73. // NOTE: The page navigation is` &&
+               ` roundtrip-free follow_up_action( control_by_id, navigationContainer / to / page1|page2 ) - the client-side equivalent of the controller's _navTo (oNavContainer.to(oPage)); 'to' is whitelisted in` &&
+               ` CONTROL_METHODS. Neither the navigation, the NAVIGATE round-trip nor the setSelectedSection follow-up was verified in a running system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction,` &&
+               ` transpiled backend + real browser): the 'To ObjectPage' list item navigates to page 2 (NavContainer.to via follow_up_action control_by_id, ObjectPage with 'Denise Smith' renders) and the nav-back` &&
+               ` button returns to page 1. Residual: the setSelectedSection reset itself (NAVIGATE round-trip with the checkbox ticked) is not asserted - the page has no icon tab bar, so the selected section has no` &&
+               ` stable DOM marker. // NOTE: The Avatar / Image src values point at the sdk.openui5.org host (imageID_275314.png, linkedin.png, Twitter.png, person.png) per the offline asset-URL rule; the original`.
+    lv_text1 = lv_text1 && ` and HRData.json use the relative ./test-resources path.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageResetSelectedSection`                class = `z2ui5_cl_smpc_app_263` path = `src/02/03/z2ui5_cl_smpc_app_263.clas.abap`
         score = 5
@@ -12008,13 +12020,17 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column assignment, and the` &&
                ` block ids and view roots go with it. // IMPROVISED: Named-model fold (app 230/263 precedent): EmploymentBlockJob and ConnectionsBlock each carry six uxap:ModelMapping elements mapping` &&
                ` ObjectPageModel>/Employee/0..5 onto the internal models emp1>..emp6>. abap2UI5 serves one default model, so the twelve ModelMapping config controls are gone (the ModelMapping 12 vs 0 line) and the` &&
-               ` six employee records are seeded as default-model root fields (emp1_name/_job/_picture .. emp6_*) bound via client->_bind. EmploymentBlockJob is additionally a two-view BlockBase (Collapsed / Expanded`.
-    lv_text1 = lv_text1 && ` with showSubSectionMore='true'); only the Collapsed view (employees 1-2) is inlined - the Expanded view with employees 3-6 and the more/less toggle are lost. // POST-1.71: sap.m.Avatar is a control` &&
-               ` @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs a UI5 runtime >= 1.73. //` &&
-               ` NOTE: what this sample adds over apps 263 and 588, which carry the identical section tree, is one attribute: selectedSection='personal'. With useIconTabBar='true' the page therefore opens on the` &&
-               ` SECOND tab rather than the first. selectedSection is an ASSOCIATION, so it cannot be data-bound - but it CAN be set statically by id in the view, which is exactly what the sample does and what the` &&
-               ` port carries. (App 263 needed the frontend action only because it RESETS the association at runtime.) // NOTE: the four asset paths (the imageID_275314.png avatar twice, linkedin.png, Twitter.png)` &&
-               ` and HRData.json's person.png point at the sdk.openui5.org host per the offline asset-URL rule, matching apps 263 and 588 which carry the same view; the original writes them relative.`.
+               ` six employee records are seeded as ONE table (t_employees, the row type name/job/picture) and each block binds the cell it needs - client->_bind( val = t_employees[ N ]-field tab = t_employees`.
+    lv_text1 = lv_text1 && ` tab_index = N ), which renders as {/T_EMPLOYEES/(N-1)/FIELD}. So what is lost is the ModelMapping indirection, not the /Employee ARRAY the elements address: the model keeps that shape and only the` &&
+               ` named-model names are gone. The cell is matched by data reference, which a stock abaplint downport loses for a component-level table expression (it outlines into a work area); abap2UI5 patches that` &&
+               ` lowering back to ASSIGNING (node/setup/patch-abaplint-downport.mjs, filed upstream and run by this repo's e2e build), so the port writes the natural t_employees[ N ]-field and needs no field symbols.` &&
+               ` EmploymentBlockJob is additionally a two-view BlockBase (Collapsed / Expanded with showSubSectionMore='true'); only the Collapsed view (employees 1-2) is inlined - the Expanded view with employees` &&
+               ` 3-6 and the more/less toggle are lost. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar` &&
+               ` and the headerContent avatar (displaySize='L'). Needs a UI5 runtime >= 1.73. // NOTE: what this sample adds over apps 263 and 588, which carry the identical section tree, is one attribute:`.
+    lv_text1 = lv_text1 && ` selectedSection='personal'. With useIconTabBar='true' the page therefore opens on the SECOND tab rather than the first. selectedSection is an ASSOCIATION, so it cannot be data-bound - but it CAN be` &&
+               ` set statically by id in the view, which is exactly what the sample does and what the port carries. (App 263 needed the frontend action only because it RESETS the association at runtime.) // NOTE: the` &&
+               ` four asset paths (the imageID_275314.png avatar twice, linkedin.png, Twitter.png) and HRData.json's person.png point at the sdk.openui5.org host per the offline asset-URL rule, matching apps 263 and` &&
+               ` 588 which carry the same view; the original writes them relative.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageSelectedSection`                     class = `z2ui5_cl_smpc_app_594` path = `src/02/03/z2ui5_cl_smpc_app_594.clas.abap`
         score = 5
@@ -12034,23 +12050,27 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
     lv_text1 = lv_text1 && ` explicit that removing a control the original declares - even a zero-visual-output one - is a loss regardless of a pixel-identical render. 26 of the 31 sidecars citing that row carried NOTE, which` &&
                ` hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column assignment, and the block ids and view roots go with it. //` &&
                ` IMPROVISED: Named-model fold (app 230/263 precedent): EmploymentBlockJob and ConnectionsBlock each carry six uxap:ModelMapping elements mapping ObjectPageModel>/Employee/0..5 onto the internal models` &&
-               ` emp1>..emp6>. abap2UI5 serves one default model, so the twelve ModelMapping config controls are gone (the ModelMapping 12 vs 0 line) and the six employee records are seeded as default-model root` &&
-               ` fields (emp1_name/_job/_picture .. emp6_*) bound via client->_bind. EmploymentBlockJob is additionally a two-view BlockBase (Collapsed / Expanded with showSubSectionMore='true'); only the Collapsed` &&
-               ` view (employees 1-2) is inlined - the Expanded view with employees 3-6 and the more/less toggle are lost. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity`.
-    lv_text1 = lv_text1 && ` sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs a UI5 runtime >= 1.73. // POST-1.71: the rowMode aggregation of` &&
-               ` sap.ui.table.Table and the control sap.ui.table.rowmodes.Auto in it are both @since 1.119 - newer than the 1.71 floor but kept for the 1:1 port, since the sample writes exactly <ui:rowMode><uirm:Auto` &&
-               ` minRowCount="2"/></ui:rowMode>. The app needs a UI5 release >= 1.119: below it the lowercase rowMode tag resolves as a control class and the 404 takes the whole view down, which is why this is an` &&
-               ` error rather than a warning. // IMPROVISED: onSectionVisibilityChanged is attached in JS (attachEvent('subSectionVisibilityChange')) rather than in the view, and it reads the event's` &&
-               ` visibleSubSections MAP: when exactly one subsection is visible it adds sapUxAPObjectPageSubSectionFitContainer to it, otherwise it removes the class from all of them. Neither half travels - the` &&
-               ` parameter is a map of live control instances keyed by id, and the decision is per render, not per round trip. addStyleClass IS whitelisted in CONTROL_METHODS, but there is nothing to key it on`.
-    lv_text1 = lv_text1 && ` without the map, so the wire is dropped: the page renders identically, only the fit-container class never toggles as the user scrolls. // NOTE: selectedSection='paymentSubSection' names a SUBSECTION` &&
-               ` id, not a section id, and is carried as written - the association resolves it to the owning section, which is how the sample opens on Personal with the Payment information subsection expanded` &&
-               ` (mode='Expanded' on that subsection is the second half of it). This is the port's whole subject and needs no round trip: the association is set statically in the view. // NOTE: the ui:Table's rows` &&
-               ` binding carries a sorter on 'Name'. A thin frontend sorts the data it sends (app 298 idiom), so the 123 rows of sap/ui/demo/mock/products.json are seeded verbatim in the file's own order, SORTed BY` &&
-               ` name in model_init and the sorter itself is gone. Name is carried as a fifth field for exactly that reason, although no column shows it; the four the sample does show are ProductId, SupplierName,` &&
-               ` Category and Price. The TableModel> prefix folds onto the default model (same-data prefix-drop). // NOTE: this sample has no Connections section, where apps 263, 588 and 594 do; its fourth section is`.
-    lv_text1 = lv_text1 && ` the ui:Table one instead. Its sections and subsections carry no ids either, apart from the paymentSubSection the selectedSection association needs. // NOTE: the four asset paths (the` &&
-               ` imageID_275314.png avatar twice, linkedin.png, Twitter.png) and HRData.json's person.png point at the sdk.openui5.org host per the offline asset-URL rule; the original writes them relative.`.
+               ` emp1>..emp6>. abap2UI5 serves one default model, so the twelve ModelMapping config controls are gone (the ModelMapping 12 vs 0 line) and the six employee records are seeded as ONE table (t_employees,` &&
+               ` the row type name/job/picture) and each block binds the cell it needs - client->_bind( val = t_employees[ N ]-field tab = t_employees tab_index = N ), which renders as {/T_EMPLOYEES/(N-1)/FIELD}. So`.
+    lv_text1 = lv_text1 && ` what is lost is the ModelMapping indirection, not the /Employee ARRAY the elements address: the model keeps that shape and only the named-model names are gone. The cell is matched by data reference,` &&
+               ` which a stock abaplint downport loses for a component-level table expression (it outlines into a work area); abap2UI5 patches that lowering back to ASSIGNING (node/setup/patch-abaplint-downport.mjs,` &&
+               ` filed upstream and run by this repo's e2e build), so the port writes the natural t_employees[ N ]-field and needs no field symbols. EmploymentBlockJob is additionally a two-view BlockBase (Collapsed` &&
+               ` / Expanded with showSubSectionMore='true'); only the Collapsed view (employees 1-2) is inlined - the Expanded view with employees 3-6 and the more/less toggle are lost. // POST-1.71: sap.m.Avatar is` &&
+               ` a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs a UI5 runtime`.
+    lv_text1 = lv_text1 && ` >= 1.73. // POST-1.71: the rowMode aggregation of sap.ui.table.Table and the control sap.ui.table.rowmodes.Auto in it are both @since 1.119 - newer than the 1.71 floor but kept for the 1:1 port,` &&
+               ` since the sample writes exactly <ui:rowMode><uirm:Auto minRowCount="2"/></ui:rowMode>. The app needs a UI5 release >= 1.119: below it the lowercase rowMode tag resolves as a control class and the 404` &&
+               ` takes the whole view down, which is why this is an error rather than a warning. // IMPROVISED: onSectionVisibilityChanged is attached in JS (attachEvent('subSectionVisibilityChange')) rather than in` &&
+               ` the view, and it reads the event's visibleSubSections MAP: when exactly one subsection is visible it adds sapUxAPObjectPageSubSectionFitContainer to it, otherwise it removes the class from all of` &&
+               ` them. Neither half travels - the parameter is a map of live control instances keyed by id, and the decision is per render, not per round trip. addStyleClass IS whitelisted in CONTROL_METHODS, but` &&
+               ` there is nothing to key it on without the map, so the wire is dropped: the page renders identically, only the fit-container class never toggles as the user scrolls. // NOTE:`.
+    lv_text1 = lv_text1 && ` selectedSection='paymentSubSection' names a SUBSECTION id, not a section id, and is carried as written - the association resolves it to the owning section, which is how the sample opens on Personal` &&
+               ` with the Payment information subsection expanded (mode='Expanded' on that subsection is the second half of it). This is the port's whole subject and needs no round trip: the association is set` &&
+               ` statically in the view. // NOTE: the ui:Table's rows binding carries a sorter on 'Name'. A thin frontend sorts the data it sends (app 298 idiom), so the 123 rows of sap/ui/demo/mock/products.json are` &&
+               ` seeded verbatim in the file's own order, SORTed BY name in model_init and the sorter itself is gone. Name is carried as a fifth field for exactly that reason, although no column shows it; the four` &&
+               ` the sample does show are ProductId, SupplierName, Category and Price. The TableModel> prefix folds onto the default model (same-data prefix-drop). // NOTE: this sample has no Connections section,` &&
+               ` where apps 263, 588 and 594 do; its fourth section is the ui:Table one instead. Its sections and subsections carry no ids either, apart from the paymentSubSection the selectedSection association`.
+    lv_text1 = lv_text1 && ` needs. // NOTE: the four asset paths (the imageID_275314.png avatar twice, linkedin.png, Twitter.png) and HRData.json's person.png point at the sdk.openui5.org host per the offline asset-URL rule;` &&
+               ` the original writes them relative.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageState`                               class = `z2ui5_cl_smpc_app_595` path = `src/02/03/z2ui5_cl_smpc_app_595.clas.abap`
         score = 5
@@ -12090,13 +12110,17 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` 26 of the 31 sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column` &&
                ` assignment, and the block ids and view roots go with it. // IMPROVISED: Named-model fold (app 230/263 precedent): EmploymentBlockJob and ConnectionsBlock each carry six uxap:ModelMapping elements` &&
                ` mapping ObjectPageModel>/Employee/0..5 onto the internal models emp1>..emp6>. abap2UI5 serves one default model, so the twelve ModelMapping config controls are gone (the ModelMapping 12 vs 0 line)` &&
-               ` and the six employee records are seeded as default-model root fields (emp1_name/_job/_picture .. emp6_*) bound via client->_bind. EmploymentBlockJob is additionally a two-view BlockBase (Collapsed /`.
-    lv_text1 = lv_text1 && ` Expanded with showSubSectionMore='true'); only the Collapsed view (employees 1-2) is inlined - the Expanded view with employees 3-6 and the more/less toggle are lost. // POST-1.71: sap.m.Avatar is a` &&
-               ` control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs a UI5 runtime >=` &&
-               ` 1.73. // NOTE: this sample and app 594 share one view: same fifteen blocks, same section and subsection ids, same titles, same header. The single difference is that app 594's ObjectPageLayout also` &&
-               ` sets selectedSection='personal' and this one does not - so this page opens on the FIRST tab and shows what useIconTabBar='true' alone does, which is the point of 'tab navigation mode'. Apps 263 and` &&
-               ` 588 carry the same section tree again. // NOTE: the four asset paths (the imageID_275314.png avatar twice, linkedin.png, Twitter.png) and HRData.json's person.png point at the sdk.openui5.org host` &&
-               ` per the offline asset-URL rule, matching apps 263 and 588 which carry the same view; the original writes them relative.`.
+               ` and the six employee records are seeded as ONE table (t_employees, the row type name/job/picture) and each block binds the cell it needs - client->_bind( val = t_employees[ N ]-field tab =`.
+    lv_text1 = lv_text1 && ` t_employees tab_index = N ), which renders as {/T_EMPLOYEES/(N-1)/FIELD}. So what is lost is the ModelMapping indirection, not the /Employee ARRAY the elements address: the model keeps that shape and` &&
+               ` only the named-model names are gone. The cell is matched by data reference, which a stock abaplint downport loses for a component-level table expression (it outlines into a work area); abap2UI5` &&
+               ` patches that lowering back to ASSIGNING (node/setup/patch-abaplint-downport.mjs, filed upstream and run by this repo's e2e build), so the port writes the natural t_employees[ N ]-field and needs no` &&
+               ` field symbols. EmploymentBlockJob is additionally a two-view BlockBase (Collapsed / Expanded with showSubSectionMore='true'); only the Collapsed view (employees 1-2) is inlined - the Expanded view` &&
+               ` with employees 3-6 and the more/less toggle are lost. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the` &&
+               ` snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs a UI5 runtime >= 1.73. // NOTE: this sample and app 594 share one view: same fifteen blocks, same section and subsection`.
+    lv_text1 = lv_text1 && ` ids, same titles, same header. The single difference is that app 594's ObjectPageLayout also sets selectedSection='personal' and this one does not - so this page opens on the FIRST tab and shows what` &&
+               ` useIconTabBar='true' alone does, which is the point of 'tab navigation mode'. Apps 263 and 588 carry the same section tree again. // NOTE: the four asset paths (the imageID_275314.png avatar twice,` &&
+               ` linkedin.png, Twitter.png) and HRData.json's person.png point at the sdk.openui5.org host per the offline asset-URL rule, matching apps 263 and 588 which carry the same view; the original writes them` &&
+               ` relative.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageTabNavigationMode`                   class = `z2ui5_cl_smpc_app_596` path = `src/02/03/z2ui5_cl_smpc_app_596.clas.abap`
         score = 5
@@ -12119,19 +12143,20 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` sidecars citing that row carried NOTE, which hid a measurable loss: columnLayout is honoured only for a real BlockBase instance, so an inlined form falls back to automatic column assignment, and the` &&
                ` block ids and view roots go with it. // IMPROVISED: EmploymentBlockJob is a two-view BlockBase (Collapsed / Expanded, selected by the block mode, with showSubSectionMore='true' offering the toggle)` &&
                ` whose views bind six internal named models emp1>..emp6> that six uxap:ModelMapping elements map onto ObjectPageModel>/Employee/0..5. abap2UI5 serves one default model and has no BlockBase mode`.
-    lv_text1 = lv_text1 && ` toggle, so: the Collapsed view (the block's initial state, two employees - a layout:Grid / layout:VerticalLayout tree with layout:GridData layoutData) is inlined, and emp1>/emp2> are folded onto` &&
-               ` default-model root fields bound via client->_bind (app 230 precedent). Lost: the six ModelMapping config controls, the Expanded view with employees 3-6, the more/less toggle behind` &&
-               ` showSubSectionMore, and the mapping indirection - the two records are resolved statically to HRData.json /Employee/0 (Michael Adams, Scrum Master) and /Employee/1 (John Miller, Product Owner). //` &&
-               ` POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): src='sap-icon://picture' in the snappedHeading and in the` &&
-               ` headerContent (displaySize='L'). Needs a UI5 runtime >= 1.73. // NOTE: The controller's three MessageToast handlers (handleLink1Press, handleLink2Press, handleEditBtnPress) are dead code in this` &&
-               ` sample - the view wires no press event and sets no showEditHeaderButton, so nothing can reach them. The port therefore has no on_event method, which is behaviour-identical. // NOTE:`.
-    lv_text1 = lv_text1 && ` subSectionLayout='TitleOnLeft' is the point of the sample (subsection titles rendered in a left column instead of above the content). The property is passed through 1:1 but the resulting layout was` &&
-               ` not verified in a running system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the ObjectPage renders and the folded emp1>/emp2> ModelMapping` &&
-               ` records show ('Michael Adams'), and the Job Relationship subsection title is there. The TitleOnLeft layout itself stays a human check: measured in the source, subSectionLayout only changes the` &&
-               ` subsection's grid column math (ObjectPageSubSection._calculateLayoutConfiguration) - it emits no own CSS class an assertion could hook onto. **e2e-verified 2026-08-04** (nightly e2e interaction,` &&
-               ` meta/interactions/z2ui5_cl_smpc_app_261.mjs). // NOTE: The two social images (linkedin.png, Twitter.png) are host-absolutized to https://sdk.openui5.org/... since 2026-08-23. The demo kit serves them` &&
-               ` as ./test-resources/..., which an abap2UI5 app has no document root to resolve against, so both icons rendered broken. The sibling ports 262/263 rewrite the same two files and declare it; this port`.
-    lv_text1 = lv_text1 && ` kept the relative form and declared nothing.`.
+    lv_text1 = lv_text1 && ` toggle, so: the Collapsed view (the block's initial state, two employees - a layout:Grid / layout:VerticalLayout tree with layout:GridData layoutData) is inlined, and emp1>/emp2> are folded onto ONE` &&
+               ` table (t_employees, the row type name/job) whose rows the view addresses individually - client->_bind( val = t_employees[ N ]-field tab = t_employees tab_index = N ), rendering` &&
+               ` {/T_EMPLOYEES/(N-1)/FIELD} (app 230/263 precedent). So the ModelMapping indirection is what goes, not the /Employee array shape the elements address. Lost: the six ModelMapping config controls, the` &&
+               ` Expanded view with employees 3-6, the more/less toggle behind showSubSectionMore, and the mapping indirection - the two records are resolved statically to HRData.json /Employee/0 (Michael Adams,` &&
+               ` Scrum Master) and /Employee/1 (John Miller, Product Owner). // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope):` &&
+               ` src='sap-icon://picture' in the snappedHeading and in the headerContent (displaySize='L'). Needs a UI5 runtime >= 1.73. // NOTE: The controller's three MessageToast handlers (handleLink1Press,`.
+    lv_text1 = lv_text1 && ` handleLink2Press, handleEditBtnPress) are dead code in this sample - the view wires no press event and sets no showEditHeaderButton, so nothing can reach them. The port therefore has no on_event` &&
+               ` method, which is behaviour-identical. // NOTE: subSectionLayout='TitleOnLeft' is the point of the sample (subsection titles rendered in a left column instead of above the content). The property is` &&
+               ` passed through 1:1 but the resulting layout was not verified in a running system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the ObjectPage` &&
+               ` renders and the folded emp1>/emp2> ModelMapping records show ('Michael Adams'), and the Job Relationship subsection title is there. The TitleOnLeft layout itself stays a human check: measured in the` &&
+               ` source, subSectionLayout only changes the subsection's grid column math (ObjectPageSubSection._calculateLayoutConfiguration) - it emits no own CSS class an assertion could hook onto. **e2e-verified` &&
+               ` 2026-08-04** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_261.mjs). // NOTE: The two social images (linkedin.png, Twitter.png) are host-absolutized to https://sdk.openui5.org/...`.
+    lv_text1 = lv_text1 && ` since 2026-08-23. The demo kit serves them as ./test-resources/..., which an abap2UI5 app has no document root to resolve against, so both icons rendered broken. The sibling ports 262/263 rewrite the` &&
+               ` same two files and declare it; this port kept the relative form and declared nothing.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageTitleOnLeft`                         class = `z2ui5_cl_smpc_app_261` path = `src/02/03/z2ui5_cl_smpc_app_261.clas.abap`
         score = 5

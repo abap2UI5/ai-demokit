@@ -5,10 +5,13 @@ CLASS z2ui5_cl_smpc_app_261 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
-    DATA emp1_name TYPE string.
-    DATA emp1_job  TYPE string.
-    DATA emp2_name TYPE string.
-    DATA emp2_job  TYPE string.
+    TYPES:
+      BEGIN OF ty_s_employee,
+        name TYPE string,
+        job  TYPE string,
+      END OF ty_s_employee.
+
+    DATA t_employees TYPE STANDARD TABLE OF ty_s_employee WITH EMPTY KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -44,7 +47,7 @@ CLASS z2ui5_cl_smpc_app_261 IMPLEMENTATION.
     " each a lazy-loading wrapper around a static view - inlined 1:1 below. The
     " EmploymentBlockJob block additionally carries uxap:ModelMapping elements
     " mapping ObjectPageModel>/Employee/N onto internal models empN>; abap2UI5
-    " serves one default model, so those are folded onto root fields.
+    " serves one default model, so those fold onto one table addressed per row.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`       v = `100%`
         )->a( n = `xmlns`        v = `sap.uxap`
@@ -559,7 +562,7 @@ CLASS z2ui5_cl_smpc_app_261 IMPLEMENTATION.
 
                                 " employment:EmploymentBlockJob inlined with its
                                 " Collapsed view (the block's initial mode); the
-                                " empN> models fold onto the default-model root
+                                " empN> models are the rows of one table
                                 )->ele( n = `Grid` ns = `layout`
                                     )->a( n = `defaultSpan` v = `L4 M6 S12`
                                     )->a( n = `hSpacing`    v = `0`
@@ -576,9 +579,9 @@ CLASS z2ui5_cl_smpc_app_261 IMPLEMENTATION.
                                                     )->ele( n = `content` ns = `layout`
                                                         )->ele( n = `VerticalLayout` ns = `layout`
                                                             )->tag( n = `Label` ns = `m`
-                                                                )->a( n = `text` v = client->_bind( emp1_name )
+                                                                )->a( n = `text` v = client->_bind( val = t_employees[ 1 ]-name tab = t_employees tab_index = 1 )
                                                             )->tag( n = `Label` ns = `m`
-                                                                )->a( n = `text` v = client->_bind( emp1_job )
+                                                                )->a( n = `text` v = client->_bind( val = t_employees[ 1 ]-job tab = t_employees tab_index = 1 )
 
                                                             )->ele( n = `layoutData` ns = `layout`
                                                                 )->tag( n = `GridData` ns = `layout`
@@ -604,9 +607,9 @@ CLASS z2ui5_cl_smpc_app_261 IMPLEMENTATION.
 
                                                     )->ele( n = `VerticalLayout` ns = `layout`
                                                         )->tag( n = `Label` ns = `m`
-                                                            )->a( n = `text` v = client->_bind( emp2_name )
+                                                            )->a( n = `text` v = client->_bind( val = t_employees[ 2 ]-name tab = t_employees tab_index = 2 )
                                                         )->tag( n = `Label` ns = `m`
-                                                            )->a( n = `text` v = client->_bind( emp2_job )
+                                                            )->a( n = `text` v = client->_bind( val = t_employees[ 2 ]-job tab = t_employees tab_index = 2 )
 
                                                         )->ele( n = `layoutData` ns = `layout`
                                                             )->tag( n = `GridData` ns = `layout`
@@ -623,10 +626,11 @@ CLASS z2ui5_cl_smpc_app_261 IMPLEMENTATION.
 
     " ObjectPageModel>/Employee rows 0 and 1, the two records the block's
     " uxap:ModelMapping elements map onto the internal models emp1> / emp2>
-    emp1_name = `Michael Adams`.
-    emp1_job  = `Scrum Master`.
-    emp2_name = `John Miller`.
-    emp2_job  = `Product Owner`.
+    t_employees = VALUE #(
+      ( name = `Michael Adams`
+        job  = `Scrum Master` )
+      ( name = `John Miller`
+        job  = `Product Owner` ) ).
 
   ENDMETHOD.
 

@@ -7,6 +7,73 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](../STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-30 — the UxAP employee family binds a table, not eighteen fields
+
+The five ObjectPage ports that carry the SharedBlocks employee records —
+**263, 588, 594, 595, 596** — each declared `emp1_name/_job/_picture` through
+`emp6_*` and bound the eighteen fields one by one. The original model is an
+ARRAY (`SharedJSONData/HRData.json` `/Employee/0..5`, which is exactly what the
+twelve `uxap:ModelMapping` elements per port address), and a flat field series
+renders identically while losing that shape. They now seed **one table**
+(`t_employees`, row type `name/job/picture`) and bind cells:
+
+```abap
+)->a( n = `text` v = client->_bind( val = t_employees[ 1 ]-name tab = t_employees tab_index = 1 )
+```
+
+which renders `{/T_EMPLOYEES/0/NAME}`. The named-model deviation in each
+sidecar shrank accordingly: what is gone is the ModelMapping indirection, not
+the array.
+
+**The detour it took to get there, because the second half is a defect.**
+`_bind( tab / tab_index )` identifies the bound cell by DATA REFERENCE
+(`z2ui5_cl_ui5_srv_bind->bind_tab_cell`), and abaplint's downport lowers a
+component-level table expression to `READ TABLE … INTO <wa>` — a copy. The
+reference match then refuses the cell on code that is correct at the v750
+target, so the natural spelling died in every downported build, the transpiled
+backend behind `npm run e2e` included. The first version of this batch worked
+around it on the caller's side: assign each row to a field symbol before the
+chain (the whole-row expression IS lowered with ASSIGNING) and bind
+`<empN>-field`. Six field symbols and six ASSIGNs per port — which for a
+six-row table is the entire gain of using a table, so it was thrown away
+again.
+
+The lowering is patched where it is wrong instead:
+`node/setup/patch-abaplint-downport.mjs` in abap2UI5 applies the upstream
+patch to the installed abaplint bundle, `npm run downport` runs it, and
+`scripts/e2e-build.mjs` here calls it before downporting the corpus. A shim
+with a stated end: it fails the build once its anchors stop matching, and
+`test_bind_tab_cell` upstream in the framework is the canary that it still
+works. Filed as `abaplint-downport-table-expression-copy` in abap2UI5's
+backlog with the patch it was written from (upstream `packages/core` green
+with it: 10885 passing).
+
+**What had to move first.** The framework's `_bind( tab / tab_index )` had no
+ABAP Doc, no test and no caller in any of the three corpora; it now has all
+three. And the linter's reconstructor deliberately refused every call carrying
+`tab`/`tab_index`, so the whole expression came back unresolved — which takes
+the **attribute** out of the reconstructed view and leaves the property gate,
+the render gate and structural-diff with nothing to look at. Measured on 263
+before the fix: `<m:Image src="…"/>` reconstructed as a bare `<m:Image/>`, and
+the port stayed green because it has eight Images and `src` was still in the
+attribute set from the other seven. `bindingOf` resolves both spellings now.
+
+Also in this pass: a CAPABILITIES row for the cell binding, naming these five
+ports as the proof.
+
+**261, 401 and 587 came with it** — the same family at two rows (`emp1`/`emp2`,
+name and job, `/Employee/0..1`), so eight ports in total.
+
+**Where this does NOT apply, checked rather than assumed.** The other ports
+with numbered sibling attributes are not the same case: 017's five
+`DateRangeSelection`s carry a typed binding with its own `parts` each, 345's
+eleven sliders, 018's seven date pickers, 045's five range sliders, 169's eight
+and 343's six are all N separately declared controls with N model paths, and
+their originals carry no collection at all (no mock JSON in the sample folder,
+no `items=` over an array). Folding those into a table would INVENT an array
+the sample does not have — the flat fields are the faithful shape there. The
+discriminator is the original's model, not the repetition in the port.
+
 ## 2026-08-28 — four formatting drifts, and the rules that stop them coming back
 
 Four cleanups out of one pass over all 637 ports. None of them changes what an
