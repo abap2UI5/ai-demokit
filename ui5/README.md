@@ -21,7 +21,7 @@ is the committed snapshot of the full demo kit sample universe (entity, Since,
 deprecation per sample) that coverage regenerates from offline (AGENTS §7).
 
 [`descriptions.json`](descriptions.json) is the third snapshot: the sentence the
-demo kit prints under each sample title, for all 793 samples, taken from
+demo kit prints under each sample title, for all 800 samples, taken from
 `src/<lib>/test/**/demokit/docuindex.json` — which is why copying the sample
 FILES here never brought it along. It is what `npm run summary` writes onto the
 ports as their `" @summary` line; refresh it with

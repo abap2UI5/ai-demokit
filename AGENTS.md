@@ -47,9 +47,9 @@ reads the files directly. **Read the matching guide BEFORE starting the task**
 | Run or debug the e2e smoke (Playwright) | `.claude/skills/e2e-debugging/SKILL.md` |
 | Settle a claim by MEASURING it, or sweep the corpus for a defect no gate sees | `scripts/probes/README.md` |
 
-**Large files — grep them, never read them whole:** `api.md` (~316 KB
-generated table), `docs/history.md` (~330 KB journal), `CAPABILITIES.md`
-(~45 KB — grep for the feature row),
+**Large files — grep them, never read them whole:** `api.md` (~356 KB
+generated table), `docs/history.md` (~436 KB journal), `CAPABILITIES.md`
+(~60 KB — grep for the feature row),
 `src/z2ui5_cl_smpc_app_000.clas.abap` (generated). (The e2e
 interactions live as one module per port under `meta/interactions/` —
 read only the port you work on.)
