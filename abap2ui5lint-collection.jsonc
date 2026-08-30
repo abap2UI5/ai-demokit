@@ -47,12 +47,18 @@
     "enum-value-too-new": { "severity": "hint" },
     "icon-too-new": { "severity": "hint" },
 
-    // Re-enabled 2026-08-30: the rule is scoped to a RUNTIME load now (a
-    // `/resources/` path or the bootstrap script), so the demo-kit hyperlink
-    // every class carries and the collection's `/test-resources/` assets are
-    // no longer reported — which is what this entry was switched off for.
-    // Measured over the corpus at zero findings before the switch flipped.
-    "commercial-ui5-host": "error"
+    // Each class links its control's SAPUI5 demo kit page, which is on
+    // ui5.sap.com because SAPUI5 has no other home — the same reason the
+    // collection's assets legitimately come from ui5.sap.com/test-resources
+    // (AGENTS §3). The rule is about an app loading its RUNTIME from the
+    // commercial host; a documentation hyperlink is not that.
+    // NOTE (2026-08-30): re-enabled in #171 and switched off again the same
+    // day. The scoping that makes it correct (a RUNTIME load only, so a
+    // demo-kit hyperlink and a /test-resources/ asset are not reported) is on
+    // the linter's main branch, not in the pinned 0.5.1 - which still reports
+    // the bare host and failed this gate with five errors. Re-enable it in the
+    // bump PR. See abap2UI5/linter#80.
+    "commercial-ui5-host": false
   },
 
   // Hints stay visible and decide nothing. An error is a view UI5 would fail

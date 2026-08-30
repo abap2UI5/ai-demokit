@@ -15,6 +15,17 @@
   // over the tree.
   //
   // `npm run fmt:chains` applies it.
+  // NOTE (2026-08-30): this file was simplified to `"properties": false` plus
+  // six entries in #171, and reverted to the form below the same day. The
+  // simplification is correct against the linter's MAIN branch and wrong
+  // against the version this repo PINS: `package.json` takes
+  // `@abap2ui5/linter` as `^0.5.1`, and in 0.5.1 `properties: false` still
+  // takes the chain rules down with it, while `frontend-action-too-new` is not
+  // a rule id it knows at all - an unknown id fails the config loader outright,
+  // so `npm run check:chains` did not merely pass blindly, it exited 2.
+  // Re-apply the simplification in the bump PR, together with the pin: the two
+  // are one change. See abap2UI5/linter#80.
+
   "$schema": "./node_modules/@abap2ui5/linter/data/abap2ui5lint.schema.json",
 
   "paths": ["src"],
@@ -28,19 +39,9 @@
   // …and the property gate is off for the same reason it is not this check's
   // business: whether a member exists on the 1.71 floor is judged by
   // view-gates, against the meta sidecars and their POST_171 deviations. Left
-  // on, this config would re-report those findings with none of that policy
-  // applied - a second, dumber opinion about work that is already gated.
-  //
-  // This is one line again as of 2026-08-30. It used to be fifteen `false`
-  // entries, because `properties: false` took the CHAIN rules down with it -
-  // they were emitted from the same pass, so a layout-only run passed
-  // everything and looked green doing it. The linter separates the two now:
-  // the snapshot-backed walk stays behind this flag, the ABAP-side rules run
-  // either way. Two of those fifteen were linter defects rather than policy
-  // (`invalid-aggregation-child` on ObjectPageSubSection.blocks, and
-  // `unknown-property` on a member newer than the pinned snapshot) and both
-  // disappear with the property gate itself.
-  "properties": false,
+  // on, this config would re-report 339 of those findings with none of that
+  // policy applied - a second, dumber opinion about work that is already
+  // gated. What remains is the layout, and nothing else.
 
   "rules": {
     // src/zz_dev is where abap2UI5/mcp-server's deploy_app writes the class an
@@ -49,21 +50,56 @@
     // walk the tree themselves.
     "chain-house-layout": { "severity": "warning", "exclude": ["src/zz_dev/"] },
 
-    // What remains after the property gate is off: the ABAP-side rules, which
-    // read the class rather than the view tree and are therefore unaffected by
-    // it. All six are view-gates' business for the same reason the version
-    // family was - it reads them against the meta sidecars, where an advisory
-    // budget and a declared deviation decide them. Measured, not guessed: these
-    // are exactly the types that fire over src with the property gate off.
+    // Everything else this run would report is somebody else's job, and doing
+    // it here would do it WORSE. All thirteen are judged by view-gates, which
+    // reads them against the meta sidecars: a POST_171 deviation excuses a
+    // version finding, ADVISORY_BUDGET pins the accepted advisory debt, and a
+    // render skip is verified against the real render. None of that policy
+    // exists in this file, so leaving them on would re-report 339 findings as
+    // a second, dumber opinion about work that is already gated - and the
+    // first person to see a red chain-format check would learn to ignore it.
+    //
+    // The property gate cannot simply be switched off instead: `properties:
+    // false` takes the chain rules with it (they are reported from the same
+    // pass), which would leave this check silently passing everything. That
+    // was measured, not assumed.
     //
     // A rule the linter grows LATER is not in this list and will fire here on
     // the next bump. That is deliberate and matches how view-gates treats new
     // advisory rules: the bump PR is where the decision belongs.
-    "hardcoded-binding-path": false,
+    "member-too-new": false,
+    "control-too-new": false,
+    "aggregation-too-new": false,
+    "event-parameter-too-new": false,
+    "enum-value-too-new": false,
     "icon-too-new": false,
-    "live-event-roundtrip": false,
+    "missing-accessibility": false,
     "event-without-handler": false,
-    "frontend-action-too-new": false,
-    "escape-sequence-in-backtick": false
+    "event-on-disabled-control": false,
+    "live-event-roundtrip": false,
+    "unknown-event-parameter": false,
+    "hardcoded-binding-path": false,
+    "commercial-ui5-host": false,
+
+    // added 2026-08-22 (batch b49, app 592 ObjectPageLazyLoadingWithoutBlocks):
+    // the fourteenth of the same kind. It never fired before, so it was never
+    // listed - and the moment it did, it was on a port whose sidecar declares
+    // a `property_gate` skip for it (sap.uxap.ObjectPageSubSection.blocks is
+    // typed sap.ui.core.Control while ObjectPageSubSection.addAggregation
+    // explicitly handles the sap.ui.core.Element ObjectPageLazyLoader). That
+    // declaration lives in meta/ and is verified per run by view-gates, which
+    // fails the port if the finding stops firing; this file has no access to
+    // it, so leaving the rule on here would re-report a judged finding as a
+    // second, dumber opinion - exactly what the thirteen above are off for.
+    "invalid-aggregation-child": false,
+
+    // added 2026-08-22 (batch b50, app 611 CalendarAriaHasPopup): the fifteenth.
+    // sap.ui.unified.DateTypeRange.ariaHasPopup is @since 1.152.0 and this
+    // repo's control metadata is pinned at 1.151.0, so the member does not
+    // exist in the snapshot and the rule reads it as a typo. The port declares
+    // a `property_gate` skip for exactly that type (and a render skip for the
+    // 1.151 runtime that rejects the attribute); both live in meta/ and are
+    // re-verified per run by view-gates, which this file cannot see.
+    "unknown-property": false
   }
 }
