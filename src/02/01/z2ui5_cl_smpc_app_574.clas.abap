@@ -231,7 +231,6 @@ CLASS z2ui5_cl_smpc_app_574 IMPLEMENTATION.
           ENDLOOP.
         ENDIF.
         counts_refresh( ).
-        view_display( ).
 
       WHEN `ITEM_ACTION`.
         " onItemActionPress deletes the row, clears the selection and toasts
@@ -243,7 +242,6 @@ CLASS z2ui5_cl_smpc_app_574 IMPLEMENTATION.
         ENDLOOP.
         counts_refresh( ).
         client->message_toast_display( `Product deleted and selection cleared.` ).
-        view_display( ).
 
       WHEN `ADD_ROW`.
         " onAddRow appends a product with randomised values; a backend cannot
@@ -262,7 +260,6 @@ CLASS z2ui5_cl_smpc_app_574 IMPLEMENTATION.
         APPEND new_row TO t_rows.
         counts_refresh( ).
         client->message_toast_display( |New product added: { new_row-name }| ).
-        view_display( ).
 
     ENDCASE.
 
