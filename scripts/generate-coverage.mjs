@@ -6,6 +6,7 @@
  *               Deprecated (since + replacement hint) · Sample (source + live
  *               links) · ABAP (ported class or —)
  *   - README.md per-module coverage summary (between the coverage markers)
+ *               and the one-line results figure at the top (glance markers)
  *
  * The in-system overview app (src/) is generated separately by
  * scripts/generate-overview.mjs.
@@ -496,6 +497,20 @@ if (!readme.includes(START) || !readme.includes(END)) {
 }
 const block = `${START}\n\n${summaryLines().join('\n').trimEnd()}\n\n${END}`;
 readme = readme.replace(new RegExp(`${START}[\\s\\S]*?${END}`), () => block);
+
+// README — splice the at-a-glance results line between the glance markers,
+// so the headline numbers can never drift from the coverage block below
+const GLANCE_START = '<!-- glance:start -->';
+const GLANCE_END = '<!-- glance:end -->';
+if (!readme.includes(GLANCE_START) || !readme.includes(GLANCE_END)) {
+  console.error(`README.md is missing the ${GLANCE_START} / ${GLANCE_END} markers.`);
+  process.exit(1);
+}
+const glance = `${GLANCE_START}\n**${totalPorted}** AI-generated ports of official UI5 demo kit samples — ` +
+  `${pct(totalPorted, totalInScope)} of the **${totalInScope}** in-scope samples, each guarded by the ` +
+  `CI gates on three ABAP releases (Standard, Cloud, NW 7.02).\n` +
+  `[Coverage](#coverage) · [api.md](api.md) · [Run them in your browser](https://abap2ui5.github.io/ai-demokit/)\n${GLANCE_END}`;
+readme = readme.replace(new RegExp(`${GLANCE_START}[\\s\\S]*?${GLANCE_END}`), () => glance);
 
 // README — splice the generation prompt from its single source
 // (scripts/generation-prompt.txt; the port-a-sample guide stays the authoritative long form)

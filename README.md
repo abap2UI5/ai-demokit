@@ -10,6 +10,11 @@
 
 _Last generated: <!-- last-run -->2026-07-20 06:21 UTC<!-- /last-run -->_
 
+<!-- glance:start -->
+**288** AI-generated ports of official UI5 demo kit samples — 45.9 % of the **628** in-scope samples, each guarded by the CI gates on three ABAP releases (Standard, Cloud, NW 7.02).
+[Coverage](#coverage) · [api.md](api.md) · [Run them in your browser](https://abap2ui5.github.io/ai-demokit/)
+<!-- glance:end -->
+
 > **This repository is AI-generated.** From every official UI5 demo kit
 > sample of the ten covered libraries (**`sap.m`**, `sap.f`, `sap.ui.core`,
 > `sap.ui.layout`, `sap.ui.table`, `sap.ui.unified`, `sap.uxap`, `sap.tnt`,
