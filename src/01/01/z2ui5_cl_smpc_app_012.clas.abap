@@ -80,9 +80,6 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
-      " the original's manifest router (#/Page2, browser Back/Forward): the
-      " framework's hash routing instead - KEEP routes #/app/<CLASS>/<DRAFT>
-      client->follow_up_action( client->cs_event-set_nav_routing ).
       model_init( ).
       view_display( ).
     ELSEIF client->check_on_navigated( ).
@@ -96,13 +93,11 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
 
   METHOD view_display.
 
-    " the original's router matches #/Page2 directly (reload, browser Forward,
-    " a bookmark): the pushed history entry keeps the /Page2 suffix after the
-    " draft segment, so a rebuild whose live hash still carries it re-enters
-    " the comparison for the restored selection
-    IF check_page2 = abap_false
-       AND contains( val = client->get( )-s_config-hash sub = `/Page2` )
-       AND line_exists( t_products[ selected = abap_true ] ).
+    " the original's router matches #/Page2 directly (a deep link, a reload):
+    " the live hash rides in s_config-hash on every request, so a render whose
+    " hash carries it enters the comparison - with nothing selected it stays
+    " empty, exactly the original's cold #/Page2
+    IF check_page2 = abap_false AND contains( val = client->get( )-s_config-hash sub = `/Page2` ).
       comparison_build( ).
       check_page2 = abap_true.
     ENDIF.
@@ -442,6 +437,13 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
     client->follow_up_action( val   = client->cs_event-binding_call
                               t_arg = VALUE #( ( `idProductsTable` ) ( `items` ) ( `filter` ) ( `CATEGORY` ) ( `EQ` ) ( `Laptops` ) ) ).
 
+    " the original's manifest router, app-owned: the hash stays the app's own
+    " (#/Page2, no route prefix), and a hash change the app did not write -
+    " browser Back/Forward, a manual edit - round-trips as HASH_CHANGED.
+    " Re-asserted per render, since the registration dies with an app switch
+    client->follow_up_action( val   = client->cs_event-set_hash_listener
+                              t_arg = VALUE #( ( `HASH_CHANGED` ) ) ).
+
     client->view_display( view->stringify( ) ).
 
     " A Carousel's active page is live control state a rebuilt view resets to
@@ -463,8 +465,8 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
     ENDIF.
 
     " the NavContainer's active page is the same class of live control state:
-    " a rebuilt view (a restored draft, browser Forward) is back on the first
-    " page while check_page2 survives as class state
+    " a rebuilt view (a restored draft, a return from a called app) is back on
+    " the first page while check_page2 survives as class state
     IF check_page2 = abap_true.
       client->follow_up_action( val   = client->cs_event-control_by_id
                                 t_arg = VALUE #( ( `rootControl` ) ( `to` ) ( `page-comparison` ) ) ).
@@ -495,10 +497,30 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
         " the router's navTo("page2") mapped to the NavContainer `to` frontend action
         client->follow_up_action( val   = client->cs_event-control_by_id
                                   t_arg = VALUE #( ( `rootControl` ) ( `to` ) ( `page-comparison` ) ) ).
-        " navTo also pushed a history entry: set_push_state appends /Page2 and
-        " pushes, while the entry below it keeps the pre-compare draft - so
-        " browser Back restores the First Page state (routing mode KEEP)
+        " navTo also writes the router's hash: with the hash listener
+        " registered this pushes the app-owned `#/Page2` - the original's URL
+        " 1:1 - as a real history entry, so browser Back has somewhere to go
         client->set_push_state( `/Page2` ).
+
+      WHEN `HASH_CHANGED`.
+        " browser Back/Forward (or a manual edit) moved the app-owned hash -
+        " the router's routeMatched: show the page the hash now names. The
+        " hash rides in s_config-hash with this very request; the app
+        " instance is untouched, so the selection survives like with the
+        " original's client-side router
+        IF contains( val = client->get( )-s_config-hash sub = `/Page2` ).
+          IF check_page2 = abap_false.
+            comparison_build( ).
+            check_page2 = abap_true.
+            client->follow_up_action( val   = client->cs_event-control_by_id
+                                      t_arg = VALUE #( ( `rootControl` ) ( `to` ) ( `page-comparison` ) ) ).
+          ENDIF.
+        ELSEIF check_page2 = abap_true.
+          check_page2 = abap_false.
+          " NavContainer `back` pops the page the `to` above pushed
+          client->follow_up_action( val   = client->cs_event-control_by_id
+                                    t_arg = VALUE #( ( `rootControl` ) ( `back` ) ) ).
+        ENDIF.
 
       WHEN `PAGE_CHANGED`.
         DATA(page_arg) = client->get_event_arg( ).
@@ -556,6 +578,12 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
     IF pages_count > lines( t_comp_products ).
       pages_count = lines( t_comp_products ).
     ENDIF.
+    " a cold #/Page2 (deep link, reload) has no selection: the original's
+    " settings model is then empty and visiblePagesCount falls back to its
+    " UI5 default 1 - a computed 0 would be an invalid CarouselLayout count
+    IF pages_count < 1.
+      pages_count = 1.
+    ENDIF.
     is_desktop = xsdbool( pages_count = 4 ).
 
     first_item = 0.
@@ -595,6 +623,12 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
     ENDIF.
 
     t_comp_props = VALUE #( ).
+    " the original's cold #/Page2 renders BOTH lists empty ('no data') - its
+    " Props are built per selected product, so no product means no rows, not
+    " nineteen property panels with empty value lists
+    IF t_comp_products IS INITIAL.
+      RETURN.
+    ENDIF.
     LOOP AT t_keys INTO DATA(s_key).
       DATA(s_prop) = VALUE ty_s_comp_prop( key = s_key-key ).
       LOOP AT t_comp_products FROM from_item TO last_item INTO DATA(s_product).

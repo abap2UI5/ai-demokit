@@ -2194,57 +2194,61 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22` ) ).
 
-    lv_text1 = `IMPROVISED: the pattern's three views (App.view with sap.m.App id=rootControl, Main.view, Comparison.view) plus manifest routing are merged into ONE view: the App hosts the Main Page and the` &&
+    lv_text1 = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed) — that check bounds what was verified: the 2026-08-27` &&
+               ` change added a render-time re-issue of both setActivePage calls at the end of view_display( ), which no listed check covered and which only a rebuild (a restored draft, or returning from a called` &&
+               ` app) exercises. The port stays checked; what was checked passed, and the new half is unverified rather than re-checked. The 2026-08-31 routing wire (the app-owned hash via set_hash_listener +` &&
+               ` set_push_state, the HASH_CHANGED page switch, the cold-#/Page2 re-entry and the render-time page re-issue in view_display) is equally outside what the 2026-07-20 run covered - unverified rather than` &&
+               ` re-checked (pushed for a live-system test on request before the local browser run finished).`.
+    lv_text2 = `IMPROVISED: the pattern's three views (App.view with sap.m.App id=rootControl, Main.view, Comparison.view) plus manifest routing are merged into ONE view: the App hosts the Main Page and the` &&
                ` Comparison f:DynamicPage (id page-comparison added) directly as its pages; the router's navTo("page2") is mapped to the documented NavContainer frontend action follow_up_action(` &&
                ` cs_event-control_by_id, rootControl//to/page-comparison ) with the default slide transition (CAPABILITIES nav row); the view controllerName attributes are dropped. Since 2026-08-31 the router's HASH` &&
-               ` half is reproduced with framework means (first port to use them): set_nav_routing on init (mode KEEP) routes '#/app/<CLASS>/<DRAFT>' - a draft route, not the original's '#/Page2' - and COMPARE pushes` &&
-               ` a history entry via set_push_state( /Page2 ); the router skips its own hash write on a push-state roundtrip, so the entry below the pushed one keeps the PRE-compare draft and browser Back restores` &&
-               ` the First Page with the selection intact (each roundtrip mints a fresh draft id, so the echo guard cannot swallow the navigation). A rebuild whose live hash still carries the /Page2 suffix (reload,`.
-    lv_text1 = lv_text1 && ` browser Forward, a bookmarked push-state URL - the suffix rides AFTER the draft segment, which routes to the pre-compare draft) re-enters the comparison from the restored selection in view_display(` &&
-               ` ), guarded on a non-empty selection because a cold deep link has none; and a rebuilt view is back on its first page while check_page2 survives as class state, so view_display( ) re-issues the` &&
-               ` NavContainer ``to`` (the carousel re-issue pattern). Still IMPROVISED: one view instead of three plus a manifest router, and the hash shape differs from the original's. // NOTE: named models` &&
-               ` flattened into the single default model: the Comparison view's settings> model becomes the bound PAGES_COUNT/IS_DESKTOP fields (pagesCount initialized to 1, the CarouselLayout.visiblePagesCount UI5` &&
-               ` default, instead of the original's undefined-until-routeMatched), and its products> model (Products/Props) becomes T_COMP_PRODUCTS/T_COMP_PROPS; the shared mock products.json default model is` &&
-               ` flattened into a flat upper-cased row type (all 20 JSON columns kept; rows without DateOfSale carry an empty string where the original JSON omits the key - a harmless string property, no enum/default`.
-    lv_text1 = lv_text1 && ` override). // NOTE: the '.formatter.url' iconSrc formatter flattened to absolute https://sdk.openui5.org image URLs - source-verified against the now-archived app/model/formatter.js (it only prefixes` &&
-               ` '../../../../../../', i.e. resolves to the test-resources root), so the absolute URLs are the faithful equivalent. // NOTE: compare button: the controller's onSelection setText/setVisible is replaced` &&
-               ` by bound COMPARE_TEXT/COMPARE_VISIBLE model properties updated in the SELECTION handler (same count>1 logic, text only refreshed while shown, like the original); the ColumnListItem gains a` &&
-               ` selected="{SELECTED}" two-way binding - the sanctioned selection-read pattern (CAPABILITIES 'Controller-read list selection') replacing getSelectedContextPaths - which is an extra attribute vs the` &&
-               ` original template, and the initial visible="false"/absent text of the Button become bindings. // IMPROVISED: the ResizeHandler-driven pagesCount/isDesktop recalculation (_onResize/_getPagesCount) is` &&
-               ` replaced by a one-shot computation at COMPARE time from client->get( )-s_device-resize-width using the original's 600/1024 thresholds and the cap at the selected-items count; no live recalculation on`.
-    lv_text1 = lv_text1 && ` window resize. Re-judged 2026-08-05 against the now-live device model (pr/live-device-model): it does NOT close this one. visiblePagesCount could bind {device>/resize/width} directly, but the count` &&
-               ` is also capped at the number of SELECTED products and then drives comparison_props_build, which slices the props table server-side per page window - so a client-side count would desync the props it` &&
-               ` is supposed to index. The round-trip decision stays; what the live model closes is the class-swap family (app 168), not this one. Re-judged again 2026-08-06 and reclassified as a BOUNDARY rather than` &&
-               ` a framework gap: closing it would need a resize -> BACKEND event wire (a debounced ResizeHandler round-trip), and that is deliberately not offered - it is chatty by construction, and every` &&
-               ` display-only case it would serve is already covered by the live device model without a round-trip. The one case it would genuinely serve is this one, where the count feeds a server-side slice; one` &&
-               ` port is not enough to file on (the repo's rule), so the idea is recorded here for the second sample that needs it. // NOTE: Panel expand: the controller's onPanelExpanded (walking the sibling HBox`.
-    lv_text1 = lv_text1 && ` controls and calling setVisible) is replaced by a bound VISIBLE flag per comparison value row, toggled in the PANEL_EXPANDED event via t_arg ${KEY} + ${$parameters>/expand}; the description HBox's` &&
-               ` literal visible="false" becomes the {VISIBLE} binding (initial false). // NOTE: The snapped/expanded Carousel re-sync is reproduced since 2026-08-06. The original's _updateCarouselsActivePage hands` &&
-               ` each Carousel its own page AT THE SAME INDEX - carousel.setActivePage( carousel.getPages()[ iFirstItem ] ) - and those pages are aggregation-template CLONES. Measured 2026-08-06` &&
-               ` (scripts/probes/aggregation-item-probe.mjs, real OpenUI5): their ids ARE deterministic and stable, even across a reorder - UI5 mints <templateId>-<parentId>-<index> - but the parent id carries the` &&
-               ` VIEW PREFIX the framework assigns at runtime (v1--tpl-v1--car-0), which the backend never sees, so it cannot spell one. The earlier sidecar called them 'nondeterministic', which the probe refutes;` &&
-               ` the gap was the prefix, not the determinism. Wherever a CONTROL_BY_ID argument takes a control id it now also takes an aggregation ITEM, addressed positionally as <id>/<aggregation>/<index>`.
-    lv_text1 = lv_text1 && ` (pr/aggregation-item-address, implemented upstream), resolved on the client where both the prefix and the aggregation are known. Both carousels are re-synced on every PAGE_CHANGED, as in the original` &&
-               ` - and, since 2026-08-27, again at the end of view_display( ) whenever first_item is past page 0, because a rebuilt Carousel is back at page 0 while first_item survives as class state AND drives the` &&
-               ` bound comparison rows. // NOTE: the DynamicPageTitle stateChange handler (.onStateChange, add/removeSnappedContent of the snapped Carousel as a Carousel-animation workaround) is dropped together with` &&
-               ` its stateChange attribute - imperative aggregation surgery with no framework equivalent; the snapped/expanded content still switches natively with the DynamicPage header state. // NOTE: comparison` &&
-               ` Props are built from a fixed 19-key list in the mock JSON key order (the original iterates the FIRST selected product's own keys, skipping ProductPicUrl - so a first product without DateOfSale would` &&
-               ` drop that row, and missing values rendered '<strong>undefined</strong>' where the port renders an empty <strong></strong>); selected products are taken in model row order, not click order; the`.
-    lv_text1 = lv_text1 && ` original's per-product information cache is unnecessary server-side. The controller's handleButtonPress (MessageBox) is dead code referenced by no view and not ported. // NOTE: the comparison Props` &&
-               ` row for Price shows 956.00 where the original shows 956. The mock carries Price as a JSON number (956) and the original prints that value straight into the Props text; the port holds it in a packed` &&
-               ` field (p LENGTH 8 DECIMALS 2, needed for the ObjectNumber's sap.ui.model.type.Currency binding, which renders 956.00 in BOTH), and an ABAP packed value always serialises with its two decimals. Only` &&
-               ` the Props text differs, and only in the trailing zeros - the ObjectNumber above it is identical in both.`.
+               ` half is reproduced 1:1 with the framework's APP-OWNED hash routing (cs_event-set_hash_listener, first port to use it; needs abap2UI5 NEWER than 1.144.0 - abap2UI5#2693): the start URL carries NO hash` &&
+               ` (like the original), COMPARE pushes the app-owned '#/Page2' via set_push_state - the original's URL byte for byte - and a hash change the app did not write (browser Back/Forward, a manual edit)` &&
+               ` round-trips as HASH_CHANGED, whose handler shows the page the live hash (s_config-hash) names: NavContainer ``back`` to the First Page - the app instance is untouched, so the selection survives`.
+    lv_text2 = lv_text2 && ` exactly like with the original's client-side router - or comparison_build + ``to`` for Forward. A render whose live hash carries /Page2 with the flag still off (a deep link, a reload) enters the` &&
+               ` comparison in view_display( ); with nothing selected it stays empty with visiblePagesCount clamped to the UI5 default 1, which is exactly the original's cold '#/Page2' ('no data' lists). The` &&
+               ` registration is re-asserted per render (it dies with an app switch), and view_display( ) re-issues the NavContainer ``to`` while check_page2 survives as class state (the carousel re-issue pattern).` &&
+               ` The 2026-08-31 morning's draft-route wire (set_nav_routing KEEP + a draft-suffixed push) was replaced the same day: it wrote '#/app/<CLASS>/<DRAFT>' on start and its Back was swallowed by hasher's` &&
+               ` cache dedupe - both reported from a live system. Still IMPROVISED: one view instead of three plus a manifest router. // NOTE: named models flattened into the single default model: the Comparison` &&
+               ` view's settings> model becomes the bound PAGES_COUNT/IS_DESKTOP fields (pagesCount initialized to 1, the CarouselLayout.visiblePagesCount UI5 default, instead of the original's`.
+    lv_text2 = lv_text2 && ` undefined-until-routeMatched), and its products> model (Products/Props) becomes T_COMP_PRODUCTS/T_COMP_PROPS; the shared mock products.json default model is flattened into a flat upper-cased row type` &&
+               ` (all 20 JSON columns kept; rows without DateOfSale carry an empty string where the original JSON omits the key - a harmless string property, no enum/default override). // NOTE: the '.formatter.url'` &&
+               ` iconSrc formatter flattened to absolute https://sdk.openui5.org image URLs - source-verified against the now-archived app/model/formatter.js (it only prefixes '../../../../../../', i.e. resolves to` &&
+               ` the test-resources root), so the absolute URLs are the faithful equivalent. // NOTE: compare button: the controller's onSelection setText/setVisible is replaced by bound COMPARE_TEXT/COMPARE_VISIBLE` &&
+               ` model properties updated in the SELECTION handler (same count>1 logic, text only refreshed while shown, like the original); the ColumnListItem gains a selected="{SELECTED}" two-way binding - the` &&
+               ` sanctioned selection-read pattern (CAPABILITIES 'Controller-read list selection') replacing getSelectedContextPaths - which is an extra attribute vs the original template, and the initial`.
+    lv_text2 = lv_text2 && ` visible="false"/absent text of the Button become bindings. // IMPROVISED: the ResizeHandler-driven pagesCount/isDesktop recalculation (_onResize/_getPagesCount) is replaced by a one-shot computation` &&
+               ` at COMPARE time from client->get( )-s_device-resize-width using the original's 600/1024 thresholds and the cap at the selected-items count; no live recalculation on window resize. Re-judged` &&
+               ` 2026-08-05 against the now-live device model (pr/live-device-model): it does NOT close this one. visiblePagesCount could bind {device>/resize/width} directly, but the count is also capped at the` &&
+               ` number of SELECTED products and then drives comparison_props_build, which slices the props table server-side per page window - so a client-side count would desync the props it is supposed to index.` &&
+               ` The round-trip decision stays; what the live model closes is the class-swap family (app 168), not this one. Re-judged again 2026-08-06 and reclassified as a BOUNDARY rather than a framework gap:` &&
+               ` closing it would need a resize -> BACKEND event wire (a debounced ResizeHandler round-trip), and that is deliberately not offered - it is chatty by construction, and every display-only case it would`.
+    lv_text2 = lv_text2 && ` serve is already covered by the live device model without a round-trip. The one case it would genuinely serve is this one, where the count feeds a server-side slice; one port is not enough to file on` &&
+               ` (the repo's rule), so the idea is recorded here for the second sample that needs it. // NOTE: Panel expand: the controller's onPanelExpanded (walking the sibling HBox controls and calling setVisible)` &&
+               ` is replaced by a bound VISIBLE flag per comparison value row, toggled in the PANEL_EXPANDED event via t_arg ${KEY} + ${$parameters>/expand}; the description HBox's literal visible="false" becomes the` &&
+               ` {VISIBLE} binding (initial false). // NOTE: The snapped/expanded Carousel re-sync is reproduced since 2026-08-06. The original's _updateCarouselsActivePage hands each Carousel its own page AT THE` &&
+               ` SAME INDEX - carousel.setActivePage( carousel.getPages()[ iFirstItem ] ) - and those pages are aggregation-template CLONES. Measured 2026-08-06 (scripts/probes/aggregation-item-probe.mjs, real` &&
+               ` OpenUI5): their ids ARE deterministic and stable, even across a reorder - UI5 mints <templateId>-<parentId>-<index> - but the parent id carries the VIEW PREFIX the framework assigns at runtime`.
+    lv_text2 = lv_text2 && ` (v1--tpl-v1--car-0), which the backend never sees, so it cannot spell one. The earlier sidecar called them 'nondeterministic', which the probe refutes; the gap was the prefix, not the determinism.` &&
+               ` Wherever a CONTROL_BY_ID argument takes a control id it now also takes an aggregation ITEM, addressed positionally as <id>/<aggregation>/<index> (pr/aggregation-item-address, implemented upstream),` &&
+               ` resolved on the client where both the prefix and the aggregation are known. Both carousels are re-synced on every PAGE_CHANGED, as in the original - and, since 2026-08-27, again at the end of` &&
+               ` view_display( ) whenever first_item is past page 0, because a rebuilt Carousel is back at page 0 while first_item survives as class state AND drives the bound comparison rows. // NOTE: the` &&
+               ` DynamicPageTitle stateChange handler (.onStateChange, add/removeSnappedContent of the snapped Carousel as a Carousel-animation workaround) is dropped together with its stateChange attribute -` &&
+               ` imperative aggregation surgery with no framework equivalent; the snapped/expanded content still switches natively with the DynamicPage header state. // NOTE: comparison Props are built from a fixed`.
+    lv_text2 = lv_text2 && ` 19-key list in the mock JSON key order (the original iterates the FIRST selected product's own keys, skipping ProductPicUrl - so a first product without DateOfSale would drop that row, and missing` &&
+               ` values rendered '<strong>undefined</strong>' where the port renders an empty <strong></strong>); selected products are taken in model row order, not click order; the original's per-product` &&
+               ` information cache is unnecessary server-side. The controller's handleButtonPress (MessageBox) is dead code referenced by no view and not ported. // NOTE: the comparison Props row for Price shows` &&
+               ` 956.00 where the original shows 956. The mock carries Price as a JSON number (956) and the original prints that value straight into the Props text; the port holds it in a packed field (p LENGTH 8` &&
+               ` DECIMALS 2, needed for the ObjectNumber's sap.ui.model.type.Currency binding, which renders 956.00 in BOTH), and an ABAP packed value always serialises with its two decimals. Only the Props text` &&
+               ` differs, and only in the trailing zeros - the ObjectNumber above it is identical in both.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ComparisonPattern`               name = `ComparisonPattern`                             class = `z2ui5_cl_smpc_app_012` path = `src/01/01/z2ui5_cl_smpc_app_012.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         ui5_only = abap_true
-        checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed) — that check bounds what was verified: the 2026-08-27` &&
-                 ` change added a render-time re-issue of both setActivePage calls at the end of view_display( ), which no listed check covered and which only a rebuild (a restored draft, or returning from a called` &&
-                 ` app) exercises. The port stays checked; what was checked passed, and the new half is unverified rather than re-checked. The 2026-08-31 routing wire (set_nav_routing KEEP, the set_push_state /Page2` &&
-                 ` entry, the hash-suffix re-entry and the render-time page re-issue in view_display) is equally outside what the 2026-07-20 run covered - unverified rather than re-checked.`
-        notes = lv_text1 ) ).
+        checked = lv_text1
+        notes = lv_text2 ) ).
 
     lv_text1 = `IMPROVISED: the i18n> ResourceModel (i18n/i18n.properties) has no framework i18n mechanism here - all texts (dialog title, section titles/summaries/details, button labels) are inlined as the resolved` &&
                ` English literals from the properties file; this covers every i18n>-bound text incl. the Panel headerText 'More Info'. // NOTE: the cookieData> named JSON model is flattened into the default model:` &&
