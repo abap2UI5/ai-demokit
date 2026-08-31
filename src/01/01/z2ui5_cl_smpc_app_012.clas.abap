@@ -60,8 +60,9 @@ CLASS z2ui5_cl_smpc_app_012 DEFINITION PUBLIC.
       END OF ty_s_key.
     TYPES ty_t_key TYPE STANDARD TABLE OF ty_s_key WITH EMPTY KEY.
 
-    DATA client     TYPE REF TO z2ui5_if_client.
-    DATA first_item TYPE i.
+    DATA client      TYPE REF TO z2ui5_if_client.
+    DATA first_item  TYPE i.
+    DATA check_page2 TYPE abap_bool.
 
     METHODS view_display.
     METHODS on_event.
@@ -79,6 +80,9 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
+      " the original's manifest router (#/Page2, browser Back/Forward): the
+      " framework's hash routing instead - KEEP routes #/app/<CLASS>/<DRAFT>
+      client->follow_up_action( client->cs_event-set_nav_routing ).
       model_init( ).
       view_display( ).
     ELSEIF client->check_on_navigated( ).
@@ -91,6 +95,17 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
 
 
   METHOD view_display.
+
+    " the original's router matches #/Page2 directly (reload, browser Forward,
+    " a bookmark): the pushed history entry keeps the /Page2 suffix after the
+    " draft segment, so a rebuild whose live hash still carries it re-enters
+    " the comparison for the restored selection
+    IF check_page2 = abap_false
+       AND contains( val = client->get( )-s_config-hash sub = `/Page2` )
+       AND line_exists( t_products[ selected = abap_true ] ).
+      comparison_build( ).
+      check_page2 = abap_true.
+    ENDIF.
 
     DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
@@ -447,6 +462,14 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
                                                  ( |carousel-expanded/pages/{ first_item }| ) ) ).
     ENDIF.
 
+    " the NavContainer's active page is the same class of live control state:
+    " a rebuilt view (a restored draft, browser Forward) is back on the first
+    " page while check_page2 survives as class state
+    IF check_page2 = abap_true.
+      client->follow_up_action( val   = client->cs_event-control_by_id
+                                t_arg = VALUE #( ( `rootControl` ) ( `to` ) ( `page-comparison` ) ) ).
+    ENDIF.
+
   ENDMETHOD.
 
 
@@ -468,9 +491,14 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
 
       WHEN `COMPARE`.
         comparison_build( ).
+        check_page2 = abap_true.
         " the router's navTo("page2") mapped to the NavContainer `to` frontend action
         client->follow_up_action( val   = client->cs_event-control_by_id
                                   t_arg = VALUE #( ( `rootControl` ) ( `to` ) ( `page-comparison` ) ) ).
+        " navTo also pushed a history entry: set_push_state appends /Page2 and
+        " pushes, while the entry below it keeps the pre-compare draft - so
+        " browser Back restores the First Page state (routing mode KEEP)
+        client->set_push_state( `/Page2` ).
 
       WHEN `PAGE_CHANGED`.
         DATA(page_arg) = client->get_event_arg( ).

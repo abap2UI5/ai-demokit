@@ -577,7 +577,6 @@ CLASS z2ui5_cl_smpc_app_584 IMPLEMENTATION.
             ENDIF.
           ENDLOOP.
         ENDIF.
-        view_display( ).
 
       WHEN `SORT`.
         " onSort flips the Name sorter; a thin frontend sorts the data it sends
@@ -587,7 +586,6 @@ CLASS z2ui5_cl_smpc_app_584 IMPLEMENTATION.
         ELSE.
           SORT t_rows BY name ASCENDING.
         ENDIF.
-        view_display( ).
 
       WHEN `ADD`.
         " onAdd: MessageBox.show( 'This functionality is not ready yet.' )

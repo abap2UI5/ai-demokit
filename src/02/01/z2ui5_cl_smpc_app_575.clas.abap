@@ -448,7 +448,6 @@ CLASS z2ui5_cl_smpc_app_575 IMPLEMENTATION.
             ENDIF.
           ENDLOOP.
         ENDIF.
-        view_display( ).
 
     ENDCASE.
 
