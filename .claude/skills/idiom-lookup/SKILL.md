@@ -5,7 +5,7 @@ description: Cheat-sheet of the recurring hard porting idioms (named models, i18
 
 # Idiom cheat-sheet & worked references
 
-Part of the ai-demokit rulebook — the base recipe lives in the
+Part of the samples-controls rulebook — the base recipe lives in the
 `port-a-sample` guide. A reference to the *recipe* means that guide; a
 `§n` reference means that section of `AGENTS.md`.
 

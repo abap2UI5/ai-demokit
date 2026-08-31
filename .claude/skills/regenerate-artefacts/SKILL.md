@@ -5,7 +5,7 @@ description: Full spec of the generated artefacts (README coverage block, STATUS
 
 # Coverage & overview — the generated artefacts
 
-Part of the ai-demokit rulebook — AGENTS.md §7 states the rule (four generated
+Part of the samples-controls rulebook — AGENTS.md §7 states the rule (four generated
 artefacts, never hand-edit, `git diff` must stay clean); this guide is the full
 spec.
 

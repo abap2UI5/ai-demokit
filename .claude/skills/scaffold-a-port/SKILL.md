@@ -5,7 +5,7 @@ description: Batch planning rules (breadth-first then idiom-first depth, HOLDOUT
 
 # Planning & scaffolding a port
 
-Part of the ai-demokit rulebook — the scope gate itself (1.71, deprecation,
+Part of the samples-controls rulebook — the scope gate itself (1.71, deprecation,
 non-app families, exceptions) is defined in `AGENTS.md` §1 and is a hard CI
 gate; this guide covers picking the next samples and generating the skeleton.
 

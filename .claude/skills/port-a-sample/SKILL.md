@@ -5,7 +5,7 @@ description: The complete recipe for rebuilding a UI5 demo kit sample as an abap
 
 # Porting recipe — how a port is built
 
-Part of the ai-demokit rulebook: `AGENTS.md` (always read first) defines
+Part of the samples-controls rulebook: `AGENTS.md` (always read first) defines
 mission, scope, layout and the sidecar contract; this guide is the
 **authoritative long form of the generation recipe**. When it changes in
 substance, update `scripts/generation-prompt.txt` in the same change
