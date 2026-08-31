@@ -70,7 +70,7 @@ function resolveLocal(pathname) {
   return null;
 }
 
-// benign-noise contract shared with the ai-mcp server — see lib-smoke.mjs
+// benign-noise contract shared with the mcp-server server — see lib-smoke.mjs
 import { benign } from './lib-smoke.mjs';
 
 // richer per-port checks (optional). Each: after boot, run action(page) and

@@ -9,7 +9,7 @@
  * structural defects, and the whole thing rendered with a real XMLView.create
  * in headless Chromium against the OpenUI5 runtime.
  *
- * What stays here is the corpus POLICY - the part that is about ai-demokit
+ * What stays here is the corpus POLICY - the part that is about samples-controls
  * and not about abap2UI5 views in general:
  *
  *   - which ports are checked: the meta/ sidecars, not a directory walk

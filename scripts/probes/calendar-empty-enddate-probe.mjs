@@ -143,7 +143,7 @@ const server = http.createServer((req, res) => {
 await new Promise((r) => server.listen(0, '127.0.0.1', r));
 const base = `http://127.0.0.1:${server.address().port}`;
 
-process.chdir(ROOT); // resolve playwright from ai-demokit's node_modules
+process.chdir(ROOT); // resolve playwright from samples-controls's node_modules
 const { chromium } = await import(path.join(ROOT, 'node_modules', 'playwright', 'index.mjs'));
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' }).catch(() => chromium.launch());
 const page = await browser.newPage();

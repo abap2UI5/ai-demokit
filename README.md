@@ -1,18 +1,18 @@
-[![ABAP_STANDARD](https://github.com/abap2UI5/ai-demokit/actions/workflows/ABAP_STANDARD.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/ABAP_STANDARD.yaml)
-[![ABAP_CLOUD](https://github.com/abap2UI5/ai-demokit/actions/workflows/ABAP_CLOUD.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/ABAP_CLOUD.yaml)
-[![ABAP_702](https://github.com/abap2UI5/ai-demokit/actions/workflows/ABAP_702.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/ABAP_702.yaml)
+[![ABAP_STANDARD](https://github.com/abap2UI5/samples-controls/actions/workflows/ABAP_STANDARD.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/ABAP_STANDARD.yaml)
+[![ABAP_CLOUD](https://github.com/abap2UI5/samples-controls/actions/workflows/ABAP_CLOUD.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/ABAP_CLOUD.yaml)
+[![ABAP_702](https://github.com/abap2UI5/samples-controls/actions/workflows/ABAP_702.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/ABAP_702.yaml)
 <br>
-[![auto_downport](https://github.com/abap2UI5/ai-demokit/actions/workflows/auto_downport.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/auto_downport.yaml)
+[![auto_downport](https://github.com/abap2UI5/samples-controls/actions/workflows/auto_downport.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/auto_downport.yaml)
 <br>
-[![generate_result](https://github.com/abap2UI5/ai-demokit/actions/workflows/generate_result.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/generate_result.yaml)
+[![generate_result](https://github.com/abap2UI5/samples-controls/actions/workflows/generate_result.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/generate_result.yaml)
 
-# abap2UI5 ai-demokit
+# abap2UI5 samples-controls
 
 _Last generated: <!-- last-run -->2026-07-20 06:21 UTC<!-- /last-run -->_
 
 <!-- glance:start -->
 **288** AI-generated ports of official UI5 demo kit samples — 45.9 % of the **628** in-scope samples, each guarded by the CI gates on three ABAP releases (Standard, Cloud, NW 7.02).
-[Coverage](#coverage) · [api.md](api.md) · [Run them in your browser](https://abap2ui5.github.io/ai-demokit/)
+[Coverage](#coverage) · [api.md](api.md) · [Run them in your browser](https://abap2ui5.github.io/samples-controls/)
 <!-- glance:end -->
 
 > **This repository is AI-generated.** From every official UI5 demo kit
@@ -26,7 +26,7 @@ _Last generated: <!-- last-run -->2026-07-20 06:21 UTC<!-- /last-run -->_
 >
 > See the result in **[api.md](api.md)**, or try it live — two ways:
 > - **In your browser (no backend):** open the GitHub Pages demo at
->   **https://abap2ui5.github.io/ai-demokit/** — the framework and all ports
+>   **https://abap2ui5.github.io/samples-controls/** — the framework and all ports
 >   run fully client-side (transpiled ABAP + sql.js WASM). Built from
 >   [`web/`](web) into [`docs/`](docs); see [`web/README.md`](web/README.md).
 > - **In your ABAP system:** pull this repo and start
@@ -194,7 +194,7 @@ the coverage and the structural diff read from.
 | [`api.md`](api.md) | One row per demo kit sample: ported, backlog or out of scope |
 | [`meta/`](meta) | One sidecar per port — status, checked, typed deviations |
 | [`pr/`](pr) | Forwardable improvement requests for the abap2UI5 framework, distilled from porting gaps |
-| [ai-mcp](https://github.com/abap2UI5/ai-mcp) | MCP server for AI coding agents — capability queries, view validation, deploy, headless run + screenshot on this repo's infrastructure (separate repository) |
+| [mcp-server](https://github.com/abap2UI5/mcp-server) | MCP server for AI coding agents — capability queries, view validation, deploy, headless run + screenshot on this repo's infrastructure (separate repository) |
 | [abap2UI5-linter](https://github.com/abap2UI5/linter) | The view gates as standalone CLI, library and GitHub Action — extracted from this repo and now used BY it (`scripts/view-gates.mjs`) |
 
 ## Coverage

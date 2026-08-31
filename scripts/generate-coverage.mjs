@@ -52,7 +52,7 @@ const END = '<!-- coverage:end -->';
 
 // link targets (overridable via env) — all links are external/absolute and
 // point at OpenUI5: the demo kit (sdk.openui5.org) and the source repo (SAP/openui5)
-const REPO = process.env.REPO || 'abap2UI5/ai-demokit';   // owner/name (this repo)
+const REPO = process.env.REPO || 'abap2UI5/samples-controls';   // owner/name (this repo)
 const REF = process.env.REF || 'main';             // branch the ABAP links resolve on
 const GH = `https://github.com/${REPO}`;
 const DEMOKIT = process.env.DEMOKIT || 'https://sdk.openui5.org';   // OpenUI5 demo kit
@@ -509,7 +509,7 @@ if (!readme.includes(GLANCE_START) || !readme.includes(GLANCE_END)) {
 const glance = `${GLANCE_START}\n**${totalPorted}** AI-generated ports of official UI5 demo kit samples — ` +
   `${pct(totalPorted, totalInScope)} of the **${totalInScope}** in-scope samples, each guarded by the ` +
   `CI gates on three ABAP releases (Standard, Cloud, NW 7.02).\n` +
-  `[Coverage](#coverage) · [api.md](api.md) · [Run them in your browser](https://abap2ui5.github.io/ai-demokit/)\n${GLANCE_END}`;
+  `[Coverage](#coverage) · [api.md](api.md) · [Run them in your browser](https://abap2ui5.github.io/samples-controls/)\n${GLANCE_END}`;
 readme = readme.replace(new RegExp(`${GLANCE_START}[\\s\\S]*?${GLANCE_END}`), () => glance);
 
 // README — splice the generation prompt from its single source

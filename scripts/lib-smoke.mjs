@@ -8,7 +8,7 @@
  * carries no URL, so it is ignored in favour of response tracking.
  *
  * This is the single source of the list: e2e-smoke.mjs consumes it here, and
- * the ai-mcp server imports this file from its resolved ai-demokit checkout
+ * the mcp-server server imports this file from its resolved samples-controls checkout
  * so its run_app tool judges boots by the same rules as the nightly gate.
  */
 export const BENIGN = [
