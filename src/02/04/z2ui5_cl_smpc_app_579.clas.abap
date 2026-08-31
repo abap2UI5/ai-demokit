@@ -60,9 +60,17 @@ CLASS z2ui5_cl_smpc_app_579 DEFINITION PUBLIC.
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
+    " the router state the original keeps (currentRouteName + the route's
+    " arguments): the original routes by INDEX into the mock collections
+    DATA route       TYPE string VALUE `list`.
+    DATA product_ix  TYPE i.
+    DATA supplier_ix TYPE i.
+
     METHODS view_display.
     METHODS on_event.
     METHODS detail_bind IMPORTING productid TYPE string.
+    METHODS hash_apply IMPORTING iv_hash TYPE string.
+    METHODS hash_push.
     METHODS model_init.
 
   PRIVATE SECTION.
@@ -89,6 +97,15 @@ CLASS z2ui5_cl_smpc_app_579 IMPLEMENTATION.
 
 
   METHOD view_display.
+
+    " the router also matches a deep link / reload (`#/detail/1/
+    " TwoColumnsMidExpanded`): the live hash rides in s_config-hash on every
+    " request; applying it is idempotent, so a rebuild whose hash matches the
+    " state simply re-derives it
+    DATA(lv_hash) = client->get( )-s_config-hash.
+    IF lv_hash IS NOT INITIAL AND lv_hash <> `#`.
+      hash_apply( lv_hash ).
+    ENDIF.
 
     DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
@@ -502,7 +519,10 @@ CLASS z2ui5_cl_smpc_app_579 IMPLEMENTATION.
                         )->a( n = `type`    v = `Transparent`
                         )->a( n = `icon`    v = `sap-icon://decline`
                         )->a( n = `tooltip` v = `Close about page`
-                        )->a( n = `press`   v = client->_event( `ABOUT_CLOSE` )
+                        " AboutPage.controller's handleClose is
+                        " window.history.go(-1): one real step back - the
+                        " hash change then round-trips as HASH_CHANGED
+                        )->a( n = `press`   v = client->follow_up_action( client->cs_event-history_back )
 
                 )->end(
             )->end(
@@ -515,6 +535,13 @@ CLASS z2ui5_cl_smpc_app_579 IMPLEMENTATION.
     " rows short of the count its own title reports
     client->follow_up_action( val   = client->cs_event-set_size_limit
                               t_arg = VALUE #( ( `1000` ) ( client->cs_view-main ) ) ).
+
+    " the original's router, app-owned: the hash carries the route the way
+    " the manifest patterns spell it, and a hash change the app did not
+    " write (browser Back/Forward, a manual edit) round-trips as
+    " HASH_CHANGED. Re-asserted per render - it dies with an app switch
+    client->follow_up_action( val   = client->cs_event-set_hash_listener
+                              t_arg = VALUE #( ( `HASH_CHANGED` ) ) ).
 
   ENDMETHOD.
 
@@ -545,39 +572,72 @@ CLASS z2ui5_cl_smpc_app_579 IMPLEMENTATION.
     CASE client->get_event( ).
 
       WHEN `LIST_ITEM`.
-        " onListItemPress: the helper's next state for level 1 opens the mid column
+        " onListItemPress: navTo('detail') - the helper's next state for
+        " level 1 opens the mid column, the route carries the product INDEX
         detail_bind( client->get_event_arg( ) ).
+        READ TABLE t_products WITH KEY productid = client->get_event_arg( ) TRANSPORTING NO FIELDS.
+        IF sy-subrc = 0.
+          product_ix = sy-tabix - 1.
+        ENDIF.
+        route  = `detail`.
         layout = `TwoColumnsMidExpanded`.
+        hash_push( ).
 
       WHEN `SUPPLIER_ITEM`.
-        " handleItemPress: level 2 opens the end column
+        " handleItemPress: navTo('detailDetail') - level 2 opens the end column
         dd_text = client->get_event_arg( ).
+        READ TABLE t_suppliers WITH KEY text = dd_text TRANSPORTING NO FIELDS.
+        IF sy-subrc = 0.
+          supplier_ix = sy-tabix - 1.
+        ENDIF.
+        route  = `detailDetail`.
         layout = `ThreeColumnsMidExpanded`.
+        hash_push( ).
 
       WHEN `ABOUT`.
-        " handleAboutPress: level 3 is the about page, full screen in the end column
+        " handleAboutPress: navTo('page2') - the about page, full screen in
+        " the end column
+        route  = `page2`.
         layout = `EndColumnFullScreen`.
-
-      WHEN `ABOUT_CLOSE`.
-        layout = `ThreeColumnsMidExpanded`.
+        hash_push( ).
 
       WHEN `MID_FULL_SCREEN`.
+        route  = `detail`.
         layout = `MidColumnFullScreen`.
+        hash_push( ).
 
       WHEN `MID_EXIT_FULL_SCREEN`.
+        route  = `detail`.
         layout = `TwoColumnsMidExpanded`.
+        hash_push( ).
 
       WHEN `MID_CLOSE`.
+        " handleClose: navTo('list') - the ':layout:' route
+        route  = `list`.
         layout = `OneColumn`.
+        hash_push( ).
 
       WHEN `END_FULL_SCREEN`.
+        route  = `detailDetail`.
         layout = `EndColumnFullScreen`.
+        hash_push( ).
 
       WHEN `END_EXIT_FULL_SCREEN`.
+        route  = `detailDetail`.
         layout = `ThreeColumnsMidExpanded`.
+        hash_push( ).
 
       WHEN `END_CLOSE`.
+        route  = `detail`.
         layout = `TwoColumnsMidExpanded`.
+        hash_push( ).
+
+      WHEN `HASH_CHANGED`.
+        " browser Back/Forward (or a manual edit) moved the app-owned hash -
+        " the router's routeMatched: derive route, indices and layout from
+        " the hash this request carries. The instance itself is untouched,
+        " so search text and sort order survive like in the original
+        hash_apply( client->get( )-s_config-hash ).
 
       WHEN `SEARCH`.
         " onSearch filters the table's items on Name
@@ -608,6 +668,84 @@ CLASS z2ui5_cl_smpc_app_579 IMPLEMENTATION.
                                      type  = `information`
                                      title = `Aw, Snap!` ).
 
+    ENDCASE.
+
+  ENDMETHOD.
+
+
+  METHOD hash_apply.
+
+    " the router's routeMatched, read side: parse the app hash back into
+    " route, indices and layout. The original's patterns: '' (list start),
+    " '{layout}' (the ':layout:' list route), 'page2',
+    " 'detail/{product}/{layout}',
+    " 'detailDetail/{product}/{supplier}/{layout}' - product/supplier are
+    " INDICES into the mock collections, defaulting to 0 like the original's
+    " `arguments.product || this._product || "0"`
+    DATA(lv_hash) = iv_hash.
+    IF lv_hash CS `#`.
+      lv_hash = substring_after( val = lv_hash sub = `#` ).
+    ENDIF.
+    SHIFT lv_hash LEFT DELETING LEADING `/`.
+    SPLIT lv_hash AT `/` INTO TABLE DATA(lt_seg).
+    DELETE lt_seg WHERE table_line IS INITIAL.
+
+    DATA(lv_p) = VALUE string( lt_seg[ 2 ] OPTIONAL ).
+    DATA(lv_s) = VALUE string( lt_seg[ 3 ] OPTIONAL ).
+
+    CASE VALUE string( lt_seg[ 1 ] OPTIONAL ).
+      WHEN ``.
+        route  = `list`.
+        layout = `OneColumn`.
+
+      WHEN `page2`.
+        route  = `page2`.
+        layout = `EndColumnFullScreen`.
+
+      WHEN `detail`.
+        route      = `detail`.
+        product_ix = COND #( WHEN lv_p CO `0123456789` AND lv_p IS NOT INITIAL AND strlen( lv_p ) <= 4 THEN lv_p ).
+        layout     = COND #( WHEN lv_s IS NOT INITIAL THEN lv_s ELSE `TwoColumnsMidExpanded` ).
+        IF product_ix < lines( t_products ).
+          detail_bind( t_products[ product_ix + 1 ]-productid ).
+        ENDIF.
+
+      WHEN `detailDetail`.
+        route       = `detailDetail`.
+        product_ix  = COND #( WHEN lv_p CO `0123456789` AND lv_p IS NOT INITIAL AND strlen( lv_p ) <= 4 THEN lv_p ).
+        supplier_ix = COND #( WHEN lv_s CO `0123456789` AND lv_s IS NOT INITIAL AND strlen( lv_s ) <= 4 THEN lv_s ).
+        layout      = COND #( WHEN VALUE string( lt_seg[ 4 ] OPTIONAL ) IS NOT INITIAL
+                              THEN lt_seg[ 4 ]
+                              ELSE `ThreeColumnsMidExpanded` ).
+        IF product_ix < lines( t_products ).
+          detail_bind( t_products[ product_ix + 1 ]-productid ).
+        ENDIF.
+        IF supplier_ix < lines( t_suppliers ).
+          dd_text = t_suppliers[ supplier_ix + 1 ]-text.
+        ENDIF.
+
+      WHEN OTHERS.
+        " the single-segment ':layout:' list route, e.g. '#/OneColumn'
+        route  = `list`.
+        layout = lt_seg[ 1 ].
+    ENDCASE.
+
+  ENDMETHOD.
+
+
+  METHOD hash_push.
+
+    " the router's navTo, write side: compose the current route the way the
+    " manifest patterns spell it and push it as the app-owned hash
+    CASE route.
+      WHEN `detail`.
+        client->set_push_state( |/detail/{ product_ix }/{ layout }| ).
+      WHEN `detailDetail`.
+        client->set_push_state( |/detailDetail/{ product_ix }/{ supplier_ix }/{ layout }| ).
+      WHEN `page2`.
+        client->set_push_state( `/page2` ).
+      WHEN OTHERS.
+        client->set_push_state( |/{ layout }| ).
     ENDCASE.
 
   ENDMETHOD.

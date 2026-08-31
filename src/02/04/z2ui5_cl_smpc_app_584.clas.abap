@@ -116,7 +116,10 @@ CLASS z2ui5_cl_smpc_app_584 IMPLEMENTATION.
             )->a( n = `showNotifications`   v = `true`
             )->a( n = `notificationsNumber` v = `2`
             )->a( n = `showNavButton`       v = |\{= ${ client->_bind( layout ) } === 'EndColumnFullScreen' \}|
-            )->a( n = `navButtonPressed`    v = client->_event( `SHELL_BACK` )
+            " handleBackButtonPressed is window.history.go(-1): one real step
+            " back that CONSUMES the history entry - the hash change then
+            " round-trips as HASH_CHANGED and restores that route
+            )->a( n = `navButtonPressed`    v = client->follow_up_action( client->cs_event-history_back )
 
             )->ele( n = `menu` ns = `f`
                 )->ele( `Menu`
@@ -579,15 +582,6 @@ CLASS z2ui5_cl_smpc_app_584 IMPLEMENTATION.
         " the end column
         route  = `page2`.
         layout = `EndColumnFullScreen`.
-        hash_push( ).
-
-      WHEN `SHELL_BACK`.
-        " handleBackButtonPressed does window.history.go(-1); no history-back
-        " frontend action exists, so the port composes the back TARGET itself
-        " and pushes it - visually the original's step, as an extra history
-        " entry instead of a consumed one (declared)
-        route  = `detailDetail`.
-        layout = `ThreeColumnsMidExpanded`.
         hash_push( ).
 
       WHEN `MID_FULL_SCREEN`.

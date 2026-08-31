@@ -18,7 +18,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the sample is a Component with a ROUTER and three views (FlexibleColumnLayout, Master, Detail). abap2UI5 serves one view, so the three become one: the FCL declares its begin and mid column pages inline, and the routing collapses to the FCL's own layout property - onListItemPress opens the mid column (TwoColumnsMidExpanded), handleFullScreen / handleExitFullScreen / handleClose set MidColumnFullScreen / TwoColumnsMidExpanded / OneColumn. That is what the router's navTo(layout) does; the URL it also writes has no counterpart. This is the corpus's first sap.f.FlexibleColumnLayout port."
+      "what": "the sample is a Component with a ROUTER and three views (FlexibleColumnLayout, Master, Detail). abap2UI5 serves one view, so the three become one: the FCL declares its begin and mid column pages inline, and the routing collapses to the FCL's own layout property - onListItemPress opens the mid column (TwoColumnsMidExpanded), handleFullScreen / handleExitFullScreen / handleClose set MidColumnFullScreen / TwoColumnsMidExpanded / OneColumn. That is what the router's navTo(layout) does. Since 2026-08-31 the URL it writes IS reproduced too, via the framework's app-owned hash routing (cs_event-set_hash_listener + set_push_state, needs abap2UI5 newer than 1.144.0 - abap2UI5#2693, the app-012/584 recipe): every routed handler composes the original's pattern from route + the product INDEX into the mock collection ('#/detail/{product}/{layout}', '#/{layout}' for the ':layout:' master route) and pushes it, a hash change the app did not write (browser Back/Forward, a manual edit) round-trips as HASH_CHANGED and is parsed back onto the RUNNING instance (the search text survives, like with the original's client-side router), and a deep link / reload re-derives the columns in view_display( ) (hash_apply is idempotent). This is the corpus's first sap.f.FlexibleColumnLayout port."
     },
     {
       "type": "NOTE",
@@ -54,7 +54,7 @@
     },
     {
       "type": "NOTE",
-      "what": "two attributes of the archived views have no counterpart. mvc:View displayBlock=\"true\" is a Component-app setting (it makes the view fill the page when it is the root of a Component) and abap2UI5 owns the view container itself. FlexibleColumnLayout stateChange is wired in the sample only to rewrite the URL through the router after a navigation arrow was used; there is no URL to rewrite here, so the port drops it - unlike columnResize, which IS wired (see the scrollToIndex deviation)."
+      "what": "two attributes of the archived views have no counterpart. mvc:View displayBlock=\"true\" is a Component-app setting (it makes the view fill the page when it is the root of a Component) and abap2UI5 owns the view container itself. FlexibleColumnLayout stateChange is wired in the sample only to replace the URL through the router after a navigation arrow was used; the port HAS a URL since 2026-08-31, but its layout is a two-way binding and an arrow drag stays client-side until the next roundtrip, so the URL keeps its last pushed value and stateChange stays dropped - closing it needs a replace option on set_push_state (declared, as in the whole FCL family). columnResize, by contrast, IS wired (see the scrollToIndex deviation)."
     }
   ]
 }
