@@ -51,29 +51,12 @@ jobs:
       with:
         node-version: '22'
 
-    # The abaplint configs pin a RELEASE TAG, not this SHA - abaplint's
-    # "branch" key feeds `git clone --branch` and takes a tag or a branch,
-    # never a commit. Different question, too: the SHA is what the transpiled
-    # backend and the e2e smoke run against, the tag is whether the corpus
-    # compiles against the framework its readers installed. Both move here so
-    # one weekly pull request carries the whole framework bump.
-    - name: Resolve the newest abap2UI5 release and move the abaplint pin
-      id: release
-      run: |
-        set -euo pipefail
-        # --exit-code: `git ls-remote` prints nothing and still exits 0 when no
-        # ref matches, so a repository that stopped tagging would resolve to an
-        # EMPTY version and this step would happily write it.
-        TAG=$(git ls-remote --exit-code --tags --refs https://github.com/abap2UI5/abap2UI5 \
-              | sed 's#.*refs/tags/##' \
-              | sed 's/-702$//' \
-              | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' \
-              | sort -V | tail -1)
-        test -n "$TAG"
-        echo "tag=$TAG" >> "$GITHUB_OUTPUT"
-        node scripts/check-pins.mjs --set "$TAG"
-        node scripts/check-pins.mjs
-
+    # The abaplint configs resolve the framework's MAIN branch, not this SHA -
+    # abaplint's "branch" key feeds `git clone --branch` and takes a tag or a
+    # branch, never a commit. Since 2026-08-31 they no longer track a release
+    # tag: framework releases are monthly snapshots and never gate a corpus
+    # merge (scripts/check-pins.mjs carries the policy), so only the commit
+    # pin moves here.
     - name: Resolve abap2UI5 main and move the pin
       id: pin
       run: |
@@ -88,10 +71,8 @@ jobs:
         if [ "$SHA" != "$(cat A2UI5_PIN)" ]; then
           echo "$SHA" > A2UI5_PIN
         fi
-        # `changed` covers the abaplint pin too - the release tag can move on a
-        # week where main did not, and vice versa.
-        # Every step below is gated on this, and it is written only once both
-        # resolves have succeeded: a run that dies in either resolve leaves it
+        # Every step below is gated on this, and it is written only once the
+        # resolve has succeeded: a run that dies in the resolve leaves it
         # UNSET, so no `!cancelled()` step below can mistake a broken run for a
         # no-op one, and a genuine no-op week still opens nothing.
         if git diff --quiet; then
@@ -151,7 +132,6 @@ jobs:
         # before it parses anything.
         SMOKE: ${{ steps.smoke.outcome }}
         SHA: ${{ steps.pin.outputs.sha }}
-        TAG: ${{ steps.release.outputs.tag }}
         RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       run: |
         set -euo pipefail
@@ -177,13 +157,10 @@ jobs:
         # every printf format is SINGLE-quoted: the body is full of backticks
         # and none of them may reach the shell as a command substitution
         {
-          printf 'Weekly re-resolve of the two framework references:\n\n'
-          printf -- '- `A2UI5_PIN` against abap2UI5 main (`%s`) — what node-setup, the\n' "$SHA"
-          printf '  Pages build and the e2e smoke run against;\n'
-          printf -- '- the abaplint configs against the newest release (`%s`) — whether\n' "$TAG"
-          printf '  the corpus compiles against the framework its readers have installed.\n\n'
-          printf 'The nightly e2e keeps testing main tip, so all three questions stay\n'
-          printf 'separately answered.\n\n'
+          printf 'Weekly re-resolve of `A2UI5_PIN` against abap2UI5 main (`%s`) —\n' "$SHA"
+          printf 'what node-setup, the Pages build and the e2e smoke run against.\n'
+          printf 'The abaplint configs resolve main directly (unpinned), and the\n'
+          printf 'nightly e2e keeps testing main tip as the canary.\n\n'
           printf '## The verdict at the new pin\n\n'
           printf '%s\n\n' "$verdict"
           printf 'Run: %s\n' "$RUN_URL"

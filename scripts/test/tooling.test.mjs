@@ -671,9 +671,9 @@ function makePinRoot() {
   ]
 }
 `;
-  fs.writeFileSync(path.join(root, 'abaplint.jsonc'), dep('1.143.0'));
+  fs.writeFileSync(path.join(root, 'abaplint.jsonc'), dep('main'));
   fs.mkdirSync(path.join(root, '.github', 'abaplint'), { recursive: true });
-  fs.writeFileSync(path.join(root, '.github', 'abaplint', 'abap_cloud.jsonc'), dep('1.143.0'));
+  fs.writeFileSync(path.join(root, '.github', 'abaplint', 'abap_cloud.jsonc'), dep('main'));
   fs.writeFileSync(path.join(root, '.github', 'abaplint', 'abap_702.jsonc'), dep('702'));
 
   writeJson(path.join(root, 'ui5', 'universe.json'), { release: '1.152.0', libs: [] });
@@ -695,7 +695,7 @@ test('check-pins: the fixture pin policy passes, and a malformed pin does not', 
     const ok = runIn(root, 'check-pins.mjs');
     assert.equal(ok.code, 0, `the fixture must satisfy the policy\n${ok.out}`);
     assert.match(ok.out, /A2UI5_PIN well-formed/);
-    assert.match(ok.out, /on release 1\.143\.0/);
+    assert.match(ok.out, /on main/);
 
     fs.writeFileSync(path.join(root, 'A2UI5_PIN'), 'main\n');
     const bad = runIn(root, 'check-pins.mjs');
@@ -711,28 +711,30 @@ test('check-pins: the fixture pin policy passes, and a malformed pin does not', 
   }
 });
 
-test('check-pins: a duplicate branch key, a stray branch and a split release all fail', () => {
+test('check-pins: a duplicate branch key, a stray branch and a release pin all fail', () => {
   const { root } = makePinRoot();
   try {
     // the 2026-08-10 incident: a deleted branch left NEXT to the intended one.
     // JSON.parse takes the last, so every consumer sees only one.
     const at = path.join(root, 'abaplint.jsonc');
     fs.writeFileSync(at, fs.readFileSync(at, 'utf8')
-      .replace('"branch": "1.143.0"', '"branch": "some-merged-branch", "branch": "1.143.0"'));
+      .replace('"branch": "main"', '"branch": "some-merged-branch", "branch": "main"'));
     const dup = runIn(root, 'check-pins.mjs');
     assert.equal(dup.code, 1);
     assert.match(dup.out, /carries 2 "branch" keys/);
 
     fs.writeFileSync(at, fs.readFileSync(at, 'utf8')
-      .replace('"branch": "some-merged-branch", "branch": "1.143.0"', '"branch": "my-feature"'));
+      .replace('"branch": "some-merged-branch", "branch": "main"', '"branch": "my-feature"'));
     const stray = runIn(root, 'check-pins.mjs');
-    assert.equal(stray.code, 1, 'only the allowlisted config may name a branch');
-    assert.match(stray.out, /which is not a release tag/);
+    assert.equal(stray.code, 1, 'a feature-branch re-point must fail after the merge');
+    assert.match(stray.out, /resolve the framework's "main"/);
 
+    // the pre-2026-08-31 policy value: a release tag no longer belongs here -
+    // releases are monthly snapshots and never gate a merge
     fs.writeFileSync(at, fs.readFileSync(at, 'utf8').replace('"branch": "my-feature"', '"branch": "1.144.0"'));
-    const split = runIn(root, 'check-pins.mjs');
-    assert.equal(split.code, 1, 'a half-finished release bump must fail');
-    assert.match(split.out, /name 2 different releases/);
+    const tag = runIn(root, 'check-pins.mjs');
+    assert.equal(tag.code, 1, 'a release tag is the OLD policy and must fail');
+    assert.match(tag.out, /releases are monthly snapshots/);
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
   }
