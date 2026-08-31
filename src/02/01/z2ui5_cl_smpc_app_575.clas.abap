@@ -44,11 +44,18 @@ CLASS z2ui5_cl_smpc_app_575 DEFINITION PUBLIC.
     " so it stays out of the round-trip model scan
     DATA press_index TYPE i VALUE -1.
 
+    " the router state the original keeps (currentRouteName + the route's
+    " arguments): the original routes by INDEX into the mock collection
+    DATA route      TYPE string VALUE `master`.
+    DATA product_ix TYPE i.
+
     METHODS view_display.
     METHODS on_event.
     METHODS detail_bind IMPORTING productid TYPE string.
     METHODS row_index IMPORTING productid     TYPE string
                       RETURNING VALUE(result) TYPE i.
+    METHODS hash_apply IMPORTING iv_hash TYPE string.
+    METHODS hash_push IMPORTING check_replace TYPE abap_bool OPTIONAL.
     METHODS model_init.
 
   PRIVATE SECTION.
@@ -76,6 +83,15 @@ CLASS z2ui5_cl_smpc_app_575 IMPLEMENTATION.
 
   METHOD view_display.
 
+    " the router also matches a deep link / reload (`#/detail/1/
+    " TwoColumnsMidExpanded`): the live hash rides in s_config-hash on every
+    " request; applying it is idempotent, so a rebuild whose hash matches the
+    " state simply re-derives it
+    DATA(lv_hash) = client->get( )-s_config-hash.
+    IF lv_hash IS NOT INITIAL AND lv_hash <> `#`.
+      hash_apply( lv_hash ).
+    ENDIF.
+
     DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     DATA(fcl) = view->ele( n = `View` ns = `mvc`
@@ -96,6 +112,10 @@ CLASS z2ui5_cl_smpc_app_575 IMPLEMENTATION.
             " resize has completed, which is when the pressed row has to be
             " scrolled back into view
             )->a( n = `columnResize`                v = client->_event( val = `COLUMN_RESIZE` arg = `${$parameters>/beginColumn}` )
+            " the original wires stateChange to onStateChanged: only a layout
+            " change by a NAVIGATION ARROW replace-navTo's the URL - the flag
+            " and the new layout travel with the event, the backend guards on it
+            )->a( n = `stateChange`      v = client->_event( val = `STATE_CHANGED` t_arg = VALUE #( ( `${$parameters>/isNavigationArrow}` ) ( `${$parameters>/layout}` ) ) )
             )->a( n = `layout`                      v = client->_bind( layout ) ).
 
     " Master.view.xml - the DynamicPage with the products table
@@ -359,6 +379,13 @@ CLASS z2ui5_cl_smpc_app_575 IMPLEMENTATION.
 
     client->view_display( view->stringify( ) ).
 
+    " the original's router, app-owned: the hash carries the route the way
+    " the manifest patterns spell it, and a hash change the app did not
+    " write (browser Back/Forward, a manual edit) round-trips as
+    " HASH_CHANGED. Re-asserted per render - it dies with an app switch
+    client->follow_up_action( val   = client->cs_event-hash_attach_changed
+                              t_arg = VALUE #( ( `HASH_CHANGED` ) ) ).
+
   ENDMETHOD.
 
 
@@ -406,21 +433,53 @@ CLASS z2ui5_cl_smpc_app_575 IMPLEMENTATION.
     CASE client->get_event( ).
 
       WHEN `LIST_ITEM`.
-        " onListItemPress: navigate to the detail route, which opens the mid column
+        " onListItemPress: navigate to the detail route, which opens the mid
+        " column - the route carries the product's INDEX into the collection
+        " (the bindingContext path index of the original)
         detail_bind( client->get_event_arg( ) ).
         " oItem.getParent( )->indexOfItem( oItem ) - the index of the pressed row
         " in the RENDERED items, which the items binding sorts on NAME
         press_index = row_index( client->get_event_arg( ) ).
+        READ TABLE t_products WITH KEY productid = client->get_event_arg( ) TRANSPORTING NO FIELDS.
+        IF sy-subrc = 0.
+          product_ix = sy-tabix - 1.
+        ENDIF.
+        route  = `detail`.
         layout = `TwoColumnsMidExpanded`.
+        hash_push( ).
 
       WHEN `FULL_SCREEN`.
+        route  = `detail`.
         layout = `MidColumnFullScreen`.
+        hash_push( ).
 
       WHEN `EXIT_FULL_SCREEN`.
+        route  = `detail`.
         layout = `TwoColumnsMidExpanded`.
+        hash_push( ).
 
       WHEN `CLOSE_COLUMN`.
+        " handleClose: navTo('master') - the ':layout:' route
+        route  = `master`.
         layout = `OneColumn`.
+        hash_push( ).
+
+      WHEN `STATE_CHANGED`.
+        " onStateChanged: the layout is a two-way binding, so the model
+        " already carries the value this event reports - but when a
+        " NAVIGATION ARROW changed it, the original replace-navTo's the
+        " URL: same route, new layout, no new history entry
+        IF client->get_event_arg( ) = abap_true.
+          layout = client->get_event_arg( 2 ).
+          hash_push( abap_true ).
+        ENDIF.
+
+      WHEN `HASH_CHANGED`.
+        " browser Back/Forward (or a manual edit) moved the app-owned hash -
+        " the router's routeMatched: derive route, index and layout from the
+        " hash this request carries. The instance itself is untouched, so the
+        " search text survives like in the original
+        hash_apply( client->get( )-s_config-hash ).
 
       WHEN `COLUMN_RESIZE`.
         " onColumnResize: oTable.scrollToIndex( iIndex ) once the begin column
@@ -450,6 +509,69 @@ CLASS z2ui5_cl_smpc_app_575 IMPLEMENTATION.
         ENDIF.
 
     ENDCASE.
+
+  ENDMETHOD.
+
+
+  METHOD hash_apply.
+
+    " the router's routeMatched, read side: parse the app hash back into
+    " route, index and layout. The original's patterns: '' (master start),
+    " '{layout}' (the ':layout:' master route), 'detail/{product}/{layout}' -
+    " product is an INDEX into the mock collection, defaulting to 0 like the
+    " original's `arguments.product || this._product || "0"`
+    DATA(lv_hash) = iv_hash.
+    IF lv_hash CS `#`.
+      lv_hash = substring_after( val = lv_hash sub = `#` ).
+    ENDIF.
+    SHIFT lv_hash LEFT DELETING LEADING `/`.
+    SPLIT lv_hash AT `/` INTO TABLE DATA(lt_seg).
+    DELETE lt_seg WHERE table_line IS INITIAL.
+
+    DATA(lv_p) = VALUE string( lt_seg[ 2 ] OPTIONAL ).
+    DATA(lv_l) = VALUE string( lt_seg[ 3 ] OPTIONAL ).
+
+    CASE VALUE string( lt_seg[ 1 ] OPTIONAL ).
+      WHEN ``.
+        route  = `master`.
+        layout = `OneColumn`.
+
+      WHEN `detail`.
+        route      = `detail`.
+        product_ix = COND #( WHEN lv_p CO `0123456789` AND lv_p IS NOT INITIAL AND strlen( lv_p ) <= 4 THEN lv_p ).
+        layout     = COND #( WHEN lv_l IS NOT INITIAL THEN lv_l ELSE `TwoColumnsMidExpanded` ).
+        IF product_ix < lines( t_products ).
+          detail_bind( t_products[ product_ix + 1 ]-productid ).
+        ENDIF.
+
+      WHEN OTHERS.
+        " the single-segment ':layout:' master route, e.g. '#/OneColumn'
+        route  = `master`.
+        layout = lt_seg[ 1 ].
+    ENDCASE.
+
+  ENDMETHOD.
+
+
+  METHOD hash_push.
+
+    DATA lv_hash TYPE string.
+    " the router's navTo, write side: compose the current route the way the
+    " manifest patterns spell it and push it as the app-owned hash
+    CASE route.
+      WHEN `detail`.
+        lv_hash = |/detail/{ product_ix }/{ layout }|.
+      WHEN OTHERS.
+        lv_hash = |/{ layout }|.
+    ENDCASE.
+
+    " a NAVIGATION ARROW rewrites the URL in place (the original's
+    " replace-navTo) - everything else is a real, pushed history entry
+    IF check_replace = abap_true.
+      client->hash_replace( lv_hash ).
+    ELSE.
+      client->hash_set( lv_hash ).
+    ENDIF.
 
   ENDMETHOD.
 

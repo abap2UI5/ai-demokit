@@ -53,9 +53,20 @@ CLASS z2ui5_cl_smpc_app_578 DEFINITION PUBLIC.
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
+    " the router state the original keeps (currentRouteName + the route's
+    " arguments): the category travels as its NAME (URL-encoded, spaces as
+    " %20), product and supplier as INDICES into the mock collections
+    DATA route          TYPE string VALUE `list`.
+    DATA route_category TYPE string.
+    DATA product_ix     TYPE i.
+    DATA supplier_ix    TYPE i.
+
     METHODS view_display.
     METHODS on_event.
     METHODS detail_bind IMPORTING productid TYPE string.
+    METHODS category_apply IMPORTING iv_category TYPE string.
+    METHODS hash_apply IMPORTING iv_hash TYPE string.
+    METHODS hash_push IMPORTING check_replace TYPE abap_bool OPTIONAL.
     METHODS model_init.
 
   PRIVATE SECTION.
@@ -83,6 +94,15 @@ CLASS z2ui5_cl_smpc_app_578 IMPLEMENTATION.
 
   METHOD view_display.
 
+    " the router also matches a deep link / reload (`#/detailDetail/Laptops/
+    " 0/TwoColumnsMidExpanded`): the live hash rides in s_config-hash on
+    " every request; applying it is idempotent, so a rebuild whose hash
+    " matches the state simply re-derives it
+    DATA(lv_hash) = client->get( )-s_config-hash.
+    IF lv_hash IS NOT INITIAL AND lv_hash <> `#`.
+      hash_apply( lv_hash ).
+    ENDIF.
+
     DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     DATA(fcl) = view->ele( n = `View` ns = `mvc`
@@ -96,6 +116,10 @@ CLASS z2ui5_cl_smpc_app_578 IMPLEMENTATION.
         )->ele( n = `FlexibleColumnLayout` ns = `f`
             )->a( n = `id`               v = `fcl`
             )->a( n = `backgroundDesign` v = `Translucent`
+            " the original wires stateChange to onStateChanged: only a layout
+            " change by a NAVIGATION ARROW replace-navTo's the URL - the flag
+            " and the new layout travel with the event, the backend guards on it
+            )->a( n = `stateChange`      v = client->_event( val = `STATE_CHANGED` t_arg = VALUE #( ( `${$parameters>/isNavigationArrow}` ) ( `${$parameters>/layout}` ) ) )
             )->a( n = `layout`           v = client->_bind( layout ) ).
 
     " List.view.xml - the categories page the sample starts on, and
@@ -518,6 +542,13 @@ CLASS z2ui5_cl_smpc_app_578 IMPLEMENTATION.
                                 t_arg = VALUE #( ( `fcl` ) ( `to` ) ( begin_page ) ) ).
     ENDIF.
 
+    " the original's router, app-owned: the hash carries the route the way
+    " the manifest patterns spell it, and a hash change the app did not
+    " write (browser Back/Forward, a manual edit) round-trips as
+    " HASH_CHANGED. Re-asserted per render - it dies with an app switch
+    client->follow_up_action( val   = client->cs_event-hash_attach_changed
+                              t_arg = VALUE #( ( `HASH_CHANGED` ) ) ).
+
   ENDMETHOD.
 
 
@@ -549,52 +580,93 @@ CLASS z2ui5_cl_smpc_app_578 IMPLEMENTATION.
       WHEN `CATEGORY_ITEM`.
         " List.controller's onListItemPress: the begin column swaps to the
         " products page, filtered to the pressed category, and the mid column
-        " opens on the first product of it
-        " the right-hand name of a WHERE resolves to the COLUMN, so the local
-        " one must not share it (apps 520/524)
-        DATA(sel_category) = client->get_event_arg( ).
-        CLEAR t_rows.
-        LOOP AT t_products INTO DATA(row) WHERE category = sel_category.
-          APPEND row TO t_rows.
-        ENDLOOP.
+        " opens on the FIRST product of it - navTo('detailDetail') with the
+        " category name and that product's index into the FULL collection
+        category_apply( client->get_event_arg( ) ).
         IF t_rows IS NOT INITIAL.
           detail_bind( t_rows[ 1 ]-productid ).
+          READ TABLE t_products WITH KEY productid = t_rows[ 1 ]-productid TRANSPORTING NO FIELDS.
+          IF sy-subrc = 0.
+            product_ix = sy-tabix - 1.
+          ENDIF.
         ENDIF.
+        route  = `detailDetail`.
         layout = `TwoColumnsMidExpanded`.
-        " park it too, so a later view_display( ) can put the column back
-        begin_page = `dynamicPageId`.
-        client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `fcl` ) ( `to` ) ( begin_page ) ) ).
+        hash_push( ).
 
       WHEN `LIST_ITEM`.
-        " Detail.controller's onListItemPress opens the mid column on that product
+        " Detail.controller's onListItemPress opens the mid column on that
+        " product - the route carries its index into the FULL collection
+        " (the bindingContext path index of the original)
         detail_bind( client->get_event_arg( ) ).
+        READ TABLE t_products WITH KEY productid = client->get_event_arg( ) TRANSPORTING NO FIELDS.
+        IF sy-subrc = 0.
+          product_ix = sy-tabix - 1.
+        ENDIF.
+        route  = `detailDetail`.
         layout = `TwoColumnsMidExpanded`.
+        hash_push( ).
 
       WHEN `SUPPLIER_ITEM`.
         " handleItemPress: level 2 opens the end column
         dd_text = client->get_event_arg( ).
+        READ TABLE t_suppliers WITH KEY text = dd_text TRANSPORTING NO FIELDS.
+        IF sy-subrc = 0.
+          supplier_ix = sy-tabix - 1.
+        ENDIF.
+        route  = `detailDetailDetail`.
         layout = `ThreeColumnsMidExpanded`.
+        hash_push( ).
 
       WHEN `MID_FULL_SCREEN`.
+        route  = `detailDetail`.
         layout = `MidColumnFullScreen`.
+        hash_push( ).
 
       WHEN `MID_EXIT_FULL_SCREEN`.
+        route  = `detailDetail`.
         layout = `TwoColumnsMidExpanded`.
+        hash_push( ).
 
       WHEN `MID_CLOSE`.
         " DetailDetail's handleClose leaves the products page alone in the
-        " begin column
+        " begin column - navigateToView('detail')
+        route  = `detail`.
         layout = `OneColumn`.
+        hash_push( ).
 
       WHEN `END_FULL_SCREEN`.
+        route  = `detailDetailDetail`.
         layout = `EndColumnFullScreen`.
+        hash_push( ).
 
       WHEN `END_EXIT_FULL_SCREEN`.
+        route  = `detailDetailDetail`.
         layout = `ThreeColumnsMidExpanded`.
+        hash_push( ).
 
       WHEN `END_CLOSE`.
+        route  = `detailDetail`.
         layout = `TwoColumnsMidExpanded`.
+        hash_push( ).
+
+      WHEN `STATE_CHANGED`.
+        " onStateChanged: the layout is a two-way binding, so the model
+        " already carries the value this event reports - but when a
+        " NAVIGATION ARROW changed it, the original replace-navTo's the
+        " URL: same route, new layout, no new history entry
+        IF client->get_event_arg( ) = abap_true.
+          layout = client->get_event_arg( 2 ).
+          hash_push( abap_true ).
+        ENDIF.
+
+      WHEN `HASH_CHANGED`.
+        " browser Back/Forward (or a manual edit) moved the app-owned hash -
+        " the router's routeMatched: derive route, category, indices and
+        " layout from the hash this request carries. The instance itself is
+        " untouched, so search text and sort order survive like in the
+        " original
+        hash_apply( client->get( )-s_config-hash ).
 
       WHEN `SEARCH`.
         " onSearch filters the table's items on Name
@@ -626,6 +698,139 @@ CLASS z2ui5_cl_smpc_app_578 IMPLEMENTATION.
                                      title = `Aw, Snap!` ).
 
     ENDCASE.
+
+  ENDMETHOD.
+
+
+  METHOD category_apply.
+
+    " the category the URL (or the pressed row) names: filter the products
+    " page to it and swap the begin column onto that page. Idempotent - the
+    " same category leaves T_ROWS alone, so a search filtered further is not
+    " reset by the next render's hash_apply
+    IF iv_category = route_category AND begin_page IS NOT INITIAL.
+      RETURN.
+    ENDIF.
+    route_category = iv_category.
+    " the right-hand name of a WHERE resolves to the COLUMN, so the local
+    " one must not share it (apps 520/524)
+    DATA(sel_category) = iv_category.
+    CLEAR t_rows.
+    LOOP AT t_products INTO DATA(row) WHERE category = sel_category.
+      APPEND row TO t_rows.
+    ENDLOOP.
+    " park it too, so a later view_display( ) can put the column back
+    begin_page = `dynamicPageId`.
+    client->follow_up_action( val   = client->cs_event-control_by_id
+                              t_arg = VALUE #( ( `fcl` ) ( `to` ) ( begin_page ) ) ).
+
+  ENDMETHOD.
+
+
+  METHOD hash_apply.
+
+    " the router's routeMatched, read side: parse the app hash back into
+    " route, category, indices and layout. The original's patterns: ''
+    " (list start), '{layout}' (the ':layout:' list route),
+    " 'detail/{category}/{layout}',
+    " 'detailDetail/{category}/{product}/{layout}',
+    " 'detailDetailDetail/{category}/{product}/{supplier}/{layout}' -
+    " the category is its NAME (spaces ride URL-encoded), product/supplier
+    " are INDICES into the mock collections, defaulting to 0 like the
+    " original's `arguments.product || this._product || "0"`
+    DATA(lv_hash) = iv_hash.
+    IF lv_hash CS `#`.
+      lv_hash = substring_after( val = lv_hash sub = `#` ).
+    ENDIF.
+    SHIFT lv_hash LEFT DELETING LEADING `/`.
+    SPLIT lv_hash AT `/` INTO TABLE DATA(lt_seg).
+    DELETE lt_seg WHERE table_line IS INITIAL.
+
+    DATA(lv_cat) = replace( val = VALUE string( lt_seg[ 2 ] OPTIONAL ) sub = `%20` with = ` ` occ = 0 ).
+    DATA(lv_p)   = VALUE string( lt_seg[ 3 ] OPTIONAL ).
+    DATA(lv_s)   = VALUE string( lt_seg[ 4 ] OPTIONAL ).
+
+    CASE VALUE string( lt_seg[ 1 ] OPTIONAL ).
+      WHEN ``.
+        route  = `list`.
+        layout = `OneColumn`.
+        " back on the categories page - the list route targets List.view
+        IF begin_page IS NOT INITIAL.
+          CLEAR begin_page.
+          CLEAR route_category.
+          client->follow_up_action( val   = client->cs_event-control_by_id
+                                    t_arg = VALUE #( ( `fcl` ) ( `to` ) ( `categoriesPage` ) ) ).
+        ENDIF.
+
+      WHEN `detail`.
+        route = `detail`.
+        category_apply( lv_cat ).
+        layout = COND #( WHEN lv_p IS NOT INITIAL THEN lv_p ELSE `OneColumn` ).
+
+      WHEN `detailDetail`.
+        route = `detailDetail`.
+        category_apply( lv_cat ).
+        product_ix = COND #( WHEN lv_p CO `0123456789` AND lv_p IS NOT INITIAL AND strlen( lv_p ) <= 4 THEN lv_p ).
+        layout     = COND #( WHEN lv_s IS NOT INITIAL THEN lv_s ELSE `TwoColumnsMidExpanded` ).
+        IF product_ix < lines( t_products ).
+          detail_bind( t_products[ product_ix + 1 ]-productid ).
+        ENDIF.
+
+      WHEN `detailDetailDetail`.
+        route = `detailDetailDetail`.
+        category_apply( lv_cat ).
+        product_ix  = COND #( WHEN lv_p CO `0123456789` AND lv_p IS NOT INITIAL AND strlen( lv_p ) <= 4 THEN lv_p ).
+        supplier_ix = COND #( WHEN lv_s CO `0123456789` AND lv_s IS NOT INITIAL AND strlen( lv_s ) <= 4 THEN lv_s ).
+        layout      = COND #( WHEN VALUE string( lt_seg[ 5 ] OPTIONAL ) IS NOT INITIAL
+                              THEN lt_seg[ 5 ]
+                              ELSE `ThreeColumnsMidExpanded` ).
+        IF product_ix < lines( t_products ).
+          detail_bind( t_products[ product_ix + 1 ]-productid ).
+        ENDIF.
+        IF supplier_ix < lines( t_suppliers ).
+          dd_text = t_suppliers[ supplier_ix + 1 ]-text.
+        ENDIF.
+
+      WHEN OTHERS.
+        " the single-segment ':layout:' list route, e.g. '#/OneColumn'
+        route  = `list`.
+        layout = lt_seg[ 1 ].
+        IF begin_page IS NOT INITIAL.
+          CLEAR begin_page.
+          CLEAR route_category.
+          client->follow_up_action( val   = client->cs_event-control_by_id
+                                    t_arg = VALUE #( ( `fcl` ) ( `to` ) ( `categoriesPage` ) ) ).
+        ENDIF.
+    ENDCASE.
+
+  ENDMETHOD.
+
+
+  METHOD hash_push.
+
+    DATA lv_hash TYPE string.
+    " the router's navTo, write side: compose the current route the way the
+    " manifest patterns spell it and push it as the app-owned hash. The
+    " category name is URL-encoded the way the original's navTo encodes it
+    DATA(lv_cat) = replace( val = route_category sub = ` ` with = `%20` occ = 0 ).
+    CASE route.
+      WHEN `detail`.
+        lv_hash = |/detail/{ lv_cat }/{ layout }|.
+      WHEN `detailDetail`.
+        lv_hash = |/detailDetail/{ lv_cat }/{ product_ix }/{ layout }|.
+      WHEN `detailDetailDetail`.
+        lv_hash = |/detailDetailDetail/{ lv_cat }/{ product_ix }/{ supplier_ix }/{ layout }|.
+      WHEN OTHERS.
+        lv_hash = |/{ layout }|.
+    ENDCASE.
+
+    " a NAVIGATION ARROW rewrites the URL in place (the original's
+    " replace-navTo) - everything else is a real, pushed history entry
+    IF check_replace = abap_true.
+      client->hash_replace( lv_hash ).
+    ELSE.
+      client->hash_set( lv_hash ).
+    ENDIF.
 
   ENDMETHOD.
 
