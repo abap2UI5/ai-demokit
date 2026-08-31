@@ -41,7 +41,7 @@
  * a `written` entry (with a `why`) rather than let the gap pass unnoticed.
  *
  * One line, because a `"` comment is one line and abaplint holds lines to 255
- * characters. 62 of the 793 upstream descriptions are longer than that - 29 of
+ * characters. 62 of the 800 upstream descriptions are longer than that - 29 of
  * them on ported samples - and those are cut back to the last sentence that
  * still fits, see `fit`.
  *
@@ -88,7 +88,7 @@ function clean(text) {
 
 /* Fit to one line: cut at the last sentence that fits.
  *
- * 62 of the 793 upstream descriptions are longer than a line holds, 29 of them
+ * 62 of the 800 upstream descriptions are longer than a line holds, 29 of them
  * on samples this repository ports - the demo kit renders a paragraph, not a
  * subtitle. Cutting at a sentence rather than at a word is what keeps the line
  * readable: every one of the 29 lands between 93 and 244 characters and ends
@@ -98,7 +98,7 @@ function clean(text) {
  *
  * The floor exists for a text whose only early full stop is an abbreviation
  * ("Fig. 1 shows ...") - there, a sentence cut would leave a stub, and half a
- * line ending in `...` is better than four words. Nothing in today's 793 hits
+ * line ending in `...` is better than four words. Nothing in today's 800 hits
  * it; it is there so a future refresh cannot silently produce a stub. */
 const FLOOR = 60;
 
