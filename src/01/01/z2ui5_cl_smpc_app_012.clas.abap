@@ -441,7 +441,7 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
     " (#/Page2, no route prefix), and a hash change the app did not write -
     " browser Back/Forward, a manual edit - round-trips as HASH_CHANGED.
     " Re-asserted per render, since the registration dies with an app switch
-    client->follow_up_action( val   = client->cs_event-set_hash_listener
+    client->follow_up_action( val   = client->cs_event-hash_attach_changed
                               t_arg = VALUE #( ( `HASH_CHANGED` ) ) ).
 
     client->view_display( view->stringify( ) ).
@@ -500,7 +500,7 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
         " navTo also writes the router's hash: with the hash listener
         " registered this pushes the app-owned `#/Page2` - the original's URL
         " 1:1 - as a real history entry, so browser Back has somewhere to go
-        client->set_push_state( `/Page2` ).
+        client->hash_set( `/Page2` ).
 
       WHEN `HASH_CHANGED`.
         " browser Back/Forward (or a manual edit) moved the app-owned hash -

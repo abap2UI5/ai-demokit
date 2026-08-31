@@ -27,7 +27,7 @@ CLASS z2ui5_cl_smpc_app_577 DEFINITION PUBLIC.
     METHODS view_display.
     METHODS on_event.
     METHODS hash_apply IMPORTING iv_hash TYPE string.
-    METHODS hash_push.
+    METHODS hash_push IMPORTING check_replace TYPE abap_bool OPTIONAL.
     METHODS section_select.
     METHODS model_init.
 
@@ -82,6 +82,10 @@ CLASS z2ui5_cl_smpc_app_577 IMPLEMENTATION.
             " List.controller attaches columnResize on the FCL: once the begin
             " column is back to full width the indexed section is re-selected
             )->a( n = `columnResize`                 v = client->_event( val = `COLUMN_RESIZE` arg = `${$parameters>/beginColumn}` )
+            " the original wires stateChange to onStateChanged: only a layout
+            " change by a NAVIGATION ARROW replace-navTo's the URL - the flag
+            " and the new layout travel with the event, the backend guards on it
+            )->a( n = `stateChange`      v = client->_event( val = `STATE_CHANGED` t_arg = VALUE #( ( `${$parameters>/isNavigationArrow}` ) ( `${$parameters>/layout}` ) ) )
             )->a( n = `layout`                       v = client->_bind( layout ) ).
 
     " List.view.xml - the ObjectPage whose sections come from the model.
@@ -207,7 +211,7 @@ CLASS z2ui5_cl_smpc_app_577 IMPLEMENTATION.
     " the manifest patterns spell it, and a hash change the app did not
     " write (browser Back/Forward, a manual edit) round-trips as
     " HASH_CHANGED. Re-asserted per render - it dies with an app switch
-    client->follow_up_action( val   = client->cs_event-set_hash_listener
+    client->follow_up_action( val   = client->cs_event-hash_attach_changed
                               t_arg = VALUE #( ( `HASH_CHANGED` ) ) ).
 
     " _onListMatched on the first rendering: a deep link '#/3' selects the
@@ -274,6 +278,16 @@ CLASS z2ui5_cl_smpc_app_577 IMPLEMENTATION.
           section_select( ).
         ENDIF.
 
+      WHEN `STATE_CHANGED`.
+        " onStateChanged: the layout is a two-way binding, so the model
+        " already carries the value this event reports - but when a
+        " NAVIGATION ARROW changed it, the original replace-navTo's the
+        " URL: same route, new layout, no new history entry
+        IF client->get_event_arg( ) = abap_true.
+          layout = client->get_event_arg( 2 ).
+          hash_push( abap_true ).
+        ENDIF.
+
       WHEN `HASH_CHANGED`.
         " browser Back/Forward (or a manual edit) moved the app-owned hash -
         " the router's routeMatched: derive route, section index and layout
@@ -329,6 +343,7 @@ CLASS z2ui5_cl_smpc_app_577 IMPLEMENTATION.
 
   METHOD hash_push.
 
+    DATA lv_hash TYPE string.
     " the router's navTo, write side: compose the current route the way the
     " manifest patterns spell it and push it as the app-owned hash. The bare
     " list route pushes '/' - the leading slash is normalised away, so the
@@ -336,14 +351,22 @@ CLASS z2ui5_cl_smpc_app_577 IMPLEMENTATION.
     " navTo('list') without a section
     CASE route.
       WHEN `detail`.
-        client->set_push_state( |/detail/{ layout }| ).
+        lv_hash = |/detail/{ layout }|.
       WHEN OTHERS.
         IF section_ix >= 0.
-          client->set_push_state( |/{ section_ix }| ).
+          lv_hash = |/{ section_ix }|.
         ELSE.
-          client->set_push_state( `/` ).
+          lv_hash = `/`.
         ENDIF.
     ENDCASE.
+
+    " a NAVIGATION ARROW rewrites the URL in place (the original's
+    " replace-navTo) - everything else is a real, pushed history entry
+    IF check_replace = abap_true.
+      client->hash_replace( lv_hash ).
+    ELSE.
+      client->hash_set( lv_hash ).
+    ENDIF.
 
   ENDMETHOD.
 
