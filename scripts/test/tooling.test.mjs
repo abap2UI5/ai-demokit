@@ -225,14 +225,12 @@ test('abap-scope: the page, the sidecars and prose do not', async () => {
   const { reachesAbap } = await import('../abap-scope.mjs');
 
   const inert = [
-    'web/search/index.html',
-    'web/search/favicon.ico',
     'web/README.md',
     'meta/z2ui5_cl_smpc_app_001.json',
     'catalogue.json',
     'ui5/descriptions.json',
-    'scripts/generate-search-index.mjs',
-    '.github/workflows/deploy-web.yaml',
+    'scripts/generate-derived.mjs',
+    'catalogue-derived.json',
     '.claude/skills/run-the-gates/SKILL.md',
     'README.md',
     'AGENTS.md',

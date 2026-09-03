@@ -181,12 +181,11 @@ Keep them separate: only `src/` is the abapGit / abaplint scope; `ui5/` is
 plain JS/XML held for reference and to feed the generator. Everything else at
 the root is documentation or tooling, not a tree the pipeline reads: `meta/`
 (one sidecar per port, plus the e2e interaction modules), `scripts/` (the
-generators and gates), `web/` (the GitHub Pages site - `web/search/` IS the
-published catalogue, three static files plus a generated index and
-deploy-generated thumbnails; the transpiled
-in-browser demo that used to live here was removed 2026-08-19, and `web/ci/`
-keeps the two patch scripts `scripts/e2e-build.mjs` and abap2UI5/mcp-server
-still execute) and `docs/` (the journal and the upstream-request record).
+generators and gates), `web/` (no site any more - the searchable catalogue
+moved to the playground 2026-09-03 and this repository feeds it
+`catalogue-derived.json` instead; the transpiled in-browser demo went
+2026-08-19, and what is left is `web/ci/`, the two patch scripts
+`scripts/e2e-build.mjs` and abap2UI5/mcp-server still execute) and `docs/` (the journal and the upstream-request record).
 
 **There is no `todo/` staging tree any more** — deleted 2026-08-12
 (`f9afe94`), so `git ls-files` shows nothing under it. It was the staging area
@@ -743,12 +742,11 @@ up to 24 hours later:
 | `structural-diff.yaml` | `structural_diff` | port vs. archived original, binding values included |
 | `data-fidelity.yaml` | `data_fidelity` | seeded values vs. the archived sample mocks |
 | `view-gates.yaml` | `view_gates` | properties + structure + headless render — the three former view gates, now run from [abap2UI5-linter](https://github.com/abap2UI5/linter) with only the corpus policy kept here in `scripts/view-gates.mjs`; also `npm run check:collection` for `src/03`, and it publishes the two README badges |
-| `meta-valid.yaml` | `meta_valid` | sidecar schema + referential integrity, the archive the sidecars point at (`check-archive`, §4), and that every generated artefact (overview app, `README.md`, `api.md`, `STATUS.md`, `SAMPLES.md`) is in sync |
+| `meta-valid.yaml` | `meta_valid` | sidecar schema + referential integrity, the archive the sidecars point at (`check-archive`, §4), and that every generated artefact (overview app, `README.md`, `api.md`, `STATUS.md`, `SAMPLES.md`, `catalogue.json`, `catalogue-derived.json`) is in sync |
 | `tooling-tests.yaml` | `tooling_tests` | the gate/generator tooling's own fixture tests |
 | `check-prose-names.yaml` | `prose_names` | every `z2ui5_cl_*` class named in prose exists, here or in the repository that owns it |
 | `check-mcp-contract.yaml` | `check-mcp-contract` | the file paths and shapes abap2UI5/mcp-server reads out of this checkout (§5, the generation prompt) |
 | `e2e-pr.yaml` | `e2e_pr` | the ports this pull request touches, booted as the real app (transpiled backend + headless Chromium) |
-| `check-family-nav.yaml` | `check-family-nav` | the shared navigation blocks of the sap.ui.layout Form family (apps 312–337) are intact |
 | `check-app-rules.yaml`, `check-keywords.yaml`, `check-summary.yaml` | same | the shared abaplint app rules, the `@keywords` and the `@summary` lines |
 
 What each gate checks, what a failure means and every legitimate escape hatch
@@ -879,21 +877,42 @@ category, library, demo kit sample id, entity, status, deviation types,
 summary, keywords — joined from the sidecars and the class scan, plus a
 top-level block saying what this repository is and naming the
 `Z2UI5_CL_SMPC_*` vs `Z2UI5_CL_SMP_*` class-name trap for a tool that has
-seen abap2UI5/samples. Committed (unlike the Pages `apps.json` below) because
-it carries only committed facts — no linter pass, so it is offline,
-deterministic and gated by the same regenerate-and-diff as the other five;
-the derived view facts (controls built, minimum UI5 release) stay in
-`apps.json`, which serves them fresher than a commit could.
+seen abap2UI5/samples. It carries only committed facts — no linter pass, so
+it is offline, deterministic and gated by the same regenerate-and-diff as the
+other five. Keep it that way: the derived view facts live next door.
 
-One more artefact is generated and deliberately NOT committed:
-`web/search/apps.json`, the data behind the searchable catalogue on GitHub
-Pages (`scripts/generate-search-index.mjs`, spec in `web/README.md`). It is
-derived twice over — from the sidecars and from an `@abap2UI5/linter` run that
-reconstructs each port's view — and it is ~360 KB. Committing it would put
-that diff on every port PR and add a gate that can only ever restate what the
-linter already says; `deploy-web` regenerates it on every deploy instead, so
-it cannot be staler than the site serving it. Do not add it to `npm run
-gates`, and do not commit it.
+**`catalogue-derived.json`** is next door
+(`scripts/generate-derived.mjs`): what the LINTER knows about each port,
+keyed by `class` so a consumer joins it onto `catalogue.json`. It answers the
+two questions the sidecars cannot — *"my system runs 1.84, which of these
+render on it"* (`minUi5`, the highest `since` of the `*-too-new` findings, and
+`needs` naming what made it that release) and *"which ports use `sap.m.Table`
+at all"* (`controls`, every type the port BUILDS, as indices into one
+dictionary) — plus the demo kit's description paragraph, which is the prose a
+free-text search actually matches on.
+
+Which UI5 library each control ships in is deliberately NOT in there. That is
+one taxonomy question, and answering it in three sample repositories would be
+three copies of a prefix table that drift; the consumer that needs it — the
+playground's catalogue, which has to decide "does this render on the build I
+carry" anyway — owns the mapping. `libraryOf` stays here for `catalogue.json`'s
+`library`, which is a different question: the one library a port's `entity` is
+filed under.
+
+Why two files and not one: everything a port carries that is committed fact is
+in `catalogue.json` already, and repeating those eight fields would mean 636
+ports written twice, two ~500 KB files diffing on every port PR, and a second
+place for them to be wrong. Split, the derived half is 258 KB. Both are
+generated from one scan of one tree in one `npm run gates`, so they cannot
+disagree about which ports exist.
+
+It IS committed, unlike the `web/search/apps.json` it replaced. That file was
+regenerated on every Pages deploy because the site serving it was in this
+repository; the catalogue is published from the playground now, over all three
+sample repositories, and builds its index by fetching this file from
+`raw.githubusercontent.com` — which serves committed files only. The linter
+run moved with it, from every deploy to `meta-valid`, where it is seven
+seconds on an install that was already paid for.
 
 `SAMPLES.md` is written from the classes and their sidecars — the row title is
 `**<entity>** — <demo kit sample name>` (the sidecar's `entity`, then the name

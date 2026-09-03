@@ -1,4 +1,0 @@
-# derived: written by scripts/generate-search-index.mjs on every deploy
-search/apps.json
-# derived: photographed by scripts/generate-screenshots.mjs on every deploy
-search/thumbs/

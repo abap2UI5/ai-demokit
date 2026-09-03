@@ -34,9 +34,10 @@ how to express a control in ABAP? Its sample is already here — or on its way.
    one click starts the app right in your system.
 
 No ABAP system at hand? Open the
-[searchable catalogue](https://abap2ui5.github.io/samples-controls/) — every port,
-filtered by control or by the UI5 release your system runs, each one a click from
-its source and from running in the browser playground.
+[sample catalogue](https://abap2ui5.github.io/playground/samples/) — every port
+here, every sample of the other two repositories, filtered by control or by the
+UI5 release your system runs, each one a click from its source and from running
+in the browser playground.
 
 #### The learning path
 
@@ -107,9 +108,12 @@ newer than 1.71) and, under each, one package per library (`01` = `sap.m`,
 SAPUI5-only controls, which have no OpenUI5 original to rebuild against. Both
 levels are derived from the port's `meta/` sidecar, never chosen — see AGENTS
 §3 for the folder tables. The generation/review batch a port came from is
-recorded in its `meta/<class>.json`, not in the tree. The browser demo is
-built from [`web/`](web) and published by `deploy-web`; see
-[`web/README.md`](web/README.md).
+recorded in its `meta/<class>.json`, not in the tree. This repository publishes
+no page of its own any more: the searchable catalogue over all three sample
+repositories lives in the
+[playground](https://abap2ui5.github.io/playground/samples/) and is built from
+[`catalogue-derived.json`](catalogue-derived.json); see
+[`web/README.md`](web/README.md) for what went where.
 
 #### Repo map
 
@@ -126,7 +130,7 @@ built from [`web/`](web) and published by `deploy-web`; see
 | [`meta/`](meta) | One sidecar per port — status, checked, typed deviations |
 | [`ui5/`](ui5) | The archived original demo kit template of every ported sample, plus the scope/universe snapshots the coverage is computed from |
 | [`scripts/`](scripts) | The generators and the gates — one script per CI job, plus `generation-prompt.txt`, the porting agent's prompt |
-| [`web/`](web) | The GitHub Pages site: the searchable catalogue of every port |
+| [`catalogue.json`](catalogue.json), [`catalogue-derived.json`](catalogue-derived.json) | The machine-readable index: the tree's facts, and what the linter knows about each port (controls built, minimum UI5 release) — joined on `class`, and what the catalogue page is built from |
 | [`docs/history.md`](docs/history.md) | The chronological journal — batches, probes, audits, one section per event |
 | [`docs/upstream-requests.md`](docs/upstream-requests.md) | The record of what porting asked the framework for — implemented and declined. Open requests live in [`backlog/`](https://github.com/abap2UI5/abap2UI5/tree/main/backlog) in abap2UI5, where the whole ecosystem's upstream backlog is |
 | [mcp-server](https://github.com/abap2UI5/mcp-server) | MCP server for AI coding agents — capability queries, view validation, deploy, headless run + screenshot on this repo's infrastructure (separate repository) |

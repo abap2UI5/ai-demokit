@@ -48,7 +48,7 @@ const REACHES = [
 
 /** Prefixes and exact paths that provably cannot move it. */
 const INERT = [
-  'web/',                       // the Pages site
+  'web/',                       // the e2e build patches (the Pages site is gone)
   'ui5/',                       // the demo kit archive the ports are diffed against
   'meta/',                      // the sidecars
   'scripts/',                   // the gate and generator tooling
@@ -63,6 +63,7 @@ const INERT = [
   '.abapgit.xml',
   'abap2ui5lint-collection.jsonc',
   'catalogue.json',             // generated index of the sidecars - derived data, no ABAP
+  'catalogue-derived.json',     // the linter's half of that index - derived data, no ABAP
   'LICENSE',
 ];
 
