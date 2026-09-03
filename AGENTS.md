@@ -888,8 +888,16 @@ two questions the sidecars cannot — *"my system runs 1.84, which of these
 render on it"* (`minUi5`, the highest `since` of the `*-too-new` findings, and
 `needs` naming what made it that release) and *"which ports use `sap.m.Table`
 at all"* (`controls`, every type the port BUILDS, as indices into one
-dictionary) — plus `libraries` and the demo kit's description paragraph, which
-is the prose a free-text search actually matches on.
+dictionary) — plus the demo kit's description paragraph, which is the prose a
+free-text search actually matches on.
+
+Which UI5 library each control ships in is deliberately NOT in there. That is
+one taxonomy question, and answering it in three sample repositories would be
+three copies of a prefix table that drift; the consumer that needs it — the
+playground's catalogue, which has to decide "does this render on the build I
+carry" anyway — owns the mapping. `libraryOf` stays here for `catalogue.json`'s
+`library`, which is a different question: the one library a port's `entity` is
+filed under.
 
 Why two files and not one: everything a port carries that is committed fact is
 in `catalogue.json` already, and repeating those eight fields would mean 636

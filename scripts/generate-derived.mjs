@@ -54,7 +54,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { checkAbapSource } from '@abap2ui5/linter';
 import { walkFiles } from './lib/src-tree.mjs';
-import { universe, libraryOf } from './lib/ui5-libs.mjs';
+import { universe } from './lib/ui5-libs.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'catalogue-derived.json');
@@ -167,11 +167,13 @@ for (const file of files) {
     /* What made it that release — the tooltip behind the badge, so a filter
      * result can be argued with rather than only believed. */
     needs: tooNew.sort((a, b) => cmpVersion(b.since, a.since) || a.name.localeCompare(b.name)),
-    /* Every library the port actually BUILDS from, which is the question
-     * "will this render on my UI5 build" — not the one library its `entity`
-     * is filed under. z2ui5.cc.* is not a UI5 library at all: those are
-     * abap2UI5's own custom controls, there wherever abap2UI5 is. */
-    libraries: [...new Set(controls.map(libraryOf))].sort(),
+    /* Every control type the port BUILDS, as indices into the dictionary
+     * below. Which LIBRARY each of those ships in is deliberately not
+     * answered here: it is one UI5 taxonomy question, and answering it in
+     * three sample repositories would be three copies of a prefix table that
+     * drift. The consumer that needs it - the playground's catalogue, which
+     * has to decide "does this render on the build I carry" anyway - owns the
+     * mapping, beside the library list it is deciding against. */
     controls: controls.map(idOf),
     controlCount: Object.values(types).reduce((a, b) => a + b, 0),
     /* A port the linter could not reconstruct built nothing as far as this
