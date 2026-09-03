@@ -51,4 +51,8 @@ jobs:
     - run: node scripts/generate-status.mjs
     - run: node scripts/generate-samples-md.mjs
     - run: node scripts/generate-catalogue.mjs
-    - run: git diff --exit-code -- src README.md api.md STATUS.md SAMPLES.md catalogue.json
+    # catalogue-derived.json - what the linter knows about each port, published
+    # for the playground's catalogue page to build its index from. Seven
+    # seconds over 636 ports; the install above is already paid for.
+    - run: node scripts/generate-derived.mjs --quiet
+    - run: git diff --exit-code -- src README.md api.md STATUS.md SAMPLES.md catalogue.json catalogue-derived.json
