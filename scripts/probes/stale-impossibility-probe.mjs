@@ -71,6 +71,16 @@ const DENY_EXACT = new Set(['destroy', 'exit', 'fireEvent', 'clone', 'applySetti
 const DENY_PREFIX = ['bind', 'unbind', 'attach', 'detach', 'addDependent', 'placeAt', 'setBinding'];
 const denied = (m) => DENY_EXACT.has(m) || DENY_PREFIX.some((p) => m.startsWith(p));
 
+/* Not control methods at all, and in this prose for other reasons: `main( )`
+ * is z2ui5_if_app~main, the ABAP entry point every port in this repository
+ * implements and the sidecars discuss constantly; `render( )` and
+ * `stringify( )` are z2ui5_cl_ui5_view_builder's own (and `stringify` is also
+ * JSON's, which is how app 447 mentions it); `factory( )` opens every chain.
+ * The frontend's allowlist has no opinion about any of them, so asking
+ * "is it denied?" of one produces a hit that can never be real - which is what
+ * the single standing hit of the 2026-09 sweep was. */
+const NOT_A_CONTROL_METHOD = new Set(['main', 'render', 'stringify', 'factory']);
+
 const CLAIM = /(cannot be|no abap2UI5 equivalent|not expressible|has no equivalent|no wire (?:can|exists)|cannot express|no bindable equivalent|which no wire|that no wire)/i;
 /* A hit leaves the list in one of TWO ways, and both have to be recorded in
  * the sidecar where the claim lives, or the next reader re-derives it. The
@@ -97,7 +107,8 @@ for (const m of metas) {
     for (const mm of d.what.matchAll(METHOD)) {
       const name = mm[1];
       // a getter is never the thing a port is blocked on
-      if (!denied(name) && !/^(get|is|has)/.test(name)) names.add(name);
+      if (denied(name) || NOT_A_CONTROL_METHOD.has(name)) continue;
+      if (!/^(get|is|has)/.test(name)) names.add(name);
     }
     if (!names.size) continue;
     hits++;
