@@ -5615,26 +5615,28 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         post171 = `Formatter.DateCreateObject is referenced via core:require, which needs UI5 >= 1.74. sap.m.PlanningCalendar itself is since 1.34 (in scope). Also sap.ui.unified.CalendarAppointment.ariaHasPopup (@since` &&
                  ` 1.150.0) is kept 1:1 from the original view (ariaHasPopup='{ariaHasPopup}'); newer than 1.71, declared. Was undeclared because the property gate was sap.m-only (now extended to all libs, 2026-07-24).` ) ).
 
-    lv_text1 = `POST-1.71: sap.ui.unified.CalendarAppointment ariaHasPopup is @since 1.150.0 - newer than the 1.71 floor. It is kept 1:1 from the sample, so the port is filed under src/02. // NOTE: The calendar date` &&
-               ` properties (the PlanningCalendar startDate and every CalendarAppointment / DateTypeRange startDate and endDate) are typed "object" and demand a real JS Date. The model keeps ISO strings and` &&
-               ` Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74). // NOTE: determineControlsVisibility shows the Label only in the` &&
-               ` nonWorking view and the Select only in the months view on a desktop. viewKey is bindable, so the key is one shared field and both controls carry the switch as an expression binding - the Label over` &&
-               ` the key alone, the Select over the key AND the device model's system/desktop flag. handleViewChange, which exists only to re-run that method, is dropped with them. // NOTE: handleGroupModeChange` &&
-               ` calls setGroupAppointmentsMode; the property is bindable, so the Select shares its key with the calendar and the change handler is dropped. handleSelectionFinish's setBuiltInViews keeps its wire: the`.
-    lv_text1 = lv_text1 && ` picked keys travel as one comma-separated argument and ABAP fills the bound string table. // NOTE: handleIntervalSelect has two branches. In the nonWorking view handleNonWorkingSpecialDates toggles a` &&
-               ` NonWorking DateTypeRange on the selected date - the specialDates aggregation is bound to a table here and the round-trip adds or removes the row, which is the same toggle. Otherwise the handler` &&
-               ` pushes a 'new appointment' (Type09) into the row it hit, or into every selected row; the row index and the selected-row indices travel with the event and ABAP does the same push. The interval's start` &&
-               ` and end travel as their LOCAL parts - a UTC toISOString( ) would shift the day. // IMPROVISED: onPress on the 'Toggle custom views' ToggleButton removes the four PlanningCalendarViews from the` &&
-               ` aggregation and adds them back, by constructing PlanningCalendarView instances in the controller. The views aggregation is declared in the view here and a backend cannot add or remove aggregation` &&
-               ` children of a rendered view, so the four views stay declared and the ToggleButton keeps its text but loses its press wire. // NOTE: The two row images are the demo kit's own test-resources files`.
-    lv_text1 = lv_text1 && ` (John_Miller.png, Donna_Moore.jpg), re-hosted on sdk.openui5.org. // NOTE: The four views, the non-working day toggle, the interval-select appointment push, the built-in views box and the two` &&
-               ` nonWorkingDays / nonWorkingHours arrays are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_537.mjs). // NOTE: **e2e-caught` &&
-               ` 2026-08-22**: the sample's own data carries an upstream typo - UI5Date.getInstance(201, 2, 4, 13, 30), a year of 201 where every neighbouring row says 2017 (Page.controller.js:110). In JavaScript` &&
-               ` that is a VALID date (4 March 201 AD); as the ISO string the port stores it became '201-03-04T13:30:00', which new Date() cannot parse at all, so the appointment reached the calendar as an Invalid` &&
-               ` Date and CalendarUtils._checkJSDateObject took the whole app down. The year is now written '0201', which is the same absurd date the original produces and which parses. The typo itself is kept: it is` &&
-               ` the sample's data. // NOTE: A JS callback is not in the UI5 expression grammar - ExpressionParser has no ``function`` keyword and reads { as an object literal, so the whole handler string failed to`.
-    lv_text1 = lv_text1 && ` parse and every argument was lost. The selection is read from the model instead: PlanningCalendarRow (and CalendarAppointment) declare a bindable ``selected``, so the flags travel with the rows and` &&
-               ` ABAP does the work.`.
+    lv_text1 = `POST-1.71: sap.ui.unified.CalendarAppointment ariaHasPopup is @since 1.150.0 - newer than the 1.71 floor. It is kept 1:1 from the sample, so the port is filed under src/02. // POST-1.71: The` &&
+               ` sap.ui.unified.CalendarDayType ENUM VALUE NonWorking is @since 1.121 and is kept 1:1 from the original. The attribute it rides on (DateTypeRange.type) is base-version, so the property gate sees a` &&
+               ` known member with a value it does not judge - the enum-value residual limit of AGENTS section 5. Same declaration app 308 carries; found by scripts/probes/post171-blindspot-probe.mjs. The app needs a` &&
+               ` UI5 release >= 1.121 for those days to render as non-working. // NOTE: The calendar date properties (the PlanningCalendar startDate and every CalendarAppointment / DateTypeRange startDate and` &&
+               ` endDate) are typed "object" and demand a real JS Date. The model keeps ISO strings and Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108` &&
+               ` uses (needs UI5 >= 1.74). // NOTE: determineControlsVisibility shows the Label only in the nonWorking view and the Select only in the months view on a desktop. viewKey is bindable, so the key is one`.
+    lv_text1 = lv_text1 && ` shared field and both controls carry the switch as an expression binding - the Label over the key alone, the Select over the key AND the device model's system/desktop flag. handleViewChange, which` &&
+               ` exists only to re-run that method, is dropped with them. // NOTE: handleGroupModeChange calls setGroupAppointmentsMode; the property is bindable, so the Select shares its key with the calendar and` &&
+               ` the change handler is dropped. handleSelectionFinish's setBuiltInViews keeps its wire: the picked keys travel as one comma-separated argument and ABAP fills the bound string table. // NOTE:` &&
+               ` handleIntervalSelect has two branches. In the nonWorking view handleNonWorkingSpecialDates toggles a NonWorking DateTypeRange on the selected date - the specialDates aggregation is bound to a table` &&
+               ` here and the round-trip adds or removes the row, which is the same toggle. Otherwise the handler pushes a 'new appointment' (Type09) into the row it hit, or into every selected row; the row index and` &&
+               ` the selected-row indices travel with the event and ABAP does the same push. The interval's start and end travel as their LOCAL parts - a UTC toISOString( ) would shift the day. // IMPROVISED: onPress`.
+    lv_text1 = lv_text1 && ` on the 'Toggle custom views' ToggleButton removes the four PlanningCalendarViews from the aggregation and adds them back, by constructing PlanningCalendarView instances in the controller. The views` &&
+               ` aggregation is declared in the view here and a backend cannot add or remove aggregation children of a rendered view, so the four views stay declared and the ToggleButton keeps its text but loses its` &&
+               ` press wire. // NOTE: The two row images are the demo kit's own test-resources files (John_Miller.png, Donna_Moore.jpg), re-hosted on sdk.openui5.org. // NOTE: The four views, the non-working day` &&
+               ` toggle, the interval-select appointment push, the built-in views box and the two nonWorkingDays / nonWorkingHours arrays are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e` &&
+               ` interaction, meta/interactions/z2ui5_cl_smpc_app_537.mjs). // NOTE: **e2e-caught 2026-08-22**: the sample's own data carries an upstream typo - UI5Date.getInstance(201, 2, 4, 13, 30), a year of 201` &&
+               ` where every neighbouring row says 2017 (Page.controller.js:110). In JavaScript that is a VALID date (4 March 201 AD); as the ISO string the port stores it became '201-03-04T13:30:00', which new`.
+    lv_text1 = lv_text1 && ` Date() cannot parse at all, so the appointment reached the calendar as an Invalid Date and CalendarUtils._checkJSDateObject took the whole app down. The year is now written '0201', which is the same` &&
+               ` absurd date the original produces and which parses. The typo itself is kept: it is the sample's data. // NOTE: A JS callback is not in the UI5 expression grammar - ExpressionParser has no` &&
+               ` ``function`` keyword and reads { as an object literal, so the whole handler string failed to parse and every argument was lost. The selection is read from the model instead: PlanningCalendarRow (and` &&
+               ` CalendarAppointment) declare a bindable ``selected``, so the flags travel with the rows and ABAP does the work.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.PlanningCalendar`                name = `PlanningCalendarViews`                         class = `z2ui5_cl_smpc_app_537` path = `src/02/01/z2ui5_cl_smpc_app_537.clas.abap`
         score = 5
@@ -5642,7 +5644,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.34`
         is_post171 = abap_true
         notes = lv_text1
-        post171 = `sap.ui.unified.CalendarAppointment ariaHasPopup is @since 1.150.0 - newer than the 1.71 floor. It is kept 1:1 from the sample, so the port is filed under src/02.` ) ).
+        post171 = `sap.ui.unified.CalendarAppointment ariaHasPopup is @since 1.150.0 - newer than the 1.71 floor. It is kept 1:1 from the sample, so the port is filed under src/02. // The sap.ui.unified.CalendarDayType` &&
+                 ` ENUM VALUE NonWorking is @since 1.121 and is kept 1:1 from the original. The attribute it rides on (DateTypeRange.type) is base-version, so the property gate sees a known member with a value it does` &&
+                 ` not judge - the enum-value residual limit of AGENTS section 5. Same declaration app 308 carries; found by scripts/probes/post171-blindspot-probe.mjs. The app needs a UI5 release >= 1.121 for those` &&
+                 ` days to render as non-working.` ) ).
 
     lv_text1 = `POST-1.71: sap.m.PlanningCalendar calendarWeekNumbering is @since 1.110.0 - newer than the 1.71 floor. The four week-numbering schemes ARE the sample, so the property is kept and the port is filed` &&
                ` under src/02. // NOTE: The calendar date properties (the PlanningCalendar startDate and every CalendarAppointment startDate and endDate) are typed "object" and demand a real JS Date. The model keeps` &&
@@ -5664,21 +5669,24 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         post171 = `sap.m.PlanningCalendar calendarWeekNumbering is @since 1.110.0 - newer than the 1.71 floor. The four week-numbering schemes ARE the sample, so the property is kept and the port is filed under src/02.` ) ).
 
     lv_text1 = `POST-1.71: sap.ui.unified.DateTypeRange secondaryType is @since 1.81.0 and color @since 1.76.0, and sap.m.PlanningCalendar firstDayOfWeek is @since 1.94 - all newer than the 1.71 floor. The legend's` &&
-               ` coloured special dates and the row's secondary type are what this sample shows, so both are kept and the port is filed under src/02. // NOTE: The calendar date properties (the PlanningCalendar` &&
-               ` startDate and every CalendarAppointment / DateTypeRange startDate and endDate) are typed "object" and demand a real JS Date. The model keeps ISO strings and Formatter.DateCreateObject from the` &&
-               ` curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74). // NOTE: The original keeps the legend-shown flag in a SECOND named model (stateModel>). abap2UI5` &&
-               ` keeps one default model, so the flag is a field here and the DynamicSideContent and the ToggleButton share it - the same two-way link the named model gives them. // NOTE: onChange calls` &&
-               ` setFirstDayOfWeek( Number( key ) ). The property is bindable, so the Select shares its key with the calendar and the change handler is dropped; the key values ('-1' .. '6') are the sample's own.`.
-    lv_text1 = lv_text1 && ` firstDayOfWeek is an INT property while a Select key is a string, so the calendar binds an expression that multiplies by 1 - the Number( ) conversion the original does in the handler. // NOTE:` &&
-               ` onBeforeRendering / handleViewChange / changeStandardItemsPerView exist only to swap the legend's standardItems between [Today, Selected, NonWorkingDay] on the OneMonth view and [Today, WorkingDay,` &&
-               ` NonWorkingDay] everywhere else. viewKey and standardItems are both bindable, so the key is one shared field and the legend carries the switch as an expression binding over it - all three handlers are` &&
-               ` dropped. // NOTE: The row images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org. // NOTE: The legend side content, the first-day-of-week Select and the view-dependent` &&
-               ` standard items are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_541.mjs). // NOTE: **e2e-caught 2026-08-22**: one` &&
-               ` special-date row was still missing its secondarytype seed after the b46 sweep fixed the others - the NonWorking range on Sophie Miller (2017-01-16 to 2017-01-18). A flat ABAP row serializes every`.
-    lv_text1 = lv_text1 && ` field, so it sent an empty string into the CalendarDayType enum and UI5 terminated the app. It is seeded 'None' like the rest. The lesson is the sweep's own: the fix has to cover EVERY row of the` &&
-               ` table, not the ones the first failure named. // NOTE: The three root-level aggregations (specialDates on the calendar, items and appointmentItems on the legend) are bound ABSOLUTELY via _bind( path =` &&
-               ` abap_true ). A bare 'T_X' path is relative and resolves against nothing outside a row context, and an unbound table is not serialized at all - either alone leaves the aggregation empty. App 553` &&
-               ` carries the same two fixes; the row-level aggregations inside PlanningCalendarRow stay relative, which is correct there.`.
+               ` coloured special dates and the row's secondary type are what this sample shows, so both are kept and the port is filed under src/02. // POST-1.71: The sap.ui.unified.CalendarDayType ENUM VALUE` &&
+               ` NonWorking is @since 1.121 and is kept 1:1 from the original. The attribute it rides on (DateTypeRange.type) is base-version, so the property gate sees a known member with a value it does not judge -` &&
+               ` the enum-value residual limit of AGENTS section 5. Same declaration app 308 carries; found by scripts/probes/post171-blindspot-probe.mjs. The app needs a UI5 release >= 1.121 for those days to render` &&
+               ` as non-working. // NOTE: The calendar date properties (the PlanningCalendar startDate and every CalendarAppointment / DateTypeRange startDate and endDate) are typed "object" and demand a real JS` &&
+               ` Date. The model keeps ISO strings and Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74). // NOTE: The original`.
+    lv_text1 = lv_text1 && ` keeps the legend-shown flag in a SECOND named model (stateModel>). abap2UI5 keeps one default model, so the flag is a field here and the DynamicSideContent and the ToggleButton share it - the same` &&
+               ` two-way link the named model gives them. // NOTE: onChange calls setFirstDayOfWeek( Number( key ) ). The property is bindable, so the Select shares its key with the calendar and the change handler is` &&
+               ` dropped; the key values ('-1' .. '6') are the sample's own. firstDayOfWeek is an INT property while a Select key is a string, so the calendar binds an expression that multiplies by 1 - the Number( )` &&
+               ` conversion the original does in the handler. // NOTE: onBeforeRendering / handleViewChange / changeStandardItemsPerView exist only to swap the legend's standardItems between [Today, Selected,` &&
+               ` NonWorkingDay] on the OneMonth view and [Today, WorkingDay, NonWorkingDay] everywhere else. viewKey and standardItems are both bindable, so the key is one shared field and the legend carries the` &&
+               ` switch as an expression binding over it - all three handlers are dropped. // NOTE: The row images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org. // NOTE: The legend side`.
+    lv_text1 = lv_text1 && ` content, the first-day-of-week Select and the view-dependent standard items are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction,` &&
+               ` meta/interactions/z2ui5_cl_smpc_app_541.mjs). // NOTE: **e2e-caught 2026-08-22**: one special-date row was still missing its secondarytype seed after the b46 sweep fixed the others - the NonWorking` &&
+               ` range on Sophie Miller (2017-01-16 to 2017-01-18). A flat ABAP row serializes every field, so it sent an empty string into the CalendarDayType enum and UI5 terminated the app. It is seeded 'None'` &&
+               ` like the rest. The lesson is the sweep's own: the fix has to cover EVERY row of the table, not the ones the first failure named. // NOTE: The three root-level aggregations (specialDates on the` &&
+               ` calendar, items and appointmentItems on the legend) are bound ABSOLUTELY via _bind( path = abap_true ). A bare 'T_X' path is relative and resolves against nothing outside a row context, and an` &&
+               ` unbound table is not serialized at all - either alone leaves the aggregation empty. App 553 carries the same two fixes; the row-level aggregations inside PlanningCalendarRow stay relative, which is` &&
+               ` correct there.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.PlanningCalendar`                name = `PlanningCalendarWithLegend`                    class = `z2ui5_cl_smpc_app_541` path = `src/02/01/z2ui5_cl_smpc_app_541.clas.abap`
         score = 5
@@ -5687,7 +5695,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         is_post171 = abap_true
         notes = lv_text1
         post171 = `sap.ui.unified.DateTypeRange secondaryType is @since 1.81.0 and color @since 1.76.0, and sap.m.PlanningCalendar firstDayOfWeek is @since 1.94 - all newer than the 1.71 floor. The legend's coloured` &&
-                 ` special dates and the row's secondary type are what this sample shows, so both are kept and the port is filed under src/02.` ) ).
+                 ` special dates and the row's secondary type are what this sample shows, so both are kept and the port is filed under src/02. // The sap.ui.unified.CalendarDayType ENUM VALUE NonWorking is @since 1.121` &&
+                 ` and is kept 1:1 from the original. The attribute it rides on (DateTypeRange.type) is base-version, so the property gate sees a known member with a value it does not judge - the enum-value residual` &&
+                 ` limit of AGENTS section 5. Same declaration app 308 carries; found by scripts/probes/post171-blindspot-probe.mjs. The app needs a UI5 release >= 1.121 for those days to render as non-working.` ) ).
 
     lv_text1 = `NOTE: The calendar date properties (the PlanningCalendar startDate and every CalendarAppointment startDate and endDate) are typed "object" and demand a real JS Date. The model keeps ISO strings and` &&
                ` Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74). // NOTE: handleAppointmentSelect opens a MessageBox with the` &&
