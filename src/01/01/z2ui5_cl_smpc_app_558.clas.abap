@@ -187,7 +187,13 @@ CLASS z2ui5_cl_smpc_app_558 IMPLEMENTATION.
         )->a( n = `id`                v = `idTabContainer`
         )->a( n = `showAddNewButton`  v = `true`
         )->a( n = `addNewButtonPress` v = client->_event( `TAB_ADD_NEW` )
-        )->a( n = `itemClose`         v = client->_event( val = `TAB_CLOSE` arg = `${$parameters>/item}.getKey()` )
+        " _handleTabContainerItemClose opens with oEvent.preventDefault( ) and
+        " closes the tab itself once the user has confirmed. check_prevent_default
+        " IS that call: the control does not close the tab, the event still
+        " reaches the backend, and tab_close( ) decides
+        )->a( n = `itemClose`         v = client->_event( val    = `TAB_CLOSE`
+                                                          arg    = `${$parameters>/item}.getKey()`
+                                                          s_ctrl = VALUE #( check_prevent_default = abap_true ) )
         )->a( n = `itemSelect`        v = client->_event( val = `TAB_SELECT` arg = `${$parameters>/item}.getKey()` )
         )->a( n = `items`             v = client->_bind( t_tabs )
 
@@ -504,9 +510,9 @@ CLASS z2ui5_cl_smpc_app_558 IMPLEMENTATION.
         ELSE.
           tab_close( pending_close ).
         ENDIF.
-        " the original cancels the close event and removes the item itself; a thin
-        " frontend cannot, so the view is sent again and the tabs come back from
-        " the model - the confirmed close then removes the row for good
+        " the close was vetoed on the wire, so the tab is still there either way:
+        " a confirmed close removes its row and this display drops it, a
+        " cancelled one leaves the row and the tab simply stays
         view_display( ).
 
       WHEN `CLOSE_TAB_CLOSED`.

@@ -120,11 +120,16 @@ CLASS z2ui5_cl_smpc_app_557 IMPLEMENTATION.
                     )->a( n = `key`    v = `{KEY}`
                     )->a( n = `mode`   v = `MultiSelect`
                     )->a( n = `items`  v = `{VALUES}`
-                    " handleSearch replaces the built-in filtering with its own; the
-                    " term round-trips and the backend narrows the group's values
-                    )->a( n = `search` v = client->_event( val   = `SEARCH`
-                                                           t_arg = VALUE #( ( `${$source>/title}` )
-                                                                            ( `${$parameters>/term}` ) ) )
+                    " handleSearch replaces the built-in filtering with its own: it
+                    " calls oEvent.preventDefault( ) FIRST and then filters the
+                    " binding itself. check_prevent_default is that call - baked
+                    " into this wire at render time, which is what the original
+                    " does too (it vetoes on every search, not per term) - and the
+                    " term round-trips so the backend narrows the group's values
+                    )->a( n = `search` v = client->_event( val    = `SEARCH`
+                                                           t_arg  = VALUE #( ( `${$source>/title}` )
+                                                                             ( `${$parameters>/term}` ) )
+                                                           s_ctrl = VALUE #( check_prevent_default = abap_true ) )
 
                     )->tag( `FacetFilterItem`
                         )->a( n = `text`     v = `{TEXT}`
