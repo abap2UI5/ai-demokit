@@ -33,8 +33,8 @@
       "what": "the table's selection is read with getSelectedContexts in the original and bound two-way here (ColumnListItem selected=\"{SELECTED}\"), so the backend has it on every round trip; onInit's attachSelectionChange becomes the Table's selectionChange attribute, which keeps idOpenSelected's visible flag in sync exactly as fnTableSelectionChange does. onInit also attaches navButtonPress on the two inner pages; the port wires navButtonPress declaratively on both."
     },
     {
-      "type": "IMPROVISED",
-      "what": "_handleTabContainerItemClose calls oEvent.preventDefault() and removes the item itself once the user confirms. A thin frontend cannot cancel a UI5 event, so the port lets the control close the tab and sends the view again from the model: an unconfirmed close therefore comes back (the tab row is still in T_TABS), and a confirmed one removes the row for good. Same two outcomes, reached the other way round."
+      "type": "NOTE",
+      "what": "_handleTabContainerItemClose calls oEvent.preventDefault( ) and removes the item itself once the user confirms, and the port reproduces both halves since 2026-09-04: the itemClose wire carries s_ctrl-check_prevent_default, which IS that call, so the control does not close the tab and tab_close( ) decides. Until then this was an IMPROVISED deviation reading \"a thin frontend cannot cancel a UI5 event\", which stopped being true when the flag shipped; the port let the control close the tab and sent the view again from the model, so an unconfirmed close visibly closed and came back. Same two outcomes as before - the tab row survives a cancel and goes for good on a confirm - reached the original's way round now. Found by scripts/probes/improvised-cluster.mjs (the pr/conditional-prevent-default GAP, closed upstream and outlived here as it had in app 306)."
     },
     {
       "type": "IMPROVISED",

@@ -45,6 +45,23 @@ const META = path.join(ROOT, 'meta');
 const LITERAL_RE = /`[^`\n]*`/g;
 const ESCAPE_RE = /(?<!\\)\\[nrt]/;
 
+/* Two literals whose backslash is NOT a lost escape, both measured on this
+ * corpus rather than assumed:
+ *
+ *   - a UI5 EXPRESSION (`${…}` in it, app 186's resize wire): the text inside
+ *     it is JavaScript that ExpressionParser evaluates in the browser, and
+ *     `'\nOld panes sizes = ['` is a JS string literal there - the escape is
+ *     resolved by the engine, exactly as in the original controller.
+ *   - a CUSTOM-DATA attribute in a foreign namespace (`app:template`, app
+ *     523's `\{1\}\n\{0\}`): the value is not displayed, it is handed to the
+ *     sample's own code, and it is copied from the original view character
+ *     for character - which is what a port of it has to be.
+ *
+ * Both were reported for months as the same defect as a toast text, and the
+ * remedy printed below would have broken them. */
+const EXPRESSION_RE = /\$\{/;
+const CUSTOM_DATA_RE = /n = `\w+:\w+`\s+v = $/;
+
 const metas = fs.readdirSync(META).filter((f) => f.endsWith('.json'))
   .map((f) => JSON.parse(fs.readFileSync(path.join(META, f), 'utf8')))
   // The overview app is prose ABOUT the ports and quotes these very literals
@@ -61,6 +78,8 @@ for (const m of metas) {
     if (line.trimStart().startsWith('"')) return; // an ABAP comment is prose
     for (const lit of line.match(LITERAL_RE) || []) {
       if (!ESCAPE_RE.test(lit)) continue;
+      if (EXPRESSION_RE.test(lit)) continue;
+      if (CUSTOM_DATA_RE.test(line.slice(0, line.indexOf(lit)))) continue;
       hits++;
       console.log(`${m.class}  ${path.relative(ROOT, file)}:${i + 1}`);
       console.log(`    ${lit.trim()}`);

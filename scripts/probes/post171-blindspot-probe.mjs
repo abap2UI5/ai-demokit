@@ -60,8 +60,13 @@ const BLIND_SPOTS = [
 ];
 
 // The chain linter guarantees one builder call per line, so the control a line
-// belongs to is simply the most recent ele( )/tag( ) above it.
-const CONTROL_RE = /\)->(?:ele|tag)\(\s*(?:n\s*=\s*)?`([^`]+)`/;
+// belongs to is simply the most recent ele( )/tag( ) above it - INCLUDING the
+// one that opens a chain off a handle (`bars->ele( \`IconTabBar\` )`), which is
+// how every port continues a view after an end( ). Reading only the `)->ele(`
+// form left the tracker holding the last control of the PREVIOUS chain, and
+// app 620's `iconTabBarInlineIcons` items aggregation - an IconTabBar's - was
+// reported as IconTabFilter.items @1.77, a member the port does not use.
+const CONTROL_RE = /(?:\)|\w)->(?:ele|tag)\(\s*(?:n\s*=\s*)?`([^`]+)`/;
 const ATTR_RE = /\)->a\(\s*n\s*=\s*`([^`]+)`/;
 
 const metas = fs.readdirSync(META).filter((f) => f.endsWith('.json'))

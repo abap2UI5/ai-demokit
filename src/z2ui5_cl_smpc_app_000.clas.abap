@@ -2706,43 +2706,46 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` {COUNT} and - like app 235 - key to {TEXT}. // NOTE: handleSearch reads oEvent.getParameter('clearButtonPressed'), which sap.m.FacetFilterList.search does not declare (its only parameter is term), so` &&
                ` the port does not transport it. It makes no difference: the original's ternary builds Filter('text', Contains, '') for the clear button and Filter('text', Contains, term) otherwise, and clearing the`.
     lv_text1 = lv_text1 && ` search field delivers an empty term - so the port simply treats an empty term as the reset, producing the same list both ways. Contains on a client model is case-insensitive, which is why the` &&
-               ` original's toLowerCase() has no counterpart; the ABAP search compares upper-cased. // IMPROVISED: oEvent.preventDefault() in handleSearch (which suppresses the FacetFilterList's internal search` &&
-               ` filtering so the custom filter is the only one) has no abap2UI5 counterpart - a thin frontend cannot cancel a UI5 event. The built-in filtering therefore still runs, on top of the backend-narrowed` &&
-               ` value list; both apply the same 'text contains term' criterion, so the rendered list is the same. The custom filtering itself is ported: the term round-trips and the backend narrows the group's` &&
-               ` values, keeping the selection flags of the values it hides. // NOTE: selection transport - every FacetFilterItem binds selected two-way; on the FacetFilter confirm (and on reset) the backend` &&
-               ` reads/clears the flags and re-filters. This is the documented 1:1 path (CAPABILITIES.md marks controller-read FacetFilter/List multi-select as expressible, with app 022 as its evidence port).`.
-    lv_text1 = lv_text1 && ` handleFacetFilterReset also drops the per-list search filters, which the port does by restoring the untouched master list. // NOTE: the original's nested items-binding filter (_filterModel: ORs` &&
-               ` inside each facet group, AND across the groups, model untouched) is expressed 1:1 as a declarative compound filter: apply_filter builds the groups JSON from the two-way bound selected flags and` &&
-               ` schedules follow_up_action cs_event-binding_call filter on idProductsTable/items. The filter column is the list TITLE, exactly as the original uses oList.getTitle() - Category / SupplierName. The` &&
-               ` filter is issued from apply_filter( ) AND re-issued from view_display( ) (via the shared filter_issue( ), guarded by the last-issued payload in filter_live), because it lives on the binding and not` &&
-               ` in the model - the app-000/607 idiom. // NOTE: onInit creates the sap.m.sample.Table component, swaps the first cell for an ObjectIdentifier {Name}/{Category} and appends the table to idVBox; that` &&
-               ` table is rebuilt inline (the same inline rebuild app 235 carries), which is why the whole Table subtree - its header toolbar with the popin-layout ComboBox, the sticky CheckBoxes and the Hide/Show`.
-    lv_text1 = lv_text1 && ` InfoToolbar ToggleButton, the info toolbar, the five columns and the ColumnListItem cells - counts as extra against the archived FacetFilter.view.xml. The price column keeps the original` &&
-               ` sap.ui.model.type.Currency composite binding 1:1. // NOTE: the appended demo table's own controller logic is expressed the way app 235 expresses it: Table.sticky is bound to an ABAP string table` &&
-               ` maintained from the CheckBox round-trip (the app-009 pattern), the ComboBox selectedKey is bound two-way and popinLayout is an expression over it (so the ComboBox change attribute is not emitted),` &&
-               ` and the ToggleButton's pressed flag drives the info toolbar's visible expression. // 1.71: the p:ColumnAIAction column plugin of the appended sap.m.sample.Table view (sap.m.plugins, far newer than` &&
-               ` UI5 1.71) is dropped with its dependents aggregation and press toast - the plugin class does not exist on a 1.71 runtime, so keeping it would crash view creation there. // NOTE: the original derives` &&
-               ` the ObjectNumber weight state in the demo table's frontend Formatter.js (weightState: KG conversion + Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin frontend -`.
-    lv_text1 = lv_text1 && ` it is computed in ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via a frontend formatter. // NOTE: not yet verified in a running system: the two-level lists/{VALUES}` &&
-               ` binding (a nested table inside a bound aggregation row) and the search round-trip. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_557.mjs). // NOTE: Checked` &&
-               ` 2026-08-26, no change needed - recorded so the check is not repeated. apply_filter splices value-text and the list title into the compound-groups JSON without escaping, and this port DOES have a` &&
-               ` free-text search field, so it reads like the app 218/420/233/499 exposure. It is not: the search term never reaches the JSON. list_search only uses it as a server-side CS predicate that narrows` &&
-               ` t_filters, and it rebuilds t_filters from t_filters_all first, so every TEXT it keeps is one of the 28 seeded literals in model_init and every TYPE is Category or SupplierName. None of them contains` &&
-               ` a double quote or a backslash, and no control in the view can write TEXT (FacetFilterItem binds text and key one-way; only selected is two-way). Same conclusion as apps 022 and 235, which carry it as`.
-    lv_text1 = lv_text1 && ` an inline comment. The residual case is a tampered client model - t_filters is a public attribute and round-trips - but that is true of every bound field in the corpus and its only effect is a filter` &&
-               ` that fails to apply in the tamperer's own session. // NOTE: Measured 2026-08-26 with a probe, before the fix: filter to Category=Accessories (34 of 123 products), then restore the very same draft` &&
-               ` through the framework's own bookmark URL (?app_start=<class>#/z2ui5-xapp-state=<draft>, what cs_event-clipboard_app_state hands out). That request carries no frontend id, so the backend takes` &&
-               ` factory_first_start -> db_load(draft): check_on_navigated( ) is true while check_on_init( ) stays false, i.e. the ELSEIF branch, which is the only way a port that never calls another app reaches` &&
-               ` view_display( ) a second time. The rebuilt view came back with 123 rows and ZERO aFilters while the FacetFilter still read "Accessories" - the client-side filter lives on the LIVE items binding and` &&
-               ` dies with it, the two-way bound selected flags are class state and survive. Re-issuing the identical binding_call against the rebuilt binding put the 34 rows back, and the empty form ([] ->`.
-    lv_text1 = lv_text1 && ` buildFilterGroups -> binding.filter([]) in core/actions/ControlCall.js) clears without error, which is why the guard is "has a filter ever been issued" and not a selection scan. Statement order in` &&
-               ` ABAP is irrelevant: View1.controller.js awaits every T_SYSTEM display before it runs a T_CUSTOM follow-up. One consequence worth naming: apply_filter( ) builds its groups from t_filters, the` &&
-               ` search-NARROWED list, not from the t_filters_all master - so after a SEARCH that hides a selected value, the rebuild re-issues the narrower filter. That is the port's existing CONFIRM semantics (the` &&
-               ` next confirm would emit the same thing), not something the re-issue introduces.`.
+               ` original's toLowerCase() has no counterpart; the ABAP search compares upper-cased. // NOTE: handleSearch calls oEvent.preventDefault( ) to suppress the FacetFilterList's internal search filtering so` &&
+               ` the custom filter is the only one, and the port reproduces it since 2026-09-04: the search wire carries s_ctrl-check_prevent_default, which IS that call, baked into the wire at render time - the` &&
+               ` right form here because the original vetoes on every search rather than per term (prevent_default_expr is the per-firing twin, app 306's idiom). Until then this was an IMPROVISED deviation reading "a` &&
+               ` thin frontend cannot cancel a UI5 event", which stopped being true when the flag shipped; the built-in filtering therefore ran on top of the backend-narrowed list, and the port relied on both` &&
+               ` applying the same 'text contains term' criterion for the result to match. It no longer relies on that. The custom filtering itself was always ported: the term round-trips and the backend narrows the`.
+    lv_text1 = lv_text1 && ` group's values, keeping the selection flags of the values it hides. Found by scripts/probes/improvised-cluster.mjs (the pr/conditional-prevent-default GAP, closed upstream and outlived here as it had` &&
+               ` in app 306). // NOTE: selection transport - every FacetFilterItem binds selected two-way; on the FacetFilter confirm (and on reset) the backend reads/clears the flags and re-filters. This is the` &&
+               ` documented 1:1 path (CAPABILITIES.md marks controller-read FacetFilter/List multi-select as expressible, with app 022 as its evidence port). handleFacetFilterReset also drops the per-list search` &&
+               ` filters, which the port does by restoring the untouched master list. // NOTE: the original's nested items-binding filter (_filterModel: ORs inside each facet group, AND across the groups, model` &&
+               ` untouched) is expressed 1:1 as a declarative compound filter: apply_filter builds the groups JSON from the two-way bound selected flags and schedules follow_up_action cs_event-binding_call filter on` &&
+               ` idProductsTable/items. The filter column is the list TITLE, exactly as the original uses oList.getTitle() - Category / SupplierName. The filter is issued from apply_filter( ) AND re-issued from`.
+    lv_text1 = lv_text1 && ` view_display( ) (via the shared filter_issue( ), guarded by the last-issued payload in filter_live), because it lives on the binding and not in the model - the app-000/607 idiom. // NOTE: onInit` &&
+               ` creates the sap.m.sample.Table component, swaps the first cell for an ObjectIdentifier {Name}/{Category} and appends the table to idVBox; that table is rebuilt inline (the same inline rebuild app 235` &&
+               ` carries), which is why the whole Table subtree - its header toolbar with the popin-layout ComboBox, the sticky CheckBoxes and the Hide/Show InfoToolbar ToggleButton, the info toolbar, the five` &&
+               ` columns and the ColumnListItem cells - counts as extra against the archived FacetFilter.view.xml. The price column keeps the original sap.ui.model.type.Currency composite binding 1:1. // NOTE: the` &&
+               ` appended demo table's own controller logic is expressed the way app 235 expresses it: Table.sticky is bound to an ABAP string table maintained from the CheckBox round-trip (the app-009 pattern), the` &&
+               ` ComboBox selectedKey is bound two-way and popinLayout is an expression over it (so the ComboBox change attribute is not emitted), and the ToggleButton's pressed flag drives the info toolbar's visible`.
+    lv_text1 = lv_text1 && ` expression. // 1.71: the p:ColumnAIAction column plugin of the appended sap.m.sample.Table view (sap.m.plugins, far newer than UI5 1.71) is dropped with its dependents aggregation and press toast -` &&
+               ` the plugin class does not exist on a 1.71 runtime, so keeping it would crash view creation there. // NOTE: the original derives the ObjectNumber weight state in the demo table's frontend Formatter.js` &&
+               ` (weightState: KG conversion + Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin frontend - it is computed in ABAP model_init into a WEIGHT_STATE field and bound` &&
+               ` state="{WEIGHT_STATE}", not via a frontend formatter. // NOTE: not yet verified in a running system: the two-level lists/{VALUES} binding (a nested table inside a bound aggregation row) and the` &&
+               ` search round-trip. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_557.mjs). // NOTE: Checked 2026-08-26, no change needed - recorded so the check is not` &&
+               ` repeated. apply_filter splices value-text and the list title into the compound-groups JSON without escaping, and this port DOES have a free-text search field, so it reads like the app 218/420/233/499`.
+    lv_text1 = lv_text1 && ` exposure. It is not: the search term never reaches the JSON. list_search only uses it as a server-side CS predicate that narrows t_filters, and it rebuilds t_filters from t_filters_all first, so` &&
+               ` every TEXT it keeps is one of the 28 seeded literals in model_init and every TYPE is Category or SupplierName. None of them contains a double quote or a backslash, and no control in the view can` &&
+               ` write TEXT (FacetFilterItem binds text and key one-way; only selected is two-way). Same conclusion as apps 022 and 235, which carry it as an inline comment. The residual case is a tampered client` &&
+               ` model - t_filters is a public attribute and round-trips - but that is true of every bound field in the corpus and its only effect is a filter that fails to apply in the tamperer's own session. //` &&
+               ` NOTE: Measured 2026-08-26 with a probe, before the fix: filter to Category=Accessories (34 of 123 products), then restore the very same draft through the framework's own bookmark URL` &&
+               ` (?app_start=<class>#/z2ui5-xapp-state=<draft>, what cs_event-clipboard_app_state hands out). That request carries no frontend id, so the backend takes factory_first_start -> db_load(draft):`.
+    lv_text1 = lv_text1 && ` check_on_navigated( ) is true while check_on_init( ) stays false, i.e. the ELSEIF branch, which is the only way a port that never calls another app reaches view_display( ) a second time. The rebuilt` &&
+               ` view came back with 123 rows and ZERO aFilters while the FacetFilter still read "Accessories" - the client-side filter lives on the LIVE items binding and dies with it, the two-way bound selected` &&
+               ` flags are class state and survive. Re-issuing the identical binding_call against the rebuilt binding put the 34 rows back, and the empty form ([] -> buildFilterGroups -> binding.filter([]) in` &&
+               ` core/actions/ControlCall.js) clears without error, which is why the guard is "has a filter ever been issued" and not a selection scan. Statement order in ABAP is irrelevant: View1.controller.js` &&
+               ` awaits every T_SYSTEM display before it runs a T_CUSTOM follow-up. One consequence worth naming: apply_filter( ) builds its groups from t_filters, the search-NARROWED list, not from the t_filters_all` &&
+               ` master - so after a SEARCH that hides a selected value, the rebuild re-issues the narrower filter. That is the port's existing CONFIRM semantics (the next confirm would emit the same thing), not`.
+    lv_text1 = lv_text1 && ` something the re-issue introduces.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.FacetFilter`                     name = `FacetFilterCustomFilters`                      class = `z2ui5_cl_smpc_app_557` path = `src/02/01/z2ui5_cl_smpc_app_557.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         is_post171 = abap_true
         notes = lv_text1
@@ -5615,26 +5618,28 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         post171 = `Formatter.DateCreateObject is referenced via core:require, which needs UI5 >= 1.74. sap.m.PlanningCalendar itself is since 1.34 (in scope). Also sap.ui.unified.CalendarAppointment.ariaHasPopup (@since` &&
                  ` 1.150.0) is kept 1:1 from the original view (ariaHasPopup='{ariaHasPopup}'); newer than 1.71, declared. Was undeclared because the property gate was sap.m-only (now extended to all libs, 2026-07-24).` ) ).
 
-    lv_text1 = `POST-1.71: sap.ui.unified.CalendarAppointment ariaHasPopup is @since 1.150.0 - newer than the 1.71 floor. It is kept 1:1 from the sample, so the port is filed under src/02. // NOTE: The calendar date` &&
-               ` properties (the PlanningCalendar startDate and every CalendarAppointment / DateTypeRange startDate and endDate) are typed "object" and demand a real JS Date. The model keeps ISO strings and` &&
-               ` Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74). // NOTE: determineControlsVisibility shows the Label only in the` &&
-               ` nonWorking view and the Select only in the months view on a desktop. viewKey is bindable, so the key is one shared field and both controls carry the switch as an expression binding - the Label over` &&
-               ` the key alone, the Select over the key AND the device model's system/desktop flag. handleViewChange, which exists only to re-run that method, is dropped with them. // NOTE: handleGroupModeChange` &&
-               ` calls setGroupAppointmentsMode; the property is bindable, so the Select shares its key with the calendar and the change handler is dropped. handleSelectionFinish's setBuiltInViews keeps its wire: the`.
-    lv_text1 = lv_text1 && ` picked keys travel as one comma-separated argument and ABAP fills the bound string table. // NOTE: handleIntervalSelect has two branches. In the nonWorking view handleNonWorkingSpecialDates toggles a` &&
-               ` NonWorking DateTypeRange on the selected date - the specialDates aggregation is bound to a table here and the round-trip adds or removes the row, which is the same toggle. Otherwise the handler` &&
-               ` pushes a 'new appointment' (Type09) into the row it hit, or into every selected row; the row index and the selected-row indices travel with the event and ABAP does the same push. The interval's start` &&
-               ` and end travel as their LOCAL parts - a UTC toISOString( ) would shift the day. // IMPROVISED: onPress on the 'Toggle custom views' ToggleButton removes the four PlanningCalendarViews from the` &&
-               ` aggregation and adds them back, by constructing PlanningCalendarView instances in the controller. The views aggregation is declared in the view here and a backend cannot add or remove aggregation` &&
-               ` children of a rendered view, so the four views stay declared and the ToggleButton keeps its text but loses its press wire. // NOTE: The two row images are the demo kit's own test-resources files`.
-    lv_text1 = lv_text1 && ` (John_Miller.png, Donna_Moore.jpg), re-hosted on sdk.openui5.org. // NOTE: The four views, the non-working day toggle, the interval-select appointment push, the built-in views box and the two` &&
-               ` nonWorkingDays / nonWorkingHours arrays are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_537.mjs). // NOTE: **e2e-caught` &&
-               ` 2026-08-22**: the sample's own data carries an upstream typo - UI5Date.getInstance(201, 2, 4, 13, 30), a year of 201 where every neighbouring row says 2017 (Page.controller.js:110). In JavaScript` &&
-               ` that is a VALID date (4 March 201 AD); as the ISO string the port stores it became '201-03-04T13:30:00', which new Date() cannot parse at all, so the appointment reached the calendar as an Invalid` &&
-               ` Date and CalendarUtils._checkJSDateObject took the whole app down. The year is now written '0201', which is the same absurd date the original produces and which parses. The typo itself is kept: it is` &&
-               ` the sample's data. // NOTE: A JS callback is not in the UI5 expression grammar - ExpressionParser has no ``function`` keyword and reads { as an object literal, so the whole handler string failed to`.
-    lv_text1 = lv_text1 && ` parse and every argument was lost. The selection is read from the model instead: PlanningCalendarRow (and CalendarAppointment) declare a bindable ``selected``, so the flags travel with the rows and` &&
-               ` ABAP does the work.`.
+    lv_text1 = `POST-1.71: sap.ui.unified.CalendarAppointment ariaHasPopup is @since 1.150.0 - newer than the 1.71 floor. It is kept 1:1 from the sample, so the port is filed under src/02. // POST-1.71: The` &&
+               ` sap.ui.unified.CalendarDayType ENUM VALUE NonWorking is @since 1.121 and is kept 1:1 from the original. The attribute it rides on (DateTypeRange.type) is base-version, so the property gate sees a` &&
+               ` known member with a value it does not judge - the enum-value residual limit of AGENTS section 5. Same declaration app 308 carries; found by scripts/probes/post171-blindspot-probe.mjs. The app needs a` &&
+               ` UI5 release >= 1.121 for those days to render as non-working. // NOTE: The calendar date properties (the PlanningCalendar startDate and every CalendarAppointment / DateTypeRange startDate and` &&
+               ` endDate) are typed "object" and demand a real JS Date. The model keeps ISO strings and Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108` &&
+               ` uses (needs UI5 >= 1.74). // NOTE: determineControlsVisibility shows the Label only in the nonWorking view and the Select only in the months view on a desktop. viewKey is bindable, so the key is one`.
+    lv_text1 = lv_text1 && ` shared field and both controls carry the switch as an expression binding - the Label over the key alone, the Select over the key AND the device model's system/desktop flag. handleViewChange, which` &&
+               ` exists only to re-run that method, is dropped with them. // NOTE: handleGroupModeChange calls setGroupAppointmentsMode; the property is bindable, so the Select shares its key with the calendar and` &&
+               ` the change handler is dropped. handleSelectionFinish's setBuiltInViews keeps its wire: the picked keys travel as one comma-separated argument and ABAP fills the bound string table. // NOTE:` &&
+               ` handleIntervalSelect has two branches. In the nonWorking view handleNonWorkingSpecialDates toggles a NonWorking DateTypeRange on the selected date - the specialDates aggregation is bound to a table` &&
+               ` here and the round-trip adds or removes the row, which is the same toggle. Otherwise the handler pushes a 'new appointment' (Type09) into the row it hit, or into every selected row; the row index and` &&
+               ` the selected-row indices travel with the event and ABAP does the same push. The interval's start and end travel as their LOCAL parts - a UTC toISOString( ) would shift the day. // IMPROVISED: onPress`.
+    lv_text1 = lv_text1 && ` on the 'Toggle custom views' ToggleButton removes the four PlanningCalendarViews from the aggregation and adds them back, by constructing PlanningCalendarView instances in the controller. The views` &&
+               ` aggregation is declared in the view here and a backend cannot add or remove aggregation children of a rendered view, so the four views stay declared and the ToggleButton keeps its text but loses its` &&
+               ` press wire. // NOTE: The two row images are the demo kit's own test-resources files (John_Miller.png, Donna_Moore.jpg), re-hosted on sdk.openui5.org. // NOTE: The four views, the non-working day` &&
+               ` toggle, the interval-select appointment push, the built-in views box and the two nonWorkingDays / nonWorkingHours arrays are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e` &&
+               ` interaction, meta/interactions/z2ui5_cl_smpc_app_537.mjs). // NOTE: **e2e-caught 2026-08-22**: the sample's own data carries an upstream typo - UI5Date.getInstance(201, 2, 4, 13, 30), a year of 201` &&
+               ` where every neighbouring row says 2017 (Page.controller.js:110). In JavaScript that is a VALID date (4 March 201 AD); as the ISO string the port stores it became '201-03-04T13:30:00', which new`.
+    lv_text1 = lv_text1 && ` Date() cannot parse at all, so the appointment reached the calendar as an Invalid Date and CalendarUtils._checkJSDateObject took the whole app down. The year is now written '0201', which is the same` &&
+               ` absurd date the original produces and which parses. The typo itself is kept: it is the sample's data. // NOTE: A JS callback is not in the UI5 expression grammar - ExpressionParser has no` &&
+               ` ``function`` keyword and reads { as an object literal, so the whole handler string failed to parse and every argument was lost. The selection is read from the model instead: PlanningCalendarRow (and` &&
+               ` CalendarAppointment) declare a bindable ``selected``, so the flags travel with the rows and ABAP does the work.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.PlanningCalendar`                name = `PlanningCalendarViews`                         class = `z2ui5_cl_smpc_app_537` path = `src/02/01/z2ui5_cl_smpc_app_537.clas.abap`
         score = 5
@@ -5642,7 +5647,10 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         since = `1.34`
         is_post171 = abap_true
         notes = lv_text1
-        post171 = `sap.ui.unified.CalendarAppointment ariaHasPopup is @since 1.150.0 - newer than the 1.71 floor. It is kept 1:1 from the sample, so the port is filed under src/02.` ) ).
+        post171 = `sap.ui.unified.CalendarAppointment ariaHasPopup is @since 1.150.0 - newer than the 1.71 floor. It is kept 1:1 from the sample, so the port is filed under src/02. // The sap.ui.unified.CalendarDayType` &&
+                 ` ENUM VALUE NonWorking is @since 1.121 and is kept 1:1 from the original. The attribute it rides on (DateTypeRange.type) is base-version, so the property gate sees a known member with a value it does` &&
+                 ` not judge - the enum-value residual limit of AGENTS section 5. Same declaration app 308 carries; found by scripts/probes/post171-blindspot-probe.mjs. The app needs a UI5 release >= 1.121 for those` &&
+                 ` days to render as non-working.` ) ).
 
     lv_text1 = `POST-1.71: sap.m.PlanningCalendar calendarWeekNumbering is @since 1.110.0 - newer than the 1.71 floor. The four week-numbering schemes ARE the sample, so the property is kept and the port is filed` &&
                ` under src/02. // NOTE: The calendar date properties (the PlanningCalendar startDate and every CalendarAppointment startDate and endDate) are typed "object" and demand a real JS Date. The model keeps` &&
@@ -5664,21 +5672,24 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         post171 = `sap.m.PlanningCalendar calendarWeekNumbering is @since 1.110.0 - newer than the 1.71 floor. The four week-numbering schemes ARE the sample, so the property is kept and the port is filed under src/02.` ) ).
 
     lv_text1 = `POST-1.71: sap.ui.unified.DateTypeRange secondaryType is @since 1.81.0 and color @since 1.76.0, and sap.m.PlanningCalendar firstDayOfWeek is @since 1.94 - all newer than the 1.71 floor. The legend's` &&
-               ` coloured special dates and the row's secondary type are what this sample shows, so both are kept and the port is filed under src/02. // NOTE: The calendar date properties (the PlanningCalendar` &&
-               ` startDate and every CalendarAppointment / DateTypeRange startDate and endDate) are typed "object" and demand a real JS Date. The model keeps ISO strings and Formatter.DateCreateObject from the` &&
-               ` curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74). // NOTE: The original keeps the legend-shown flag in a SECOND named model (stateModel>). abap2UI5` &&
-               ` keeps one default model, so the flag is a field here and the DynamicSideContent and the ToggleButton share it - the same two-way link the named model gives them. // NOTE: onChange calls` &&
-               ` setFirstDayOfWeek( Number( key ) ). The property is bindable, so the Select shares its key with the calendar and the change handler is dropped; the key values ('-1' .. '6') are the sample's own.`.
-    lv_text1 = lv_text1 && ` firstDayOfWeek is an INT property while a Select key is a string, so the calendar binds an expression that multiplies by 1 - the Number( ) conversion the original does in the handler. // NOTE:` &&
-               ` onBeforeRendering / handleViewChange / changeStandardItemsPerView exist only to swap the legend's standardItems between [Today, Selected, NonWorkingDay] on the OneMonth view and [Today, WorkingDay,` &&
-               ` NonWorkingDay] everywhere else. viewKey and standardItems are both bindable, so the key is one shared field and the legend carries the switch as an expression binding over it - all three handlers are` &&
-               ` dropped. // NOTE: The row images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org. // NOTE: The legend side content, the first-day-of-week Select and the view-dependent` &&
-               ` standard items are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_541.mjs). // NOTE: **e2e-caught 2026-08-22**: one` &&
-               ` special-date row was still missing its secondarytype seed after the b46 sweep fixed the others - the NonWorking range on Sophie Miller (2017-01-16 to 2017-01-18). A flat ABAP row serializes every`.
-    lv_text1 = lv_text1 && ` field, so it sent an empty string into the CalendarDayType enum and UI5 terminated the app. It is seeded 'None' like the rest. The lesson is the sweep's own: the fix has to cover EVERY row of the` &&
-               ` table, not the ones the first failure named. // NOTE: The three root-level aggregations (specialDates on the calendar, items and appointmentItems on the legend) are bound ABSOLUTELY via _bind( path =` &&
-               ` abap_true ). A bare 'T_X' path is relative and resolves against nothing outside a row context, and an unbound table is not serialized at all - either alone leaves the aggregation empty. App 553` &&
-               ` carries the same two fixes; the row-level aggregations inside PlanningCalendarRow stay relative, which is correct there.`.
+               ` coloured special dates and the row's secondary type are what this sample shows, so both are kept and the port is filed under src/02. // POST-1.71: The sap.ui.unified.CalendarDayType ENUM VALUE` &&
+               ` NonWorking is @since 1.121 and is kept 1:1 from the original. The attribute it rides on (DateTypeRange.type) is base-version, so the property gate sees a known member with a value it does not judge -` &&
+               ` the enum-value residual limit of AGENTS section 5. Same declaration app 308 carries; found by scripts/probes/post171-blindspot-probe.mjs. The app needs a UI5 release >= 1.121 for those days to render` &&
+               ` as non-working. // NOTE: The calendar date properties (the PlanningCalendar startDate and every CalendarAppointment / DateTypeRange startDate and endDate) are typed "object" and demand a real JS` &&
+               ` Date. The model keeps ISO strings and Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74). // NOTE: The original`.
+    lv_text1 = lv_text1 && ` keeps the legend-shown flag in a SECOND named model (stateModel>). abap2UI5 keeps one default model, so the flag is a field here and the DynamicSideContent and the ToggleButton share it - the same` &&
+               ` two-way link the named model gives them. // NOTE: onChange calls setFirstDayOfWeek( Number( key ) ). The property is bindable, so the Select shares its key with the calendar and the change handler is` &&
+               ` dropped; the key values ('-1' .. '6') are the sample's own. firstDayOfWeek is an INT property while a Select key is a string, so the calendar binds an expression that multiplies by 1 - the Number( )` &&
+               ` conversion the original does in the handler. // NOTE: onBeforeRendering / handleViewChange / changeStandardItemsPerView exist only to swap the legend's standardItems between [Today, Selected,` &&
+               ` NonWorkingDay] on the OneMonth view and [Today, WorkingDay, NonWorkingDay] everywhere else. viewKey and standardItems are both bindable, so the key is one shared field and the legend carries the` &&
+               ` switch as an expression binding over it - all three handlers are dropped. // NOTE: The row images are the demo kit's own test-resources files, re-hosted on sdk.openui5.org. // NOTE: The legend side`.
+    lv_text1 = lv_text1 && ` content, the first-day-of-week Select and the view-dependent standard items are unverified in a running system. **e2e-verified 2026-08-25** (nightly e2e interaction,` &&
+               ` meta/interactions/z2ui5_cl_smpc_app_541.mjs). // NOTE: **e2e-caught 2026-08-22**: one special-date row was still missing its secondarytype seed after the b46 sweep fixed the others - the NonWorking` &&
+               ` range on Sophie Miller (2017-01-16 to 2017-01-18). A flat ABAP row serializes every field, so it sent an empty string into the CalendarDayType enum and UI5 terminated the app. It is seeded 'None'` &&
+               ` like the rest. The lesson is the sweep's own: the fix has to cover EVERY row of the table, not the ones the first failure named. // NOTE: The three root-level aggregations (specialDates on the` &&
+               ` calendar, items and appointmentItems on the legend) are bound ABSOLUTELY via _bind( path = abap_true ). A bare 'T_X' path is relative and resolves against nothing outside a row context, and an` &&
+               ` unbound table is not serialized at all - either alone leaves the aggregation empty. App 553 carries the same two fixes; the row-level aggregations inside PlanningCalendarRow stay relative, which is` &&
+               ` correct there.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.PlanningCalendar`                name = `PlanningCalendarWithLegend`                    class = `z2ui5_cl_smpc_app_541` path = `src/02/01/z2ui5_cl_smpc_app_541.clas.abap`
         score = 5
@@ -5687,7 +5698,9 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
         is_post171 = abap_true
         notes = lv_text1
         post171 = `sap.ui.unified.DateTypeRange secondaryType is @since 1.81.0 and color @since 1.76.0, and sap.m.PlanningCalendar firstDayOfWeek is @since 1.94 - all newer than the 1.71 floor. The legend's coloured` &&
-                 ` special dates and the row's secondary type are what this sample shows, so both are kept and the port is filed under src/02.` ) ).
+                 ` special dates and the row's secondary type are what this sample shows, so both are kept and the port is filed under src/02. // The sap.ui.unified.CalendarDayType ENUM VALUE NonWorking is @since 1.121` &&
+                 ` and is kept 1:1 from the original. The attribute it rides on (DateTypeRange.type) is base-version, so the property gate sees a known member with a value it does not judge - the enum-value residual` &&
+                 ` limit of AGENTS section 5. Same declaration app 308 carries; found by scripts/probes/post171-blindspot-probe.mjs. The app needs a UI5 release >= 1.121 for those days to render as non-working.` ) ).
 
     lv_text1 = `NOTE: The calendar date properties (the PlanningCalendar startDate and every CalendarAppointment startDate and endDate) are typed "object" and demand a real JS Date. The model keeps ISO strings and` &&
                ` Formatter.DateCreateObject from the curated module converts them at the point of use, the same idiom app 108 uses (needs UI5 >= 1.74). // NOTE: handleAppointmentSelect opens a MessageBox with the` &&
@@ -6809,41 +6822,43 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` binds the four ADD_* fields the backend keeps for the new record. Only the add-item copy carries the fragment's id=myForm - the tab copy is a template inside a bound aggregation, where an id would be` &&
                ` cloned. // NOTE: the table's selection is read with getSelectedContexts in the original and bound two-way here (ColumnListItem selected="{SELECTED}"), so the backend has it on every round trip;`.
     lv_text1 = lv_text1 && ` onInit's attachSelectionChange becomes the Table's selectionChange attribute, which keeps idOpenSelected's visible flag in sync exactly as fnTableSelectionChange does. onInit also attaches` &&
-               ` navButtonPress on the two inner pages; the port wires navButtonPress declaratively on both. // IMPROVISED: _handleTabContainerItemClose calls oEvent.preventDefault() and removes the item itself once` &&
-               ` the user confirms. A thin frontend cannot cancel a UI5 event, so the port lets the control close the tab and sends the view again from the model: an unconfirmed close therefore comes back (the tab` &&
-               ` row is still in T_TABS), and a confirmed one removes the row for good. Same two outcomes, reached the other way round. // IMPROVISED: _handleTabContainerAddNewButtonPress ends with` &&
-               ` oTabContainer.setSelectedItem(<the new item>) so the fresh tab is the one on screen. TabContainer.selectedItem is an ASSOCIATION to a TabContainerItem instance, and the item ids of a bound` &&
-               ` aggregation are generated at runtime, so the port cannot name the item: the new tab is appended and starts modified (in edit mode), but selecting it is left to the control's own default. // NOTE: the`.
-    lv_text1 = lv_text1 && ` new ProductIds the original generates with Math.random() ('ProductId-' + Math.random(), and a bare Math.random() on the add-item page) become a backend counter, ProductId-1, ProductId-2, ... - a` &&
-               ` client-side random draw is not reproducible from a backend and carries no meaning in the sample. // NOTE: _showConfirmation's MessageBox.confirm with the custom actions ['Leave Page', CANCEL] /` &&
-               ` ['Close Tab', CANCEL], the Warning icon and initialFocus CANCEL is ported 1:1 through client->message_box_display( actions, initialfocus, onclose ); the chosen action comes back as the onclose` &&
-               ` event's argument, as in app 101. // NOTE: _resetUnsavedItems is kept: rows the add-new button created and nobody saved carry an UNSAVED flag and are dropped when the user leaves the page (all of` &&
-               ` them) or closes their tab (just that one), and a tab whose product is gone goes with it. The original's onExit teardown (detaching handlers, nulling members) has no counterpart - abap2UI5 rebuilds` &&
-               ` the view per round trip. // NOTE: onInit raises the model size limit to 200 and binds the full mock /ProductCollection; the port seeds all 123 rows verbatim (ProductId, Name, SupplierName,`.
-    lv_text1 = lv_text1 && ` Description, Price, CurrencyCode - the fields the two views bind). The ObjectHeader keeps the original sap.ui.model.type.Currency composite binding 1:1. // NOTE: the OverflowToolbarButton that opens` &&
-               ` the add-item page is icon-only in the original (icon=sap-icon://add, no text and no tooltip). The port gives it tooltip="Add" so it is reachable with a screen reader - the one accessibility addition` &&
-               ` in this port. // NOTE: not yet verified in a running system: the TabContainer built over a bound items aggregation, the visible-driven Display/Edit swap inside a tab, and the close-confirmation round` &&
-               ` trip that relies on the view being sent again. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_558.mjs). // NOTE: onInit calls oModel.setSizeLimit(200)` &&
-               ` because the collection is 123 rows and the JSONModel caps a bound aggregation at 100. The port issues cs_event-set_size_limit for MAIN; without it the table stopped 23 rows short. // NOTE: A` &&
-               ` NavContainer's position is LIVE CONTROL STATE and does not survive a view rebuild. view_display( ) destroys the MAIN slot and XMLView.create builds a fresh control tree, so navCon comes back on its`.
-    lv_text1 = lv_text1 && ` FIRST page - the product list, this NavContainer declaring no initialPage - while selected_tab, save_visible and cancel_visible survive as class state. Four of the five branches that call` &&
-               ` view_display( ) are reachable only FROM tabContainerPage (TAB_CANCEL, TAB_CLOSE, CLOSE_TAB_CLOSED, TAB_ADD_NEW), so pressing + on the tab bar created the tab, put the footer into edit mode and` &&
-               ` dropped the user on the product list. Fixed 2026-08-27 with the app-000 re-issue idiom: a PROTECTED nav_page parks the target the LIVE navCon was last sent to (PROTECTED, not PUBLIC, because it is` &&
-               ` bookkeeping and only PUBLIC attributes are serialized into the view model; not PRIVATE, because the draft serialization walks the attributes with a dynamic ASSIGN obj->(name) that cannot reach a` &&
-               ` PRIVATE one), and the end of view_display( ) re-issues it, guarded by ``nav_page IS NOT INITIAL AND nav_page <> ``table````. Re-issuing the LAST-ISSUED target rather than re-deriving it is what keeps` &&
-               ` the branches that DO want the table correct: nav_to_table and the tab_close redirect when the last tab goes both park ``table`` and are skipped by the same guard. Unlike the sibling ports this one`.
-    lv_text1 = lv_text1 && ` needs no bookmark restore to reach the second view_display( ) IN A BROWSER - TAB_ADD_NEW is one press away from the tab page, and the interaction module clicks that + for real. An earlier note here` &&
-               ` claimed firing addNewButtonPress drove no round trip at all in the headless harness; that was a HARNESS ARTEFACT and is withdrawn (corrected 2026-08-27). The frontend's eB DROPS any event fired while` &&
-               ` a round trip is still in flight - the listener runs and fireEvent returns cleanly, and nothing goes out on the wire - so a press sent too early reads back as a dead control. Measured both ways` &&
-               ` against the built backend: fired while busy, no POST and the TabContainer keeps its two items; fired a second later on an idle frontend, TAB_ADD_NEW goes out, t_tabs grows to three and navCon stays` &&
-               ` on tabContainerPage. The TabContainer's own add button IS rendered (class sapMTSAddNewTabBtn, tooltip "Add New Tab", in the control's TabStrip) and takes a plain click with no force. Not to be` &&
-               ` confused with the product table's headerToolbar OverflowToolbarButton (sap-icon://add, tooltip "Add"), which is NEW_ITEM_ADD on a different page. The leg asserts all three halves: the third tab, its`.
-    lv_text1 = lv_text1 && ` key ProductId-1 (the backend counter, so it is TAB_ADD_NEW's own row), and the re-issued tabContainerPage - and with the guarded re-issue removed from view_display( ) only the last of the three` &&
-               ` fails.`.
+               ` navButtonPress on the two inner pages; the port wires navButtonPress declaratively on both. // NOTE: _handleTabContainerItemClose calls oEvent.preventDefault( ) and removes the item itself once the` &&
+               ` user confirms, and the port reproduces both halves since 2026-09-04: the itemClose wire carries s_ctrl-check_prevent_default, which IS that call, so the control does not close the tab and tab_close(` &&
+               ` ) decides. Until then this was an IMPROVISED deviation reading "a thin frontend cannot cancel a UI5 event", which stopped being true when the flag shipped; the port let the control close the tab and` &&
+               ` sent the view again from the model, so an unconfirmed close visibly closed and came back. Same two outcomes as before - the tab row survives a cancel and goes for good on a confirm - reached the` &&
+               ` original's way round now. Found by scripts/probes/improvised-cluster.mjs (the pr/conditional-prevent-default GAP, closed upstream and outlived here as it had in app 306). // IMPROVISED:`.
+    lv_text1 = lv_text1 && ` _handleTabContainerAddNewButtonPress ends with oTabContainer.setSelectedItem(<the new item>) so the fresh tab is the one on screen. TabContainer.selectedItem is an ASSOCIATION to a TabContainerItem` &&
+               ` instance, and the item ids of a bound aggregation are generated at runtime, so the port cannot name the item: the new tab is appended and starts modified (in edit mode), but selecting it is left to` &&
+               ` the control's own default. // NOTE: the new ProductIds the original generates with Math.random() ('ProductId-' + Math.random(), and a bare Math.random() on the add-item page) become a backend` &&
+               ` counter, ProductId-1, ProductId-2, ... - a client-side random draw is not reproducible from a backend and carries no meaning in the sample. // NOTE: _showConfirmation's MessageBox.confirm with the` &&
+               ` custom actions ['Leave Page', CANCEL] / ['Close Tab', CANCEL], the Warning icon and initialFocus CANCEL is ported 1:1 through client->message_box_display( actions, initialfocus, onclose ); the chosen` &&
+               ` action comes back as the onclose event's argument, as in app 101. // NOTE: _resetUnsavedItems is kept: rows the add-new button created and nobody saved carry an UNSAVED flag and are dropped when the`.
+    lv_text1 = lv_text1 && ` user leaves the page (all of them) or closes their tab (just that one), and a tab whose product is gone goes with it. The original's onExit teardown (detaching handlers, nulling members) has no` &&
+               ` counterpart - abap2UI5 rebuilds the view per round trip. // NOTE: onInit raises the model size limit to 200 and binds the full mock /ProductCollection; the port seeds all 123 rows verbatim` &&
+               ` (ProductId, Name, SupplierName, Description, Price, CurrencyCode - the fields the two views bind). The ObjectHeader keeps the original sap.ui.model.type.Currency composite binding 1:1. // NOTE: the` &&
+               ` OverflowToolbarButton that opens the add-item page is icon-only in the original (icon=sap-icon://add, no text and no tooltip). The port gives it tooltip="Add" so it is reachable with a screen reader` &&
+               ` - the one accessibility addition in this port. // NOTE: not yet verified in a running system: the TabContainer built over a bound items aggregation, the visible-driven Display/Edit swap inside a tab,` &&
+               ` and the close-confirmation round trip that relies on the view being sent again. **e2e-verified 2026-08-25** (nightly e2e interaction, meta/interactions/z2ui5_cl_smpc_app_558.mjs). // NOTE: onInit`.
+    lv_text1 = lv_text1 && ` calls oModel.setSizeLimit(200) because the collection is 123 rows and the JSONModel caps a bound aggregation at 100. The port issues cs_event-set_size_limit for MAIN; without it the table stopped 23` &&
+               ` rows short. // NOTE: A NavContainer's position is LIVE CONTROL STATE and does not survive a view rebuild. view_display( ) destroys the MAIN slot and XMLView.create builds a fresh control tree, so` &&
+               ` navCon comes back on its FIRST page - the product list, this NavContainer declaring no initialPage - while selected_tab, save_visible and cancel_visible survive as class state. Four of the five` &&
+               ` branches that call view_display( ) are reachable only FROM tabContainerPage (TAB_CANCEL, TAB_CLOSE, CLOSE_TAB_CLOSED, TAB_ADD_NEW), so pressing + on the tab bar created the tab, put the footer into` &&
+               ` edit mode and dropped the user on the product list. Fixed 2026-08-27 with the app-000 re-issue idiom: a PROTECTED nav_page parks the target the LIVE navCon was last sent to (PROTECTED, not PUBLIC,` &&
+               ` because it is bookkeeping and only PUBLIC attributes are serialized into the view model; not PRIVATE, because the draft serialization walks the attributes with a dynamic ASSIGN obj->(name) that`.
+    lv_text1 = lv_text1 && ` cannot reach a PRIVATE one), and the end of view_display( ) re-issues it, guarded by ``nav_page IS NOT INITIAL AND nav_page <> ``table````. Re-issuing the LAST-ISSUED target rather than re-deriving` &&
+               ` it is what keeps the branches that DO want the table correct: nav_to_table and the tab_close redirect when the last tab goes both park ``table`` and are skipped by the same guard. Unlike the sibling` &&
+               ` ports this one needs no bookmark restore to reach the second view_display( ) IN A BROWSER - TAB_ADD_NEW is one press away from the tab page, and the interaction module clicks that + for real. An` &&
+               ` earlier note here claimed firing addNewButtonPress drove no round trip at all in the headless harness; that was a HARNESS ARTEFACT and is withdrawn (corrected 2026-08-27). The frontend's eB DROPS any` &&
+               ` event fired while a round trip is still in flight - the listener runs and fireEvent returns cleanly, and nothing goes out on the wire - so a press sent too early reads back as a dead control.` &&
+               ` Measured both ways against the built backend: fired while busy, no POST and the TabContainer keeps its two items; fired a second later on an idle frontend, TAB_ADD_NEW goes out, t_tabs grows to three`.
+    lv_text1 = lv_text1 && ` and navCon stays on tabContainerPage. The TabContainer's own add button IS rendered (class sapMTSAddNewTabBtn, tooltip "Add New Tab", in the control's TabStrip) and takes a plain click with no force.` &&
+               ` Not to be confused with the product table's headerToolbar OverflowToolbarButton (sap-icon://add, tooltip "Add"), which is NEW_ITEM_ADD on a different page. The leg asserts all three halves: the third` &&
+               ` tab, its key ProductId-1 (the backend counter, so it is TAB_ADD_NEW's own row), and the re-issued tabContainerPage - and with the guarded re-issue removed from view_display( ) only the last of the` &&
+               ` three fails.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.TabContainer`                    name = `TabContainerMHC`                               class = `z2ui5_cl_smpc_app_558` path = `src/01/01/z2ui5_cl_smpc_app_558.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
         notes = lv_text1 ) ).
 
@@ -10768,7 +10783,12 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` access to the browser's locale, so the port composes the label from the same two dates in the ABAP model's own yyyymmdd form; the range case keeps the sample's en dash separator. // NOTE: not yet` &&
                ` verified in a running system: that selecting day 5, one of days 10-12 or day 20 opens the popover with the matching type, and that a plain day opens nothing. **e2e-verified 2026-08-25** (nightly e2e` &&
                ` interaction, meta/interactions/z2ui5_cl_smpc_app_611.mjs). // NOTE: The epoch milliseconds arriving from getTime( ) are converted through decfloat34, not i. ABAP's i tops out at 2,147,483,647 and a`.
-    lv_text1 = lv_text1 && ` 2026 timestamp is ~1.8e12, so CONV i( ) raises CX_SY_CONVERSION_OVERFLOW and the whole round-trip dumps on a real stack. CI never saw it because the transpiled backend represents i as a JS number.`.
+    lv_text1 = lv_text1 && ` 2026 timestamp is ~1.8e12, so CONV i( ) raises CX_SY_CONVERSION_OVERFLOW and the whole round-trip dumps on a real stack. CI never saw it because the transpiled backend represents i as a JS number. //` &&
+               ` NOTE: The sample's own stylesheet is injected through an added core:HTML style leaf (no counterpart in the original view). This sample's manifest lists ``../style.css`` - the sheet the sap.ui.unified` &&
+               ` samples SHARE one folder up, archived at ui5/sap.ui.unified/style.css - and the port carried the viewPadding class the original carries with no rule behind it, so it rendered flush against the page` &&
+               ` edge where the sample renders padded. Injected are the rules that reach this view: the two viewPadding rules and .sap-phone .sapUiCal{position:relative}, which is written by CalendarRenderer on the` &&
+               ` Calendar's own root rather than by the author. The sheet's remaining rules (.labelMarginLeft, .fullHeight - classes this view does not carry - and .sapUiCancel, which no OpenUI5 renderer writes) stay` &&
+               ` out. Same treatment as apps 139/177/220/240/246/305/306/307/308; this port was ported after that sweep and was missed by it. Found by scripts/probes/orphan-style-class-probe.mjs.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarAriaHasPopup`                          class = `z2ui5_cl_smpc_app_611` path = `src/02/02/z2ui5_cl_smpc_app_611.clas.abap`
         score = 5

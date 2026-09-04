@@ -46,6 +46,10 @@
     {
       "type": "NOTE",
       "what": "The epoch milliseconds arriving from getTime( ) are converted through decfloat34, not i. ABAP's i tops out at 2,147,483,647 and a 2026 timestamp is ~1.8e12, so CONV i( ) raises CX_SY_CONVERSION_OVERFLOW and the whole round-trip dumps on a real stack. CI never saw it because the transpiled backend represents i as a JS number."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's own stylesheet is injected through an added core:HTML style leaf (no counterpart in the original view). This sample's manifest lists `../style.css` - the sheet the sap.ui.unified samples SHARE one folder up, archived at ui5/sap.ui.unified/style.css - and the port carried the viewPadding class the original carries with no rule behind it, so it rendered flush against the page edge where the sample renders padded. Injected are the rules that reach this view: the two viewPadding rules and .sap-phone .sapUiCal{position:relative}, which is written by CalendarRenderer on the Calendar's own root rather than by the author. The sheet's remaining rules (.labelMarginLeft, .fullHeight - classes this view does not carry - and .sapUiCancel, which no OpenUI5 renderer writes) stay out. Same treatment as apps 139/177/220/240/246/305/306/307/308; this port was ported after that sweep and was missed by it. Found by scripts/probes/orphan-style-class-probe.mjs."
     }
   ]
 }
