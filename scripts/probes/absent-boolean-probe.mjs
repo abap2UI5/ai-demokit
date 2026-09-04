@@ -70,6 +70,34 @@ if (fs.existsSync(LIBS)) {
   }
 }
 
+/*
+ * The source with COMMENTS and literal CONTENT blanked, offset for offset.
+ *
+ * The paren walk below counts `( … )` groups, and this corpus writes prose
+ * next to its data: app 167's seed carries the comment "NavigationListItem
+ * only fires itemSelect when getSelectable( ) is true", whose `( )` was
+ * counted as a fifteenth row of a fourteen-row table - a row with none of the
+ * fields set, which is exactly the shape this probe reports. Three false hits
+ * from one sentence, and the remedy it printed ("seed abap_true on those
+ * rows") would have changed correct data. A literal is blanked for the same
+ * reason: a `(` inside a title is not a row either.
+ */
+function codeOnly(src) {
+  let out = '';
+  let str = null;
+  let comment = false;
+  for (let i = 0; i < src.length; i++) {
+    const c = src[i];
+    if (c === '\n') { out += c; comment = false; continue; }
+    if (comment) { out += ' '; continue; }
+    if (str) { out += c === str ? c : ' '; if (c === str) str = null; continue; }
+    if (c === '"' || (c === '*' && (i === 0 || src[i - 1] === '\n'))) { comment = true; out += ' '; continue; }
+    if (c === '`' || c === "'" || c === '|') { str = c; out += c; continue; }
+    out += c;
+  }
+  return out;
+}
+
 // ---- the balanced body of a VALUE #( … ), and its top-level ( … ) rows ----
 const balanced = (src, i) => {
   let d = 0;
@@ -137,9 +165,12 @@ for (const m of metas) {
   const bools = new Set([...src.matchAll(/(\w+)\s+TYPE abap_bool/g)].map((x) => x[1].toLowerCase()));
   if (!bools.size) continue;
   const bound = boundProps(src);
+  /* The seeds are read out of the blanked copy; `boundProps( )` above still
+   * reads the source, because what it looks for IS the literals. */
+  const code = codeOnly(src);
 
-  for (const v of src.matchAll(/VALUE #\(/g)) {
-    const body = balanced(src, v.index + 7);
+  for (const v of code.matchAll(/VALUE #\(/g)) {
+    const body = balanced(code, v.index + 7);
     if (!body) continue;
     const rows = topLevelRows(body);
     if (rows.length < 2) continue;
@@ -152,7 +183,7 @@ for (const m of metas) {
       if (re.test(base)) continue;
       const set = rows.filter((r) => re.test(r)).length;
       if (set === 0 || set === rows.length) continue;
-      const line = src.slice(0, v.index).split('\n').length;
+      const line = code.slice(0, v.index).split('\n').length;   // same offsets as src
       const targets = (bound[f] || []).filter(([c, p]) => defaultsTrue(c, p));
       if (!targets.length) {
         loose++;

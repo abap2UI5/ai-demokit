@@ -10768,7 +10768,12 @@ CLASS z2ui5_cl_smpc_app_000 IMPLEMENTATION.
                ` access to the browser's locale, so the port composes the label from the same two dates in the ABAP model's own yyyymmdd form; the range case keeps the sample's en dash separator. // NOTE: not yet` &&
                ` verified in a running system: that selecting day 5, one of days 10-12 or day 20 opens the popover with the matching type, and that a plain day opens nothing. **e2e-verified 2026-08-25** (nightly e2e` &&
                ` interaction, meta/interactions/z2ui5_cl_smpc_app_611.mjs). // NOTE: The epoch milliseconds arriving from getTime( ) are converted through decfloat34, not i. ABAP's i tops out at 2,147,483,647 and a`.
-    lv_text1 = lv_text1 && ` 2026 timestamp is ~1.8e12, so CONV i( ) raises CX_SY_CONVERSION_OVERFLOW and the whole round-trip dumps on a real stack. CI never saw it because the transpiled backend represents i as a JS number.`.
+    lv_text1 = lv_text1 && ` 2026 timestamp is ~1.8e12, so CONV i( ) raises CX_SY_CONVERSION_OVERFLOW and the whole round-trip dumps on a real stack. CI never saw it because the transpiled backend represents i as a JS number. //` &&
+               ` NOTE: The sample's own stylesheet is injected through an added core:HTML style leaf (no counterpart in the original view). This sample's manifest lists ``../style.css`` - the sheet the sap.ui.unified` &&
+               ` samples SHARE one folder up, archived at ui5/sap.ui.unified/style.css - and the port carried the viewPadding class the original carries with no rule behind it, so it rendered flush against the page` &&
+               ` edge where the sample renders padded. Injected are the rules that reach this view: the two viewPadding rules and .sap-phone .sapUiCal{position:relative}, which is written by CalendarRenderer on the` &&
+               ` Calendar's own root rather than by the author. The sheet's remaining rules (.labelMarginLeft, .fullHeight - classes this view does not carry - and .sapUiCancel, which no OpenUI5 renderer writes) stay` &&
+               ` out. Same treatment as apps 139/177/220/240/246/305/306/307/308; this port was ported after that sweep and was missed by it. Found by scripts/probes/orphan-style-class-probe.mjs.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarAriaHasPopup`                          class = `z2ui5_cl_smpc_app_611` path = `src/02/02/z2ui5_cl_smpc_app_611.clas.abap`
         score = 5

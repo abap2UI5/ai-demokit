@@ -1,4 +1,4 @@
-" @keywords calendar sap.ui.unified calendarariahaspopup verticallayout text datetyperange popover vbox title
+" @keywords calendar sap.ui.unified calendarariahaspopup html verticallayout text datetyperange popover vbox title
 " @summary Calendar demonstrating configurable aria-haspopup attribute on individual day cells via DateTypeRange and a global Calendar-level fallback.
 CLASS z2ui5_cl_smpc_app_611 DEFINITION PUBLIC.
 
@@ -64,6 +64,14 @@ CLASS z2ui5_cl_smpc_app_611 IMPLEMENTATION.
         )->a( n = `core:require` v = `{Formatter: 'z2ui5/model/formatter'}`
         )->a( n = `xmlns:core`   v = `sap.ui.core`
 
+        " the sample's own ../style.css (shared by the sap.ui.unified samples and
+        " listed in this sample's manifest) - the view carries the class and the
+        " rule behind it has to come with it. \{ \} escaped: the XMLView parser
+        " reads an unescaped brace as a binding
+        )->tag( n = `HTML` ns = `core`
+            )->a( n = `content` v = `<style>.viewPadding\{padding:1rem\}` &&
+                                    `.sap-phone .viewPadding\{padding:0rem\}` &&
+                                    `.sap-phone .sapUiCal\{position:relative\}</style>`
         )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `width` v = `100%`
 
