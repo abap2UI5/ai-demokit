@@ -37,10 +37,10 @@ CLASS z2ui5_cl_smpc_app_614 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -49,8 +49,15 @@ CLASS z2ui5_cl_smpc_app_614 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `myPopover` INTO TABLE temp1.
+    INSERT `openBy` INTO TABLE temp1.
+    INSERT `$event.oSource.sId` INTO TABLE temp1.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -69,7 +76,7 @@ CLASS z2ui5_cl_smpc_app_614 IMPLEMENTATION.
             " title's domRef - the same popover is declared in dependents and
             " opened anchored to the pressed control, roundtrip-free
             )->a( n = `titlePress`          v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                          t_arg = VALUE #( ( `myPopover` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
+                                                                          t_arg = temp1 )
             )->a( n = `number`              v = |\{ parts:[\{path:'{ client->_bind_path( price ) }'\},| &&
                                                  |\{path:'{ client->_bind_path( currencycode ) }'\}],| &&
                                                  | type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|

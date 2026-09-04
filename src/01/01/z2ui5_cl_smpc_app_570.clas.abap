@@ -24,7 +24,7 @@ CLASS z2ui5_cl_smpc_app_570 DEFINITION PUBLIC.
              price_text    TYPE string,
              currencycode  TYPE string,
            END OF ty_s_product.
-    TYPES ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
+    TYPES ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH DEFAULT KEY.
 
     DATA t_products TYPE ty_t_product.
     " onEdit keeps a deepExtend copy so onCancel can put it back
@@ -47,12 +47,12 @@ CLASS z2ui5_cl_smpc_app_570 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -61,9 +61,15 @@ CLASS z2ui5_cl_smpc_app_570 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA page TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp3 TYPE string_table.
+    DATA cells TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    DATA(page) = view->ele( n = `View` ns = `mvc`
+    
+    page = view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -74,6 +80,11 @@ CLASS z2ui5_cl_smpc_app_570 IMPLEMENTATION.
             )->a( n = `class`           v = `sapUiContentPadding`
             )->a( n = `showNavButton`   v = `false` ).
 
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `Order button pressed` INTO TABLE temp1.
     page->ele( `footer`
         )->ele( `OverflowToolbar`
             )->a( n = `id` v = `otbFooter`
@@ -84,7 +95,7 @@ CLASS z2ui5_cl_smpc_app_570 IMPLEMENTATION.
                 " onOrder shows a static toast - composed on the client
                 )->a( n = `press` v = client->follow_up_action(
                           val   = client->cs_event-control_global
-                          t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Order button pressed` ) ) )
+                          t_arg = temp1 )
 
                 )->ele( `layoutData`
                     )->tag( `OverflowToolbarLayoutData`
@@ -95,7 +106,14 @@ CLASS z2ui5_cl_smpc_app_570 IMPLEMENTATION.
         )->end(
     )->end( ).
 
-    DATA(cells) = page->ele( `content`
+    
+    CLEAR temp3.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp3.
+    INSERT `show` INTO TABLE temp3.
+    INSERT `Pasted Data: {0}` INTO TABLE temp3.
+    INSERT `${$parameters>/data}` INTO TABLE temp3.
+    
+    cells = page->ele( `content`
         )->ele( `Table`
             )->a( n = `id`               v = `idProductsTable`
             )->a( n = `growing`          v = `true`
@@ -104,10 +122,7 @@ CLASS z2ui5_cl_smpc_app_570 IMPLEMENTATION.
             " onPaste toasts the pasted data - composed on the client
             )->a( n = `paste`            v = client->follow_up_action(
                       val   = client->cs_event-control_global
-                      t_arg = VALUE #( ( `MESSAGE_TOAST` )
-                                       ( `show` )
-                                       ( `Pasted Data: {0}` )
-                                       ( `${$parameters>/data}` ) ) )
+                      t_arg = temp3 )
 
             )->ele( `headerToolbar`
                 )->ele( `OverflowToolbar`
@@ -218,13 +233,22 @@ CLASS z2ui5_cl_smpc_app_570 IMPLEMENTATION.
 
     " the first row SAVE could not parse, if any - see the SAVE branch
     DATA lv_bad TYPE string.
+        DATA temp5 LIKE LINE OF t_products.
+        DATA lr_seed LIKE REF TO temp5.
+        DATA temp6 LIKE LINE OF t_products.
+        DATA lr_prod LIKE REF TO temp6.
+          DATA lv_txt TYPE string.
+          DATA lv_ok TYPE abap_bool.
+          DATA temp1 TYPE xsdboolean.
 
     CASE client->get_event( ).
 
       WHEN `EDIT`.
         " onEdit: seed the string mirror from the packed price, keep a copy for
         " Cancel, then rebind to the editable template
-        LOOP AT t_products REFERENCE INTO DATA(lr_seed).
+        
+        
+        LOOP AT t_products REFERENCE INTO lr_seed.
           lr_seed->price_text = |{ lr_seed->price }|.
         ENDLOOP.
         t_backup = t_products.
@@ -236,15 +260,18 @@ CLASS z2ui5_cl_smpc_app_570 IMPLEMENTATION.
         " framework - decides. A cell that does not convert keeps its old price,
         " its text is put back from that price, and the app STAYS in edit mode
         " with a toast: the entry is never discarded behind the user's back
-        LOOP AT t_products REFERENCE INTO DATA(lr_prod).
-          DATA(lv_txt) = condense( lr_prod->price_text ).
+        
+        
+        LOOP AT t_products REFERENCE INTO lr_prod.
+          
+          lv_txt = condense( lr_prod->price_text ).
           " three terms, not just the character one: CA demands a real digit so a
           " lone `-` or `.` cannot reach the assignment (it used to land as 0.00),
           " and the length term keeps a long digit run from overflowing the target
-          DATA(lv_ok) = xsdbool( lv_txt IS NOT INITIAL
-                             AND lv_txt CO `0123456789.-`
-                             AND lv_txt CA `0123456789`
-                             AND strlen( lv_txt ) <= 15 ).
+          
+          
+          temp1 = boolc( lv_txt IS NOT INITIAL AND lv_txt CO `0123456789.-` AND lv_txt CA `0123456789` AND strlen( lv_txt ) <= 15 ).
+          lv_ok = temp1.
           IF lv_ok = abap_true.
             TRY.
                 lr_prod->price = lv_txt.
@@ -278,376 +305,1241 @@ CLASS z2ui5_cl_smpc_app_570 IMPLEMENTATION.
   METHOD model_init.
 
     " the full mock /ProductCollection
-    t_products = VALUE #(
-      ( productid = `HT-1000` name = `Notebook Basic 15` quantity = `10` uom = `PC`
-        weightmeasure = `4.2` weightunit = `KG` weight_state = `Success`
-        price = `956` currencycode = `EUR` )
-      ( productid = `HT-1001` name = `Notebook Basic 17` quantity = `20` uom = `PC`
-        weightmeasure = `4.5` weightunit = `KG` weight_state = `Success`
-        price = `1249` currencycode = `EUR` )
-      ( productid = `HT-1002` name = `Notebook Basic 18` quantity = `10` uom = `PC`
-        weightmeasure = `4.2` weightunit = `KG` weight_state = `Success`
-        price = `1570` currencycode = `EUR` )
-      ( productid = `HT-1003` name = `Notebook Basic 19` quantity = `15` uom = `PC`
-        weightmeasure = `4.2` weightunit = `KG` weight_state = `Success`
-        price = `1650` currencycode = `EUR` )
-      ( productid = `HT-1007` name = `ITelO Vault` quantity = `15` uom = `PC`
-        weightmeasure = `0.2` weightunit = `KG` weight_state = `Success`
-        price = `299` currencycode = `EUR` )
-      ( productid = `HT-1010` name = `Notebook Professional 15` quantity = `16` uom = `PC`
-        weightmeasure = `4.3` weightunit = `KG` weight_state = `Success`
-        price = `1999` currencycode = `EUR` )
-      ( productid = `HT-1011` name = `Notebook Professional 17` quantity = `17` uom = `PC`
-        weightmeasure = `4.1` weightunit = `KG` weight_state = `Success`
-        price = `2299` currencycode = `EUR` )
-      ( productid = `HT-1020` name = `ITelO Vault Net` quantity = `14` uom = `PC`
-        weightmeasure = `0.16` weightunit = `KG` weight_state = `Success`
-        price = `459` currencycode = `EUR` )
-      ( productid = `HT-1021` name = `ITelO Vault SAT` quantity = `50` uom = `PC`
-        weightmeasure = `0.18` weightunit = `KG` weight_state = `Success`
-        price = `149` currencycode = `EUR` )
-      ( productid = `HT-1022` name = `Comfort Easy` quantity = `30` uom = `PC`
-        weightmeasure = `0.2` weightunit = `KG` weight_state = `Success`
-        price = `1679` currencycode = `EUR` )
-      ( productid = `HT-1023` name = `Comfort Senior` quantity = `24` uom = `PC`
-        weightmeasure = `0.8` weightunit = `KG` weight_state = `Success`
-        price = `512` currencycode = `EUR` )
-      ( productid = `HT-1030` name = `Ergo Screen E-I` quantity = `14` uom = `PC`
-        weightmeasure = `21` weightunit = `KG` weight_state = `Success`
-        price = `230` currencycode = `EUR` )
-      ( productid = `HT-1031` name = `Ergo Screen E-II` quantity = `24` uom = `PC`
-        weightmeasure = `21` weightunit = `KG` weight_state = `Success`
-        price = `285` currencycode = `EUR` )
-      ( productid = `HT-1032` name = `Ergo Screen E-III` quantity = `50` uom = `PC`
-        weightmeasure = `21` weightunit = `KG` weight_state = `Success`
-        price = `345` currencycode = `EUR` )
-      ( productid = `HT-1035` name = `Flat Basic` quantity = `23` uom = `PC`
-        weightmeasure = `14` weightunit = `KG` weight_state = `Success`
-        price = `399` currencycode = `EUR` )
-      ( productid = `HT-1036` name = `Flat Future` quantity = `22` uom = `PC`
-        weightmeasure = `15` weightunit = `KG` weight_state = `Success`
-        price = `430` currencycode = `EUR` )
-      ( productid = `HT-1037` name = `Flat XL` quantity = `23` uom = `PC`
-        weightmeasure = `17` weightunit = `KG` weight_state = `Success`
-        price = `1230` currencycode = `EUR` )
-      ( productid = `HT-1040` name = `Laser Professional Eco` quantity = `21` uom = `PC`
-        weightmeasure = `32` weightunit = `KG` weight_state = `Success`
-        price = `830` currencycode = `EUR` )
-      ( productid = `HT-1041` name = `Laser Basic` quantity = `8` uom = `PC`
-        weightmeasure = `23` weightunit = `KG` weight_state = `Success`
-        price = `490` currencycode = `EUR` )
-      ( productid = `HT-1042` name = `Laser Allround` quantity = `9` uom = `PC`
-        weightmeasure = `17` weightunit = `KG` weight_state = `Success`
-        price = `349` currencycode = `EUR` )
-      ( productid = `HT-1050` name = `Ultra Jet Super Color` quantity = `17` uom = `PC`
-        weightmeasure = `3` weightunit = `KG` weight_state = `Success`
-        price = `139` currencycode = `EUR` )
-      ( productid = `HT-1051` name = `Ultra Jet Mobile` quantity = `18` uom = `PC`
-        weightmeasure = `1.9` weightunit = `KG` weight_state = `Success`
-        price = `99` currencycode = `EUR` )
-      ( productid = `HT-1052` name = `Ultra Jet Super Highspeed` quantity = `25` uom = `PC`
-        weightmeasure = `18` weightunit = `KG` weight_state = `Success`
-        price = `170` currencycode = `EUR` )
-      ( productid = `HT-1055` name = `Multi Print` quantity = `16` uom = `PC`
-        weightmeasure = `6.3` weightunit = `KG` weight_state = `Success`
-        price = `99` currencycode = `EUR` )
-      ( productid = `HT-1056` name = `Multi Color` quantity = `5` uom = `PC`
-        weightmeasure = `4.3` weightunit = `KG` weight_state = `Success`
-        price = `119` currencycode = `EUR` )
-      ( productid = `HT-1060` name = `Cordless Mouse` quantity = `25` uom = `PC`
-        weightmeasure = `0.09` weightunit = `KG` weight_state = `Success`
-        price = `9` currencycode = `EUR` )
-      ( productid = `HT-1061` name = `Speed Mouse` quantity = `12` uom = `PC`
-        weightmeasure = `0.09` weightunit = `KG` weight_state = `Success`
-        price = `7` currencycode = `EUR` )
-      ( productid = `HT-1062` name = `Track Mouse` quantity = `12` uom = `PC`
-        weightmeasure = `0.03` weightunit = `KG` weight_state = `Success`
-        price = `11` currencycode = `EUR` )
-      ( productid = `HT-1063` name = `Ergonomic Keyboard` quantity = `50` uom = `PC`
-        weightmeasure = `2.1` weightunit = `KG` weight_state = `Success`
-        price = `14` currencycode = `EUR` )
-      ( productid = `HT-1064` name = `Internet Keyboard` quantity = `35` uom = `PC`
-        weightmeasure = `1.8` weightunit = `KG` weight_state = `Success`
-        price = `16` currencycode = `EUR` )
-      ( productid = `HT-1065` name = `Media Keyboard` quantity = `26` uom = `PC`
-        weightmeasure = `2.3` weightunit = `KG` weight_state = `Success`
-        price = `26` currencycode = `EUR` )
-      ( productid = `HT-1066` name = `Mousepad` quantity = `12` uom = `PC`
-        weightmeasure = `80` weightunit = `G` weight_state = `Success`
-        price = `6.99` currencycode = `EUR` )
-      ( productid = `HT-1067` name = `Ergo Mousepad` quantity = `16` uom = `PC`
-        weightmeasure = `80` weightunit = `G` weight_state = `Success`
-        price = `8.99` currencycode = `EUR` )
-      ( productid = `HT-1068` name = `Designer Mousepad` quantity = `26` uom = `PC`
-        weightmeasure = `90` weightunit = `G` weight_state = `Success`
-        price = `12.99` currencycode = `EUR` )
-      ( productid = `HT-1069` name = `Universal card reader` quantity = `22` uom = `PC`
-        weightmeasure = `45` weightunit = `G` weight_state = `Success`
-        price = `14` currencycode = `EUR` )
-      ( productid = `HT-1070` name = `Proctra X` quantity = `15` uom = `PC`
-        weightmeasure = `0.255` weightunit = `KG` weight_state = `Success`
-        price = `70.9` currencycode = `EUR` )
-      ( productid = `HT-1071` name = `Gladiator MX` quantity = `16` uom = `PC`
-        weightmeasure = `0.3` weightunit = `KG` weight_state = `Success`
-        price = `81.7` currencycode = `EUR` )
-      ( productid = `HT-1072` name = `Hurricane GX` quantity = `13` uom = `PC`
-        weightmeasure = `0.4` weightunit = `KG` weight_state = `Success`
-        price = `101.2` currencycode = `EUR` )
-      ( productid = `HT-1073` name = `Hurricane GX/LN` quantity = `5` uom = `PC`
-        weightmeasure = `0.4` weightunit = `KG` weight_state = `Success`
-        price = `139.99` currencycode = `EUR` )
-      ( productid = `HT-1080` name = `Photo Scan` quantity = `8` uom = `PC`
-        weightmeasure = `2.3` weightunit = `KG` weight_state = `Success`
-        price = `129` currencycode = `EUR` )
-      ( productid = `HT-1081` name = `Power Scan` quantity = `11` uom = `PC`
-        weightmeasure = `2.4` weightunit = `KG` weight_state = `Success`
-        price = `89` currencycode = `EUR` )
-      ( productid = `HT-1082` name = `Jet Scan Professional` quantity = `13` uom = `PC`
-        weightmeasure = `3.2` weightunit = `KG` weight_state = `Success`
-        price = `169` currencycode = `EUR` )
-      ( productid = `HT-1083` name = `Jet Scan Professional` quantity = `10` uom = `PC`
-        weightmeasure = `3.2` weightunit = `KG` weight_state = `Success`
-        price = `189` currencycode = `EUR` )
-      ( productid = `HT-1085` name = `Copymaster` quantity = `10` uom = `PC`
-        weightmeasure = `23.2` weightunit = `KG` weight_state = `Success`
-        price = `1499` currencycode = `EUR` )
-      ( productid = `HT-1090` name = `Surround Sound` quantity = `20` uom = `PC`
-        weightmeasure = `3` weightunit = `KG` weight_state = `Success`
-        price = `39` currencycode = `EUR` )
-      ( productid = `HT-1091` name = `Blaster Extreme` quantity = `15` uom = `PC`
-        weightmeasure = `1.4` weightunit = `KG` weight_state = `Success`
-        price = `26` currencycode = `EUR` )
-      ( productid = `HT-1092` name = `Sound Booster` quantity = `50` uom = `PC`
-        weightmeasure = `2.1` weightunit = `KG` weight_state = `Success`
-        price = `45` currencycode = `EUR` )
-      ( productid = `HT-1095` name = `Lovely Sound 5.1 Wireless` quantity = `12` uom = `PC`
-        weightmeasure = `80` weightunit = `G` weight_state = `Success`
-        price = `49` currencycode = `EUR` )
-      ( productid = `HT-1096` name = `Lovely Sound 5.1` quantity = `18` uom = `PC`
-        weightmeasure = `130` weightunit = `G` weight_state = `Success`
-        price = `39` currencycode = `EUR` )
-      ( productid = `HT-1097` name = `Lovely Sound Stereo` quantity = `21` uom = `PC`
-        weightmeasure = `60` weightunit = `G` weight_state = `Success`
-        price = `29` currencycode = `EUR` )
-      ( productid = `HT-1100` name = `Smart Office` quantity = `25` uom = `PC`
-        weightmeasure = `1.2` weightunit = `KG` weight_state = `Success`
-        price = `89.9` currencycode = `EUR` )
-      ( productid = `HT-1101` name = `Smart Design` quantity = `26` uom = `PC`
-        weightmeasure = `0.8` weightunit = `KG` weight_state = `Success`
-        price = `79.9` currencycode = `EUR` )
-      ( productid = `HT-1102` name = `Smart Network` quantity = `28` uom = `PC`
-        weightmeasure = `0.8` weightunit = `KG` weight_state = `Success`
-        price = `69` currencycode = `EUR` )
-      ( productid = `HT-1103` name = `Smart Multimedia` quantity = `9` uom = `PC`
-        weightmeasure = `0.8` weightunit = `KG` weight_state = `Success`
-        price = `77` currencycode = `EUR` )
-      ( productid = `HT-1104` name = `Smart Games` quantity = `13` uom = `PC`
-        weightmeasure = `1.1` weightunit = `KG` weight_state = `Success`
-        price = `55` currencycode = `EUR` )
-      ( productid = `HT-1105` name = `Smart Internet Antivirus` quantity = `17` uom = `PC`
-        weightmeasure = `0.7` weightunit = `KG` weight_state = `Success`
-        price = `29` currencycode = `EUR` )
-      ( productid = `HT-1106` name = `Smart Firewall` quantity = `19` uom = `PC`
-        weightmeasure = `0.9` weightunit = `KG` weight_state = `Success`
-        price = `34` currencycode = `EUR` )
-      ( productid = `HT-1107` name = `Smart Money` quantity = `18` uom = `PC`
-        weightmeasure = `0.5` weightunit = `KG` weight_state = `Success`
-        price = `29.9` currencycode = `EUR` )
-      ( productid = `HT-1110` name = `PC Lock` quantity = `14` uom = `PC`
-        weightmeasure = `0.03` weightunit = `KG` weight_state = `Success`
-        price = `8.9` currencycode = `EUR` )
-      ( productid = `HT-1111` name = `Notebook Lock` quantity = `20` uom = `PC`
-        weightmeasure = `0.02` weightunit = `KG` weight_state = `Success`
-        price = `6.9` currencycode = `EUR` )
-      ( productid = `HT-1112` name = `Web cam reality` quantity = `27` uom = `PC`
-        weightmeasure = `0.075` weightunit = `KG` weight_state = `Success`
-        price = `39` currencycode = `EUR` )
-      ( productid = `HT-1113` name = `Screen clean` quantity = `17` uom = `PC`
-        weightmeasure = `0.05` weightunit = `KG` weight_state = `Success`
-        price = `2.3` currencycode = `EUR` )
-      ( productid = `HT-1114` name = `Fabric bag professional` quantity = `14` uom = `PC`
-        weightmeasure = `1.8` weightunit = `KG` weight_state = `Success`
-        price = `31` currencycode = `EUR` )
-      ( productid = `HT-1115` name = `Wireless DSL Router` quantity = `16` uom = `PC`
-        weightmeasure = `0.45` weightunit = `KG` weight_state = `Success`
-        price = `49` currencycode = `EUR` )
-      ( productid = `HT-1116` name = `Wireless DSL Router / Repeater` quantity = `12` uom = `PC`
-        weightmeasure = `0.45` weightunit = `KG` weight_state = `Success`
-        price = `59` currencycode = `EUR` )
-      ( productid = `HT-1117` name = `Wireless DSL Router / Repeater and Print Server` quantity = `12` uom = `PC`
-        weightmeasure = `0.45` weightunit = `KG` weight_state = `Success`
-        price = `69` currencycode = `EUR` )
-      ( productid = `HT-1118` name = `USB Stick` quantity = `14` uom = `PC`
-        weightmeasure = `0.015` weightunit = `KG` weight_state = `Success`
-        price = `35` currencycode = `EUR` )
-      ( productid = `HT-1119` name = `Travel Adapter` quantity = `10` uom = `PC`
-        weightmeasure = `88` weightunit = `G` weight_state = `Success`
-        price = `79` currencycode = `EUR` )
-      ( productid = `HT-1120` name = `Cordless Bluetooth Keyboard, english international` quantity = `13` uom = `PC`
-        weightmeasure = `1` weightunit = `KG` weight_state = `Success`
-        price = `29` currencycode = `EUR` )
-      ( productid = `HT-1137` name = `Flat XXL` quantity = `10` uom = `PC`
-        weightmeasure = `18` weightunit = `KG` weight_state = `Success`
-        price = `1430` currencycode = `EUR` )
-      ( productid = `HT-1138` name = `Pocket Mouse` quantity = `20` uom = `PC`
-        weightmeasure = `0.02` weightunit = `KG` weight_state = `Success`
-        price = `23` currencycode = `EUR` )
-      ( productid = `HT-1210` name = `PC Power Station` quantity = `22` uom = `PC`
-        weightmeasure = `2.3` weightunit = `KG` weight_state = `Success`
-        price = `2399` currencycode = `EUR` )
-      ( productid = `HT-1251` name = `Astro Laptop 1516` quantity = `23` uom = `PC`
-        weightmeasure = `4.2` weightunit = `KG` weight_state = `Success`
-        price = `989` currencycode = `EUR` )
-      ( productid = `HT-1252` name = `Astro Phone 6` quantity = `28` uom = `PC`
-        weightmeasure = `0.75` weightunit = `KG` weight_state = `Success`
-        price = `649` currencycode = `EUR` )
-      ( productid = `HT-1253` name = `Benda Laptop 1408` quantity = `27` uom = `PC`
-        weightmeasure = `4.2` weightunit = `KG` weight_state = `Success`
-        price = `976` currencycode = `EUR` )
-      ( productid = `HT-1254` name = `Bending Screen 21HD` quantity = `23` uom = `PC`
-        weightmeasure = `15` weightunit = `KG` weight_state = `Success`
-        price = `250` currencycode = `EUR` )
-      ( productid = `HT-1255` name = `Broad Screen 22HD` quantity = `5` uom = `PC`
-        weightmeasure = `16` weightunit = `KG` weight_state = `Success`
-        price = `270` currencycode = `EUR` )
-      ( productid = `HT-1256` name = `Cerdik Phone 7` quantity = `19` uom = `PC`
-        weightmeasure = `0.75` weightunit = `KG` weight_state = `Success`
-        price = `549` currencycode = `EUR` )
-      ( productid = `HT-1257` name = `Cepat Tablet 10.5` quantity = `17` uom = `PC`
-        weightmeasure = `2.8` weightunit = `KG` weight_state = `Success`
-        price = `549` currencycode = `EUR` )
-      ( productid = `HT-1258` name = `Cepat Tablet 8` quantity = `24` uom = `PC`
-        weightmeasure = `2.5` weightunit = `KG` weight_state = `Success`
-        price = `529` currencycode = `EUR` )
-      ( productid = `HT-1500` name = `Server Basic` quantity = `24` uom = `PC`
-        weightmeasure = `18` weightunit = `KG` weight_state = `Success`
-        price = `5000` currencycode = `EUR` )
-      ( productid = `HT-1501` name = `Server Professional` quantity = `26` uom = `PC`
-        weightmeasure = `25` weightunit = `KG` weight_state = `Success`
-        price = `15000` currencycode = `EUR` )
-      ( productid = `HT-1502` name = `Server Power Pro` quantity = `34` uom = `PC`
-        weightmeasure = `35` weightunit = `KG` weight_state = `Success`
-        price = `25000` currencycode = `EUR` )
-      ( productid = `HT-1600` name = `Family PC Basic` quantity = `10` uom = `PC`
-        weightmeasure = `4.8` weightunit = `KG` weight_state = `Success`
-        price = `600` currencycode = `EUR` )
-      ( productid = `HT-1601` name = `Family PC Pro` quantity = `20` uom = `PC`
-        weightmeasure = `5.3` weightunit = `KG` weight_state = `Success`
-        price = `900` currencycode = `EUR` )
-      ( productid = `HT-1602` name = `Gaming Monster` quantity = `24` uom = `PC`
-        weightmeasure = `5.9` weightunit = `KG` weight_state = `Success`
-        price = `1200` currencycode = `EUR` )
-      ( productid = `HT-1603` name = `Gaming Monster Pro` quantity = `25` uom = `PC`
-        weightmeasure = `6.8` weightunit = `KG` weight_state = `Success`
-        price = `1700` currencycode = `EUR` )
-      ( productid = `HT-2000` name = `7" Widescreen Portable DVD Player w MP3` quantity = `20` uom = `PC`
-        weightmeasure = `0.79` weightunit = `KG` weight_state = `Success`
-        price = `249.99` currencycode = `EUR` )
-      ( productid = `HT-2001` name = `10" Portable DVD player` quantity = `21` uom = `PC`
-        weightmeasure = `0.84` weightunit = `KG` weight_state = `Success`
-        price = `449.99` currencycode = `EUR` )
-      ( productid = `HT-2002` name = `Portable DVD Player with 9" LCD Monitor` quantity = `50` uom = `PC`
-        weightmeasure = `0.72` weightunit = `KG` weight_state = `Success`
-        price = `853.99` currencycode = `EUR` )
-      ( productid = `HT-2025` name = `CD/DVD case: 264 sleeves` quantity = `26` uom = `PC`
-        weightmeasure = `0.65` weightunit = `KG` weight_state = `Success`
-        price = `44.99` currencycode = `EUR` )
-      ( productid = `HT-2026` name = `Audio/Video Cable Kit - 4m` quantity = `16` uom = `PC`
-        weightmeasure = `0.2` weightunit = `KG` weight_state = `Success`
-        price = `29.99` currencycode = `EUR` )
-      ( productid = `HT-2027` name = `Removable CD/DVD Laser Labels` quantity = `25` uom = `PC`
-        weightmeasure = `0.15` weightunit = `KG` weight_state = `Success`
-        price = `8.99` currencycode = `EUR` )
-      ( productid = `HT-6100` name = `Beam Breaker B-1` quantity = `32` uom = `PC`
-        weightmeasure = `1.7` weightunit = `KG` weight_state = `Success`
-        price = `469` currencycode = `EUR` )
-      ( productid = `HT-6101` name = `Beam Breaker B-2` quantity = `18` uom = `PC`
-        weightmeasure = `2` weightunit = `KG` weight_state = `Success`
-        price = `679` currencycode = `EUR` )
-      ( productid = `HT-6102` name = `Beam Breaker B-3` quantity = `16` uom = `PC`
-        weightmeasure = `2.5` weightunit = `KG` weight_state = `Success`
-        price = `889` currencycode = `EUR` )
-      ( productid = `HT-6110` name = `Play Movie` quantity = `15` uom = `PC`
-        weightmeasure = `2.4` weightunit = `KG` weight_state = `Success`
-        price = `130` currencycode = `EUR` )
-      ( productid = `HT-6111` name = `Record Movie` quantity = `24` uom = `PC`
-        weightmeasure = `3.1` weightunit = `KG` weight_state = `Success`
-        price = `288` currencycode = `EUR` )
-      ( productid = `HT-6120` name = `ITelo MusicStick` quantity = `15` uom = `PC`
-        weightmeasure = `134` weightunit = `G` weight_state = `Success`
-        price = `45` currencycode = `EUR` )
-      ( productid = `HT-6121` name = `ITelo Jog-Mate` quantity = `24` uom = `PC`
-        weightmeasure = `134` weightunit = `G` weight_state = `Success`
-        price = `63` currencycode = `EUR` )
-      ( productid = `HT-6122` name = `Power Pro Player 40` quantity = `23` uom = `PC`
-        weightmeasure = `266` weightunit = `G` weight_state = `Success`
-        price = `167` currencycode = `EUR` )
-      ( productid = `HT-6123` name = `Power Pro Player 80` quantity = `13` uom = `PC`
-        weightmeasure = `267` weightunit = `G` weight_state = `Success`
-        price = `299` currencycode = `EUR` )
-      ( productid = `HT-6130` name = `Flat Watch HD32` quantity = `16` uom = `PC`
-        weightmeasure = `2.6` weightunit = `KG` weight_state = `Success`
-        price = `1459` currencycode = `EUR` )
-      ( productid = `HT-6131` name = `Flat Watch HD37` quantity = `14` uom = `PC`
-        weightmeasure = `2.2` weightunit = `KG` weight_state = `Success`
-        price = `1199` currencycode = `EUR` )
-      ( productid = `HT-6132` name = `Flat Watch HD41` quantity = `13` uom = `PC`
-        weightmeasure = `1.8` weightunit = `KG` weight_state = `Success`
-        price = `899` currencycode = `EUR` )
-      ( productid = `HT-7000` name = `Copperberry` quantity = `5` uom = `PC`
-        weightmeasure = `0.5` weightunit = `KG` weight_state = `Success`
-        price = `549` currencycode = `EUR` )
-      ( productid = `HT-7010` name = `Silverberry` quantity = `9` uom = `PC`
-        weightmeasure = `0.5` weightunit = `KG` weight_state = `Success`
-        price = `549` currencycode = `EUR` )
-      ( productid = `HT-7020` name = `Goldberry` quantity = `11` uom = `PC`
-        weightmeasure = `0.5` weightunit = `KG` weight_state = `Success`
-        price = `549` currencycode = `EUR` )
-      ( productid = `HT-7030` name = `Platinberry` quantity = `12` uom = `PC`
-        weightmeasure = `0.5` weightunit = `KG` weight_state = `Success`
-        price = `549` currencycode = `EUR` )
-      ( productid = `HT-8000` name = `ITelO FlexTop I4000` quantity = `11` uom = `PC`
-        weightmeasure = `4` weightunit = `KG` weight_state = `Success`
-        price = `799` currencycode = `EUR` )
-      ( productid = `HT-8001` name = `ITelO FlexTop I6300c` quantity = `20` uom = `PC`
-        weightmeasure = `4.2` weightunit = `KG` weight_state = `Success`
-        price = `799` currencycode = `EUR` )
-      ( productid = `HT-8002` name = `ITelO FlexTop I9100` quantity = `20` uom = `PC`
-        weightmeasure = `3.5` weightunit = `KG` weight_state = `Success`
-        price = `1199` currencycode = `EUR` )
-      ( productid = `HT-8003` name = `ITelO FlexTop I9800` quantity = `22` uom = `PC`
-        weightmeasure = `3.8` weightunit = `KG` weight_state = `Success`
-        price = `1388` currencycode = `EUR` )
-      ( productid = `HT-9991` name = `Smartphone Leather Case` quantity = `12` uom = `PC`
-        weightmeasure = `0.02` weightunit = `KG` weight_state = `Success`
-        price = `25` currencycode = `EUR` )
-      ( productid = `HT-9992` name = `Smartphone Alpha` quantity = `13` uom = `PC`
-        weightmeasure = `0.75` weightunit = `KG` weight_state = `Success`
-        price = `599` currencycode = `EUR` )
-      ( productid = `HT-9993` name = `Mini Tablet` quantity = `10` uom = `PC`
-        weightmeasure = `3.8` weightunit = `KG` weight_state = `Success`
-        price = `833` currencycode = `EUR` )
-      ( productid = `HT-9994` name = `Camcorder View` quantity = `50` uom = `PC`
-        weightmeasure = `3.8` weightunit = `KG` weight_state = `Success`
-        price = `1388` currencycode = `EUR` )
-      ( productid = `HT-9995` name = `Tablet Pouch` quantity = `34` uom = `PC`
-        weightmeasure = `0.03` weightunit = `KG` weight_state = `Success`
-        price = `20` currencycode = `EUR` )
-      ( productid = `HT-9996` name = `Tablet Pouch` quantity = `34` uom = `PC`
-        weightmeasure = `0.03` weightunit = `KG` weight_state = `Success`
-        price = `20` currencycode = `EUR` )
-      ( productid = `HT-9997` name = `e-Book Reader ReadMe` quantity = `23` uom = `PC`
-        weightmeasure = `3.8` weightunit = `KG` weight_state = `Success`
-        price = `33` currencycode = `EUR` )
-      ( productid = `HT-9998` name = `Smartphone Beta` quantity = `21` uom = `PC`
-        weightmeasure = `0.75` weightunit = `KG` weight_state = `Success`
-        price = `30` currencycode = `EUR` )
-      ( productid = `HT-9999` name = `Maxi Tablet` quantity = `20` uom = `PC`
-        weightmeasure = `3.8` weightunit = `KG` weight_state = `Success`
-        price = `749` currencycode = `EUR` )
-      ( productid = `PF-1000` name = `Flyer` quantity = `33` uom = `PC`
-        weightmeasure = `0.01` weightunit = `KG` weight_state = `Success`
-        price = `0` currencycode = `EUR` ) ).
+    DATA temp7 TYPE z2ui5_cl_smpc_app_570=>ty_t_product.
+    DATA temp8 LIKE LINE OF temp7.
+    CLEAR temp7.
+    
+    temp8-productid = `HT-1000`.
+    temp8-name = `Notebook Basic 15`.
+    temp8-quantity = `10`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `4.2`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `956`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1001`.
+    temp8-name = `Notebook Basic 17`.
+    temp8-quantity = `20`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `4.5`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `1249`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1002`.
+    temp8-name = `Notebook Basic 18`.
+    temp8-quantity = `10`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `4.2`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `1570`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1003`.
+    temp8-name = `Notebook Basic 19`.
+    temp8-quantity = `15`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `4.2`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `1650`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1007`.
+    temp8-name = `ITelO Vault`.
+    temp8-quantity = `15`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.2`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `299`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1010`.
+    temp8-name = `Notebook Professional 15`.
+    temp8-quantity = `16`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `4.3`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `1999`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1011`.
+    temp8-name = `Notebook Professional 17`.
+    temp8-quantity = `17`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `4.1`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `2299`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1020`.
+    temp8-name = `ITelO Vault Net`.
+    temp8-quantity = `14`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.16`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `459`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1021`.
+    temp8-name = `ITelO Vault SAT`.
+    temp8-quantity = `50`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.18`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `149`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1022`.
+    temp8-name = `Comfort Easy`.
+    temp8-quantity = `30`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.2`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `1679`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1023`.
+    temp8-name = `Comfort Senior`.
+    temp8-quantity = `24`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.8`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `512`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1030`.
+    temp8-name = `Ergo Screen E-I`.
+    temp8-quantity = `14`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `21`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `230`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1031`.
+    temp8-name = `Ergo Screen E-II`.
+    temp8-quantity = `24`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `21`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `285`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1032`.
+    temp8-name = `Ergo Screen E-III`.
+    temp8-quantity = `50`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `21`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `345`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1035`.
+    temp8-name = `Flat Basic`.
+    temp8-quantity = `23`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `14`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `399`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1036`.
+    temp8-name = `Flat Future`.
+    temp8-quantity = `22`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `15`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `430`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1037`.
+    temp8-name = `Flat XL`.
+    temp8-quantity = `23`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `17`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `1230`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1040`.
+    temp8-name = `Laser Professional Eco`.
+    temp8-quantity = `21`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `32`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `830`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1041`.
+    temp8-name = `Laser Basic`.
+    temp8-quantity = `8`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `23`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `490`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1042`.
+    temp8-name = `Laser Allround`.
+    temp8-quantity = `9`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `17`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `349`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1050`.
+    temp8-name = `Ultra Jet Super Color`.
+    temp8-quantity = `17`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `3`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `139`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1051`.
+    temp8-name = `Ultra Jet Mobile`.
+    temp8-quantity = `18`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `1.9`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `99`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1052`.
+    temp8-name = `Ultra Jet Super Highspeed`.
+    temp8-quantity = `25`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `18`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `170`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1055`.
+    temp8-name = `Multi Print`.
+    temp8-quantity = `16`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `6.3`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `99`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1056`.
+    temp8-name = `Multi Color`.
+    temp8-quantity = `5`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `4.3`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `119`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1060`.
+    temp8-name = `Cordless Mouse`.
+    temp8-quantity = `25`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.09`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `9`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1061`.
+    temp8-name = `Speed Mouse`.
+    temp8-quantity = `12`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.09`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `7`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1062`.
+    temp8-name = `Track Mouse`.
+    temp8-quantity = `12`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.03`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `11`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1063`.
+    temp8-name = `Ergonomic Keyboard`.
+    temp8-quantity = `50`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `2.1`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `14`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1064`.
+    temp8-name = `Internet Keyboard`.
+    temp8-quantity = `35`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `1.8`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `16`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1065`.
+    temp8-name = `Media Keyboard`.
+    temp8-quantity = `26`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `2.3`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `26`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1066`.
+    temp8-name = `Mousepad`.
+    temp8-quantity = `12`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `80`.
+    temp8-weightunit = `G`.
+    temp8-weight_state = `Success`.
+    temp8-price = `6.99`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1067`.
+    temp8-name = `Ergo Mousepad`.
+    temp8-quantity = `16`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `80`.
+    temp8-weightunit = `G`.
+    temp8-weight_state = `Success`.
+    temp8-price = `8.99`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1068`.
+    temp8-name = `Designer Mousepad`.
+    temp8-quantity = `26`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `90`.
+    temp8-weightunit = `G`.
+    temp8-weight_state = `Success`.
+    temp8-price = `12.99`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1069`.
+    temp8-name = `Universal card reader`.
+    temp8-quantity = `22`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `45`.
+    temp8-weightunit = `G`.
+    temp8-weight_state = `Success`.
+    temp8-price = `14`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1070`.
+    temp8-name = `Proctra X`.
+    temp8-quantity = `15`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.255`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `70.9`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1071`.
+    temp8-name = `Gladiator MX`.
+    temp8-quantity = `16`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.3`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `81.7`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1072`.
+    temp8-name = `Hurricane GX`.
+    temp8-quantity = `13`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.4`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `101.2`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1073`.
+    temp8-name = `Hurricane GX/LN`.
+    temp8-quantity = `5`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.4`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `139.99`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1080`.
+    temp8-name = `Photo Scan`.
+    temp8-quantity = `8`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `2.3`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `129`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1081`.
+    temp8-name = `Power Scan`.
+    temp8-quantity = `11`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `2.4`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `89`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1082`.
+    temp8-name = `Jet Scan Professional`.
+    temp8-quantity = `13`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `3.2`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `169`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1083`.
+    temp8-name = `Jet Scan Professional`.
+    temp8-quantity = `10`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `3.2`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `189`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1085`.
+    temp8-name = `Copymaster`.
+    temp8-quantity = `10`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `23.2`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `1499`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1090`.
+    temp8-name = `Surround Sound`.
+    temp8-quantity = `20`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `3`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `39`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1091`.
+    temp8-name = `Blaster Extreme`.
+    temp8-quantity = `15`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `1.4`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `26`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1092`.
+    temp8-name = `Sound Booster`.
+    temp8-quantity = `50`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `2.1`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `45`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1095`.
+    temp8-name = `Lovely Sound 5.1 Wireless`.
+    temp8-quantity = `12`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `80`.
+    temp8-weightunit = `G`.
+    temp8-weight_state = `Success`.
+    temp8-price = `49`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1096`.
+    temp8-name = `Lovely Sound 5.1`.
+    temp8-quantity = `18`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `130`.
+    temp8-weightunit = `G`.
+    temp8-weight_state = `Success`.
+    temp8-price = `39`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1097`.
+    temp8-name = `Lovely Sound Stereo`.
+    temp8-quantity = `21`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `60`.
+    temp8-weightunit = `G`.
+    temp8-weight_state = `Success`.
+    temp8-price = `29`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1100`.
+    temp8-name = `Smart Office`.
+    temp8-quantity = `25`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `1.2`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `89.9`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1101`.
+    temp8-name = `Smart Design`.
+    temp8-quantity = `26`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.8`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `79.9`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1102`.
+    temp8-name = `Smart Network`.
+    temp8-quantity = `28`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.8`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `69`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1103`.
+    temp8-name = `Smart Multimedia`.
+    temp8-quantity = `9`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.8`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `77`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1104`.
+    temp8-name = `Smart Games`.
+    temp8-quantity = `13`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `1.1`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `55`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1105`.
+    temp8-name = `Smart Internet Antivirus`.
+    temp8-quantity = `17`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.7`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `29`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1106`.
+    temp8-name = `Smart Firewall`.
+    temp8-quantity = `19`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.9`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `34`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1107`.
+    temp8-name = `Smart Money`.
+    temp8-quantity = `18`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.5`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `29.9`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1110`.
+    temp8-name = `PC Lock`.
+    temp8-quantity = `14`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.03`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `8.9`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1111`.
+    temp8-name = `Notebook Lock`.
+    temp8-quantity = `20`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.02`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `6.9`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1112`.
+    temp8-name = `Web cam reality`.
+    temp8-quantity = `27`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.075`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `39`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1113`.
+    temp8-name = `Screen clean`.
+    temp8-quantity = `17`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.05`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `2.3`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1114`.
+    temp8-name = `Fabric bag professional`.
+    temp8-quantity = `14`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `1.8`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `31`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1115`.
+    temp8-name = `Wireless DSL Router`.
+    temp8-quantity = `16`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.45`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `49`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1116`.
+    temp8-name = `Wireless DSL Router / Repeater`.
+    temp8-quantity = `12`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.45`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `59`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1117`.
+    temp8-name = `Wireless DSL Router / Repeater and Print Server`.
+    temp8-quantity = `12`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.45`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `69`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1118`.
+    temp8-name = `USB Stick`.
+    temp8-quantity = `14`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.015`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `35`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1119`.
+    temp8-name = `Travel Adapter`.
+    temp8-quantity = `10`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `88`.
+    temp8-weightunit = `G`.
+    temp8-weight_state = `Success`.
+    temp8-price = `79`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1120`.
+    temp8-name = `Cordless Bluetooth Keyboard, english international`.
+    temp8-quantity = `13`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `1`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `29`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1137`.
+    temp8-name = `Flat XXL`.
+    temp8-quantity = `10`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `18`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `1430`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1138`.
+    temp8-name = `Pocket Mouse`.
+    temp8-quantity = `20`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.02`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `23`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1210`.
+    temp8-name = `PC Power Station`.
+    temp8-quantity = `22`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `2.3`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `2399`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1251`.
+    temp8-name = `Astro Laptop 1516`.
+    temp8-quantity = `23`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `4.2`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `989`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1252`.
+    temp8-name = `Astro Phone 6`.
+    temp8-quantity = `28`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.75`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `649`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1253`.
+    temp8-name = `Benda Laptop 1408`.
+    temp8-quantity = `27`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `4.2`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `976`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1254`.
+    temp8-name = `Bending Screen 21HD`.
+    temp8-quantity = `23`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `15`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `250`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1255`.
+    temp8-name = `Broad Screen 22HD`.
+    temp8-quantity = `5`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `16`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `270`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1256`.
+    temp8-name = `Cerdik Phone 7`.
+    temp8-quantity = `19`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.75`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `549`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1257`.
+    temp8-name = `Cepat Tablet 10.5`.
+    temp8-quantity = `17`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `2.8`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `549`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1258`.
+    temp8-name = `Cepat Tablet 8`.
+    temp8-quantity = `24`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `2.5`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `529`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1500`.
+    temp8-name = `Server Basic`.
+    temp8-quantity = `24`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `18`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `5000`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1501`.
+    temp8-name = `Server Professional`.
+    temp8-quantity = `26`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `25`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `15000`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1502`.
+    temp8-name = `Server Power Pro`.
+    temp8-quantity = `34`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `35`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `25000`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1600`.
+    temp8-name = `Family PC Basic`.
+    temp8-quantity = `10`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `4.8`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `600`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1601`.
+    temp8-name = `Family PC Pro`.
+    temp8-quantity = `20`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `5.3`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `900`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1602`.
+    temp8-name = `Gaming Monster`.
+    temp8-quantity = `24`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `5.9`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `1200`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1603`.
+    temp8-name = `Gaming Monster Pro`.
+    temp8-quantity = `25`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `6.8`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `1700`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-2000`.
+    temp8-name = `7" Widescreen Portable DVD Player w MP3`.
+    temp8-quantity = `20`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.79`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `249.99`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-2001`.
+    temp8-name = `10" Portable DVD player`.
+    temp8-quantity = `21`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.84`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `449.99`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-2002`.
+    temp8-name = `Portable DVD Player with 9" LCD Monitor`.
+    temp8-quantity = `50`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.72`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `853.99`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-2025`.
+    temp8-name = `CD/DVD case: 264 sleeves`.
+    temp8-quantity = `26`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.65`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `44.99`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-2026`.
+    temp8-name = `Audio/Video Cable Kit - 4m`.
+    temp8-quantity = `16`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.2`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `29.99`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-2027`.
+    temp8-name = `Removable CD/DVD Laser Labels`.
+    temp8-quantity = `25`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.15`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `8.99`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-6100`.
+    temp8-name = `Beam Breaker B-1`.
+    temp8-quantity = `32`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `1.7`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `469`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-6101`.
+    temp8-name = `Beam Breaker B-2`.
+    temp8-quantity = `18`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `2`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `679`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-6102`.
+    temp8-name = `Beam Breaker B-3`.
+    temp8-quantity = `16`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `2.5`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `889`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-6110`.
+    temp8-name = `Play Movie`.
+    temp8-quantity = `15`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `2.4`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `130`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-6111`.
+    temp8-name = `Record Movie`.
+    temp8-quantity = `24`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `3.1`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `288`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-6120`.
+    temp8-name = `ITelo MusicStick`.
+    temp8-quantity = `15`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `134`.
+    temp8-weightunit = `G`.
+    temp8-weight_state = `Success`.
+    temp8-price = `45`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-6121`.
+    temp8-name = `ITelo Jog-Mate`.
+    temp8-quantity = `24`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `134`.
+    temp8-weightunit = `G`.
+    temp8-weight_state = `Success`.
+    temp8-price = `63`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-6122`.
+    temp8-name = `Power Pro Player 40`.
+    temp8-quantity = `23`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `266`.
+    temp8-weightunit = `G`.
+    temp8-weight_state = `Success`.
+    temp8-price = `167`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-6123`.
+    temp8-name = `Power Pro Player 80`.
+    temp8-quantity = `13`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `267`.
+    temp8-weightunit = `G`.
+    temp8-weight_state = `Success`.
+    temp8-price = `299`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-6130`.
+    temp8-name = `Flat Watch HD32`.
+    temp8-quantity = `16`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `2.6`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `1459`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-6131`.
+    temp8-name = `Flat Watch HD37`.
+    temp8-quantity = `14`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `2.2`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `1199`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-6132`.
+    temp8-name = `Flat Watch HD41`.
+    temp8-quantity = `13`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `1.8`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `899`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-7000`.
+    temp8-name = `Copperberry`.
+    temp8-quantity = `5`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.5`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `549`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-7010`.
+    temp8-name = `Silverberry`.
+    temp8-quantity = `9`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.5`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `549`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-7020`.
+    temp8-name = `Goldberry`.
+    temp8-quantity = `11`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.5`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `549`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-7030`.
+    temp8-name = `Platinberry`.
+    temp8-quantity = `12`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.5`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `549`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-8000`.
+    temp8-name = `ITelO FlexTop I4000`.
+    temp8-quantity = `11`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `4`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `799`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-8001`.
+    temp8-name = `ITelO FlexTop I6300c`.
+    temp8-quantity = `20`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `4.2`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `799`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-8002`.
+    temp8-name = `ITelO FlexTop I9100`.
+    temp8-quantity = `20`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `3.5`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `1199`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-8003`.
+    temp8-name = `ITelO FlexTop I9800`.
+    temp8-quantity = `22`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `3.8`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `1388`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-9991`.
+    temp8-name = `Smartphone Leather Case`.
+    temp8-quantity = `12`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.02`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `25`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-9992`.
+    temp8-name = `Smartphone Alpha`.
+    temp8-quantity = `13`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.75`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `599`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-9993`.
+    temp8-name = `Mini Tablet`.
+    temp8-quantity = `10`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `3.8`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `833`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-9994`.
+    temp8-name = `Camcorder View`.
+    temp8-quantity = `50`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `3.8`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `1388`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-9995`.
+    temp8-name = `Tablet Pouch`.
+    temp8-quantity = `34`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.03`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `20`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-9996`.
+    temp8-name = `Tablet Pouch`.
+    temp8-quantity = `34`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.03`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `20`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-9997`.
+    temp8-name = `e-Book Reader ReadMe`.
+    temp8-quantity = `23`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `3.8`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `33`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-9998`.
+    temp8-name = `Smartphone Beta`.
+    temp8-quantity = `21`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.75`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `30`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-9999`.
+    temp8-name = `Maxi Tablet`.
+    temp8-quantity = `20`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `3.8`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `749`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `PF-1000`.
+    temp8-name = `Flyer`.
+    temp8-quantity = `33`.
+    temp8-uom = `PC`.
+    temp8-weightmeasure = `0.01`.
+    temp8-weightunit = `KG`.
+    temp8-weight_state = `Success`.
+    temp8-price = `0`.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    t_products = temp7.
 
   ENDMETHOD.
 

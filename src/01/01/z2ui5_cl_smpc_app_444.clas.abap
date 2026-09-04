@@ -12,7 +12,7 @@ CLASS z2ui5_cl_smpc_app_444 DEFINITION PUBLIC.
              priority TYPE string,
              unread   TYPE abap_bool,
            END OF ty_s_notification.
-    TYPES ty_t_notification TYPE STANDARD TABLE OF ty_s_notification WITH EMPTY KEY.
+    TYPES ty_t_notification TYPE STANDARD TABLE OF ty_s_notification WITH DEFAULT KEY.
 
     DATA t_notifications TYPE ty_t_notification.
     DATA group_visible   TYPE abap_bool VALUE abap_true.
@@ -33,9 +33,9 @@ CLASS z2ui5_cl_smpc_app_444 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -44,7 +44,8 @@ CLASS z2ui5_cl_smpc_app_444 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -102,6 +103,9 @@ CLASS z2ui5_cl_smpc_app_444 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp1 TYPE string_table.
+        DATA temp3 TYPE i.
+        DATA closed_id LIKE temp3.
 
     CASE client->get_event( ).
 
@@ -115,11 +119,18 @@ CLASS z2ui5_cl_smpc_app_444 IMPLEMENTATION.
         " instances, and a size limit applies to a bound aggregation, not to
         " added children. Bound here, so the limit has to be raised explicitly
         " (the app-252 / app-094 idiom).
+        
+        CLEAR temp1.
+        INSERT `400` INTO TABLE temp1.
+        INSERT client->cs_view-main INTO TABLE temp1.
         client->follow_up_action( val   = client->cs_event-set_size_limit
-                                  t_arg = VALUE #( ( `400` ) ( client->cs_view-main ) ) ).
+                                  t_arg = temp1 ).
 
       WHEN `ITEM_CLOSE`.
-        DATA(closed_id) = CONV i( client->get_event_arg( ) ).
+        
+        temp3 = client->get_event_arg( ).
+        
+        closed_id = temp3.
         DELETE t_notifications WHERE id = closed_id.
 
       WHEN `GROUP_CLOSE`.
@@ -133,6 +144,20 @@ CLASS z2ui5_cl_smpc_app_444 IMPLEMENTATION.
 
 
   METHOD notifications_load.
+    DATA temp4 TYPE string_table.
+    DATA titles LIKE temp4.
+    DATA temp6 TYPE string_table.
+    DATA times LIKE temp6.
+    DATA temp8 TYPE string_table.
+    DATA priorities LIKE temp8.
+      DATA index LIKE sy-index.
+      DATA temp10 TYPE z2ui5_cl_smpc_app_444=>ty_s_notification.
+      DATA temp1 LIKE LINE OF titles.
+      DATA temp2 LIKE sy-tabix.
+      DATA temp3 LIKE LINE OF times.
+      DATA temp5 LIKE sy-tabix.
+      DATA temp7 LIKE LINE OF priorities.
+      DATA temp9 LIKE sy-tabix.
 
     " onLoadNotificationsPress fills the group once, with the maximum number of
     " notifications the device takes (400 on desktop, 100 otherwise). The titles,
@@ -143,20 +168,65 @@ CLASS z2ui5_cl_smpc_app_444 IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    DATA(titles) = VALUE string_table( ( `New order request` )
-                                       ( `Your vacation has been approved` )
-                                       ( `New transaction in queue` )
-                                       ( `An new request await your action` ) ).
-    DATA(times) = VALUE string_table( ( `3 days` ) ( `5 minutes` ) ( `1 hour` ) ).
-    DATA(priorities) = VALUE string_table( ( `None` ) ( `Low` ) ( `Medium` ) ( `High` ) ).
+    
+    CLEAR temp4.
+    INSERT `New order request` INTO TABLE temp4.
+    INSERT `Your vacation has been approved` INTO TABLE temp4.
+    INSERT `New transaction in queue` INTO TABLE temp4.
+    INSERT `An new request await your action` INTO TABLE temp4.
+    
+    titles = temp4.
+    
+    CLEAR temp6.
+    INSERT `3 days` INTO TABLE temp6.
+    INSERT `5 minutes` INTO TABLE temp6.
+    INSERT `1 hour` INTO TABLE temp6.
+    
+    times = temp6.
+    
+    CLEAR temp8.
+    INSERT `None` INTO TABLE temp8.
+    INSERT `Low` INTO TABLE temp8.
+    INSERT `Medium` INTO TABLE temp8.
+    INSERT `High` INTO TABLE temp8.
+    
+    priorities = temp8.
 
     DO 400 TIMES.
-      DATA(index) = sy-index.
-      INSERT VALUE #( id       = index
-                      title    = |{ titles[ index MOD 4 + 1 ] } { index }|
-                      datetime = times[ index MOD 3 + 1 ]
-                      priority = priorities[ index MOD 4 + 1 ]
-                      unread   = abap_true )
+      
+      index = sy-index.
+      
+      CLEAR temp10.
+      temp10-id = index.
+      
+      
+      temp2 = sy-tabix.
+      READ TABLE titles INDEX index MOD 4 + 1 INTO temp1.
+      sy-tabix = temp2.
+      IF sy-subrc <> 0.
+        ASSERT 1 = 0.
+      ENDIF.
+      temp10-title = |{ temp1 } { index }|.
+      
+      
+      temp5 = sy-tabix.
+      READ TABLE times INDEX index MOD 3 + 1 INTO temp3.
+      sy-tabix = temp5.
+      IF sy-subrc <> 0.
+        ASSERT 1 = 0.
+      ENDIF.
+      temp10-datetime = temp3.
+      
+      
+      temp9 = sy-tabix.
+      READ TABLE priorities INDEX index MOD 4 + 1 INTO temp7.
+      sy-tabix = temp9.
+      IF sy-subrc <> 0.
+        ASSERT 1 = 0.
+      ENDIF.
+      temp10-priority = temp7.
+      temp10-unread = abap_true.
+      INSERT temp10
              INTO TABLE t_notifications.
     ENDDO.
 

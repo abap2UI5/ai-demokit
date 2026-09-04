@@ -17,8 +17,8 @@ CLASS z2ui5_cl_smpc_app_168 DEFINITION PUBLIC.
         revenue      TYPE string,
         statusschema TYPE string,
       END OF ty_prod.
-    DATA cities TYPE STANDARD TABLE OF ty_city WITH EMPTY KEY.
-    DATA productitems TYPE STANDARD TABLE OF ty_prod WITH EMPTY KEY.
+    DATA cities TYPE STANDARD TABLE OF ty_city WITH DEFAULT KEY.
+    DATA productitems TYPE STANDARD TABLE OF ty_prod WITH DEFAULT KEY.
     DATA snap_to_row         TYPE abap_bool.
     DATA allow_dense_fill    TYPE abap_bool.
     DATA inline_block_layout TYPE abap_bool.
@@ -40,12 +40,12 @@ CLASS z2ui5_cl_smpc_app_168 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -54,7 +54,12 @@ CLASS z2ui5_cl_smpc_app_168 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    DATA temp3 TYPE string_table.
+    DATA temp4 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " The original binds two named models (cities>, products>) inside the cards;
     " abap2UI5 keeps one default model, so those bind directly ({cities>/cities}
@@ -64,6 +69,28 @@ CLASS z2ui5_cl_smpc_app_168 IMPLEMENTATION.
     " Switches carry a two-way bound state and nothing else, the Reveal Grid
     " ToggleButton is undecorated, and columnsChange round-trips into on_event.
     " The sidecar was corrected on 2026-08-05 and this half was missed.
+    
+    CLEAR temp1.
+    INSERT `demoGrid` INTO TABLE temp1.
+    INSERT `removeStyleClass` INTO TABLE temp1.
+    INSERT `${$parameters>/layout} === 'layoutXS' || ${$parameters>/layout} === 'layoutS' ? 'sapUiSmallMargin' : 'sapUiTinyMargin'` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `demoGrid` INTO TABLE temp2.
+    INSERT `addStyleClass` INTO TABLE temp2.
+    INSERT `${$parameters>/layout} === 'layoutXS' || ${$parameters>/layout} === 'layoutS' ? 'sapUiTinyMargin' : 'sapUiSmallMargin'` INTO TABLE temp2.
+    
+    CLEAR temp3.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp3.
+    INSERT `show` INTO TABLE temp3.
+    INSERT `Press was fired on - {0}` INTO TABLE temp3.
+    INSERT `$event.oSource.getMetadata().getName()` INTO TABLE temp3.
+    
+    CLEAR temp4.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp4.
+    INSERT `show` INTO TABLE temp4.
+    INSERT `Press was fired on - {0}` INTO TABLE temp4.
+    INSERT `$event.oSource.getMetadata().getName()` INTO TABLE temp4.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
@@ -158,14 +185,10 @@ CLASS z2ui5_cl_smpc_app_168 IMPLEMENTATION.
                 " determination too, so a phone starts out tiny like the original
                 )->a( n = `layoutChange`      v = client->follow_up_action(
                           val   = client->cs_event-control_by_id
-                          t_arg = VALUE #( ( `demoGrid` )
-                                           ( `removeStyleClass` )
-                                           ( `${$parameters>/layout} === 'layoutXS' || ${$parameters>/layout} === 'layoutS' ? 'sapUiSmallMargin' : 'sapUiTinyMargin'` ) ) ) && `; ` &&
+                          t_arg = temp1 ) && `; ` &&
                                             client->follow_up_action(
                           val   = client->cs_event-control_by_id
-                          t_arg = VALUE #( ( `demoGrid` )
-                                           ( `addStyleClass` )
-                                           ( `${$parameters>/layout} === 'layoutXS' || ${$parameters>/layout} === 'layoutS' ? 'sapUiTinyMargin' : 'sapUiSmallMargin'` ) ) )
+                          t_arg = temp2 )
                 " added attrs (declared): the switch-driven properties the original
                 " set imperatively (setSnapToRow / setAllowDenseFill / setInlineBlockLayout)
                 )->a( n = `snapToRow`         v = client->_bind( snap_to_row )
@@ -192,7 +215,7 @@ CLASS z2ui5_cl_smpc_app_168 IMPLEMENTATION.
                     )->a( n = `header` v = `Sales Fulfillment Application Title`
                     )->a( n = `subheader` v = `Subtitle`
                     )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                    t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Press was fired on - {0}` ) ( `$event.oSource.getMetadata().getName()` ) ) )
+                                                                    t_arg = temp3 )
                     )->ele( `layoutData`
                         )->tag( n = `GridContainerItemLayoutData` ns = `f`
                             )->a( n = `minRows` v = `2`
@@ -246,7 +269,7 @@ CLASS z2ui5_cl_smpc_app_168 IMPLEMENTATION.
                             )->a( n = `subtitle` v = `Buy a single drive ticket for a date`
                             )->a( n = `iconSrc`  v = `sap-icon://bus-public-transport`
                             )->a( n = `press`    v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                               t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Press was fired on - {0}` ) ( `$event.oSource.getMetadata().getName()` ) ) )
+                                                                               t_arg = temp4 )
 
                     )->end(
                     )->ele( n = `content` ns = `f`
@@ -437,21 +460,54 @@ CLASS z2ui5_cl_smpc_app_168 IMPLEMENTATION.
 
   METHOD model_init.
 
-    cities = VALUE #(
-      ( text = `Berlin` key = `BR` )
-      ( text = `London` key = `LN` )
-      ( text = `Madrid` key = `MD` )
-      ( text = `Prague` key = `PR` )
-      ( text = `Paris`  key = `PS` )
-      ( text = `Sofia`  key = `SF` )
-      ( text = `Vienna` key = `VN` )
-    ).
+    DATA temp3 LIKE cities.
+    DATA temp4 LIKE LINE OF temp3.
+    DATA temp5 LIKE productitems.
+    DATA temp6 LIKE LINE OF temp5.
+    CLEAR temp3.
+    
+    temp4-text = `Berlin`.
+    temp4-key = `BR`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-text = `London`.
+    temp4-key = `LN`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-text = `Madrid`.
+    temp4-key = `MD`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-text = `Prague`.
+    temp4-key = `PR`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-text = `Paris`.
+    temp4-key = `PS`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-text = `Sofia`.
+    temp4-key = `SF`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-text = `Vienna`.
+    temp4-key = `VN`.
+    INSERT temp4 INTO TABLE temp3.
+    cities = temp3.
 
-    productitems = VALUE #(
-      ( title = `Notebook HT` subtitle = `ID23452256-D44`  revenue = `27.25K EUR` statusschema = `Success` )
-      ( title = `Notebook XT` subtitle = `ID27852256-D47`  revenue = `7.35K EUR`  statusschema = `Error` )
-      ( title = `Notebook ST` subtitle = `ID123555587-I05` revenue = `22.89K EUR` statusschema = `Warning` )
-    ).
+    
+    CLEAR temp5.
+    
+    temp6-title = `Notebook HT`.
+    temp6-subtitle = `ID23452256-D44`.
+    temp6-revenue = `27.25K EUR`.
+    temp6-statusschema = `Success`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-title = `Notebook XT`.
+    temp6-subtitle = `ID27852256-D47`.
+    temp6-revenue = `7.35K EUR`.
+    temp6-statusschema = `Error`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-title = `Notebook ST`.
+    temp6-subtitle = `ID123555587-I05`.
+    temp6-revenue = `22.89K EUR`.
+    temp6-statusschema = `Warning`.
+    INSERT temp6 INTO TABLE temp5.
+    productitems = temp5.
 
   ENDMETHOD.
 

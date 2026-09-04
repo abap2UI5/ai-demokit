@@ -19,7 +19,7 @@ CLASS z2ui5_cl_smpc_app_028 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -28,8 +28,117 @@ CLASS z2ui5_cl_smpc_app_028 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    DATA temp3 TYPE string_table.
+    DATA temp4 TYPE string_table.
+    DATA temp5 TYPE string_table.
+    DATA temp6 TYPE string_table.
+    DATA temp7 TYPE string_table.
+    DATA temp8 TYPE string_table.
+    DATA temp9 TYPE string_table.
+    DATA temp10 TYPE string_table.
+    DATA temp11 TYPE string_table.
+    DATA temp12 TYPE string_table.
+    DATA temp13 TYPE string_table.
+    DATA temp14 TYPE string_table.
+    DATA temp15 TYPE string_table.
+    DATA temp16 TYPE string_table.
+    DATA temp17 TYPE string_table.
+    DATA temp18 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `The tile is pressed.` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp2.
+    INSERT `show` INTO TABLE temp2.
+    INSERT `The tile is pressed.` INTO TABLE temp2.
+    
+    CLEAR temp3.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp3.
+    INSERT `show` INTO TABLE temp3.
+    INSERT `The tile is pressed.` INTO TABLE temp3.
+    
+    CLEAR temp4.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp4.
+    INSERT `show` INTO TABLE temp4.
+    INSERT `The tile is pressed.` INTO TABLE temp4.
+    
+    CLEAR temp5.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp5.
+    INSERT `show` INTO TABLE temp5.
+    INSERT `The tile is pressed.` INTO TABLE temp5.
+    
+    CLEAR temp6.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp6.
+    INSERT `show` INTO TABLE temp6.
+    INSERT `The tile is pressed.` INTO TABLE temp6.
+    
+    CLEAR temp7.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp7.
+    INSERT `show` INTO TABLE temp7.
+    INSERT `The tile is pressed.` INTO TABLE temp7.
+    
+    CLEAR temp8.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp8.
+    INSERT `show` INTO TABLE temp8.
+    INSERT `The tile is pressed.` INTO TABLE temp8.
+    
+    CLEAR temp9.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp9.
+    INSERT `show` INTO TABLE temp9.
+    INSERT `The tile is pressed.` INTO TABLE temp9.
+    
+    CLEAR temp10.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp10.
+    INSERT `show` INTO TABLE temp10.
+    INSERT `The tile is pressed.` INTO TABLE temp10.
+    
+    CLEAR temp11.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp11.
+    INSERT `show` INTO TABLE temp11.
+    INSERT `The tile is pressed.` INTO TABLE temp11.
+    
+    CLEAR temp12.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp12.
+    INSERT `show` INTO TABLE temp12.
+    INSERT `The tile is pressed.` INTO TABLE temp12.
+    
+    CLEAR temp13.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp13.
+    INSERT `show` INTO TABLE temp13.
+    INSERT `The tile is pressed.` INTO TABLE temp13.
+    
+    CLEAR temp14.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp14.
+    INSERT `show` INTO TABLE temp14.
+    INSERT `The tile is pressed.` INTO TABLE temp14.
+    
+    CLEAR temp15.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp15.
+    INSERT `show` INTO TABLE temp15.
+    INSERT `The tile is pressed.` INTO TABLE temp15.
+    
+    CLEAR temp16.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp16.
+    INSERT `show` INTO TABLE temp16.
+    INSERT `The tile is pressed.` INTO TABLE temp16.
+    
+    CLEAR temp17.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp17.
+    INSERT `show` INTO TABLE temp17.
+    INSERT `The tile is pressed.` INTO TABLE temp17.
+    
+    CLEAR temp18.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp18.
+    INSERT `show` INTO TABLE temp18.
+    INSERT `The tile is pressed.` INTO TABLE temp18.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
@@ -46,7 +155,7 @@ CLASS z2ui5_cl_smpc_app_028 IMPLEMENTATION.
             )->a( n = `frameType` v = `OneByHalf`
             )->a( n = `subheader` v = `Expenses`
             )->a( n = `press`     v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The tile is pressed.` ) ) )
+                                                                t_arg = temp1 )
 
             )->ele( `TileContent`
                 )->a( n = `unit`   v = `EUR`
@@ -66,7 +175,7 @@ CLASS z2ui5_cl_smpc_app_028 IMPLEMENTATION.
             )->a( n = `class`     v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
             )->a( n = `header`    v = `US Profit Margin`
             )->a( n = `press`     v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The tile is pressed.` ) ) )
+                                                                t_arg = temp2 )
             )->a( n = `frameType` v = `OneByHalf`
 
             )->ele( `TileContent`
@@ -87,7 +196,7 @@ CLASS z2ui5_cl_smpc_app_028 IMPLEMENTATION.
             )->a( n = `header`    v = `Sales Fulfillment Application Title`
             )->a( n = `subheader` v = `Subtitle`
             )->a( n = `press`     v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The tile is pressed.` ) ) )
+                                                                t_arg = temp3 )
             )->a( n = `frameType` v = `TwoByHalf`
 
             )->ele( `TileContent`
@@ -105,7 +214,7 @@ CLASS z2ui5_cl_smpc_app_028 IMPLEMENTATION.
             )->a( n = `header`    v = `Manage Activity Master Data Type`
             )->a( n = `subheader` v = `Subtitle`
             )->a( n = `press`     v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The tile is pressed.` ) ) )
+                                                                t_arg = temp4 )
             )->a( n = `frameType` v = `OneByHalf`
 
             )->ele( `TileContent`
@@ -121,7 +230,7 @@ CLASS z2ui5_cl_smpc_app_028 IMPLEMENTATION.
             )->a( n = `subheader` v = `Subtitle Launch Tile`
             )->a( n = `mode`      v = `HeaderMode`
             )->a( n = `press`     v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The tile is pressed.` ) ) )
+                                                                t_arg = temp5 )
 
             )->tag( `TileContent`
                 )->a( n = `unit`   v = `EUR`
@@ -134,7 +243,7 @@ CLASS z2ui5_cl_smpc_app_028 IMPLEMENTATION.
             )->a( n = `header`    v = `Jessica D. Prince Senior Consultant`
             )->a( n = `subheader` v = `Department`
             )->a( n = `press`     v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The tile is pressed.` ) ) )
+                                                                t_arg = temp6 )
 
             )->ele( `TileContent`
                 )->tag( `ImageContent`
@@ -148,7 +257,7 @@ CLASS z2ui5_cl_smpc_app_028 IMPLEMENTATION.
             )->a( n = `backgroundImage` v = `https://sdk.openui5.org/test-resources/sap/m/images/NewsImage1.png`
             )->a( n = `frameType`       v = `OneByOne`
             )->a( n = `press`           v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                      t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The tile is pressed.` ) ) )
+                                                                      t_arg = temp7 )
 
             )->ele( `TileContent`
                 )->a( n = `footer`    v = `Report Available`
@@ -166,7 +275,7 @@ CLASS z2ui5_cl_smpc_app_028 IMPLEMENTATION.
             )->a( n = `backgroundImage` v = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/SlideTile/images/NewsImage1.png`
             )->a( n = `frameType`       v = `TwoByOne`
             )->a( n = `press`           v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                      t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The tile is pressed.` ) ) )
+                                                                      t_arg = temp8 )
 
             )->ele( `TileContent`
                 )->a( n = `footer` v = `August 21, 2016`
@@ -183,7 +292,7 @@ CLASS z2ui5_cl_smpc_app_028 IMPLEMENTATION.
             )->a( n = `header`      v = `Country-Specific Profit Margin`
             )->a( n = `subheader`   v = `Expenses`
             )->a( n = `press`       v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                  t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The tile is pressed.` ) ) )
+                                                                  t_arg = temp9 )
             )->a( n = `systemInfo`  v = `system info`
             )->a( n = `appShortcut` v = `app shortcut`
 
@@ -210,7 +319,7 @@ CLASS z2ui5_cl_smpc_app_028 IMPLEMENTATION.
                 )->a( n = `backgroundImage` v = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/SlideTile/images/NewsImage1.png`
                 )->a( n = `frameType`       v = `TwoByOne`
                 )->a( n = `press`           v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                          t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The tile is pressed.` ) ) )
+                                                                          t_arg = temp10 )
 
                 )->ele( `TileContent`
                     )->a( n = `footer` v = `August 21, 2016`
@@ -243,7 +352,7 @@ CLASS z2ui5_cl_smpc_app_028 IMPLEMENTATION.
             )->a( n = `header`    v = `Feed Tile that shows updates of the last feeds given to a specific topic:`
             )->a( n = `frameType` v = `TwoByOne`
             )->a( n = `press`     v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The tile is pressed.` ) ) )
+                                                                t_arg = temp11 )
 
             )->ele( `TileContent`
                 )->a( n = `footer` v = `New Notifications`
@@ -260,7 +369,7 @@ CLASS z2ui5_cl_smpc_app_028 IMPLEMENTATION.
             )->a( n = `class`     v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
             )->a( n = `header`    v = `Country-Specific Profit Margin`
             )->a( n = `press`     v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The tile is pressed.` ) ) )
+                                                                t_arg = temp12 )
             )->a( n = `frameType` v = `TwoByHalf`
 
             )->ele( `TileContent`
@@ -282,7 +391,7 @@ CLASS z2ui5_cl_smpc_app_028 IMPLEMENTATION.
             )->a( n = `header`    v = `Cumulative Totals`
             )->a( n = `subheader` v = `Expenses`
             )->a( n = `press`     v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The tile is pressed.` ) ) )
+                                                                t_arg = temp13 )
             )->a( n = `frameType` v = `OneByHalf`
 
             )->ele( `TileContent`
@@ -302,7 +411,7 @@ CLASS z2ui5_cl_smpc_app_028 IMPLEMENTATION.
             )->a( n = `header`    v = `Right click to open in new tab`
             )->a( n = `subheader` v = `Link tile`
             )->a( n = `press`     v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The tile is pressed.` ) ) )
+                                                                t_arg = temp14 )
             )->a( n = `url`       v = `https://www.sap.com/`
             )->a( n = `frameType` v = `TwoByHalf`
 
@@ -317,7 +426,7 @@ CLASS z2ui5_cl_smpc_app_028 IMPLEMENTATION.
             )->a( n = `class`  v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
             )->a( n = `header` v = `US Profit Margin`
             )->a( n = `press`  v = client->follow_up_action( val   = client->cs_event-control_global
-                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The tile is pressed.` ) ) )
+                                                             t_arg = temp15 )
 
             )->ele( `TileContent`
                 )->a( n = `unit` v = `Unit`
@@ -337,7 +446,7 @@ CLASS z2ui5_cl_smpc_app_028 IMPLEMENTATION.
             )->a( n = `header`      v = `Sales Fulfillment Application Title`
             )->a( n = `subheader`   v = `Subtitle`
             )->a( n = `press`       v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                  t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The tile is pressed.` ) ) )
+                                                                  t_arg = temp16 )
             )->a( n = `systemInfo`  v = `system`
             )->a( n = `appShortcut` v = `shortcut`
 
@@ -356,7 +465,7 @@ CLASS z2ui5_cl_smpc_app_028 IMPLEMENTATION.
             )->a( n = `header`    v = `Cumulative Totals`
             )->a( n = `subheader` v = `Expenses`
             )->a( n = `press`     v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The tile is pressed.` ) ) )
+                                                                t_arg = temp17 )
 
             )->ele( `TileContent`
                 )->a( n = `unit`   v = `Unit`
@@ -375,7 +484,7 @@ CLASS z2ui5_cl_smpc_app_028 IMPLEMENTATION.
             )->a( n = `header`    v = `Right click to open in new tab`
             )->a( n = `subheader` v = `Link tile`
             )->a( n = `press`     v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The tile is pressed.` ) ) )
+                                                                t_arg = temp18 )
             )->a( n = `url`       v = `https://www.sap.com/`
             )->a( n = `frameType` v = `TwoByOne`
 

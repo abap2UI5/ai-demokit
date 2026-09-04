@@ -36,12 +36,12 @@ CLASS z2ui5_cl_smpc_app_518 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -50,8 +50,17 @@ CLASS z2ui5_cl_smpc_app_518 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 LIKE LINE OF temp1.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `REDIRECT` INTO TABLE temp1.
+    
+    temp2 = |\{ URL: 'http://www.sap.com', NEW_WINDOW: true \}|.
+    INSERT temp2 INTO TABLE temp1.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
@@ -92,7 +101,7 @@ CLASS z2ui5_cl_smpc_app_518 IMPLEMENTATION.
                 )->a( n = `text`   v = `www.sap.com`
                 )->a( n = `active` v = `true`
                 )->a( n = `press`  v = client->follow_up_action( val   = client->cs_event-urlhelper
-                                                                 t_arg = VALUE #( ( `REDIRECT` ) ( |\{ URL: 'http://www.sap.com', NEW_WINDOW: true \}| ) ) ) ).
+                                                                 t_arg = temp1 ) ).
 
     client->view_display( view->stringify( ) ).
 
@@ -117,7 +126,8 @@ CLASS z2ui5_cl_smpc_app_518 IMPLEMENTATION.
 
   METHOD popup_feedback_display.
 
-    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA popup TYPE REF TO z2ui5_cl_ui5_view_builder.
+    popup = z2ui5_cl_ui5_view_builder=>factory( ).
 
     popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns`      v = `sap.m`

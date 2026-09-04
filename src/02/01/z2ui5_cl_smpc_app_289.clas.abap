@@ -32,9 +32,9 @@ CLASS z2ui5_cl_smpc_app_289 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -43,7 +43,8 @@ CLASS z2ui5_cl_smpc_app_289 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the original builds the MessageStrip in the controller and adds it to the
     " VerticalLayout (destroying the previous one first). Here it is part of the
@@ -80,6 +81,11 @@ CLASS z2ui5_cl_smpc_app_289 IMPLEMENTATION.
 
 
   METHOD on_event.
+      DATA temp1 TYPE string.
+      DATA temp4 TYPE xsdboolean.
+      DATA temp5 TYPE xsdboolean.
+      DATA temp2 TYPE string_table.
+      DATA temp3 LIKE LINE OF temp2.
 
     IF client->get_event( ) = `GENERATE`.
       " _generateMsgStrip picks type, showIcon and showCloseButton at random.
@@ -91,23 +97,39 @@ CLASS z2ui5_cl_smpc_app_289 IMPLEMENTATION.
       strip_visible = abap_true.
       strip_text    = `Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ` &&
                       `ad minim veniam, quis nostrud exercitation ullamco.`.
-      strip_type    = SWITCH string( press_count MOD 4
-                                     WHEN 1 THEN `Information`
-                                     WHEN 2 THEN `Warning`
-                                     WHEN 3 THEN `Error`
-                                     WHEN 0 THEN `Success` ).
-      show_icon     = xsdbool( press_count MOD 2 = 1 ).
-      show_close    = xsdbool( press_count MOD 3 <> 0 ).
+      
+      CASE press_count MOD 4.
+        WHEN 1.
+          temp1 = `Information`.
+        WHEN 2.
+          temp1 = `Warning`.
+        WHEN 3.
+          temp1 = `Error`.
+        WHEN 0.
+          temp1 = `Success`.
+      ENDCASE.
+      strip_type    = temp1.
+      
+      temp4 = boolc( press_count MOD 2 = 1 ).
+      show_icon     = temp4.
+      
+      temp5 = boolc( press_count MOD 3 <> 0 ).
+      show_close    = temp5.
 
       " onInit takes an InvisibleMessage instance and _generateMsgStrip
       " announces the new strip assertively. InvisibleMessage is a singleton
       " with no control id, so the announcement goes through the global
       " target added for it (pr/invisible-message-announce)
+      
+      CLEAR temp2.
+      INSERT `INVISIBLE_MESSAGE` INTO TABLE temp2.
+      INSERT `announce` INTO TABLE temp2.
+      
+      temp3 = |New Information Bar of type { strip_type } { strip_text }|.
+      INSERT temp3 INTO TABLE temp2.
+      INSERT `Assertive` INTO TABLE temp2.
       client->follow_up_action( val   = client->cs_event-control_global
-                                t_arg = VALUE #( ( `INVISIBLE_MESSAGE` )
-                                                 ( `announce` )
-                                                 ( |New Information Bar of type { strip_type } { strip_text }| )
-                                                 ( `Assertive` ) ) ).
+                                t_arg = temp2 ).
 
       " showMsgStrip DESTROYS the old strip and creates a new one, so a strip
       " the user closed always comes back. Rebinding cannot do that on its own:

@@ -9,7 +9,7 @@ CLASS z2ui5_cl_smpc_app_504 DEFINITION PUBLIC.
              key  TYPE string,
              text TYPE string,
            END OF ty_s_token.
-    TYPES ty_t_token TYPE STANDARD TABLE OF ty_s_token WITH EMPTY KEY.
+    TYPES ty_t_token TYPE STANDARD TABLE OF ty_s_token WITH DEFAULT KEY.
 
     DATA t_tokens TYPE ty_t_token.
     DATA value    TYPE string.
@@ -30,9 +30,9 @@ CLASS z2ui5_cl_smpc_app_504 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -41,7 +41,8 @@ CLASS z2ui5_cl_smpc_app_504 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
@@ -89,13 +90,18 @@ CLASS z2ui5_cl_smpc_app_504 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA text TYPE string.
+            DATA temp1 TYPE string_table.
+            DATA temp3 TYPE string_table.
+            DATA temp5 TYPE string_table.
 
     CASE client->get_event( ).
 
       WHEN `VALIDATE`.
         " the validator's switch: c/d become themselves, e becomes f, a and f are
         " added after a delay and b is rejected after one
-        DATA(text) = client->get_event_arg( ).
+        
+        text = client->get_event_arg( ).
         CLEAR value.
         CASE text.
           WHEN `c` OR `d`.
@@ -103,15 +109,27 @@ CLASS z2ui5_cl_smpc_app_504 IMPLEMENTATION.
           WHEN `e`.
             token_add( `f` ).
           WHEN `a`.
+            
+            CLEAR temp1.
+            INSERT `ADD_A` INTO TABLE temp1.
+            INSERT `3000` INTO TABLE temp1.
             client->follow_up_action( val   = client->cs_event-start_timer
-                                      t_arg = VALUE #( ( `ADD_A` ) ( `3000` ) ) ).
+                                      t_arg = temp1 ).
           WHEN `b`.
             " the original's callback answers null after five seconds - nothing is added
+            
+            CLEAR temp3.
+            INSERT `REJECT_B` INTO TABLE temp3.
+            INSERT `5000` INTO TABLE temp3.
             client->follow_up_action( val   = client->cs_event-start_timer
-                                      t_arg = VALUE #( ( `REJECT_B` ) ( `5000` ) ) ).
+                                      t_arg = temp3 ).
           WHEN `f`.
+            
+            CLEAR temp5.
+            INSERT `ADD_F` INTO TABLE temp5.
+            INSERT `10000` INTO TABLE temp5.
             client->follow_up_action( val   = client->cs_event-start_timer
-                                      t_arg = VALUE #( ( `ADD_F` ) ( `10000` ) ) ).
+                                      t_arg = temp5 ).
         ENDCASE.
 
       WHEN `ADD_A`.
@@ -136,10 +154,18 @@ CLASS z2ui5_cl_smpc_app_504 IMPLEMENTATION.
 
     " a token whose key is already there is not added again - the original's
     " validator relies on the Tokenizer refusing a duplicate key
-    IF line_exists( t_tokens[ key = text ] ).
+    DATA temp7 LIKE sy-subrc.
+    DATA temp8 TYPE z2ui5_cl_smpc_app_504=>ty_s_token.
+    READ TABLE t_tokens WITH KEY key = text TRANSPORTING NO FIELDS.
+    temp7 = sy-subrc.
+    IF temp7 = 0.
       RETURN.
     ENDIF.
-    APPEND VALUE #( key = text text = text ) TO t_tokens.
+    
+    CLEAR temp8.
+    temp8-key = text.
+    temp8-text = text.
+    APPEND temp8 TO t_tokens.
 
   ENDMETHOD.
 

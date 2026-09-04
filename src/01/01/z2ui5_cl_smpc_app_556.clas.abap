@@ -11,7 +11,7 @@ CLASS z2ui5_cl_smpc_app_556 DEFINITION PUBLIC.
              dateofsale   TYPE string,
              selected     TYPE abap_bool,
            END OF ty_s_product.
-    TYPES ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
+    TYPES ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH DEFAULT KEY.
 
     DATA t_products    TYPE ty_t_product.
     DATA selected_date TYPE string.
@@ -34,12 +34,12 @@ CLASS z2ui5_cl_smpc_app_556 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -48,7 +48,8 @@ CLASS z2ui5_cl_smpc_app_556 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -125,9 +126,16 @@ CLASS z2ui5_cl_smpc_app_556 IMPLEMENTATION.
 
   METHOD popup_date_display.
 
-    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA popup TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    popup = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the dialog and its Calendar are built in the controller (new Dialog({ ... }))
+    
+    CLEAR temp1.
+    INSERT `$event.oSource.getSelectedDates()[0].getStartDate().getFullYear()` INTO TABLE temp1.
+    INSERT `$event.oSource.getSelectedDates()[0].getStartDate().getMonth() + 1` INTO TABLE temp1.
+    INSERT `$event.oSource.getSelectedDates()[0].getStartDate().getDate()` INTO TABLE temp1.
     popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns`         v = `sap.m`
         )->a( n = `xmlns:core`    v = `sap.ui.core`
@@ -155,10 +163,7 @@ CLASS z2ui5_cl_smpc_app_556 IMPLEMENTATION.
                 )->a( n = `width`  v = `100%`
                 )->a( n = `select` v = client->_event(
                           val   = `CALENDAR_SELECT`
-                          t_arg = VALUE #(
-                            ( `$event.oSource.getSelectedDates()[0].getStartDate().getFullYear()` )
-                            ( `$event.oSource.getSelectedDates()[0].getStartDate().getMonth() + 1` )
-                            ( `$event.oSource.getSelectedDates()[0].getStartDate().getDate()` ) ) ) ).
+                          t_arg = temp1 ) ).
 
     client->popup_display( popup->stringify( ) ).
 
@@ -166,26 +171,41 @@ CLASS z2ui5_cl_smpc_app_556 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp3 LIKE sy-subrc.
+        DATA temp2 TYPE xsdboolean.
+        DATA temp4 TYPE i.
+        DATA temp1 TYPE i.
+        FIELD-SYMBOLS <product> LIKE LINE OF t_products.
 
     CASE client->get_event( ).
 
       WHEN `SELECTION_CHANGE`.
         " handleTableSelectionChange enables the button while at least one row is
         " selected; the row flags are bound two-way, so the count is already here
-        has_selection = xsdbool( line_exists( t_products[ selected = abap_true ] ) ).
+        
+        READ TABLE t_products WITH KEY selected = abap_true TRANSPORTING NO FIELDS.
+        temp3 = sy-subrc.
+        
+        temp2 = boolc( temp3 = 0 ).
+        has_selection = temp2.
 
       WHEN `CHANGE_DATES`.
         selected_date = ``.
         popup_date_display( ).
 
       WHEN `CALENDAR_SELECT`.
+        
+        temp4 = client->get_event_arg( 2 ).
+        
+        temp1 = client->get_event_arg( 3 ).
         selected_date = |{ client->get_event_arg( ) }| &&
-                        |-{ CONV i( client->get_event_arg( 2 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
-                        |-{ CONV i( client->get_event_arg( 3 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }|.
+                        |-{ temp4 WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
+                        |-{ temp1 WIDTH = 2 ALIGN = RIGHT PAD = '0' }|.
 
       WHEN `DATE_OK`.
         " the OK button writes the picked date into every SELECTED row
-        LOOP AT t_products ASSIGNING FIELD-SYMBOL(<product>) WHERE selected = abap_true.
+        
+        LOOP AT t_products ASSIGNING <product> WHERE selected = abap_true.
           <product>-dateofsale = selected_date.
         ENDLOOP.
         client->popup_destroy( ).
@@ -201,18 +221,51 @@ CLASS z2ui5_cl_smpc_app_556 IMPLEMENTATION.
   METHOD model_init.
 
     " setSizeLimit( 10 ) keeps the first ten rows of the mock collection
-    t_products = VALUE #(
-      ( name = `Notebook Basic 15`        suppliername = `Very Best Screens` dateofsale = `2017-03-26` )
-      ( name = `Notebook Basic 17`        suppliername = `Very Best Screens` dateofsale = `2017-04-17` )
-      ( name = `Notebook Basic 18`        suppliername = `Very Best Screens` dateofsale = `2017-01-07` )
-      ( name = `Notebook Basic 19`        suppliername = `Smartcards`        dateofsale = `2017-04-09` )
-      ( name = `ITelO Vault`              suppliername = `Technocom`         dateofsale = `2017-05-17` )
-      ( name = `Notebook Professional 15` suppliername = `Very Best Screens` dateofsale = `2017-02-22` )
-      ( name = `Notebook Professional 17` suppliername = `Very Best Screens` dateofsale = `2017-01-02` )
-      ( name = `ITelO Vault Net`          suppliername = `Technocom`         dateofsale = `2017-05-08` )
-      ( name = `ITelO Vault SAT`          suppliername = `Technocom`         dateofsale = `2017-06-30` )
-      ( name = `Comfort Easy`             suppliername = `Technocom`         dateofsale = `2017-03-02` )
-    ).
+    DATA temp5 TYPE z2ui5_cl_smpc_app_556=>ty_t_product.
+    DATA temp6 LIKE LINE OF temp5.
+    CLEAR temp5.
+    
+    temp6-name = `Notebook Basic 15`.
+    temp6-suppliername = `Very Best Screens`.
+    temp6-dateofsale = `2017-03-26`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-name = `Notebook Basic 17`.
+    temp6-suppliername = `Very Best Screens`.
+    temp6-dateofsale = `2017-04-17`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-name = `Notebook Basic 18`.
+    temp6-suppliername = `Very Best Screens`.
+    temp6-dateofsale = `2017-01-07`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-name = `Notebook Basic 19`.
+    temp6-suppliername = `Smartcards`.
+    temp6-dateofsale = `2017-04-09`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-name = `ITelO Vault`.
+    temp6-suppliername = `Technocom`.
+    temp6-dateofsale = `2017-05-17`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-name = `Notebook Professional 15`.
+    temp6-suppliername = `Very Best Screens`.
+    temp6-dateofsale = `2017-02-22`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-name = `Notebook Professional 17`.
+    temp6-suppliername = `Very Best Screens`.
+    temp6-dateofsale = `2017-01-02`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-name = `ITelO Vault Net`.
+    temp6-suppliername = `Technocom`.
+    temp6-dateofsale = `2017-05-08`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-name = `ITelO Vault SAT`.
+    temp6-suppliername = `Technocom`.
+    temp6-dateofsale = `2017-06-30`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-name = `Comfort Easy`.
+    temp6-suppliername = `Technocom`.
+    temp6-dateofsale = `2017-03-02`.
+    INSERT temp6 INTO TABLE temp5.
+    t_products = temp5.
 
   ENDMETHOD.
 

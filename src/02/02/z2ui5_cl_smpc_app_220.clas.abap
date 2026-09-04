@@ -9,7 +9,7 @@ CLASS z2ui5_cl_smpc_app_220 DEFINITION PUBLIC.
              start TYPE string,
              end   TYPE string,
            END OF ty_s_disabled.
-    TYPES ty_t_disabled TYPE STANDARD TABLE OF ty_s_disabled WITH EMPTY KEY.
+    TYPES ty_t_disabled TYPE STANDARD TABLE OF ty_s_disabled WITH DEFAULT KEY.
 
     DATA min_date          TYPE string.
     DATA max_date          TYPE string.
@@ -33,12 +33,12 @@ CLASS z2ui5_cl_smpc_app_220 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -47,7 +47,9 @@ CLASS z2ui5_cl_smpc_app_220 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " Calendar min/max/disabled dates are typed "object" and demand real JS Date
     " objects; the model keeps ABAP DATS strings and Formatter.DateAbapDateToDateObject from the
@@ -59,6 +61,11 @@ CLASS z2ui5_cl_smpc_app_220 IMPLEMENTATION.
     " chained calls resolve there (measured with
     " scripts/probes/event-arg-expression-probe.mjs) - and the long-style English
     " rendering of DateFormat.getInstance({style:'long'}) is composed in ABAP.
+    
+    CLEAR temp1.
+    INSERT `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getFullYear() : 0` INTO TABLE temp1.
+    INSERT `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getMonth() + 1 : 0` INTO TABLE temp1.
+    INSERT `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getDate() : 0` INTO TABLE temp1.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`      v = `sap.ui.layout`
         )->a( n = `xmlns:u`      v = `sap.ui.unified`
@@ -86,10 +93,7 @@ CLASS z2ui5_cl_smpc_app_220 IMPLEMENTATION.
                 )->a( n = `disabledDates`   v = client->_bind( t_disabled )
                 )->a( n = `showWeekNumbers` v = client->_bind( show_week_numbers )
                 )->a( n = `select`          v = client->_event( val   = `CAL_SELECT`
-                                                                t_arg = VALUE #(
-                                                                  ( `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getFullYear() : 0` )
-                                                                  ( `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getMonth() + 1 : 0` )
-                                                                  ( `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getDate() : 0` ) ) )
+                                                                t_arg = temp1 )
 
                 )->ele( n = `disabledDates` ns = `u`
                     )->tag( n = `DateRange` ns = `u`
@@ -135,24 +139,56 @@ CLASS z2ui5_cl_smpc_app_220 IMPLEMENTATION.
 
 
   METHOD on_event.
+      DATA year TYPE string.
+        DATA temp3 TYPE i.
+        DATA month LIKE temp3.
+        DATA temp4 TYPE string.
+        DATA temp1 TYPE i.
 
     IF client->get_event( ) = `CAL_SELECT`.
       " handleCalendarSelect: DateFormat.getInstance({style:'long'}).format(oDate)
       " - the English long form ('March 17, 2026'). The day arrives as its three
       " LOCAL parts; year 0 means the re-click cleared the selection
-      DATA(year) = client->get_event_arg( ).
+      
+      year = client->get_event_arg( ).
       IF year IS INITIAL OR year = `0`.
         selected_date = `No Date Selected`.
       ELSE.
-        DATA(month) = CONV i( client->get_event_arg( 2 ) ).
-        selected_date = |{ SWITCH string( month
-                                          WHEN 1 THEN `January`   WHEN 2 THEN `February`
-                                          WHEN 3 THEN `March`     WHEN 4 THEN `April`
-                                          WHEN 5 THEN `May`       WHEN 6 THEN `June`
-                                          WHEN 7 THEN `July`      WHEN 8 THEN `August`
-                                          WHEN 9 THEN `September` WHEN 10 THEN `October`
-                                          WHEN 11 THEN `November` WHEN 12 THEN `December` ) }| &&
-                        | { CONV i( client->get_event_arg( 3 ) ) }, { year }|.
+        
+        temp3 = client->get_event_arg( 2 ).
+        
+        month = temp3.
+        
+        CASE month.
+          WHEN 1.
+            temp4 = `January`.
+          WHEN 2.
+            temp4 = `February`.
+          WHEN 3.
+            temp4 = `March`.
+          WHEN 4.
+            temp4 = `April`.
+          WHEN 5.
+            temp4 = `May`.
+          WHEN 6.
+            temp4 = `June`.
+          WHEN 7.
+            temp4 = `July`.
+          WHEN 8.
+            temp4 = `August`.
+          WHEN 9.
+            temp4 = `September`.
+          WHEN 10.
+            temp4 = `October`.
+          WHEN 11.
+            temp4 = `November`.
+          WHEN 12.
+            temp4 = `December`.
+        ENDCASE.
+        
+        temp1 = client->get_event_arg( 3 ).
+        selected_date = |{ temp4 }| &&
+                        | { temp1 }, { year }|.
       ENDIF.
     ENDIF.
 
@@ -160,6 +196,8 @@ CLASS z2ui5_cl_smpc_app_220 IMPLEMENTATION.
 
 
   METHOD model_init.
+    DATA temp5 TYPE z2ui5_cl_smpc_app_220=>ty_t_disabled.
+    DATA temp6 LIKE LINE OF temp5.
 
     " original values are UI5Date.getInstance(year, month0, day) - month is
     " 0-based, and those are LOCAL dates. They are kept in the ABAP DATS form
@@ -173,9 +211,16 @@ CLASS z2ui5_cl_smpc_app_220 IMPLEMENTATION.
     max_date          = `20501231`.
     show_week_numbers = abap_true.
     selected_date     = `No Date Selected`.
-    t_disabled        = VALUE #(
-      ( start = `20160104` end = `20160110` )
-      ( start = `20160115` end = `` ) ).
+    
+    CLEAR temp5.
+    
+    temp6-start = `20160104`.
+    temp6-end = `20160110`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-start = `20160115`.
+    temp6-end = ``.
+    INSERT temp6 INTO TABLE temp5.
+    t_disabled        = temp5.
 
   ENDMETHOD.
 

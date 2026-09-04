@@ -19,7 +19,7 @@ CLASS z2ui5_cl_smpc_app_122 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -28,8 +28,15 @@ CLASS z2ui5_cl_smpc_app_122 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `Over budget!` INTO TABLE temp1.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
@@ -106,7 +113,7 @@ CLASS z2ui5_cl_smpc_app_122 IMPLEMENTATION.
                 )->a( n = `src`   v = `sap-icon://stethoscope`
                 )->a( n = `class` v = `size5`
                 )->a( n = `color` v = `#8875E7`
-                )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Over budget!` ) ) )
+                )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = temp1 )
                 )->ele( n = `layoutData` ns = `core`
                     )->tag( `FlexItemData`
                         )->a( n = `growFactor` v = `1` ).

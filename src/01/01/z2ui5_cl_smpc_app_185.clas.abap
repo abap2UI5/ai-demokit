@@ -11,7 +11,7 @@ CLASS z2ui5_cl_smpc_app_185 DEFINITION PUBLIC.
         text           TYPE string,
         additionaltext TYPE string,
       END OF ty_item.
-    DATA t_items TYPE STANDARD TABLE OF ty_item WITH EMPTY KEY.
+    DATA t_items TYPE STANDARD TABLE OF ty_item WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -28,10 +28,10 @@ CLASS z2ui5_cl_smpc_app_185 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -40,7 +40,8 @@ CLASS z2ui5_cl_smpc_app_185 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " The default model is one array of rows; abap2UI5's single default model is
     " an object, so the sample's root-array bindings ({/}, /9/text) resolve
@@ -237,13 +238,20 @@ CLASS z2ui5_cl_smpc_app_185 IMPLEMENTATION.
     " view binds the finished text.
     CONSTANTS lc_nbsp TYPE string VALUE ` `.
 
-    DATA(lv_repl) = ` ` && lc_nbsp.
+    DATA lv_repl TYPE string.
     DATA lv_inverted TYPE i.
     DATA lv_text TYPE string.
-    DATA lv_add  TYPE string.
+    DATA lv_add TYPE string.
+      DATA lv_i LIKE sy-index.
+      DATA temp1 TYPE z2ui5_cl_smpc_app_185=>ty_item.
+    lv_repl = ` ` && lc_nbsp.
+    
+    
+    
 
     DO 10 TIMES.
-      DATA(lv_i) = sy-index.
+      
+      lv_i = sy-index.
       lv_inverted = 11 - lv_i.
 
       lv_text = |Text with { repeat( val = ` ` occ = lv_i - 1 ) }{ lv_i } whitespaces|.
@@ -252,7 +260,12 @@ CLASS z2ui5_cl_smpc_app_185 IMPLEMENTATION.
       REPLACE ALL OCCURRENCES OF `  ` IN lv_text WITH lv_repl.
       REPLACE ALL OCCURRENCES OF `  ` IN lv_add  WITH lv_repl.
 
-      APPEND VALUE #( key = lv_i text = lv_text additionaltext = lv_add ) TO t_items.
+      
+      CLEAR temp1.
+      temp1-key = lv_i.
+      temp1-text = lv_text.
+      temp1-additionaltext = lv_add.
+      APPEND temp1 TO t_items.
     ENDDO.
 
   ENDMETHOD.

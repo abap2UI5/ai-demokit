@@ -15,7 +15,7 @@ CLASS z2ui5_cl_smpc_app_376 DEFINITION PUBLIC.
         infoicon      TYPE string,
         wrapcharlimit TYPE i,
       END OF ty_s_name.
-    DATA t_names TYPE STANDARD TABLE OF ty_s_name WITH EMPTY KEY.
+    DATA t_names TYPE STANDARD TABLE OF ty_s_name WITH DEFAULT KEY.
 
     DATA wrapping TYPE abap_bool.
     DATA inverted TYPE abap_bool.
@@ -35,10 +35,10 @@ CLASS z2ui5_cl_smpc_app_376 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -47,7 +47,8 @@ CLASS z2ui5_cl_smpc_app_376 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -99,6 +100,8 @@ CLASS z2ui5_cl_smpc_app_376 IMPLEMENTATION.
 
 
   METHOD model_init.
+    DATA temp1 LIKE t_names.
+    DATA temp2 LIKE LINE OF temp1.
 
     " Data of the inline JSON model defined in the original sample controller.
     " The original seeds only wrapping: false; /inverted starts out undefined,
@@ -106,50 +109,58 @@ CLASS z2ui5_cl_smpc_app_376 IMPLEMENTATION.
     wrapping = abap_false.
     inverted = abap_false.
 
-    t_names = VALUE #(
-      ( title     = `Short title`
-        icon      = `sap-icon://favorite`
-        highlight = `Success`
-        info      = `Available`
-        infoicon  = `sap-icon://accept` )
-      ( title     = `Short title with long info text`
-        icon      = `sap-icon://employee`
-        highlight = `Error`
-        info      = `This is a very long information status text that demonstrates truncation and wrapping behavior`
-        infoicon  = `sap-icon://decline` )
-      ( title     = `wrapCharLimit is set to Default. Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ` &&
-                    `ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita ` &&
-                    `kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, ` &&
-                    `sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, ` &&
-                    `consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.`
-        desc      = `Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam ` &&
-                    `erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata ` &&
-                    `sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor ` &&
-                    `invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed ` &&
-                    `diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.`
-        icon      = `sap-icon://favorite`
-        highlight = `Success`
-        info      = `Completed`
-        infoicon  = `sap-icon://accept` )
-      ( title     = `wrapCharLimit is set to 100. Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut ` &&
-                    `labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd ` &&
-                    `gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed ` &&
-                    `diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, ` &&
-                    `consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.`
-        desc      = `Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam ` &&
-                    `erat, sed diam voluptua.`
-        icon          = `sap-icon://employee`
-        highlight     = `Error`
-        info          = `Incomplete`
-        infoicon      = `sap-icon://decline`
-        wrapcharlimit = 100 )
-      ( title         = `Title text`
-        desc          = `Description text`
-        icon          = `sap-icon://accept`
-        highlight     = `Information`
-        info          = `Information`
-        infoicon      = `sap-icon://information`
-        wrapcharlimit = 10 ) ).
+    
+    CLEAR temp1.
+    
+    temp2-title = `Short title`.
+    temp2-icon = `sap-icon://favorite`.
+    temp2-highlight = `Success`.
+    temp2-info = `Available`.
+    temp2-infoicon = `sap-icon://accept`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Short title with long info text`.
+    temp2-icon = `sap-icon://employee`.
+    temp2-highlight = `Error`.
+    temp2-info = `This is a very long information status text that demonstrates truncation and wrapping behavior`.
+    temp2-infoicon = `sap-icon://decline`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `wrapCharLimit is set to Default. Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ` &&
+`ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita ` &&
+`kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, ` &&
+`sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, ` &&
+`consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.`.
+    temp2-desc = `Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam ` &&
+`erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata ` &&
+`sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor ` &&
+`invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed ` &&
+`diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.`.
+    temp2-icon = `sap-icon://favorite`.
+    temp2-highlight = `Success`.
+    temp2-info = `Completed`.
+    temp2-infoicon = `sap-icon://accept`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `wrapCharLimit is set to 100. Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut ` &&
+`labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd ` &&
+`gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed ` &&
+`diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, ` &&
+`consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.`.
+    temp2-desc = `Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam ` &&
+`erat, sed diam voluptua.`.
+    temp2-icon = `sap-icon://employee`.
+    temp2-highlight = `Error`.
+    temp2-info = `Incomplete`.
+    temp2-infoicon = `sap-icon://decline`.
+    temp2-wrapcharlimit = 100.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Title text`.
+    temp2-desc = `Description text`.
+    temp2-icon = `sap-icon://accept`.
+    temp2-highlight = `Information`.
+    temp2-info = `Information`.
+    temp2-infoicon = `sap-icon://information`.
+    temp2-wrapcharlimit = 10.
+    INSERT temp2 INTO TABLE temp1.
+    t_names = temp1.
 
   ENDMETHOD.
 

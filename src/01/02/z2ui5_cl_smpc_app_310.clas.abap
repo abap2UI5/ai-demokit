@@ -21,9 +21,9 @@ CLASS z2ui5_cl_smpc_app_310 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -32,7 +32,8 @@ CLASS z2ui5_cl_smpc_app_310 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
@@ -75,7 +76,8 @@ CLASS z2ui5_cl_smpc_app_310 IMPLEMENTATION.
 
     " openPopover builds the ResponsivePopover imperatively (new ResponsivePopover({...}).openBy(button));
     " expressed as a core:FragmentDefinition shown anchored via popover_display( xml by_id )
-    DATA(popover) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA popover TYPE REF TO z2ui5_cl_ui5_view_builder.
+    popover = z2ui5_cl_ui5_view_builder=>factory( ).
 
     popover->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns`      v = `sap.m`

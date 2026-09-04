@@ -12,7 +12,7 @@ CLASS z2ui5_cl_smpc_app_594 DEFINITION PUBLIC.
         picture TYPE string,
       END OF ty_s_employee.
 
-    DATA t_employees TYPE STANDARD TABLE OF ty_s_employee WITH EMPTY KEY.
+    DATA t_employees TYPE STANDARD TABLE OF ty_s_employee WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -29,10 +29,10 @@ CLASS z2ui5_cl_smpc_app_594 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -41,8 +41,229 @@ CLASS z2ui5_cl_smpc_app_594 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 LIKE LINE OF t_employees.
+    DATA temp2 LIKE sy-tabix.
+    DATA temp3 LIKE LINE OF t_employees.
+    DATA temp4 LIKE sy-tabix.
+    DATA temp5 LIKE LINE OF t_employees.
+    DATA temp6 LIKE sy-tabix.
+    DATA temp7 LIKE LINE OF t_employees.
+    DATA temp8 LIKE sy-tabix.
+    DATA temp9 LIKE LINE OF t_employees.
+    DATA temp10 LIKE sy-tabix.
+    DATA temp11 LIKE LINE OF t_employees.
+    DATA temp12 LIKE sy-tabix.
+    DATA temp13 LIKE LINE OF t_employees.
+    DATA temp14 LIKE sy-tabix.
+    DATA temp15 LIKE LINE OF t_employees.
+    DATA temp16 LIKE sy-tabix.
+    DATA temp17 LIKE LINE OF t_employees.
+    DATA temp18 LIKE sy-tabix.
+    DATA temp19 LIKE LINE OF t_employees.
+    DATA temp20 LIKE sy-tabix.
+    DATA temp21 LIKE LINE OF t_employees.
+    DATA temp22 LIKE sy-tabix.
+    DATA temp23 LIKE LINE OF t_employees.
+    DATA temp24 LIKE sy-tabix.
+    DATA temp25 LIKE LINE OF t_employees.
+    DATA temp26 LIKE sy-tabix.
+    DATA temp27 LIKE LINE OF t_employees.
+    DATA temp28 LIKE sy-tabix.
+    DATA temp29 LIKE LINE OF t_employees.
+    DATA temp30 LIKE sy-tabix.
+    DATA temp31 LIKE LINE OF t_employees.
+    DATA temp32 LIKE sy-tabix.
+    DATA temp33 LIKE LINE OF t_employees.
+    DATA temp34 LIKE sy-tabix.
+    DATA temp35 LIKE LINE OF t_employees.
+    DATA temp36 LIKE sy-tabix.
+    DATA temp37 LIKE LINE OF t_employees.
+    DATA temp38 LIKE sy-tabix.
+    DATA temp39 LIKE LINE OF t_employees.
+    DATA temp40 LIKE sy-tabix.
+    DATA temp41 LIKE LINE OF t_employees.
+    DATA temp42 LIKE sy-tabix.
+    DATA temp43 LIKE LINE OF t_employees.
+    DATA temp44 LIKE sy-tabix.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    
+    temp2 = sy-tabix.
+    READ TABLE t_employees INDEX 1 INTO temp1.
+    sy-tabix = temp2.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp4 = sy-tabix.
+    READ TABLE t_employees INDEX 1 INTO temp3.
+    sy-tabix = temp4.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp6 = sy-tabix.
+    READ TABLE t_employees INDEX 2 INTO temp5.
+    sy-tabix = temp6.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp8 = sy-tabix.
+    READ TABLE t_employees INDEX 2 INTO temp7.
+    sy-tabix = temp8.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp10 = sy-tabix.
+    READ TABLE t_employees INDEX 1 INTO temp9.
+    sy-tabix = temp10.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp12 = sy-tabix.
+    READ TABLE t_employees INDEX 1 INTO temp11.
+    sy-tabix = temp12.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp14 = sy-tabix.
+    READ TABLE t_employees INDEX 1 INTO temp13.
+    sy-tabix = temp14.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp16 = sy-tabix.
+    READ TABLE t_employees INDEX 2 INTO temp15.
+    sy-tabix = temp16.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp18 = sy-tabix.
+    READ TABLE t_employees INDEX 2 INTO temp17.
+    sy-tabix = temp18.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp20 = sy-tabix.
+    READ TABLE t_employees INDEX 2 INTO temp19.
+    sy-tabix = temp20.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp22 = sy-tabix.
+    READ TABLE t_employees INDEX 3 INTO temp21.
+    sy-tabix = temp22.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp24 = sy-tabix.
+    READ TABLE t_employees INDEX 3 INTO temp23.
+    sy-tabix = temp24.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp26 = sy-tabix.
+    READ TABLE t_employees INDEX 3 INTO temp25.
+    sy-tabix = temp26.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp28 = sy-tabix.
+    READ TABLE t_employees INDEX 4 INTO temp27.
+    sy-tabix = temp28.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp30 = sy-tabix.
+    READ TABLE t_employees INDEX 4 INTO temp29.
+    sy-tabix = temp30.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp32 = sy-tabix.
+    READ TABLE t_employees INDEX 4 INTO temp31.
+    sy-tabix = temp32.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp34 = sy-tabix.
+    READ TABLE t_employees INDEX 5 INTO temp33.
+    sy-tabix = temp34.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp36 = sy-tabix.
+    READ TABLE t_employees INDEX 5 INTO temp35.
+    sy-tabix = temp36.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp38 = sy-tabix.
+    READ TABLE t_employees INDEX 5 INTO temp37.
+    sy-tabix = temp38.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp40 = sy-tabix.
+    READ TABLE t_employees INDEX 6 INTO temp39.
+    sy-tabix = temp40.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp42 = sy-tabix.
+    READ TABLE t_employees INDEX 6 INTO temp41.
+    sy-tabix = temp42.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp44 = sy-tabix.
+    READ TABLE t_employees INDEX 6 INTO temp43.
+    sy-tabix = temp44.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`       v = `100%`
         )->a( n = `xmlns`        v = `sap.uxap`
@@ -587,9 +808,9 @@ CLASS z2ui5_cl_smpc_app_594 IMPLEMENTATION.
                                                     )->ele( n = `content` ns = `layout`
                                                         )->ele( n = `VerticalLayout` ns = `layout`
                                                             )->tag( n = `Label` ns = `m`
-                                                                )->a( n = `text` v = client->_bind( val = t_employees[ 1 ]-name tab = t_employees tab_index = 1 )
+                                                                )->a( n = `text` v = client->_bind( val = temp1-name tab = t_employees tab_index = 1 )
                                                             )->tag( n = `Label` ns = `m`
-                                                                )->a( n = `text` v = client->_bind( val = t_employees[ 1 ]-job tab = t_employees tab_index = 1 )
+                                                                )->a( n = `text` v = client->_bind( val = temp3-job tab = t_employees tab_index = 1 )
 
                                                             )->ele( n = `layoutData` ns = `layout`
                                                                 )->tag( n = `GridData` ns = `layout`
@@ -615,9 +836,9 @@ CLASS z2ui5_cl_smpc_app_594 IMPLEMENTATION.
 
                                                     )->ele( n = `VerticalLayout` ns = `layout`
                                                         )->tag( n = `Label` ns = `m`
-                                                            )->a( n = `text` v = client->_bind( val = t_employees[ 2 ]-name tab = t_employees tab_index = 2 )
+                                                            )->a( n = `text` v = client->_bind( val = temp5-name tab = t_employees tab_index = 2 )
                                                         )->tag( n = `Label` ns = `m`
-                                                            )->a( n = `text` v = client->_bind( val = t_employees[ 2 ]-job tab = t_employees tab_index = 2 )
+                                                            )->a( n = `text` v = client->_bind( val = temp7-job tab = t_employees tab_index = 2 )
 
                                                         )->ele( n = `layoutData` ns = `layout`
                                                             )->tag( n = `GridData` ns = `layout`
@@ -653,11 +874,11 @@ CLASS z2ui5_cl_smpc_app_594 IMPLEMENTATION.
                                 )->ele( n = `Panel` ns = `m`
                                     )->ele( n = `VBox` ns = `m`
                                         )->tag( n = `Image` ns = `m`
-                                            )->a( n = `src` v = client->_bind( val = t_employees[ 1 ]-picture tab = t_employees tab_index = 1 )
+                                            )->a( n = `src` v = client->_bind( val = temp9-picture tab = t_employees tab_index = 1 )
                                         )->tag( n = `Label` ns = `m`
-                                            )->a( n = `text` v = client->_bind( val = t_employees[ 1 ]-name tab = t_employees tab_index = 1 )
+                                            )->a( n = `text` v = client->_bind( val = temp11-name tab = t_employees tab_index = 1 )
                                         )->tag( n = `Label` ns = `m`
-                                            )->a( n = `text` v = client->_bind( val = t_employees[ 1 ]-job tab = t_employees tab_index = 1 )
+                                            )->a( n = `text` v = client->_bind( val = temp13-job tab = t_employees tab_index = 1 )
 
                                     )->end(
                                 )->end(
@@ -665,11 +886,11 @@ CLASS z2ui5_cl_smpc_app_594 IMPLEMENTATION.
                                 )->ele( n = `Panel` ns = `m`
                                     )->ele( n = `VBox` ns = `m`
                                         )->tag( n = `Image` ns = `m`
-                                            )->a( n = `src` v = client->_bind( val = t_employees[ 2 ]-picture tab = t_employees tab_index = 2 )
+                                            )->a( n = `src` v = client->_bind( val = temp15-picture tab = t_employees tab_index = 2 )
                                         )->tag( n = `Label` ns = `m`
-                                            )->a( n = `text` v = client->_bind( val = t_employees[ 2 ]-name tab = t_employees tab_index = 2 )
+                                            )->a( n = `text` v = client->_bind( val = temp17-name tab = t_employees tab_index = 2 )
                                         )->tag( n = `Label` ns = `m`
-                                            )->a( n = `text` v = client->_bind( val = t_employees[ 2 ]-job tab = t_employees tab_index = 2 )
+                                            )->a( n = `text` v = client->_bind( val = temp19-job tab = t_employees tab_index = 2 )
 
                                     )->end(
                                 )->end(
@@ -677,11 +898,11 @@ CLASS z2ui5_cl_smpc_app_594 IMPLEMENTATION.
                                 )->ele( n = `Panel` ns = `m`
                                     )->ele( n = `VBox` ns = `m`
                                         )->tag( n = `Image` ns = `m`
-                                            )->a( n = `src` v = client->_bind( val = t_employees[ 3 ]-picture tab = t_employees tab_index = 3 )
+                                            )->a( n = `src` v = client->_bind( val = temp21-picture tab = t_employees tab_index = 3 )
                                         )->tag( n = `Label` ns = `m`
-                                            )->a( n = `text` v = client->_bind( val = t_employees[ 3 ]-name tab = t_employees tab_index = 3 )
+                                            )->a( n = `text` v = client->_bind( val = temp23-name tab = t_employees tab_index = 3 )
                                         )->tag( n = `Label` ns = `m`
-                                            )->a( n = `text` v = client->_bind( val = t_employees[ 3 ]-job tab = t_employees tab_index = 3 )
+                                            )->a( n = `text` v = client->_bind( val = temp25-job tab = t_employees tab_index = 3 )
 
                                     )->end(
                                 )->end(
@@ -689,11 +910,11 @@ CLASS z2ui5_cl_smpc_app_594 IMPLEMENTATION.
                                 )->ele( n = `Panel` ns = `m`
                                     )->ele( n = `VBox` ns = `m`
                                         )->tag( n = `Image` ns = `m`
-                                            )->a( n = `src` v = client->_bind( val = t_employees[ 4 ]-picture tab = t_employees tab_index = 4 )
+                                            )->a( n = `src` v = client->_bind( val = temp27-picture tab = t_employees tab_index = 4 )
                                         )->tag( n = `Label` ns = `m`
-                                            )->a( n = `text` v = client->_bind( val = t_employees[ 4 ]-name tab = t_employees tab_index = 4 )
+                                            )->a( n = `text` v = client->_bind( val = temp29-name tab = t_employees tab_index = 4 )
                                         )->tag( n = `Label` ns = `m`
-                                            )->a( n = `text` v = client->_bind( val = t_employees[ 4 ]-job tab = t_employees tab_index = 4 )
+                                            )->a( n = `text` v = client->_bind( val = temp31-job tab = t_employees tab_index = 4 )
 
                                     )->end(
                                 )->end(
@@ -701,11 +922,11 @@ CLASS z2ui5_cl_smpc_app_594 IMPLEMENTATION.
                                 )->ele( n = `Panel` ns = `m`
                                     )->ele( n = `VBox` ns = `m`
                                         )->tag( n = `Image` ns = `m`
-                                            )->a( n = `src` v = client->_bind( val = t_employees[ 5 ]-picture tab = t_employees tab_index = 5 )
+                                            )->a( n = `src` v = client->_bind( val = temp33-picture tab = t_employees tab_index = 5 )
                                         )->tag( n = `Label` ns = `m`
-                                            )->a( n = `text` v = client->_bind( val = t_employees[ 5 ]-name tab = t_employees tab_index = 5 )
+                                            )->a( n = `text` v = client->_bind( val = temp35-name tab = t_employees tab_index = 5 )
                                         )->tag( n = `Label` ns = `m`
-                                            )->a( n = `text` v = client->_bind( val = t_employees[ 5 ]-job tab = t_employees tab_index = 5 )
+                                            )->a( n = `text` v = client->_bind( val = temp37-job tab = t_employees tab_index = 5 )
 
                                     )->end(
                                 )->end(
@@ -713,11 +934,11 @@ CLASS z2ui5_cl_smpc_app_594 IMPLEMENTATION.
                                 )->ele( n = `Panel` ns = `m`
                                     )->ele( n = `VBox` ns = `m`
                                         )->tag( n = `Image` ns = `m`
-                                            )->a( n = `src` v = client->_bind( val = t_employees[ 6 ]-picture tab = t_employees tab_index = 6 )
+                                            )->a( n = `src` v = client->_bind( val = temp39-picture tab = t_employees tab_index = 6 )
                                         )->tag( n = `Label` ns = `m`
-                                            )->a( n = `text` v = client->_bind( val = t_employees[ 6 ]-name tab = t_employees tab_index = 6 )
+                                            )->a( n = `text` v = client->_bind( val = temp41-name tab = t_employees tab_index = 6 )
                                         )->tag( n = `Label` ns = `m`
-                                            )->a( n = `text` v = client->_bind( val = t_employees[ 6 ]-job tab = t_employees tab_index = 6 )
+                                            )->a( n = `text` v = client->_bind( val = temp43-job tab = t_employees tab_index = 6 )
         ).
 
     client->view_display( view->stringify( ) ).
@@ -731,25 +952,35 @@ CLASS z2ui5_cl_smpc_app_594 IMPLEMENTATION.
     " ModelMapping elements map onto the internal models emp1>..emp6> - one
     " table, so the model keeps the array shape the original addresses and the
     " view addresses it per row (client->_bind( tab / tab_index ))
-    t_employees = VALUE #(
-      ( name    = `Michael Adams`
-        job     = `Scrum Master`
-        picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png` )
-      ( name    = `John Miller`
-        job     = `Product Owner`
-        picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png` )
-      ( name    = `Richard Wilson`
-        job     = `Ux Designer`
-        picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png` )
-      ( name    = `Julie Armstrong`
-        job     = `Quality Engineer`
-        picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png` )
-      ( name    = `Denise Smith`
-        job     = `Team Member`
-        picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png` )
-      ( name    = `Richard Adams`
-        job     = `Team Member`
-        picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png` ) ).
+    DATA temp3 LIKE t_employees.
+    DATA temp4 LIKE LINE OF temp3.
+    CLEAR temp3.
+    
+    temp4-name = `Michael Adams`.
+    temp4-job = `Scrum Master`.
+    temp4-picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-name = `John Miller`.
+    temp4-job = `Product Owner`.
+    temp4-picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-name = `Richard Wilson`.
+    temp4-job = `Ux Designer`.
+    temp4-picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-name = `Julie Armstrong`.
+    temp4-job = `Quality Engineer`.
+    temp4-picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-name = `Denise Smith`.
+    temp4-job = `Team Member`.
+    temp4-picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-name = `Richard Adams`.
+    temp4-job = `Team Member`.
+    temp4-picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png`.
+    INSERT temp4 INTO TABLE temp3.
+    t_employees = temp3.
 
   ENDMETHOD.
 

@@ -22,10 +22,10 @@ CLASS z2ui5_cl_smpc_app_029 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -34,8 +34,45 @@ CLASS z2ui5_cl_smpc_app_029 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    DATA temp3 TYPE string_table.
+    DATA temp4 TYPE string_table.
+    DATA temp5 TYPE string_table.
+    DATA temp6 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `Fire press` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp2.
+    INSERT `show` INTO TABLE temp2.
+    INSERT `Fire press` INTO TABLE temp2.
+    
+    CLEAR temp3.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp3.
+    INSERT `show` INTO TABLE temp3.
+    INSERT `Fire press` INTO TABLE temp3.
+    
+    CLEAR temp4.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp4.
+    INSERT `show` INTO TABLE temp4.
+    INSERT `Fire press` INTO TABLE temp4.
+    
+    CLEAR temp5.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp5.
+    INSERT `show` INTO TABLE temp5.
+    INSERT `Fire press` INTO TABLE temp5.
+    
+    CLEAR temp6.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp6.
+    INSERT `show` INTO TABLE temp6.
+    INSERT `Fire press` INTO TABLE temp6.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:core` v = `sap.ui.core`
@@ -82,13 +119,13 @@ CLASS z2ui5_cl_smpc_app_029 IMPLEMENTATION.
                 )->a( n = `value`      v = `1.75`
                 )->a( n = `valueColor` v = `Good`
                 )->a( n = `indicator`  v = `Up`
-                )->a( n = `press`      v = client->follow_up_action( val   = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Fire press` ) ) )
+                )->a( n = `press`      v = client->follow_up_action( val   = client->cs_event-control_global t_arg = temp1 )
             )->tag( `NumericContent`
                 )->a( n = `scale`      v = `M`
                 )->a( n = `value`      v = `0.57`
                 )->a( n = `valueColor` v = `Error`
                 )->a( n = `indicator`  v = `Down`
-                )->a( n = `press`      v = client->follow_up_action( val   = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Fire press` ) ) )
+                )->a( n = `press`      v = client->follow_up_action( val   = client->cs_event-control_global t_arg = temp2 )
             )->tag( `NumericContent`
                 )->a( n = `value` v = `1762`
                 )->a( n = `icon`  v = `sap-icon://line-charts`
@@ -100,13 +137,13 @@ CLASS z2ui5_cl_smpc_app_029 IMPLEMENTATION.
                 )->a( n = `value`      v = `1.04`
                 )->a( n = `valueColor` v = `Neutral`
                 )->a( n = `indicator`  v = `Up`
-                )->a( n = `press`      v = client->follow_up_action( val   = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Fire press` ) ) )
+                )->a( n = `press`      v = client->follow_up_action( val   = client->cs_event-control_global t_arg = temp3 )
             )->tag( `NumericContent`
                 )->a( n = `scale`      v = `M`
                 )->a( n = `value`      v = `3.65`
                 )->a( n = `valueColor` v = `Good`
                 )->a( n = `indicator`  v = `Up`
-                )->a( n = `press`      v = client->follow_up_action( val   = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Fire press` ) ) )
+                )->a( n = `press`      v = client->follow_up_action( val   = client->cs_event-control_global t_arg = temp4 )
             )->tag( `NumericContent`
                 )->a( n = `value` v = `1762`
                 )->a( n = `icon`  v = `sap-icon://bar-chart`
@@ -115,7 +152,7 @@ CLASS z2ui5_cl_smpc_app_029 IMPLEMENTATION.
                 )->a( n = `value`      v = `0.73`
                 )->a( n = `valueColor` v = `Error`
                 )->a( n = `indicator`  v = `Down`
-                )->a( n = `press`      v = client->follow_up_action( val   = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Fire press` ) ) )
+                )->a( n = `press`      v = client->follow_up_action( val   = client->cs_event-control_global t_arg = temp5 )
 
         )->end(
         )->ele( `HeaderContainer`
@@ -133,7 +170,7 @@ CLASS z2ui5_cl_smpc_app_029 IMPLEMENTATION.
                         )->a( n = `value`      v = `1.96`
                         )->a( n = `valueColor` v = `Error`
                         )->a( n = `indicator`  v = `Down`
-                        )->a( n = `press`      v = client->follow_up_action( val   = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Fire press` ) ) )
+                        )->a( n = `press`      v = client->follow_up_action( val   = client->cs_event-control_global t_arg = temp6 )
 
                 )->end(
             )->end(

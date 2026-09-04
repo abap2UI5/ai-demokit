@@ -19,7 +19,7 @@ CLASS z2ui5_cl_smpc_app_149 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -28,8 +28,17 @@ CLASS z2ui5_cl_smpc_app_149 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 LIKE LINE OF temp1.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `REDIRECT` INTO TABLE temp1.
+    
+    temp2 = |\{ URL: 'test-resources/sap/ui/integration/demokit/cardExplorer/index.html', NEW_WINDOW: true \}|.
+    INSERT temp2 INTO TABLE temp1.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -50,8 +59,7 @@ CLASS z2ui5_cl_smpc_app_149 IMPLEMENTATION.
                 " original onImagePress: URLHelper.redirect(url, true) - 1:1 via the
                 " urlhelper REDIRECT frontend action (same relative target as the Link)
                 )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-urlhelper
-                                                                t_arg = VALUE #( ( `REDIRECT` )
-                                                                                 ( |\{ URL: 'test-resources/sap/ui/integration/demokit/cardExplorer/index.html', NEW_WINDOW: true \}| ) ) ) ).
+                                                                t_arg = temp1 ) ).
 
     client->view_display( view->stringify( ) ).
 

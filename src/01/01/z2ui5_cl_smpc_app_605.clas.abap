@@ -10,7 +10,7 @@ CLASS z2ui5_cl_smpc_app_605 DEFINITION PUBLIC.
              color  TYPE string,
              growth TYPE string,
            END OF ty_s_content.
-    TYPES ty_t_content TYPE STANDARD TABLE OF ty_s_content WITH EMPTY KEY.
+    TYPES ty_t_content TYPE STANDARD TABLE OF ty_s_content WITH DEFAULT KEY.
 
     " the ObjectHeader's binding="{/ProductCollection/}" folded onto root fields
     DATA description   TYPE string.
@@ -38,12 +38,12 @@ CLASS z2ui5_cl_smpc_app_605 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -52,8 +52,15 @@ CLASS z2ui5_cl_smpc_app_605 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_BOX` INTO TABLE temp1.
+    INSERT `alert` INTO TABLE temp1.
+    INSERT `Link was clicked!` INTO TABLE temp1.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
         )->a( n = `xmlns`     v = `sap.m`
@@ -106,7 +113,7 @@ CLASS z2ui5_cl_smpc_app_605 IMPLEMENTATION.
                             )->a( n = `valueColor` v = `{COLOR}`
                             )->a( n = `indicator`  v = `{GROWTH}`
                             )->a( n = `press`      v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                                  t_arg = VALUE #( ( `MESSAGE_BOX` ) ( `alert` ) ( `Link was clicked!` ) ) )
+                                                                                  t_arg = temp1 )
                     )->end(
                 )->end(
             )->end(
@@ -131,16 +138,31 @@ CLASS z2ui5_cl_smpc_app_605 IMPLEMENTATION.
     " onScroll appends three tiles whose value, colour and growth are RANDOM.
     " A backend cannot draw the browser's numbers, so the three that come next
     " are taken from the mock's own list, cycling (see sidecar)
-    DATA(seed) = lines( t_content ).
+    DATA seed TYPE i.
+      DATA index TYPE i.
+      DATA temp3 LIKE LINE OF t_content.
+      DATA temp4 LIKE sy-tabix.
+    seed = lines( t_content ).
     DO 3 TIMES.
-      DATA(index) = ( seed + sy-index - 1 ) MOD 11 + 1.
-      INSERT t_content[ index ] INTO TABLE t_content.
+      
+      index = ( seed + sy-index - 1 ) MOD 11 + 1.
+      
+      
+      temp4 = sy-tabix.
+      READ TABLE t_content INDEX index INTO temp3.
+      sy-tabix = temp4.
+      IF sy-subrc <> 0.
+        ASSERT 1 = 0.
+      ENDIF.
+      INSERT temp3 INTO TABLE t_content.
     ENDDO.
 
   ENDMETHOD.
 
 
   METHOD model_init.
+    DATA temp5 TYPE z2ui5_cl_smpc_app_605=>ty_t_content.
+    DATA temp6 LIKE LINE OF temp5.
 
     " data.json /ProductCollection - the single record the ObjectHeader binds
     description  = `Notebook Basic 15 with 2,80 GHz quad core, 15" LCD, 4 GB DDR3 RAM, 500 GB Hard Disc, Windows 8 Pro`.
@@ -150,19 +172,54 @@ CLASS z2ui5_cl_smpc_app_605 IMPLEMENTATION.
     suppliername = `Very Best Screens`.
 
     " data.json /ContentData - the eleven tiles the HeaderContainer starts with
-    t_content = VALUE #(
-      ( value = `1.75` color = `Good`    growth = `Up` )
-      ( value = `0.52` color = `Neutral` growth = `Up` )
-      ( value = `1.62` color = `Good`    growth = `Down` )
-      ( value = `0.65` color = `Good`    growth = `Up` )
-      ( value = `2.84` color = `Error`   growth = `Down` )
-      ( value = `0.73` color = `Good`    growth = `Up` )
-      ( value = `0.32` color = `Good`    growth = `Up` )
-      ( value = `0.97` color = `Error`   growth = `Down` )
-      ( value = `2.25` color = `Neutral` growth = `Down` )
-      ( value = `3.27` color = `Error`   growth = `Up` )
-      ( value = `1.15` color = `Neutral` growth = `Up` )
-    ).
+    
+    CLEAR temp5.
+    
+    temp6-value = `1.75`.
+    temp6-color = `Good`.
+    temp6-growth = `Up`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-value = `0.52`.
+    temp6-color = `Neutral`.
+    temp6-growth = `Up`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-value = `1.62`.
+    temp6-color = `Good`.
+    temp6-growth = `Down`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-value = `0.65`.
+    temp6-color = `Good`.
+    temp6-growth = `Up`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-value = `2.84`.
+    temp6-color = `Error`.
+    temp6-growth = `Down`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-value = `0.73`.
+    temp6-color = `Good`.
+    temp6-growth = `Up`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-value = `0.32`.
+    temp6-color = `Good`.
+    temp6-growth = `Up`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-value = `0.97`.
+    temp6-color = `Error`.
+    temp6-growth = `Down`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-value = `2.25`.
+    temp6-color = `Neutral`.
+    temp6-growth = `Down`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-value = `3.27`.
+    temp6-color = `Error`.
+    temp6-growth = `Up`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-value = `1.15`.
+    temp6-color = `Neutral`.
+    temp6-growth = `Up`.
+    INSERT temp6 INTO TABLE temp5.
+    t_content = temp5.
 
   ENDMETHOD.
 

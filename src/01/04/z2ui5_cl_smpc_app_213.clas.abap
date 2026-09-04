@@ -10,7 +10,7 @@ CLASS z2ui5_cl_smpc_app_213 DEFINITION PUBLIC.
         title    TYPE string,
         subtitle TYPE string,
       END OF ty_item.
-    DATA t_items      TYPE STANDARD TABLE OF ty_item WITH EMPTY KEY.
+    DATA t_items      TYPE STANDARD TABLE OF ty_item WITH DEFAULT KEY.
     DATA slider_value TYPE i.
 
   PROTECTED SECTION.
@@ -28,10 +28,10 @@ CLASS z2ui5_cl_smpc_app_213 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -40,8 +40,16 @@ CLASS z2ui5_cl_smpc_app_213 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `Layout changed to {0}` INTO TABLE temp1.
+    INSERT `${$parameters>/layout}` INTO TABLE temp1.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
@@ -73,7 +81,7 @@ CLASS z2ui5_cl_smpc_app_213 IMPLEMENTATION.
 
                 )->ele( n = `customLayout` ns = `f`
                     )->ele( n = `GridResponsiveLayout` ns = `grid`
-                        )->a( n = `layoutChange` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Layout changed to {0}` ) ( `${$parameters>/layout}` ) ) )
+                        )->a( n = `layoutChange` v = client->follow_up_action( val = client->cs_event-control_global t_arg = temp1 )
 
                         )->ele( n = `layoutS` ns = `grid`
                             )->tag( n = `GridSettings` ns = `grid`
@@ -126,38 +134,97 @@ CLASS z2ui5_cl_smpc_app_213 IMPLEMENTATION.
 
 
   METHOD model_init.
+    DATA temp3 LIKE t_items.
+    DATA temp4 LIKE LINE OF temp3.
 
     slider_value = 100.
 
     " Grid items inlined from the sample's model/items.json (27 rows).
-    t_items = VALUE #(
-      ( title = `Grid item title 1`                                                                                                                               subtitle = `Subtitle 1` )
-      ( title = `Grid item title 2`                                                                                                                               subtitle = `Subtitle 2` )
-      ( title = `Grid item title 3`                                                                                                                               subtitle = `Subtitle 3` )
-      ( title = `Grid item title 4`                                                                                                                               subtitle = `Subtitle 4` )
-      ( title = `Grid item title 5`                                                                                                                               subtitle = `Subtitle 5` )
-      ( title = `Grid item title 6 Grid item title Grid item title Grid item title Grid item title Grid item title`                                               subtitle = `Subtitle 6` )
-      ( title = `Very long Grid item title that should wrap 7`                                                                                                    subtitle = `This is a long subtitle 7` )
-      ( title = `Grid item title B 8`                                                                                                                             subtitle = `Subtitle 8` )
-      ( title = `Grid item title B 9 Grid item title B  Grid item title B 9 Grid item title B 9Grid item title B 9title B 9 Grid item title B 9Grid item title B` subtitle = `Subtitle 9` )
-      ( title = `Grid item title B 10`                                                                                                                            subtitle = `Subtitle 10` )
-      ( title = `Grid item title B 11`                                                                                                                            subtitle = `Subtitle 11` )
-      ( title = `Grid item title B 12`                                                                                                                            subtitle = `Subtitle 12` )
-      ( title = `Grid item title 13`                                                                                                                              subtitle = `Subtitle 13` )
-      ( title = `Grid item title 14`                                                                                                                              subtitle = `Subtitle 14` )
-      ( title = `Grid item title 15`                                                                                                                              subtitle = `Subtitle 15` )
-      ( title = `Grid item title 16`                                                                                                                              subtitle = `Subtitle 16` )
-      ( title = `Grid item title 17`                                                                                                                              subtitle = `Subtitle 17` )
-      ( title = `Grid item title 18`                                                                                                                              subtitle = `Subtitle 18` )
-      ( title = `Very long Grid item title that should wrap 19`                                                                                                   subtitle = `This is a long subtitle 19` )
-      ( title = `Grid item title B 20`                                                                                                                            subtitle = `Subtitle 20` )
-      ( title = `Grid item title B 21`                                                                                                                            subtitle = `Subtitle 21` )
-      ( title = `Grid item title B 22`                                                                                                                            subtitle = `Subtitle 22` )
-      ( title = `Grid item title B 23`                                                                                                                            subtitle = `Subtitle 23` )
-      ( title = `Grid item title B 24`                                                                                                                            subtitle = `Subtitle 24` )
-      ( title = `Grid item title B 21`                                                                                                                            subtitle = `Subtitle 21` )
-      ( title = `Grid item title B 22`                                                                                                                            subtitle = `Subtitle 22` )
-      ( title = `Grid item title B 23`                                                                                                                            subtitle = `Subtitle 23` ) ).
+    
+    CLEAR temp3.
+    
+    temp4-title = `Grid item title 1`.
+    temp4-subtitle = `Subtitle 1`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Grid item title 2`.
+    temp4-subtitle = `Subtitle 2`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Grid item title 3`.
+    temp4-subtitle = `Subtitle 3`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Grid item title 4`.
+    temp4-subtitle = `Subtitle 4`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Grid item title 5`.
+    temp4-subtitle = `Subtitle 5`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Grid item title 6 Grid item title Grid item title Grid item title Grid item title Grid item title`.
+    temp4-subtitle = `Subtitle 6`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Very long Grid item title that should wrap 7`.
+    temp4-subtitle = `This is a long subtitle 7`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Grid item title B 8`.
+    temp4-subtitle = `Subtitle 8`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Grid item title B 9 Grid item title B  Grid item title B 9 Grid item title B 9Grid item title B 9title B 9 Grid item title B 9Grid item title B`.
+    temp4-subtitle = `Subtitle 9`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Grid item title B 10`.
+    temp4-subtitle = `Subtitle 10`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Grid item title B 11`.
+    temp4-subtitle = `Subtitle 11`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Grid item title B 12`.
+    temp4-subtitle = `Subtitle 12`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Grid item title 13`.
+    temp4-subtitle = `Subtitle 13`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Grid item title 14`.
+    temp4-subtitle = `Subtitle 14`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Grid item title 15`.
+    temp4-subtitle = `Subtitle 15`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Grid item title 16`.
+    temp4-subtitle = `Subtitle 16`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Grid item title 17`.
+    temp4-subtitle = `Subtitle 17`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Grid item title 18`.
+    temp4-subtitle = `Subtitle 18`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Very long Grid item title that should wrap 19`.
+    temp4-subtitle = `This is a long subtitle 19`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Grid item title B 20`.
+    temp4-subtitle = `Subtitle 20`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Grid item title B 21`.
+    temp4-subtitle = `Subtitle 21`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Grid item title B 22`.
+    temp4-subtitle = `Subtitle 22`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Grid item title B 23`.
+    temp4-subtitle = `Subtitle 23`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Grid item title B 24`.
+    temp4-subtitle = `Subtitle 24`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Grid item title B 21`.
+    temp4-subtitle = `Subtitle 21`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Grid item title B 22`.
+    temp4-subtitle = `Subtitle 22`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Grid item title B 23`.
+    temp4-subtitle = `Subtitle 23`.
+    INSERT temp4 INTO TABLE temp3.
+    t_items = temp3.
 
   ENDMETHOD.
 

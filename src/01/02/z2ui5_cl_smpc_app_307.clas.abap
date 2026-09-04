@@ -8,7 +8,7 @@ CLASS z2ui5_cl_smpc_app_307 DEFINITION PUBLIC.
     TYPES: BEGIN OF ty_s_date,
              date TYPE string,
            END OF ty_s_date.
-    DATA selecteddates TYPE STANDARD TABLE OF ty_s_date WITH EMPTY KEY.
+    DATA selecteddates TYPE STANDARD TABLE OF ty_s_date WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     " one entry per DateRange the frontend marshalled out of the LIVE
@@ -17,7 +17,7 @@ CLASS z2ui5_cl_smpc_app_307 DEFINITION PUBLIC.
     TYPES: BEGIN OF ty_s_event_range,
              startdate TYPE string,
            END OF ty_s_event_range.
-    TYPES ty_t_event_range TYPE STANDARD TABLE OF ty_s_event_range WITH EMPTY KEY.
+    TYPES ty_t_event_range TYPE STANDARD TABLE OF ty_s_event_range WITH DEFAULT KEY.
 
     DATA client TYPE REF TO z2ui5_if_client.
 
@@ -38,9 +38,9 @@ CLASS z2ui5_cl_smpc_app_307 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -49,7 +49,8 @@ CLASS z2ui5_cl_smpc_app_307 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
@@ -100,6 +101,11 @@ CLASS z2ui5_cl_smpc_app_307 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA ranges TYPE z2ui5_cl_smpc_app_307=>ty_t_event_range.
+        DATA temp1 LIKE LINE OF ranges.
+        DATA lr_range LIKE REF TO temp1.
+          DATA temp2 TYPE z2ui5_cl_smpc_app_307=>ty_s_date.
+        DATA temp3 TYPE string_table.
 
     CASE client->get_event( ).
 
@@ -108,12 +114,18 @@ CLASS z2ui5_cl_smpc_app_307 IMPLEMENTATION.
         " each formatted yyyy-MM-dd - the day is the first ten characters of
         " the ISO local timestamp the marshalled DateRange carries
         CLEAR selecteddates.
-        DATA(ranges) = event_ranges( client->get_event_arg( ) ).
-        LOOP AT ranges REFERENCE INTO DATA(lr_range).
+        
+        ranges = event_ranges( client->get_event_arg( ) ).
+        
+        
+        LOOP AT ranges REFERENCE INTO lr_range.
           IF strlen( lr_range->startdate ) < 10.
             CONTINUE.
           ENDIF.
-          INSERT VALUE #( date = lr_range->startdate(10) ) INTO TABLE selecteddates.
+          
+          CLEAR temp2.
+          temp2-date = lr_range->startdate(10).
+          INSERT temp2 INTO TABLE selecteddates.
         ENDLOOP.
 
       WHEN `REMOVE_SELECTION`.
@@ -122,8 +134,12 @@ CLASS z2ui5_cl_smpc_app_307 IMPLEMENTATION.
         " has to be emptied on the control - the model half alone would leave
         " the days highlighted
         CLEAR selecteddates.
+        
+        CLEAR temp3.
+        INSERT `calendar` INTO TABLE temp3.
+        INSERT `removeAllSelectedDates` INTO TABLE temp3.
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `calendar` ) ( `removeAllSelectedDates` ) ) ).
+                                  t_arg = temp3 ).
 
     ENDCASE.
 
@@ -132,7 +148,8 @@ CLASS z2ui5_cl_smpc_app_307 IMPLEMENTATION.
 
   METHOD event_ranges.
 
-    DATA(lv_json) = condense( val ).
+    DATA lv_json TYPE string.
+    lv_json = condense( val ).
     IF lv_json IS INITIAL.
       RETURN.
     ENDIF.

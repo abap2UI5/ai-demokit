@@ -28,12 +28,12 @@ CLASS z2ui5_cl_smpc_app_071 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -42,7 +42,8 @@ CLASS z2ui5_cl_smpc_app_071 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
@@ -81,8 +82,9 @@ CLASS z2ui5_cl_smpc_app_071 IMPLEMENTATION.
   METHOD model_init.
 
     " the bound record /ProductCollection/0 (Notebook Basic 15) of ui5/mock/products.json, verbatim
-    s_product = VALUE #( name        = `Notebook Basic 15`
-                         description = `Notebook Basic 15 with 2,80 GHz quad core, 15" LCD, 4 GB DDR3 RAM, 500 GB Hard Disc, Windows 8 Pro` ).
+    CLEAR s_product.
+    s_product-name = `Notebook Basic 15`.
+    s_product-description = `Notebook Basic 15 with 2,80 GHz quad core, 15" LCD, 4 GB DDR3 RAM, 500 GB Hard Disc, Windows 8 Pro`.
 
   ENDMETHOD.
 

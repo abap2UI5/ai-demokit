@@ -19,7 +19,7 @@ CLASS z2ui5_cl_smpc_app_060 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -28,8 +28,22 @@ CLASS z2ui5_cl_smpc_app_060 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `theMenu` INTO TABLE temp1.
+    INSERT `toggleBy` INTO TABLE temp1.
+    INSERT `$event.oSource.sId` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp2.
+    INSERT `show` INTO TABLE temp2.
+    INSERT `Action triggered on item: {0}` INTO TABLE temp2.
+    INSERT `${$parameters>/item}.getText()` INTO TABLE temp2.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
@@ -44,7 +58,7 @@ CLASS z2ui5_cl_smpc_app_060 IMPLEMENTATION.
                 " toggle the menu anchored to the pressed button, roundtrip-free
                 " (1:1 with the sample's client-side isOpen()/openBy/close)
                 )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                       t_arg = VALUE #( ( `theMenu` ) ( `toggleBy` ) ( `$event.oSource.sId` ) ) )
+                                                                       t_arg = temp1 )
 
                 )->ele( `dependents`
                     )->ele( `Menu`
@@ -56,7 +70,7 @@ CLASS z2ui5_cl_smpc_app_060 IMPLEMENTATION.
                         " internal MenuWrapper too, so both print the leaf text (the
                         " sidecar carries the measurement)
                         )->a( n = `itemSelected` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                               t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
+                                                                               t_arg = temp2 )
 
                         )->tag( `MenuItem`
                             )->a( n = `text` v = `Hide Existing Sites`

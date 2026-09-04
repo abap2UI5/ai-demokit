@@ -15,7 +15,7 @@ CLASS z2ui5_cl_smpc_app_066 DEFINITION PUBLIC.
         counter     TYPE i,
       END OF ty_s_message.
 
-    DATA t_messages    TYPE STANDARD TABLE OF ty_s_message WITH EMPTY KEY.
+    DATA t_messages    TYPE STANDARD TABLE OF ty_s_message WITH DEFAULT KEY.
     DATA highest_icon  TYPE string.
     DATA highest_type  TYPE string.
     DATA highest_count TYPE i.
@@ -35,10 +35,10 @@ CLASS z2ui5_cl_smpc_app_066 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -47,8 +47,21 @@ CLASS z2ui5_cl_smpc_app_066 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `messagePopover` INTO TABLE temp1.
+    INSERT `toggleBy` INTO TABLE temp1.
+    INSERT `messagePopoverBtn` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp2.
+    INSERT `show` INTO TABLE temp2.
+    INSERT `Active title is pressed` INTO TABLE temp2.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -67,14 +80,14 @@ CLASS z2ui5_cl_smpc_app_066 IMPLEMENTATION.
                         )->a( n = `text`         v = client->_bind( highest_count )
                         )->a( n = `ariaHasPopup` v = `Dialog`
                         )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                               t_arg = VALUE #( ( `messagePopover` ) ( `toggleBy` ) ( `messagePopoverBtn` ) ) )
+                                                                               t_arg = temp1 )
 
                         )->ele( `dependents`
                             )->ele( `MessagePopover`
                                 )->a( n = `id`              v = `messagePopover`
                                 )->a( n = `items`           v = client->_bind( t_messages )
                                 )->a( n = `activeTitlePress` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                                           t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Active title is pressed` ) ) )
+                                                                                           t_arg = temp2 )
 
                                 )->ele( `MessageItem`
                                     )->a( n = `type`        v = `{TYPE}`
@@ -109,19 +122,43 @@ CLASS z2ui5_cl_smpc_app_066 IMPLEMENTATION.
 
   METHOD model_init.
 
-    t_messages = VALUE #(
-      ( type = `Error` title = `Error message` active = abap_true counter = 1 subtitle = `Example of subtitle`
-        description = `First Error message description. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod` &&
-                      `tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo` &&
-                      `consequat. Duis aute irure dolor in reprehenderit in voluptate velit essecillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non` &&
-                      `proident, sunt in culpa qui officia deserunt mollit anim id est laborum.` )
-      ( type = `Warning` title = `Warning without description` description = `` )
-      ( type = `Success` title = `Success message` counter = 1 subtitle = `Example of subtitle`
-        description = `First Success message description` )
-      ( type = `Error` title = `Error message` counter = 2 subtitle = `Example of subtitle`
-        description = `Second Error message description` )
-      ( type = `Information` title = `Information message` counter = 1 subtitle = `Example of subtitle`
-        description = `First Information message description` ) ).
+    DATA temp3 LIKE t_messages.
+    DATA temp4 LIKE LINE OF temp3.
+    CLEAR temp3.
+    
+    temp4-type = `Error`.
+    temp4-title = `Error message`.
+    temp4-active = abap_true.
+    temp4-counter = 1.
+    temp4-subtitle = `Example of subtitle`.
+    temp4-description = `First Error message description. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod` &&
+`tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo` &&
+`consequat. Duis aute irure dolor in reprehenderit in voluptate velit essecillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non` &&
+`proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-type = `Warning`.
+    temp4-title = `Warning without description`.
+    temp4-description = ``.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-type = `Success`.
+    temp4-title = `Success message`.
+    temp4-counter = 1.
+    temp4-subtitle = `Example of subtitle`.
+    temp4-description = `First Success message description`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-type = `Error`.
+    temp4-title = `Error message`.
+    temp4-counter = 2.
+    temp4-subtitle = `Example of subtitle`.
+    temp4-description = `Second Error message description`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-type = `Information`.
+    temp4-title = `Information message`.
+    temp4-counter = 1.
+    temp4-subtitle = `Example of subtitle`.
+    temp4-description = `First Information message description`.
+    INSERT temp4 INTO TABLE temp3.
+    t_messages = temp3.
 
     " the sample's three formatters render the button from the highest-severity message
     " (Error > Warning > Success > Info); the mock data is static, so the outcome is

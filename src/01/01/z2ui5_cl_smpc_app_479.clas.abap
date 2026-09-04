@@ -9,7 +9,7 @@ CLASS z2ui5_cl_smpc_app_479 DEFINITION PUBLIC.
              key  TYPE string,
              text TYPE string,
            END OF ty_s_country.
-    TYPES ty_t_country TYPE STANDARD TABLE OF ty_s_country WITH EMPTY KEY.
+    TYPES ty_t_country TYPE STANDARD TABLE OF ty_s_country WITH DEFAULT KEY.
 
     DATA t_countries TYPE ty_t_country.
 
@@ -33,12 +33,12 @@ CLASS z2ui5_cl_smpc_app_479 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -47,7 +47,8 @@ CLASS z2ui5_cl_smpc_app_479 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
@@ -94,15 +95,22 @@ CLASS z2ui5_cl_smpc_app_479 IMPLEMENTATION.
 
 
   METHOD on_event.
+      DATA temp1 TYPE string.
 
     IF client->get_event( ) = `CHANGE`.
 
       " fnFormatter: "text (key)" when both are there, otherwise whichever one is
-      formatted = COND string( WHEN combo_box_value IS NOT INITIAL AND combo_box_key IS NOT INITIAL
-                               THEN |{ combo_box_value } ({ combo_box_key })|
-                               WHEN combo_box_value IS NOT INITIAL THEN combo_box_value
-                               WHEN combo_box_key IS NOT INITIAL THEN combo_box_key
-                               ELSE `` ).
+      
+      IF combo_box_value IS NOT INITIAL AND combo_box_key IS NOT INITIAL.
+        temp1 = |{ combo_box_value } ({ combo_box_key })|.
+      ELSEIF combo_box_value IS NOT INITIAL.
+        temp1 = combo_box_value.
+      ELSEIF combo_box_key IS NOT INITIAL.
+        temp1 = combo_box_key.
+      ELSE.
+        temp1 = ``.
+      ENDIF.
+      formatted = temp1.
 
     ENDIF.
 
@@ -112,77 +120,221 @@ CLASS z2ui5_cl_smpc_app_479 IMPLEMENTATION.
   METHOD model_init.
 
     " full mock /CountriesCollection of ui5/mock/countriesExtendedCollection.json
-    t_countries = VALUE #(
-        ( key = `DZ`  text = `Algeria` )
-        ( key = `AR`  text = `Argentina` )
-        ( key = `AU`  text = `Australia` )
-        ( key = `AT`  text = `Austria` )
-        ( key = `BH`  text = `Bahrain` )
-        ( key = `BE`  text = `Belgium` )
-        ( key = `BA`  text = `Bosnia and Herzegovina` )
-        ( key = `BR`  text = `Brazil` )
-        ( key = `BG`  text = `Bulgaria` )
-        ( key = `CA`  text = `Canada` )
-        ( key = `CL`  text = `Chile` )
-        ( key = `CO`  text = `Colombia` )
-        ( key = `HR`  text = `Croatia` )
-        ( key = `CU`  text = `Cuba` )
-        ( key = `CZ`  text = `Czech Republic` )
-        ( key = `DK`  text = `Denmark` )
-        ( key = `EG`  text = `Egypt` )
-        ( key = `EE`  text = `Estonia` )
-        ( key = `FI`  text = `Finland` )
-        ( key = `FR`  text = `France` )
-        ( key = `GER` text = `Germany` )
-        ( key = `GH`  text = `Ghana` )
-        ( key = `GR`  text = `Greece` )
-        ( key = `HU`  text = `Hungary` )
-        ( key = `IN`  text = `India` )
-        ( key = `ID`  text = `Indonesia` )
-        ( key = `IE`  text = `Ireland` )
-        ( key = `IL`  text = `Israel` )
-        ( key = `IT`  text = `Italy` )
-        ( key = `JP`  text = `Japan` )
-        ( key = `JO`  text = `Jordan` )
-        ( key = `KE`  text = `Kenya` )
-        ( key = `KW`  text = `Kuwait` )
-        ( key = `LV`  text = `Latvia` )
-        ( key = `LT`  text = `Lithuania` )
-        ( key = `MK`  text = `Macedonia` )
-        ( key = `MY`  text = `Malaysia` )
-        ( key = `MX`  text = `Mexico` )
-        ( key = `ME`  text = `Montenegro` )
-        ( key = `MA`  text = `Morocco` )
-        ( key = `NL`  text = `Netherlands` )
-        ( key = `NZ`  text = `New Zealand` )
-        ( key = `NG`  text = `Nigeria` )
-        ( key = `NO`  text = `Norway` )
-        ( key = `OM`  text = `Oman` )
-        ( key = `PE`  text = `Peru` )
-        ( key = `PH`  text = `Philippines` )
-        ( key = `PL`  text = `Poland` )
-        ( key = `PT`  text = `Portugal` )
-        ( key = `QA`  text = `Qatar` )
-        ( key = `RO`  text = `Romania` )
-        ( key = `RU`  text = `Russia` )
-        ( key = `SA`  text = `Saudi Arabia` )
-        ( key = `SN`  text = `Senegal` )
-        ( key = `RS`  text = `Serbia` )
-        ( key = `SG`  text = `Singapore` )
-        ( key = `SK`  text = `Slovakia` )
-        ( key = `SI`  text = `Slovenia` )
-        ( key = `ZA`  text = `South Africa` )
-        ( key = `KR`  text = `South Korea` )
-        ( key = `ES`  text = `Spain` )
-        ( key = `SE`  text = `Sweden` )
-        ( key = `CH`  text = `Switzerland` )
-        ( key = `TN`  text = `Tunisia` )
-        ( key = `TR`  text = `Turkey` )
-        ( key = `UG`  text = `Uganda` )
-        ( key = `UA`  text = `Ukraine` )
-        ( key = `AE`  text = `United Arab Emirates` )
-        ( key = `GB`  text = `United Kingdom` )
-        ( key = `YE`  text = `Yemen` ) ).
+    DATA temp2 TYPE z2ui5_cl_smpc_app_479=>ty_t_country.
+    DATA temp3 LIKE LINE OF temp2.
+    CLEAR temp2.
+    
+    temp3-key = `DZ`.
+    temp3-text = `Algeria`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `AR`.
+    temp3-text = `Argentina`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `AU`.
+    temp3-text = `Australia`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `AT`.
+    temp3-text = `Austria`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `BH`.
+    temp3-text = `Bahrain`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `BE`.
+    temp3-text = `Belgium`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `BA`.
+    temp3-text = `Bosnia and Herzegovina`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `BR`.
+    temp3-text = `Brazil`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `BG`.
+    temp3-text = `Bulgaria`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `CA`.
+    temp3-text = `Canada`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `CL`.
+    temp3-text = `Chile`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `CO`.
+    temp3-text = `Colombia`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `HR`.
+    temp3-text = `Croatia`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `CU`.
+    temp3-text = `Cuba`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `CZ`.
+    temp3-text = `Czech Republic`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `DK`.
+    temp3-text = `Denmark`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `EG`.
+    temp3-text = `Egypt`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `EE`.
+    temp3-text = `Estonia`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `FI`.
+    temp3-text = `Finland`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `FR`.
+    temp3-text = `France`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `GER`.
+    temp3-text = `Germany`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `GH`.
+    temp3-text = `Ghana`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `GR`.
+    temp3-text = `Greece`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `HU`.
+    temp3-text = `Hungary`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `IN`.
+    temp3-text = `India`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `ID`.
+    temp3-text = `Indonesia`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `IE`.
+    temp3-text = `Ireland`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `IL`.
+    temp3-text = `Israel`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `IT`.
+    temp3-text = `Italy`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `JP`.
+    temp3-text = `Japan`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `JO`.
+    temp3-text = `Jordan`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `KE`.
+    temp3-text = `Kenya`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `KW`.
+    temp3-text = `Kuwait`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `LV`.
+    temp3-text = `Latvia`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `LT`.
+    temp3-text = `Lithuania`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `MK`.
+    temp3-text = `Macedonia`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `MY`.
+    temp3-text = `Malaysia`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `MX`.
+    temp3-text = `Mexico`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `ME`.
+    temp3-text = `Montenegro`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `MA`.
+    temp3-text = `Morocco`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `NL`.
+    temp3-text = `Netherlands`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `NZ`.
+    temp3-text = `New Zealand`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `NG`.
+    temp3-text = `Nigeria`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `NO`.
+    temp3-text = `Norway`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `OM`.
+    temp3-text = `Oman`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `PE`.
+    temp3-text = `Peru`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `PH`.
+    temp3-text = `Philippines`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `PL`.
+    temp3-text = `Poland`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `PT`.
+    temp3-text = `Portugal`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `QA`.
+    temp3-text = `Qatar`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `RO`.
+    temp3-text = `Romania`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `RU`.
+    temp3-text = `Russia`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `SA`.
+    temp3-text = `Saudi Arabia`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `SN`.
+    temp3-text = `Senegal`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `RS`.
+    temp3-text = `Serbia`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `SG`.
+    temp3-text = `Singapore`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `SK`.
+    temp3-text = `Slovakia`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `SI`.
+    temp3-text = `Slovenia`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `ZA`.
+    temp3-text = `South Africa`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `KR`.
+    temp3-text = `South Korea`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `ES`.
+    temp3-text = `Spain`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `SE`.
+    temp3-text = `Sweden`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `CH`.
+    temp3-text = `Switzerland`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `TN`.
+    temp3-text = `Tunisia`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `TR`.
+    temp3-text = `Turkey`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `UG`.
+    temp3-text = `Uganda`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `UA`.
+    temp3-text = `Ukraine`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `AE`.
+    temp3-text = `United Arab Emirates`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `GB`.
+    temp3-text = `United Kingdom`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-key = `YE`.
+    temp3-text = `Yemen`.
+    INSERT temp3 INTO TABLE temp2.
+    t_countries = temp2.
 
   ENDMETHOD.
 

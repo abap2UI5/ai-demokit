@@ -19,7 +19,7 @@ CLASS z2ui5_cl_smpc_app_388 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -28,11 +28,30 @@ CLASS z2ui5_cl_smpc_app_388 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    DATA temp3 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the controller's only handler is MessageToast.show('The GenericTile is
     " pressed.') - a constant text, so every press is the roundtrip-free
     " client toast (app 005/275 idiom) and the app stays init-only
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `The GenericTile is pressed.` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp2.
+    INSERT `show` INTO TABLE temp2.
+    INSERT `The GenericTile is pressed.` INTO TABLE temp2.
+    
+    CLEAR temp3.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp3.
+    INSERT `show` INTO TABLE temp3.
+    INSERT `The GenericTile is pressed.` INTO TABLE temp3.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
@@ -48,7 +67,7 @@ CLASS z2ui5_cl_smpc_app_388 IMPLEMENTATION.
             )->a( n = `header`    v = `Feed Tile that shows updates of the last feeds given to a specific topic:`
             )->a( n = `frameType` v = `TwoByOne`
             )->a( n = `press`     v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The GenericTile is pressed.` ) ) )
+                                                                t_arg = temp1 )
 
             )->ele( `TileContent`
                 )->a( n = `footer` v = `New Notifications`
@@ -70,7 +89,7 @@ CLASS z2ui5_cl_smpc_app_388 IMPLEMENTATION.
                     )->a( n = `backgroundImage` v = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/GenericTileAsFeedTile/images/NewsImage1.png`
                     )->a( n = `frameType`       v = `TwoByOne`
                     )->a( n = `press`           v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                              t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The GenericTile is pressed.` ) ) )
+                                                                              t_arg = temp2 )
 
                     )->ele( `TileContent`
                         )->a( n = `footer` v = `August 21, 2016`
@@ -85,7 +104,7 @@ CLASS z2ui5_cl_smpc_app_388 IMPLEMENTATION.
                     )->a( n = `backgroundImage` v = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/GenericTileAsFeedTile/images/NewsImage2.png`
                     )->a( n = `frameType`       v = `TwoByOne`
                     )->a( n = `press`           v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                              t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The GenericTile is pressed.` ) ) )
+                                                                              t_arg = temp3 )
 
                     )->ele( `TileContent`
                         )->a( n = `footer` v = `August 21, 2016`

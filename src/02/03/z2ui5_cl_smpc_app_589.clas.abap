@@ -22,9 +22,9 @@ CLASS z2ui5_cl_smpc_app_589 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -33,13 +33,44 @@ CLASS z2ui5_cl_smpc_app_589 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    DATA temp3 TYPE string_table.
+    DATA temp4 TYPE string_table.
+    DATA temp5 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " Block->content inlining (app 401/416 precedent): the four sections hold the
     " SAME goals block authored four ways - a typed view (GoalsBlockView.js), a
     " JSON view, an HTML view and an XML view - which is the whole point of the
     " sample. abap2UI5 emits one XML view, so each block's CONTENT is inlined and
     " the four view TYPES collapse to one (see sidecar)
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `Page 1 a very long link clicked` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp2.
+    INSERT `show` INTO TABLE temp2.
+    INSERT `Page 2 long link clicked` INTO TABLE temp2.
+    
+    CLEAR temp3.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp3.
+    INSERT `show` INTO TABLE temp3.
+    INSERT `Button was presed` INTO TABLE temp3.
+    
+    CLEAR temp4.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp4.
+    INSERT `show` INTO TABLE temp4.
+    INSERT `Button was presed` INTO TABLE temp4.
+    
+    CLEAR temp5.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp5.
+    INSERT `show` INTO TABLE temp5.
+    INSERT `Button was presed` INTO TABLE temp5.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`       v = `100%`
         )->a( n = `xmlns`        v = `sap.uxap`
@@ -108,11 +139,11 @@ CLASS z2ui5_cl_smpc_app_589 IMPLEMENTATION.
                             )->tag( n = `Link` ns = `m`
                                 )->a( n = `text`  v = `Page 1 a very long link`
                                 )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Page 1 a very long link clicked` ) ) )
+                                                                                t_arg = temp1 )
                             )->tag( n = `Link` ns = `m`
                                 )->a( n = `text`  v = `Page 2 long link`
                                 )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Page 2 long link clicked` ) ) )
+                                                                                t_arg = temp2 )
                         )->end(
                     )->end(
                 )->end(
@@ -192,7 +223,7 @@ CLASS z2ui5_cl_smpc_app_589 IMPLEMENTATION.
                                     )->tag( n = `Button` ns = `m`
                                         )->a( n = `text`  v = `Hello from a typed view`
                                         )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                                        t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Button was presed` ) ) )
+                                                                                        t_arg = temp3 )
                                 )->end(
                             )->end(
                         )->end(
@@ -216,7 +247,7 @@ CLASS z2ui5_cl_smpc_app_589 IMPLEMENTATION.
                                     )->a( n = `id`    v = `MyButton`
                                     )->a( n = `text`  v = `Hello from JSON view`
                                     )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                                    t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Button was presed` ) ) )
+                                                                                    t_arg = temp4 )
                             )->end(
                         )->end(
                     )->end(
@@ -242,7 +273,7 @@ CLASS z2ui5_cl_smpc_app_589 IMPLEMENTATION.
                                         )->a( n = `id`    v = `Button1`
                                         )->a( n = `text`  v = `Hello from HTML view`
                                         )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                                        t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Button was presed` ) ) )
+                                                                                        t_arg = temp5 )
                                 )->end(
                             )->end(
                         )->end(
@@ -298,10 +329,13 @@ CLASS z2ui5_cl_smpc_app_589 IMPLEMENTATION.
 
 
   METHOD on_event.
+      DATA temp1 TYPE xsdboolean.
 
     IF client->get_event( ) = `TOGGLE_FOOTER`.
       " toggleFooter: setShowFooter( !getShowFooter( ) )
-      show_footer = xsdbool( show_footer = abap_false ).
+      
+      temp1 = boolc( show_footer = abap_false ).
+      show_footer = temp1.
     ENDIF.
 
   ENDMETHOD.

@@ -19,7 +19,7 @@ CLASS z2ui5_cl_smpc_app_398 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -28,10 +28,13 @@ CLASS z2ui5_cl_smpc_app_398 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA base TYPE string.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " fixed values of the original img JSONModel (img>/products/pic1..pic3, screw)
-    DATA(base) = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/`.
+    
+    base = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/`.
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`

@@ -22,9 +22,9 @@ CLASS z2ui5_cl_smpc_app_138 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -33,7 +33,10 @@ CLASS z2ui5_cl_smpc_app_138 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " two of the three controller behaviours are reproduced: breakpointChanged
     " carries its currentBreakpoint parameter to the backend, which enables the
@@ -42,6 +45,16 @@ CLASS z2ui5_cl_smpc_app_138 IMPLEMENTATION.
     " control_by_id. The Slider's DOM resize is roundtrip-free too since the `css`
     " control method exists: sap.m.Page has no width property, so the width goes
     " onto the container's DOM node, like the original's jQuery .width( )
+    
+    CLEAR temp1.
+    INSERT `DynamicSideContent` INTO TABLE temp1.
+    INSERT `toggle` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `sideContentContainer` INTO TABLE temp2.
+    INSERT `css` INTO TABLE temp2.
+    INSERT `width` INTO TABLE temp2.
+    INSERT `${$parameters>/value} + '%'` INTO TABLE temp2.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
@@ -104,7 +117,7 @@ CLASS z2ui5_cl_smpc_app_138 IMPLEMENTATION.
                         " lifecycle, none of which this is)
                         )->a( n = `press`   v = client->follow_up_action(
                                   val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `DynamicSideContent` ) ( `toggle` ) ) )
+                                  t_arg = temp1 )
                         )->a( n = `id`      v = `toggleButton`
                         )->a( n = `enabled` v = client->_bind( toggle_enabled )
                     )->tag( `Slider`
@@ -116,10 +129,7 @@ CLASS z2ui5_cl_smpc_app_138 IMPLEMENTATION.
                         )->a( n = `visible`    v = `{= !${device>/system/phone} }`
                         )->a( n = `liveChange` v = client->follow_up_action(
                                   val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `sideContentContainer` )
-                                                   ( `css` )
-                                                   ( `width` )
-                                                   ( `${$parameters>/value} + '%'` ) ) )
+                                  t_arg = temp2 )
                     )->tag( `Text`
                         )->a( n = `id`      v = `DSCWidthHintText`
                         )->a( n = `text`    v = `Best view in full screen mode`
@@ -131,12 +141,15 @@ CLASS z2ui5_cl_smpc_app_138 IMPLEMENTATION.
 
 
   METHOD on_event.
+      DATA temp1 TYPE xsdboolean.
 
     " _updateToggleButtonState: the button is only enabled on breakpoint S.
     " The only round-trip left - the Toggle press drives the control's own
     " toggle( ) from the frontend, and the Slider writes its width there too
     IF client->get_event( ) = `BP_CHANGED`.
-      toggle_enabled = xsdbool( client->get_event_arg( ) = `S` ).
+      
+      temp1 = boolc( client->get_event_arg( ) = `S` ).
+      toggle_enabled = temp1.
     ENDIF.
 
   ENDMETHOD.

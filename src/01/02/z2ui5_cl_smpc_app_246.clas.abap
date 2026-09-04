@@ -22,9 +22,9 @@ CLASS z2ui5_cl_smpc_app_246 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -33,8 +33,29 @@ CLASS z2ui5_cl_smpc_app_246 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    DATA temp3 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `File upload complete. Status: 200 (Upload Success)` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp2.
+    INSERT `show` INTO TABLE temp2.
+    INSERT `Press 'Upload File' to upload file '{0}'` INTO TABLE temp2.
+    INSERT `${$parameters>/newValue}` INTO TABLE temp2.
+    
+    CLEAR temp3.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp3.
+    INSERT `show` INTO TABLE temp3.
+    INSERT `The file type *.{0} is not supported. Choose one of the following types: txt, jpg` INTO TABLE temp3.
+    INSERT `${$parameters>/fileType}` INTO TABLE temp3.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:u`   v = `sap.ui.unified`
@@ -62,11 +83,11 @@ CLASS z2ui5_cl_smpc_app_246 IMPLEMENTATION.
                 )->a( n = `uploadUrl`      v = `upload/`
                 )->a( n = `tooltip`        v = `Upload your file to the local server`
                 )->a( n = `uploadComplete` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                         t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `File upload complete. Status: 200 (Upload Success)` ) ) )
+                                                                         t_arg = temp1 )
                 )->a( n = `change`         v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                         t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Press 'Upload File' to upload file '{0}'` ) ( `${$parameters>/newValue}` ) ) )
+                                                                         t_arg = temp2 )
                 )->a( n = `typeMissmatch`  v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                         t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The file type *.{0} is not supported. Choose one of the following types: txt, jpg` ) ( `${$parameters>/fileType}` ) ) )
+                                                                         t_arg = temp3 )
                 )->a( n = `style`          v = `Emphasized`
                 )->a( n = `fileType`       v = `txt,jpg`
                 )->a( n = `placeholder`    v = `Choose a file for Upload...`
@@ -95,6 +116,8 @@ CLASS z2ui5_cl_smpc_app_246 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp3 TYPE string_table.
+        DATA temp5 TYPE string_table.
 
     IF client->get_event( ) = `UPLOAD`.
       " original handleUploadPress: no chosen file -> 'Choose a file first';
@@ -104,15 +127,23 @@ CLASS z2ui5_cl_smpc_app_246 IMPLEMENTATION.
       IF file_value IS INITIAL.
         client->message_toast_display( `Choose a file first` ).
       ELSE.
+        
+        CLEAR temp3.
+        INSERT `fileUploader` INTO TABLE temp3.
+        INSERT `upload` INTO TABLE temp3.
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `fileUploader` ) ( `upload` ) ) ).
+                                  t_arg = temp3 ).
         " clear( ) resets the control, which is all the original does after
         " upload( ). Clearing the BOUND field here as well would be worse than
         " redundant: a changed model is pushed BEFORE the queued follow-up
         " actions run, so FileUploader.setValue('') would reset the form and
         " upload( ) would post an empty one
+        
+        CLEAR temp5.
+        INSERT `fileUploader` INTO TABLE temp5.
+        INSERT `clear` INTO TABLE temp5.
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `fileUploader` ) ( `clear` ) ) ).
+                                  t_arg = temp5 ).
       ENDIF.
     ENDIF.
 

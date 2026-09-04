@@ -20,9 +20,9 @@ CLASS z2ui5_cl_smpc_app_112 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -31,7 +31,8 @@ CLASS z2ui5_cl_smpc_app_112 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.ui.unified`
@@ -61,13 +62,15 @@ CLASS z2ui5_cl_smpc_app_112 IMPLEMENTATION.
 
 
   METHOD on_event.
+      DATA popover TYPE REF TO z2ui5_cl_ui5_view_builder.
 
     IF client->get_event( ) = `OPEN_POPOVER`.
       " original openPopover: a controller-built ResponsivePopover with an
       " HSL/Simplified ColorPicker, opened by the pressed button; the
       " Device.system.phone branch (Submit/Cancel buttons vs no header) is
       " expressed via device> model bindings instead of a JS branch
-      DATA(popover) = z2ui5_cl_ui5_view_builder=>factory( ).
+      
+      popover = z2ui5_cl_ui5_view_builder=>factory( ).
 
       popover->ele( n = `FragmentDefinition` ns = `core`
           )->a( n = `xmlns:core` v = `sap.ui.core`

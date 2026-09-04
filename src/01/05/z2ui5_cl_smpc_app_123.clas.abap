@@ -23,13 +23,13 @@ CLASS z2ui5_cl_smpc_app_123 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       expanded     = abap_true.
       sub3_visible = abap_true.
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -38,7 +38,8 @@ CLASS z2ui5_cl_smpc_app_123 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
@@ -124,16 +125,22 @@ CLASS z2ui5_cl_smpc_app_123 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp1 TYPE xsdboolean.
+        DATA temp2 TYPE xsdboolean.
 
     CASE client->get_event( ).
 
       WHEN `TOGGLE_EXPAND`.
         " original onCollapseExpandPress: getExpanded() -> setExpanded(!bExpanded)
-        expanded = xsdbool( expanded = abap_false ).
+        
+        temp1 = boolc( expanded = abap_false ).
+        expanded = temp1.
 
       WHEN `TOGGLE_SUB3`.
         " original onHideShowSubItemPress: toggles subItemThree visibility
-        sub3_visible = xsdbool( sub3_visible = abap_false ).
+        
+        temp2 = boolc( sub3_visible = abap_false ).
+        sub3_visible = temp2.
 
     ENDCASE.
 

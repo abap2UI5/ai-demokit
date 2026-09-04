@@ -22,7 +22,7 @@ CLASS z2ui5_cl_smpc_sapui5_007 DEFINITION PUBLIC.
         datetime  TYPE string,
         text      TYPE string,
       END OF ty_s_feed.
-    DATA mt_feed TYPE STANDARD TABLE OF ty_s_feed WITH EMPTY KEY.
+    DATA mt_feed TYPE STANDARD TABLE OF ty_s_feed WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -39,11 +39,11 @@ CLASS z2ui5_cl_smpc_sapui5_007 IMPLEMENTATION.
 
     me->client = client.
 
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
 
       set_data( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -51,32 +51,95 @@ CLASS z2ui5_cl_smpc_sapui5_007 IMPLEMENTATION.
 
   METHOD set_data.
 
-    mt_feed = VALUE #(
-              ( author = `Developer9` authorpic = `sap-icon://employee` type = `Reply`  datetime = `01.11.2023` text = `newest entry` )
-              ( author = `Developer8` authorpic = `sap-icon://employee` type = `Reply`  datetime = `01.10.2023` text = `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor` )
-              ( author = `Developer7` authorpic = `sap-icon://employee` type = `Reply`  datetime = `01.09.2023` text = `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor` )
-              ( author = `Developer6` authorpic = `sap-icon://employee` type = `Reply`  datetime = `01.08.2023` text = `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor` )
-              ( author = `Developer5` authorpic = `sap-icon://employee` type = `Reply`  datetime = `01.07.2023` text = `this is a text` )
-              ( author = `Developer4` authorpic = `sap-icon://employee` type = `Reply`  datetime = `01.06.2023` text = `this is another entry Product D` )
-              ( author = `Developer3` authorpic = `sap-icon://employee` type = `Reply`  datetime = `01.05.2023` text = `this is another entry Product C` )
-              ( author = `Developer2` authorpic = `sap-icon://employee` type = `Reply`  datetime = `01.04.2023` text = `this is another entry Product B` )
-              ( author = `Developer1` authorpic = `sap-icon://employee` type = `Reply`  datetime = `01.03.2023` text = `this is another entry Product A` )
-      ( author = `Developer` title = `this is a title` datetime = `01.02.2023` authorpic = `sap-icon://employee` type = `Request` date = `August 26 2023`
-                        text =
-      `this is a long text Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.` &&
-                          `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.` &&
-                          `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, seddiamnonumyeirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.` &&
-                          `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.` &&
-                          `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.` &&
-                          `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna` &&
-                          `aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.` )
-      ( title = `first entry` author = `Developer` datetime = `01.01.2023`  authorpic = `sap-icon://employee` type = `Reply` date = `August 26 2023` text = `this is the beginning of a timeline` ) ).
+    DATA temp1 LIKE mt_feed.
+    DATA temp2 LIKE LINE OF temp1.
+    CLEAR temp1.
+    
+    temp2-author = `Developer9`.
+    temp2-authorpic = `sap-icon://employee`.
+    temp2-type = `Reply`.
+    temp2-datetime = `01.11.2023`.
+    temp2-text = `newest entry`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-author = `Developer8`.
+    temp2-authorpic = `sap-icon://employee`.
+    temp2-type = `Reply`.
+    temp2-datetime = `01.10.2023`.
+    temp2-text = `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-author = `Developer7`.
+    temp2-authorpic = `sap-icon://employee`.
+    temp2-type = `Reply`.
+    temp2-datetime = `01.09.2023`.
+    temp2-text = `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-author = `Developer6`.
+    temp2-authorpic = `sap-icon://employee`.
+    temp2-type = `Reply`.
+    temp2-datetime = `01.08.2023`.
+    temp2-text = `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-author = `Developer5`.
+    temp2-authorpic = `sap-icon://employee`.
+    temp2-type = `Reply`.
+    temp2-datetime = `01.07.2023`.
+    temp2-text = `this is a text`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-author = `Developer4`.
+    temp2-authorpic = `sap-icon://employee`.
+    temp2-type = `Reply`.
+    temp2-datetime = `01.06.2023`.
+    temp2-text = `this is another entry Product D`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-author = `Developer3`.
+    temp2-authorpic = `sap-icon://employee`.
+    temp2-type = `Reply`.
+    temp2-datetime = `01.05.2023`.
+    temp2-text = `this is another entry Product C`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-author = `Developer2`.
+    temp2-authorpic = `sap-icon://employee`.
+    temp2-type = `Reply`.
+    temp2-datetime = `01.04.2023`.
+    temp2-text = `this is another entry Product B`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-author = `Developer1`.
+    temp2-authorpic = `sap-icon://employee`.
+    temp2-type = `Reply`.
+    temp2-datetime = `01.03.2023`.
+    temp2-text = `this is another entry Product A`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-author = `Developer`.
+    temp2-title = `this is a title`.
+    temp2-datetime = `01.02.2023`.
+    temp2-authorpic = `sap-icon://employee`.
+    temp2-type = `Request`.
+    temp2-date = `August 26 2023`.
+    temp2-text =
+`this is a long text Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.` &&
+`Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.` &&
+`Lorem ipsum dolor sit amet, consetetur sadipscing elitr, seddiamnonumyeirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.` &&
+`Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.` &&
+`Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.` &&
+`Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna` &&
+`aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `first entry`.
+    temp2-author = `Developer`.
+    temp2-datetime = `01.01.2023`.
+    temp2-authorpic = `sap-icon://employee`.
+    temp2-type = `Reply`.
+    temp2-date = `August 26 2023`.
+    temp2-text = `this is the beginning of a timeline`.
+    INSERT temp2 INTO TABLE temp1.
+    mt_feed = temp1.
 
   ENDMETHOD.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `displayBlock`   v = `true`

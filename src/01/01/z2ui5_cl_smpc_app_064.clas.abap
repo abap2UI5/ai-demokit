@@ -19,7 +19,7 @@ CLASS z2ui5_cl_smpc_app_064 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -28,8 +28,21 @@ CLASS z2ui5_cl_smpc_app_064 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `The numeric content is pressed.` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp2.
+    INSERT `show` INTO TABLE temp2.
+    INSERT `The numeric content is pressed.` INTO TABLE temp2.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -42,7 +55,7 @@ CLASS z2ui5_cl_smpc_app_064 IMPLEMENTATION.
             )->a( n = `icon`       v = `sap-icon://travel-expense`
             )->a( n = `class`      v = `sapUiSmallMargin`
             )->a( n = `press`      v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                 t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The numeric content is pressed.` ) ) )
+                                                                 t_arg = temp1 )
         )->tag( `NumericContent`
             )->a( n = `value`      v = `11`
             )->a( n = `scale`      v = `MM`
@@ -52,7 +65,7 @@ CLASS z2ui5_cl_smpc_app_064 IMPLEMENTATION.
             )->a( n = `icon`       v = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/NumericContentIcon/images/grass.jpg`
             )->a( n = `class`      v = `sapUiSmallMargin`
             )->a( n = `press`      v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                 t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The numeric content is pressed.` ) ) ) ).
+                                                                 t_arg = temp2 ) ).
 
     client->view_display( view->stringify( ) ).
 

@@ -9,7 +9,7 @@ CLASS z2ui5_cl_smpc_app_608 DEFINITION PUBLIC.
              firstcolumntext  TYPE string,
              secondcolumntext TYPE string,
            END OF ty_s_item.
-    TYPES ty_t_item TYPE STANDARD TABLE OF ty_s_item WITH EMPTY KEY.
+    TYPES ty_t_item TYPE STANDARD TABLE OF ty_s_item WITH DEFAULT KEY.
 
     DATA t_items1 TYPE ty_t_item.
     DATA t_items2 TYPE ty_t_item.
@@ -40,12 +40,12 @@ CLASS z2ui5_cl_smpc_app_608 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -54,9 +54,12 @@ CLASS z2ui5_cl_smpc_app_608 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA content TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    DATA(content) = view->ele( n = `View` ns = `mvc`
+    
+    content = view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:core` v = `sap.ui.core`
@@ -225,12 +228,18 @@ CLASS z2ui5_cl_smpc_app_608 IMPLEMENTATION.
 
     " setCorrectData: columnRatio "<a>:<b>", the ratio text and the percentages,
     " the second of which is 100 minus the rounded first
-    DATA(total) = first_ratio + second_ratio.
+    DATA total TYPE i.
+    DATA temp1 TYPE i.
+    DATA first_pct LIKE temp1.
+    total = first_ratio + second_ratio.
     IF total = 0.
       RETURN.
     ENDIF.
 
-    DATA(first_pct) = CONV i( round( val = first_ratio * 100 / total dec = 0 ) ).
+    
+    temp1 = round( val = first_ratio * 100 / total dec = 0 ).
+    
+    first_pct = temp1.
 
     column_ratio    = |{ first_ratio }:{ second_ratio }|.
     ratio_text      = column_ratio.
@@ -243,41 +252,78 @@ CLASS z2ui5_cl_smpc_app_608 IMPLEMENTATION.
 
     " onInit builds ten items per Select: the first column's text repeated five
     " times plus the row number, and the same for the second column
-    t_items1 = VALUE #(
-      ( firstcolumntext  = `First column text First column text First column text First column text First column text  1`
-        secondcolumntext = `Second column text Second column text Second column text Second column text Second column text  1` )
-      ( firstcolumntext  = `First column text First column text First column text First column text First column text  2`
-        secondcolumntext = `Second column text Second column text Second column text Second column text Second column text  2` )
-      ( firstcolumntext  = `First column text First column text First column text First column text First column text  3`
-        secondcolumntext = `Second column text Second column text Second column text Second column text Second column text  3` )
-      ( firstcolumntext  = `First column text First column text First column text First column text First column text  4`
-        secondcolumntext = `Second column text Second column text Second column text Second column text Second column text  4` )
-      ( firstcolumntext  = `First column text First column text First column text First column text First column text  5`
-        secondcolumntext = `Second column text Second column text Second column text Second column text Second column text  5` )
-      ( firstcolumntext  = `First column text First column text First column text First column text First column text  6`
-        secondcolumntext = `Second column text Second column text Second column text Second column text Second column text  6` )
-      ( firstcolumntext  = `First column text First column text First column text First column text First column text  7`
-        secondcolumntext = `Second column text Second column text Second column text Second column text Second column text  7` )
-      ( firstcolumntext  = `First column text First column text First column text First column text First column text  8`
-        secondcolumntext = `Second column text Second column text Second column text Second column text Second column text  8` )
-      ( firstcolumntext  = `First column text First column text First column text First column text First column text  9`
-        secondcolumntext = `Second column text Second column text Second column text Second column text Second column text  9` )
-      ( firstcolumntext  = `First column text First column text First column text First column text First column text  10`
-        secondcolumntext = `Second column text Second column text Second column text Second column text Second column text  10` )
-    ).
+    DATA temp2 TYPE z2ui5_cl_smpc_app_608=>ty_t_item.
+    DATA temp3 LIKE LINE OF temp2.
+    DATA temp4 TYPE z2ui5_cl_smpc_app_608=>ty_t_item.
+    DATA temp5 LIKE LINE OF temp4.
+    CLEAR temp2.
+    
+    temp3-firstcolumntext = `First column text First column text First column text First column text First column text  1`.
+    temp3-secondcolumntext = `Second column text Second column text Second column text Second column text Second column text  1`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-firstcolumntext = `First column text First column text First column text First column text First column text  2`.
+    temp3-secondcolumntext = `Second column text Second column text Second column text Second column text Second column text  2`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-firstcolumntext = `First column text First column text First column text First column text First column text  3`.
+    temp3-secondcolumntext = `Second column text Second column text Second column text Second column text Second column text  3`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-firstcolumntext = `First column text First column text First column text First column text First column text  4`.
+    temp3-secondcolumntext = `Second column text Second column text Second column text Second column text Second column text  4`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-firstcolumntext = `First column text First column text First column text First column text First column text  5`.
+    temp3-secondcolumntext = `Second column text Second column text Second column text Second column text Second column text  5`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-firstcolumntext = `First column text First column text First column text First column text First column text  6`.
+    temp3-secondcolumntext = `Second column text Second column text Second column text Second column text Second column text  6`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-firstcolumntext = `First column text First column text First column text First column text First column text  7`.
+    temp3-secondcolumntext = `Second column text Second column text Second column text Second column text Second column text  7`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-firstcolumntext = `First column text First column text First column text First column text First column text  8`.
+    temp3-secondcolumntext = `Second column text Second column text Second column text Second column text Second column text  8`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-firstcolumntext = `First column text First column text First column text First column text First column text  9`.
+    temp3-secondcolumntext = `Second column text Second column text Second column text Second column text Second column text  9`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-firstcolumntext = `First column text First column text First column text First column text First column text  10`.
+    temp3-secondcolumntext = `Second column text Second column text Second column text Second column text Second column text  10`.
+    INSERT temp3 INTO TABLE temp2.
+    t_items1 = temp2.
 
-    t_items2 = VALUE #(
-      ( firstcolumntext = `First column text` secondcolumntext = `Second column text` )
-      ( firstcolumntext = `First column text` secondcolumntext = `Second column text` )
-      ( firstcolumntext = `First column text` secondcolumntext = `Second column text` )
-      ( firstcolumntext = `First column text` secondcolumntext = `Second column text` )
-      ( firstcolumntext = `First column text` secondcolumntext = `Second column text` )
-      ( firstcolumntext = `First column text` secondcolumntext = `Second column text` )
-      ( firstcolumntext = `First column text` secondcolumntext = `Second column text` )
-      ( firstcolumntext = `First column text` secondcolumntext = `Second column text` )
-      ( firstcolumntext = `First column text` secondcolumntext = `Second column text` )
-      ( firstcolumntext = `First column text` secondcolumntext = `Second column text` )
-    ).
+    
+    CLEAR temp4.
+    
+    temp5-firstcolumntext = `First column text`.
+    temp5-secondcolumntext = `Second column text`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-firstcolumntext = `First column text`.
+    temp5-secondcolumntext = `Second column text`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-firstcolumntext = `First column text`.
+    temp5-secondcolumntext = `Second column text`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-firstcolumntext = `First column text`.
+    temp5-secondcolumntext = `Second column text`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-firstcolumntext = `First column text`.
+    temp5-secondcolumntext = `Second column text`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-firstcolumntext = `First column text`.
+    temp5-secondcolumntext = `Second column text`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-firstcolumntext = `First column text`.
+    temp5-secondcolumntext = `Second column text`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-firstcolumntext = `First column text`.
+    temp5-secondcolumntext = `Second column text`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-firstcolumntext = `First column text`.
+    temp5-secondcolumntext = `Second column text`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-firstcolumntext = `First column text`.
+    temp5-secondcolumntext = `Second column text`.
+    INSERT temp5 INTO TABLE temp4.
+    t_items2 = temp4.
 
     " the sliders' own initial values, and the state setCorrectData would leave
     first_ratio  = 3.

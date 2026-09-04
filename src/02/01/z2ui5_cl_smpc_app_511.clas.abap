@@ -9,7 +9,7 @@ CLASS z2ui5_cl_smpc_app_511 DEFINITION PUBLIC.
              productid TYPE string,
              name      TYPE string,
            END OF ty_s_product.
-    TYPES ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
+    TYPES ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH DEFAULT KEY.
 
     DATA t_products       TYPE ty_t_product.
     DATA selected_product TYPE string VALUE `HT-1001`.
@@ -29,10 +29,10 @@ CLASS z2ui5_cl_smpc_app_511 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -41,8 +41,30 @@ CLASS z2ui5_cl_smpc_app_511 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 LIKE LINE OF temp1.
+    DATA temp3 TYPE string_table.
+    DATA temp4 LIKE LINE OF temp3.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    
+    temp2 = `change event fired! ` && |\n| && ` Selected Item id: {0}` && |\n| && `Previously Selected Item id: {1}`.
+    INSERT temp2 INTO TABLE temp1.
+    INSERT `${$parameters>/selectedItem}.getId()` INTO TABLE temp1.
+    INSERT `${$parameters>/previousSelectedItem}.getId()` INTO TABLE temp1.
+    
+    CLEAR temp3.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp3.
+    INSERT `show` INTO TABLE temp3.
+    
+    temp4 = `liveChange event fired! ` && |\n| && ` Selected item id: {0}`.
+    INSERT temp4 INTO TABLE temp3.
+    INSERT `${$parameters>/selectedItem}.getId()` INTO TABLE temp3.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
         )->a( n = `xmlns:core` v = `sap.ui.core`
@@ -61,14 +83,9 @@ CLASS z2ui5_cl_smpc_app_511 IMPLEMENTATION.
                     )->a( n = `selectedKey`    v = client->_bind( selected_product )
                     )->a( n = `items`          v = |\{ path: '{ client->_bind_path( t_products ) }', sorter: \{ path: 'NAME' \} \}|
                     )->a( n = `change`         v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` )
-                                                                                              ( `change event fired! ` && |\n| && ` Selected Item id: {0}` && |\n| && `Previously Selected Item id: {1}` )
-                                                                                              ( `${$parameters>/selectedItem}.getId()` )
-                                                                                              ( `${$parameters>/previousSelectedItem}.getId()` ) ) )
+                                                                             t_arg = temp1 )
                     )->a( n = `liveChange`     v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` )
-                                                                                              ( `liveChange event fired! ` && |\n| && ` Selected item id: {0}` )
-                                                                                              ( `${$parameters>/selectedItem}.getId()` ) ) )
+                                                                             t_arg = temp3 )
 
                     )->tag( n = `ListItem` ns = `core`
                         )->a( n = `key`  v = `{PRODUCTID}`
@@ -82,17 +99,41 @@ CLASS z2ui5_cl_smpc_app_511 IMPLEMENTATION.
   METHOD model_init.
 
     " the ten products the controller seeds inline, verbatim
-    t_products = VALUE #(
-        ( productid = `HT-1001` name = `Notebook Basic 17` )
-        ( productid = `HT-1002` name = `Notebook Basic 18` )
-        ( productid = `HT-1003` name = `Notebook Basic 19` )
-        ( productid = `HT-1007` name = `ITelO Vault` )
-        ( productid = `HT-1010` name = `Notebook Professional 15` )
-        ( productid = `HT-1011` name = `Notebook Professional 17` )
-        ( productid = `HT-1020` name = `ITelO Vault Net` )
-        ( productid = `HT-1021` name = `ITelO Vault SAT` )
-        ( productid = `HT-1022` name = `Comfort Easy` )
-        ( productid = `HT-1023` name = `Comfort Senior` ) ).
+    DATA temp3 TYPE z2ui5_cl_smpc_app_511=>ty_t_product.
+    DATA temp4 LIKE LINE OF temp3.
+    CLEAR temp3.
+    
+    temp4-productid = `HT-1001`.
+    temp4-name = `Notebook Basic 17`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-productid = `HT-1002`.
+    temp4-name = `Notebook Basic 18`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-productid = `HT-1003`.
+    temp4-name = `Notebook Basic 19`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-productid = `HT-1007`.
+    temp4-name = `ITelO Vault`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-productid = `HT-1010`.
+    temp4-name = `Notebook Professional 15`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-productid = `HT-1011`.
+    temp4-name = `Notebook Professional 17`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-productid = `HT-1020`.
+    temp4-name = `ITelO Vault Net`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-productid = `HT-1021`.
+    temp4-name = `ITelO Vault SAT`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-productid = `HT-1022`.
+    temp4-name = `Comfort Easy`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-productid = `HT-1023`.
+    temp4-name = `Comfort Senior`.
+    INSERT temp4 INTO TABLE temp3.
+    t_products = temp3.
 
   ENDMETHOD.
 

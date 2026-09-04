@@ -15,7 +15,7 @@ CLASS z2ui5_cl_smpc_app_148 DEFINITION PUBLIC.
         unread    TYPE abap_bool,
         busy      TYPE abap_bool,
       END OF ty_item.
-    DATA t_items TYPE STANDARD TABLE OF ty_item WITH EMPTY KEY.
+    DATA t_items TYPE STANDARD TABLE OF ty_item WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -33,12 +33,12 @@ CLASS z2ui5_cl_smpc_app_148 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -47,11 +47,18 @@ CLASS z2ui5_cl_smpc_app_148 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the drop carries the two row indices and the insert position as client-side
     " resolved $-args (CAPABILITIES "Drag & drop reorder"); on_event reorders the
     " ABAP table with exactly the original controller's splice arithmetic
+    
+    CLEAR temp1.
+    INSERT `${$parameters>/draggedControl/oParent}.indexOfItem(${$parameters>/draggedControl})` INTO TABLE temp1.
+    INSERT `${$parameters>/droppedControl/oParent}.indexOfItem(${$parameters>/droppedControl})` INTO TABLE temp1.
+    INSERT `${$parameters>/dropPosition}` INTO TABLE temp1.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`         v = `sap.m`
         )->a( n = `xmlns:mvc`     v = `sap.ui.core.mvc`
@@ -86,10 +93,7 @@ CLASS z2ui5_cl_smpc_app_148 IMPLEMENTATION.
                         )->a( n = `dropPosition`      v = `Between`
                         )->a( n = `dropLayout`        v = `Horizontal`
                         )->a( n = `drop`              v = client->_event( val   = `DROP`
-                                                                          t_arg = VALUE #(
-                                                                            ( `${$parameters>/draggedControl/oParent}.indexOfItem(${$parameters>/draggedControl})` )
-                                                                            ( `${$parameters>/droppedControl/oParent}.indexOfItem(${$parameters>/droppedControl})` )
-                                                                            ( `${$parameters>/dropPosition}` ) ) )
+                                                                          t_arg = temp1 )
 
                 )->end(
 
@@ -127,21 +131,47 @@ CLASS z2ui5_cl_smpc_app_148 IMPLEMENTATION.
 
 
   METHOD on_event.
+      DATA temp3 TYPE i.
+      DATA drag_pos LIKE temp3.
+      DATA temp4 TYPE i.
+      DATA drop_pos LIKE temp4.
+      DATA position TYPE string.
+      DATA item LIKE LINE OF t_items.
+      DATA temp1 LIKE LINE OF t_items.
+      DATA temp2 LIKE sy-tabix.
+      DATA temp5 TYPE i.
+      DATA insert_at LIKE temp5.
 
     IF client->get_event( ) = `DROP`.
       " onDrop 1:1 - the client indices are 0-based, ABAP rows 1-based. Both
       " arrive from the frontend, so they are range-checked before they are
       " used as a table index: JS would splice a nonsense index harmlessly,
       " ABAP would dump on the read
-      DATA(drag_pos) = CONV i( client->get_event_arg( ) ).
-      DATA(drop_pos) = CONV i( client->get_event_arg( 2 ) ).
-      DATA(position) = client->get_event_arg( 3 ).
+      
+      temp3 = client->get_event_arg( ).
+      
+      drag_pos = temp3.
+      
+      temp4 = client->get_event_arg( 2 ).
+      
+      drop_pos = temp4.
+      
+      position = client->get_event_arg( 3 ).
 
       IF drag_pos < 0 OR drag_pos >= lines( t_items ) OR drop_pos < 0 OR drop_pos >= lines( t_items ).
         RETURN.
       ENDIF.
 
-      DATA(item) = t_items[ drag_pos + 1 ].
+      
+      
+      
+      temp2 = sy-tabix.
+      READ TABLE t_items INDEX drag_pos + 1 INTO temp1.
+      sy-tabix = temp2.
+      IF sy-subrc <> 0.
+        ASSERT 1 = 0.
+      ENDIF.
+      item = temp1.
       DELETE t_items INDEX drag_pos + 1.
 
       IF drag_pos < drop_pos.
@@ -154,7 +184,14 @@ CLASS z2ui5_cl_smpc_app_148 IMPLEMENTATION.
       " moment ago would be gone. Reachable: GridDragOver falls back to the LAST
       " item with "After" when the pointer is over no item at all, which can be
       " the dragged one, giving drag_pos = drop_pos = lines - 1
-      DATA(insert_at) = COND i( WHEN position = `Before` THEN drop_pos + 1 ELSE drop_pos + 2 ).
+      
+      IF position = `Before`.
+        temp5 = drop_pos + 1.
+      ELSE.
+        temp5 = drop_pos + 2.
+      ENDIF.
+      
+      insert_at = temp5.
       IF insert_at > lines( t_items ) + 1.
         insert_at = lines( t_items ) + 1.
       ENDIF.
@@ -169,35 +206,227 @@ CLASS z2ui5_cl_smpc_app_148 IMPLEMENTATION.
     " 27 items inlined from model/data.json; absent enum fields defaulted to
     " their UI5 values (highlight None, type Inactive) so the bound properties
     " stay valid, matching the original's undefined-renders-as-default.
-    t_items = VALUE #(
-      ( title = `Box title 1` subtitle = `Subtitle 1` counter = 5 highlight = `Error` type = `Active` unread = abap_true busy = abap_false )
-      ( title = `Box title 2` subtitle = `Subtitle 2` counter = 15 highlight = `Warning` type = `Active` unread = abap_false busy = abap_false )
-      ( title = `Box title 3` subtitle = `Subtitle 3` counter = 15734 highlight = `None` type = `Inactive` unread = abap_false busy = abap_true )
-      ( title = `Box title 4` subtitle = `Subtitle 4` counter = 2 highlight = `None` type = `Inactive` unread = abap_false busy = abap_false )
-      ( title = `Box title 5` subtitle = `Subtitle 5` counter = 1 highlight = `Warning` type = `Inactive` unread = abap_false busy = abap_false )
-      ( title = `Box title 6 Box title Box title Box title Box title Box title` subtitle = `Subtitle 6` counter = 5 highlight = `None` type = `Active` unread = abap_false busy = abap_false )
-      ( title = `Very long Box title that should wrap 7` subtitle = `This is a long subtitle 7` counter = 5 highlight = `Error` type = `DetailAndActive` unread = abap_false busy = abap_false )
-      ( title = `Box title B 8` subtitle = `Subtitle 8` counter = 0 highlight = `None` type = `Navigation` unread = abap_false busy = abap_false )
-      ( title = `Box title B 9 Box title B  Box title B 9 Box title B 9Box title B 9title B 9 Box title B 9Box title B` subtitle = `Subtitle 9` counter = 0 highlight = `Success` type = `Inactive` unread = abap_false busy = abap_false )
-      ( title = `Box title B 10` subtitle = `Subtitle 10` counter = 0 highlight = `None` type = `Active` unread = abap_false busy = abap_false )
-      ( title = `Box title B 11` subtitle = `Subtitle 11` counter = 0 highlight = `None` type = `Active` unread = abap_false busy = abap_false )
-      ( title = `Box title B 12` subtitle = `Subtitle 12` counter = 0 highlight = `Information` type = `Inactive` unread = abap_false busy = abap_false )
-      ( title = `Box title 13` subtitle = `Subtitle 13` counter = 5 highlight = `None` type = `Navigation` unread = abap_false busy = abap_false )
-      ( title = `Box title 14` subtitle = `Subtitle 14` counter = 0 highlight = `Success` type = `DetailAndActive` unread = abap_false busy = abap_false )
-      ( title = `Box title 15` subtitle = `Subtitle 15` counter = 0 highlight = `None` type = `Inactive` unread = abap_false busy = abap_false )
-      ( title = `Box title 16` subtitle = `Subtitle 16` counter = 37412578 highlight = `None` type = `Navigation` unread = abap_false busy = abap_false )
-      ( title = `Box title 17` subtitle = `Subtitle 17` counter = 0 highlight = `Information` type = `Inactive` unread = abap_false busy = abap_false )
-      ( title = `Box title 18` subtitle = `Subtitle 18` counter = 0 highlight = `None` type = `Inactive` unread = abap_false busy = abap_false )
-      ( title = `Very long Box title that should wrap 19` subtitle = `This is a long subtitle 19` counter = 0 highlight = `None` type = `Inactive` unread = abap_false busy = abap_false )
-      ( title = `Box title B 20` subtitle = `Subtitle 20` counter = 1 highlight = `Success` type = `Inactive` unread = abap_false busy = abap_true )
-      ( title = `Box title B 21` subtitle = `Subtitle 21` counter = 0 highlight = `None` type = `Navigation` unread = abap_false busy = abap_false )
-      ( title = `Box title B 22` subtitle = `Subtitle 22` counter = 5 highlight = `None` type = `Inactive` unread = abap_true busy = abap_false )
-      ( title = `Box title B 23` subtitle = `Subtitle 23` counter = 3 highlight = `None` type = `Inactive` unread = abap_true busy = abap_false )
-      ( title = `Box title B 24` subtitle = `Subtitle 24` counter = 5 highlight = `Error` type = `Inactive` unread = abap_false busy = abap_false )
-      ( title = `Box title B 21` subtitle = `Subtitle 21` counter = 0 highlight = `None` type = `Inactive` unread = abap_false busy = abap_false )
-      ( title = `Box title B 22` subtitle = `Subtitle 22` counter = 0 highlight = `None` type = `Navigation` unread = abap_true busy = abap_false )
-      ( title = `Box title B 23` subtitle = `Subtitle 23` counter = 0 highlight = `None` type = `Navigation` unread = abap_false busy = abap_false )
-    ).
+    DATA temp6 LIKE t_items.
+    DATA temp7 LIKE LINE OF temp6.
+    CLEAR temp6.
+    
+    temp7-title = `Box title 1`.
+    temp7-subtitle = `Subtitle 1`.
+    temp7-counter = 5.
+    temp7-highlight = `Error`.
+    temp7-type = `Active`.
+    temp7-unread = abap_true.
+    temp7-busy = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `Box title 2`.
+    temp7-subtitle = `Subtitle 2`.
+    temp7-counter = 15.
+    temp7-highlight = `Warning`.
+    temp7-type = `Active`.
+    temp7-unread = abap_false.
+    temp7-busy = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `Box title 3`.
+    temp7-subtitle = `Subtitle 3`.
+    temp7-counter = 15734.
+    temp7-highlight = `None`.
+    temp7-type = `Inactive`.
+    temp7-unread = abap_false.
+    temp7-busy = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `Box title 4`.
+    temp7-subtitle = `Subtitle 4`.
+    temp7-counter = 2.
+    temp7-highlight = `None`.
+    temp7-type = `Inactive`.
+    temp7-unread = abap_false.
+    temp7-busy = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `Box title 5`.
+    temp7-subtitle = `Subtitle 5`.
+    temp7-counter = 1.
+    temp7-highlight = `Warning`.
+    temp7-type = `Inactive`.
+    temp7-unread = abap_false.
+    temp7-busy = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `Box title 6 Box title Box title Box title Box title Box title`.
+    temp7-subtitle = `Subtitle 6`.
+    temp7-counter = 5.
+    temp7-highlight = `None`.
+    temp7-type = `Active`.
+    temp7-unread = abap_false.
+    temp7-busy = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `Very long Box title that should wrap 7`.
+    temp7-subtitle = `This is a long subtitle 7`.
+    temp7-counter = 5.
+    temp7-highlight = `Error`.
+    temp7-type = `DetailAndActive`.
+    temp7-unread = abap_false.
+    temp7-busy = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `Box title B 8`.
+    temp7-subtitle = `Subtitle 8`.
+    temp7-counter = 0.
+    temp7-highlight = `None`.
+    temp7-type = `Navigation`.
+    temp7-unread = abap_false.
+    temp7-busy = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `Box title B 9 Box title B  Box title B 9 Box title B 9Box title B 9title B 9 Box title B 9Box title B`.
+    temp7-subtitle = `Subtitle 9`.
+    temp7-counter = 0.
+    temp7-highlight = `Success`.
+    temp7-type = `Inactive`.
+    temp7-unread = abap_false.
+    temp7-busy = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `Box title B 10`.
+    temp7-subtitle = `Subtitle 10`.
+    temp7-counter = 0.
+    temp7-highlight = `None`.
+    temp7-type = `Active`.
+    temp7-unread = abap_false.
+    temp7-busy = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `Box title B 11`.
+    temp7-subtitle = `Subtitle 11`.
+    temp7-counter = 0.
+    temp7-highlight = `None`.
+    temp7-type = `Active`.
+    temp7-unread = abap_false.
+    temp7-busy = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `Box title B 12`.
+    temp7-subtitle = `Subtitle 12`.
+    temp7-counter = 0.
+    temp7-highlight = `Information`.
+    temp7-type = `Inactive`.
+    temp7-unread = abap_false.
+    temp7-busy = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `Box title 13`.
+    temp7-subtitle = `Subtitle 13`.
+    temp7-counter = 5.
+    temp7-highlight = `None`.
+    temp7-type = `Navigation`.
+    temp7-unread = abap_false.
+    temp7-busy = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `Box title 14`.
+    temp7-subtitle = `Subtitle 14`.
+    temp7-counter = 0.
+    temp7-highlight = `Success`.
+    temp7-type = `DetailAndActive`.
+    temp7-unread = abap_false.
+    temp7-busy = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `Box title 15`.
+    temp7-subtitle = `Subtitle 15`.
+    temp7-counter = 0.
+    temp7-highlight = `None`.
+    temp7-type = `Inactive`.
+    temp7-unread = abap_false.
+    temp7-busy = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `Box title 16`.
+    temp7-subtitle = `Subtitle 16`.
+    temp7-counter = 37412578.
+    temp7-highlight = `None`.
+    temp7-type = `Navigation`.
+    temp7-unread = abap_false.
+    temp7-busy = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `Box title 17`.
+    temp7-subtitle = `Subtitle 17`.
+    temp7-counter = 0.
+    temp7-highlight = `Information`.
+    temp7-type = `Inactive`.
+    temp7-unread = abap_false.
+    temp7-busy = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `Box title 18`.
+    temp7-subtitle = `Subtitle 18`.
+    temp7-counter = 0.
+    temp7-highlight = `None`.
+    temp7-type = `Inactive`.
+    temp7-unread = abap_false.
+    temp7-busy = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `Very long Box title that should wrap 19`.
+    temp7-subtitle = `This is a long subtitle 19`.
+    temp7-counter = 0.
+    temp7-highlight = `None`.
+    temp7-type = `Inactive`.
+    temp7-unread = abap_false.
+    temp7-busy = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `Box title B 20`.
+    temp7-subtitle = `Subtitle 20`.
+    temp7-counter = 1.
+    temp7-highlight = `Success`.
+    temp7-type = `Inactive`.
+    temp7-unread = abap_false.
+    temp7-busy = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `Box title B 21`.
+    temp7-subtitle = `Subtitle 21`.
+    temp7-counter = 0.
+    temp7-highlight = `None`.
+    temp7-type = `Navigation`.
+    temp7-unread = abap_false.
+    temp7-busy = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `Box title B 22`.
+    temp7-subtitle = `Subtitle 22`.
+    temp7-counter = 5.
+    temp7-highlight = `None`.
+    temp7-type = `Inactive`.
+    temp7-unread = abap_true.
+    temp7-busy = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `Box title B 23`.
+    temp7-subtitle = `Subtitle 23`.
+    temp7-counter = 3.
+    temp7-highlight = `None`.
+    temp7-type = `Inactive`.
+    temp7-unread = abap_true.
+    temp7-busy = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `Box title B 24`.
+    temp7-subtitle = `Subtitle 24`.
+    temp7-counter = 5.
+    temp7-highlight = `Error`.
+    temp7-type = `Inactive`.
+    temp7-unread = abap_false.
+    temp7-busy = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `Box title B 21`.
+    temp7-subtitle = `Subtitle 21`.
+    temp7-counter = 0.
+    temp7-highlight = `None`.
+    temp7-type = `Inactive`.
+    temp7-unread = abap_false.
+    temp7-busy = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `Box title B 22`.
+    temp7-subtitle = `Subtitle 22`.
+    temp7-counter = 0.
+    temp7-highlight = `None`.
+    temp7-type = `Navigation`.
+    temp7-unread = abap_true.
+    temp7-busy = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `Box title B 23`.
+    temp7-subtitle = `Subtitle 23`.
+    temp7-counter = 0.
+    temp7-highlight = `None`.
+    temp7-type = `Navigation`.
+    temp7-unread = abap_false.
+    temp7-busy = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    t_items = temp6.
 
   ENDMETHOD.
 

@@ -39,9 +39,9 @@ CLASS z2ui5_cl_smpc_app_065 DEFINITION PUBLIC.
         code           TYPE string,
       END OF ty_s_message.
 
-    DATA t_forms      TYPE STANDARD TABLE OF ty_s_form WITH EMPTY KEY.
-    DATA t_employment TYPE STANDARD TABLE OF ty_s_employment WITH EMPTY KEY.
-    DATA t_messages   TYPE STANDARD TABLE OF ty_s_message WITH EMPTY KEY.
+    DATA t_forms      TYPE STANDARD TABLE OF ty_s_form WITH DEFAULT KEY.
+    DATA t_employment TYPE STANDARD TABLE OF ty_s_employment WITH DEFAULT KEY.
+    DATA t_messages   TYPE STANDARD TABLE OF ty_s_message WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -59,14 +59,14 @@ CLASS z2ui5_cl_smpc_app_065 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
       " original onInit: MessageToast.show('Press "Save" to trigger validation.')
       client->message_toast_display( `Press "Save" to trigger validation.` ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -75,8 +75,15 @@ CLASS z2ui5_cl_smpc_app_065 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `messagePopover` INTO TABLE temp1.
+    INSERT `toggleBy` INTO TABLE temp1.
+    INSERT `messagePopoverBtn` INTO TABLE temp1.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`      v = `100%`
         )->a( n = `xmlns`       v = `sap.m`
@@ -226,7 +233,7 @@ CLASS z2ui5_cl_smpc_app_065 IMPLEMENTATION.
                         " original: this.oMP.toggle(oEvent.getSource()) - a pure client-side toggle, so
                         " wired roundtrip-free (no on_event) anchored to the button by its own id
                         )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                               t_arg = VALUE #( ( `messagePopover` ) ( `toggleBy` ) ( `messagePopoverBtn` ) ) )
+                                                                               t_arg = temp1 )
 
                         )->ele( `dependents`
                             )->ele( `MessagePopover`
@@ -270,6 +277,24 @@ CLASS z2ui5_cl_smpc_app_065 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA lv_control_id TYPE string.
+          DATA temp3 TYPE string_table.
+          DATA temp5 TYPE string_table.
+          DATA temp7 TYPE string_table.
+          FIELD-SYMBOLS <temp9> LIKE LINE OF t_forms.
+          DATA temp10 LIKE sy-tabix.
+          FIELD-SYMBOLS <temp11> LIKE LINE OF t_forms.
+          DATA temp12 LIKE sy-tabix.
+          FIELD-SYMBOLS <temp13> LIKE LINE OF t_forms.
+          DATA temp14 LIKE sy-tabix.
+          FIELD-SYMBOLS <temp15> LIKE LINE OF t_employment.
+          DATA temp16 LIKE sy-tabix.
+        DATA temp17 LIKE t_messages.
+        DATA temp18 LIKE LINE OF temp17.
+        DATA temp19 LIKE LINE OF t_messages.
+        DATA lr_msg LIKE REF TO temp19.
+          DATA temp20 TYPE z2ui5_cl_smpc_app_065=>ty_s_message-code.
+        DATA temp21 TYPE string_table.
 
     CASE client->get_event( ).
 
@@ -277,14 +302,25 @@ CLASS z2ui5_cl_smpc_app_065 IMPLEMENTATION.
         " original: activeTitlePress scrolls to the message's target control, closes the popover
         " and focuses the control; the full control id travels from the pressed MessageItem's
         " message object (getControlIds()[0]) and the frontend SCROLL_INTO_VIEW + SET_FOCUS act on it
-        DATA(lv_control_id) = client->get_event_arg( ).
+        
+        lv_control_id = client->get_event_arg( ).
         IF lv_control_id IS NOT INITIAL.
+          
+          CLEAR temp3.
+          INSERT lv_control_id INTO TABLE temp3.
           client->follow_up_action( val   = client->cs_event-scroll_into_view
-                                    t_arg = VALUE #( ( lv_control_id ) ) ).
+                                    t_arg = temp3 ).
+          
+          CLEAR temp5.
+          INSERT `messagePopover` INTO TABLE temp5.
+          INSERT `close` INTO TABLE temp5.
           client->follow_up_action( val   = client->cs_event-control_by_id
-                                    t_arg = VALUE #( ( `messagePopover` ) ( `close` ) ) ).
+                                    t_arg = temp5 ).
+          
+          CLEAR temp7.
+          INSERT lv_control_id INTO TABLE temp7.
           client->follow_up_action( val   = client->cs_event-set_focus
-                                    t_arg = VALUE #( ( lv_control_id ) ) ).
+                                    t_arg = temp7 ).
         ENDIF.
 
       WHEN `SAVE`.
@@ -297,36 +333,94 @@ CLASS z2ui5_cl_smpc_app_065 IMPLEMENTATION.
         " z2ui5.cc.MessageManager reconciles into the message manager.
         IF lines( t_forms ) >= 7.
           " John Miller  -> /T_FORMS/4/NAME
-          t_forms[ 5 ]-name     = ``.
+          
+          
+          temp10 = sy-tabix.
+          READ TABLE t_forms INDEX 5 ASSIGNING <temp9>.
+          sy-tabix = temp10.
+          IF sy-subrc <> 0.
+            ASSERT 1 = 0.
+          ENDIF.
+          <temp9>-name     = ``.
           " Stefan Bosch -> /T_FORMS/5/ZIP_CODE
-          t_forms[ 6 ]-zip_code = `AAA`.
+          
+          
+          temp12 = sy-tabix.
+          READ TABLE t_forms INDEX 6 ASSIGNING <temp11>.
+          sy-tabix = temp12.
+          IF sy-subrc <> 0.
+            ASSERT 1 = 0.
+          ENDIF.
+          <temp11>-zip_code = `AAA`.
           " Maria Fontes -> /T_FORMS/6/EMAIL
-          t_forms[ 7 ]-email    = `MariaFontes.com`.
+          
+          
+          temp14 = sy-tabix.
+          READ TABLE t_forms INDEX 7 ASSIGNING <temp13>.
+          sy-tabix = temp14.
+          IF sy-subrc <> 0.
+            ASSERT 1 = 0.
+          ENDIF.
+          <temp13>-email    = `MariaFontes.com`.
         ENDIF.
         IF t_employment IS NOT INITIAL.
-          t_employment[ 1 ]-weeklyhours = `400`.
+          
+          
+          temp16 = sy-tabix.
+          READ TABLE t_employment INDEX 1 ASSIGNING <temp15>.
+          sy-tabix = temp16.
+          IF sy-subrc <> 0.
+            ASSERT 1 = 0.
+          ENDIF.
+          <temp15>-weeklyhours = `400`.
         ENDIF.
-        t_messages = VALUE #(
-          ( message = `A mandatory field is required` type = `Error` additionaltext = `Name`
-            target = `/T_FORMS/4/NAME` )
-          ( message = `Enter a number with no decimal places` type = `Error` additionaltext = `ZIP Code/City`
-            target = `/T_FORMS/5/ZIP_CODE` )
-          ( message = `Enter a valid value` type = `Error` additionaltext = `Email`
-            target = `/T_FORMS/6/EMAIL` )
-          ( message = `The value should not exceed 40` type = `Warning` additionaltext = `Standard Weekly Hours`
-            description = `The value of the working hours field should not exceed 40 hours.`
-            target = `/T_EMPLOYMENT/0/WEEKLYHOURS` ) ).
+        
+        CLEAR temp17.
+        
+        temp18-message = `A mandatory field is required`.
+        temp18-type = `Error`.
+        temp18-additionaltext = `Name`.
+        temp18-target = `/T_FORMS/4/NAME`.
+        INSERT temp18 INTO TABLE temp17.
+        temp18-message = `Enter a number with no decimal places`.
+        temp18-type = `Error`.
+        temp18-additionaltext = `ZIP Code/City`.
+        temp18-target = `/T_FORMS/5/ZIP_CODE`.
+        INSERT temp18 INTO TABLE temp17.
+        temp18-message = `Enter a valid value`.
+        temp18-type = `Error`.
+        temp18-additionaltext = `Email`.
+        temp18-target = `/T_FORMS/6/EMAIL`.
+        INSERT temp18 INTO TABLE temp17.
+        temp18-message = `The value should not exceed 40`.
+        temp18-type = `Warning`.
+        temp18-additionaltext = `Standard Weekly Hours`.
+        temp18-description = `The value of the working hours field should not exceed 40 hours.`.
+        temp18-target = `/T_EMPLOYMENT/0/WEEKLYHOURS`.
+        INSERT temp18 INTO TABLE temp17.
+        t_messages = temp17.
         " the message group (Personal, <section>) is a domain classification, so
         " it is computed in the backend (thin frontend) and rides on the Message
         " code field - the original derives it in its controller's getGroupName.
-        LOOP AT t_messages REFERENCE INTO DATA(lr_msg).
-          lr_msg->code = COND #( WHEN lr_msg->additionaltext = `Email`
-                                 THEN `Personal, Contact`
-                                 ELSE `Personal, Information` ).
+        
+        
+        LOOP AT t_messages REFERENCE INTO lr_msg.
+          
+          IF lr_msg->additionaltext = `Email`.
+            temp20 = `Personal, Contact`.
+          ELSE.
+            temp20 = `Personal, Information`.
+          ENDIF.
+          lr_msg->code = temp20.
         ENDLOOP.
         " original: oMP.openBy(oButton) after the values are set - open the popover anchored to the button
+        
+        CLEAR temp21.
+        INSERT `messagePopover` INTO TABLE temp21.
+        INSERT `openBy` INTO TABLE temp21.
+        INSERT `messagePopoverBtn` INTO TABLE temp21.
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `messagePopover` ) ( `openBy` ) ( `messagePopoverBtn` ) ) ).
+                                  t_arg = temp21 ).
 
       WHEN `CHANGE`.
         " the sample's onChange manually adds/removes required-field and constraint messages; here
@@ -340,35 +434,113 @@ CLASS z2ui5_cl_smpc_app_065 IMPLEMENTATION.
 
   METHOD model_init.
 
-    t_forms = VALUE #(
-      ( name = `Julie Armstrong` street_name = `Mainstreet` street_number = `1278`
-        zip_code = `12345` zip_city = `Maintown` country = `Germany`
-        email = `Julie.Armstrong@company.com` phone_number = `+1 (610) 661-1000` phone_time = `12:00` website = `n/a` )
-      ( name = `Denise Smith` street_name = `Mainstreet` street_number = `1567`
-        zip_code = `12345` zip_city = `Maintown` country = `Germany`
-        email = `Denise.Smith@company.com` phone_number = `+1 (610) 661-1000` phone_time = `12:00` website = `n/a` )
-      ( name = `Richard Wilson` street_name = `Mainstreet` street_number = `2984`
-        zip_code = `12345` zip_city = `Maintown` country = `Germany`
-        email = `Richard.Wilson@company.com` phone_number = `+1 (610) 661-1000` phone_time = `12:00` website = `n/a` )
-      ( name = `Gerd Becker` street_name = `Mainstreet` street_number = `3614`
-        zip_code = `12345` zip_city = `Maintown` country = `Germany`
-        email = `Gerd.Becker@company.com` phone_number = `+1 (610) 661-1000` phone_time = `12:00` website = `n/a` )
-      ( name = `John Miller` street_name = `Mainstreet` street_number = `1618`
-        zip_code = `AAA` zip_city = `Maintown` country = `Germany`
-        email = `John.Miller@company.com` phone_number = `+1 (610) 661-1000` phone_time = `12:00` website = `n/a` )
-      ( name = `Stefan Bosch` street_name = `Mainstreet` street_number = `4864`
-        zip_code = `12345` zip_city = `Maintown` country = `Germany`
-        email = `Stefan.Bosch@company.com` phone_number = `+1 (610) 661-1000` phone_time = `12:00` website = `n/a` )
-      ( name = `Maria Fontes` street_name = `Mainstreet` street_number = `4864`
-        zip_code = `12345` zip_city = `Maintown` country = `Germany`
-        email = `` phone_number = `+1 (610) 661-1000` phone_time = `12:00` website = `MariaFontescompany.com` )
-      ( name = `Antonio Ferrari` street_name = `Mainstreet` street_number = `2598`
-        zip_code = `12345` zip_city = `Maintown` country = `Germany`
-        email = `Antonio.Ferrari@company.com` phone_number = `+1 (610) 661-1000` phone_time = `12:00` website = `n/a` ) ).
+    DATA temp23 LIKE t_forms.
+    DATA temp24 LIKE LINE OF temp23.
+    DATA temp25 LIKE t_employment.
+    DATA temp26 LIKE LINE OF temp25.
+    CLEAR temp23.
+    
+    temp24-name = `Julie Armstrong`.
+    temp24-street_name = `Mainstreet`.
+    temp24-street_number = `1278`.
+    temp24-zip_code = `12345`.
+    temp24-zip_city = `Maintown`.
+    temp24-country = `Germany`.
+    temp24-email = `Julie.Armstrong@company.com`.
+    temp24-phone_number = `+1 (610) 661-1000`.
+    temp24-phone_time = `12:00`.
+    temp24-website = `n/a`.
+    INSERT temp24 INTO TABLE temp23.
+    temp24-name = `Denise Smith`.
+    temp24-street_name = `Mainstreet`.
+    temp24-street_number = `1567`.
+    temp24-zip_code = `12345`.
+    temp24-zip_city = `Maintown`.
+    temp24-country = `Germany`.
+    temp24-email = `Denise.Smith@company.com`.
+    temp24-phone_number = `+1 (610) 661-1000`.
+    temp24-phone_time = `12:00`.
+    temp24-website = `n/a`.
+    INSERT temp24 INTO TABLE temp23.
+    temp24-name = `Richard Wilson`.
+    temp24-street_name = `Mainstreet`.
+    temp24-street_number = `2984`.
+    temp24-zip_code = `12345`.
+    temp24-zip_city = `Maintown`.
+    temp24-country = `Germany`.
+    temp24-email = `Richard.Wilson@company.com`.
+    temp24-phone_number = `+1 (610) 661-1000`.
+    temp24-phone_time = `12:00`.
+    temp24-website = `n/a`.
+    INSERT temp24 INTO TABLE temp23.
+    temp24-name = `Gerd Becker`.
+    temp24-street_name = `Mainstreet`.
+    temp24-street_number = `3614`.
+    temp24-zip_code = `12345`.
+    temp24-zip_city = `Maintown`.
+    temp24-country = `Germany`.
+    temp24-email = `Gerd.Becker@company.com`.
+    temp24-phone_number = `+1 (610) 661-1000`.
+    temp24-phone_time = `12:00`.
+    temp24-website = `n/a`.
+    INSERT temp24 INTO TABLE temp23.
+    temp24-name = `John Miller`.
+    temp24-street_name = `Mainstreet`.
+    temp24-street_number = `1618`.
+    temp24-zip_code = `AAA`.
+    temp24-zip_city = `Maintown`.
+    temp24-country = `Germany`.
+    temp24-email = `John.Miller@company.com`.
+    temp24-phone_number = `+1 (610) 661-1000`.
+    temp24-phone_time = `12:00`.
+    temp24-website = `n/a`.
+    INSERT temp24 INTO TABLE temp23.
+    temp24-name = `Stefan Bosch`.
+    temp24-street_name = `Mainstreet`.
+    temp24-street_number = `4864`.
+    temp24-zip_code = `12345`.
+    temp24-zip_city = `Maintown`.
+    temp24-country = `Germany`.
+    temp24-email = `Stefan.Bosch@company.com`.
+    temp24-phone_number = `+1 (610) 661-1000`.
+    temp24-phone_time = `12:00`.
+    temp24-website = `n/a`.
+    INSERT temp24 INTO TABLE temp23.
+    temp24-name = `Maria Fontes`.
+    temp24-street_name = `Mainstreet`.
+    temp24-street_number = `4864`.
+    temp24-zip_code = `12345`.
+    temp24-zip_city = `Maintown`.
+    temp24-country = `Germany`.
+    temp24-email = ``.
+    temp24-phone_number = `+1 (610) 661-1000`.
+    temp24-phone_time = `12:00`.
+    temp24-website = `MariaFontescompany.com`.
+    INSERT temp24 INTO TABLE temp23.
+    temp24-name = `Antonio Ferrari`.
+    temp24-street_name = `Mainstreet`.
+    temp24-street_number = `2598`.
+    temp24-zip_code = `12345`.
+    temp24-zip_city = `Maintown`.
+    temp24-country = `Germany`.
+    temp24-email = `Antonio.Ferrari@company.com`.
+    temp24-phone_number = `+1 (610) 661-1000`.
+    temp24-phone_time = `12:00`.
+    temp24-website = `n/a`.
+    INSERT temp24 INTO TABLE temp23.
+    t_forms = temp23.
 
-    t_employment = VALUE #(
-      ( jobtitle = `Senior UI Developer (UIDEV-SR)` paygrade = `Salary Grade 18 (GR-14` weeklyhours = `0`
-        unit = `ABC` class = `Employee` fte = `1` ) ).
+    
+    CLEAR temp25.
+    
+    temp26-jobtitle = `Senior UI Developer (UIDEV-SR)`.
+    temp26-paygrade = `Salary Grade 18 (GR-14`.
+    temp26-weeklyhours = `0`.
+    temp26-unit = `ABC`.
+    temp26-class = `Employee`.
+    temp26-fte = `1`.
+    INSERT temp26 INTO TABLE temp25.
+    t_employment = temp25.
 
   ENDMETHOD.
 

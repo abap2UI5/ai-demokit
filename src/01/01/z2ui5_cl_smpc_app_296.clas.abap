@@ -26,12 +26,12 @@ CLASS z2ui5_cl_smpc_app_296 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -40,7 +40,8 @@ CLASS z2ui5_cl_smpc_app_296 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
@@ -124,11 +125,16 @@ CLASS z2ui5_cl_smpc_app_296 IMPLEMENTATION.
 
 
   METHOD dialog_open.
+    DATA temp1 TYPE string_table.
 
     search_operator = operator.
 
+    
+    CLEAR temp1.
+    INSERT `settingsDialog` INTO TABLE temp1.
+    INSERT `open` INTO TABLE temp1.
     client->follow_up_action( val   = client->cs_event-control_by_id
-                              t_arg = VALUE #( ( `settingsDialog` ) ( `open` ) ) ).
+                              t_arg = temp1 ).
 
   ENDMETHOD.
 

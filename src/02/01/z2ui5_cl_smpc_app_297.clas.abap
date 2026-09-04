@@ -24,12 +24,12 @@ CLASS z2ui5_cl_smpc_app_297 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -38,8 +38,13 @@ CLASS z2ui5_cl_smpc_app_297 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE z2ui5_if_client=>ty_s_event_control.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    temp1-prevent_default_expr = |${ client->_bind( date_value_state ) } === 'Error'|.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
@@ -323,8 +328,7 @@ CLASS z2ui5_cl_smpc_app_297 IMPLEMENTATION.
                           " braces (|${ ... }| yields "$" + the bare path), and $/PATH is
                           " not a token the UI5 event-handler parser knows. The braced
                           " form gives the ${/PATH} the expression needs
-                          s_ctrl = VALUE #( prevent_default_expr =
-                                              |${ client->_bind( date_value_state ) } === 'Error'| ) )
+                          s_ctrl = temp1 )
 
                 )->ele( `customTabs`
                     )->ele( `ViewSettingsCustomTab`
@@ -368,20 +372,36 @@ CLASS z2ui5_cl_smpc_app_297 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp2 TYPE string_table.
+        DATA temp4 TYPE string_table.
+        DATA temp6 TYPE string_table.
+        DATA filter_string TYPE string.
 
     CASE client->get_event( ).
 
       WHEN `OPEN_DIALOG`.
+        
+        CLEAR temp2.
+        INSERT `settingsDialog` INTO TABLE temp2.
+        INSERT `open` INTO TABLE temp2.
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `settingsDialog` ) ( `open` ) ) ).
+                                  t_arg = temp2 ).
 
       WHEN `OPEN_SINGLE_TAB`.
+        
+        CLEAR temp4.
+        INSERT `settingsDialogCustomTab` INTO TABLE temp4.
+        INSERT `open` INTO TABLE temp4.
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `settingsDialogCustomTab` ) ( `open` ) ) ).
+                                  t_arg = temp4 ).
 
       WHEN `OPEN_DATE_PICKER`.
+        
+        CLEAR temp6.
+        INSERT `settingsDialogDatePicker` INTO TABLE temp6.
+        INSERT `open` INTO TABLE temp6.
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `settingsDialogDatePicker` ) ( `open` ) ) ).
+                                  t_arg = temp6 ).
 
       WHEN `DATE_CHANGE`.
         " the original validateDate: an unparsable date marks the field
@@ -402,7 +422,8 @@ CLASS z2ui5_cl_smpc_app_297 IMPLEMENTATION.
         ENDIF.
 
       WHEN `CONFIRM`.
-        DATA(filter_string) = client->get_event_arg( ).
+        
+        filter_string = client->get_event_arg( ).
         IF filter_string IS NOT INITIAL.
           client->message_toast_display( filter_string ).
         ENDIF.

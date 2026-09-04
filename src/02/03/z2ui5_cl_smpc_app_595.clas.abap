@@ -20,11 +20,11 @@ CLASS z2ui5_cl_smpc_app_595 DEFINITION PUBLIC.
              category     TYPE string,
              price        TYPE string,
            END OF ty_s_product.
-    TYPES ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
+    TYPES ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH DEFAULT KEY.
 
     DATA t_products TYPE ty_t_product.
 
-    DATA t_employees TYPE STANDARD TABLE OF ty_s_employee WITH EMPTY KEY.
+    DATA t_employees TYPE STANDARD TABLE OF ty_s_employee WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -41,10 +41,10 @@ CLASS z2ui5_cl_smpc_app_595 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -53,8 +53,49 @@ CLASS z2ui5_cl_smpc_app_595 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 LIKE LINE OF t_employees.
+    DATA temp2 LIKE sy-tabix.
+    DATA temp3 LIKE LINE OF t_employees.
+    DATA temp4 LIKE sy-tabix.
+    DATA temp5 LIKE LINE OF t_employees.
+    DATA temp6 LIKE sy-tabix.
+    DATA temp7 LIKE LINE OF t_employees.
+    DATA temp8 LIKE sy-tabix.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    
+    temp2 = sy-tabix.
+    READ TABLE t_employees INDEX 1 INTO temp1.
+    sy-tabix = temp2.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp4 = sy-tabix.
+    READ TABLE t_employees INDEX 1 INTO temp3.
+    sy-tabix = temp4.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp6 = sy-tabix.
+    READ TABLE t_employees INDEX 2 INTO temp5.
+    sy-tabix = temp6.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp8 = sy-tabix.
+    READ TABLE t_employees INDEX 2 INTO temp7.
+    sy-tabix = temp8.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`       v = `100%`
         )->a( n = `xmlns`        v = `sap.uxap`
@@ -592,9 +633,9 @@ CLASS z2ui5_cl_smpc_app_595 IMPLEMENTATION.
                                                     )->ele( n = `content` ns = `layout`
                                                         )->ele( n = `VerticalLayout` ns = `layout`
                                                             )->tag( n = `Label` ns = `m`
-                                                                )->a( n = `text` v = client->_bind( val = t_employees[ 1 ]-name tab = t_employees tab_index = 1 )
+                                                                )->a( n = `text` v = client->_bind( val = temp1-name tab = t_employees tab_index = 1 )
                                                             )->tag( n = `Label` ns = `m`
-                                                                )->a( n = `text` v = client->_bind( val = t_employees[ 1 ]-job tab = t_employees tab_index = 1 )
+                                                                )->a( n = `text` v = client->_bind( val = temp3-job tab = t_employees tab_index = 1 )
 
                                                             )->ele( n = `layoutData` ns = `layout`
                                                                 )->tag( n = `GridData` ns = `layout`
@@ -620,9 +661,9 @@ CLASS z2ui5_cl_smpc_app_595 IMPLEMENTATION.
 
                                                     )->ele( n = `VerticalLayout` ns = `layout`
                                                         )->tag( n = `Label` ns = `m`
-                                                            )->a( n = `text` v = client->_bind( val = t_employees[ 2 ]-name tab = t_employees tab_index = 2 )
+                                                            )->a( n = `text` v = client->_bind( val = temp5-name tab = t_employees tab_index = 2 )
                                                         )->tag( n = `Label` ns = `m`
-                                                            )->a( n = `text` v = client->_bind( val = t_employees[ 2 ]-job tab = t_employees tab_index = 2 )
+                                                            )->a( n = `text` v = client->_bind( val = temp7-job tab = t_employees tab_index = 2 )
 
                                                         )->ele( n = `layoutData` ns = `layout`
                                                             )->tag( n = `GridData` ns = `layout`
@@ -705,25 +746,37 @@ CLASS z2ui5_cl_smpc_app_595 IMPLEMENTATION.
     " ModelMapping elements map onto the internal models emp1>..emp6> - one
     " table, so the model keeps the array shape the original addresses and the
     " view addresses it per row (client->_bind( tab / tab_index ))
-    t_employees = VALUE #(
-      ( name    = `Michael Adams`
-        job     = `Scrum Master`
-        picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png` )
-      ( name    = `John Miller`
-        job     = `Product Owner`
-        picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png` )
-      ( name    = `Richard Wilson`
-        job     = `Ux Designer`
-        picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png` )
-      ( name    = `Julie Armstrong`
-        job     = `Quality Engineer`
-        picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png` )
-      ( name    = `Denise Smith`
-        job     = `Team Member`
-        picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png` )
-      ( name    = `Richard Adams`
-        job     = `Team Member`
-        picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png` ) ).
+    DATA temp3 LIKE t_employees.
+    DATA temp4 LIKE LINE OF temp3.
+    DATA temp5 TYPE z2ui5_cl_smpc_app_595=>ty_t_product.
+    DATA temp6 LIKE LINE OF temp5.
+    CLEAR temp3.
+    
+    temp4-name = `Michael Adams`.
+    temp4-job = `Scrum Master`.
+    temp4-picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-name = `John Miller`.
+    temp4-job = `Product Owner`.
+    temp4-picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-name = `Richard Wilson`.
+    temp4-job = `Ux Designer`.
+    temp4-picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-name = `Julie Armstrong`.
+    temp4-job = `Quality Engineer`.
+    temp4-picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-name = `Denise Smith`.
+    temp4-job = `Team Member`.
+    temp4-picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-name = `Richard Adams`.
+    temp4-job = `Team Member`.
+    temp4-picture = `https://sdk.openui5.org/test-resources/sap/uxap/images/person.png`.
+    INSERT temp4 INTO TABLE temp3.
+    t_employees = temp3.
 
     " sap/ui/demo/mock/products.json /ProductCollection, already in the order the
     " rows binding's sorter puts it in (path 'Name', ascending) - a thin frontend
@@ -731,131 +784,748 @@ CLASS z2ui5_cl_smpc_app_595 IMPLEMENTATION.
     " sap/ui/demo/mock/products.json /ProductCollection, seeded verbatim in the
     " file's own order and then put into the order the rows binding's sorter
     " asks for (path 'Name') - a thin frontend sorts the data it sends (app 298)
-    t_products = VALUE #(
-      ( productid = `HT-1000` name = `Notebook Basic 15`                                  suppliername = `Very Best Screens` category = `Laptops`                     price = `956` )
-      ( productid = `HT-1001` name = `Notebook Basic 17`                                  suppliername = `Very Best Screens` category = `Laptops`                     price = `1249` )
-      ( productid = `HT-1002` name = `Notebook Basic 18`                                  suppliername = `Very Best Screens` category = `Laptops`                     price = `1570` )
-      ( productid = `HT-1003` name = `Notebook Basic 19`                                  suppliername = `Smartcards`        category = `Laptops`                     price = `1650` )
-      ( productid = `HT-1007` name = `ITelO Vault`                                        suppliername = `Technocom`         category = `Accessories`                 price = `299` )
-      ( productid = `HT-1010` name = `Notebook Professional 15`                           suppliername = `Very Best Screens` category = `Accessories`                 price = `1999` )
-      ( productid = `HT-1011` name = `Notebook Professional 17`                           suppliername = `Very Best Screens` category = `Laptops`                     price = `2299` )
-      ( productid = `HT-1020` name = `ITelO Vault Net`                                    suppliername = `Technocom`         category = `Accessories`                 price = `459` )
-      ( productid = `HT-1021` name = `ITelO Vault SAT`                                    suppliername = `Technocom`         category = `Accessories`                 price = `149` )
-      ( productid = `HT-1022` name = `Comfort Easy`                                       suppliername = `Technocom`         category = `Accessories`                 price = `1679` )
-      ( productid = `HT-1023` name = `Comfort Senior`                                     suppliername = `Technocom`         category = `Accessories`                 price = `512` )
-      ( productid = `HT-1030` name = `Ergo Screen E-I`                                    suppliername = `Very Best Screens` category = `Flat Screen Monitors`        price = `230` )
-      ( productid = `HT-1031` name = `Ergo Screen E-II`                                   suppliername = `Very Best Screens` category = `Flat Screen Monitors`        price = `285` )
-      ( productid = `HT-1032` name = `Ergo Screen E-III`                                  suppliername = `Very Best Screens` category = `Flat Screen Monitors`        price = `345` )
-      ( productid = `HT-1035` name = `Flat Basic`                                         suppliername = `Very Best Screens` category = `Flat Screen Monitors`        price = `399` )
-      ( productid = `HT-1036` name = `Flat Future`                                        suppliername = `Very Best Screens` category = `Flat Screen Monitors`        price = `430` )
-      ( productid = `HT-1037` name = `Flat XL`                                            suppliername = `Very Best Screens` category = `Flat Screen Monitors`        price = `1230` )
-      ( productid = `HT-1040` name = `Laser Professional Eco`                             suppliername = `Alpha Printers`    category = `Printers`                    price = `830` )
-      ( productid = `HT-1041` name = `Laser Basic`                                        suppliername = `Alpha Printers`    category = `Printers`                    price = `490` )
-      ( productid = `HT-1042` name = `Laser Allround`                                     suppliername = `Alpha Printers`    category = `Printers`                    price = `349` )
-      ( productid = `HT-1050` name = `Ultra Jet Super Color`                              suppliername = `Alpha Printers`    category = `Printers`                    price = `139` )
-      ( productid = `HT-1051` name = `Ultra Jet Mobile`                                   suppliername = `Printer for All`   category = `Printers`                    price = `99` )
-      ( productid = `HT-1052` name = `Ultra Jet Super Highspeed`                          suppliername = `Printer for All`   category = `Printers`                    price = `170` )
-      ( productid = `HT-1055` name = `Multi Print`                                        suppliername = `Printer for All`   category = `Multifunction Printers`      price = `99` )
-      ( productid = `HT-1056` name = `Multi Color`                                        suppliername = `Printer for All`   category = `Multifunction Printers`      price = `119` )
-      ( productid = `HT-1060` name = `Cordless Mouse`                                     suppliername = `Oxynum`            category = `Mice`                        price = `9` )
-      ( productid = `HT-1061` name = `Speed Mouse`                                        suppliername = `Oxynum`            category = `Mice`                        price = `7` )
-      ( productid = `HT-1062` name = `Track Mouse`                                        suppliername = `Oxynum`            category = `Mice`                        price = `11` )
-      ( productid = `HT-1063` name = `Ergonomic Keyboard`                                 suppliername = `Oxynum`            category = `Keyboards`                   price = `14` )
-      ( productid = `HT-1064` name = `Internet Keyboard`                                  suppliername = `Oxynum`            category = `Keyboards`                   price = `16` )
-      ( productid = `HT-1065` name = `Media Keyboard`                                     suppliername = `Oxynum`            category = `Keyboards`                   price = `26` )
-      ( productid = `HT-1066` name = `Mousepad`                                           suppliername = `Oxynum`            category = `Mousepads`                   price = `6.99` )
-      ( productid = `HT-1067` name = `Ergo Mousepad`                                      suppliername = `Oxynum`            category = `Mousepads`                   price = `8.99` )
-      ( productid = `HT-1068` name = `Designer Mousepad`                                  suppliername = `Fasttech`          category = `Mousepads`                   price = `12.99` )
-      ( productid = `HT-1069` name = `Universal card reader`                              suppliername = `Fasttech`          category = `Computer System Accessories` price = `14` )
-      ( productid = `HT-1070` name = `Proctra X`                                          suppliername = `Ultrasonic United` category = `Graphic Cards`               price = `70.9` )
-      ( productid = `HT-1071` name = `Gladiator MX`                                       suppliername = `Ultrasonic United` category = `Graphic Cards`               price = `81.7` )
-      ( productid = `HT-1072` name = `Hurricane GX`                                       suppliername = `Ultrasonic United` category = `Graphic Cards`               price = `101.2` )
-      ( productid = `HT-1073` name = `Hurricane GX/LN`                                    suppliername = `Smartcards`        category = `Graphic Cards`               price = `139.99` )
-      ( productid = `HT-1080` name = `Photo Scan`                                         suppliername = `Printer for All`   category = `Scanners`                    price = `129` )
-      ( productid = `HT-1081` name = `Power Scan`                                         suppliername = `Printer for All`   category = `Scanners`                    price = `89` )
-      ( productid = `HT-1082` name = `Jet Scan Professional`                              suppliername = `Printer for All`   category = `Scanners`                    price = `169` )
-      ( productid = `HT-1083` name = `Jet Scan Professional`                              suppliername = `Printer for All`   category = `Scanners`                    price = `189` )
-      ( productid = `HT-1085` name = `Copymaster`                                         suppliername = `Alpha Printers`    category = `Multifunction Printers`      price = `1499` )
-      ( productid = `HT-1090` name = `Surround Sound`                                     suppliername = `Speaker Experts`   category = `Speakers`                    price = `39` )
-      ( productid = `HT-1091` name = `Blaster Extreme`                                    suppliername = `Speaker Experts`   category = `Speakers`                    price = `26` )
-      ( productid = `HT-1092` name = `Sound Booster`                                      suppliername = `Speaker Experts`   category = `Speakers`                    price = `45` )
-      ( productid = `HT-1095` name = `Lovely Sound 5.1 Wireless`                          suppliername = `Fasttech`          category = `Accessories`                 price = `49` )
-      ( productid = `HT-1096` name = `Lovely Sound 5.1`                                   suppliername = `Fasttech`          category = `Accessories`                 price = `39` )
-      ( productid = `HT-1097` name = `Lovely Sound Stereo`                                suppliername = `Fasttech`          category = `Accessories`                 price = `29` )
-      ( productid = `HT-1100` name = `Smart Office`                                       suppliername = `Technocom`         category = `Software`                    price = `89.9` )
-      ( productid = `HT-1101` name = `Smart Design`                                       suppliername = `Technocom`         category = `Software`                    price = `79.9` )
-      ( productid = `HT-1102` name = `Smart Network`                                      suppliername = `Technocom`         category = `Software`                    price = `69` )
-      ( productid = `HT-1103` name = `Smart Multimedia`                                   suppliername = `Technocom`         category = `Software`                    price = `77` )
-      ( productid = `HT-1104` name = `Smart Games`                                        suppliername = `Technocom`         category = `Software`                    price = `55` )
-      ( productid = `HT-1105` name = `Smart Internet Antivirus`                           suppliername = `Brainsoft`         category = `Software`                    price = `29` )
-      ( productid = `HT-1106` name = `Smart Firewall`                                     suppliername = `Brainsoft`         category = `Software`                    price = `34` )
-      ( productid = `HT-1107` name = `Smart Money`                                        suppliername = `Brainsoft`         category = `Software`                    price = `29.9` )
-      ( productid = `HT-1110` name = `PC Lock`                                            suppliername = `Red Point Stores`  category = `Computer System Accessories` price = `8.9` )
-      ( productid = `HT-1111` name = `Notebook Lock`                                      suppliername = `Red Point Stores`  category = `Computer System Accessories` price = `6.9` )
-      ( productid = `HT-1112` name = `Web cam reality`                                    suppliername = `Red Point Stores`  category = `Computer System Accessories` price = `39` )
-      ( productid = `HT-1113` name = `Screen clean`                                       suppliername = `Red Point Stores`  category = `Computer System Accessories` price = `2.3` )
-      ( productid = `HT-1114` name = `Fabric bag professional`                            suppliername = `Red Point Stores`  category = `Computer System Accessories` price = `31` )
-      ( productid = `HT-1115` name = `Wireless DSL Router`                                suppliername = `Red Point Stores`  category = `Telecommunications`          price = `49` )
-      ( productid = `HT-1116` name = `Wireless DSL Router / Repeater`                     suppliername = `Red Point Stores`  category = `Telecommunications`          price = `59` )
-      ( productid = `HT-1117` name = `Wireless DSL Router / Repeater and Print Server`    suppliername = `Technocom`         category = `Telecommunications`          price = `69` )
-      ( productid = `HT-1118` name = `USB Stick`                                          suppliername = `Technocom`         category = `Computer System Accessories` price = `35` )
-      ( productid = `HT-1119` name = `Travel Adapter`                                     suppliername = `Titanium`          category = `Accessories`                 price = `79` )
-      ( productid = `HT-1120` name = `Cordless Bluetooth Keyboard, english international` suppliername = `Technocom`         category = `Keyboards`                   price = `29` )
-      ( productid = `HT-1137` name = `Flat XXL`                                           suppliername = `Technocom`         category = `Flat Screen Monitors`        price = `1430` )
-      ( productid = `HT-1138` name = `Pocket Mouse`                                       suppliername = `Technocom`         category = `Mice`                        price = `23` )
-      ( productid = `HT-1210` name = `PC Power Station`                                   suppliername = `Technocom`         category = `PCs`                         price = `2399` )
-      ( productid = `HT-1251` name = `Astro Laptop 1516`                                  suppliername = `Ultrasonic United` category = `Laptops`                     price = `989` )
-      ( productid = `HT-1252` name = `Astro Phone 6`                                      suppliername = `Ultrasonic United` category = `Smartphones and Tablets`     price = `649` )
-      ( productid = `HT-1253` name = `Benda Laptop 1408`                                  suppliername = `Ultrasonic United` category = `Laptops`                     price = `976` )
-      ( productid = `HT-1254` name = `Bending Screen 21HD`                                suppliername = `Ultrasonic United` category = `Flat Screens`                price = `250` )
-      ( productid = `HT-1255` name = `Broad Screen 22HD`                                  suppliername = `Ultrasonic United` category = `Flat Screens`                price = `270` )
-      ( productid = `HT-1256` name = `Cerdik Phone 7`                                     suppliername = `Ultrasonic United` category = `Smartphones and Tablets`     price = `549` )
-      ( productid = `HT-1257` name = `Cepat Tablet 10.5`                                  suppliername = `Ultrasonic United` category = `Smartphones and Tablets`     price = `549` )
-      ( productid = `HT-1258` name = `Cepat Tablet 8`                                     suppliername = `Ultrasonic United` category = `Smartphones and Tablets`     price = `529` )
-      ( productid = `HT-1500` name = `Server Basic`                                       suppliername = `Technocom`         category = `Servers`                     price = `5000` )
-      ( productid = `HT-1501` name = `Server Professional`                                suppliername = `Technocom`         category = `Servers`                     price = `15000` )
-      ( productid = `HT-1502` name = `Server Power Pro`                                   suppliername = `Technocom`         category = `Servers`                     price = `25000` )
-      ( productid = `HT-1600` name = `Family PC Basic`                                    suppliername = `Titanium`          category = `Desktop Computers`           price = `600` )
-      ( productid = `HT-1601` name = `Family PC Pro`                                      suppliername = `Titanium`          category = `Desktop Computers`           price = `900` )
-      ( productid = `HT-1602` name = `Gaming Monster`                                     suppliername = `Titanium`          category = `Desktop Computers`           price = `1200` )
-      ( productid = `HT-1603` name = `Gaming Monster Pro`                                 suppliername = `Titanium`          category = `Desktop Computers`           price = `1700` )
-      ( productid = `HT-2000` name = `7" Widescreen Portable DVD Player w MP3`            suppliername = `Titanium`          category = `Accessories`                 price = `249.99` )
-      ( productid = `HT-2001` name = `10" Portable DVD player`                            suppliername = `Titanium`          category = `Accessories`                 price = `449.99` )
-      ( productid = `HT-2002` name = `Portable DVD Player with 9" LCD Monitor`            suppliername = `Technocom`         category = `Accessories`                 price = `853.99` )
-      ( productid = `HT-2025` name = `CD/DVD case: 264 sleeves`                           suppliername = `Titanium`          category = `Accessories`                 price = `44.99` )
-      ( productid = `HT-2026` name = `Audio/Video Cable Kit - 4m`                         suppliername = `Titanium`          category = `Accessories`                 price = `29.99` )
-      ( productid = `HT-2027` name = `Removable CD/DVD Laser Labels`                      suppliername = `Titanium`          category = `Accessories`                 price = `8.99` )
-      ( productid = `HT-6100` name = `Beam Breaker B-1`                                   suppliername = `Titanium`          category = `Accessories`                 price = `469` )
-      ( productid = `HT-6101` name = `Beam Breaker B-2`                                   suppliername = `Technocom`         category = `Accessories`                 price = `679` )
-      ( productid = `HT-6102` name = `Beam Breaker B-3`                                   suppliername = `Technocom`         category = `Accessories`                 price = `889` )
-      ( productid = `HT-6110` name = `Play Movie`                                         suppliername = `Fasttech`          category = `Accessories`                 price = `130` )
-      ( productid = `HT-6111` name = `Record Movie`                                       suppliername = `Fasttech`          category = `Accessories`                 price = `288` )
-      ( productid = `HT-6120` name = `ITelo MusicStick`                                   suppliername = `Fasttech`          category = `Accessories`                 price = `45` )
-      ( productid = `HT-6121` name = `ITelo Jog-Mate`                                     suppliername = `Fasttech`          category = `Accessories`                 price = `63` )
-      ( productid = `HT-6122` name = `Power Pro Player 40`                                suppliername = `Fasttech`          category = `Accessories`                 price = `167` )
-      ( productid = `HT-6123` name = `Power Pro Player 80`                                suppliername = `Fasttech`          category = `Accessories`                 price = `299` )
-      ( productid = `HT-6130` name = `Flat Watch HD32`                                    suppliername = `Very Best Screens` category = `Flat Screen TVs`             price = `1459` )
-      ( productid = `HT-6131` name = `Flat Watch HD37`                                    suppliername = `Very Best Screens` category = `Flat Screen TVs`             price = `1199` )
-      ( productid = `HT-6132` name = `Flat Watch HD41`                                    suppliername = `Very Best Screens` category = `Flat Screen TVs`             price = `899` )
-      ( productid = `HT-7000` name = `Copperberry`                                        suppliername = `Fasttech`          category = `Accessories`                 price = `549` )
-      ( productid = `HT-7010` name = `Silverberry`                                        suppliername = `Fasttech`          category = `Accessories`                 price = `549` )
-      ( productid = `HT-7020` name = `Goldberry`                                          suppliername = `Fasttech`          category = `Accessories`                 price = `549` )
-      ( productid = `HT-7030` name = `Platinberry`                                        suppliername = `Fasttech`          category = `Accessories`                 price = `549` )
-      ( productid = `HT-8000` name = `ITelO FlexTop I4000`                                suppliername = `Titanium`          category = `Laptops`                     price = `799` )
-      ( productid = `HT-8001` name = `ITelO FlexTop I6300c`                               suppliername = `Titanium`          category = `Laptops`                     price = `799` )
-      ( productid = `HT-8002` name = `ITelO FlexTop I9100`                                suppliername = `Titanium`          category = `Laptops`                     price = `1199` )
-      ( productid = `HT-8003` name = `ITelO FlexTop I9800`                                suppliername = `Titanium`          category = `Laptops`                     price = `1388` )
-      ( productid = `HT-9991` name = `Smartphone Leather Case`                            suppliername = `Ultrasonic United` category = `Accessories`                 price = `25` )
-      ( productid = `HT-9992` name = `Smartphone Alpha`                                   suppliername = `Ultrasonic United` category = `Smartphones and Tablets`     price = `599` )
-      ( productid = `HT-9993` name = `Mini Tablet`                                        suppliername = `Ultrasonic United` category = `Smartphones and Tablets`     price = `833` )
-      ( productid = `HT-9994` name = `Camcorder View`                                     suppliername = `Ultrasonic United` category = `Accessories`                 price = `1388` )
-      ( productid = `HT-9995` name = `Tablet Pouch`                                       suppliername = `Titanium`          category = `Accessories`                 price = `20` )
-      ( productid = `HT-9996` name = `Tablet Pouch`                                       suppliername = `Titanium`          category = `Accessories`                 price = `20` )
-      ( productid = `HT-9997` name = `e-Book Reader ReadMe`                               suppliername = `Titanium`          category = `Smartphones and Tablets`     price = `33` )
-      ( productid = `HT-9998` name = `Smartphone Beta`                                    suppliername = `Titanium`          category = `Smartphones and Tablets`     price = `30` )
-      ( productid = `HT-9999` name = `Maxi Tablet`                                        suppliername = `Titanium`          category = `Tablets`                     price = `749` )
-      ( productid = `PF-1000` name = `Flyer`                                              suppliername = `Titanium`          category = `Accessories`                 price = `0` )
-    ).
+    
+    CLEAR temp5.
+    
+    temp6-productid = `HT-1000`.
+    temp6-name = `Notebook Basic 15`.
+    temp6-suppliername = `Very Best Screens`.
+    temp6-category = `Laptops`.
+    temp6-price = `956`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1001`.
+    temp6-name = `Notebook Basic 17`.
+    temp6-suppliername = `Very Best Screens`.
+    temp6-category = `Laptops`.
+    temp6-price = `1249`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1002`.
+    temp6-name = `Notebook Basic 18`.
+    temp6-suppliername = `Very Best Screens`.
+    temp6-category = `Laptops`.
+    temp6-price = `1570`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1003`.
+    temp6-name = `Notebook Basic 19`.
+    temp6-suppliername = `Smartcards`.
+    temp6-category = `Laptops`.
+    temp6-price = `1650`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1007`.
+    temp6-name = `ITelO Vault`.
+    temp6-suppliername = `Technocom`.
+    temp6-category = `Accessories`.
+    temp6-price = `299`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1010`.
+    temp6-name = `Notebook Professional 15`.
+    temp6-suppliername = `Very Best Screens`.
+    temp6-category = `Accessories`.
+    temp6-price = `1999`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1011`.
+    temp6-name = `Notebook Professional 17`.
+    temp6-suppliername = `Very Best Screens`.
+    temp6-category = `Laptops`.
+    temp6-price = `2299`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1020`.
+    temp6-name = `ITelO Vault Net`.
+    temp6-suppliername = `Technocom`.
+    temp6-category = `Accessories`.
+    temp6-price = `459`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1021`.
+    temp6-name = `ITelO Vault SAT`.
+    temp6-suppliername = `Technocom`.
+    temp6-category = `Accessories`.
+    temp6-price = `149`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1022`.
+    temp6-name = `Comfort Easy`.
+    temp6-suppliername = `Technocom`.
+    temp6-category = `Accessories`.
+    temp6-price = `1679`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1023`.
+    temp6-name = `Comfort Senior`.
+    temp6-suppliername = `Technocom`.
+    temp6-category = `Accessories`.
+    temp6-price = `512`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1030`.
+    temp6-name = `Ergo Screen E-I`.
+    temp6-suppliername = `Very Best Screens`.
+    temp6-category = `Flat Screen Monitors`.
+    temp6-price = `230`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1031`.
+    temp6-name = `Ergo Screen E-II`.
+    temp6-suppliername = `Very Best Screens`.
+    temp6-category = `Flat Screen Monitors`.
+    temp6-price = `285`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1032`.
+    temp6-name = `Ergo Screen E-III`.
+    temp6-suppliername = `Very Best Screens`.
+    temp6-category = `Flat Screen Monitors`.
+    temp6-price = `345`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1035`.
+    temp6-name = `Flat Basic`.
+    temp6-suppliername = `Very Best Screens`.
+    temp6-category = `Flat Screen Monitors`.
+    temp6-price = `399`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1036`.
+    temp6-name = `Flat Future`.
+    temp6-suppliername = `Very Best Screens`.
+    temp6-category = `Flat Screen Monitors`.
+    temp6-price = `430`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1037`.
+    temp6-name = `Flat XL`.
+    temp6-suppliername = `Very Best Screens`.
+    temp6-category = `Flat Screen Monitors`.
+    temp6-price = `1230`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1040`.
+    temp6-name = `Laser Professional Eco`.
+    temp6-suppliername = `Alpha Printers`.
+    temp6-category = `Printers`.
+    temp6-price = `830`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1041`.
+    temp6-name = `Laser Basic`.
+    temp6-suppliername = `Alpha Printers`.
+    temp6-category = `Printers`.
+    temp6-price = `490`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1042`.
+    temp6-name = `Laser Allround`.
+    temp6-suppliername = `Alpha Printers`.
+    temp6-category = `Printers`.
+    temp6-price = `349`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1050`.
+    temp6-name = `Ultra Jet Super Color`.
+    temp6-suppliername = `Alpha Printers`.
+    temp6-category = `Printers`.
+    temp6-price = `139`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1051`.
+    temp6-name = `Ultra Jet Mobile`.
+    temp6-suppliername = `Printer for All`.
+    temp6-category = `Printers`.
+    temp6-price = `99`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1052`.
+    temp6-name = `Ultra Jet Super Highspeed`.
+    temp6-suppliername = `Printer for All`.
+    temp6-category = `Printers`.
+    temp6-price = `170`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1055`.
+    temp6-name = `Multi Print`.
+    temp6-suppliername = `Printer for All`.
+    temp6-category = `Multifunction Printers`.
+    temp6-price = `99`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1056`.
+    temp6-name = `Multi Color`.
+    temp6-suppliername = `Printer for All`.
+    temp6-category = `Multifunction Printers`.
+    temp6-price = `119`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1060`.
+    temp6-name = `Cordless Mouse`.
+    temp6-suppliername = `Oxynum`.
+    temp6-category = `Mice`.
+    temp6-price = `9`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1061`.
+    temp6-name = `Speed Mouse`.
+    temp6-suppliername = `Oxynum`.
+    temp6-category = `Mice`.
+    temp6-price = `7`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1062`.
+    temp6-name = `Track Mouse`.
+    temp6-suppliername = `Oxynum`.
+    temp6-category = `Mice`.
+    temp6-price = `11`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1063`.
+    temp6-name = `Ergonomic Keyboard`.
+    temp6-suppliername = `Oxynum`.
+    temp6-category = `Keyboards`.
+    temp6-price = `14`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1064`.
+    temp6-name = `Internet Keyboard`.
+    temp6-suppliername = `Oxynum`.
+    temp6-category = `Keyboards`.
+    temp6-price = `16`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1065`.
+    temp6-name = `Media Keyboard`.
+    temp6-suppliername = `Oxynum`.
+    temp6-category = `Keyboards`.
+    temp6-price = `26`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1066`.
+    temp6-name = `Mousepad`.
+    temp6-suppliername = `Oxynum`.
+    temp6-category = `Mousepads`.
+    temp6-price = `6.99`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1067`.
+    temp6-name = `Ergo Mousepad`.
+    temp6-suppliername = `Oxynum`.
+    temp6-category = `Mousepads`.
+    temp6-price = `8.99`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1068`.
+    temp6-name = `Designer Mousepad`.
+    temp6-suppliername = `Fasttech`.
+    temp6-category = `Mousepads`.
+    temp6-price = `12.99`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1069`.
+    temp6-name = `Universal card reader`.
+    temp6-suppliername = `Fasttech`.
+    temp6-category = `Computer System Accessories`.
+    temp6-price = `14`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1070`.
+    temp6-name = `Proctra X`.
+    temp6-suppliername = `Ultrasonic United`.
+    temp6-category = `Graphic Cards`.
+    temp6-price = `70.9`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1071`.
+    temp6-name = `Gladiator MX`.
+    temp6-suppliername = `Ultrasonic United`.
+    temp6-category = `Graphic Cards`.
+    temp6-price = `81.7`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1072`.
+    temp6-name = `Hurricane GX`.
+    temp6-suppliername = `Ultrasonic United`.
+    temp6-category = `Graphic Cards`.
+    temp6-price = `101.2`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1073`.
+    temp6-name = `Hurricane GX/LN`.
+    temp6-suppliername = `Smartcards`.
+    temp6-category = `Graphic Cards`.
+    temp6-price = `139.99`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1080`.
+    temp6-name = `Photo Scan`.
+    temp6-suppliername = `Printer for All`.
+    temp6-category = `Scanners`.
+    temp6-price = `129`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1081`.
+    temp6-name = `Power Scan`.
+    temp6-suppliername = `Printer for All`.
+    temp6-category = `Scanners`.
+    temp6-price = `89`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1082`.
+    temp6-name = `Jet Scan Professional`.
+    temp6-suppliername = `Printer for All`.
+    temp6-category = `Scanners`.
+    temp6-price = `169`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1083`.
+    temp6-name = `Jet Scan Professional`.
+    temp6-suppliername = `Printer for All`.
+    temp6-category = `Scanners`.
+    temp6-price = `189`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1085`.
+    temp6-name = `Copymaster`.
+    temp6-suppliername = `Alpha Printers`.
+    temp6-category = `Multifunction Printers`.
+    temp6-price = `1499`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1090`.
+    temp6-name = `Surround Sound`.
+    temp6-suppliername = `Speaker Experts`.
+    temp6-category = `Speakers`.
+    temp6-price = `39`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1091`.
+    temp6-name = `Blaster Extreme`.
+    temp6-suppliername = `Speaker Experts`.
+    temp6-category = `Speakers`.
+    temp6-price = `26`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1092`.
+    temp6-name = `Sound Booster`.
+    temp6-suppliername = `Speaker Experts`.
+    temp6-category = `Speakers`.
+    temp6-price = `45`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1095`.
+    temp6-name = `Lovely Sound 5.1 Wireless`.
+    temp6-suppliername = `Fasttech`.
+    temp6-category = `Accessories`.
+    temp6-price = `49`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1096`.
+    temp6-name = `Lovely Sound 5.1`.
+    temp6-suppliername = `Fasttech`.
+    temp6-category = `Accessories`.
+    temp6-price = `39`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1097`.
+    temp6-name = `Lovely Sound Stereo`.
+    temp6-suppliername = `Fasttech`.
+    temp6-category = `Accessories`.
+    temp6-price = `29`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1100`.
+    temp6-name = `Smart Office`.
+    temp6-suppliername = `Technocom`.
+    temp6-category = `Software`.
+    temp6-price = `89.9`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1101`.
+    temp6-name = `Smart Design`.
+    temp6-suppliername = `Technocom`.
+    temp6-category = `Software`.
+    temp6-price = `79.9`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1102`.
+    temp6-name = `Smart Network`.
+    temp6-suppliername = `Technocom`.
+    temp6-category = `Software`.
+    temp6-price = `69`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1103`.
+    temp6-name = `Smart Multimedia`.
+    temp6-suppliername = `Technocom`.
+    temp6-category = `Software`.
+    temp6-price = `77`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1104`.
+    temp6-name = `Smart Games`.
+    temp6-suppliername = `Technocom`.
+    temp6-category = `Software`.
+    temp6-price = `55`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1105`.
+    temp6-name = `Smart Internet Antivirus`.
+    temp6-suppliername = `Brainsoft`.
+    temp6-category = `Software`.
+    temp6-price = `29`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1106`.
+    temp6-name = `Smart Firewall`.
+    temp6-suppliername = `Brainsoft`.
+    temp6-category = `Software`.
+    temp6-price = `34`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1107`.
+    temp6-name = `Smart Money`.
+    temp6-suppliername = `Brainsoft`.
+    temp6-category = `Software`.
+    temp6-price = `29.9`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1110`.
+    temp6-name = `PC Lock`.
+    temp6-suppliername = `Red Point Stores`.
+    temp6-category = `Computer System Accessories`.
+    temp6-price = `8.9`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1111`.
+    temp6-name = `Notebook Lock`.
+    temp6-suppliername = `Red Point Stores`.
+    temp6-category = `Computer System Accessories`.
+    temp6-price = `6.9`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1112`.
+    temp6-name = `Web cam reality`.
+    temp6-suppliername = `Red Point Stores`.
+    temp6-category = `Computer System Accessories`.
+    temp6-price = `39`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1113`.
+    temp6-name = `Screen clean`.
+    temp6-suppliername = `Red Point Stores`.
+    temp6-category = `Computer System Accessories`.
+    temp6-price = `2.3`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1114`.
+    temp6-name = `Fabric bag professional`.
+    temp6-suppliername = `Red Point Stores`.
+    temp6-category = `Computer System Accessories`.
+    temp6-price = `31`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1115`.
+    temp6-name = `Wireless DSL Router`.
+    temp6-suppliername = `Red Point Stores`.
+    temp6-category = `Telecommunications`.
+    temp6-price = `49`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1116`.
+    temp6-name = `Wireless DSL Router / Repeater`.
+    temp6-suppliername = `Red Point Stores`.
+    temp6-category = `Telecommunications`.
+    temp6-price = `59`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1117`.
+    temp6-name = `Wireless DSL Router / Repeater and Print Server`.
+    temp6-suppliername = `Technocom`.
+    temp6-category = `Telecommunications`.
+    temp6-price = `69`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1118`.
+    temp6-name = `USB Stick`.
+    temp6-suppliername = `Technocom`.
+    temp6-category = `Computer System Accessories`.
+    temp6-price = `35`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1119`.
+    temp6-name = `Travel Adapter`.
+    temp6-suppliername = `Titanium`.
+    temp6-category = `Accessories`.
+    temp6-price = `79`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1120`.
+    temp6-name = `Cordless Bluetooth Keyboard, english international`.
+    temp6-suppliername = `Technocom`.
+    temp6-category = `Keyboards`.
+    temp6-price = `29`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1137`.
+    temp6-name = `Flat XXL`.
+    temp6-suppliername = `Technocom`.
+    temp6-category = `Flat Screen Monitors`.
+    temp6-price = `1430`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1138`.
+    temp6-name = `Pocket Mouse`.
+    temp6-suppliername = `Technocom`.
+    temp6-category = `Mice`.
+    temp6-price = `23`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1210`.
+    temp6-name = `PC Power Station`.
+    temp6-suppliername = `Technocom`.
+    temp6-category = `PCs`.
+    temp6-price = `2399`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1251`.
+    temp6-name = `Astro Laptop 1516`.
+    temp6-suppliername = `Ultrasonic United`.
+    temp6-category = `Laptops`.
+    temp6-price = `989`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1252`.
+    temp6-name = `Astro Phone 6`.
+    temp6-suppliername = `Ultrasonic United`.
+    temp6-category = `Smartphones and Tablets`.
+    temp6-price = `649`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1253`.
+    temp6-name = `Benda Laptop 1408`.
+    temp6-suppliername = `Ultrasonic United`.
+    temp6-category = `Laptops`.
+    temp6-price = `976`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1254`.
+    temp6-name = `Bending Screen 21HD`.
+    temp6-suppliername = `Ultrasonic United`.
+    temp6-category = `Flat Screens`.
+    temp6-price = `250`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1255`.
+    temp6-name = `Broad Screen 22HD`.
+    temp6-suppliername = `Ultrasonic United`.
+    temp6-category = `Flat Screens`.
+    temp6-price = `270`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1256`.
+    temp6-name = `Cerdik Phone 7`.
+    temp6-suppliername = `Ultrasonic United`.
+    temp6-category = `Smartphones and Tablets`.
+    temp6-price = `549`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1257`.
+    temp6-name = `Cepat Tablet 10.5`.
+    temp6-suppliername = `Ultrasonic United`.
+    temp6-category = `Smartphones and Tablets`.
+    temp6-price = `549`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1258`.
+    temp6-name = `Cepat Tablet 8`.
+    temp6-suppliername = `Ultrasonic United`.
+    temp6-category = `Smartphones and Tablets`.
+    temp6-price = `529`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1500`.
+    temp6-name = `Server Basic`.
+    temp6-suppliername = `Technocom`.
+    temp6-category = `Servers`.
+    temp6-price = `5000`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1501`.
+    temp6-name = `Server Professional`.
+    temp6-suppliername = `Technocom`.
+    temp6-category = `Servers`.
+    temp6-price = `15000`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1502`.
+    temp6-name = `Server Power Pro`.
+    temp6-suppliername = `Technocom`.
+    temp6-category = `Servers`.
+    temp6-price = `25000`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1600`.
+    temp6-name = `Family PC Basic`.
+    temp6-suppliername = `Titanium`.
+    temp6-category = `Desktop Computers`.
+    temp6-price = `600`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1601`.
+    temp6-name = `Family PC Pro`.
+    temp6-suppliername = `Titanium`.
+    temp6-category = `Desktop Computers`.
+    temp6-price = `900`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1602`.
+    temp6-name = `Gaming Monster`.
+    temp6-suppliername = `Titanium`.
+    temp6-category = `Desktop Computers`.
+    temp6-price = `1200`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-1603`.
+    temp6-name = `Gaming Monster Pro`.
+    temp6-suppliername = `Titanium`.
+    temp6-category = `Desktop Computers`.
+    temp6-price = `1700`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-2000`.
+    temp6-name = `7" Widescreen Portable DVD Player w MP3`.
+    temp6-suppliername = `Titanium`.
+    temp6-category = `Accessories`.
+    temp6-price = `249.99`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-2001`.
+    temp6-name = `10" Portable DVD player`.
+    temp6-suppliername = `Titanium`.
+    temp6-category = `Accessories`.
+    temp6-price = `449.99`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-2002`.
+    temp6-name = `Portable DVD Player with 9" LCD Monitor`.
+    temp6-suppliername = `Technocom`.
+    temp6-category = `Accessories`.
+    temp6-price = `853.99`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-2025`.
+    temp6-name = `CD/DVD case: 264 sleeves`.
+    temp6-suppliername = `Titanium`.
+    temp6-category = `Accessories`.
+    temp6-price = `44.99`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-2026`.
+    temp6-name = `Audio/Video Cable Kit - 4m`.
+    temp6-suppliername = `Titanium`.
+    temp6-category = `Accessories`.
+    temp6-price = `29.99`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-2027`.
+    temp6-name = `Removable CD/DVD Laser Labels`.
+    temp6-suppliername = `Titanium`.
+    temp6-category = `Accessories`.
+    temp6-price = `8.99`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-6100`.
+    temp6-name = `Beam Breaker B-1`.
+    temp6-suppliername = `Titanium`.
+    temp6-category = `Accessories`.
+    temp6-price = `469`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-6101`.
+    temp6-name = `Beam Breaker B-2`.
+    temp6-suppliername = `Technocom`.
+    temp6-category = `Accessories`.
+    temp6-price = `679`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-6102`.
+    temp6-name = `Beam Breaker B-3`.
+    temp6-suppliername = `Technocom`.
+    temp6-category = `Accessories`.
+    temp6-price = `889`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-6110`.
+    temp6-name = `Play Movie`.
+    temp6-suppliername = `Fasttech`.
+    temp6-category = `Accessories`.
+    temp6-price = `130`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-6111`.
+    temp6-name = `Record Movie`.
+    temp6-suppliername = `Fasttech`.
+    temp6-category = `Accessories`.
+    temp6-price = `288`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-6120`.
+    temp6-name = `ITelo MusicStick`.
+    temp6-suppliername = `Fasttech`.
+    temp6-category = `Accessories`.
+    temp6-price = `45`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-6121`.
+    temp6-name = `ITelo Jog-Mate`.
+    temp6-suppliername = `Fasttech`.
+    temp6-category = `Accessories`.
+    temp6-price = `63`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-6122`.
+    temp6-name = `Power Pro Player 40`.
+    temp6-suppliername = `Fasttech`.
+    temp6-category = `Accessories`.
+    temp6-price = `167`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-6123`.
+    temp6-name = `Power Pro Player 80`.
+    temp6-suppliername = `Fasttech`.
+    temp6-category = `Accessories`.
+    temp6-price = `299`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-6130`.
+    temp6-name = `Flat Watch HD32`.
+    temp6-suppliername = `Very Best Screens`.
+    temp6-category = `Flat Screen TVs`.
+    temp6-price = `1459`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-6131`.
+    temp6-name = `Flat Watch HD37`.
+    temp6-suppliername = `Very Best Screens`.
+    temp6-category = `Flat Screen TVs`.
+    temp6-price = `1199`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-6132`.
+    temp6-name = `Flat Watch HD41`.
+    temp6-suppliername = `Very Best Screens`.
+    temp6-category = `Flat Screen TVs`.
+    temp6-price = `899`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-7000`.
+    temp6-name = `Copperberry`.
+    temp6-suppliername = `Fasttech`.
+    temp6-category = `Accessories`.
+    temp6-price = `549`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-7010`.
+    temp6-name = `Silverberry`.
+    temp6-suppliername = `Fasttech`.
+    temp6-category = `Accessories`.
+    temp6-price = `549`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-7020`.
+    temp6-name = `Goldberry`.
+    temp6-suppliername = `Fasttech`.
+    temp6-category = `Accessories`.
+    temp6-price = `549`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-7030`.
+    temp6-name = `Platinberry`.
+    temp6-suppliername = `Fasttech`.
+    temp6-category = `Accessories`.
+    temp6-price = `549`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-8000`.
+    temp6-name = `ITelO FlexTop I4000`.
+    temp6-suppliername = `Titanium`.
+    temp6-category = `Laptops`.
+    temp6-price = `799`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-8001`.
+    temp6-name = `ITelO FlexTop I6300c`.
+    temp6-suppliername = `Titanium`.
+    temp6-category = `Laptops`.
+    temp6-price = `799`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-8002`.
+    temp6-name = `ITelO FlexTop I9100`.
+    temp6-suppliername = `Titanium`.
+    temp6-category = `Laptops`.
+    temp6-price = `1199`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-8003`.
+    temp6-name = `ITelO FlexTop I9800`.
+    temp6-suppliername = `Titanium`.
+    temp6-category = `Laptops`.
+    temp6-price = `1388`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-9991`.
+    temp6-name = `Smartphone Leather Case`.
+    temp6-suppliername = `Ultrasonic United`.
+    temp6-category = `Accessories`.
+    temp6-price = `25`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-9992`.
+    temp6-name = `Smartphone Alpha`.
+    temp6-suppliername = `Ultrasonic United`.
+    temp6-category = `Smartphones and Tablets`.
+    temp6-price = `599`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-9993`.
+    temp6-name = `Mini Tablet`.
+    temp6-suppliername = `Ultrasonic United`.
+    temp6-category = `Smartphones and Tablets`.
+    temp6-price = `833`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-9994`.
+    temp6-name = `Camcorder View`.
+    temp6-suppliername = `Ultrasonic United`.
+    temp6-category = `Accessories`.
+    temp6-price = `1388`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-9995`.
+    temp6-name = `Tablet Pouch`.
+    temp6-suppliername = `Titanium`.
+    temp6-category = `Accessories`.
+    temp6-price = `20`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-9996`.
+    temp6-name = `Tablet Pouch`.
+    temp6-suppliername = `Titanium`.
+    temp6-category = `Accessories`.
+    temp6-price = `20`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-9997`.
+    temp6-name = `e-Book Reader ReadMe`.
+    temp6-suppliername = `Titanium`.
+    temp6-category = `Smartphones and Tablets`.
+    temp6-price = `33`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-9998`.
+    temp6-name = `Smartphone Beta`.
+    temp6-suppliername = `Titanium`.
+    temp6-category = `Smartphones and Tablets`.
+    temp6-price = `30`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `HT-9999`.
+    temp6-name = `Maxi Tablet`.
+    temp6-suppliername = `Titanium`.
+    temp6-category = `Tablets`.
+    temp6-price = `749`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-productid = `PF-1000`.
+    temp6-name = `Flyer`.
+    temp6-suppliername = `Titanium`.
+    temp6-category = `Accessories`.
+    temp6-price = `0`.
+    INSERT temp6 INTO TABLE temp5.
+    t_products = temp5.
 
     SORT t_products BY name AS TEXT.
 

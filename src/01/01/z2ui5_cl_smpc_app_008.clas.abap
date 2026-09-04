@@ -19,7 +19,7 @@ CLASS z2ui5_cl_smpc_app_008 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -28,8 +28,20 @@ CLASS z2ui5_cl_smpc_app_008 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 LIKE LINE OF temp1.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    
+    temp2 = `Color Selected: value - {0}, ` && |\n| && ` defaultAction - {1}`.
+    INSERT temp2 INTO TABLE temp1.
+    INSERT `${$parameters>/value}` INTO TABLE temp1.
+    INSERT `${$parameters>/defaultAction}` INTO TABLE temp1.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
@@ -53,9 +65,7 @@ CLASS z2ui5_cl_smpc_app_008 IMPLEMENTATION.
                 )->a( n = `text` v = `Choose Color`
             )->tag( `ColorPalette`
                 )->a( n = `colorSelect` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                      t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Color Selected: value - {0}, `
-                                                                                                                        && |\n|
-                                                                                                                        && ` defaultAction - {1}` ) ( `${$parameters>/value}` ) ( `${$parameters>/defaultAction}` ) ) ) ).
+                                                                      t_arg = temp1 ) ).
 
     client->view_display( view->stringify( ) ).
 

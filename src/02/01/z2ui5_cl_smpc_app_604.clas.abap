@@ -9,7 +9,7 @@ CLASS z2ui5_cl_smpc_app_604 DEFINITION PUBLIC.
              src TYPE string,
              alt TYPE string,
            END OF ty_s_image.
-    TYPES ty_t_image TYPE STANDARD TABLE OF ty_s_image WITH EMPTY KEY.
+    TYPES ty_t_image TYPE STANDARD TABLE OF ty_s_image WITH DEFAULT KEY.
 
     " the pages the Carousel shows - rebuilt when the count changes
     DATA t_pages    TYPE ty_t_image.
@@ -73,12 +73,12 @@ CLASS z2ui5_cl_smpc_app_604 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -87,12 +87,15 @@ CLASS z2ui5_cl_smpc_app_604 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA page TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " every controller handler here is a SETTER on a bindable property, so the
     " port binds the option controls and the Carousel to the same fields and
     " keeps the whole playground in the browser (see sidecar)
-    DATA(page) = view->ele( n = `View` ns = `mvc`
+    
+    page = view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -323,39 +326,83 @@ CLASS z2ui5_cl_smpc_app_604 IMPLEMENTATION.
 
   METHOD options_apply.
 
-    arrows_placement      = COND #( WHEN arrows_idx = 0 THEN `Content` ELSE `PageIndicator` ).
+    DATA temp1 TYPE string.
+    DATA temp2 TYPE string.
+    DATA temp3 TYPE string.
+    DATA temp4 TYPE string.
+    DATA temp5 TYPE string.
+    DATA temp6 TYPE string.
+    IF arrows_idx = 0.
+      temp1 = `Content`.
+    ELSE.
+      temp1 = `PageIndicator`.
+    ENDIF.
+    arrows_placement      = temp1.
 
-    indicator_placement   = SWITCH #( indicator_idx
-                                      WHEN 0 THEN `Bottom`
-                                      WHEN 1 THEN `Top`
-                                      WHEN 2 THEN `OverContentBottom`
-                                      ELSE        `OverContentTop` ).
+    
+    CASE indicator_idx.
+      WHEN 0.
+        temp2 = `Bottom`.
+      WHEN 1.
+        temp2 = `Top`.
+      WHEN 2.
+        temp2 = `OverContentBottom`.
+      WHEN OTHERS.
+        temp2 = `OverContentTop`.
+    ENDCASE.
+    indicator_placement   = temp2.
 
-    background_design     = SWITCH #( background_idx
-                                      WHEN 0 THEN `Solid`
-                                      WHEN 1 THEN `Translucent`
-                                      ELSE        `Transparent` ).
+    
+    CASE background_idx.
+      WHEN 0.
+        temp3 = `Solid`.
+      WHEN 1.
+        temp3 = `Translucent`.
+      WHEN OTHERS.
+        temp3 = `Transparent`.
+    ENDCASE.
+    background_design     = temp3.
 
-    ind_background_design = SWITCH #( ind_background_idx
-                                      WHEN 0 THEN `Solid`
-                                      WHEN 1 THEN `Translucent`
-                                      ELSE        `Transparent` ).
+    
+    CASE ind_background_idx.
+      WHEN 0.
+        temp4 = `Solid`.
+      WHEN 1.
+        temp4 = `Translucent`.
+      WHEN OTHERS.
+        temp4 = `Transparent`.
+    ENDCASE.
+    ind_background_design = temp4.
 
-    ind_border_design     = COND #( WHEN ind_border_idx = 0 THEN `Solid` ELSE `None` ).
+    
+    IF ind_border_idx = 0.
+      temp5 = `Solid`.
+    ELSE.
+      temp5 = `None`.
+    ENDIF.
+    ind_border_design     = temp5.
 
-    scroll_mode = COND #( WHEN scroll_visible_pages = abap_true THEN `VisiblePages` ELSE `SinglePage` ).
+    
+    IF scroll_visible_pages = abap_true.
+      temp6 = `VisiblePages`.
+    ELSE.
+      temp6 = `SinglePage`.
+    ENDIF.
+    scroll_mode = temp6.
 
   ENDMETHOD.
 
 
   METHOD pages_rebuild.
+    DATA image LIKE LINE OF t_images.
 
     IF num_images < 1 OR num_images > 9.
       RETURN.
     ENDIF.
 
     CLEAR t_pages.
-    LOOP AT t_images INTO DATA(image) TO num_images.
+    
+    LOOP AT t_images INTO image TO num_images.
       INSERT image INTO TABLE t_pages.
     ENDLOOP.
 
@@ -366,26 +413,38 @@ CLASS z2ui5_cl_smpc_app_604 IMPLEMENTATION.
 
     " sap/ui/demo/mock/img.json /images - the nine pictures the sample offers,
     " with the alt text its addPage( ) composes ('Example picture <n>')
-    t_images = VALUE #(
-      ( src = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/bigimgs/273303_low_jpg_srgb.jpg`
-        alt = `Example picture 1` )
-      ( src = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/bigimgs/273537_low_jpg_srgb.jpg`
-        alt = `Example picture 2` )
-      ( src = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/bigimgs/274731_high_jpg_eci_rgb.jpg`
-        alt = `Example picture 3` )
-      ( src = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1603.jpg`
-        alt = `Example picture 4` )
-      ( src = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2002.jpg`
-        alt = `Example picture 5` )
-      ( src = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2020.jpg`
-        alt = `Example picture 6` )
-      ( src = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2025.jpg`
-        alt = `Example picture 7` )
-      ( src = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2026.jpg`
-        alt = `Example picture 8` )
-      ( src = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2027.jpg`
-        alt = `Example picture 9` )
-    ).
+    DATA temp7 TYPE z2ui5_cl_smpc_app_604=>ty_t_image.
+    DATA temp8 LIKE LINE OF temp7.
+    CLEAR temp7.
+    
+    temp8-src = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/bigimgs/273303_low_jpg_srgb.jpg`.
+    temp8-alt = `Example picture 1`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-src = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/bigimgs/273537_low_jpg_srgb.jpg`.
+    temp8-alt = `Example picture 2`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-src = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/bigimgs/274731_high_jpg_eci_rgb.jpg`.
+    temp8-alt = `Example picture 3`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-src = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1603.jpg`.
+    temp8-alt = `Example picture 4`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-src = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2002.jpg`.
+    temp8-alt = `Example picture 5`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-src = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2020.jpg`.
+    temp8-alt = `Example picture 6`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-src = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2025.jpg`.
+    temp8-alt = `Example picture 7`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-src = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2026.jpg`.
+    temp8-alt = `Example picture 8`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-src = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2027.jpg`.
+    temp8-alt = `Example picture 9`.
+    INSERT temp8 INTO TABLE temp7.
+    t_images = temp7.
 
     pages_rebuild( ).
 

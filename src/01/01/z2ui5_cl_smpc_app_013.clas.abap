@@ -23,9 +23,9 @@ CLASS z2ui5_cl_smpc_app_013 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -34,7 +34,8 @@ CLASS z2ui5_cl_smpc_app_013 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
@@ -56,6 +57,8 @@ CLASS z2ui5_cl_smpc_app_013 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp1 TYPE string_table.
+          DATA temp3 TYPE string_table.
 
     CASE client->get_event( ).
 
@@ -72,8 +75,11 @@ CLASS z2ui5_cl_smpc_app_013 IMPLEMENTATION.
         " where a control_by_id focus is a bare control.focus( ) that returns
         " at once on the still-invisible button. SET_FOCUS resolves the id
         " across every open slot, so it needs no view
+        
+        CLEAR temp1.
+        INSERT `actionSavePreferences` INTO TABLE temp1.
         client->follow_up_action( val   = client->cs_event-set_focus
-                                  t_arg = VALUE #( ( `actionSavePreferences` ) ) ).
+                                  t_arg = temp1 ).
 
       WHEN `ACCEPT_ALL_COOKIES`.
         " insert your accept all logic here
@@ -94,8 +100,11 @@ CLASS z2ui5_cl_smpc_app_013 IMPLEMENTATION.
         ELSE.
           " the cancel action navigates back to the preview
           show_cookie_details = abap_false.
+          
+          CLEAR temp3.
+          INSERT `actionSetPreferences` INTO TABLE temp3.
           client->follow_up_action( val   = client->cs_event-set_focus
-                                    t_arg = VALUE #( ( `actionSetPreferences` ) ) ).
+                                    t_arg = temp3 ).
         ENDIF.
 
     ENDCASE.
@@ -105,7 +114,9 @@ CLASS z2ui5_cl_smpc_app_013 IMPLEMENTATION.
 
   METHOD dialog_display.
 
-    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA popup TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp5 TYPE string_table.
+    popup = z2ui5_cl_ui5_view_builder=>factory( ).
 
     popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns`      v = `sap.m`
@@ -243,8 +254,11 @@ CLASS z2ui5_cl_smpc_app_013 IMPLEMENTATION.
     client->popup_display( popup->stringify( ) ).
 
     " the original's afterOpen handler moves the focus to the Set Preferences action
+    
+    CLEAR temp5.
+    INSERT `actionSetPreferences` INTO TABLE temp5.
     client->follow_up_action( val   = client->cs_event-set_focus
-                              t_arg = VALUE #( ( `actionSetPreferences` ) ) ).
+                              t_arg = temp5 ).
 
   ENDMETHOD.
 

@@ -12,7 +12,7 @@ CLASS z2ui5_cl_smpc_app_287 DEFINITION PUBLIC.
         content TYPE string,
         badge   TYPE abap_bool,
       END OF ty_s_tab.
-    TYPES ty_t_tab TYPE STANDARD TABLE OF ty_s_tab WITH EMPTY KEY.
+    TYPES ty_t_tab TYPE STANDARD TABLE OF ty_s_tab WITH DEFAULT KEY.
 
     DATA t_tabs      TYPE ty_t_tab.
     DATA density_idx TYPE i.
@@ -34,12 +34,12 @@ CLASS z2ui5_cl_smpc_app_287 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -48,7 +48,8 @@ CLASS z2ui5_cl_smpc_app_287 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " onTabDensityModeSelect sets tabDensityMode on all nine bars from the
     " selected radio button's text; tabDensityMode is a bindable property, so
@@ -650,29 +651,46 @@ CLASS z2ui5_cl_smpc_app_287 IMPLEMENTATION.
 
 
   METHOD on_event.
+      DATA temp1 TYPE string.
 
     IF client->get_event( ) = `DENSITY`.
       " the original reads the selected button's TEXT; the group's
       " selectedIndex is bound two-way, so the same three values are derived
       " server-side and every bar follows through its tabDensityMode binding
-      tab_density = SWITCH string( density_idx
-                                   WHEN 0 THEN `Cozy`
-                                   WHEN 1 THEN `Compact`
-                                   WHEN 2 THEN `Inherit` ).
+      
+      CASE density_idx.
+        WHEN 0.
+          temp1 = `Cozy`.
+        WHEN 1.
+          temp1 = `Compact`.
+        WHEN 2.
+          temp1 = `Inherit`.
+      ENDCASE.
+      tab_density = temp1.
     ENDIF.
 
   ENDMETHOD.
 
 
   METHOD model_init.
+      DATA temp2 TYPE z2ui5_cl_smpc_app_287=>ty_t_tab.
+      DATA temp3 LIKE LINE OF temp2.
+      DATA temp1 TYPE xsdboolean.
 
     " onInit adds 30 IconTabFilters to iconTabBar0, the 19th carrying a badge
     DO 30 TIMES.
-      t_tabs = VALUE #( BASE t_tabs
-        ( text    = |Tab { sy-index }|
-          key     = |{ sy-index }|
-          content = |Content { sy-index }|
-          badge   = xsdbool( sy-index = 19 ) ) ).
+      
+      CLEAR temp2.
+      temp2 = t_tabs.
+      
+      temp3-text = |Tab { sy-index }|.
+      temp3-key = |{ sy-index }|.
+      temp3-content = |Content { sy-index }|.
+      
+      temp1 = boolc( sy-index = 19 ).
+      temp3-badge = temp1.
+      INSERT temp3 INTO TABLE temp2.
+      t_tabs = temp2.
     ENDDO.
 
   ENDMETHOD.

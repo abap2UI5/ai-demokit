@@ -20,9 +20,9 @@ CLASS z2ui5_cl_smpc_app_410 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -35,10 +35,13 @@ CLASS z2ui5_cl_smpc_app_410 IMPLEMENTATION.
     " link element in onInit; here it is a core:HTML style tag (apps 026/028
     " idiom), literal braces escaped as \{ \} in a backtick literal because
     " the XMLView binding parser reads unescaped braces as a binding
-    DATA(css) = `<style>.dummyContainer1\{padding:1em;height:4em;background-color:#A9EAFF\}` &&
+    DATA css TYPE string.
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    css = `<style>.dummyContainer1\{padding:1em;height:4em;background-color:#A9EAFF\}` &&
                 `.dummyContainer2\{display:inline-block\}</style>`.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " Block-content inlining (app 187/239/261 precedent): the blocks
     " aggregation holds the sample's own BlockBase control sample:EventingBlock

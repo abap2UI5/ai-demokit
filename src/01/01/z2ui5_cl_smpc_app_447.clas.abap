@@ -23,9 +23,9 @@ CLASS z2ui5_cl_smpc_app_447 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -34,7 +34,8 @@ CLASS z2ui5_cl_smpc_app_447 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
@@ -72,10 +73,15 @@ CLASS z2ui5_cl_smpc_app_447 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp1 TYPE string_table.
+        DATA temp3 TYPE string_table.
 
     CASE client->get_event( ).
 
       WHEN `TEXT_INFO`.
+        
+        CLEAR temp1.
+        INSERT `OK` INTO TABLE temp1.
         client->message_box_display( text         = `Information`
                                      type         = `information`
                                      " pinned because the framework remaps the
@@ -86,7 +92,7 @@ CLASS z2ui5_cl_smpc_app_447 IMPLEMENTATION.
                                      " original calls, pins OK. Without this the
                                      " box grew a Cancel button the sample has
                                      " not got.
-                                     actions      = VALUE #( ( `OK` ) )
+                                     actions      = temp1
                                      title        = `Information`
                                      details      = `Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, ` &&
                                     `eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam ` &&
@@ -126,6 +132,9 @@ CLASS z2ui5_cl_smpc_app_447 IMPLEMENTATION.
       WHEN `TEXT_INFO_ASYNC`.
         " the original resolves the details from a Promise after 2 seconds;
         " the backend has the text right away and passes it as it is
+        
+        CLEAR temp3.
+        INSERT `OK` INTO TABLE temp3.
         client->message_box_display( text         = `Information`
                                      type         = `information`
                                      " pinned because the framework remaps the
@@ -136,7 +145,7 @@ CLASS z2ui5_cl_smpc_app_447 IMPLEMENTATION.
                                      " original calls, pins OK. Without this the
                                      " box grew a Cancel button the sample has
                                      " not got.
-                                     actions      = VALUE #( ( `OK` ) )
+                                     actions      = temp3
                                      title        = `Information`
                                      details      = `Asynchronously fetched details`
                                      contentwidth = `100px`

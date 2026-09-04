@@ -13,14 +13,14 @@ CLASS z2ui5_cl_smpc_app_528 DEFINITION PUBLIC.
              infostate   TYPE string,
              highlight   TYPE string,
            END OF ty_s_row.
-    TYPES ty_t_row TYPE STANDARD TABLE OF ty_s_row WITH EMPTY KEY.
+    TYPES ty_t_row TYPE STANDARD TABLE OF ty_s_row WITH DEFAULT KEY.
 
     TYPES: BEGIN OF ty_s_employee,
              firstname TYPE string,
              lastname  TYPE string,
              birthdate TYPE string,
            END OF ty_s_employee.
-    TYPES ty_t_employee TYPE STANDARD TABLE OF ty_s_employee WITH EMPTY KEY.
+    TYPES ty_t_employee TYPE STANDARD TABLE OF ty_s_employee WITH DEFAULT KEY.
 
     DATA t_orders     TYPE ty_t_row.
     DATA t_employees  TYPE ty_t_employee.
@@ -43,10 +43,10 @@ CLASS z2ui5_cl_smpc_app_528 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -55,13 +55,72 @@ CLASS z2ui5_cl_smpc_app_528 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA border TYPE string.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    DATA temp3 TYPE string_table.
+    DATA temp4 TYPE string_table.
+    DATA temp5 LIKE LINE OF temp4.
+    DATA temp6 TYPE string_table.
+    DATA temp7 LIKE LINE OF temp6.
+    DATA temp8 TYPE string_table.
+    DATA temp9 LIKE LINE OF temp8.
+    DATA temp10 TYPE string_table.
+    DATA temp11 TYPE string_table.
+    DATA temp12 LIKE LINE OF temp11.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " onBorderReached toasts '<panel header> border reached' and moves the focus
     " into the neighbouring grid; the toast is composed on the client here (the
     " focus hand-off has no counterpart - see sidecar)
-    DATA(border) = `MESSAGE_TOAST`.
+    
+    border = `MESSAGE_TOAST`.
 
+    
+    CLEAR temp1.
+    INSERT border INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `Group 1 border reached` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT border INTO TABLE temp2.
+    INSERT `show` INTO TABLE temp2.
+    INSERT `Group 2 border reached` INTO TABLE temp2.
+    
+    CLEAR temp3.
+    INSERT border INTO TABLE temp3.
+    INSERT `show` INTO TABLE temp3.
+    INSERT `Group 3 border reached` INTO TABLE temp3.
+    
+    CLEAR temp4.
+    INSERT `TRIGGER_TEL` INTO TABLE temp4.
+    
+    temp5 = |\{ TEL: '+1 202 34869-0' \}|.
+    INSERT temp5 INTO TABLE temp4.
+    
+    CLEAR temp6.
+    INSERT `TRIGGER_TEL` INTO TABLE temp6.
+    
+    temp7 = |\{ TEL: '+1 202 555 5555' \}|.
+    INSERT temp7 INTO TABLE temp6.
+    
+    CLEAR temp8.
+    INSERT `TRIGGER_EMAIL` INTO TABLE temp8.
+    
+    temp9 = |\{ EMAIL: 'donna@peachvalley.com' \}|.
+    INSERT temp9 INTO TABLE temp8.
+    
+    CLEAR temp10.
+    INSERT border INTO TABLE temp10.
+    INSERT `show` INTO TABLE temp10.
+    INSERT `Group 4 border reached` INTO TABLE temp10.
+    
+    CLEAR temp11.
+    INSERT `REDIRECT` INTO TABLE temp11.
+    
+    temp12 = |\{ URL: 'https://www.sap.com', NEW_WINDOW: true \}|.
+    INSERT temp12 INTO TABLE temp11.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
@@ -97,7 +156,7 @@ CLASS z2ui5_cl_smpc_app_528 IMPLEMENTATION.
                     )->ele( n = `GridContainer` ns = `f`
                         )->a( n = `id`             v = `grid1`
                         )->a( n = `borderReached`  v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                                 t_arg = VALUE #( ( border ) ( `show` ) ( `Group 1 border reached` ) ) )
+                                                                                 t_arg = temp1 )
 
                         )->ele( `GenericTile`
                             )->a( n = `header`    v = `Cumulative Totals`
@@ -232,7 +291,7 @@ CLASS z2ui5_cl_smpc_app_528 IMPLEMENTATION.
                     )->ele( n = `GridContainer` ns = `f`
                         )->a( n = `id`            v = `grid2`
                         )->a( n = `borderReached` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                                t_arg = VALUE #( ( border ) ( `show` ) ( `Group 2 border reached` ) ) )
+                                                                                t_arg = temp2 )
 
                         " listContent/tasks, rebuilt declaratively
                         )->ele( n = `Card` ns = `f`
@@ -346,7 +405,7 @@ CLASS z2ui5_cl_smpc_app_528 IMPLEMENTATION.
                     )->ele( n = `GridContainer` ns = `f`
                         )->a( n = `id`            v = `grid3`
                         )->a( n = `borderReached` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                                t_arg = VALUE #( ( border ) ( `show` ) ( `Group 3 border reached` ) ) )
+                                                                                t_arg = temp3 )
 
                         " objectContent/contact, rebuilt declaratively
                         )->ele( n = `Card` ns = `f`
@@ -373,19 +432,19 @@ CLASS z2ui5_cl_smpc_app_528 IMPLEMENTATION.
                                         )->a( n = `value` v = `+1 202 34869-0`
                                         )->a( n = `type`  v = `Active`
                                         )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-urlhelper
-                                                                                        t_arg = VALUE #( ( `TRIGGER_TEL` ) ( |\{ TEL: '+1 202 34869-0' \}| ) ) )
+                                                                                        t_arg = temp4 )
                                     )->tag( `DisplayListItem`
                                         )->a( n = `label` v = `Phone`
                                         )->a( n = `value` v = `+1 202 555 5555`
                                         )->a( n = `type`  v = `Active`
                                         )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-urlhelper
-                                                                                        t_arg = VALUE #( ( `TRIGGER_TEL` ) ( |\{ TEL: '+1 202 555 5555' \}| ) ) )
+                                                                                        t_arg = temp6 )
                                     )->tag( `DisplayListItem`
                                         )->a( n = `label` v = `Email`
                                         )->a( n = `value` v = `donna@peachvalley.com`
                                         )->a( n = `type`  v = `Active`
                                         )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-urlhelper
-                                                                                        t_arg = VALUE #( ( `TRIGGER_EMAIL` ) ( |\{ EMAIL: 'donna@peachvalley.com' \}| ) ) )
+                                                                                        t_arg = temp8 )
 
                                 )->end(
                             )->end(
@@ -443,7 +502,7 @@ CLASS z2ui5_cl_smpc_app_528 IMPLEMENTATION.
                     )->ele( n = `GridContainer` ns = `f`
                         )->a( n = `id`            v = `grid4`
                         )->a( n = `borderReached` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                                t_arg = VALUE #( ( border ) ( `show` ) ( `Group 4 border reached` ) ) )
+                                                                                t_arg = temp10 )
 
                         )->ele( `GenericTile`
                             )->a( n = `header` v = `Sales Fulfillment Application Title`
@@ -525,7 +584,7 @@ CLASS z2ui5_cl_smpc_app_528 IMPLEMENTATION.
                                     )->a( n = `iconSrc`    v = `sap-icon://activities`
                                     )->a( n = `statusText` v = `100 of 200`
                                     )->a( n = `press`      v = client->follow_up_action( val   = client->cs_event-urlhelper
-                                                                                         t_arg = VALUE #( ( `REDIRECT` ) ( |\{ URL: 'https://www.sap.com', NEW_WINDOW: true \}| ) ) )
+                                                                                         t_arg = temp11 )
 
                             )->end(
                             )->ele( n = `content` ns = `f`
@@ -548,40 +607,114 @@ CLASS z2ui5_cl_smpc_app_528 IMPLEMENTATION.
   METHOD model_init.
 
     " cardManifests.json listContent/orders
-    t_orders = VALUE #(
-      ( title = `Teico Inc.`  description = `Sun Valley, Idaho`    info = `246` infostate = `Error` )
-      ( title = `Scrum LTD.`  description = `Dayville, Oregon`     info = `164` infostate = `Warning` )
-      ( title = `Lean Co.`    description = `Raymond, California`  info = `73`  infostate = `None` ) ).
+    DATA temp3 TYPE z2ui5_cl_smpc_app_528=>ty_t_row.
+    DATA temp4 LIKE LINE OF temp3.
+    DATA temp5 TYPE z2ui5_cl_smpc_app_528=>ty_t_employee.
+    DATA temp6 LIKE LINE OF temp5.
+    DATA temp7 TYPE z2ui5_cl_smpc_app_528=>ty_t_row.
+    DATA temp8 LIKE LINE OF temp7.
+    DATA temp9 TYPE z2ui5_cl_smpc_app_528=>ty_t_row.
+    DATA temp10 LIKE LINE OF temp9.
+    DATA temp11 TYPE z2ui5_cl_smpc_app_528=>ty_t_row.
+    DATA temp12 LIKE LINE OF temp11.
+    CLEAR temp3.
+    
+    temp4-title = `Teico Inc.`.
+    temp4-description = `Sun Valley, Idaho`.
+    temp4-info = `246`.
+    temp4-infostate = `Error`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Scrum LTD.`.
+    temp4-description = `Dayville, Oregon`.
+    temp4-info = `164`.
+    temp4-infostate = `Warning`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Lean Co.`.
+    temp4-description = `Raymond, California`.
+    temp4-info = `73`.
+    temp4-infostate = `None`.
+    INSERT temp4 INTO TABLE temp3.
+    t_orders = temp3.
 
     " tableContent/employees
-    t_employees = VALUE #(
-      ( firstname = `Donna` lastname = `Moore`     birthdate = `1986-08-11` )
-      ( firstname = `John`  lastname = `Miller`    birthdate = `1984-05-13` )
-      ( firstname = `Alain` lastname = `Chevalier` birthdate = `1993-02-01` )
-      ( firstname = `Elena` lastname = `Petrova`   birthdate = `1976-09-19` ) ).
+    
+    CLEAR temp5.
+    
+    temp6-firstname = `Donna`.
+    temp6-lastname = `Moore`.
+    temp6-birthdate = `1986-08-11`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-firstname = `John`.
+    temp6-lastname = `Miller`.
+    temp6-birthdate = `1984-05-13`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-firstname = `Alain`.
+    temp6-lastname = `Chevalier`.
+    temp6-birthdate = `1993-02-01`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-firstname = `Elena`.
+    temp6-lastname = `Petrova`.
+    temp6-birthdate = `1976-09-19`.
+    INSERT temp6 INTO TABLE temp5.
+    t_employees = temp5.
 
     " listContent/tasks
-    t_tasks = VALUE #(
-      ( title = `Call Simone`    icon = `sap-icon://call`  infostate = `Error` )
-      ( title = `Write to Elena` icon = `sap-icon://email` infostate = `Warning` ) ).
+    
+    CLEAR temp7.
+    
+    temp8-title = `Call Simone`.
+    temp8-icon = `sap-icon://call`.
+    temp8-infostate = `Error`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-title = `Write to Elena`.
+    temp8-icon = `sap-icon://email`.
+    temp8-infostate = `Warning`.
+    INSERT temp8 INTO TABLE temp7.
+    t_tasks = temp7.
 
     " listContent/contacts
-    t_contacts = VALUE #(
-      ( title = `Alain Chevalier` icon = `sap-icon://person-placeholder` )
-      ( title = `Monique Legrand` icon = `sap-icon://account` )
-      ( title = `Elena Petrova`   icon = `sap-icon://business-card` )
-      ( title = `Monique Legrand` icon = `sap-icon://account` )
-      ( title = `Alain Chevalier` icon = `sap-icon://account` )
-      ( title = `Elena Petrova`   icon = `sap-icon://business-card` ) ).
+    
+    CLEAR temp9.
+    
+    temp10-title = `Alain Chevalier`.
+    temp10-icon = `sap-icon://person-placeholder`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-title = `Monique Legrand`.
+    temp10-icon = `sap-icon://account`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-title = `Elena Petrova`.
+    temp10-icon = `sap-icon://business-card`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-title = `Monique Legrand`.
+    temp10-icon = `sap-icon://account`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-title = `Alain Chevalier`.
+    temp10-icon = `sap-icon://account`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-title = `Elena Petrova`.
+    temp10-icon = `sap-icon://business-card`.
+    INSERT temp10 INTO TABLE temp9.
+    t_contacts = temp9.
 
     " listContent/withAction
-    t_withaction = VALUE #(
-      ( title = `Notebook Basic 15`
-        description = `Notebook Basic 15 with 2,80 GHz quad core, 15" LCD, 4 GB DDR3 RAM, 500 GB Hard Disc, Windows 8 Pro`
-        icon = `sap-icon://laptop` highlight = `Information` info = `27.45 EUR` infostate = `Success` )
-      ( title = `Notebook Basic 17`
-        description = `Notebook Basic 17 with 2,80 GHz quad core, 17" LCD, 4 GB DDR3 RAM, 500 GB Hard Disc, Windows 8 Pro`
-        icon = `sap-icon://laptop` highlight = `Success` info = `27.45 EUR` infostate = `Success` ) ).
+    
+    CLEAR temp11.
+    
+    temp12-title = `Notebook Basic 15`.
+    temp12-description = `Notebook Basic 15 with 2,80 GHz quad core, 15" LCD, 4 GB DDR3 RAM, 500 GB Hard Disc, Windows 8 Pro`.
+    temp12-icon = `sap-icon://laptop`.
+    temp12-highlight = `Information`.
+    temp12-info = `27.45 EUR`.
+    temp12-infostate = `Success`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-title = `Notebook Basic 17`.
+    temp12-description = `Notebook Basic 17 with 2,80 GHz quad core, 17" LCD, 4 GB DDR3 RAM, 500 GB Hard Disc, Windows 8 Pro`.
+    temp12-icon = `sap-icon://laptop`.
+    temp12-highlight = `Success`.
+    temp12-info = `27.45 EUR`.
+    temp12-infostate = `Success`.
+    INSERT temp12 INTO TABLE temp11.
+    t_withaction = temp11.
 
   ENDMETHOD.
 

@@ -15,9 +15,9 @@ CLASS z2ui5_cl_smpc_app_303 DEFINITION PUBLIC.
              title TYPE string,
              icon  TYPE string,
              key   TYPE string,
-             items TYPE STANDARD TABLE OF ty_s_sub_item WITH EMPTY KEY,
+             items TYPE STANDARD TABLE OF ty_s_sub_item WITH DEFAULT KEY,
            END OF ty_s_nav_item.
-    DATA navigation TYPE STANDARD TABLE OF ty_s_nav_item WITH EMPTY KEY.
+    DATA navigation TYPE STANDARD TABLE OF ty_s_nav_item WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -35,12 +35,12 @@ CLASS z2ui5_cl_smpc_app_303 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -49,7 +49,9 @@ CLASS z2ui5_cl_smpc_app_303 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+      DATA temp1 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
@@ -306,50 +308,121 @@ CLASS z2ui5_cl_smpc_app_303 IMPLEMENTATION.
     " untouched key and the key the initialPage already shows both need no
     " action at all
     IF selectedkey IS NOT INITIAL AND selectedkey <> `page1`.
+      
+      CLEAR temp1.
+      INSERT `pageContainer` INTO TABLE temp1.
+      INSERT `to` INTO TABLE temp1.
+      INSERT selectedkey INTO TABLE temp1.
       client->follow_up_action( val   = client->cs_event-control_by_id
-                                t_arg = VALUE #( ( `pageContainer` ) ( `to` ) ( selectedkey ) ) ).
+                                t_arg = temp1 ).
     ENDIF.
 
   ENDMETHOD.
 
 
   METHOD on_event.
+      DATA temp3 TYPE string_table.
 
     IF client->get_event( ) = `ITEM_SELECT`.
       " original onItemSelect: pageContainer.to( the selected item's key )
+      
+      CLEAR temp3.
+      INSERT `pageContainer` INTO TABLE temp3.
+      INSERT `to` INTO TABLE temp3.
+      INSERT client->get_event_arg( ) INTO TABLE temp3.
       client->follow_up_action( val   = client->cs_event-control_by_id
-                                t_arg = VALUE #( ( `pageContainer` )
-                                                 ( `to` )
-                                                 ( client->get_event_arg( ) ) ) ).
+                                t_arg = temp3 ).
     ENDIF.
 
   ENDMETHOD.
 
 
   METHOD model_init.
+    DATA temp5 LIKE navigation.
+    DATA temp6 LIKE LINE OF temp5.
+    DATA temp1 TYPE z2ui5_cl_smpc_app_303=>ty_s_nav_item-items.
+    DATA temp2 LIKE LINE OF temp1.
+    DATA temp3 TYPE z2ui5_cl_smpc_app_303=>ty_s_nav_item-items.
+    DATA temp4 LIKE LINE OF temp3.
+    DATA temp7 TYPE z2ui5_cl_smpc_app_303=>ty_s_nav_item-items.
+    DATA temp8 LIKE LINE OF temp7.
+    DATA temp9 TYPE z2ui5_cl_smpc_app_303=>ty_s_nav_item-items.
+    DATA temp10 LIKE LINE OF temp9.
 
     " model/data.json of the sample, inlined 1:1
     selectedkey = `page1`.
 
-    navigation = VALUE #(
-      ( title = `Home`         key = `page1` )
-      ( title = `Applications` key = `page2` )
-      ( title = `Users and Groups`
-        items = VALUE #( ( title = `User 1` key = `page3` )
-                         ( title = `User 2` key = `page3` )
-                         ( title = `User 3` key = `page3` ) ) )
-      ( title = `Identity`
-        items = VALUE #( ( title = `Identity 1` key = `page4` )
-                         ( title = `Identity 2`   key = `page4` )
-                         ( title = `Identity 3`   key = `page4` ) ) )
-      ( title = `Provisioning` key = `page5` )
-      ( title = `Monitoring` icon = `sap-icon://unwired`
-        items = VALUE #( ( title = `Monitoring 1` key = `page6` )
-                         ( title = `Monitoring 2` key = `page6` ) ) )
-      ( title = `Resources`
-        items = VALUE #( ( title = `Resource 1` key = `page7` )
-                         ( title = `Resource 2` key = `page7` )
-                         ( title = `Resource 3` key = `page7` ) ) ) ).
+    
+    CLEAR temp5.
+    
+    temp6-title = `Home`.
+    temp6-key = `page1`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-title = `Applications`.
+    temp6-key = `page2`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-title = `Users and Groups`.
+    
+    CLEAR temp1.
+    
+    temp2-title = `User 1`.
+    temp2-key = `page3`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `User 2`.
+    temp2-key = `page3`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `User 3`.
+    temp2-key = `page3`.
+    INSERT temp2 INTO TABLE temp1.
+    temp6-items = temp1.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-title = `Identity`.
+    
+    CLEAR temp3.
+    
+    temp4-title = `Identity 1`.
+    temp4-key = `page4`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Identity 2`.
+    temp4-key = `page4`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Identity 3`.
+    temp4-key = `page4`.
+    INSERT temp4 INTO TABLE temp3.
+    temp6-items = temp3.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-title = `Provisioning`.
+    temp6-key = `page5`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-title = `Monitoring`.
+    temp6-icon = `sap-icon://unwired`.
+    
+    CLEAR temp7.
+    
+    temp8-title = `Monitoring 1`.
+    temp8-key = `page6`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-title = `Monitoring 2`.
+    temp8-key = `page6`.
+    INSERT temp8 INTO TABLE temp7.
+    temp6-items = temp7.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-title = `Resources`.
+    
+    CLEAR temp9.
+    
+    temp10-title = `Resource 1`.
+    temp10-key = `page7`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-title = `Resource 2`.
+    temp10-key = `page7`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-title = `Resource 3`.
+    temp10-key = `page7`.
+    INSERT temp10 INTO TABLE temp9.
+    temp6-items = temp9.
+    INSERT temp6 INTO TABLE temp5.
+    navigation = temp5.
 
   ENDMETHOD.
 

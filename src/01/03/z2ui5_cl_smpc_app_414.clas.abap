@@ -23,13 +23,13 @@ CLASS z2ui5_cl_smpc_app_414 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       " the original never sets showHeaderContent in the view - the UI5 default is true
       show_header_content = abap_true.
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -38,7 +38,8 @@ CLASS z2ui5_cl_smpc_app_414 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " Block->content inlining (app 217/188/178/161 precedent, CAPABILITIES 'Custom
     " BlockBase blocks in a sap.uxap.ObjectPageLayout'): the original blocks and
@@ -281,17 +282,22 @@ CLASS z2ui5_cl_smpc_app_414 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp1 TYPE xsdboolean.
+        DATA popover TYPE REF TO z2ui5_cl_ui5_view_builder.
 
     CASE client->get_event( ).
 
       WHEN `TOGGLE_HEADER_CONTENT`.
         " handlePress: the original toggles the layout's showHeaderContent state
-        show_header_content = xsdbool( show_header_content = abap_false ).
+        
+        temp1 = boolc( show_header_content = abap_false ).
+        show_header_content = temp1.
 
       WHEN `MARK_CHANGES_PRESS`.
         " handleMarkChangesPress: the PopoverUnsavedChanges fragment, built
         " server-side and opened anchored at the pressed header control
-        DATA(popover) = z2ui5_cl_ui5_view_builder=>factory( ).
+        
+        popover = z2ui5_cl_ui5_view_builder=>factory( ).
         popover->ele( n = `FragmentDefinition` ns = `core`
             )->a( n = `xmlns`      v = `sap.m`
             )->a( n = `xmlns:core` v = `sap.ui.core`

@@ -10,7 +10,7 @@ CLASS z2ui5_cl_smpc_app_567 DEFINITION PUBLIC.
              suppliername TYPE string,
              description  TYPE string,
            END OF ty_s_product.
-    TYPES ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
+    TYPES ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH DEFAULT KEY.
 
     TYPES: BEGIN OF ty_s_column,
              width          TYPE string,
@@ -19,7 +19,7 @@ CLASS z2ui5_cl_smpc_app_567 DEFINITION PUBLIC.
              minscreenwidth TYPE string,
              styleclass     TYPE string,
            END OF ty_s_column.
-    TYPES ty_t_column TYPE STANDARD TABLE OF ty_s_column WITH EMPTY KEY.
+    TYPES ty_t_column TYPE STANDARD TABLE OF ty_s_column WITH DEFAULT KEY.
 
     DATA t_products     TYPE ty_t_product.
     " the two column models: the clone gives its first column width auto, which
@@ -44,10 +44,10 @@ CLASS z2ui5_cl_smpc_app_567 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -56,7 +56,8 @@ CLASS z2ui5_cl_smpc_app_567 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
@@ -183,22 +184,62 @@ CLASS z2ui5_cl_smpc_app_567 IMPLEMENTATION.
   METHOD model_init.
 
     " setSizeLimit(3) on the products model - only the first three rows render
-    t_products = VALUE #(
-      ( name = `Notebook Basic 15` suppliername = `Very Best Screens`
-        description = `Notebook Basic 15 with 2,80 GHz quad core, 15" LCD, 4 GB DDR3 RAM, 500 GB Hard Disc, Windows 8 Pro` )
-      ( name = `Notebook Basic 17` suppliername = `Very Best Screens`
-        description = `Notebook Basic 17 with 2,80 GHz quad core, 17" LCD, 4 GB DDR3 RAM, 500 GB Hard Disc, Windows 8 Pro` )
-      ( name = `Notebook Basic 18` suppliername = `Very Best Screens`
-        description = `Notebook Basic 18 with 2,80 GHz quad core, 18" LCD, 8 GB DDR3 RAM, 1000 GB Hard Disc, Windows 8 Pro` ) ).
+    DATA temp1 TYPE z2ui5_cl_smpc_app_567=>ty_t_product.
+    DATA temp2 LIKE LINE OF temp1.
+    DATA temp3 TYPE z2ui5_cl_smpc_app_567=>ty_t_column.
+    DATA temp4 LIKE LINE OF temp3.
+    FIELD-SYMBOLS <temp5> LIKE LINE OF t_clone.
+    DATA temp6 LIKE sy-tabix.
+    CLEAR temp1.
+    
+    temp2-name = `Notebook Basic 15`.
+    temp2-suppliername = `Very Best Screens`.
+    temp2-description = `Notebook Basic 15 with 2,80 GHz quad core, 15" LCD, 4 GB DDR3 RAM, 500 GB Hard Disc, Windows 8 Pro`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Basic 17`.
+    temp2-suppliername = `Very Best Screens`.
+    temp2-description = `Notebook Basic 17 with 2,80 GHz quad core, 17" LCD, 4 GB DDR3 RAM, 500 GB Hard Disc, Windows 8 Pro`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Basic 18`.
+    temp2-suppliername = `Very Best Screens`.
+    temp2-description = `Notebook Basic 18 with 2,80 GHz quad core, 18" LCD, 8 GB DDR3 RAM, 1000 GB Hard Disc, Windows 8 Pro`.
+    INSERT temp2 INTO TABLE temp1.
+    t_products = temp1.
 
     " the controller's oData, and the deepExtend clone whose first width is auto
-    t_columns = VALUE #(
-      ( width = `30%` header = `Product Name`  demandpopin = abap_false minscreenwidth = `` styleclass = `cellBorderLeft cellBorderRight` )
-      ( width = `20%` header = `Supplier Name` demandpopin = abap_false minscreenwidth = `` styleclass = `cellBorderRight` )
-      ( width = `50%` header = `Description`   demandpopin = abap_true  minscreenwidth = `Tablet` styleclass = `cellBorderRight` ) ).
+    
+    CLEAR temp3.
+    
+    temp4-width = `30%`.
+    temp4-header = `Product Name`.
+    temp4-demandpopin = abap_false.
+    temp4-minscreenwidth = ``.
+    temp4-styleclass = `cellBorderLeft cellBorderRight`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-width = `20%`.
+    temp4-header = `Supplier Name`.
+    temp4-demandpopin = abap_false.
+    temp4-minscreenwidth = ``.
+    temp4-styleclass = `cellBorderRight`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-width = `50%`.
+    temp4-header = `Description`.
+    temp4-demandpopin = abap_true.
+    temp4-minscreenwidth = `Tablet`.
+    temp4-styleclass = `cellBorderRight`.
+    INSERT temp4 INTO TABLE temp3.
+    t_columns = temp3.
 
     t_clone = t_columns.
-    t_clone[ 1 ]-width = `auto`.
+    
+    
+    temp6 = sy-tabix.
+    READ TABLE t_clone INDEX 1 ASSIGNING <temp5>.
+    sy-tabix = temp6.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    <temp5>-width = `auto`.
 
   ENDMETHOD.
 

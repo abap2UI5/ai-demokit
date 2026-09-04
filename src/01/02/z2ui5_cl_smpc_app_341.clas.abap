@@ -39,7 +39,7 @@ CLASS z2ui5_cl_smpc_app_341 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       " no model_init here: the sample's Cards start WITHOUT a manifest and are
       " filled by the "Start loading" press - so the model is seeded there.
       " The eleven fields still have to carry the JSON literal `null` rather
@@ -59,9 +59,9 @@ CLASS z2ui5_cl_smpc_app_341 IMPLEMENTATION.
       manifest_object           = c_no_manifest.
       manifest_timeline         = c_no_manifest.
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -70,7 +70,8 @@ CLASS z2ui5_cl_smpc_app_341 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the sample's SimpleForm (loading time + Start loading) and the
     " f:GridContainer with the eleven sap.ui.integration Cards, each rendering
@@ -233,6 +234,10 @@ CLASS z2ui5_cl_smpc_app_341 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp3 TYPE string_table.
+        DATA temp1 LIKE temp3.
+        DATA lv_card_id LIKE LINE OF temp1.
+          DATA temp2 TYPE string_table.
 
     IF client->get_event( ) = `FORM_SUBMIT`.
       " the original walks the grid items and either sets the manifest (first
@@ -242,12 +247,29 @@ CLASS z2ui5_cl_smpc_app_341 IMPLEMENTATION.
       IF manifest_listtest = c_no_manifest.
         model_init( ).
       ELSE.
-        LOOP AT VALUE string_table( ( `listTest` ) ( `list` ) ( `error` ) ( `all` )
-                                    ( `descriptionTitle` ) ( `iconTitle` ) ( `table` )
-                                    ( `analytical` ) ( `calendar` ) ( `object` )
-                                    ( `timeline` ) ) INTO DATA(lv_card_id).
+        
+        CLEAR temp3.
+        INSERT `listTest` INTO TABLE temp3.
+        INSERT `list` INTO TABLE temp3.
+        INSERT `error` INTO TABLE temp3.
+        INSERT `all` INTO TABLE temp3.
+        INSERT `descriptionTitle` INTO TABLE temp3.
+        INSERT `iconTitle` INTO TABLE temp3.
+        INSERT `table` INTO TABLE temp3.
+        INSERT `analytical` INTO TABLE temp3.
+        INSERT `calendar` INTO TABLE temp3.
+        INSERT `object` INTO TABLE temp3.
+        INSERT `timeline` INTO TABLE temp3.
+        
+        temp1 = temp3.
+        
+        LOOP AT temp1 INTO lv_card_id.
+          
+          CLEAR temp2.
+          INSERT lv_card_id INTO TABLE temp2.
+          INSERT `refresh` INTO TABLE temp2.
           client->follow_up_action( val   = client->cs_event-control_by_id
-                                    t_arg = VALUE #( ( lv_card_id ) ( `refresh` ) ) ).
+                                    t_arg = temp2 ).
         ENDLOOP.
       ENDIF.
     ENDIF.

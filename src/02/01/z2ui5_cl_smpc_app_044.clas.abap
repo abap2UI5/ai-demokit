@@ -25,9 +25,9 @@ CLASS z2ui5_cl_smpc_app_044 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -36,7 +36,8 @@ CLASS z2ui5_cl_smpc_app_044 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
@@ -75,13 +76,17 @@ CLASS z2ui5_cl_smpc_app_044 IMPLEMENTATION.
 
 
   METHOD on_event.
+      DATA temp1 TYPE string_table.
 
     IF client->get_event( ) = `SHOW_PDF`.
       " original onPress setSource + open(): update the bound source, then the whitelisted open runs after render (t_arg positional: id, method; the view defaults to cs_view-main)
       pdf_source = c_base_url && client->get_event_arg( ).
+      
+      CLEAR temp1.
+      INSERT `pdfViewer` INTO TABLE temp1.
+      INSERT `open` INTO TABLE temp1.
       client->follow_up_action( val   = z2ui5_if_client=>cs_event-control_by_id
-                                t_arg = VALUE #( ( `pdfViewer` )
-                                                 ( `open` ) ) ).
+                                t_arg = temp1 ).
     ENDIF.
 
   ENDMETHOD.

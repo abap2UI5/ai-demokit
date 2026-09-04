@@ -16,8 +16,8 @@ CLASS z2ui5_cl_smpc_app_117 DEFINITION PUBLIC.
              status       TYPE string,
              statusschema TYPE string,
            END OF ty_s_product.
-    DATA t_cities   TYPE STANDARD TABLE OF ty_s_city WITH EMPTY KEY.
-    DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
+    DATA t_cities   TYPE STANDARD TABLE OF ty_s_city WITH DEFAULT KEY.
+    DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -34,10 +34,10 @@ CLASS z2ui5_cl_smpc_app_117 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -46,12 +46,22 @@ CLASS z2ui5_cl_smpc_app_117 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 LIKE LINE OF temp1.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " both cards of the sample, rebuilt 1:1. The two named models fold into the
     " one default model (cities> -> T_CITIES, products> -> T_PRODUCTS; the last
     " path segment stays identical, which is what structural-diff matches), and
     " the sorter of the two ComboBoxes rides along as a raw binding-info string
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    
+    temp2 = `By pressing the 'Book' button a new application can be opened where the actual booking happens. ` && `This can be in the same window, in a new tab or in a dialog.`.
+    INSERT temp2 INTO TABLE temp1.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
@@ -119,10 +129,7 @@ CLASS z2ui5_cl_smpc_app_117 IMPLEMENTATION.
                             )->a( n = `text`  v = `Book`
                             )->a( n = `press` v = client->follow_up_action(
                                       val   = client->cs_event-control_global
-                                      t_arg = VALUE #( ( `MESSAGE_TOAST` )
-                                                       ( `show` )
-                                                       ( `By pressing the 'Book' button a new application can be opened where the actual booking happens. ` &&
-                                                         `This can be in the same window, in a new tab or in a dialog.` ) ) )
+                                      t_arg = temp1 )
                             )->a( n = `type`  v = `Emphasized`
                             )->a( n = `class` v = `sapUiTinyMarginBegin`
 
@@ -175,19 +182,57 @@ CLASS z2ui5_cl_smpc_app_117 IMPLEMENTATION.
   METHOD model_init.
 
     " model/cities.json and model/products.json, verbatim
-    t_cities = VALUE #(
-      ( text = `Berlin` key = `BR` )
-      ( text = `London` key = `LN` )
-      ( text = `Madrid` key = `MD` )
-      ( text = `Prague` key = `PR` )
-      ( text = `Paris`  key = `PS` )
-      ( text = `Sofia`  key = `SF` )
-      ( text = `Vienna` key = `VN` ) ).
+    DATA temp3 LIKE t_cities.
+    DATA temp4 LIKE LINE OF temp3.
+    DATA temp5 LIKE t_products.
+    DATA temp6 LIKE LINE OF temp5.
+    CLEAR temp3.
+    
+    temp4-text = `Berlin`.
+    temp4-key = `BR`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-text = `London`.
+    temp4-key = `LN`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-text = `Madrid`.
+    temp4-key = `MD`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-text = `Prague`.
+    temp4-key = `PR`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-text = `Paris`.
+    temp4-key = `PS`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-text = `Sofia`.
+    temp4-key = `SF`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-text = `Vienna`.
+    temp4-key = `VN`.
+    INSERT temp4 INTO TABLE temp3.
+    t_cities = temp3.
 
-    t_products = VALUE #(
-      ( title = `Notebook HT` subtitle = `ID23452256-D44`  revenue = `27.25K EUR` status = `success`  statusschema = `Success` )
-      ( title = `Notebook XT` subtitle = `ID27852256-D47`  revenue = `7.35K EUR`  status = `exceeded` statusschema = `Error` )
-      ( title = `Notebook ST` subtitle = `ID123555587-I05` revenue = `22.89K EUR` status = `warning`  statusschema = `Warning` ) ).
+    
+    CLEAR temp5.
+    
+    temp6-title = `Notebook HT`.
+    temp6-subtitle = `ID23452256-D44`.
+    temp6-revenue = `27.25K EUR`.
+    temp6-status = `success`.
+    temp6-statusschema = `Success`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-title = `Notebook XT`.
+    temp6-subtitle = `ID27852256-D47`.
+    temp6-revenue = `7.35K EUR`.
+    temp6-status = `exceeded`.
+    temp6-statusschema = `Error`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-title = `Notebook ST`.
+    temp6-subtitle = `ID123555587-I05`.
+    temp6-revenue = `22.89K EUR`.
+    temp6-status = `warning`.
+    temp6-statusschema = `Warning`.
+    INSERT temp6 INTO TABLE temp5.
+    t_products = temp5.
 
   ENDMETHOD.
 

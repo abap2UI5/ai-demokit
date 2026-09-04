@@ -28,12 +28,12 @@ CLASS z2ui5_cl_smpc_app_622 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -42,7 +42,8 @@ CLASS z2ui5_cl_smpc_app_622 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
@@ -93,6 +94,8 @@ CLASS z2ui5_cl_smpc_app_622 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA name_bad TYPE abap_bool.
+        DATA email_bad TYPE abap_bool.
 
     CASE client->get_event( ).
 
@@ -102,8 +105,10 @@ CLASS z2ui5_cl_smpc_app_622 IMPLEMENTATION.
 
       WHEN `SUBMIT`.
         " onSubmit validates BOTH, then toasts or raises the alert
-        DATA(name_bad)  = name_validate( ).
-        DATA(email_bad) = email_validate( ).
+        
+        name_bad  = name_validate( ).
+        
+        email_bad = email_validate( ).
         IF name_bad = abap_false AND email_bad = abap_false.
           client->message_toast_display( `The input is validated. Your form has been submitted.` ).
         ELSE.
@@ -119,28 +124,50 @@ CLASS z2ui5_cl_smpc_app_622 IMPLEMENTATION.
   METHOD name_validate.
 
     " the binding's own constraints: at least one character, at most ten
-    result = xsdbool( strlen( name ) < 1 OR strlen( name ) > 10 ).
-    name_state = COND #( WHEN result = abap_true THEN `Error` ELSE `None` ).
+    DATA temp2 TYPE xsdboolean.
+    DATA temp1 TYPE string.
+    temp2 = boolc( strlen( name ) < 1 OR strlen( name ) > 10 ).
+    result = temp2.
+    
+    IF result = abap_true.
+      temp1 = `Error`.
+    ELSE.
+      temp1 = `None`.
+    ENDIF.
+    name_state = temp1.
 
   ENDMETHOD.
 
 
   METHOD email_validate.
+    DATA at TYPE i.
+      DATA domain TYPE string.
+      DATA dot TYPE i.
+    DATA temp2 TYPE string.
 
     " customEMailType's regex is /^\w+[\w-+\.]*\@\w+([-\.]\w+)*\.[a-zA-Z]{2,}$/;
     " the same shape without a regex engine: one @ with something before it, and
     " a dot with at least two more characters after it (see sidecar)
     result = abap_true.
-    DATA(at) = find( val = email sub = `@` ).
+    
+    at = find( val = email sub = `@` ).
     IF at > 0 AND find( val = email sub = `@` occ = 2 ) < 0.
-      DATA(domain) = substring( val = email off = at + 1 ).
-      DATA(dot)    = find( val = domain sub = `.` occ = -1 ).
+      
+      domain = substring( val = email off = at + 1 ).
+      
+      dot    = find( val = domain sub = `.` occ = -1 ).
       IF dot > 0 AND strlen( domain ) - dot > 2 AND find( val = email sub = ` ` ) < 0.
         result = abap_false.
       ENDIF.
     ENDIF.
 
-    email_state = COND #( WHEN result = abap_true THEN `Error` ELSE `None` ).
+    
+    IF result = abap_true.
+      temp2 = `Error`.
+    ELSE.
+      temp2 = `None`.
+    ENDIF.
+    email_state = temp2.
 
   ENDMETHOD.
 

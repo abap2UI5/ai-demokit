@@ -15,7 +15,7 @@ CLASS z2ui5_cl_smpc_app_210 DEFINITION PUBLIC.
         height       TYPE string,
         dimunit      TYPE string,
       END OF ty_s_product.
-    DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
+    DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -32,10 +32,10 @@ CLASS z2ui5_cl_smpc_app_210 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -44,7 +44,8 @@ CLASS z2ui5_cl_smpc_app_210 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
@@ -113,130 +114,995 @@ CLASS z2ui5_cl_smpc_app_210 IMPLEMENTATION.
 
   METHOD model_init.
 
-    t_products = VALUE #(
-      ( name = `Notebook Basic 15`                                  productid = `HT-1000` suppliername = `Very Best Screens` width = `30`   depth = `18`   height = `3`    dimunit = `cm` )
-      ( name = `Notebook Basic 17`                                  productid = `HT-1001` suppliername = `Very Best Screens` width = `29`   depth = `17`   height = `3.1`  dimunit = `cm` )
-      ( name = `Notebook Basic 18`                                  productid = `HT-1002` suppliername = `Very Best Screens` width = `28`   depth = `19`   height = `2.5`  dimunit = `cm` )
-      ( name = `Notebook Basic 19`                                  productid = `HT-1003` suppliername = `Smartcards`        width = `32`   depth = `21`   height = `4`    dimunit = `cm` )
-      ( name = `ITelO Vault`                                        productid = `HT-1007` suppliername = `Technocom`         width = `32`   depth = `22`   height = `3`    dimunit = `cm` )
-      ( name = `Notebook Professional 15`                           productid = `HT-1010` suppliername = `Very Best Screens` width = `33`   depth = `20`   height = `3`    dimunit = `cm` )
-      ( name = `Notebook Professional 17`                           productid = `HT-1011` suppliername = `Very Best Screens` width = `33`   depth = `23`   height = `2`    dimunit = `cm` )
-      ( name = `ITelO Vault Net`                                    productid = `HT-1020` suppliername = `Technocom`         width = `10`   depth = `1.8`  height = `17`   dimunit = `cm` )
-      ( name = `ITelO Vault SAT`                                    productid = `HT-1021` suppliername = `Technocom`         width = `11`   depth = `1.7`  height = `18`   dimunit = `cm` )
-      ( name = `Comfort Easy`                                       productid = `HT-1022` suppliername = `Technocom`         width = `84`   depth = `1.5`  height = `14`   dimunit = `cm` )
-      ( name = `Comfort Senior`                                     productid = `HT-1023` suppliername = `Technocom`         width = `80`   depth = `1.6`  height = `13`   dimunit = `cm` )
-      ( name = `Ergo Screen E-I`                                    productid = `HT-1030` suppliername = `Very Best Screens` width = `37`   depth = `12`   height = `36`   dimunit = `cm` )
-      ( name = `Ergo Screen E-II`                                   productid = `HT-1031` suppliername = `Very Best Screens` width = `40.8` depth = `19`   height = `43`   dimunit = `cm` )
-      ( name = `Ergo Screen E-III`                                  productid = `HT-1032` suppliername = `Very Best Screens` width = `40.8` depth = `19`   height = `43`   dimunit = `cm` )
-      ( name = `Flat Basic`                                         productid = `HT-1035` suppliername = `Very Best Screens` width = `39`   depth = `20`   height = `41`   dimunit = `cm` )
-      ( name = `Flat Future`                                        productid = `HT-1036` suppliername = `Very Best Screens` width = `45`   depth = `26`   height = `46`   dimunit = `cm` )
-      ( name = `Flat XL`                                            productid = `HT-1037` suppliername = `Very Best Screens` width = `54.5` depth = `22.1` height = `39.1` dimunit = `cm` )
-      ( name = `Laser Professional Eco`                             productid = `HT-1040` suppliername = `Alpha Printers`    width = `51`   depth = `46`   height = `30`   dimunit = `cm` )
-      ( name = `Laser Basic`                                        productid = `HT-1041` suppliername = `Alpha Printers`    width = `48`   depth = `42`   height = `26`   dimunit = `cm` )
-      ( name = `Laser Allround`                                     productid = `HT-1042` suppliername = `Alpha Printers`    width = `53`   depth = `50`   height = `65`   dimunit = `cm` )
-      ( name = `Ultra Jet Super Color`                              productid = `HT-1050` suppliername = `Alpha Printers`    width = `41`   depth = `41`   height = `28`   dimunit = `cm` )
-      ( name = `Ultra Jet Mobile`                                   productid = `HT-1051` suppliername = `Printer for All`   width = `46`   depth = `32`   height = `25`   dimunit = `cm` )
-      ( name = `Ultra Jet Super Highspeed`                          productid = `HT-1052` suppliername = `Printer for All`   width = `41`   depth = `41`   height = `28`   dimunit = `cm` )
-      ( name = `Multi Print`                                        productid = `HT-1055` suppliername = `Printer for All`   width = `55`   depth = `45`   height = `29`   dimunit = `cm` )
-      ( name = `Multi Color`                                        productid = `HT-1056` suppliername = `Printer for All`   width = `51`   depth = `41.3` height = `22`   dimunit = `cm` )
-      ( name = `Cordless Mouse`                                     productid = `HT-1060` suppliername = `Oxynum`            width = `6`    depth = `14.5` height = `3.5`  dimunit = `cm` )
-      ( name = `Speed Mouse`                                        productid = `HT-1061` suppliername = `Oxynum`            width = `7`    depth = `15`   height = `3.1`  dimunit = `cm` )
-      ( name = `Track Mouse`                                        productid = `HT-1062` suppliername = `Oxynum`            width = `3`    depth = `7`    height = `4`    dimunit = `cm` )
-      ( name = `Ergonomic Keyboard`                                 productid = `HT-1063` suppliername = `Oxynum`            width = `50`   depth = `21`   height = `3.5`  dimunit = `cm` )
-      ( name = `Internet Keyboard`                                  productid = `HT-1064` suppliername = `Oxynum`            width = `52`   depth = `25`   height = `3`    dimunit = `cm` )
-      ( name = `Media Keyboard`                                     productid = `HT-1065` suppliername = `Oxynum`            width = `51.4` depth = `23`   height = `4`    dimunit = `cm` )
-      ( name = `Mousepad`                                           productid = `HT-1066` suppliername = `Oxynum`            width = `15`   depth = `6`    height = `0.2`  dimunit = `cm` )
-      ( name = `Ergo Mousepad`                                      productid = `HT-1067` suppliername = `Oxynum`            width = `15`   depth = `6`    height = `0.2`  dimunit = `cm` )
-      ( name = `Designer Mousepad`                                  productid = `HT-1068` suppliername = `Fasttech`          width = `24`   depth = `24`   height = `0.6`  dimunit = `cm` )
-      ( name = `Universal card reader`                              productid = `HT-1069` suppliername = `Fasttech`          width = `6`    depth = `6`    height = `3`    dimunit = `cm` )
-      ( name = `Proctra X`                                          productid = `HT-1070` suppliername = `Ultrasonic United` width = `22`   depth = `35`   height = `17`   dimunit = `cm` )
-      ( name = `Gladiator MX`                                       productid = `HT-1071` suppliername = `Ultrasonic United` width = `22`   depth = `35`   height = `17`   dimunit = `cm` )
-      ( name = `Hurricane GX`                                       productid = `HT-1072` suppliername = `Ultrasonic United` width = `22`   depth = `35`   height = `17`   dimunit = `cm` )
-      ( name = `Hurricane GX/LN`                                    productid = `HT-1073` suppliername = `Smartcards`        width = `22`   depth = `35`   height = `17`   dimunit = `cm` )
-      ( name = `Photo Scan`                                         productid = `HT-1080` suppliername = `Printer for All`   width = `34`   depth = `48`   height = `5`    dimunit = `cm` )
-      ( name = `Power Scan`                                         productid = `HT-1081` suppliername = `Printer for All`   width = `31`   depth = `43`   height = `7`    dimunit = `cm` )
-      ( name = `Jet Scan Professional`                              productid = `HT-1082` suppliername = `Printer for All`   width = `33`   depth = `41`   height = `12`   dimunit = `cm` )
-      ( name = `Jet Scan Professional`                              productid = `HT-1083` suppliername = `Printer for All`   width = `35`   depth = `40`   height = `10`   dimunit = `cm` )
-      ( name = `Copymaster`                                         productid = `HT-1085` suppliername = `Alpha Printers`    width = `45`   depth = `42`   height = `22`   dimunit = `cm` )
-      ( name = `Surround Sound`                                     productid = `HT-1090` suppliername = `Speaker Experts`   width = `12`   depth = `10`   height = `16`   dimunit = `cm` )
-      ( name = `Blaster Extreme`                                    productid = `HT-1091` suppliername = `Speaker Experts`   width = `13`   depth = `11`   height = `17.5` dimunit = `cm` )
-      ( name = `Sound Booster`                                      productid = `HT-1092` suppliername = `Speaker Experts`   width = `12.4` depth = `10.4` height = `18.1` dimunit = `cm` )
-      ( name = `Lovely Sound 5.1 Wireless`                          productid = `HT-1095` suppliername = `Fasttech`          width = `24`   depth = `19`   height = `23`   dimunit = `cm` )
-      ( name = `Lovely Sound 5.1`                                   productid = `HT-1096` suppliername = `Fasttech`          width = `25`   depth = `17`   height = `19`   dimunit = `cm` )
-      ( name = `Lovely Sound Stereo`                                productid = `HT-1097` suppliername = `Fasttech`          width = `21.3` depth = `2.4`  height = `19.7` dimunit = `cm` )
-      ( name = `Smart Office`                                       productid = `HT-1100` suppliername = `Technocom`         width = `15`   depth = `6.5`  height = `2.1`  dimunit = `cm` )
-      ( name = `Smart Design`                                       productid = `HT-1101` suppliername = `Technocom`         width = `14`   depth = `6.7`  height = `24`   dimunit = `cm` )
-      ( name = `Smart Network`                                      productid = `HT-1102` suppliername = `Technocom`         width = `16`   depth = `6`    height = `27`   dimunit = `cm` )
-      ( name = `Smart Multimedia`                                   productid = `HT-1103` suppliername = `Technocom`         width = `11`   depth = `3.4`  height = `22`   dimunit = `cm` )
-      ( name = `Smart Games`                                        productid = `HT-1104` suppliername = `Technocom`         width = `10`   depth = `3`    height = `30`   dimunit = `cm` )
-      ( name = `Smart Internet Antivirus`                           productid = `HT-1105` suppliername = `Brainsoft`         width = `16`   depth = `4`    height = `21`   dimunit = `cm` )
-      ( name = `Smart Firewall`                                     productid = `HT-1106` suppliername = `Brainsoft`         width = `17.9` depth = `4.2`  height = `23.1` dimunit = `cm` )
-      ( name = `Smart Money`                                        productid = `HT-1107` suppliername = `Brainsoft`         width = `12`   depth = `1.5`  height = `19`   dimunit = `cm` )
-      ( name = `PC Lock`                                            productid = `HT-1110` suppliername = `Red Point Stores`  width = `20`   depth = `8`    height = `4.3`  dimunit = `cm` )
-      ( name = `Notebook Lock`                                      productid = `HT-1111` suppliername = `Red Point Stores`  width = `31`   depth = `9`    height = `7`    dimunit = `cm` )
-      ( name = `Web cam reality`                                    productid = `HT-1112` suppliername = `Red Point Stores`  width = `9`    depth = `8.2`  height = `1.3`  dimunit = `cm` )
-      ( name = `Screen clean`                                       productid = `HT-1113` suppliername = `Red Point Stores`  width = `2`    depth = `2`    height = `0.1`  dimunit = `cm` )
-      ( name = `Fabric bag professional`                            productid = `HT-1114` suppliername = `Red Point Stores`  width = `42`   depth = `32`   height = `7`    dimunit = `cm` )
-      ( name = `Wireless DSL Router`                                productid = `HT-1115` suppliername = `Red Point Stores`  width = `19.3` depth = `18`   height = `5`    dimunit = `cm` )
-      ( name = `Wireless DSL Router / Repeater`                     productid = `HT-1116` suppliername = `Red Point Stores`  width = `19.3` depth = `18`   height = `5`    dimunit = `cm` )
-      ( name = `Wireless DSL Router / Repeater and Print Server`    productid = `HT-1117` suppliername = `Technocom`         width = `19.3` depth = `18`   height = `5`    dimunit = `cm` )
-      ( name = `USB Stick`                                          productid = `HT-1118` suppliername = `Technocom`         width = `1.5`  depth = `8.7`  height = `1.2`  dimunit = `cm` )
-      ( name = `Travel Adapter`                                     productid = `HT-1119` suppliername = `Titanium`          width = `2`    depth = `3.1`  height = `3.9`  dimunit = `cm` )
-      ( name = `Cordless Bluetooth Keyboard, english international` productid = `HT-1120` suppliername = `Technocom`         width = `51.4` depth = `23`   height = `4`    dimunit = `cm` )
-      ( name = `Flat XXL`                                           productid = `HT-1137` suppliername = `Technocom`         width = `54`   depth = `22`   height = `38`   dimunit = `cm` )
-      ( name = `Pocket Mouse`                                       productid = `HT-1138` suppliername = `Technocom`         width = `0.3`  depth = `0.5`  height = `1`    dimunit = `cm` )
-      ( name = `PC Power Station`                                   productid = `HT-1210` suppliername = `Technocom`         width = `28`   depth = `31`   height = `43`   dimunit = `cm` )
-      ( name = `Astro Laptop 1516`                                  productid = `HT-1251` suppliername = `Ultrasonic United` width = `30`   depth = `18`   height = `3`    dimunit = `cm` )
-      ( name = `Astro Phone 6`                                      productid = `HT-1252` suppliername = `Ultrasonic United` width = `8`    depth = `6`    height = `1.5`  dimunit = `cm` )
-      ( name = `Benda Laptop 1408`                                  productid = `HT-1253` suppliername = `Ultrasonic United` width = `30`   depth = `18`   height = `3`    dimunit = `cm` )
-      ( name = `Bending Screen 21HD`                                productid = `HT-1254` suppliername = `Ultrasonic United` width = `37`   depth = `12`   height = `36`   dimunit = `cm` )
-      ( name = `Broad Screen 22HD`                                  productid = `HT-1255` suppliername = `Ultrasonic United` width = `39`   depth = `12`   height = `38`   dimunit = `cm` )
-      ( name = `Cerdik Phone 7`                                     productid = `HT-1256` suppliername = `Ultrasonic United` width = `9`    depth = `15`   height = `1.5`  dimunit = `cm` )
-      ( name = `Cepat Tablet 10.5`                                  productid = `HT-1257` suppliername = `Ultrasonic United` width = `48`   depth = `31`   height = `4.5`  dimunit = `cm` )
-      ( name = `Cepat Tablet 8`                                     productid = `HT-1258` suppliername = `Ultrasonic United` width = `38`   depth = `21`   height = `3.5`  dimunit = `cm` )
-      ( name = `Server Basic`                                       productid = `HT-1500` suppliername = `Technocom`         width = `34`   depth = `35`   height = `23`   dimunit = `cm` )
-      ( name = `Server Professional`                                productid = `HT-1501` suppliername = `Technocom`         width = `29`   depth = `30`   height = `27`   dimunit = `cm` )
-      ( name = `Server Power Pro`                                   productid = `HT-1502` suppliername = `Technocom`         width = `22`   depth = `27.3` height = `37`   dimunit = `cm` )
-      ( name = `Family PC Basic`                                    productid = `HT-1600` suppliername = `Titanium`          width = `21.4` depth = `29`   height = `38`   dimunit = `cm` )
-      ( name = `Family PC Pro`                                      productid = `HT-1601` suppliername = `Titanium`          width = `25`   depth = `31.7` height = `40.2` dimunit = `cm` )
-      ( name = `Gaming Monster`                                     productid = `HT-1602` suppliername = `Titanium`          width = `26.5` depth = `34`   height = `47`   dimunit = `cm` )
-      ( name = `Gaming Monster Pro`                                 productid = `HT-1603` suppliername = `Titanium`          width = `27`   depth = `28`   height = `42`   dimunit = `cm` )
-      ( name = `7" Widescreen Portable DVD Player w MP3`            productid = `HT-2000` suppliername = `Titanium`          width = `21.4` depth = `19`   height = `27.6` dimunit = `cm` )
-      ( name = `10" Portable DVD player`                            productid = `HT-2001` suppliername = `Titanium`          width = `24`   depth = `19.5` height = `29`   dimunit = `cm` )
-      ( name = `Portable DVD Player with 9" LCD Monitor`            productid = `HT-2002` suppliername = `Technocom`         width = `21`   depth = `16.5` height = `14`   dimunit = `cm` )
-      ( name = `CD/DVD case: 264 sleeves`                           productid = `HT-2025` suppliername = `Titanium`          width = `13`   depth = `13`   height = `20`   dimunit = `cm` )
-      ( name = `Audio/Video Cable Kit - 4m`                         productid = `HT-2026` suppliername = `Titanium`          width = `21`   depth = `10.2` height = `13`   dimunit = `cm` )
-      ( name = `Removable CD/DVD Laser Labels`                      productid = `HT-2027` suppliername = `Titanium`          width = `5.5`  depth = `2`    height = `2`    dimunit = `cm` )
-      ( name = `Beam Breaker B-1`                                   productid = `HT-6100` suppliername = `Titanium`          width = `30.4` depth = `23.1` height = `23`   dimunit = `cm` )
-      ( name = `Beam Breaker B-2`                                   productid = `HT-6101` suppliername = `Technocom`         width = `30.4` depth = `23.1` height = `23`   dimunit = `cm` )
-      ( name = `Beam Breaker B-3`                                   productid = `HT-6102` suppliername = `Technocom`         width = `30.4` depth = `23.1` height = `23`   dimunit = `cm` )
-      ( name = `Play Movie`                                         productid = `HT-6110` suppliername = `Fasttech`          width = `37`   depth = `24`   height = `6`    dimunit = `cm` )
-      ( name = `Record Movie`                                       productid = `HT-6111` suppliername = `Fasttech`          width = `38`   depth = `26`   height = `6.2`  dimunit = `cm` )
-      ( name = `ITelo MusicStick`                                   productid = `HT-6120` suppliername = `Fasttech`          width = `1.5`  depth = `6`    height = `1`    dimunit = `cm` )
-      ( name = `ITelo Jog-Mate`                                     productid = `HT-6121` suppliername = `Fasttech`          width = `5.1`  depth = `8`    height = `9.2`  dimunit = `cm` )
-      ( name = `Power Pro Player 40`                                productid = `HT-6122` suppliername = `Fasttech`          width = `5.1`  depth = `8`    height = `9.2`  dimunit = `cm` )
-      ( name = `Power Pro Player 80`                                productid = `HT-6123` suppliername = `Fasttech`          width = `4`    depth = `6`    height = `0.8`  dimunit = `cm` )
-      ( name = `Flat Watch HD32`                                    productid = `HT-6130` suppliername = `Very Best Screens` width = `78`   depth = `22.1` height = `55`   dimunit = `cm` )
-      ( name = `Flat Watch HD37`                                    productid = `HT-6131` suppliername = `Very Best Screens` width = `99.1` depth = `26`   height = `61`   dimunit = `cm` )
-      ( name = `Flat Watch HD41`                                    productid = `HT-6132` suppliername = `Very Best Screens` width = `128`  depth = `23`   height = `79.1` dimunit = `cm` )
-      ( name = `Copperberry`                                        productid = `HT-7000` suppliername = `Fasttech`          width = `8.1`  depth = `13`   height = `12.1` dimunit = `cm` )
-      ( name = `Silverberry`                                        productid = `HT-7010` suppliername = `Fasttech`          width = `8.1`  depth = `13`   height = `12.1` dimunit = `cm` )
-      ( name = `Goldberry`                                          productid = `HT-7020` suppliername = `Fasttech`          width = `8.1`  depth = `13`   height = `12.1` dimunit = `cm` )
-      ( name = `Platinberry`                                        productid = `HT-7030` suppliername = `Fasttech`          width = `8.1`  depth = `13`   height = `12.1` dimunit = `cm` )
-      ( name = `ITelO FlexTop I4000`                                productid = `HT-8000` suppliername = `Titanium`          width = `31`   depth = `19`   height = `3.1`  dimunit = `cm` )
-      ( name = `ITelO FlexTop I6300c`                               productid = `HT-8001` suppliername = `Titanium`          width = `32`   depth = `20`   height = `3.4`  dimunit = `cm` )
-      ( name = `ITelO FlexTop I9100`                                productid = `HT-8002` suppliername = `Titanium`          width = `38`   depth = `21`   height = `4.1`  dimunit = `cm` )
-      ( name = `ITelO FlexTop I9800`                                productid = `HT-8003` suppliername = `Titanium`          width = `48`   depth = `31`   height = `4.5`  dimunit = `cm` )
-      ( name = `Smartphone Leather Case`                            productid = `HT-9991` suppliername = `Ultrasonic United` width = `48`   depth = `31`   height = `4.5`  dimunit = `cm` )
-      ( name = `Smartphone Alpha`                                   productid = `HT-9992` suppliername = `Ultrasonic United` width = `48`   depth = `31`   height = `4.5`  dimunit = `cm` )
-      ( name = `Mini Tablet`                                        productid = `HT-9993` suppliername = `Ultrasonic United` width = `48`   depth = `31`   height = `4.5`  dimunit = `cm` )
-      ( name = `Camcorder View`                                     productid = `HT-9994` suppliername = `Ultrasonic United` width = `48`   depth = `31`   height = `27`   dimunit = `cm` )
-      ( name = `Tablet Pouch`                                       productid = `HT-9995` suppliername = `Titanium`          width = `25`   depth = `40`   height = `4.5`  dimunit = `cm` )
-      ( name = `Tablet Pouch`                                       productid = `HT-9996` suppliername = `Titanium`          width = `25`   depth = `40`   height = `4.5`  dimunit = `cm` )
-      ( name = `e-Book Reader ReadMe`                               productid = `HT-9997` suppliername = `Titanium`          width = `48`   depth = `31`   height = `4.5`  dimunit = `cm` )
-      ( name = `Smartphone Beta`                                    productid = `HT-9998` suppliername = `Titanium`          width = `48`   depth = `31`   height = `4.5`  dimunit = `cm` )
-      ( name = `Maxi Tablet`                                        productid = `HT-9999` suppliername = `Titanium`          width = `48`   depth = `31`   height = `4.5`  dimunit = `cm` )
-      ( name = `Flyer`                                              productid = `PF-1000` suppliername = `Titanium`          width = `46`   depth = `30`   height = `3`    dimunit = `cm` ) ).
+    DATA temp1 LIKE t_products.
+    DATA temp2 LIKE LINE OF temp1.
+    CLEAR temp1.
+    
+    temp2-name = `Notebook Basic 15`.
+    temp2-productid = `HT-1000`.
+    temp2-suppliername = `Very Best Screens`.
+    temp2-width = `30`.
+    temp2-depth = `18`.
+    temp2-height = `3`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Basic 17`.
+    temp2-productid = `HT-1001`.
+    temp2-suppliername = `Very Best Screens`.
+    temp2-width = `29`.
+    temp2-depth = `17`.
+    temp2-height = `3.1`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Basic 18`.
+    temp2-productid = `HT-1002`.
+    temp2-suppliername = `Very Best Screens`.
+    temp2-width = `28`.
+    temp2-depth = `19`.
+    temp2-height = `2.5`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Basic 19`.
+    temp2-productid = `HT-1003`.
+    temp2-suppliername = `Smartcards`.
+    temp2-width = `32`.
+    temp2-depth = `21`.
+    temp2-height = `4`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO Vault`.
+    temp2-productid = `HT-1007`.
+    temp2-suppliername = `Technocom`.
+    temp2-width = `32`.
+    temp2-depth = `22`.
+    temp2-height = `3`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Professional 15`.
+    temp2-productid = `HT-1010`.
+    temp2-suppliername = `Very Best Screens`.
+    temp2-width = `33`.
+    temp2-depth = `20`.
+    temp2-height = `3`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Professional 17`.
+    temp2-productid = `HT-1011`.
+    temp2-suppliername = `Very Best Screens`.
+    temp2-width = `33`.
+    temp2-depth = `23`.
+    temp2-height = `2`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO Vault Net`.
+    temp2-productid = `HT-1020`.
+    temp2-suppliername = `Technocom`.
+    temp2-width = `10`.
+    temp2-depth = `1.8`.
+    temp2-height = `17`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO Vault SAT`.
+    temp2-productid = `HT-1021`.
+    temp2-suppliername = `Technocom`.
+    temp2-width = `11`.
+    temp2-depth = `1.7`.
+    temp2-height = `18`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Comfort Easy`.
+    temp2-productid = `HT-1022`.
+    temp2-suppliername = `Technocom`.
+    temp2-width = `84`.
+    temp2-depth = `1.5`.
+    temp2-height = `14`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Comfort Senior`.
+    temp2-productid = `HT-1023`.
+    temp2-suppliername = `Technocom`.
+    temp2-width = `80`.
+    temp2-depth = `1.6`.
+    temp2-height = `13`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Ergo Screen E-I`.
+    temp2-productid = `HT-1030`.
+    temp2-suppliername = `Very Best Screens`.
+    temp2-width = `37`.
+    temp2-depth = `12`.
+    temp2-height = `36`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Ergo Screen E-II`.
+    temp2-productid = `HT-1031`.
+    temp2-suppliername = `Very Best Screens`.
+    temp2-width = `40.8`.
+    temp2-depth = `19`.
+    temp2-height = `43`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Ergo Screen E-III`.
+    temp2-productid = `HT-1032`.
+    temp2-suppliername = `Very Best Screens`.
+    temp2-width = `40.8`.
+    temp2-depth = `19`.
+    temp2-height = `43`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Flat Basic`.
+    temp2-productid = `HT-1035`.
+    temp2-suppliername = `Very Best Screens`.
+    temp2-width = `39`.
+    temp2-depth = `20`.
+    temp2-height = `41`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Flat Future`.
+    temp2-productid = `HT-1036`.
+    temp2-suppliername = `Very Best Screens`.
+    temp2-width = `45`.
+    temp2-depth = `26`.
+    temp2-height = `46`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Flat XL`.
+    temp2-productid = `HT-1037`.
+    temp2-suppliername = `Very Best Screens`.
+    temp2-width = `54.5`.
+    temp2-depth = `22.1`.
+    temp2-height = `39.1`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Laser Professional Eco`.
+    temp2-productid = `HT-1040`.
+    temp2-suppliername = `Alpha Printers`.
+    temp2-width = `51`.
+    temp2-depth = `46`.
+    temp2-height = `30`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Laser Basic`.
+    temp2-productid = `HT-1041`.
+    temp2-suppliername = `Alpha Printers`.
+    temp2-width = `48`.
+    temp2-depth = `42`.
+    temp2-height = `26`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Laser Allround`.
+    temp2-productid = `HT-1042`.
+    temp2-suppliername = `Alpha Printers`.
+    temp2-width = `53`.
+    temp2-depth = `50`.
+    temp2-height = `65`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Ultra Jet Super Color`.
+    temp2-productid = `HT-1050`.
+    temp2-suppliername = `Alpha Printers`.
+    temp2-width = `41`.
+    temp2-depth = `41`.
+    temp2-height = `28`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Ultra Jet Mobile`.
+    temp2-productid = `HT-1051`.
+    temp2-suppliername = `Printer for All`.
+    temp2-width = `46`.
+    temp2-depth = `32`.
+    temp2-height = `25`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Ultra Jet Super Highspeed`.
+    temp2-productid = `HT-1052`.
+    temp2-suppliername = `Printer for All`.
+    temp2-width = `41`.
+    temp2-depth = `41`.
+    temp2-height = `28`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Multi Print`.
+    temp2-productid = `HT-1055`.
+    temp2-suppliername = `Printer for All`.
+    temp2-width = `55`.
+    temp2-depth = `45`.
+    temp2-height = `29`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Multi Color`.
+    temp2-productid = `HT-1056`.
+    temp2-suppliername = `Printer for All`.
+    temp2-width = `51`.
+    temp2-depth = `41.3`.
+    temp2-height = `22`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Cordless Mouse`.
+    temp2-productid = `HT-1060`.
+    temp2-suppliername = `Oxynum`.
+    temp2-width = `6`.
+    temp2-depth = `14.5`.
+    temp2-height = `3.5`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Speed Mouse`.
+    temp2-productid = `HT-1061`.
+    temp2-suppliername = `Oxynum`.
+    temp2-width = `7`.
+    temp2-depth = `15`.
+    temp2-height = `3.1`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Track Mouse`.
+    temp2-productid = `HT-1062`.
+    temp2-suppliername = `Oxynum`.
+    temp2-width = `3`.
+    temp2-depth = `7`.
+    temp2-height = `4`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Ergonomic Keyboard`.
+    temp2-productid = `HT-1063`.
+    temp2-suppliername = `Oxynum`.
+    temp2-width = `50`.
+    temp2-depth = `21`.
+    temp2-height = `3.5`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Internet Keyboard`.
+    temp2-productid = `HT-1064`.
+    temp2-suppliername = `Oxynum`.
+    temp2-width = `52`.
+    temp2-depth = `25`.
+    temp2-height = `3`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Media Keyboard`.
+    temp2-productid = `HT-1065`.
+    temp2-suppliername = `Oxynum`.
+    temp2-width = `51.4`.
+    temp2-depth = `23`.
+    temp2-height = `4`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Mousepad`.
+    temp2-productid = `HT-1066`.
+    temp2-suppliername = `Oxynum`.
+    temp2-width = `15`.
+    temp2-depth = `6`.
+    temp2-height = `0.2`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Ergo Mousepad`.
+    temp2-productid = `HT-1067`.
+    temp2-suppliername = `Oxynum`.
+    temp2-width = `15`.
+    temp2-depth = `6`.
+    temp2-height = `0.2`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Designer Mousepad`.
+    temp2-productid = `HT-1068`.
+    temp2-suppliername = `Fasttech`.
+    temp2-width = `24`.
+    temp2-depth = `24`.
+    temp2-height = `0.6`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Universal card reader`.
+    temp2-productid = `HT-1069`.
+    temp2-suppliername = `Fasttech`.
+    temp2-width = `6`.
+    temp2-depth = `6`.
+    temp2-height = `3`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Proctra X`.
+    temp2-productid = `HT-1070`.
+    temp2-suppliername = `Ultrasonic United`.
+    temp2-width = `22`.
+    temp2-depth = `35`.
+    temp2-height = `17`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Gladiator MX`.
+    temp2-productid = `HT-1071`.
+    temp2-suppliername = `Ultrasonic United`.
+    temp2-width = `22`.
+    temp2-depth = `35`.
+    temp2-height = `17`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Hurricane GX`.
+    temp2-productid = `HT-1072`.
+    temp2-suppliername = `Ultrasonic United`.
+    temp2-width = `22`.
+    temp2-depth = `35`.
+    temp2-height = `17`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Hurricane GX/LN`.
+    temp2-productid = `HT-1073`.
+    temp2-suppliername = `Smartcards`.
+    temp2-width = `22`.
+    temp2-depth = `35`.
+    temp2-height = `17`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Photo Scan`.
+    temp2-productid = `HT-1080`.
+    temp2-suppliername = `Printer for All`.
+    temp2-width = `34`.
+    temp2-depth = `48`.
+    temp2-height = `5`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Power Scan`.
+    temp2-productid = `HT-1081`.
+    temp2-suppliername = `Printer for All`.
+    temp2-width = `31`.
+    temp2-depth = `43`.
+    temp2-height = `7`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Jet Scan Professional`.
+    temp2-productid = `HT-1082`.
+    temp2-suppliername = `Printer for All`.
+    temp2-width = `33`.
+    temp2-depth = `41`.
+    temp2-height = `12`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Jet Scan Professional`.
+    temp2-productid = `HT-1083`.
+    temp2-suppliername = `Printer for All`.
+    temp2-width = `35`.
+    temp2-depth = `40`.
+    temp2-height = `10`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Copymaster`.
+    temp2-productid = `HT-1085`.
+    temp2-suppliername = `Alpha Printers`.
+    temp2-width = `45`.
+    temp2-depth = `42`.
+    temp2-height = `22`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Surround Sound`.
+    temp2-productid = `HT-1090`.
+    temp2-suppliername = `Speaker Experts`.
+    temp2-width = `12`.
+    temp2-depth = `10`.
+    temp2-height = `16`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Blaster Extreme`.
+    temp2-productid = `HT-1091`.
+    temp2-suppliername = `Speaker Experts`.
+    temp2-width = `13`.
+    temp2-depth = `11`.
+    temp2-height = `17.5`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Sound Booster`.
+    temp2-productid = `HT-1092`.
+    temp2-suppliername = `Speaker Experts`.
+    temp2-width = `12.4`.
+    temp2-depth = `10.4`.
+    temp2-height = `18.1`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Lovely Sound 5.1 Wireless`.
+    temp2-productid = `HT-1095`.
+    temp2-suppliername = `Fasttech`.
+    temp2-width = `24`.
+    temp2-depth = `19`.
+    temp2-height = `23`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Lovely Sound 5.1`.
+    temp2-productid = `HT-1096`.
+    temp2-suppliername = `Fasttech`.
+    temp2-width = `25`.
+    temp2-depth = `17`.
+    temp2-height = `19`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Lovely Sound Stereo`.
+    temp2-productid = `HT-1097`.
+    temp2-suppliername = `Fasttech`.
+    temp2-width = `21.3`.
+    temp2-depth = `2.4`.
+    temp2-height = `19.7`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smart Office`.
+    temp2-productid = `HT-1100`.
+    temp2-suppliername = `Technocom`.
+    temp2-width = `15`.
+    temp2-depth = `6.5`.
+    temp2-height = `2.1`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smart Design`.
+    temp2-productid = `HT-1101`.
+    temp2-suppliername = `Technocom`.
+    temp2-width = `14`.
+    temp2-depth = `6.7`.
+    temp2-height = `24`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smart Network`.
+    temp2-productid = `HT-1102`.
+    temp2-suppliername = `Technocom`.
+    temp2-width = `16`.
+    temp2-depth = `6`.
+    temp2-height = `27`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smart Multimedia`.
+    temp2-productid = `HT-1103`.
+    temp2-suppliername = `Technocom`.
+    temp2-width = `11`.
+    temp2-depth = `3.4`.
+    temp2-height = `22`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smart Games`.
+    temp2-productid = `HT-1104`.
+    temp2-suppliername = `Technocom`.
+    temp2-width = `10`.
+    temp2-depth = `3`.
+    temp2-height = `30`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smart Internet Antivirus`.
+    temp2-productid = `HT-1105`.
+    temp2-suppliername = `Brainsoft`.
+    temp2-width = `16`.
+    temp2-depth = `4`.
+    temp2-height = `21`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smart Firewall`.
+    temp2-productid = `HT-1106`.
+    temp2-suppliername = `Brainsoft`.
+    temp2-width = `17.9`.
+    temp2-depth = `4.2`.
+    temp2-height = `23.1`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smart Money`.
+    temp2-productid = `HT-1107`.
+    temp2-suppliername = `Brainsoft`.
+    temp2-width = `12`.
+    temp2-depth = `1.5`.
+    temp2-height = `19`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `PC Lock`.
+    temp2-productid = `HT-1110`.
+    temp2-suppliername = `Red Point Stores`.
+    temp2-width = `20`.
+    temp2-depth = `8`.
+    temp2-height = `4.3`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Lock`.
+    temp2-productid = `HT-1111`.
+    temp2-suppliername = `Red Point Stores`.
+    temp2-width = `31`.
+    temp2-depth = `9`.
+    temp2-height = `7`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Web cam reality`.
+    temp2-productid = `HT-1112`.
+    temp2-suppliername = `Red Point Stores`.
+    temp2-width = `9`.
+    temp2-depth = `8.2`.
+    temp2-height = `1.3`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Screen clean`.
+    temp2-productid = `HT-1113`.
+    temp2-suppliername = `Red Point Stores`.
+    temp2-width = `2`.
+    temp2-depth = `2`.
+    temp2-height = `0.1`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Fabric bag professional`.
+    temp2-productid = `HT-1114`.
+    temp2-suppliername = `Red Point Stores`.
+    temp2-width = `42`.
+    temp2-depth = `32`.
+    temp2-height = `7`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Wireless DSL Router`.
+    temp2-productid = `HT-1115`.
+    temp2-suppliername = `Red Point Stores`.
+    temp2-width = `19.3`.
+    temp2-depth = `18`.
+    temp2-height = `5`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Wireless DSL Router / Repeater`.
+    temp2-productid = `HT-1116`.
+    temp2-suppliername = `Red Point Stores`.
+    temp2-width = `19.3`.
+    temp2-depth = `18`.
+    temp2-height = `5`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Wireless DSL Router / Repeater and Print Server`.
+    temp2-productid = `HT-1117`.
+    temp2-suppliername = `Technocom`.
+    temp2-width = `19.3`.
+    temp2-depth = `18`.
+    temp2-height = `5`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `USB Stick`.
+    temp2-productid = `HT-1118`.
+    temp2-suppliername = `Technocom`.
+    temp2-width = `1.5`.
+    temp2-depth = `8.7`.
+    temp2-height = `1.2`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Travel Adapter`.
+    temp2-productid = `HT-1119`.
+    temp2-suppliername = `Titanium`.
+    temp2-width = `2`.
+    temp2-depth = `3.1`.
+    temp2-height = `3.9`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Cordless Bluetooth Keyboard, english international`.
+    temp2-productid = `HT-1120`.
+    temp2-suppliername = `Technocom`.
+    temp2-width = `51.4`.
+    temp2-depth = `23`.
+    temp2-height = `4`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Flat XXL`.
+    temp2-productid = `HT-1137`.
+    temp2-suppliername = `Technocom`.
+    temp2-width = `54`.
+    temp2-depth = `22`.
+    temp2-height = `38`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Pocket Mouse`.
+    temp2-productid = `HT-1138`.
+    temp2-suppliername = `Technocom`.
+    temp2-width = `0.3`.
+    temp2-depth = `0.5`.
+    temp2-height = `1`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `PC Power Station`.
+    temp2-productid = `HT-1210`.
+    temp2-suppliername = `Technocom`.
+    temp2-width = `28`.
+    temp2-depth = `31`.
+    temp2-height = `43`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Astro Laptop 1516`.
+    temp2-productid = `HT-1251`.
+    temp2-suppliername = `Ultrasonic United`.
+    temp2-width = `30`.
+    temp2-depth = `18`.
+    temp2-height = `3`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Astro Phone 6`.
+    temp2-productid = `HT-1252`.
+    temp2-suppliername = `Ultrasonic United`.
+    temp2-width = `8`.
+    temp2-depth = `6`.
+    temp2-height = `1.5`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Benda Laptop 1408`.
+    temp2-productid = `HT-1253`.
+    temp2-suppliername = `Ultrasonic United`.
+    temp2-width = `30`.
+    temp2-depth = `18`.
+    temp2-height = `3`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Bending Screen 21HD`.
+    temp2-productid = `HT-1254`.
+    temp2-suppliername = `Ultrasonic United`.
+    temp2-width = `37`.
+    temp2-depth = `12`.
+    temp2-height = `36`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Broad Screen 22HD`.
+    temp2-productid = `HT-1255`.
+    temp2-suppliername = `Ultrasonic United`.
+    temp2-width = `39`.
+    temp2-depth = `12`.
+    temp2-height = `38`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Cerdik Phone 7`.
+    temp2-productid = `HT-1256`.
+    temp2-suppliername = `Ultrasonic United`.
+    temp2-width = `9`.
+    temp2-depth = `15`.
+    temp2-height = `1.5`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Cepat Tablet 10.5`.
+    temp2-productid = `HT-1257`.
+    temp2-suppliername = `Ultrasonic United`.
+    temp2-width = `48`.
+    temp2-depth = `31`.
+    temp2-height = `4.5`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Cepat Tablet 8`.
+    temp2-productid = `HT-1258`.
+    temp2-suppliername = `Ultrasonic United`.
+    temp2-width = `38`.
+    temp2-depth = `21`.
+    temp2-height = `3.5`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Server Basic`.
+    temp2-productid = `HT-1500`.
+    temp2-suppliername = `Technocom`.
+    temp2-width = `34`.
+    temp2-depth = `35`.
+    temp2-height = `23`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Server Professional`.
+    temp2-productid = `HT-1501`.
+    temp2-suppliername = `Technocom`.
+    temp2-width = `29`.
+    temp2-depth = `30`.
+    temp2-height = `27`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Server Power Pro`.
+    temp2-productid = `HT-1502`.
+    temp2-suppliername = `Technocom`.
+    temp2-width = `22`.
+    temp2-depth = `27.3`.
+    temp2-height = `37`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Family PC Basic`.
+    temp2-productid = `HT-1600`.
+    temp2-suppliername = `Titanium`.
+    temp2-width = `21.4`.
+    temp2-depth = `29`.
+    temp2-height = `38`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Family PC Pro`.
+    temp2-productid = `HT-1601`.
+    temp2-suppliername = `Titanium`.
+    temp2-width = `25`.
+    temp2-depth = `31.7`.
+    temp2-height = `40.2`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Gaming Monster`.
+    temp2-productid = `HT-1602`.
+    temp2-suppliername = `Titanium`.
+    temp2-width = `26.5`.
+    temp2-depth = `34`.
+    temp2-height = `47`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Gaming Monster Pro`.
+    temp2-productid = `HT-1603`.
+    temp2-suppliername = `Titanium`.
+    temp2-width = `27`.
+    temp2-depth = `28`.
+    temp2-height = `42`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `7" Widescreen Portable DVD Player w MP3`.
+    temp2-productid = `HT-2000`.
+    temp2-suppliername = `Titanium`.
+    temp2-width = `21.4`.
+    temp2-depth = `19`.
+    temp2-height = `27.6`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `10" Portable DVD player`.
+    temp2-productid = `HT-2001`.
+    temp2-suppliername = `Titanium`.
+    temp2-width = `24`.
+    temp2-depth = `19.5`.
+    temp2-height = `29`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Portable DVD Player with 9" LCD Monitor`.
+    temp2-productid = `HT-2002`.
+    temp2-suppliername = `Technocom`.
+    temp2-width = `21`.
+    temp2-depth = `16.5`.
+    temp2-height = `14`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `CD/DVD case: 264 sleeves`.
+    temp2-productid = `HT-2025`.
+    temp2-suppliername = `Titanium`.
+    temp2-width = `13`.
+    temp2-depth = `13`.
+    temp2-height = `20`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Audio/Video Cable Kit - 4m`.
+    temp2-productid = `HT-2026`.
+    temp2-suppliername = `Titanium`.
+    temp2-width = `21`.
+    temp2-depth = `10.2`.
+    temp2-height = `13`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Removable CD/DVD Laser Labels`.
+    temp2-productid = `HT-2027`.
+    temp2-suppliername = `Titanium`.
+    temp2-width = `5.5`.
+    temp2-depth = `2`.
+    temp2-height = `2`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Beam Breaker B-1`.
+    temp2-productid = `HT-6100`.
+    temp2-suppliername = `Titanium`.
+    temp2-width = `30.4`.
+    temp2-depth = `23.1`.
+    temp2-height = `23`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Beam Breaker B-2`.
+    temp2-productid = `HT-6101`.
+    temp2-suppliername = `Technocom`.
+    temp2-width = `30.4`.
+    temp2-depth = `23.1`.
+    temp2-height = `23`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Beam Breaker B-3`.
+    temp2-productid = `HT-6102`.
+    temp2-suppliername = `Technocom`.
+    temp2-width = `30.4`.
+    temp2-depth = `23.1`.
+    temp2-height = `23`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Play Movie`.
+    temp2-productid = `HT-6110`.
+    temp2-suppliername = `Fasttech`.
+    temp2-width = `37`.
+    temp2-depth = `24`.
+    temp2-height = `6`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Record Movie`.
+    temp2-productid = `HT-6111`.
+    temp2-suppliername = `Fasttech`.
+    temp2-width = `38`.
+    temp2-depth = `26`.
+    temp2-height = `6.2`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelo MusicStick`.
+    temp2-productid = `HT-6120`.
+    temp2-suppliername = `Fasttech`.
+    temp2-width = `1.5`.
+    temp2-depth = `6`.
+    temp2-height = `1`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelo Jog-Mate`.
+    temp2-productid = `HT-6121`.
+    temp2-suppliername = `Fasttech`.
+    temp2-width = `5.1`.
+    temp2-depth = `8`.
+    temp2-height = `9.2`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Power Pro Player 40`.
+    temp2-productid = `HT-6122`.
+    temp2-suppliername = `Fasttech`.
+    temp2-width = `5.1`.
+    temp2-depth = `8`.
+    temp2-height = `9.2`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Power Pro Player 80`.
+    temp2-productid = `HT-6123`.
+    temp2-suppliername = `Fasttech`.
+    temp2-width = `4`.
+    temp2-depth = `6`.
+    temp2-height = `0.8`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Flat Watch HD32`.
+    temp2-productid = `HT-6130`.
+    temp2-suppliername = `Very Best Screens`.
+    temp2-width = `78`.
+    temp2-depth = `22.1`.
+    temp2-height = `55`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Flat Watch HD37`.
+    temp2-productid = `HT-6131`.
+    temp2-suppliername = `Very Best Screens`.
+    temp2-width = `99.1`.
+    temp2-depth = `26`.
+    temp2-height = `61`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Flat Watch HD41`.
+    temp2-productid = `HT-6132`.
+    temp2-suppliername = `Very Best Screens`.
+    temp2-width = `128`.
+    temp2-depth = `23`.
+    temp2-height = `79.1`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Copperberry`.
+    temp2-productid = `HT-7000`.
+    temp2-suppliername = `Fasttech`.
+    temp2-width = `8.1`.
+    temp2-depth = `13`.
+    temp2-height = `12.1`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Silverberry`.
+    temp2-productid = `HT-7010`.
+    temp2-suppliername = `Fasttech`.
+    temp2-width = `8.1`.
+    temp2-depth = `13`.
+    temp2-height = `12.1`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Goldberry`.
+    temp2-productid = `HT-7020`.
+    temp2-suppliername = `Fasttech`.
+    temp2-width = `8.1`.
+    temp2-depth = `13`.
+    temp2-height = `12.1`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Platinberry`.
+    temp2-productid = `HT-7030`.
+    temp2-suppliername = `Fasttech`.
+    temp2-width = `8.1`.
+    temp2-depth = `13`.
+    temp2-height = `12.1`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO FlexTop I4000`.
+    temp2-productid = `HT-8000`.
+    temp2-suppliername = `Titanium`.
+    temp2-width = `31`.
+    temp2-depth = `19`.
+    temp2-height = `3.1`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO FlexTop I6300c`.
+    temp2-productid = `HT-8001`.
+    temp2-suppliername = `Titanium`.
+    temp2-width = `32`.
+    temp2-depth = `20`.
+    temp2-height = `3.4`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO FlexTop I9100`.
+    temp2-productid = `HT-8002`.
+    temp2-suppliername = `Titanium`.
+    temp2-width = `38`.
+    temp2-depth = `21`.
+    temp2-height = `4.1`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO FlexTop I9800`.
+    temp2-productid = `HT-8003`.
+    temp2-suppliername = `Titanium`.
+    temp2-width = `48`.
+    temp2-depth = `31`.
+    temp2-height = `4.5`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smartphone Leather Case`.
+    temp2-productid = `HT-9991`.
+    temp2-suppliername = `Ultrasonic United`.
+    temp2-width = `48`.
+    temp2-depth = `31`.
+    temp2-height = `4.5`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smartphone Alpha`.
+    temp2-productid = `HT-9992`.
+    temp2-suppliername = `Ultrasonic United`.
+    temp2-width = `48`.
+    temp2-depth = `31`.
+    temp2-height = `4.5`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Mini Tablet`.
+    temp2-productid = `HT-9993`.
+    temp2-suppliername = `Ultrasonic United`.
+    temp2-width = `48`.
+    temp2-depth = `31`.
+    temp2-height = `4.5`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Camcorder View`.
+    temp2-productid = `HT-9994`.
+    temp2-suppliername = `Ultrasonic United`.
+    temp2-width = `48`.
+    temp2-depth = `31`.
+    temp2-height = `27`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Tablet Pouch`.
+    temp2-productid = `HT-9995`.
+    temp2-suppliername = `Titanium`.
+    temp2-width = `25`.
+    temp2-depth = `40`.
+    temp2-height = `4.5`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Tablet Pouch`.
+    temp2-productid = `HT-9996`.
+    temp2-suppliername = `Titanium`.
+    temp2-width = `25`.
+    temp2-depth = `40`.
+    temp2-height = `4.5`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `e-Book Reader ReadMe`.
+    temp2-productid = `HT-9997`.
+    temp2-suppliername = `Titanium`.
+    temp2-width = `48`.
+    temp2-depth = `31`.
+    temp2-height = `4.5`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smartphone Beta`.
+    temp2-productid = `HT-9998`.
+    temp2-suppliername = `Titanium`.
+    temp2-width = `48`.
+    temp2-depth = `31`.
+    temp2-height = `4.5`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Maxi Tablet`.
+    temp2-productid = `HT-9999`.
+    temp2-suppliername = `Titanium`.
+    temp2-width = `48`.
+    temp2-depth = `31`.
+    temp2-height = `4.5`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Flyer`.
+    temp2-productid = `PF-1000`.
+    temp2-suppliername = `Titanium`.
+    temp2-width = `46`.
+    temp2-depth = `30`.
+    temp2-height = `3`.
+    temp2-dimunit = `cm`.
+    INSERT temp2 INTO TABLE temp1.
+    t_products = temp1.
 
   ENDMETHOD.
 

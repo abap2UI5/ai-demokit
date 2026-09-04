@@ -22,14 +22,14 @@ CLASS z2ui5_cl_smpc_app_183 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       " original seeds the current time (UI5Date.getInstance()) - fixed here for
       " determinism; the placeholder is derived at runtime from the type's
       " getPlaceholderText() in the original - seeded as a static representative
       dtvalue   = `2026-07-24 13:30:00`.
       dtpattern = `e.g. Dec 31, 2026, 11:59:58 PM`.
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -38,7 +38,8 @@ CLASS z2ui5_cl_smpc_app_183 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " sap.ui.model.type.DateTime data-type binding (TypeDateTime). DateTimeType is
     " pulled via core:require; the DateTimePicker, the Input and the style/pattern/

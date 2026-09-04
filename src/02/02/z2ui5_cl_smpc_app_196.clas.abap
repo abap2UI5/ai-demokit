@@ -18,10 +18,10 @@ CLASS z2ui5_cl_smpc_app_196 DEFINITION PUBLIC.
         currency TYPE string,
         price    TYPE string,
       END OF ty_s_string.
-    DATA variousnumberdatamodel      TYPE STANDARD TABLE OF ty_s_number WITH EMPTY KEY.
-    DATA nondecimalcurrencydatamodel TYPE STANDARD TABLE OF ty_s_nondecimal WITH EMPTY KEY.
-    DATA bignumberdatamodel          TYPE STANDARD TABLE OF ty_s_string WITH EMPTY KEY.
-    DATA customcurrencydatamodel     TYPE STANDARD TABLE OF ty_s_string WITH EMPTY KEY.
+    DATA variousnumberdatamodel      TYPE STANDARD TABLE OF ty_s_number WITH DEFAULT KEY.
+    DATA nondecimalcurrencydatamodel TYPE STANDARD TABLE OF ty_s_nondecimal WITH DEFAULT KEY.
+    DATA bignumberdatamodel          TYPE STANDARD TABLE OF ty_s_string WITH DEFAULT KEY.
+    DATA customcurrencydatamodel     TYPE STANDARD TABLE OF ty_s_string WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -38,10 +38,10 @@ CLASS z2ui5_cl_smpc_app_196 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -50,7 +50,9 @@ CLASS z2ui5_cl_smpc_app_196 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
@@ -149,10 +151,13 @@ CLASS z2ui5_cl_smpc_app_196 IMPLEMENTATION.
     " The registration itself is real (it reaches a BOUND
     " sap.ui.model.type.Currency, which does re-format); this control cannot
     " pick it up. Measured 2026-08-23
+    
+    CLEAR temp1.
+    INSERT `FORMATTING` INTO TABLE temp1.
+    INSERT `setCustomCurrencies` INTO TABLE temp1.
+    INSERT `{"BGN4":{"digits":4},"WWWW":{"digits":5}}` INTO TABLE temp1.
     client->follow_up_action( val   = client->cs_event-control_global
-                              t_arg = VALUE #( ( `FORMATTING` )
-                                               ( `setCustomCurrencies` )
-                                               ( `{"BGN4":{"digits":4},"WWWW":{"digits":5}}` ) ) ).
+                              t_arg = temp1 ).
 
   ENDMETHOD.
 
@@ -162,29 +167,80 @@ CLASS z2ui5_cl_smpc_app_196 IMPLEMENTATION.
     " inline mock data of the sample's controller (the four JSONModel arrays).
     " the Formatting.setCustomCurrencies call sits at the end of view_display( )
     " - see the note there for what it can and cannot reach
-    variousnumberdatamodel = VALUE #(
-        ( currency = `EUR` price = `2300.12` )
-        ( currency = `EUR` price = `38` )
-        ( currency = `JPY` price = `1928472` )
-        ( currency = `JPY` price = `233.9385763` )
-        ( currency = `USD` price = `125.02` )
-        ( currency = `USD` price = `2125.02843` )
-        ( currency = `TND` price = `9283` )
-        ( currency = `TND` price = `235.0298` ) ).
+    DATA temp3 LIKE variousnumberdatamodel.
+    DATA temp4 LIKE LINE OF temp3.
+    DATA temp5 LIKE nondecimalcurrencydatamodel.
+    DATA temp6 LIKE LINE OF temp5.
+    DATA temp7 LIKE bignumberdatamodel.
+    DATA temp8 LIKE LINE OF temp7.
+    DATA temp9 LIKE customcurrencydatamodel.
+    DATA temp10 LIKE LINE OF temp9.
+    CLEAR temp3.
+    
+    temp4-currency = `EUR`.
+    temp4-price = `2300.12`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-currency = `EUR`.
+    temp4-price = `38`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-currency = `JPY`.
+    temp4-price = `1928472`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-currency = `JPY`.
+    temp4-price = `233.9385763`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-currency = `USD`.
+    temp4-price = `125.02`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-currency = `USD`.
+    temp4-price = `2125.02843`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-currency = `TND`.
+    temp4-price = `9283`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-currency = `TND`.
+    temp4-price = `235.0298`.
+    INSERT temp4 INTO TABLE temp3.
+    variousnumberdatamodel = temp3.
 
-    nondecimalcurrencydatamodel = VALUE #(
-        ( currency = `JPY` price = `2300.12` )
-        ( currency = `JPY` price = `38` )
-        ( currency = `JPY` price = `1928472` )
-        ( currency = `JPY` price = `233` ) ).
+    
+    CLEAR temp5.
+    
+    temp6-currency = `JPY`.
+    temp6-price = `2300.12`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-currency = `JPY`.
+    temp6-price = `38`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-currency = `JPY`.
+    temp6-price = `1928472`.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-currency = `JPY`.
+    temp6-price = `233`.
+    INSERT temp6 INTO TABLE temp5.
+    nondecimalcurrencydatamodel = temp5.
 
-    bignumberdatamodel = VALUE #(
-        ( currency = `USD` price = `12345678901234567890123` )
-        ( currency = `USD` price = `123456789012345678901.23` ) ).
+    
+    CLEAR temp7.
+    
+    temp8-currency = `USD`.
+    temp8-price = `12345678901234567890123`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-currency = `USD`.
+    temp8-price = `123456789012345678901.23`.
+    INSERT temp8 INTO TABLE temp7.
+    bignumberdatamodel = temp7.
 
-    customcurrencydatamodel = VALUE #(
-        ( currency = `BGN4` price = `123.4567` )
-        ( currency = `WWWW` price = `123.45676` ) ).
+    
+    CLEAR temp9.
+    
+    temp10-currency = `BGN4`.
+    temp10-price = `123.4567`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-currency = `WWWW`.
+    temp10-price = `123.45676`.
+    INSERT temp10 INTO TABLE temp9.
+    customcurrencydatamodel = temp9.
 
   ENDMETHOD.
 

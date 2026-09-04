@@ -39,12 +39,12 @@ CLASS z2ui5_cl_smpc_app_534 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -53,7 +53,8 @@ CLASS z2ui5_cl_smpc_app_534 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
@@ -516,20 +517,33 @@ CLASS z2ui5_cl_smpc_app_534 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp1 TYPE string_table.
+        DATA temp3 TYPE string_table.
+        DATA temp5 TYPE string_table.
 
     CASE client->get_event( ).
 
       WHEN `CURRENT_STEP_LINEAR`.
         " onCurrentStepChangeLinear: setCurrentStep on the linear wizard
         linearwizardselectedstep = client->get_event_arg( ).
+        
+        CLEAR temp1.
+        INSERT `CreateProductWizard` INTO TABLE temp1.
+        INSERT `goToStep` INTO TABLE temp1.
+        INSERT linearwizardselectedstep INTO TABLE temp1.
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `CreateProductWizard` ) ( `goToStep` ) ( linearwizardselectedstep ) ) ).
+                                  t_arg = temp1 ).
 
       WHEN `CURRENT_STEP_BRANCHING`.
         " onCurrentStepChangeBranching: setCurrentStep on the branching wizard
         branchingselectedstep = client->get_event_arg( ).
+        
+        CLEAR temp3.
+        INSERT `BranchingWizard` INTO TABLE temp3.
+        INSERT `goToStep` INTO TABLE temp3.
+        INSERT branchingselectedstep INTO TABLE temp3.
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `BranchingWizard` ) ( `goToStep` ) ( branchingselectedstep ) ) ).
+                                  t_arg = temp3 ).
 
       WHEN `BACKGROUND_DESIGN`.
         " onBackgroundDesignChange sets the design on BOTH wizards
@@ -550,8 +564,13 @@ CLASS z2ui5_cl_smpc_app_534 IMPLEMENTATION.
         " discardAndApplyPath discards the progress, resets the Select and
         " rewires the path the picked radio button spells out
         path_index = client->get_event_arg( ).
+        
+        CLEAR temp5.
+        INSERT `BranchingWizard` INTO TABLE temp5.
+        INSERT `discardProgress` INTO TABLE temp5.
+        INSERT `A` INTO TABLE temp5.
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `BranchingWizard` ) ( `discardProgress` ) ( `A` ) ) ).
+                                  t_arg = temp5 ).
         branchingselectedstep = `A`.
         path_apply( ).
 
@@ -564,22 +583,67 @@ CLASS z2ui5_cl_smpc_app_534 IMPLEMENTATION.
 
     " applyPath reads the picked radio button's TEXT and setNextStep's its way
     " down the arrow-separated path, clearing the last step's nextStep
-    DATA(paths) = VALUE string_table( ( `A->B1->C->D->E->F1->F2->G` )
-                                      ( `A->B2->C->D->E->F1->G` )
-                                      ( `A->B1->B2->C->D->E` ) ).
+    DATA temp7 TYPE string_table.
+    DATA paths LIKE temp7.
+    TYPES temp5 TYPE STANDARD TABLE OF string WITH DEFAULT KEY.
+DATA steps TYPE temp5.
+    DATA temp1 LIKE LINE OF paths.
+    DATA temp2 LIKE sy-tabix.
+    DATA step LIKE LINE OF steps.
+      DATA idx LIKE sy-tabix.
+        DATA temp9 TYPE string_table.
+        DATA temp3 LIKE LINE OF steps.
+        DATA temp4 LIKE sy-tabix.
+        DATA temp11 TYPE string_table.
+    CLEAR temp7.
+    INSERT `A->B1->C->D->E->F1->F2->G` INTO TABLE temp7.
+    INSERT `A->B2->C->D->E->F1->G` INTO TABLE temp7.
+    INSERT `A->B1->B2->C->D->E` INTO TABLE temp7.
+    
+    paths = temp7.
     IF path_index < 0 OR path_index >= lines( paths ).
       RETURN.
     ENDIF.
 
-    SPLIT paths[ path_index + 1 ] AT `->` INTO TABLE DATA(steps).
-    LOOP AT steps INTO DATA(step).
-      DATA(idx) = sy-tabix.
+    
+
+    
+    
+    temp2 = sy-tabix.
+    READ TABLE paths INDEX path_index + 1 INTO temp1.
+    sy-tabix = temp2.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    SPLIT temp1 AT `->` INTO TABLE steps.
+    
+    LOOP AT steps INTO step.
+      
+      idx = sy-tabix.
       IF idx < lines( steps ).
+        
+        CLEAR temp9.
+        INSERT step INTO TABLE temp9.
+        INSERT `setNextStep` INTO TABLE temp9.
+        
+        
+        temp4 = sy-tabix.
+        READ TABLE steps INDEX idx + 1 INTO temp3.
+        sy-tabix = temp4.
+        IF sy-subrc <> 0.
+          ASSERT 1 = 0.
+        ENDIF.
+        INSERT temp3 INTO TABLE temp9.
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( step ) ( `setNextStep` ) ( steps[ idx + 1 ] ) ) ).
+                                  t_arg = temp9 ).
       ELSE.
+        
+        CLEAR temp11.
+        INSERT step INTO TABLE temp11.
+        INSERT `setNextStep` INTO TABLE temp11.
+        INSERT `` INTO TABLE temp11.
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( step ) ( `setNextStep` ) ( `` ) ) ).
+                                  t_arg = temp11 ).
       ENDIF.
     ENDLOOP.
 
@@ -589,12 +653,37 @@ CLASS z2ui5_cl_smpc_app_534 IMPLEMENTATION.
   METHOD info_validate.
 
     " validateProdInfoStep: a name of at least six characters and a numeric weight
-    DATA(name_ok)   = xsdbool( strlen( product_name ) >= 6 ).
-    DATA(weight_ok) = xsdbool( product_weight IS NOT INITIAL AND product_weight CO `0123456789.` ).
+    DATA name_ok TYPE abap_bool.
+    DATA temp1 TYPE xsdboolean.
+    DATA weight_ok TYPE abap_bool.
+    DATA temp2 TYPE xsdboolean.
+    DATA temp13 TYPE string.
+    DATA temp14 TYPE string.
+    DATA temp3 TYPE xsdboolean.
+    temp1 = boolc( strlen( product_name ) >= 6 ).
+    name_ok   = temp1.
+    
+    
+    temp2 = boolc( product_weight IS NOT INITIAL AND product_weight CO `0123456789.` ).
+    weight_ok = temp2.
 
-    product_name_state   = COND #( WHEN name_ok   = abap_true THEN `None` ELSE `Error` ).
-    product_weight_state = COND #( WHEN weight_ok = abap_true THEN `None` ELSE `Error` ).
-    step2_validated      = xsdbool( name_ok = abap_true AND weight_ok = abap_true ).
+    
+    IF name_ok = abap_true.
+      temp13 = `None`.
+    ELSE.
+      temp13 = `Error`.
+    ENDIF.
+    product_name_state   = temp13.
+    
+    IF weight_ok = abap_true.
+      temp14 = `None`.
+    ELSE.
+      temp14 = `Error`.
+    ENDIF.
+    product_weight_state = temp14.
+    
+    temp3 = boolc( name_ok = abap_true AND weight_ok = abap_true ).
+    step2_validated      = temp3.
 
   ENDMETHOD.
 

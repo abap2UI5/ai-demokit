@@ -15,7 +15,7 @@ CLASS z2ui5_cl_smpc_app_543 DEFINITION PUBLIC.
              pic         TYPE string,
              tentative   TYPE abap_bool,
            END OF ty_s_appointment.
-    TYPES ty_t_appointment TYPE STANDARD TABLE OF ty_s_appointment WITH EMPTY KEY.
+    TYPES ty_t_appointment TYPE STANDARD TABLE OF ty_s_appointment WITH DEFAULT KEY.
     TYPES: BEGIN OF ty_s_header,
              start_at    TYPE string,
              end_at      TYPE string,
@@ -25,7 +25,7 @@ CLASS z2ui5_cl_smpc_app_543 DEFINITION PUBLIC.
              type        TYPE string,
              pic         TYPE string,
            END OF ty_s_header.
-    TYPES ty_t_header TYPE STANDARD TABLE OF ty_s_header WITH EMPTY KEY.
+    TYPES ty_t_header TYPE STANDARD TABLE OF ty_s_header WITH DEFAULT KEY.
     TYPES: BEGIN OF ty_s_person,
              pic            TYPE string,
              name           TYPE string,
@@ -33,7 +33,7 @@ CLASS z2ui5_cl_smpc_app_543 DEFINITION PUBLIC.
              t_appointments TYPE ty_t_appointment,
              t_headers      TYPE ty_t_header,
            END OF ty_s_person.
-    DATA t_people TYPE STANDARD TABLE OF ty_s_person WITH EMPTY KEY.
+    DATA t_people TYPE STANDARD TABLE OF ty_s_person WITH DEFAULT KEY.
 
     DATA start_date         TYPE string.
     DATA appointment_height TYPE string.
@@ -55,12 +55,12 @@ CLASS z2ui5_cl_smpc_app_543 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -69,7 +69,8 @@ CLASS z2ui5_cl_smpc_app_543 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the calendar date properties are typed "object" and demand a real JS Date;
     " the model keeps ISO strings and Formatter.DateCreateObject converts them
@@ -205,12 +206,14 @@ CLASS z2ui5_cl_smpc_app_543 IMPLEMENTATION.
 
 
   METHOD on_event.
+        FIELD-SYMBOLS <row> LIKE LINE OF t_people.
 
     IF client->get_event( ) = `SORT_CHANGE`.
       " handleSortChange hands the calendar a JS comparator; ABAP sorts the
       " rows themselves instead (see sidecar)
       IF client->get_event_arg( ) = `custom`.
-        LOOP AT t_people ASSIGNING FIELD-SYMBOL(<row>).
+        
+        LOOP AT t_people ASSIGNING <row>.
           SORT <row>-t_appointments BY title AS TEXT.
         ENDLOOP.
       ELSE.
@@ -222,51 +225,243 @@ CLASS z2ui5_cl_smpc_app_543 IMPLEMENTATION.
 
 
   METHOD model_init.
+    DATA temp1 LIKE t_people.
+    DATA temp2 LIKE LINE OF temp1.
+    DATA temp3 TYPE z2ui5_cl_smpc_app_543=>ty_t_appointment.
+    DATA temp4 LIKE LINE OF temp3.
+    DATA temp5 TYPE z2ui5_cl_smpc_app_543=>ty_t_header.
+    DATA temp6 TYPE z2ui5_cl_smpc_app_543=>ty_t_appointment.
+    DATA temp7 LIKE LINE OF temp6.
+    DATA temp8 TYPE z2ui5_cl_smpc_app_543=>ty_t_header.
+    DATA temp9 LIKE LINE OF temp8.
 
     start_date         = `2017-03-08T08:00:00`.
     appointment_height = `Regular`.
     round_width        = `None`.
 
-    t_people = VALUE #(
-      ( pic = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/John_Miller.png` name = `John Miller` role = `team member`
-        t_appointments = VALUE #(
-          ( start_at = `2017-03-07T18:00:00` end_at = `2017-03-07T19:10:00` title = `Discussion of the plan` info = `Online meeting` type = `Type04` tentative = abap_false )
-          ( start_at = `2017-03-07T14:00:00` end_at = `2017-03-07T15:15:00` title = `Department meeting` type = `Type04` tentative = abap_false )
-          ( start_at = `2017-03-03T10:00:00` end_at = `2017-03-07T12:00:00` title = `Workshop out of the country` type = `Type07` pic = `sap-icon://sap-ui5` tentative = abap_false )
-          ( start_at = `2017-03-08T09:00:00` end_at = `2017-03-08T11:00:00` title = `Team meeting` info = `room 105` type = `Type01` pic = `sap-icon://sap-ui5` tentative = abap_false )
-          ( start_at = `2017-03-08T09:30:00` end_at = `2017-03-08T11:30:00` title = `Meeting with Max` type = `Type02` pic = `sap-icon://sap-ui5` tentative = abap_false )
-          ( start_at = `2017-03-08T11:00:00` end_at = `2017-03-08T13:00:00` title = `Lunch` info = `info` description = `description` type = `Type03` tentative = abap_true )
-          ( start_at = `2017-03-08T11:00:00` end_at = `2017-03-08T13:00:00` title = `Meeting with the crew` type = `Type04` tentative = abap_false )
-          ( start_at = `2017-03-09T09:00:00` end_at = `2017-03-09T16:00:00` title = `Busy` type = `Type08` tentative = abap_false )
-          ( start_at = `2017-03-10T09:00:00` end_at = `2017-03-10T11:00:00` title = `Team meeting` info = `room 105` type = `Type01` pic = `sap-icon://sap-ui5` tentative = abap_false )
-          ( start_at = `2017-03-10T09:30:00` end_at = `2017-03-10T16:30:00` title = `Meeting with Max` type = `Type02` tentative = abap_false )
-          ( start_at = `2017-03-11T00:00:00` end_at = `2017-03-13T23:59:00` title = `Vacation` info = `out of office` type = `Type04` tentative = abap_false )
-          ( start_at = `2017-03-16T00:30:00` end_at = `2017-03-16T23:30:00` title = `New Colleague` info = `room 115` type = `Type10` tentative = abap_true )
-          ( start_at = `2017-10-11T00:00:00` end_at = `2017-11-13T23:59:00` title = `Vacation` info = `out of office` type = `Type04` tentative = abap_false )
-          ( start_at = `2017-03-08T14:00:00` end_at = `2017-03-08T15:00:00` title = `Reminder` type = `Type06` )
-        )
-        t_headers = VALUE #(
-        )  )
-      ( pic = `sap-icon://employee` name = `Max Mustermann` role = `team member`
-        t_appointments = VALUE #(
-          ( start_at = `2016-12-01T00:30:00` end_at = `2017-01-31T23:30:00` title = `New product release` info = `room 105` type = `Type03` tentative = abap_true )
-          ( start_at = `2017-03-02T08:00:00` end_at = `2017-03-02T17:00:00` title = `Education` type = `Type05` tentative = abap_false )
-          ( start_at = `2017-03-03T09:00:00` end_at = `2017-03-03T10:00:00` title = `New Product` info = `room 105` type = `Type03` tentative = abap_true )
-          ( start_at = `2017-03-08T08:00:00` end_at = `2017-03-08T13:00:00` title = `Meet Donna` type = `Type06` tentative = abap_false )
-          ( start_at = `2017-03-08T13:00:00` end_at = `2017-03-09T11:00:00` title = `Team meeting` info = `room 1` type = `Type01` pic = `sap-icon://sap-ui5` tentative = abap_false )
-          ( start_at = `2017-03-08T13:00:00` end_at = `2017-03-08T14:59:00` title = `Team meeting2` info = `room 2` type = `Type01` pic = `sap-icon://sap-ui5` tentative = abap_false )
-          ( start_at = `2017-03-09T00:00:00` end_at = `2017-03-09T23:59:00` title = `Department meeting` type = `Type04` tentative = abap_false )
-          ( start_at = `2017-03-12T00:00:00` end_at = `2017-03-12T12:00:00` title = `Meeting with John` type = `Type02` tentative = abap_false )
-          ( start_at = `2017-03-12T12:00:00` end_at = `2017-03-12T23:59:00` title = `Team Building` info = `out of office` type = `Type10` pic = `sap-icon://sap-ui5` tentative = abap_false )
-          ( start_at = `2017-03-13T00:00:00` end_at = `2017-03-13T12:00:00` title = `New Product` info = `room 325` type = `Type07` tentative = abap_true )
-          ( start_at = `2017-03-13T12:00:00` end_at = `2017-03-13T23:30:00` title = `New Product` info = `room 105` type = `Type03` tentative = abap_true )
-          ( start_at = `2017-03-14T00:00:00` end_at = `2017-03-14T12:00:00` title = `Vacation` info = `out of office` type = `Type04` tentative = abap_false )
-          ( start_at = `2017-03-14T12:00:00` end_at = `2017-03-14T23:30:00` title = `New product release` info = `room 105` type = `Type03` tentative = abap_true )
-        )
-        t_headers = VALUE #(
-          ( start_at = `2017-03-08T08:00:00` end_at = `2017-03-08T10:00:00` title = `Development of UI5` type = `Type07` pic = `sap-icon://sap-ui5` )
-          ( start_at = `2017-05-01T00:00:00` end_at = `2017-08-30T23:59:00` title = `New quarter` type = `Type10` )
-        )  ) ).
+    
+    CLEAR temp1.
+    
+    temp2-pic = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/John_Miller.png`.
+    temp2-name = `John Miller`.
+    temp2-role = `team member`.
+    
+    CLEAR temp3.
+    
+    temp4-start_at = `2017-03-07T18:00:00`.
+    temp4-end_at = `2017-03-07T19:10:00`.
+    temp4-title = `Discussion of the plan`.
+    temp4-info = `Online meeting`.
+    temp4-type = `Type04`.
+    temp4-tentative = abap_false.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-start_at = `2017-03-07T14:00:00`.
+    temp4-end_at = `2017-03-07T15:15:00`.
+    temp4-title = `Department meeting`.
+    temp4-type = `Type04`.
+    temp4-tentative = abap_false.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-start_at = `2017-03-03T10:00:00`.
+    temp4-end_at = `2017-03-07T12:00:00`.
+    temp4-title = `Workshop out of the country`.
+    temp4-type = `Type07`.
+    temp4-pic = `sap-icon://sap-ui5`.
+    temp4-tentative = abap_false.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-start_at = `2017-03-08T09:00:00`.
+    temp4-end_at = `2017-03-08T11:00:00`.
+    temp4-title = `Team meeting`.
+    temp4-info = `room 105`.
+    temp4-type = `Type01`.
+    temp4-pic = `sap-icon://sap-ui5`.
+    temp4-tentative = abap_false.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-start_at = `2017-03-08T09:30:00`.
+    temp4-end_at = `2017-03-08T11:30:00`.
+    temp4-title = `Meeting with Max`.
+    temp4-type = `Type02`.
+    temp4-pic = `sap-icon://sap-ui5`.
+    temp4-tentative = abap_false.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-start_at = `2017-03-08T11:00:00`.
+    temp4-end_at = `2017-03-08T13:00:00`.
+    temp4-title = `Lunch`.
+    temp4-info = `info`.
+    temp4-description = `description`.
+    temp4-type = `Type03`.
+    temp4-tentative = abap_true.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-start_at = `2017-03-08T11:00:00`.
+    temp4-end_at = `2017-03-08T13:00:00`.
+    temp4-title = `Meeting with the crew`.
+    temp4-type = `Type04`.
+    temp4-tentative = abap_false.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-start_at = `2017-03-09T09:00:00`.
+    temp4-end_at = `2017-03-09T16:00:00`.
+    temp4-title = `Busy`.
+    temp4-type = `Type08`.
+    temp4-tentative = abap_false.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-start_at = `2017-03-10T09:00:00`.
+    temp4-end_at = `2017-03-10T11:00:00`.
+    temp4-title = `Team meeting`.
+    temp4-info = `room 105`.
+    temp4-type = `Type01`.
+    temp4-pic = `sap-icon://sap-ui5`.
+    temp4-tentative = abap_false.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-start_at = `2017-03-10T09:30:00`.
+    temp4-end_at = `2017-03-10T16:30:00`.
+    temp4-title = `Meeting with Max`.
+    temp4-type = `Type02`.
+    temp4-tentative = abap_false.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-start_at = `2017-03-11T00:00:00`.
+    temp4-end_at = `2017-03-13T23:59:00`.
+    temp4-title = `Vacation`.
+    temp4-info = `out of office`.
+    temp4-type = `Type04`.
+    temp4-tentative = abap_false.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-start_at = `2017-03-16T00:30:00`.
+    temp4-end_at = `2017-03-16T23:30:00`.
+    temp4-title = `New Colleague`.
+    temp4-info = `room 115`.
+    temp4-type = `Type10`.
+    temp4-tentative = abap_true.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-start_at = `2017-10-11T00:00:00`.
+    temp4-end_at = `2017-11-13T23:59:00`.
+    temp4-title = `Vacation`.
+    temp4-info = `out of office`.
+    temp4-type = `Type04`.
+    temp4-tentative = abap_false.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-start_at = `2017-03-08T14:00:00`.
+    temp4-end_at = `2017-03-08T15:00:00`.
+    temp4-title = `Reminder`.
+    temp4-type = `Type06`.
+    INSERT temp4 INTO TABLE temp3.
+    temp2-t_appointments = temp3.
+    
+    CLEAR temp5.
+    temp2-t_headers = temp5.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-pic = `sap-icon://employee`.
+    temp2-name = `Max Mustermann`.
+    temp2-role = `team member`.
+    
+    CLEAR temp6.
+    
+    temp7-start_at = `2016-12-01T00:30:00`.
+    temp7-end_at = `2017-01-31T23:30:00`.
+    temp7-title = `New product release`.
+    temp7-info = `room 105`.
+    temp7-type = `Type03`.
+    temp7-tentative = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-start_at = `2017-03-02T08:00:00`.
+    temp7-end_at = `2017-03-02T17:00:00`.
+    temp7-title = `Education`.
+    temp7-type = `Type05`.
+    temp7-tentative = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-start_at = `2017-03-03T09:00:00`.
+    temp7-end_at = `2017-03-03T10:00:00`.
+    temp7-title = `New Product`.
+    temp7-info = `room 105`.
+    temp7-type = `Type03`.
+    temp7-tentative = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-start_at = `2017-03-08T08:00:00`.
+    temp7-end_at = `2017-03-08T13:00:00`.
+    temp7-title = `Meet Donna`.
+    temp7-type = `Type06`.
+    temp7-tentative = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-start_at = `2017-03-08T13:00:00`.
+    temp7-end_at = `2017-03-09T11:00:00`.
+    temp7-title = `Team meeting`.
+    temp7-info = `room 1`.
+    temp7-type = `Type01`.
+    temp7-pic = `sap-icon://sap-ui5`.
+    temp7-tentative = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-start_at = `2017-03-08T13:00:00`.
+    temp7-end_at = `2017-03-08T14:59:00`.
+    temp7-title = `Team meeting2`.
+    temp7-info = `room 2`.
+    temp7-type = `Type01`.
+    temp7-pic = `sap-icon://sap-ui5`.
+    temp7-tentative = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-start_at = `2017-03-09T00:00:00`.
+    temp7-end_at = `2017-03-09T23:59:00`.
+    temp7-title = `Department meeting`.
+    temp7-type = `Type04`.
+    temp7-tentative = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-start_at = `2017-03-12T00:00:00`.
+    temp7-end_at = `2017-03-12T12:00:00`.
+    temp7-title = `Meeting with John`.
+    temp7-type = `Type02`.
+    temp7-tentative = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-start_at = `2017-03-12T12:00:00`.
+    temp7-end_at = `2017-03-12T23:59:00`.
+    temp7-title = `Team Building`.
+    temp7-info = `out of office`.
+    temp7-type = `Type10`.
+    temp7-pic = `sap-icon://sap-ui5`.
+    temp7-tentative = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-start_at = `2017-03-13T00:00:00`.
+    temp7-end_at = `2017-03-13T12:00:00`.
+    temp7-title = `New Product`.
+    temp7-info = `room 325`.
+    temp7-type = `Type07`.
+    temp7-tentative = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-start_at = `2017-03-13T12:00:00`.
+    temp7-end_at = `2017-03-13T23:30:00`.
+    temp7-title = `New Product`.
+    temp7-info = `room 105`.
+    temp7-type = `Type03`.
+    temp7-tentative = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-start_at = `2017-03-14T00:00:00`.
+    temp7-end_at = `2017-03-14T12:00:00`.
+    temp7-title = `Vacation`.
+    temp7-info = `out of office`.
+    temp7-type = `Type04`.
+    temp7-tentative = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-start_at = `2017-03-14T12:00:00`.
+    temp7-end_at = `2017-03-14T23:30:00`.
+    temp7-title = `New product release`.
+    temp7-info = `room 105`.
+    temp7-type = `Type03`.
+    temp7-tentative = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp2-t_appointments = temp6.
+    
+    CLEAR temp8.
+    
+    temp9-start_at = `2017-03-08T08:00:00`.
+    temp9-end_at = `2017-03-08T10:00:00`.
+    temp9-title = `Development of UI5`.
+    temp9-type = `Type07`.
+    temp9-pic = `sap-icon://sap-ui5`.
+    INSERT temp9 INTO TABLE temp8.
+    temp9-start_at = `2017-05-01T00:00:00`.
+    temp9-end_at = `2017-08-30T23:59:00`.
+    temp9-title = `New quarter`.
+    temp9-type = `Type10`.
+    INSERT temp9 INTO TABLE temp8.
+    temp2-t_headers = temp8.
+    INSERT temp2 INTO TABLE temp1.
+    t_people = temp1.
 
   ENDMETHOD.
 

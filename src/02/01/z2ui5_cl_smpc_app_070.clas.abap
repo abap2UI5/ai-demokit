@@ -26,12 +26,12 @@ CLASS z2ui5_cl_smpc_app_070 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -40,8 +40,29 @@ CLASS z2ui5_cl_smpc_app_070 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    DATA temp3 TYPE string_table.
+    DATA temp4 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `A` INTO TABLE temp1.
+    INSERT `0` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `A` INTO TABLE temp2.
+    INSERT `100` INTO TABLE temp2.
+    
+    CLEAR temp3.
+    INSERT `B` INTO TABLE temp3.
+    INSERT `0` INTO TABLE temp3.
+    
+    CLEAR temp4.
+    INSERT `B` INTO TABLE temp4.
+    INSERT `100` INTO TABLE temp4.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -164,11 +185,11 @@ CLASS z2ui5_cl_smpc_app_070 IMPLEMENTATION.
                     )->a( n = `id`    v = `pi-with-animation-button0`
                     )->a( n = `class` v = `sapUiSmallMarginEnd`
                     )->a( n = `text`  v = `Set to 0%`
-                    )->a( n = `press` v = client->_event( val = `SET` t_arg = VALUE #( ( `A` ) ( `0` ) ) )
+                    )->a( n = `press` v = client->_event( val = `SET` t_arg = temp1 )
                 )->tag( `Button`
                     )->a( n = `id`    v = `pi-with-animation-button100`
                     )->a( n = `text`  v = `Set to 100%`
-                    )->a( n = `press` v = client->_event( val = `SET` t_arg = VALUE #( ( `A` ) ( `100` ) ) )
+                    )->a( n = `press` v = client->_event( val = `SET` t_arg = temp2 )
 
             )->end(
 
@@ -189,11 +210,11 @@ CLASS z2ui5_cl_smpc_app_070 IMPLEMENTATION.
                     )->a( n = `id`    v = `pi-without-animation-button0`
                     )->a( n = `class` v = `sapUiSmallMarginEnd`
                     )->a( n = `text`  v = `Set to 0%`
-                    )->a( n = `press` v = client->_event( val = `SET` t_arg = VALUE #( ( `B` ) ( `0` ) ) )
+                    )->a( n = `press` v = client->_event( val = `SET` t_arg = temp3 )
                 )->tag( `Button`
                     )->a( n = `id`    v = `pi-without-animation-button100`
                     )->a( n = `text`  v = `Set to 100%`
-                    )->a( n = `press` v = client->_event( val = `SET` t_arg = VALUE #( ( `B` ) ( `100` ) ) )
+                    )->a( n = `press` v = client->_event( val = `SET` t_arg = temp4 )
 
             )->end(
         )->end( ).
@@ -204,11 +225,15 @@ CLASS z2ui5_cl_smpc_app_070 IMPLEMENTATION.
 
 
   METHOD on_event.
+      DATA target TYPE string.
+      DATA value TYPE string.
 
     IF client->get_event( ) = `SET`.
       " the original's onPIChangeValueButtonPressed - setPercentValue/setDisplayValue on the target PI
-      DATA(target) = client->get_event_arg( ).
-      DATA(value)  = client->get_event_arg( 2 ).
+      
+      target = client->get_event_arg( ).
+      
+      value  = client->get_event_arg( 2 ).
       IF target = `A`.
         pi_a_value   = value.
         pi_a_display = |{ value }%|.

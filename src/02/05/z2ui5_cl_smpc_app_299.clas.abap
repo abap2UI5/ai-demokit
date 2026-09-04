@@ -14,7 +14,7 @@ CLASS z2ui5_cl_smpc_app_299 DEFINITION PUBLIC.
              icon     TYPE string,
              expanded TYPE abap_bool,
            END OF ty_s_nav_item.
-    DATA t_nav_items TYPE STANDARD TABLE OF ty_s_nav_item WITH EMPTY KEY.
+    DATA t_nav_items TYPE STANDARD TABLE OF ty_s_nav_item WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -33,12 +33,12 @@ CLASS z2ui5_cl_smpc_app_299 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -47,8 +47,13 @@ CLASS z2ui5_cl_smpc_app_299 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `EXPANDED` INTO TABLE temp1.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -78,7 +83,7 @@ CLASS z2ui5_cl_smpc_app_299 IMPLEMENTATION.
                 )->ele( n = `NavigationList` ns = `tnt`
                     )->a( n = `items` v = client->_bind(
                                               val                = t_nav_items
-                                              omit_initial_paths = VALUE #( ( `EXPANDED` ) ) )
+                                              omit_initial_paths = temp1 )
 
                     )->tag( n = `NavigationListItem` ns = `tnt`
                         )->a( n = `text`     v = `{TEXT}`
@@ -110,12 +115,18 @@ CLASS z2ui5_cl_smpc_app_299 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp4 TYPE xsdboolean.
+        DATA temp3 TYPE z2ui5_cl_smpc_app_299=>ty_s_nav_item.
+        DATA temp1 TYPE z2ui5_cl_smpc_app_299=>ty_s_nav_item-text.
+        DATA temp2 TYPE z2ui5_cl_smpc_app_299=>ty_s_nav_item-icon.
 
     CASE client->get_event( ).
 
       WHEN `TOGGLE_EXPAND`.
         " original onCollapseExpandPress: toggles SideNavigation.expanded
-        expanded = xsdbool( expanded = abap_false ).
+        
+        temp4 = boolc( expanded = abap_false ).
+        expanded = temp4.
 
       WHEN `QUICK_CREATE`.
         popup_quickcreate_display( ).
@@ -124,13 +135,24 @@ CLASS z2ui5_cl_smpc_app_299 IMPLEMENTATION.
         " the Create button: addItem( new NavigationListItem({ text: sName ||
         " 'New Navigation Item', expanded: true, icon: sIcon || 'sap-icon://building' }) )
         " - reproduced 1:1 by appending the row the bound list renders
-        INSERT VALUE #( text     = COND #( WHEN create_name IS NOT INITIAL
-                                           THEN create_name
-                                           ELSE `New Navigation Item` )
-                        icon     = COND #( WHEN create_icon IS NOT INITIAL
-                                           THEN create_icon
-                                           ELSE `sap-icon://building` )
-                        expanded = abap_true ) INTO TABLE t_nav_items.
+        
+        CLEAR temp3.
+        
+        IF create_name IS NOT INITIAL.
+          temp1 = create_name.
+        ELSE.
+          temp1 = `New Navigation Item`.
+        ENDIF.
+        temp3-text = temp1.
+        
+        IF create_icon IS NOT INITIAL.
+          temp2 = create_icon.
+        ELSE.
+          temp2 = `sap-icon://building`.
+        ENDIF.
+        temp3-icon = temp2.
+        temp3-expanded = abap_true.
+        INSERT temp3 INTO TABLE t_nav_items.
         client->popup_destroy( ).
 
     ENDCASE.
@@ -142,7 +164,8 @@ CLASS z2ui5_cl_smpc_app_299 IMPLEMENTATION.
 
     " original quickActionPress builds this Dialog imperatively (new Dialog({...}).open());
     " expressed as a core:FragmentDefinition shown via popup_display (declared deviation)
-    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA popup TYPE REF TO z2ui5_cl_ui5_view_builder.
+    popup = z2ui5_cl_ui5_view_builder=>factory( ).
 
     popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns:core` v = `sap.ui.core`
@@ -191,10 +214,23 @@ CLASS z2ui5_cl_smpc_app_299 IMPLEMENTATION.
   METHOD model_init.
 
     " the four items the sample declares on the main NavigationList
-    t_nav_items = VALUE #( ( text = `Home`      icon = `sap-icon://home` )
-                           ( text = `Building`  icon = `sap-icon://building` )
-                           ( text = `Mileage`   icon = `sap-icon://mileage` )
-                           ( text = `Transport` icon = `sap-icon://map-2` ) ).
+    DATA temp4 LIKE t_nav_items.
+    DATA temp5 LIKE LINE OF temp4.
+    CLEAR temp4.
+    
+    temp5-text = `Home`.
+    temp5-icon = `sap-icon://home`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-text = `Building`.
+    temp5-icon = `sap-icon://building`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-text = `Mileage`.
+    temp5-icon = `sap-icon://mileage`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-text = `Transport`.
+    temp5-icon = `sap-icon://map-2`.
+    INSERT temp5 INTO TABLE temp4.
+    t_nav_items = temp4.
 
   ENDMETHOD.
 

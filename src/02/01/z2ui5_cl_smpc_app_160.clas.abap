@@ -20,9 +20,9 @@ CLASS z2ui5_cl_smpc_app_160 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -31,7 +31,8 @@ CLASS z2ui5_cl_smpc_app_160 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " handleLinkPress opens MessageBox.alert('Link was clicked!'); the framework
     " expresses that 1:1 (client->message_box_display), so both wired Links go

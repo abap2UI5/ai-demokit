@@ -20,9 +20,9 @@ CLASS z2ui5_cl_smpc_app_278 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -31,7 +31,8 @@ CLASS z2ui5_cl_smpc_app_278 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
@@ -103,6 +104,8 @@ CLASS z2ui5_cl_smpc_app_278 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp1 TYPE string_table.
+        DATA temp3 TYPE string_table.
 
     CASE client->get_event( ).
 
@@ -146,20 +149,28 @@ CLASS z2ui5_cl_smpc_app_278 IMPLEMENTATION.
       WHEN `ERROR_CUSTOM_ACTION`.
 
         " dependentOn ties the message box to the layout's lifecycle (original: this.getView())
+        
+        CLEAR temp1.
+        INSERT `Manage Products` INTO TABLE temp1.
+        INSERT `CLOSE` INTO TABLE temp1.
         client->message_box_display(
           text             = `Product A does not exist.`
           type             = `error`
-          actions          = VALUE #( ( `Manage Products` ) ( `CLOSE` ) )
+          actions          = temp1
           emphasizedaction = `Manage Products`
           onclose          = `ACTION_SELECTED`
           dependenton      = `messageBoxHost` ).
 
       WHEN `WARNING_TWO_ACTIONS`.
 
+        
+        CLEAR temp3.
+        INSERT `OK` INTO TABLE temp3.
+        INSERT `CANCEL` INTO TABLE temp3.
         client->message_box_display(
           text             = `The quantity you have reported exceeds the quantity planned.`
           type             = `warning`
-          actions          = VALUE #( ( `OK` ) ( `CANCEL` ) )
+          actions          = temp3
           emphasizedaction = `OK`
           onclose          = `ACTION_SELECTED`
           dependenton      = `messageBoxHost` ).

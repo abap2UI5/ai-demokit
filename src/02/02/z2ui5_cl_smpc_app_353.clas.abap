@@ -18,7 +18,7 @@ CLASS z2ui5_cl_smpc_app_353 DEFINITION PUBLIC.
         " away - so the position has to be carried explicitly to restore it.
         ordinal  TYPE i,
       END OF ty_s_product,
-      ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
+      ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH DEFAULT KEY.
 
     " the original keeps ONE collection and separates the two tables by a Rank
     " filter (Rank = 0 available, Rank > 0 selected, sorted by Rank); with the
@@ -53,12 +53,12 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -67,12 +67,27 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the two-table move demo. Both tables bind their own model table, the two
     " arrow buttons and the context menus move the selected row across, and the
     " drag & drop wires ship the dragged / dropped row indices plus the drop
     " position so the move and the reorder happen in ABAP.
+    
+    CLEAR temp1.
+    INSERT `${$parameters>/draggedControl}.getIndex()` INTO TABLE temp1.
+    INSERT `${$parameters>/droppedControl}.getIndex()` INTO TABLE temp1.
+    INSERT `${$parameters>/dropPosition}` INTO TABLE temp1.
+    INSERT `${$parameters>/draggedControl}.getParent().getId().indexOf('table2') >= 0` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `${$parameters>/draggedControl}.getIndex()` INTO TABLE temp2.
+    INSERT `${$parameters>/droppedControl}.getIndex()` INTO TABLE temp2.
+    INSERT `${$parameters>/dropPosition}` INTO TABLE temp2.
+    INSERT `${$parameters>/draggedControl}.getParent().getId().indexOf('table2') >= 0` INTO TABLE temp2.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`         v = `sap.ui.table`
         )->a( n = `xmlns:plugins` v = `sap.m.plugins`
@@ -293,20 +308,14 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
                                 )->a( n = `targetAggregation` v = `rows`
                                 )->a( n = `dropPosition`      v = `Between`
                                 )->a( n = `drop`              v = client->_event( val   = `DROP_TO_2`
-                                                                                  t_arg = VALUE #( ( `${$parameters>/draggedControl}.getIndex()` )
-                                                                                                   ( `${$parameters>/droppedControl}.getIndex()` )
-                                                                                                   ( `${$parameters>/dropPosition}` )
-                                                                                                   ( `${$parameters>/draggedControl}.getParent().getId().indexOf('table2') >= 0` ) ) )
+                                                                                  t_arg = temp1 )
 
                             )->tag( n = `DragDropInfo` ns = `dnd`
                                 )->a( n = `sourceAggregation` v = `rows`
                                 )->a( n = `targetAggregation` v = `rows`
                                 )->a( n = `dropPosition`      v = `Between`
                                 )->a( n = `drop`              v = client->_event( val   = `DROP_TO_2`
-                                                                                  t_arg = VALUE #( ( `${$parameters>/draggedControl}.getIndex()` )
-                                                                                                   ( `${$parameters>/droppedControl}.getIndex()` )
-                                                                                                   ( `${$parameters>/dropPosition}` )
-                                                                                                   ( `${$parameters>/draggedControl}.getParent().getId().indexOf('table2') >= 0` ) ) )
+                                                                                  t_arg = temp2 )
 
                         )->end(
                     )->end(
@@ -321,21 +330,56 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp3 TYPE i.
+        DATA temp4 TYPE i.
+        DATA temp5 TYPE i.
+        DATA temp6 TYPE i.
+          DATA temp7 LIKE LINE OF t_available.
+          DATA temp8 LIKE sy-tabix.
+          DATA temp9 LIKE LINE OF t_selected.
+          DATA temp10 LIKE sy-tabix.
+          DATA ls_row LIKE LINE OF t_selected.
+          DATA temp22 LIKE LINE OF t_selected.
+          DATA temp23 LIKE sy-tabix.
+          DATA temp11 LIKE LINE OF t_selected.
+          DATA temp12 LIKE sy-tabix.
+        DATA temp13 TYPE i.
+        DATA lv_from TYPE i.
+          DATA temp14 LIKE LINE OF t_selected.
+          DATA temp15 LIKE sy-tabix.
+        DATA temp16 TYPE i.
+        DATA temp17 TYPE i.
+        DATA lv_to TYPE i.
+        DATA lv_after TYPE abap_bool.
+        DATA temp1 TYPE xsdboolean.
+        DATA lv_internal TYPE string.
+          DATA temp18 LIKE LINE OF t_selected.
+          DATA temp19 LIKE sy-tabix.
+          DATA temp20 LIKE LINE OF t_available.
+          DATA temp21 LIKE sy-tabix.
 
     CASE client->get_event( ).
 
       WHEN `SELECT_1`.
-        selected_1 = CONV i( client->get_event_arg( ) ) + 1.
+        
+        temp3 = client->get_event_arg( ).
+        selected_1 = temp3 + 1.
 
       WHEN `CTX_MENU_1`.
         " onBeforeOpenContextMenu selects the row under the cursor
-        selected_1 = CONV i( client->get_event_arg( ) ) + 1.
+        
+        temp4 = client->get_event_arg( ).
+        selected_1 = temp4 + 1.
 
       WHEN `SELECT_2`.
-        selected_2 = CONV i( client->get_event_arg( ) ) + 1.
+        
+        temp5 = client->get_event_arg( ).
+        selected_2 = temp5 + 1.
 
       WHEN `CTX_MENU_2`.
-        selected_2 = CONV i( client->get_event_arg( ) ) + 1.
+        
+        temp6 = client->get_event_arg( ).
+        selected_2 = temp6 + 1.
 
       WHEN `MOVE_TO_2`.
         " moveToTable2: the selected available product becomes a selected one
@@ -346,7 +390,15 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
           " Before( ) the current first one and table 2 is sorted descending by
           " Rank, so it lands at the TOP. INSERT ... INTO TABLE on a STANDARD
           " TABLE WITH EMPTY KEY appends, which put it at the bottom instead.
-          INSERT t_available[ selected_1 ] INTO t_selected INDEX 1.
+          
+          
+          temp8 = sy-tabix.
+          READ TABLE t_available INDEX selected_1 INTO temp7.
+          sy-tabix = temp8.
+          IF sy-subrc <> 0.
+            ASSERT 1 = 0.
+          ENDIF.
+          INSERT temp7 INTO t_selected INDEX 1.
           DELETE t_available INDEX selected_1.
           selected_1 = 0.
         ENDIF.
@@ -357,14 +409,31 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
         IF selected_2 < 1 OR selected_2 > lines( t_selected ).
           client->message_toast_display( `Please select a row!` ).
         ELSE.
-          available_restore( t_selected[ selected_2 ] ).
+          
+          
+          temp10 = sy-tabix.
+          READ TABLE t_selected INDEX selected_2 INTO temp9.
+          sy-tabix = temp10.
+          IF sy-subrc <> 0.
+            ASSERT 1 = 0.
+          ENDIF.
+          available_restore( temp9 ).
           DELETE t_selected INDEX selected_2.
           selected_2 = 0.
         ENDIF.
 
       WHEN `MOVE_UP`.
         IF selected_2 > 1 AND selected_2 <= lines( t_selected ).
-          DATA(ls_row) = t_selected[ selected_2 ].
+          
+          
+          
+          temp23 = sy-tabix.
+          READ TABLE t_selected INDEX selected_2 INTO temp22.
+          sy-tabix = temp23.
+          IF sy-subrc <> 0.
+            ASSERT 1 = 0.
+          ENDIF.
+          ls_row = temp22.
           DELETE t_selected INDEX selected_2.
           INSERT ls_row INTO t_selected INDEX selected_2 - 1.
           selected_2 = selected_2 - 1.
@@ -372,7 +441,15 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
 
       WHEN `MOVE_DOWN`.
         IF selected_2 >= 1 AND selected_2 < lines( t_selected ).
-          ls_row = t_selected[ selected_2 ].
+          
+          
+          temp12 = sy-tabix.
+          READ TABLE t_selected INDEX selected_2 INTO temp11.
+          sy-tabix = temp12.
+          IF sy-subrc <> 0.
+            ASSERT 1 = 0.
+          ENDIF.
+          ls_row = temp11.
           DELETE t_selected INDEX selected_2.
           INSERT ls_row INTO t_selected INDEX selected_2 + 1.
           selected_2 = selected_2 + 1.
@@ -381,9 +458,20 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
       WHEN `DROP_TO_1`.
         " onDropTable1: whatever was dragged out of the selected table goes
         " back to the available one
-        DATA(lv_from) = CONV i( client->get_event_arg( ) ) + 1.
+        
+        temp13 = client->get_event_arg( ).
+        
+        lv_from = temp13 + 1.
         IF lv_from >= 1 AND lv_from <= lines( t_selected ).
-          available_restore( t_selected[ lv_from ] ).
+          
+          
+          temp15 = sy-tabix.
+          READ TABLE t_selected INDEX lv_from INTO temp14.
+          sy-tabix = temp15.
+          IF sy-subrc <> 0.
+            ASSERT 1 = 0.
+          ENDIF.
+          available_restore( temp14 ).
           DELETE t_selected INDEX lv_from.
         ENDIF.
 
@@ -392,16 +480,33 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
         " computes a Rank between the two neighbours, which with an ordered
         " table is simply the insert index. The fourth argument says whether
         " the drag started INSIDE table 2 (a reorder) or came from table 1
-        lv_from = CONV i( client->get_event_arg( ) ) + 1.
-        DATA(lv_to) = CONV i( client->get_event_arg( 2 ) ) + 1.
-        DATA(lv_after) = xsdbool( client->get_event_arg( 3 ) = `After` ).
-        DATA(lv_internal) = client->get_event_arg( 4 ).
+        
+        temp16 = client->get_event_arg( ).
+        lv_from = temp16 + 1.
+        
+        temp17 = client->get_event_arg( 2 ).
+        
+        lv_to = temp17 + 1.
+        
+        
+        temp1 = boolc( client->get_event_arg( 3 ) = `After` ).
+        lv_after = temp1.
+        
+        lv_internal = client->get_event_arg( 4 ).
 
         IF lv_internal = abap_true.
           IF lv_from < 1 OR lv_from > lines( t_selected ).
             RETURN.
           ENDIF.
-          ls_row = t_selected[ lv_from ].
+          
+          
+          temp19 = sy-tabix.
+          READ TABLE t_selected INDEX lv_from INTO temp18.
+          sy-tabix = temp19.
+          IF sy-subrc <> 0.
+            ASSERT 1 = 0.
+          ENDIF.
+          ls_row = temp18.
           DELETE t_selected INDEX lv_from.
           IF lv_from < lv_to.
             lv_to = lv_to - 1.
@@ -410,7 +515,15 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
           IF lv_from < 1 OR lv_from > lines( t_available ).
             RETURN.
           ENDIF.
-          ls_row = t_available[ lv_from ].
+          
+          
+          temp21 = sy-tabix.
+          READ TABLE t_available INDEX lv_from INTO temp20.
+          sy-tabix = temp21.
+          IF sy-subrc <> 0.
+            ASSERT 1 = 0.
+          ENDIF.
+          ls_row = temp20.
           DELETE t_available INDEX lv_from.
         ENDIF.
 
@@ -450,135 +563,509 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
     " the shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json)
     " with the three columns both tables bind; every product starts in the
     " available table, which is what the original's initialRank = 0 means
-    t_available = VALUE #(
-      ( name = `Notebook Basic 15`                                  category = `Laptops`                     quantity = 10 )
-      ( name = `Notebook Basic 17`                                  category = `Laptops`                     quantity = 20 )
-      ( name = `Notebook Basic 18`                                  category = `Laptops`                     quantity = 10 )
-      ( name = `Notebook Basic 19`                                  category = `Laptops`                     quantity = 15 )
-      ( name = `ITelO Vault`                                        category = `Accessories`                 quantity = 15 )
-      ( name = `Notebook Professional 15`                           category = `Accessories`                 quantity = 16 )
-      ( name = `Notebook Professional 17`                           category = `Laptops`                     quantity = 17 )
-      ( name = `ITelO Vault Net`                                    category = `Accessories`                 quantity = 14 )
-      ( name = `ITelO Vault SAT`                                    category = `Accessories`                 quantity = 50 )
-      ( name = `Comfort Easy`                                       category = `Accessories`                 quantity = 30 )
-      ( name = `Comfort Senior`                                     category = `Accessories`                 quantity = 24 )
-      ( name = `Ergo Screen E-I`                                    category = `Flat Screen Monitors`        quantity = 14 )
-      ( name = `Ergo Screen E-II`                                   category = `Flat Screen Monitors`        quantity = 24 )
-      ( name = `Ergo Screen E-III`                                  category = `Flat Screen Monitors`        quantity = 50 )
-      ( name = `Flat Basic`                                         category = `Flat Screen Monitors`        quantity = 23 )
-      ( name = `Flat Future`                                        category = `Flat Screen Monitors`        quantity = 22 )
-      ( name = `Flat XL`                                            category = `Flat Screen Monitors`        quantity = 23 )
-      ( name = `Laser Professional Eco`                             category = `Printers`                    quantity = 21 )
-      ( name = `Laser Basic`                                        category = `Printers`                    quantity = 8 )
-      ( name = `Laser Allround`                                     category = `Printers`                    quantity = 9 )
-      ( name = `Ultra Jet Super Color`                              category = `Printers`                    quantity = 17 )
-      ( name = `Ultra Jet Mobile`                                   category = `Printers`                    quantity = 18 )
-      ( name = `Ultra Jet Super Highspeed`                          category = `Printers`                    quantity = 25 )
-      ( name = `Multi Print`                                        category = `Multifunction Printers`      quantity = 16 )
-      ( name = `Multi Color`                                        category = `Multifunction Printers`      quantity = 5 )
-      ( name = `Cordless Mouse`                                     category = `Mice`                        quantity = 25 )
-      ( name = `Speed Mouse`                                        category = `Mice`                        quantity = 12 )
-      ( name = `Track Mouse`                                        category = `Mice`                        quantity = 12 )
-      ( name = `Ergonomic Keyboard`                                 category = `Keyboards`                   quantity = 50 )
-      ( name = `Internet Keyboard`                                  category = `Keyboards`                   quantity = 35 )
-      ( name = `Media Keyboard`                                     category = `Keyboards`                   quantity = 26 )
-      ( name = `Mousepad`                                           category = `Mousepads`                   quantity = 12 )
-      ( name = `Ergo Mousepad`                                      category = `Mousepads`                   quantity = 16 )
-      ( name = `Designer Mousepad`                                  category = `Mousepads`                   quantity = 26 )
-      ( name = `Universal card reader`                              category = `Computer System Accessories` quantity = 22 )
-      ( name = `Proctra X`                                          category = `Graphic Cards`               quantity = 15 )
-      ( name = `Gladiator MX`                                       category = `Graphic Cards`               quantity = 16 )
-      ( name = `Hurricane GX`                                       category = `Graphic Cards`               quantity = 13 )
-      ( name = `Hurricane GX/LN`                                    category = `Graphic Cards`               quantity = 5 )
-      ( name = `Photo Scan`                                         category = `Scanners`                    quantity = 8 )
-      ( name = `Power Scan`                                         category = `Scanners`                    quantity = 11 )
-      ( name = `Jet Scan Professional`                              category = `Scanners`                    quantity = 13 )
-      ( name = `Jet Scan Professional`                              category = `Scanners`                    quantity = 10 )
-      ( name = `Copymaster`                                         category = `Multifunction Printers`      quantity = 10 )
-      ( name = `Surround Sound`                                     category = `Speakers`                    quantity = 20 )
-      ( name = `Blaster Extreme`                                    category = `Speakers`                    quantity = 15 )
-      ( name = `Sound Booster`                                      category = `Speakers`                    quantity = 50 )
-      ( name = `Lovely Sound 5.1 Wireless`                          category = `Accessories`                 quantity = 12 )
-      ( name = `Lovely Sound 5.1`                                   category = `Accessories`                 quantity = 18 )
-      ( name = `Lovely Sound Stereo`                                category = `Accessories`                 quantity = 21 )
-      ( name = `Smart Office`                                       category = `Software`                    quantity = 25 )
-      ( name = `Smart Design`                                       category = `Software`                    quantity = 26 )
-      ( name = `Smart Network`                                      category = `Software`                    quantity = 28 )
-      ( name = `Smart Multimedia`                                   category = `Software`                    quantity = 9 )
-      ( name = `Smart Games`                                        category = `Software`                    quantity = 13 )
-      ( name = `Smart Internet Antivirus`                           category = `Software`                    quantity = 17 )
-      ( name = `Smart Firewall`                                     category = `Software`                    quantity = 19 )
-      ( name = `Smart Money`                                        category = `Software`                    quantity = 18 )
-      ( name = `PC Lock`                                            category = `Computer System Accessories` quantity = 14 )
-      ( name = `Notebook Lock`                                      category = `Computer System Accessories` quantity = 20 )
-      ( name = `Web cam reality`                                    category = `Computer System Accessories` quantity = 27 )
-      ( name = `Screen clean`                                       category = `Computer System Accessories` quantity = 17 )
-      ( name = `Fabric bag professional`                            category = `Computer System Accessories` quantity = 14 )
-      ( name = `Wireless DSL Router`                                category = `Telecommunications`          quantity = 16 )
-      ( name = `Wireless DSL Router / Repeater`                     category = `Telecommunications`          quantity = 12 )
-      ( name = `Wireless DSL Router / Repeater and Print Server`    category = `Telecommunications`          quantity = 12 )
-      ( name = `USB Stick`                                          category = `Computer System Accessories` quantity = 14 )
-      ( name = `Travel Adapter`                                     category = `Accessories`                 quantity = 10 )
-      ( name = `Cordless Bluetooth Keyboard, english international` category = `Keyboards`                   quantity = 13 )
-      ( name = `Flat XXL`                                           category = `Flat Screen Monitors`        quantity = 10 )
-      ( name = `Pocket Mouse`                                       category = `Mice`                        quantity = 20 )
-      ( name = `PC Power Station`                                   category = `PCs`                         quantity = 22 )
-      ( name = `Astro Laptop 1516`                                  category = `Laptops`                     quantity = 23 )
-      ( name = `Astro Phone 6`                                      category = `Smartphones and Tablets`     quantity = 28 )
-      ( name = `Benda Laptop 1408`                                  category = `Laptops`                     quantity = 27 )
-      ( name = `Bending Screen 21HD`                                category = `Flat Screens`                quantity = 23 )
-      ( name = `Broad Screen 22HD`                                  category = `Flat Screens`                quantity = 5 )
-      ( name = `Cerdik Phone 7`                                     category = `Smartphones and Tablets`     quantity = 19 )
-      ( name = `Cepat Tablet 10.5`                                  category = `Smartphones and Tablets`     quantity = 17 )
-      ( name = `Cepat Tablet 8`                                     category = `Smartphones and Tablets`     quantity = 24 )
-      ( name = `Server Basic`                                       category = `Servers`                     quantity = 24 )
-      ( name = `Server Professional`                                category = `Servers`                     quantity = 26 )
-      ( name = `Server Power Pro`                                   category = `Servers`                     quantity = 34 )
-      ( name = `Family PC Basic`                                    category = `Desktop Computers`           quantity = 10 )
-      ( name = `Family PC Pro`                                      category = `Desktop Computers`           quantity = 20 )
-      ( name = `Gaming Monster`                                     category = `Desktop Computers`           quantity = 24 )
-      ( name = `Gaming Monster Pro`                                 category = `Desktop Computers`           quantity = 25 )
-      ( name = `7" Widescreen Portable DVD Player w MP3`            category = `Accessories`                 quantity = 20 )
-      ( name = `10" Portable DVD player`                            category = `Accessories`                 quantity = 21 )
-      ( name = `Portable DVD Player with 9" LCD Monitor`            category = `Accessories`                 quantity = 50 )
-      ( name = `CD/DVD case: 264 sleeves`                           category = `Accessories`                 quantity = 26 )
-      ( name = `Audio/Video Cable Kit - 4m`                         category = `Accessories`                 quantity = 16 )
-      ( name = `Removable CD/DVD Laser Labels`                      category = `Accessories`                 quantity = 25 )
-      ( name = `Beam Breaker B-1`                                   category = `Accessories`                 quantity = 32 )
-      ( name = `Beam Breaker B-2`                                   category = `Accessories`                 quantity = 18 )
-      ( name = `Beam Breaker B-3`                                   category = `Accessories`                 quantity = 16 )
-      ( name = `Play Movie`                                         category = `Accessories`                 quantity = 15 )
-      ( name = `Record Movie`                                       category = `Accessories`                 quantity = 24 )
-      ( name = `ITelo MusicStick`                                   category = `Accessories`                 quantity = 15 )
-      ( name = `ITelo Jog-Mate`                                     category = `Accessories`                 quantity = 24 )
-      ( name = `Power Pro Player 40`                                category = `Accessories`                 quantity = 23 )
-      ( name = `Power Pro Player 80`                                category = `Accessories`                 quantity = 13 )
-      ( name = `Flat Watch HD32`                                    category = `Flat Screen TVs`             quantity = 16 )
-      ( name = `Flat Watch HD37`                                    category = `Flat Screen TVs`             quantity = 14 )
-      ( name = `Flat Watch HD41`                                    category = `Flat Screen TVs`             quantity = 13 )
-      ( name = `Copperberry`                                        category = `Accessories`                 quantity = 5 )
-      ( name = `Silverberry`                                        category = `Accessories`                 quantity = 9 )
-      ( name = `Goldberry`                                          category = `Accessories`                 quantity = 11 )
-      ( name = `Platinberry`                                        category = `Accessories`                 quantity = 12 )
-      ( name = `ITelO FlexTop I4000`                                category = `Laptops`                     quantity = 11 )
-      ( name = `ITelO FlexTop I6300c`                               category = `Laptops`                     quantity = 20 )
-      ( name = `ITelO FlexTop I9100`                                category = `Laptops`                     quantity = 20 )
-      ( name = `ITelO FlexTop I9800`                                category = `Laptops`                     quantity = 22 )
-      ( name = `Smartphone Leather Case`                            category = `Accessories`                 quantity = 12 )
-      ( name = `Smartphone Alpha`                                   category = `Smartphones and Tablets`     quantity = 13 )
-      ( name = `Mini Tablet`                                        category = `Smartphones and Tablets`     quantity = 10 )
-      ( name = `Camcorder View`                                     category = `Accessories`                 quantity = 50 )
-      ( name = `Tablet Pouch`                                       category = `Accessories`                 quantity = 34 )
-      ( name = `Tablet Pouch`                                       category = `Accessories`                 quantity = 34 )
-      ( name = `e-Book Reader ReadMe`                               category = `Smartphones and Tablets`     quantity = 23 )
-      ( name = `Smartphone Beta`                                    category = `Smartphones and Tablets`     quantity = 21 )
-      ( name = `Maxi Tablet`                                        category = `Tablets`                     quantity = 20 )
-      ( name = `Flyer`                                              category = `Accessories`                 quantity = 33 )
-      ).
+    DATA temp22 TYPE z2ui5_cl_smpc_app_353=>ty_t_product.
+    DATA temp23 LIKE LINE OF temp22.
+    FIELD-SYMBOLS <seed> LIKE LINE OF t_available.
+    CLEAR temp22.
+    
+    temp23-name = `Notebook Basic 15`.
+    temp23-category = `Laptops`.
+    temp23-quantity = 10.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Notebook Basic 17`.
+    temp23-category = `Laptops`.
+    temp23-quantity = 20.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Notebook Basic 18`.
+    temp23-category = `Laptops`.
+    temp23-quantity = 10.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Notebook Basic 19`.
+    temp23-category = `Laptops`.
+    temp23-quantity = 15.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `ITelO Vault`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 15.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Notebook Professional 15`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 16.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Notebook Professional 17`.
+    temp23-category = `Laptops`.
+    temp23-quantity = 17.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `ITelO Vault Net`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 14.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `ITelO Vault SAT`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 50.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Comfort Easy`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 30.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Comfort Senior`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 24.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Ergo Screen E-I`.
+    temp23-category = `Flat Screen Monitors`.
+    temp23-quantity = 14.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Ergo Screen E-II`.
+    temp23-category = `Flat Screen Monitors`.
+    temp23-quantity = 24.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Ergo Screen E-III`.
+    temp23-category = `Flat Screen Monitors`.
+    temp23-quantity = 50.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Flat Basic`.
+    temp23-category = `Flat Screen Monitors`.
+    temp23-quantity = 23.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Flat Future`.
+    temp23-category = `Flat Screen Monitors`.
+    temp23-quantity = 22.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Flat XL`.
+    temp23-category = `Flat Screen Monitors`.
+    temp23-quantity = 23.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Laser Professional Eco`.
+    temp23-category = `Printers`.
+    temp23-quantity = 21.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Laser Basic`.
+    temp23-category = `Printers`.
+    temp23-quantity = 8.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Laser Allround`.
+    temp23-category = `Printers`.
+    temp23-quantity = 9.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Ultra Jet Super Color`.
+    temp23-category = `Printers`.
+    temp23-quantity = 17.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Ultra Jet Mobile`.
+    temp23-category = `Printers`.
+    temp23-quantity = 18.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Ultra Jet Super Highspeed`.
+    temp23-category = `Printers`.
+    temp23-quantity = 25.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Multi Print`.
+    temp23-category = `Multifunction Printers`.
+    temp23-quantity = 16.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Multi Color`.
+    temp23-category = `Multifunction Printers`.
+    temp23-quantity = 5.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Cordless Mouse`.
+    temp23-category = `Mice`.
+    temp23-quantity = 25.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Speed Mouse`.
+    temp23-category = `Mice`.
+    temp23-quantity = 12.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Track Mouse`.
+    temp23-category = `Mice`.
+    temp23-quantity = 12.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Ergonomic Keyboard`.
+    temp23-category = `Keyboards`.
+    temp23-quantity = 50.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Internet Keyboard`.
+    temp23-category = `Keyboards`.
+    temp23-quantity = 35.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Media Keyboard`.
+    temp23-category = `Keyboards`.
+    temp23-quantity = 26.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Mousepad`.
+    temp23-category = `Mousepads`.
+    temp23-quantity = 12.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Ergo Mousepad`.
+    temp23-category = `Mousepads`.
+    temp23-quantity = 16.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Designer Mousepad`.
+    temp23-category = `Mousepads`.
+    temp23-quantity = 26.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Universal card reader`.
+    temp23-category = `Computer System Accessories`.
+    temp23-quantity = 22.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Proctra X`.
+    temp23-category = `Graphic Cards`.
+    temp23-quantity = 15.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Gladiator MX`.
+    temp23-category = `Graphic Cards`.
+    temp23-quantity = 16.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Hurricane GX`.
+    temp23-category = `Graphic Cards`.
+    temp23-quantity = 13.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Hurricane GX/LN`.
+    temp23-category = `Graphic Cards`.
+    temp23-quantity = 5.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Photo Scan`.
+    temp23-category = `Scanners`.
+    temp23-quantity = 8.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Power Scan`.
+    temp23-category = `Scanners`.
+    temp23-quantity = 11.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Jet Scan Professional`.
+    temp23-category = `Scanners`.
+    temp23-quantity = 13.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Jet Scan Professional`.
+    temp23-category = `Scanners`.
+    temp23-quantity = 10.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Copymaster`.
+    temp23-category = `Multifunction Printers`.
+    temp23-quantity = 10.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Surround Sound`.
+    temp23-category = `Speakers`.
+    temp23-quantity = 20.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Blaster Extreme`.
+    temp23-category = `Speakers`.
+    temp23-quantity = 15.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Sound Booster`.
+    temp23-category = `Speakers`.
+    temp23-quantity = 50.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Lovely Sound 5.1 Wireless`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 12.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Lovely Sound 5.1`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 18.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Lovely Sound Stereo`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 21.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Smart Office`.
+    temp23-category = `Software`.
+    temp23-quantity = 25.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Smart Design`.
+    temp23-category = `Software`.
+    temp23-quantity = 26.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Smart Network`.
+    temp23-category = `Software`.
+    temp23-quantity = 28.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Smart Multimedia`.
+    temp23-category = `Software`.
+    temp23-quantity = 9.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Smart Games`.
+    temp23-category = `Software`.
+    temp23-quantity = 13.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Smart Internet Antivirus`.
+    temp23-category = `Software`.
+    temp23-quantity = 17.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Smart Firewall`.
+    temp23-category = `Software`.
+    temp23-quantity = 19.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Smart Money`.
+    temp23-category = `Software`.
+    temp23-quantity = 18.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `PC Lock`.
+    temp23-category = `Computer System Accessories`.
+    temp23-quantity = 14.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Notebook Lock`.
+    temp23-category = `Computer System Accessories`.
+    temp23-quantity = 20.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Web cam reality`.
+    temp23-category = `Computer System Accessories`.
+    temp23-quantity = 27.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Screen clean`.
+    temp23-category = `Computer System Accessories`.
+    temp23-quantity = 17.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Fabric bag professional`.
+    temp23-category = `Computer System Accessories`.
+    temp23-quantity = 14.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Wireless DSL Router`.
+    temp23-category = `Telecommunications`.
+    temp23-quantity = 16.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Wireless DSL Router / Repeater`.
+    temp23-category = `Telecommunications`.
+    temp23-quantity = 12.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Wireless DSL Router / Repeater and Print Server`.
+    temp23-category = `Telecommunications`.
+    temp23-quantity = 12.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `USB Stick`.
+    temp23-category = `Computer System Accessories`.
+    temp23-quantity = 14.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Travel Adapter`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 10.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Cordless Bluetooth Keyboard, english international`.
+    temp23-category = `Keyboards`.
+    temp23-quantity = 13.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Flat XXL`.
+    temp23-category = `Flat Screen Monitors`.
+    temp23-quantity = 10.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Pocket Mouse`.
+    temp23-category = `Mice`.
+    temp23-quantity = 20.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `PC Power Station`.
+    temp23-category = `PCs`.
+    temp23-quantity = 22.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Astro Laptop 1516`.
+    temp23-category = `Laptops`.
+    temp23-quantity = 23.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Astro Phone 6`.
+    temp23-category = `Smartphones and Tablets`.
+    temp23-quantity = 28.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Benda Laptop 1408`.
+    temp23-category = `Laptops`.
+    temp23-quantity = 27.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Bending Screen 21HD`.
+    temp23-category = `Flat Screens`.
+    temp23-quantity = 23.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Broad Screen 22HD`.
+    temp23-category = `Flat Screens`.
+    temp23-quantity = 5.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Cerdik Phone 7`.
+    temp23-category = `Smartphones and Tablets`.
+    temp23-quantity = 19.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Cepat Tablet 10.5`.
+    temp23-category = `Smartphones and Tablets`.
+    temp23-quantity = 17.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Cepat Tablet 8`.
+    temp23-category = `Smartphones and Tablets`.
+    temp23-quantity = 24.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Server Basic`.
+    temp23-category = `Servers`.
+    temp23-quantity = 24.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Server Professional`.
+    temp23-category = `Servers`.
+    temp23-quantity = 26.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Server Power Pro`.
+    temp23-category = `Servers`.
+    temp23-quantity = 34.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Family PC Basic`.
+    temp23-category = `Desktop Computers`.
+    temp23-quantity = 10.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Family PC Pro`.
+    temp23-category = `Desktop Computers`.
+    temp23-quantity = 20.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Gaming Monster`.
+    temp23-category = `Desktop Computers`.
+    temp23-quantity = 24.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Gaming Monster Pro`.
+    temp23-category = `Desktop Computers`.
+    temp23-quantity = 25.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `7" Widescreen Portable DVD Player w MP3`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 20.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `10" Portable DVD player`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 21.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Portable DVD Player with 9" LCD Monitor`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 50.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `CD/DVD case: 264 sleeves`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 26.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Audio/Video Cable Kit - 4m`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 16.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Removable CD/DVD Laser Labels`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 25.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Beam Breaker B-1`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 32.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Beam Breaker B-2`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 18.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Beam Breaker B-3`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 16.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Play Movie`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 15.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Record Movie`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 24.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `ITelo MusicStick`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 15.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `ITelo Jog-Mate`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 24.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Power Pro Player 40`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 23.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Power Pro Player 80`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 13.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Flat Watch HD32`.
+    temp23-category = `Flat Screen TVs`.
+    temp23-quantity = 16.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Flat Watch HD37`.
+    temp23-category = `Flat Screen TVs`.
+    temp23-quantity = 14.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Flat Watch HD41`.
+    temp23-category = `Flat Screen TVs`.
+    temp23-quantity = 13.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Copperberry`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 5.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Silverberry`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 9.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Goldberry`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 11.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Platinberry`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 12.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `ITelO FlexTop I4000`.
+    temp23-category = `Laptops`.
+    temp23-quantity = 11.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `ITelO FlexTop I6300c`.
+    temp23-category = `Laptops`.
+    temp23-quantity = 20.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `ITelO FlexTop I9100`.
+    temp23-category = `Laptops`.
+    temp23-quantity = 20.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `ITelO FlexTop I9800`.
+    temp23-category = `Laptops`.
+    temp23-quantity = 22.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Smartphone Leather Case`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 12.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Smartphone Alpha`.
+    temp23-category = `Smartphones and Tablets`.
+    temp23-quantity = 13.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Mini Tablet`.
+    temp23-category = `Smartphones and Tablets`.
+    temp23-quantity = 10.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Camcorder View`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 50.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Tablet Pouch`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 34.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Tablet Pouch`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 34.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `e-Book Reader ReadMe`.
+    temp23-category = `Smartphones and Tablets`.
+    temp23-quantity = 23.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Smartphone Beta`.
+    temp23-category = `Smartphones and Tablets`.
+    temp23-quantity = 21.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Maxi Tablet`.
+    temp23-category = `Tablets`.
+    temp23-quantity = 20.
+    INSERT temp23 INTO TABLE temp22.
+    temp23-name = `Flyer`.
+    temp23-category = `Accessories`.
+    temp23-quantity = 33.
+    INSERT temp23 INTO TABLE temp22.
+    t_available = temp22.
 
     " stamped after the literals rather than written into them, so the seeded
     " values stay exactly the mock's
-    LOOP AT t_available ASSIGNING FIELD-SYMBOL(<seed>).
+    
+    LOOP AT t_available ASSIGNING <seed>.
       <seed>-ordinal = sy-tabix.
     ENDLOOP.
 

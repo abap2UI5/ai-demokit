@@ -22,10 +22,11 @@ CLASS z2ui5_cl_smpc_app_121 DEFINITION PUBLIC.
              url          TYPE string,
              thumbnailurl TYPE string,
              uploadstate  TYPE string,
-             markers      TYPE STANDARD TABLE OF ty_s_marker WITH EMPTY KEY,
-             statuses     TYPE STANDARD TABLE OF ty_s_status WITH EMPTY KEY,
+             markers      TYPE STANDARD TABLE OF ty_s_marker WITH DEFAULT KEY,
+             statuses     TYPE STANDARD TABLE OF ty_s_status WITH DEFAULT KEY,
            END OF ty_s_item.
-    DATA t_items TYPE STANDARD TABLE OF ty_s_item WITH EMPTY KEY.
+    TYPES temp1_116400003e TYPE STANDARD TABLE OF ty_s_item WITH DEFAULT KEY.
+DATA t_items TYPE temp1_116400003e.
     " onSelectionChange enables the version button for exactly one selection
     DATA version_enabled TYPE abap_bool.
 
@@ -44,12 +45,12 @@ CLASS z2ui5_cl_smpc_app_121 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -58,8 +59,15 @@ CLASS z2ui5_cl_smpc_app_121 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `VISIBILITY` INTO TABLE temp1.
+    INSERT `STATE` INTO TABLE temp1.
+    INSERT `ICON` INTO TABLE temp1.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
@@ -93,9 +101,7 @@ CLASS z2ui5_cl_smpc_app_121 IMPLEMENTATION.
                 " sap.ui.core.ValueState rejected THAT - the app died again,
                 " one enum further along, after VISIBILITY was fixed.
                 )->a( n = `items`         v = client->_bind( val = t_items
-                                                             omit_initial_paths = VALUE #( ( `VISIBILITY` )
-                                                                                          ( `STATE` )
-                                                                                          ( `ICON` ) ) )
+                                                             omit_initial_paths = temp1 )
                 )->a( n = `mode`          v = `MultiSelect`
                 )->a( n = `selectionChanged`  v = client->_event( val = `SELECTION` arg = `$event.oSource.getSelectedItems().length` )
                 )->a( n = `afterItemRemoved`  v = client->_event( val = `REMOVED` arg = `${$parameters>/item}.getFileName()` )
@@ -150,13 +156,16 @@ CLASS z2ui5_cl_smpc_app_121 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp1 TYPE xsdboolean.
 
     CASE client->get_event( ).
 
       WHEN `SELECTION`.
         " onSelectionChange enables the version button for exactly one selected
         " item; the original raises no toast here
-        version_enabled = xsdbool( client->get_event_arg( ) = `1` ).
+        
+        temp1 = boolc( client->get_event_arg( ) = `1` ).
+        version_enabled = temp1.
 
       WHEN `REMOVED`.
         " onAfterItemRemoved splices the row out of the model. The sample matches
@@ -182,23 +191,73 @@ CLASS z2ui5_cl_smpc_app_121 IMPLEMENTATION.
 
     " the sample's own items.json, both rows verbatim - the asset URLs point at
     " the OpenUI5 host per the offline asset rule
-    t_items = VALUE #(
-      ( filename    = `Business Plan Agenda.doc`
-        mediatype   = `application/msword`
-        url         = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/UploadCollection/LinkedDocuments/Business Plan Agenda.doc`
-        uploadstate = `Complete`
-        markers     = VALUE #( ( type = `Draft` ) ( type = `Favorite` ) ( type = `Flagged` )
-                               ( type = `Locked` ) ( type = `Unsaved` ) )
-        statuses    = VALUE #( ( title = `Uploaded By` text = `Jane Burns` active = abap_true )
-                               ( title = `Uploaded On` text = `2014-07-28` active = abap_false )
-                               ( title = `File Size` text = `25` active = abap_false )
-                               ( title = `Document Info Record` text = `SSP/101010101` state = `Information` ) ) )
-      ( filename     = `Picture of a woman.png`
-        url          = `https://sdk.openui5.org/test-resources/sap/m/images/Woman_04.png`
-        thumbnailurl = `https://sdk.openui5.org/test-resources/sap/m/images/Woman_04.png`
-        uploadstate  = `Complete`
-        statuses     = VALUE #( ( title = `Uploaded By` text = `Jane Burns` active = abap_true )
-                                ( title = `Uploaded On` text = `2014-07-28` active = abap_false ) ) ) ).
+    DATA temp3 LIKE t_items.
+    DATA temp4 LIKE LINE OF temp3.
+    DATA temp1 TYPE z2ui5_cl_smpc_app_121=>ty_s_item-markers.
+    DATA temp2 LIKE LINE OF temp1.
+    DATA temp5 TYPE z2ui5_cl_smpc_app_121=>ty_s_item-statuses.
+    DATA temp6 LIKE LINE OF temp5.
+    DATA temp7 TYPE z2ui5_cl_smpc_app_121=>ty_s_item-statuses.
+    DATA temp8 LIKE LINE OF temp7.
+    CLEAR temp3.
+    
+    temp4-filename = `Business Plan Agenda.doc`.
+    temp4-mediatype = `application/msword`.
+    temp4-url = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/UploadCollection/LinkedDocuments/Business Plan Agenda.doc`.
+    temp4-uploadstate = `Complete`.
+    
+    CLEAR temp1.
+    
+    temp2-type = `Draft`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-type = `Favorite`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-type = `Flagged`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-type = `Locked`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-type = `Unsaved`.
+    INSERT temp2 INTO TABLE temp1.
+    temp4-markers = temp1.
+    
+    CLEAR temp5.
+    
+    temp6-title = `Uploaded By`.
+    temp6-text = `Jane Burns`.
+    temp6-active = abap_true.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-title = `Uploaded On`.
+    temp6-text = `2014-07-28`.
+    temp6-active = abap_false.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-title = `File Size`.
+    temp6-text = `25`.
+    temp6-active = abap_false.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-title = `Document Info Record`.
+    temp6-text = `SSP/101010101`.
+    temp6-state = `Information`.
+    INSERT temp6 INTO TABLE temp5.
+    temp4-statuses = temp5.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-filename = `Picture of a woman.png`.
+    temp4-url = `https://sdk.openui5.org/test-resources/sap/m/images/Woman_04.png`.
+    temp4-thumbnailurl = `https://sdk.openui5.org/test-resources/sap/m/images/Woman_04.png`.
+    temp4-uploadstate = `Complete`.
+    
+    CLEAR temp7.
+    
+    temp8-title = `Uploaded By`.
+    temp8-text = `Jane Burns`.
+    temp8-active = abap_true.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-title = `Uploaded On`.
+    temp8-text = `2014-07-28`.
+    temp8-active = abap_false.
+    INSERT temp8 INTO TABLE temp7.
+    temp4-statuses = temp7.
+    INSERT temp4 INTO TABLE temp3.
+    t_items = temp3.
 
   ENDMETHOD.
 

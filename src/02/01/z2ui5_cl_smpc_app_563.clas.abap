@@ -14,7 +14,7 @@ CLASS z2ui5_cl_smpc_app_563 DEFINITION PUBLIC.
         counter           TYPE i,
         markupdescription TYPE abap_bool,
       END OF ty_s_message.
-    TYPES ty_t_message TYPE STANDARD TABLE OF ty_s_message WITH EMPTY KEY.
+    TYPES ty_t_message TYPE STANDARD TABLE OF ty_s_message WITH DEFAULT KEY.
 
     DATA t_messages     TYPE ty_t_message.
     DATA popover_title  TYPE string.
@@ -37,12 +37,12 @@ CLASS z2ui5_cl_smpc_app_563 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -51,7 +51,8 @@ CLASS z2ui5_cl_smpc_app_563 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
@@ -77,7 +78,8 @@ CLASS z2ui5_cl_smpc_app_563 IMPLEMENTATION.
 
   METHOD popover_display.
 
-    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA popup TYPE REF TO z2ui5_cl_ui5_view_builder.
+    popup = z2ui5_cl_ui5_view_builder=>factory( ).
 
     popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns`      v = `sap.m`
@@ -152,6 +154,7 @@ CLASS z2ui5_cl_smpc_app_563 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp1 TYPE string_table.
 
     CASE client->get_event( ).
 
@@ -170,9 +173,13 @@ CLASS z2ui5_cl_smpc_app_563 IMPLEMENTATION.
       WHEN `NAV_BACK`.
         back_visible = abap_false.
         popover_title = `Messages`.
+        
+        CLEAR temp1.
+        INSERT `messageView` INTO TABLE temp1.
+        INSERT `navigateBack` INTO TABLE temp1.
         client->follow_up_action( val   = client->cs_event-control_by_id
                                   view  = client->cs_view-popover
-                                  t_arg = VALUE #( ( `messageView` ) ( `navigateBack` ) ) ).
+                                  t_arg = temp1 ).
 
       WHEN `CLOSE`.
         client->popover_destroy( ).
@@ -183,34 +190,44 @@ CLASS z2ui5_cl_smpc_app_563 IMPLEMENTATION.
 
 
   METHOD model_init.
+    DATA temp3 TYPE z2ui5_cl_smpc_app_563=>ty_t_message.
+    DATA temp4 LIKE LINE OF temp3.
 
     popover_title = `Messages`.
 
     " the controller's aMockMessages
-    t_messages = VALUE #(
-      ( type        = `Error`
-        title       = `Error message`
-        description = `First Error message description. ` && |\n| && `Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod`
-        subtitle    = `Example of subtitle`
-        counter     = 1 )
-      ( type        = `Warning`
-        title       = `Warning without description`
-        description = `` )
-      ( type        = `Success`
-        title       = `Success message`
-        description = `First Success message description`
-        subtitle    = `Example of subtitle`
-        counter     = 1 )
-      ( type        = `Error`
-        title       = `Error message`
-        description = `Second Error message description`
-        subtitle    = `Example of subtitle`
-        counter     = 2 )
-      ( type        = `Information`
-        title       = `Information message`
-        description = `First Information message description`
-        subtitle    = `Example of subtitle`
-        counter     = 1 ) ).
+    
+    CLEAR temp3.
+    
+    temp4-type = `Error`.
+    temp4-title = `Error message`.
+    temp4-description = `First Error message description. ` && |\n| && `Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod`.
+    temp4-subtitle = `Example of subtitle`.
+    temp4-counter = 1.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-type = `Warning`.
+    temp4-title = `Warning without description`.
+    temp4-description = ``.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-type = `Success`.
+    temp4-title = `Success message`.
+    temp4-description = `First Success message description`.
+    temp4-subtitle = `Example of subtitle`.
+    temp4-counter = 1.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-type = `Error`.
+    temp4-title = `Error message`.
+    temp4-description = `Second Error message description`.
+    temp4-subtitle = `Example of subtitle`.
+    temp4-counter = 2.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-type = `Information`.
+    temp4-title = `Information message`.
+    temp4-description = `First Information message description`.
+    temp4-subtitle = `Example of subtitle`.
+    temp4-counter = 1.
+    INSERT temp4 INTO TABLE temp3.
+    t_messages = temp3.
 
   ENDMETHOD.
 

@@ -14,12 +14,12 @@ CLASS z2ui5_cl_smpc_app_531 DEFINITION PUBLIC.
              emailsubject TYPE string,
              target       TYPE string,
            END OF ty_s_element.
-    TYPES ty_t_element TYPE STANDARD TABLE OF ty_s_element WITH EMPTY KEY.
+    TYPES ty_t_element TYPE STANDARD TABLE OF ty_s_element WITH DEFAULT KEY.
     TYPES: BEGIN OF ty_s_group,
              heading  TYPE string,
              elements TYPE ty_t_element,
            END OF ty_s_group.
-    TYPES ty_t_group TYPE STANDARD TABLE OF ty_s_group WITH EMPTY KEY.
+    TYPES ty_t_group TYPE STANDARD TABLE OF ty_s_group WITH DEFAULT KEY.
     TYPES: BEGIN OF ty_s_page,
              pageid          TYPE string,
              header          TYPE string,
@@ -34,7 +34,7 @@ CLASS z2ui5_cl_smpc_app_531 DEFINITION PUBLIC.
              badgeicon       TYPE string,
              groups          TYPE ty_t_group,
            END OF ty_s_page.
-    TYPES ty_t_page TYPE STANDARD TABLE OF ty_s_page WITH EMPTY KEY.
+    TYPES ty_t_page TYPE STANDARD TABLE OF ty_s_page WITH DEFAULT KEY.
 
     DATA t_pages TYPE ty_t_page.
 
@@ -55,12 +55,12 @@ CLASS z2ui5_cl_smpc_app_531 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -69,7 +69,8 @@ CLASS z2ui5_cl_smpc_app_531 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
@@ -105,8 +106,15 @@ CLASS z2ui5_cl_smpc_app_531 IMPLEMENTATION.
 
   METHOD popup_quickview_display.
 
-    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA popup TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    popup = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `Avatar was pressed` INTO TABLE temp1.
     popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:core` v = `sap.ui.core`
@@ -134,7 +142,7 @@ CLASS z2ui5_cl_smpc_app_531 IMPLEMENTATION.
                         " page - resolved per row in model_init (see sidecar)
                         )->a( n = `badgeIcon`       v = `{BADGEICON}`
                         )->a( n = `press`           v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                                  t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Avatar was pressed` ) ) )
+                                                                                  t_arg = temp1 )
 
                 )->end(
                 )->ele( `QuickViewGroup`
@@ -163,48 +171,133 @@ CLASS z2ui5_cl_smpc_app_531 IMPLEMENTATION.
 
     " target seeds the UI5 default '_blank' explicitly - a serialized empty
     " string would override the QuickViewGroupElement.target default
-    t_pages = VALUE #(
-      ( pageid          = `companyPageId`
-        header          = `Company Info`
-        title           = `SAP SE`
-        titleurl        = `http://sap.com`
-        description     = `Founded in 1972`
-        " the sample gives this page no backgroundColor; an empty string would
-        " override the enum DEFAULT and reject the whole view, so it is seeded
-        backgroundcolor = `Accent6`
-        icon         = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/QuickViewAvatarConfiguration/sap-logo.png`
-        fallbackicon = `sap-icon://building`
-        displayshape = `Square`
-        groups       = VALUE #(
-          ( heading  = `Office`
-            elements = VALUE #(
-              ( label = `Headquarters` value = `Walldorf, Germany`  elementtype = `text`  target = `_blank` )
-              ( label = `Phone`        value = `+001 6101 34869-0`  elementtype = `phone` target = `_blank` ) ) )
-          ( heading  = `Main Contact`
-            elements = VALUE #(
-              ( label = `Name`   value = `John Doe`           elementtype = `pageLink` pagelinkid = `companyEmployeePageId` target = `_blank` )
-              ( label = `Mobile` value = `+001 6101 34869-0`  elementtype = `mobile`   target = `_blank` )
-              ( label = `Phone`  value = `+001 6101 34869-0`  elementtype = `phone`    target = `_blank` )
-              ( label = `Email`  value = `main.contact@company.com` emailsubject = `Subject` elementtype = `email` target = `_blank` ) ) ) ) )
-
-      ( pageid          = `companyEmployeePageId`
-        header          = `Employee Info`
-        title           = `John Doe`
-        initials        = `JD`
-        displayshape    = `Circle`
-        backgroundcolor = `Accent8`
-        description     = `Department Manager`
-        badgeicon       = `sap-icon://edit`
-        groups          = VALUE #(
-          ( heading  = `Company`
-            elements = VALUE #(
-              ( label = `Name`    value = `Adventure Company` url = `http://sap.com` elementtype = `link` target = `_blank` )
-              ( label = `Address` value = `Sofia, Boris III, 136A` elementtype = `text` target = `_blank` )
-              ( label = `Slogan`  value = `Innovation through technology` elementtype = `text` target = `_blank` ) ) )
-          ( heading  = `Other`
-            elements = VALUE #(
-              ( label = `Email` value = `john.doe@sap.com` emailsubject = `Subject` elementtype = `email` target = `_blank` )
-              ( label = `Phone` value = `+359 888 888 888` elementtype = `phone` target = `_blank` ) ) ) ) ) ).
+    DATA temp3 TYPE z2ui5_cl_smpc_app_531=>ty_t_page.
+    DATA temp4 LIKE LINE OF temp3.
+    DATA temp1 TYPE z2ui5_cl_smpc_app_531=>ty_t_group.
+    DATA temp2 LIKE LINE OF temp1.
+    DATA temp7 TYPE z2ui5_cl_smpc_app_531=>ty_t_element.
+    DATA temp8 LIKE LINE OF temp7.
+    DATA temp9 TYPE z2ui5_cl_smpc_app_531=>ty_t_element.
+    DATA temp10 LIKE LINE OF temp9.
+    DATA temp5 TYPE z2ui5_cl_smpc_app_531=>ty_t_group.
+    DATA temp6 LIKE LINE OF temp5.
+    DATA temp11 TYPE z2ui5_cl_smpc_app_531=>ty_t_element.
+    DATA temp12 LIKE LINE OF temp11.
+    DATA temp13 TYPE z2ui5_cl_smpc_app_531=>ty_t_element.
+    DATA temp14 LIKE LINE OF temp13.
+    CLEAR temp3.
+    
+    temp4-pageid = `companyPageId`.
+    temp4-header = `Company Info`.
+    temp4-title = `SAP SE`.
+    temp4-titleurl = `http://sap.com`.
+    temp4-description = `Founded in 1972`.
+    temp4-backgroundcolor = `Accent6`.
+    temp4-icon = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/QuickViewAvatarConfiguration/sap-logo.png`.
+    temp4-fallbackicon = `sap-icon://building`.
+    temp4-displayshape = `Square`.
+    
+    CLEAR temp1.
+    
+    temp2-heading = `Office`.
+    
+    CLEAR temp7.
+    
+    temp8-label = `Headquarters`.
+    temp8-value = `Walldorf, Germany`.
+    temp8-elementtype = `text`.
+    temp8-target = `_blank`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-label = `Phone`.
+    temp8-value = `+001 6101 34869-0`.
+    temp8-elementtype = `phone`.
+    temp8-target = `_blank`.
+    INSERT temp8 INTO TABLE temp7.
+    temp2-elements = temp7.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-heading = `Main Contact`.
+    
+    CLEAR temp9.
+    
+    temp10-label = `Name`.
+    temp10-value = `John Doe`.
+    temp10-elementtype = `pageLink`.
+    temp10-pagelinkid = `companyEmployeePageId`.
+    temp10-target = `_blank`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-label = `Mobile`.
+    temp10-value = `+001 6101 34869-0`.
+    temp10-elementtype = `mobile`.
+    temp10-target = `_blank`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-label = `Phone`.
+    temp10-value = `+001 6101 34869-0`.
+    temp10-elementtype = `phone`.
+    temp10-target = `_blank`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-label = `Email`.
+    temp10-value = `main.contact@company.com`.
+    temp10-emailsubject = `Subject`.
+    temp10-elementtype = `email`.
+    temp10-target = `_blank`.
+    INSERT temp10 INTO TABLE temp9.
+    temp2-elements = temp9.
+    INSERT temp2 INTO TABLE temp1.
+    temp4-groups = temp1.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-pageid = `companyEmployeePageId`.
+    temp4-header = `Employee Info`.
+    temp4-title = `John Doe`.
+    temp4-initials = `JD`.
+    temp4-displayshape = `Circle`.
+    temp4-backgroundcolor = `Accent8`.
+    temp4-description = `Department Manager`.
+    temp4-badgeicon = `sap-icon://edit`.
+    
+    CLEAR temp5.
+    
+    temp6-heading = `Company`.
+    
+    CLEAR temp11.
+    
+    temp12-label = `Name`.
+    temp12-value = `Adventure Company`.
+    temp12-url = `http://sap.com`.
+    temp12-elementtype = `link`.
+    temp12-target = `_blank`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-label = `Address`.
+    temp12-value = `Sofia, Boris III, 136A`.
+    temp12-elementtype = `text`.
+    temp12-target = `_blank`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-label = `Slogan`.
+    temp12-value = `Innovation through technology`.
+    temp12-elementtype = `text`.
+    temp12-target = `_blank`.
+    INSERT temp12 INTO TABLE temp11.
+    temp6-elements = temp11.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-heading = `Other`.
+    
+    CLEAR temp13.
+    
+    temp14-label = `Email`.
+    temp14-value = `john.doe@sap.com`.
+    temp14-emailsubject = `Subject`.
+    temp14-elementtype = `email`.
+    temp14-target = `_blank`.
+    INSERT temp14 INTO TABLE temp13.
+    temp14-label = `Phone`.
+    temp14-value = `+359 888 888 888`.
+    temp14-elementtype = `phone`.
+    temp14-target = `_blank`.
+    INSERT temp14 INTO TABLE temp13.
+    temp6-elements = temp13.
+    INSERT temp6 INTO TABLE temp5.
+    temp4-groups = temp5.
+    INSERT temp4 INTO TABLE temp3.
+    t_pages = temp3.
 
   ENDMETHOD.
 

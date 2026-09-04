@@ -19,8 +19,8 @@ CLASS z2ui5_cl_smpc_app_265 DEFINITION PUBLIC.
              region    TYPE string,
            END OF ty_s_accountmanager.
 
-    DATA t_customers       TYPE STANDARD TABLE OF ty_s_customer WITH EMPTY KEY.
-    DATA t_accountmanagers TYPE STANDARD TABLE OF ty_s_accountmanager WITH EMPTY KEY.
+    DATA t_customers       TYPE STANDARD TABLE OF ty_s_customer WITH DEFAULT KEY.
+    DATA t_accountmanagers TYPE STANDARD TABLE OF ty_s_accountmanager WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -37,10 +37,10 @@ CLASS z2ui5_cl_smpc_app_265 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -49,7 +49,8 @@ CLASS z2ui5_cl_smpc_app_265 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " The Select's items binding carries a boundFilters entry whose value1 is
     " the RELATIVE row field {REGION} - each row's Select therefore lists only
@@ -121,42 +122,183 @@ CLASS z2ui5_cl_smpc_app_265 IMPLEMENTATION.
 
   METHOD model_init.
 
-    t_customers = VALUE #(
-      ( key = 1  name = `TechCorp Solutions`        region = `Americas` accountmanagerid = 1 )
-      ( key = 4  name = `Innovation Systems Inc`    region = `Americas` accountmanagerid = 1 )
-      ( key = 2  name = `Global Industries Ltd`     region = `EMEA`     accountmanagerid = 6 )
-      ( key = 3  name = `Asia Pacific Ventures`     region = `APJ`      accountmanagerid = 10 )
-      ( key = 8  name = `Continental Solutions`     region = `EMEA`     accountmanagerid = 6 )
-      ( key = 5  name = `European Tech Group`       region = `EMEA`     accountmanagerid = 8 )
-      ( key = 6  name = `Pacific Rim Enterprises`   region = `APJ`      accountmanagerid = 10 )
-      ( key = 7  name = `Digital Dynamics Corp`     region = `Americas` accountmanagerid = 3 )
-      ( key = 10 name = `Atlantic Technologies`     region = `Americas` accountmanagerid = 3 )
-      ( key = 9  name = `Eastern Markets Ltd`       region = `APJ`      accountmanagerid = 11 )
-      ( key = 11 name = `Nordic Innovations`        region = `EMEA`     accountmanagerid = 8 )
-      ( key = 12 name = `Southeast Asia Holdings`   region = `APJ`      accountmanagerid = 11 )
-      ( key = 13 name = `North American Systems`    region = `Americas` accountmanagerid = 5 )
-      ( key = 14 name = `Mediterranean Group`       region = `EMEA`     accountmanagerid = 7 )
-      ( key = 15 name = `Indo-Pacific Corp`         region = `APJ`      accountmanagerid = 12 )
-      ( key = 16 name = `Western Digital Solutions` region = `Americas` accountmanagerid = 2 )
-      ( key = 17 name = `Alpine Technologies`       region = `EMEA`     accountmanagerid = 7 )
-      ( key = 18 name = `Oceanic Enterprises`       region = `APJ`      accountmanagerid = 12 )
-      ( key = 19 name = `Great Lakes Industries`    region = `Americas` accountmanagerid = 2 )
-      ( key = 20 name = `Baltic Solutions Ltd`      region = `EMEA`     accountmanagerid = 8 ) ).
+    DATA temp1 LIKE t_customers.
+    DATA temp2 LIKE LINE OF temp1.
+    DATA temp3 LIKE t_accountmanagers.
+    DATA temp4 LIKE LINE OF temp3.
+    CLEAR temp1.
+    
+    temp2-key = 1.
+    temp2-name = `TechCorp Solutions`.
+    temp2-region = `Americas`.
+    temp2-accountmanagerid = 1.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = 4.
+    temp2-name = `Innovation Systems Inc`.
+    temp2-region = `Americas`.
+    temp2-accountmanagerid = 1.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = 2.
+    temp2-name = `Global Industries Ltd`.
+    temp2-region = `EMEA`.
+    temp2-accountmanagerid = 6.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = 3.
+    temp2-name = `Asia Pacific Ventures`.
+    temp2-region = `APJ`.
+    temp2-accountmanagerid = 10.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = 8.
+    temp2-name = `Continental Solutions`.
+    temp2-region = `EMEA`.
+    temp2-accountmanagerid = 6.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = 5.
+    temp2-name = `European Tech Group`.
+    temp2-region = `EMEA`.
+    temp2-accountmanagerid = 8.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = 6.
+    temp2-name = `Pacific Rim Enterprises`.
+    temp2-region = `APJ`.
+    temp2-accountmanagerid = 10.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = 7.
+    temp2-name = `Digital Dynamics Corp`.
+    temp2-region = `Americas`.
+    temp2-accountmanagerid = 3.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = 10.
+    temp2-name = `Atlantic Technologies`.
+    temp2-region = `Americas`.
+    temp2-accountmanagerid = 3.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = 9.
+    temp2-name = `Eastern Markets Ltd`.
+    temp2-region = `APJ`.
+    temp2-accountmanagerid = 11.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = 11.
+    temp2-name = `Nordic Innovations`.
+    temp2-region = `EMEA`.
+    temp2-accountmanagerid = 8.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = 12.
+    temp2-name = `Southeast Asia Holdings`.
+    temp2-region = `APJ`.
+    temp2-accountmanagerid = 11.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = 13.
+    temp2-name = `North American Systems`.
+    temp2-region = `Americas`.
+    temp2-accountmanagerid = 5.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = 14.
+    temp2-name = `Mediterranean Group`.
+    temp2-region = `EMEA`.
+    temp2-accountmanagerid = 7.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = 15.
+    temp2-name = `Indo-Pacific Corp`.
+    temp2-region = `APJ`.
+    temp2-accountmanagerid = 12.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = 16.
+    temp2-name = `Western Digital Solutions`.
+    temp2-region = `Americas`.
+    temp2-accountmanagerid = 2.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = 17.
+    temp2-name = `Alpine Technologies`.
+    temp2-region = `EMEA`.
+    temp2-accountmanagerid = 7.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = 18.
+    temp2-name = `Oceanic Enterprises`.
+    temp2-region = `APJ`.
+    temp2-accountmanagerid = 12.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = 19.
+    temp2-name = `Great Lakes Industries`.
+    temp2-region = `Americas`.
+    temp2-accountmanagerid = 2.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = 20.
+    temp2-name = `Baltic Solutions Ltd`.
+    temp2-region = `EMEA`.
+    temp2-accountmanagerid = 8.
+    INSERT temp2 INTO TABLE temp1.
+    t_customers = temp1.
 
-    t_accountmanagers = VALUE #(
-      ( id = 1  firstname = `John`      lastname = `Smith`    region = `Americas` )
-      ( id = 2  firstname = `Sarah`     lastname = `Johnson`  region = `Americas` )
-      ( id = 3  firstname = `Mike`      lastname = `Williams` region = `Americas` )
-      ( id = 4  firstname = `Jennifer`  lastname = `Brown`    region = `Americas` )
-      ( id = 5  firstname = `David`     lastname = `Jones`    region = `Americas` )
-      ( id = 6  firstname = `Emma`      lastname = `Anderson` region = `EMEA` )
-      ( id = 7  firstname = `Lucas`     lastname = `Mueller`  region = `EMEA` )
-      ( id = 8  firstname = `Sophie`    lastname = `Dubois`   region = `EMEA` )
-      ( id = 9  firstname = `Marco`     lastname = `Rossi`    region = `EMEA` )
-      ( id = 10 firstname = `Yuki`      lastname = `Tanaka`   region = `APJ` )
-      ( id = 11 firstname = `Raj`       lastname = `Patel`    region = `APJ` )
-      ( id = 12 firstname = `Li`        lastname = `Chen`     region = `APJ` )
-      ( id = 13 firstname = `Priya`     lastname = `Sharma`   region = `APJ` ) ).
+    
+    CLEAR temp3.
+    
+    temp4-id = 1.
+    temp4-firstname = `John`.
+    temp4-lastname = `Smith`.
+    temp4-region = `Americas`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-id = 2.
+    temp4-firstname = `Sarah`.
+    temp4-lastname = `Johnson`.
+    temp4-region = `Americas`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-id = 3.
+    temp4-firstname = `Mike`.
+    temp4-lastname = `Williams`.
+    temp4-region = `Americas`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-id = 4.
+    temp4-firstname = `Jennifer`.
+    temp4-lastname = `Brown`.
+    temp4-region = `Americas`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-id = 5.
+    temp4-firstname = `David`.
+    temp4-lastname = `Jones`.
+    temp4-region = `Americas`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-id = 6.
+    temp4-firstname = `Emma`.
+    temp4-lastname = `Anderson`.
+    temp4-region = `EMEA`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-id = 7.
+    temp4-firstname = `Lucas`.
+    temp4-lastname = `Mueller`.
+    temp4-region = `EMEA`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-id = 8.
+    temp4-firstname = `Sophie`.
+    temp4-lastname = `Dubois`.
+    temp4-region = `EMEA`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-id = 9.
+    temp4-firstname = `Marco`.
+    temp4-lastname = `Rossi`.
+    temp4-region = `EMEA`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-id = 10.
+    temp4-firstname = `Yuki`.
+    temp4-lastname = `Tanaka`.
+    temp4-region = `APJ`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-id = 11.
+    temp4-firstname = `Raj`.
+    temp4-lastname = `Patel`.
+    temp4-region = `APJ`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-id = 12.
+    temp4-firstname = `Li`.
+    temp4-lastname = `Chen`.
+    temp4-region = `APJ`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-id = 13.
+    temp4-firstname = `Priya`.
+    temp4-lastname = `Sharma`.
+    temp4-region = `APJ`.
+    INSERT temp4 INTO TABLE temp3.
+    t_accountmanagers = temp3.
 
   ENDMETHOD.
 

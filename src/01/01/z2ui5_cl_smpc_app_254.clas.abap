@@ -11,7 +11,7 @@ CLASS z2ui5_cl_smpc_app_254 DEFINITION PUBLIC.
         valuestate     TYPE string,
         valuestatetext TYPE string,
       END OF ty_s_row.
-    DATA modeldata TYPE STANDARD TABLE OF ty_s_row WITH EMPTY KEY.
+    DATA modeldata TYPE STANDARD TABLE OF ty_s_row WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -28,10 +28,10 @@ CLASS z2ui5_cl_smpc_app_254 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -40,7 +40,8 @@ CLASS z2ui5_cl_smpc_app_254 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -69,13 +70,27 @@ CLASS z2ui5_cl_smpc_app_254 IMPLEMENTATION.
 
     " onInit's aData 1:1 - every row carries a valueState (no absent-enum
     " trap); the rows without a valueStateText keep the empty default
-    modeldata = VALUE #(
-      ( label = `DateRangeSelection with valueState None`        valuestate = `None` )
-      ( label = `DateRangeSelection with valueState Information` valuestate = `Information` )
-      ( label = `DateRangeSelection with valueState Success`     valuestate = `Success` )
-      ( label = `DateRangeSelection with valueState Warning and long valueStateText` valuestate = `Warning`
-        valuestatetext = `Warning message. This is an extra long text used as a warning message. It illustrates how the text wraps into two or more lines without truncation to show the full length of the message.` )
-      ( label = `DateRangeSelection with valueState Error` valuestate = `Error` ) ).
+    DATA temp1 LIKE modeldata.
+    DATA temp2 LIKE LINE OF temp1.
+    CLEAR temp1.
+    
+    temp2-label = `DateRangeSelection with valueState None`.
+    temp2-valuestate = `None`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-label = `DateRangeSelection with valueState Information`.
+    temp2-valuestate = `Information`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-label = `DateRangeSelection with valueState Success`.
+    temp2-valuestate = `Success`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-label = `DateRangeSelection with valueState Warning and long valueStateText`.
+    temp2-valuestate = `Warning`.
+    temp2-valuestatetext = `Warning message. This is an extra long text used as a warning message. It illustrates how the text wraps into two or more lines without truncation to show the full length of the message.`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-label = `DateRangeSelection with valueState Error`.
+    temp2-valuestate = `Error`.
+    INSERT temp2 INTO TABLE temp1.
+    modeldata = temp1.
 
   ENDMETHOD.
 

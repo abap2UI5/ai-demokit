@@ -11,7 +11,7 @@ CLASS z2ui5_cl_smpc_app_512 DEFINITION PUBLIC.
              list_text TYPE string,
              list_info TYPE string,
            END OF ty_s_item.
-    TYPES ty_t_item TYPE STANDARD TABLE OF ty_s_item WITH EMPTY KEY.
+    TYPES ty_t_item TYPE STANDARD TABLE OF ty_s_item WITH DEFAULT KEY.
 
     " the tokens z2ui5.cc.MultiInputExt mirrors out of the tokenUpdate event -
     " the whole added / removed list, not just its first entry
@@ -19,7 +19,7 @@ CLASS z2ui5_cl_smpc_app_512 DEFINITION PUBLIC.
              key  TYPE string,
              text TYPE string,
            END OF ty_s_token.
-    TYPES ty_t_token TYPE STANDARD TABLE OF ty_s_token WITH EMPTY KEY.
+    TYPES ty_t_token TYPE STANDARD TABLE OF ty_s_token WITH DEFAULT KEY.
 
     DATA t_items   TYPE ty_t_item.
     DATA t_added   TYPE ty_t_token.
@@ -40,9 +40,9 @@ CLASS z2ui5_cl_smpc_app_512 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -51,7 +51,8 @@ CLASS z2ui5_cl_smpc_app_512 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`      v = `100%`
@@ -110,21 +111,33 @@ CLASS z2ui5_cl_smpc_app_512 IMPLEMENTATION.
 
 
   METHOD on_event.
+      DATA removed LIKE LINE OF t_removed.
+      DATA added LIKE LINE OF t_added.
+        DATA temp1 LIKE sy-subrc.
+          DATA temp2 TYPE z2ui5_cl_smpc_app_512=>ty_s_item.
 
     IF client->get_event( ) = `TOKEN_UPDATE`.
       " the two branches of the original's tokenUpdate handler, over the FULL
       " token lists the companion control mirrors out of the event
-      LOOP AT t_removed INTO DATA(removed).
+      
+      LOOP AT t_removed INTO removed.
         DELETE t_items WHERE key = removed-key.
       ENDLOOP.
 
-      LOOP AT t_added INTO DATA(added).
-        IF NOT line_exists( t_items[ key = added-key ] ).
+      
+      LOOP AT t_added INTO added.
+        
+        READ TABLE t_items WITH KEY key = added-key TRANSPORTING NO FIELDS.
+        temp1 = sy-subrc.
+        IF NOT temp1 = 0.
           " _textFormatter / _keyFormatter, computed in the backend
-          APPEND VALUE #( key       = added-key
-                          text      = added-text
-                          list_text = |text: { added-text }|
-                          list_info = |key: { added-key }| ) TO t_items.
+          
+          CLEAR temp2.
+          temp2-key = added-key.
+          temp2-text = added-text.
+          temp2-list_text = |text: { added-text }|.
+          temp2-list_info = |key: { added-key }|.
+          APPEND temp2 TO t_items.
         ENDIF.
       ENDLOOP.
     ENDIF.

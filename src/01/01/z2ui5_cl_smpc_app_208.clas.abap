@@ -11,7 +11,7 @@ CLASS z2ui5_cl_smpc_app_208 DEFINITION PUBLIC.
         status    TYPE string,
         infostate TYPE string,
       END OF ty_s_product.
-    DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
+    DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -28,10 +28,10 @@ CLASS z2ui5_cl_smpc_app_208 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -40,7 +40,8 @@ CLASS z2ui5_cl_smpc_app_208 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
@@ -66,141 +67,402 @@ CLASS z2ui5_cl_smpc_app_208 IMPLEMENTATION.
 
     " the shared mock /ProductCollection (ui5/mock/products.json), the two bound
     " columns Name/Status, all 123 rows kept verbatim
-    t_products = VALUE #(
-      ( name = `Notebook Basic 15`                                  status = `Available` )
-      ( name = `Notebook Basic 17`                                  status = `Available` )
-      ( name = `Notebook Basic 18`                                  status = `Available` )
-      ( name = `Notebook Basic 19`                                  status = `Out of Stock` )
-      ( name = `ITelO Vault`                                        status = `Out of Stock` )
-      ( name = `Notebook Professional 15`                           status = `Out of Stock` )
-      ( name = `Notebook Professional 17`                           status = `Out of Stock` )
-      ( name = `ITelO Vault Net`                                    status = `Discontinued` )
-      ( name = `ITelO Vault SAT`                                    status = `Available` )
-      ( name = `Comfort Easy`                                       status = `Out of Stock` )
-      ( name = `Comfort Senior`                                     status = `Available` )
-      ( name = `Ergo Screen E-I`                                    status = `Available` )
-      ( name = `Ergo Screen E-II`                                   status = `Available` )
-      ( name = `Ergo Screen E-III`                                  status = `Out of Stock` )
-      ( name = `Flat Basic`                                         status = `Available` )
-      ( name = `Flat Future`                                        status = `Available` )
-      ( name = `Flat XL`                                            status = `Available` )
-      ( name = `Laser Professional Eco`                             status = `Available` )
-      ( name = `Laser Basic`                                        status = `Available` )
-      ( name = `Laser Allround`                                     status = `Available` )
-      ( name = `Ultra Jet Super Color`                              status = `Discontinued` )
-      ( name = `Ultra Jet Mobile`                                   status = `Discontinued` )
-      ( name = `Ultra Jet Super Highspeed`                          status = `Available` )
-      ( name = `Multi Print`                                        status = `Available` )
-      ( name = `Multi Color`                                        status = `Available` )
-      ( name = `Cordless Mouse`                                     status = `Available` )
-      ( name = `Speed Mouse`                                        status = `Available` )
-      ( name = `Track Mouse`                                        status = `Discontinued` )
-      ( name = `Ergonomic Keyboard`                                 status = `Available` )
-      ( name = `Internet Keyboard`                                  status = `Out of Stock` )
-      ( name = `Media Keyboard`                                     status = `Available` )
-      ( name = `Mousepad`                                           status = `Available` )
-      ( name = `Ergo Mousepad`                                      status = `Out of Stock` )
-      ( name = `Designer Mousepad`                                  status = `Available` )
-      ( name = `Universal card reader`                              status = `Available` )
-      ( name = `Proctra X`                                          status = `Out of Stock` )
-      ( name = `Gladiator MX`                                       status = `Discontinued` )
-      ( name = `Hurricane GX`                                       status = `Available` )
-      ( name = `Hurricane GX/LN`                                    status = `Out of Stock` )
-      ( name = `Photo Scan`                                         status = `Out of Stock` )
-      ( name = `Power Scan`                                         status = `Out of Stock` )
-      ( name = `Jet Scan Professional`                              status = `Out of Stock` )
-      ( name = `Jet Scan Professional`                              status = `Available` )
-      ( name = `Copymaster`                                         status = `Available` )
-      ( name = `Surround Sound`                                     status = `Available` )
-      ( name = `Blaster Extreme`                                    status = `Available` )
-      ( name = `Sound Booster`                                      status = `Discontinued` )
-      ( name = `Lovely Sound 5.1 Wireless`                          status = `Available` )
-      ( name = `Lovely Sound 5.1`                                   status = `Available` )
-      ( name = `Lovely Sound Stereo`                                status = `Out of Stock` )
-      ( name = `Smart Office`                                       status = `Out of Stock` )
-      ( name = `Smart Design`                                       status = `Available` )
-      ( name = `Smart Network`                                      status = `Available` )
-      ( name = `Smart Multimedia`                                   status = `Available` )
-      ( name = `Smart Games`                                        status = `Available` )
-      ( name = `Smart Internet Antivirus`                           status = `Available` )
-      ( name = `Smart Firewall`                                     status = `Discontinued` )
-      ( name = `Smart Money`                                        status = `Out of Stock` )
-      ( name = `PC Lock`                                            status = `Available` )
-      ( name = `Notebook Lock`                                      status = `Available` )
-      ( name = `Web cam reality`                                    status = `Out of Stock` )
-      ( name = `Screen clean`                                       status = `Available` )
-      ( name = `Fabric bag professional`                            status = `Available` )
-      ( name = `Wireless DSL Router`                                status = `Available` )
-      ( name = `Wireless DSL Router / Repeater`                     status = `Out of Stock` )
-      ( name = `Wireless DSL Router / Repeater and Print Server`    status = `Available` )
-      ( name = `USB Stick`                                          status = `Available` )
-      ( name = `Travel Adapter`                                     status = `Discontinued` )
-      ( name = `Cordless Bluetooth Keyboard, english international` status = `Out of Stock` )
-      ( name = `Flat XXL`                                           status = `Discontinued` )
-      ( name = `Pocket Mouse`                                       status = `Available` )
-      ( name = `PC Power Station`                                   status = `Available` )
-      ( name = `Astro Laptop 1516`                                  status = `Available` )
-      ( name = `Astro Phone 6`                                      status = `Available` )
-      ( name = `Benda Laptop 1408`                                  status = `Discontinued` )
-      ( name = `Bending Screen 21HD`                                status = `Available` )
-      ( name = `Broad Screen 22HD`                                  status = `Discontinued` )
-      ( name = `Cerdik Phone 7`                                     status = `Discontinued` )
-      ( name = `Cepat Tablet 10.5`                                  status = `Available` )
-      ( name = `Cepat Tablet 8`                                     status = `Available` )
-      ( name = `Server Basic`                                       status = `Available` )
-      ( name = `Server Professional`                                status = `Out of Stock` )
-      ( name = `Server Power Pro`                                   status = `Available` )
-      ( name = `Family PC Basic`                                    status = `Available` )
-      ( name = `Family PC Pro`                                      status = `Available` )
-      ( name = `Gaming Monster`                                     status = `Available` )
-      ( name = `Gaming Monster Pro`                                 status = `Discontinued` )
-      ( name = `7" Widescreen Portable DVD Player w MP3`            status = `Available` )
-      ( name = `10" Portable DVD player`                            status = `Available` )
-      ( name = `Portable DVD Player with 9" LCD Monitor`            status = `Available` )
-      ( name = `CD/DVD case: 264 sleeves`                           status = `Discontinued` )
-      ( name = `Audio/Video Cable Kit - 4m`                         status = `Available` )
-      ( name = `Removable CD/DVD Laser Labels`                      status = `Discontinued` )
-      ( name = `Beam Breaker B-1`                                   status = `Out of Stock` )
-      ( name = `Beam Breaker B-2`                                   status = `Available` )
-      ( name = `Beam Breaker B-3`                                   status = `Out of Stock` )
-      ( name = `Play Movie`                                         status = `Available` )
-      ( name = `Record Movie`                                       status = `Discontinued` )
-      ( name = `ITelo MusicStick`                                   status = `Available` )
-      ( name = `ITelo Jog-Mate`                                     status = `Available` )
-      ( name = `Power Pro Player 40`                                status = `Available` )
-      ( name = `Power Pro Player 80`                                status = `Available` )
-      ( name = `Flat Watch HD32`                                    status = `Available` )
-      ( name = `Flat Watch HD37`                                    status = `Available` )
-      ( name = `Flat Watch HD41`                                    status = `Discontinued` )
-      ( name = `Copperberry`                                        status = `Discontinued` )
-      ( name = `Silverberry`                                        status = `Discontinued` )
-      ( name = `Goldberry`                                          status = `Available` )
-      ( name = `Platinberry`                                        status = `Available` )
-      ( name = `ITelO FlexTop I4000`                                status = `Available` )
-      ( name = `ITelO FlexTop I6300c`                               status = `Discontinued` )
-      ( name = `ITelO FlexTop I9100`                                status = `Available` )
-      ( name = `ITelO FlexTop I9800`                                status = `Available` )
-      ( name = `Smartphone Leather Case`                            status = `Available` )
-      ( name = `Smartphone Alpha`                                   status = `Out of Stock` )
-      ( name = `Mini Tablet`                                        status = `Available` )
-      ( name = `Camcorder View`                                     status = `Out of Stock` )
-      ( name = `Tablet Pouch`                                       status = `Available` )
-      ( name = `Tablet Pouch`                                       status = `Available` )
-      ( name = `e-Book Reader ReadMe`                               status = `Available` )
-      ( name = `Smartphone Beta`                                    status = `Available` )
-      ( name = `Maxi Tablet`                                        status = `Available` )
-      ( name = `Flyer`                                              status = `Out of Stock` )
-    ).
+    DATA temp1 LIKE t_products.
+    DATA temp2 LIKE LINE OF temp1.
+    DATA temp3 LIKE LINE OF t_products.
+    DATA lr_product LIKE REF TO temp3.
+      DATA temp4 TYPE z2ui5_cl_smpc_app_208=>ty_s_product-infostate.
+    CLEAR temp1.
+    
+    temp2-name = `Notebook Basic 15`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Basic 17`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Basic 18`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Basic 19`.
+    temp2-status = `Out of Stock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO Vault`.
+    temp2-status = `Out of Stock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Professional 15`.
+    temp2-status = `Out of Stock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Professional 17`.
+    temp2-status = `Out of Stock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO Vault Net`.
+    temp2-status = `Discontinued`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO Vault SAT`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Comfort Easy`.
+    temp2-status = `Out of Stock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Comfort Senior`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Ergo Screen E-I`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Ergo Screen E-II`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Ergo Screen E-III`.
+    temp2-status = `Out of Stock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Flat Basic`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Flat Future`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Flat XL`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Laser Professional Eco`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Laser Basic`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Laser Allround`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Ultra Jet Super Color`.
+    temp2-status = `Discontinued`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Ultra Jet Mobile`.
+    temp2-status = `Discontinued`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Ultra Jet Super Highspeed`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Multi Print`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Multi Color`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Cordless Mouse`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Speed Mouse`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Track Mouse`.
+    temp2-status = `Discontinued`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Ergonomic Keyboard`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Internet Keyboard`.
+    temp2-status = `Out of Stock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Media Keyboard`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Mousepad`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Ergo Mousepad`.
+    temp2-status = `Out of Stock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Designer Mousepad`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Universal card reader`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Proctra X`.
+    temp2-status = `Out of Stock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Gladiator MX`.
+    temp2-status = `Discontinued`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Hurricane GX`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Hurricane GX/LN`.
+    temp2-status = `Out of Stock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Photo Scan`.
+    temp2-status = `Out of Stock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Power Scan`.
+    temp2-status = `Out of Stock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Jet Scan Professional`.
+    temp2-status = `Out of Stock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Jet Scan Professional`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Copymaster`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Surround Sound`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Blaster Extreme`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Sound Booster`.
+    temp2-status = `Discontinued`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Lovely Sound 5.1 Wireless`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Lovely Sound 5.1`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Lovely Sound Stereo`.
+    temp2-status = `Out of Stock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smart Office`.
+    temp2-status = `Out of Stock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smart Design`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smart Network`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smart Multimedia`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smart Games`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smart Internet Antivirus`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smart Firewall`.
+    temp2-status = `Discontinued`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smart Money`.
+    temp2-status = `Out of Stock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `PC Lock`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Lock`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Web cam reality`.
+    temp2-status = `Out of Stock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Screen clean`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Fabric bag professional`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Wireless DSL Router`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Wireless DSL Router / Repeater`.
+    temp2-status = `Out of Stock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Wireless DSL Router / Repeater and Print Server`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `USB Stick`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Travel Adapter`.
+    temp2-status = `Discontinued`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Cordless Bluetooth Keyboard, english international`.
+    temp2-status = `Out of Stock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Flat XXL`.
+    temp2-status = `Discontinued`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Pocket Mouse`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `PC Power Station`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Astro Laptop 1516`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Astro Phone 6`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Benda Laptop 1408`.
+    temp2-status = `Discontinued`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Bending Screen 21HD`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Broad Screen 22HD`.
+    temp2-status = `Discontinued`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Cerdik Phone 7`.
+    temp2-status = `Discontinued`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Cepat Tablet 10.5`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Cepat Tablet 8`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Server Basic`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Server Professional`.
+    temp2-status = `Out of Stock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Server Power Pro`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Family PC Basic`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Family PC Pro`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Gaming Monster`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Gaming Monster Pro`.
+    temp2-status = `Discontinued`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `7" Widescreen Portable DVD Player w MP3`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `10" Portable DVD player`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Portable DVD Player with 9" LCD Monitor`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `CD/DVD case: 264 sleeves`.
+    temp2-status = `Discontinued`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Audio/Video Cable Kit - 4m`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Removable CD/DVD Laser Labels`.
+    temp2-status = `Discontinued`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Beam Breaker B-1`.
+    temp2-status = `Out of Stock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Beam Breaker B-2`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Beam Breaker B-3`.
+    temp2-status = `Out of Stock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Play Movie`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Record Movie`.
+    temp2-status = `Discontinued`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelo MusicStick`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelo Jog-Mate`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Power Pro Player 40`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Power Pro Player 80`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Flat Watch HD32`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Flat Watch HD37`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Flat Watch HD41`.
+    temp2-status = `Discontinued`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Copperberry`.
+    temp2-status = `Discontinued`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Silverberry`.
+    temp2-status = `Discontinued`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Goldberry`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Platinberry`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO FlexTop I4000`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO FlexTop I6300c`.
+    temp2-status = `Discontinued`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO FlexTop I9100`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO FlexTop I9800`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smartphone Leather Case`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smartphone Alpha`.
+    temp2-status = `Out of Stock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Mini Tablet`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Camcorder View`.
+    temp2-status = `Out of Stock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Tablet Pouch`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Tablet Pouch`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `e-Book Reader ReadMe`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smartphone Beta`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Maxi Tablet`.
+    temp2-status = `Available`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Flyer`.
+    temp2-status = `Out of Stock`.
+    INSERT temp2 INTO TABLE temp1.
+    t_products = temp1.
 
     " the original's '.formatter.status' maps Status -> a ValueState in the
     " frontend; abap2UI5 is a thin frontend, so the info state is derived here
     " in the backend and bound directly (infoState="{INFOSTATE}")
-    LOOP AT t_products REFERENCE INTO DATA(lr_product).
-      lr_product->infostate = SWITCH #( lr_product->status
-        WHEN `Available`    THEN `Success`
-        WHEN `Out of Stock` THEN `Warning`
-        WHEN `Discontinued` THEN `Error`
-        ELSE `None` ).
+    
+    
+    LOOP AT t_products REFERENCE INTO lr_product.
+      
+      CASE lr_product->status.
+        WHEN `Available`.
+          temp4 = `Success`.
+        WHEN `Out of Stock`.
+          temp4 = `Warning`.
+        WHEN `Discontinued`.
+          temp4 = `Error`.
+        WHEN OTHERS.
+          temp4 = `None`.
+      ENDCASE.
+      lr_product->infostate = temp4.
     ENDLOOP.
 
   ENDMETHOD.

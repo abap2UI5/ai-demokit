@@ -9,8 +9,8 @@ CLASS z2ui5_cl_smpc_app_086 DEFINITION PUBLIC.
       BEGIN OF ty_s_key,
         key TYPE string,
       END OF ty_s_key.
-    DATA t_design_types TYPE STANDARD TABLE OF ty_s_key WITH EMPTY KEY.
-    DATA t_style_types  TYPE STANDARD TABLE OF ty_s_key WITH EMPTY KEY.
+    DATA t_design_types TYPE STANDARD TABLE OF ty_s_key WITH DEFAULT KEY.
+    DATA t_style_types  TYPE STANDARD TABLE OF ty_s_key WITH DEFAULT KEY.
     DATA design         TYPE string.
     DATA style          TYPE string.
 
@@ -29,10 +29,10 @@ CLASS z2ui5_cl_smpc_app_086 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -41,7 +41,8 @@ CLASS z2ui5_cl_smpc_app_086 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
@@ -109,8 +110,29 @@ CLASS z2ui5_cl_smpc_app_086 IMPLEMENTATION.
   METHOD model_init.
 
     " keys of sap.m.ToolbarDesign / sap.m.ToolbarStyle in Object.keys order (library.js declaration order)
-    t_design_types = VALUE #( ( key = `Auto` ) ( key = `Transparent` ) ( key = `Info` ) ( key = `Solid` ) ).
-    t_style_types  = VALUE #( ( key = `Standard` ) ( key = `Clear` ) ).
+    DATA temp1 LIKE t_design_types.
+    DATA temp2 LIKE LINE OF temp1.
+    DATA temp3 LIKE t_style_types.
+    DATA temp4 LIKE LINE OF temp3.
+    CLEAR temp1.
+    
+    temp2-key = `Auto`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = `Transparent`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = `Info`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = `Solid`.
+    INSERT temp2 INTO TABLE temp1.
+    t_design_types = temp1.
+    
+    CLEAR temp3.
+    
+    temp4-key = `Standard`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-key = `Clear`.
+    INSERT temp4 INTO TABLE temp3.
+    t_style_types  = temp3.
     design = `Auto`.
     style  = `Standard`.
 

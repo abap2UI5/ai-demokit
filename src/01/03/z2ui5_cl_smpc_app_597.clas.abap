@@ -39,12 +39,12 @@ CLASS z2ui5_cl_smpc_app_597 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -53,12 +53,25 @@ CLASS z2ui5_cl_smpc_app_597 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " Block->content inlining (app 401/416 precedent). Four of this sample's block
     " types are NOT in the demo kit archive - they live in UI5's test resources
     " (sap.uxap.testblocks.*) or in a Headers sample that is not published - so
     " their content is improvised; see the sidecar, which says exactly which
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `action pressed !` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp2.
+    INSERT `show` INTO TABLE temp2.
+    INSERT `action pressed !` INTO TABLE temp2.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`       v = `100%`
         )->a( n = `xmlns`        v = `sap.uxap`
@@ -185,13 +198,13 @@ CLASS z2ui5_cl_smpc_app_597 IMPLEMENTATION.
                                     )->a( n = `type`    v = `Transparent`
                                     )->a( n = `tooltip` v = `action`
                                     )->a( n = `press`   v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                                    t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `action pressed !` ) ) )
+                                                                                    t_arg = temp1 )
                                 )->tag( n = `Button` ns = `m`
                                     )->a( n = `icon`    v = `sap-icon://edit`
                                     )->a( n = `type`    v = `Transparent`
                                     )->a( n = `tooltip` v = `edit`
                                     )->a( n = `press`   v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                                    t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `action pressed !` ) ) )
+                                                                                    t_arg = temp2 )
                             )->end(
 
                             )->ele( `blocks`

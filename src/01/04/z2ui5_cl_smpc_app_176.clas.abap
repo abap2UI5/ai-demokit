@@ -11,7 +11,7 @@ CLASS z2ui5_cl_smpc_app_176 DEFINITION PUBLIC.
         subtitle TYPE string,
         group    TYPE string,
       END OF ty_s_item.
-    DATA t_items      TYPE STANDARD TABLE OF ty_s_item WITH EMPTY KEY.
+    DATA t_items      TYPE STANDARD TABLE OF ty_s_item WITH DEFAULT KEY.
     DATA slider_value TYPE i.
 
   PROTECTED SECTION.
@@ -29,10 +29,10 @@ CLASS z2ui5_cl_smpc_app_176 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -41,7 +41,8 @@ CLASS z2ui5_cl_smpc_app_176 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
@@ -112,37 +113,122 @@ CLASS z2ui5_cl_smpc_app_176 IMPLEMENTATION.
 
 
   METHOD model_init.
+    DATA temp1 LIKE t_items.
+    DATA temp2 LIKE LINE OF temp1.
 
     slider_value = 100.
-    t_items = VALUE #(
-      ( title = `Grid item title 1`                                                                                                                     subtitle = `Subtitle 1`  group = `Group A` )
-      ( title = `Grid item title 2`                                                                                                                     subtitle = `Subtitle 2`  group = `Group A` )
-      ( title = `Grid item title 3`                                                                                                                     subtitle = `Subtitle 3`  group = `Group A` )
-      ( title = `Grid item title 4`                                                                                                                     subtitle = `Subtitle 4`  group = `Group A` )
-      ( title = `Grid item title 5`                                                                                                                     subtitle = `Subtitle 5`  group = `Group A` )
-      ( title = `Grid item title 6`                                                                                                                     subtitle = `Subtitle 6`  group = `Group A` )
-      ( title = `Grid item title 7`                                                                                                                     subtitle = `Subtitle 7`  group = `Group A` )
-      ( title = `Grid item title 8`                                                                                                                     subtitle = `Subtitle 8`  group = `Group A` )
-      ( title = `Grid item title 9`                                                                                                                     subtitle = `Subtitle 9`  group = `Group A` )
-      ( title = `Grid item title 10`                                                                                                                    subtitle = `Subtitle 10` group = `Group B` )
-      ( title = `Grid item title 11`                                                                                                                    subtitle = `Subtitle 11` group = `Group B` )
-      ( title = `Grid item title 12`                                                                                                                    subtitle = `Subtitle 12` group = `Group B` )
-      ( title = `Grid item title 13`                                                                                                                    subtitle = `Subtitle 13` group = `Group B` )
-      ( title = `Grid item title 14`                                                                                                                    subtitle = `Subtitle 14` group = `Group B` )
-      ( title = `Grid item title 15`                                                                                                                    subtitle = `Subtitle 15` group = `Group B` )
-      ( title = `Grid item title 16`                                                                                                                    subtitle = `Subtitle 16` group = `Group B` )
-      ( title = `Grid item title 17`                                                                                                                    subtitle = `Subtitle 17` group = `Group B` )
-      ( title = `Grid item title 18`                                                                                                                    subtitle = `Subtitle 18` group = `Group B` )
-      ( title = `Grid item title 19 Grid item title 19 Grid item title 19 Grid item title 19 Grid item title 19 Grid item title 19 Grid item title 19 ` subtitle = `Subtitle 19` group = `Group B` )
-      ( title = `Grid item title 20`                                                                                                                    subtitle = `Subtitle 20` group = `Group B` )
-      ( title = `Grid item title 21`                                                                                                                    subtitle = `Subtitle 21` group = `Group B` )
-      ( title = `Grid item title 22`                                                                                                                    subtitle = `Subtitle 22` group = `Group B` )
-      ( title = `Grid item title 23`                                                                                                                    subtitle = `Subtitle 23` group = `Group B` )
-      ( title = `Grid item title 24`                                                                                                                    subtitle = `Subtitle 24` group = `Group B` )
-      ( title = `Grid item title 25`                                                                                                                    subtitle = `Subtitle 25` group = `Group B` )
-      ( title = `Grid item title 26`                                                                                                                    subtitle = `Subtitle 26` group = `Group B` )
-      ( title = `Grid item title 27`                                                                                                                    subtitle = `Subtitle 27` group = `Group B` )
-    ).
+    
+    CLEAR temp1.
+    
+    temp2-title = `Grid item title 1`.
+    temp2-subtitle = `Subtitle 1`.
+    temp2-group = `Group A`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Grid item title 2`.
+    temp2-subtitle = `Subtitle 2`.
+    temp2-group = `Group A`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Grid item title 3`.
+    temp2-subtitle = `Subtitle 3`.
+    temp2-group = `Group A`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Grid item title 4`.
+    temp2-subtitle = `Subtitle 4`.
+    temp2-group = `Group A`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Grid item title 5`.
+    temp2-subtitle = `Subtitle 5`.
+    temp2-group = `Group A`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Grid item title 6`.
+    temp2-subtitle = `Subtitle 6`.
+    temp2-group = `Group A`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Grid item title 7`.
+    temp2-subtitle = `Subtitle 7`.
+    temp2-group = `Group A`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Grid item title 8`.
+    temp2-subtitle = `Subtitle 8`.
+    temp2-group = `Group A`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Grid item title 9`.
+    temp2-subtitle = `Subtitle 9`.
+    temp2-group = `Group A`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Grid item title 10`.
+    temp2-subtitle = `Subtitle 10`.
+    temp2-group = `Group B`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Grid item title 11`.
+    temp2-subtitle = `Subtitle 11`.
+    temp2-group = `Group B`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Grid item title 12`.
+    temp2-subtitle = `Subtitle 12`.
+    temp2-group = `Group B`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Grid item title 13`.
+    temp2-subtitle = `Subtitle 13`.
+    temp2-group = `Group B`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Grid item title 14`.
+    temp2-subtitle = `Subtitle 14`.
+    temp2-group = `Group B`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Grid item title 15`.
+    temp2-subtitle = `Subtitle 15`.
+    temp2-group = `Group B`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Grid item title 16`.
+    temp2-subtitle = `Subtitle 16`.
+    temp2-group = `Group B`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Grid item title 17`.
+    temp2-subtitle = `Subtitle 17`.
+    temp2-group = `Group B`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Grid item title 18`.
+    temp2-subtitle = `Subtitle 18`.
+    temp2-group = `Group B`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Grid item title 19 Grid item title 19 Grid item title 19 Grid item title 19 Grid item title 19 Grid item title 19 Grid item title 19 `.
+    temp2-subtitle = `Subtitle 19`.
+    temp2-group = `Group B`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Grid item title 20`.
+    temp2-subtitle = `Subtitle 20`.
+    temp2-group = `Group B`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Grid item title 21`.
+    temp2-subtitle = `Subtitle 21`.
+    temp2-group = `Group B`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Grid item title 22`.
+    temp2-subtitle = `Subtitle 22`.
+    temp2-group = `Group B`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Grid item title 23`.
+    temp2-subtitle = `Subtitle 23`.
+    temp2-group = `Group B`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Grid item title 24`.
+    temp2-subtitle = `Subtitle 24`.
+    temp2-group = `Group B`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Grid item title 25`.
+    temp2-subtitle = `Subtitle 25`.
+    temp2-group = `Group B`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Grid item title 26`.
+    temp2-subtitle = `Subtitle 26`.
+    temp2-group = `Group B`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Grid item title 27`.
+    temp2-subtitle = `Subtitle 27`.
+    temp2-group = `Group B`.
+    INSERT temp2 INTO TABLE temp1.
+    t_items = temp1.
 
   ENDMETHOD.
 

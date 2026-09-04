@@ -19,7 +19,7 @@ CLASS z2ui5_cl_smpc_app_433 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -29,15 +29,24 @@ CLASS z2ui5_cl_smpc_app_433 IMPLEMENTATION.
   METHOD view_display.
 
     " fixed value of the original img JSONModel (/products/pic1)
-    DATA(pic1) = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg`.
+    DATA pic1 TYPE string.
+    DATA width_s TYPE string.
+    DATA width_m TYPE string.
+    DATA width_l TYPE string.
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    pic1 = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg`.
 
     " onInit seeds /widthS /widthM /widthL from Device.system.phone (2/4/6em on a
     " phone, 5/10/15em otherwise) - expressed over the framework's device> model
-    DATA(width_s) = `{= ${device>/system/phone} ? '2em' : '5em' }`.
-    DATA(width_m) = `{= ${device>/system/phone} ? '4em' : '10em' }`.
-    DATA(width_l) = `{= ${device>/system/phone} ? '6em' : '15em' }`.
+    
+    width_s = `{= ${device>/system/phone} ? '2em' : '5em' }`.
+    
+    width_m = `{= ${device>/system/phone} ? '4em' : '10em' }`.
+    
+    width_l = `{= ${device>/system/phone} ? '6em' : '15em' }`.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`

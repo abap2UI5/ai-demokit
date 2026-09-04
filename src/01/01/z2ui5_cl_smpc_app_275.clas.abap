@@ -20,10 +20,10 @@ CLASS z2ui5_cl_smpc_app_275 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -32,11 +32,42 @@ CLASS z2ui5_cl_smpc_app_275 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    DATA temp3 TYPE string_table.
+    DATA temp4 TYPE string_table.
+    DATA temp5 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the controller's only handler is MessageToast.show('The generic tile is
     " pressed.') - a constant text, so every press is the roundtrip-free
     " client toast (app 005 idiom) and the app stays init-only
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `The generic tile is pressed.` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp2.
+    INSERT `show` INTO TABLE temp2.
+    INSERT `The generic tile is pressed.` INTO TABLE temp2.
+    
+    CLEAR temp3.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp3.
+    INSERT `show` INTO TABLE temp3.
+    INSERT `The generic tile is pressed.` INTO TABLE temp3.
+    
+    CLEAR temp4.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp4.
+    INSERT `show` INTO TABLE temp4.
+    INSERT `The generic tile is pressed.` INTO TABLE temp4.
+    
+    CLEAR temp5.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp5.
+    INSERT `show` INTO TABLE temp5.
+    INSERT `The generic tile is pressed.` INTO TABLE temp5.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -67,7 +98,7 @@ CLASS z2ui5_cl_smpc_app_275 IMPLEMENTATION.
             )->a( n = `header`    v = `Status Loaded - with press event`
             )->a( n = `subheader` v = `Subheader`
             )->a( n = `press`     v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The generic tile is pressed.` ) ) )
+                                                                t_arg = temp1 )
 
             )->ele( `TileContent`
                 )->a( n = `unit`   v = `Unit`
@@ -105,7 +136,7 @@ CLASS z2ui5_cl_smpc_app_275 IMPLEMENTATION.
             )->a( n = `subheader` v = `Subheader`
             )->a( n = `state`     v = `Loading`
             )->a( n = `press`     v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The generic tile is pressed.` ) ) )
+                                                                t_arg = temp2 )
 
             )->ele( `TileContent`
                 )->a( n = `unit`   v = `Unit`
@@ -148,7 +179,7 @@ CLASS z2ui5_cl_smpc_app_275 IMPLEMENTATION.
             )->a( n = `frameType` v = `TwoByOne`
             )->a( n = `state`     v = `Failed`
             )->a( n = `press`     v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The generic tile is pressed.` ) ) )
+                                                                t_arg = temp3 )
 
             )->ele( `TileContent`
                 )->a( n = `unit`   v = `Unit`
@@ -187,7 +218,7 @@ CLASS z2ui5_cl_smpc_app_275 IMPLEMENTATION.
                 )->a( n = `frameType`       v = `TwoByOne`
                 )->a( n = `state`           v = `Loaded`
                 )->a( n = `press`           v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                          t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The generic tile is pressed.` ) ) )
+                                                                          t_arg = temp4 )
 
                 )->ele( `TileContent`
                     )->a( n = `unit`   v = `Unit`
@@ -225,7 +256,7 @@ CLASS z2ui5_cl_smpc_app_275 IMPLEMENTATION.
             )->a( n = `subheader` v = `Subheader`
             )->a( n = `state`     v = `Disabled`
             )->a( n = `press`     v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The generic tile is pressed.` ) ) )
+                                                                t_arg = temp5 )
 
             )->ele( `TileContent`
                 )->a( n = `footer` v = `Footer`

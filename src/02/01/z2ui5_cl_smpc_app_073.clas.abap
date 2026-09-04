@@ -32,12 +32,12 @@ CLASS z2ui5_cl_smpc_app_073 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -46,8 +46,17 @@ CLASS z2ui5_cl_smpc_app_073 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 LIKE LINE OF temp1.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `REDIRECT` INTO TABLE temp1.
+    
+    temp2 = |\{ URL: 'http://www.sap.com', NEW_WINDOW: true \}|.
+    INSERT temp2 INTO TABLE temp1.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -98,7 +107,7 @@ CLASS z2ui5_cl_smpc_app_073 IMPLEMENTATION.
                     )->a( n = `active` v = `true`
                     " the original handleSAPLinkPressed - URLHelper redirect as the URLHELPER REDIRECT frontend action (see sidecar)
                     )->a( n = `press`  v = client->follow_up_action( val   = client->cs_event-urlhelper
-                                                                     t_arg = VALUE #( ( `REDIRECT` ) ( |\{ URL: 'http://www.sap.com', NEW_WINDOW: true \}| ) ) )
+                                                                     t_arg = temp1 )
 
                 )->tag( `Label`
                     )->a( n = `text`   v = `Active Object Attribute which has only title, therefore no link is displayed`
@@ -152,11 +161,13 @@ CLASS z2ui5_cl_smpc_app_073 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA popup TYPE REF TO z2ui5_cl_ui5_view_builder.
 
     CASE client->get_event( ).
       WHEN `FEEDBACK`.
         " the original's handleFeedbacklinkPressed - a Dialog with a RatingIndicator + TextArea and Submit/Cancel
-        DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
+        
+        popup = z2ui5_cl_ui5_view_builder=>factory( ).
         popup->ele( n = `FragmentDefinition` ns = `core`
             )->a( n = `xmlns`      v = `sap.m`
             )->a( n = `xmlns:core` v = `sap.ui.core`
@@ -207,9 +218,13 @@ CLASS z2ui5_cl_smpc_app_073 IMPLEMENTATION.
   METHOD model_init.
 
     " the bound record /ProductCollection/0 (Notebook Basic 15) of ui5/mock/products.json, verbatim
-    s_product = VALUE #( weight_measure = `4.2` weight_unit = `KG`
-                         width          = `30`  depth       = `18`
-                         height         = `3`   dim_unit    = `cm` ).
+    CLEAR s_product.
+    s_product-weight_measure = `4.2`.
+    s_product-weight_unit = `KG`.
+    s_product-width = `30`.
+    s_product-depth = `18`.
+    s_product-height = `3`.
+    s_product-dim_unit = `cm`.
 
   ENDMETHOD.
 

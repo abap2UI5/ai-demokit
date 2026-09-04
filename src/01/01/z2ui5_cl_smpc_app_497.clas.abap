@@ -10,7 +10,7 @@ CLASS z2ui5_cl_smpc_app_497 DEFINITION PUBLIC.
              productid     TYPE string,
              productpicurl TYPE string,
            END OF ty_s_product.
-    TYPES ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
+    TYPES ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH DEFAULT KEY.
 
     DATA t_products  TYPE ty_t_product.
     DATA swipe_text  TYPE string VALUE `Approve`.
@@ -32,12 +32,12 @@ CLASS z2ui5_cl_smpc_app_497 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -46,7 +46,8 @@ CLASS z2ui5_cl_smpc_app_497 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
@@ -81,6 +82,8 @@ CLASS z2ui5_cl_smpc_app_497 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp1 TYPE i.
+        DATA index LIKE temp1.
 
     CASE client->get_event( ).
 
@@ -97,7 +100,10 @@ CLASS z2ui5_cl_smpc_app_497 IMPLEMENTATION.
         ENDIF.
 
       WHEN `REJECT`.
-        DATA(index) = CONV i( client->get_event_arg( ) ).
+        
+        temp1 = client->get_event_arg( ).
+        
+        index = temp1.
         IF index >= 0 AND index < lines( t_products ).
           DELETE t_products INDEX index + 1.
         ENDIF.
@@ -110,130 +116,503 @@ CLASS z2ui5_cl_smpc_app_497 IMPLEMENTATION.
   METHOD model_init.
 
     " full mock /ProductCollection of ui5/mock/products.json (the bound fields)
-    t_products = VALUE #(
-        ( name = `Notebook Basic 15`                                  productid = `HT-1000` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg` )
-        ( name = `Notebook Basic 17`                                  productid = `HT-1001` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1001.jpg` )
-        ( name = `Notebook Basic 18`                                  productid = `HT-1002` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1002.jpg` )
-        ( name = `Notebook Basic 19`                                  productid = `HT-1003` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1003.jpg` )
-        ( name = `ITelO Vault`                                        productid = `HT-1007` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1007.jpg` )
-        ( name = `Notebook Professional 15`                           productid = `HT-1010` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1010.jpg` )
-        ( name = `Notebook Professional 17`                           productid = `HT-1011` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1011.jpg` )
-        ( name = `ITelO Vault Net`                                    productid = `HT-1020` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1020.jpg` )
-        ( name = `ITelO Vault SAT`                                    productid = `HT-1021` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1021.jpg` )
-        ( name = `Comfort Easy`                                       productid = `HT-1022` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1022.jpg` )
-        ( name = `Comfort Senior`                                     productid = `HT-1023` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1023.jpg` )
-        ( name = `Ergo Screen E-I`                                    productid = `HT-1030` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1030.jpg` )
-        ( name = `Ergo Screen E-II`                                   productid = `HT-1031` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1031.jpg` )
-        ( name = `Ergo Screen E-III`                                  productid = `HT-1032` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1032.jpg` )
-        ( name = `Flat Basic`                                         productid = `HT-1035` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1035.jpg` )
-        ( name = `Flat Future`                                        productid = `HT-1036` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1036.jpg` )
-        ( name = `Flat XL`                                            productid = `HT-1037` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1037.jpg` )
-        ( name = `Laser Professional Eco`                             productid = `HT-1040` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1040.jpg` )
-        ( name = `Laser Basic`                                        productid = `HT-1041` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1041.jpg` )
-        ( name = `Laser Allround`                                     productid = `HT-1042` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1042.jpg` )
-        ( name = `Ultra Jet Super Color`                              productid = `HT-1050` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1050.jpg` )
-        ( name = `Ultra Jet Mobile`                                   productid = `HT-1051` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1051.jpg` )
-        ( name = `Ultra Jet Super Highspeed`                          productid = `HT-1052` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1052.jpg` )
-        ( name = `Multi Print`                                        productid = `HT-1055` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1055.jpg` )
-        ( name = `Multi Color`                                        productid = `HT-1056` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1056.jpg` )
-        ( name = `Cordless Mouse`                                     productid = `HT-1060` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1060.jpg` )
-        ( name = `Speed Mouse`                                        productid = `HT-1061` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1061.jpg` )
-        ( name = `Track Mouse`                                        productid = `HT-1062` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1062.jpg` )
-        ( name = `Ergonomic Keyboard`                                 productid = `HT-1063` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1063.jpg` )
-        ( name = `Internet Keyboard`                                  productid = `HT-1064` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1064.jpg` )
-        ( name = `Media Keyboard`                                     productid = `HT-1065` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1065.jpg` )
-        ( name = `Mousepad`                                           productid = `HT-1066` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1066.jpg` )
-        ( name = `Ergo Mousepad`                                      productid = `HT-1067` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1067.jpg` )
-        ( name = `Designer Mousepad`                                  productid = `HT-1068` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1068.jpg` )
-        ( name = `Universal card reader`                              productid = `HT-1069` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1069.jpg` )
-        ( name = `Proctra X`                                          productid = `HT-1070` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1070.jpg` )
-        ( name = `Gladiator MX`                                       productid = `HT-1071` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1071.jpg` )
-        ( name = `Hurricane GX`                                       productid = `HT-1072` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1072.jpg` )
-        ( name = `Hurricane GX/LN`                                    productid = `HT-1073` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1073.jpg` )
-        ( name = `Photo Scan`                                         productid = `HT-1080` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1080.jpg` )
-        ( name = `Power Scan`                                         productid = `HT-1081` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1081.jpg` )
-        ( name = `Jet Scan Professional`                              productid = `HT-1082` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1082.jpg` )
-        ( name = `Jet Scan Professional`                              productid = `HT-1083` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1083.jpg` )
-        ( name = `Copymaster`                                         productid = `HT-1085` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1085.jpg` )
-        ( name = `Surround Sound`                                     productid = `HT-1090` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1090.jpg` )
-        ( name = `Blaster Extreme`                                    productid = `HT-1091` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1091.jpg` )
-        ( name = `Sound Booster`                                      productid = `HT-1092` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1092.jpg` )
-        ( name = `Lovely Sound 5.1 Wireless`                          productid = `HT-1095` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1095.jpg` )
-        ( name = `Lovely Sound 5.1`                                   productid = `HT-1096` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1096.jpg` )
-        ( name = `Lovely Sound Stereo`                                productid = `HT-1097` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1097.jpg` )
-        ( name = `Smart Office`                                       productid = `HT-1100` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1100.jpg` )
-        ( name = `Smart Design`                                       productid = `HT-1101` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1101.jpg` )
-        ( name = `Smart Network`                                      productid = `HT-1102` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1102.jpg` )
-        ( name = `Smart Multimedia`                                   productid = `HT-1103` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1103.jpg` )
-        ( name = `Smart Games`                                        productid = `HT-1104` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1104.jpg` )
-        ( name = `Smart Internet Antivirus`                           productid = `HT-1105` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1105.jpg` )
-        ( name = `Smart Firewall`                                     productid = `HT-1106` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1106.jpg` )
-        ( name = `Smart Money`                                        productid = `HT-1107` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1107.jpg` )
-        ( name = `PC Lock`                                            productid = `HT-1110` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1110.jpg` )
-        ( name = `Notebook Lock`                                      productid = `HT-1111` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1111.jpg` )
-        ( name = `Web cam reality`                                    productid = `HT-1112` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1112.jpg` )
-        ( name = `Screen clean`                                       productid = `HT-1113` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1113.jpg` )
-        ( name = `Fabric bag professional`                            productid = `HT-1114` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1114.jpg` )
-        ( name = `Wireless DSL Router`                                productid = `HT-1115` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1115.jpg` )
-        ( name = `Wireless DSL Router / Repeater`                     productid = `HT-1116` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1116.jpg` )
-        ( name = `Wireless DSL Router / Repeater and Print Server`    productid = `HT-1117` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1117.jpg` )
-        ( name = `USB Stick`                                          productid = `HT-1118` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1118.jpg` )
-        ( name = `Travel Adapter`                                     productid = `HT-1119` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1119.jpg` )
-        ( name = `Cordless Bluetooth Keyboard, english international` productid = `HT-1120` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1120.jpg` )
-        ( name = `Flat XXL`                                           productid = `HT-1137` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1137.jpg` )
-        ( name = `Pocket Mouse`                                       productid = `HT-1138` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1138.jpg` )
-        ( name = `PC Power Station`                                   productid = `HT-1210` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1210.jpg` )
-        ( name = `Astro Laptop 1516`                                  productid = `HT-1251` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1251.jpg` )
-        ( name = `Astro Phone 6`                                      productid = `HT-1252` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1252.jpg` )
-        ( name = `Benda Laptop 1408`                                  productid = `HT-1253` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1253.jpg` )
-        ( name = `Bending Screen 21HD`                                productid = `HT-1254` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1254.jpg` )
-        ( name = `Broad Screen 22HD`                                  productid = `HT-1255` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1255.jpg` )
-        ( name = `Cerdik Phone 7`                                     productid = `HT-1256` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1256.jpg` )
-        ( name = `Cepat Tablet 10.5`                                  productid = `HT-1257` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1257.jpg` )
-        ( name = `Cepat Tablet 8`                                     productid = `HT-1258` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1258.jpg` )
-        ( name = `Server Basic`                                       productid = `HT-1500` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1500.jpg` )
-        ( name = `Server Professional`                                productid = `HT-1501` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1501.jpg` )
-        ( name = `Server Power Pro`                                   productid = `HT-1502` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1502.jpg` )
-        ( name = `Family PC Basic`                                    productid = `HT-1600` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1600.jpg` )
-        ( name = `Family PC Pro`                                      productid = `HT-1601` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1601.jpg` )
-        ( name = `Gaming Monster`                                     productid = `HT-1602` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1602.jpg` )
-        ( name = `Gaming Monster Pro`                                 productid = `HT-1603` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1603.jpg` )
-        ( name = `7" Widescreen Portable DVD Player w MP3`            productid = `HT-2000` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2000.jpg` )
-        ( name = `10" Portable DVD player`                            productid = `HT-2001` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2001.jpg` )
-        ( name = `Portable DVD Player with 9" LCD Monitor`            productid = `HT-2002` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2002.jpg` )
-        ( name = `CD/DVD case: 264 sleeves`                           productid = `HT-2025` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2025.jpg` )
-        ( name = `Audio/Video Cable Kit - 4m`                         productid = `HT-2026` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2026.jpg` )
-        ( name = `Removable CD/DVD Laser Labels`                      productid = `HT-2027` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2027.jpg` )
-        ( name = `Beam Breaker B-1`                                   productid = `HT-6100` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6100.jpg` )
-        ( name = `Beam Breaker B-2`                                   productid = `HT-6101` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6101.jpg` )
-        ( name = `Beam Breaker B-3`                                   productid = `HT-6102` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6102.jpg` )
-        ( name = `Play Movie`                                         productid = `HT-6110` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6110.jpg` )
-        ( name = `Record Movie`                                       productid = `HT-6111` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6111.jpg` )
-        ( name = `ITelo MusicStick`                                   productid = `HT-6120` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6120.jpg` )
-        ( name = `ITelo Jog-Mate`                                     productid = `HT-6121` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6121.jpg` )
-        ( name = `Power Pro Player 40`                                productid = `HT-6122` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6122.jpg` )
-        ( name = `Power Pro Player 80`                                productid = `HT-6123` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6123.jpg` )
-        ( name = `Flat Watch HD32`                                    productid = `HT-6130` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6130.jpg` )
-        ( name = `Flat Watch HD37`                                    productid = `HT-6131` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6131.jpg` )
-        ( name = `Flat Watch HD41`                                    productid = `HT-6132` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6132.jpg` )
-        ( name = `Copperberry`                                        productid = `HT-7000` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7000.jpg` )
-        ( name = `Silverberry`                                        productid = `HT-7010` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7010.jpg` )
-        ( name = `Goldberry`                                          productid = `HT-7020` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7020.jpg` )
-        ( name = `Platinberry`                                        productid = `HT-7030` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7030.jpg` )
-        ( name = `ITelO FlexTop I4000`                                productid = `HT-8000` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-8000.jpg` )
-        ( name = `ITelO FlexTop I6300c`                               productid = `HT-8001` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-8001.jpg` )
-        ( name = `ITelO FlexTop I9100`                                productid = `HT-8002` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-8002.jpg` )
-        ( name = `ITelO FlexTop I9800`                                productid = `HT-8003` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-8003.jpg` )
-        ( name = `Smartphone Leather Case`                            productid = `HT-9991` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9991.jpg` )
-        ( name = `Smartphone Alpha`                                   productid = `HT-9992` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9992.jpg` )
-        ( name = `Mini Tablet`                                        productid = `HT-9993` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9993.jpg` )
-        ( name = `Camcorder View`                                     productid = `HT-9994` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9994.jpg` )
-        ( name = `Tablet Pouch`                                       productid = `HT-9995` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9995.jpg` )
-        ( name = `Tablet Pouch`                                       productid = `HT-9996` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9996.jpg` )
-        ( name = `e-Book Reader ReadMe`                               productid = `HT-9997` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9997.jpg` )
-        ( name = `Smartphone Beta`                                    productid = `HT-9998` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9998.jpg` )
-        ( name = `Maxi Tablet`                                        productid = `HT-9999` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9999.jpg` )
-        ( name = `Flyer`                                              productid = `PF-1000` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/PF-1000.jpg` ) ).
+    DATA temp2 TYPE z2ui5_cl_smpc_app_497=>ty_t_product.
+    DATA temp3 LIKE LINE OF temp2.
+    CLEAR temp2.
+    
+    temp3-name = `Notebook Basic 15`.
+    temp3-productid = `HT-1000`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Notebook Basic 17`.
+    temp3-productid = `HT-1001`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1001.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Notebook Basic 18`.
+    temp3-productid = `HT-1002`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1002.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Notebook Basic 19`.
+    temp3-productid = `HT-1003`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1003.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `ITelO Vault`.
+    temp3-productid = `HT-1007`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1007.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Notebook Professional 15`.
+    temp3-productid = `HT-1010`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1010.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Notebook Professional 17`.
+    temp3-productid = `HT-1011`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1011.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `ITelO Vault Net`.
+    temp3-productid = `HT-1020`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1020.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `ITelO Vault SAT`.
+    temp3-productid = `HT-1021`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1021.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Comfort Easy`.
+    temp3-productid = `HT-1022`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1022.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Comfort Senior`.
+    temp3-productid = `HT-1023`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1023.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Ergo Screen E-I`.
+    temp3-productid = `HT-1030`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1030.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Ergo Screen E-II`.
+    temp3-productid = `HT-1031`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1031.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Ergo Screen E-III`.
+    temp3-productid = `HT-1032`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1032.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Flat Basic`.
+    temp3-productid = `HT-1035`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1035.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Flat Future`.
+    temp3-productid = `HT-1036`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1036.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Flat XL`.
+    temp3-productid = `HT-1037`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1037.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Laser Professional Eco`.
+    temp3-productid = `HT-1040`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1040.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Laser Basic`.
+    temp3-productid = `HT-1041`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1041.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Laser Allround`.
+    temp3-productid = `HT-1042`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1042.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Ultra Jet Super Color`.
+    temp3-productid = `HT-1050`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1050.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Ultra Jet Mobile`.
+    temp3-productid = `HT-1051`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1051.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Ultra Jet Super Highspeed`.
+    temp3-productid = `HT-1052`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1052.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Multi Print`.
+    temp3-productid = `HT-1055`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1055.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Multi Color`.
+    temp3-productid = `HT-1056`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1056.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Cordless Mouse`.
+    temp3-productid = `HT-1060`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1060.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Speed Mouse`.
+    temp3-productid = `HT-1061`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1061.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Track Mouse`.
+    temp3-productid = `HT-1062`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1062.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Ergonomic Keyboard`.
+    temp3-productid = `HT-1063`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1063.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Internet Keyboard`.
+    temp3-productid = `HT-1064`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1064.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Media Keyboard`.
+    temp3-productid = `HT-1065`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1065.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Mousepad`.
+    temp3-productid = `HT-1066`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1066.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Ergo Mousepad`.
+    temp3-productid = `HT-1067`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1067.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Designer Mousepad`.
+    temp3-productid = `HT-1068`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1068.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Universal card reader`.
+    temp3-productid = `HT-1069`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1069.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Proctra X`.
+    temp3-productid = `HT-1070`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1070.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Gladiator MX`.
+    temp3-productid = `HT-1071`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1071.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Hurricane GX`.
+    temp3-productid = `HT-1072`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1072.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Hurricane GX/LN`.
+    temp3-productid = `HT-1073`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1073.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Photo Scan`.
+    temp3-productid = `HT-1080`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1080.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Power Scan`.
+    temp3-productid = `HT-1081`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1081.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Jet Scan Professional`.
+    temp3-productid = `HT-1082`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1082.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Jet Scan Professional`.
+    temp3-productid = `HT-1083`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1083.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Copymaster`.
+    temp3-productid = `HT-1085`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1085.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Surround Sound`.
+    temp3-productid = `HT-1090`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1090.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Blaster Extreme`.
+    temp3-productid = `HT-1091`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1091.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Sound Booster`.
+    temp3-productid = `HT-1092`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1092.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Lovely Sound 5.1 Wireless`.
+    temp3-productid = `HT-1095`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1095.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Lovely Sound 5.1`.
+    temp3-productid = `HT-1096`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1096.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Lovely Sound Stereo`.
+    temp3-productid = `HT-1097`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1097.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Smart Office`.
+    temp3-productid = `HT-1100`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1100.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Smart Design`.
+    temp3-productid = `HT-1101`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1101.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Smart Network`.
+    temp3-productid = `HT-1102`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1102.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Smart Multimedia`.
+    temp3-productid = `HT-1103`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1103.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Smart Games`.
+    temp3-productid = `HT-1104`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1104.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Smart Internet Antivirus`.
+    temp3-productid = `HT-1105`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1105.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Smart Firewall`.
+    temp3-productid = `HT-1106`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1106.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Smart Money`.
+    temp3-productid = `HT-1107`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1107.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `PC Lock`.
+    temp3-productid = `HT-1110`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1110.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Notebook Lock`.
+    temp3-productid = `HT-1111`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1111.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Web cam reality`.
+    temp3-productid = `HT-1112`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1112.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Screen clean`.
+    temp3-productid = `HT-1113`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1113.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Fabric bag professional`.
+    temp3-productid = `HT-1114`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1114.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Wireless DSL Router`.
+    temp3-productid = `HT-1115`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1115.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Wireless DSL Router / Repeater`.
+    temp3-productid = `HT-1116`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1116.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Wireless DSL Router / Repeater and Print Server`.
+    temp3-productid = `HT-1117`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1117.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `USB Stick`.
+    temp3-productid = `HT-1118`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1118.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Travel Adapter`.
+    temp3-productid = `HT-1119`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1119.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Cordless Bluetooth Keyboard, english international`.
+    temp3-productid = `HT-1120`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1120.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Flat XXL`.
+    temp3-productid = `HT-1137`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1137.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Pocket Mouse`.
+    temp3-productid = `HT-1138`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1138.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `PC Power Station`.
+    temp3-productid = `HT-1210`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1210.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Astro Laptop 1516`.
+    temp3-productid = `HT-1251`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1251.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Astro Phone 6`.
+    temp3-productid = `HT-1252`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1252.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Benda Laptop 1408`.
+    temp3-productid = `HT-1253`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1253.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Bending Screen 21HD`.
+    temp3-productid = `HT-1254`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1254.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Broad Screen 22HD`.
+    temp3-productid = `HT-1255`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1255.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Cerdik Phone 7`.
+    temp3-productid = `HT-1256`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1256.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Cepat Tablet 10.5`.
+    temp3-productid = `HT-1257`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1257.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Cepat Tablet 8`.
+    temp3-productid = `HT-1258`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1258.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Server Basic`.
+    temp3-productid = `HT-1500`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1500.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Server Professional`.
+    temp3-productid = `HT-1501`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1501.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Server Power Pro`.
+    temp3-productid = `HT-1502`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1502.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Family PC Basic`.
+    temp3-productid = `HT-1600`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1600.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Family PC Pro`.
+    temp3-productid = `HT-1601`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1601.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Gaming Monster`.
+    temp3-productid = `HT-1602`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1602.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Gaming Monster Pro`.
+    temp3-productid = `HT-1603`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1603.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `7" Widescreen Portable DVD Player w MP3`.
+    temp3-productid = `HT-2000`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2000.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `10" Portable DVD player`.
+    temp3-productid = `HT-2001`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2001.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Portable DVD Player with 9" LCD Monitor`.
+    temp3-productid = `HT-2002`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2002.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `CD/DVD case: 264 sleeves`.
+    temp3-productid = `HT-2025`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2025.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Audio/Video Cable Kit - 4m`.
+    temp3-productid = `HT-2026`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2026.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Removable CD/DVD Laser Labels`.
+    temp3-productid = `HT-2027`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2027.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Beam Breaker B-1`.
+    temp3-productid = `HT-6100`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6100.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Beam Breaker B-2`.
+    temp3-productid = `HT-6101`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6101.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Beam Breaker B-3`.
+    temp3-productid = `HT-6102`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6102.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Play Movie`.
+    temp3-productid = `HT-6110`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6110.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Record Movie`.
+    temp3-productid = `HT-6111`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6111.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `ITelo MusicStick`.
+    temp3-productid = `HT-6120`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6120.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `ITelo Jog-Mate`.
+    temp3-productid = `HT-6121`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6121.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Power Pro Player 40`.
+    temp3-productid = `HT-6122`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6122.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Power Pro Player 80`.
+    temp3-productid = `HT-6123`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6123.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Flat Watch HD32`.
+    temp3-productid = `HT-6130`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6130.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Flat Watch HD37`.
+    temp3-productid = `HT-6131`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6131.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Flat Watch HD41`.
+    temp3-productid = `HT-6132`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6132.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Copperberry`.
+    temp3-productid = `HT-7000`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7000.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Silverberry`.
+    temp3-productid = `HT-7010`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7010.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Goldberry`.
+    temp3-productid = `HT-7020`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7020.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Platinberry`.
+    temp3-productid = `HT-7030`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7030.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `ITelO FlexTop I4000`.
+    temp3-productid = `HT-8000`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-8000.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `ITelO FlexTop I6300c`.
+    temp3-productid = `HT-8001`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-8001.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `ITelO FlexTop I9100`.
+    temp3-productid = `HT-8002`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-8002.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `ITelO FlexTop I9800`.
+    temp3-productid = `HT-8003`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-8003.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Smartphone Leather Case`.
+    temp3-productid = `HT-9991`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9991.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Smartphone Alpha`.
+    temp3-productid = `HT-9992`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9992.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Mini Tablet`.
+    temp3-productid = `HT-9993`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9993.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Camcorder View`.
+    temp3-productid = `HT-9994`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9994.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Tablet Pouch`.
+    temp3-productid = `HT-9995`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9995.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Tablet Pouch`.
+    temp3-productid = `HT-9996`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9996.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `e-Book Reader ReadMe`.
+    temp3-productid = `HT-9997`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9997.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Smartphone Beta`.
+    temp3-productid = `HT-9998`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9998.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Maxi Tablet`.
+    temp3-productid = `HT-9999`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9999.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-name = `Flyer`.
+    temp3-productid = `PF-1000`.
+    temp3-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/PF-1000.jpg`.
+    INSERT temp3 INTO TABLE temp2.
+    t_products = temp2.
 
   ENDMETHOD.
 

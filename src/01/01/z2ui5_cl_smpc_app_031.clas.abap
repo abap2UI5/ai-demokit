@@ -19,7 +19,7 @@ CLASS z2ui5_cl_smpc_app_031 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -29,13 +29,20 @@ CLASS z2ui5_cl_smpc_app_031 IMPLEMENTATION.
   METHOD view_display.
 
     " fixed values of the original img JSONModel (/products/pic1, /products/pic3)
-    DATA(pic1) = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg`.
-    DATA(pic3) = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6100-large.jpg`.
+    DATA pic1 TYPE string.
+    DATA pic3 TYPE string.
+    DATA size TYPE string.
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    pic1 = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg`.
+    
+    pic3 = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6100-large.jpg`.
 
     " the original's device-dependent image size (5em phone / 10em otherwise), expressed over the framework's device> model
-    DATA(size) = `{= ${device>/system/phone} ? '5em' : '10em' }`.
+    
+    size = `{= ${device>/system/phone} ? '5em' : '10em' }`.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`

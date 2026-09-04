@@ -9,7 +9,7 @@ CLASS z2ui5_cl_smpc_app_232 DEFINITION PUBLIC.
              key  TYPE string,
              text TYPE string,
            END OF ty_s_country.
-    DATA t_countries TYPE STANDARD TABLE OF ty_s_country WITH EMPTY KEY.
+    DATA t_countries TYPE STANDARD TABLE OF ty_s_country WITH DEFAULT KEY.
     DATA value    TYPE string.
     DATA selected TYPE string.
     " the sample's $cmd> command model (CommandExecution enabled/visible) has no
@@ -38,12 +38,12 @@ CLASS z2ui5_cl_smpc_app_232 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -52,8 +52,24 @@ CLASS z2ui5_cl_smpc_app_232 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    DATA temp3 TYPE string_table.
+    DATA temp5 TYPE string_table.
+    DATA temp7 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `popover` INTO TABLE temp1.
+    INSERT `openBy` INTO TABLE temp1.
+    INSERT `$event.oSource.sId` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `popoverCommand` INTO TABLE temp2.
+    INSERT `openBy` INTO TABLE temp2.
+    INSERT `$event.oSource.sId` INTO TABLE temp2.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
@@ -178,7 +194,7 @@ CLASS z2ui5_cl_smpc_app_232 IMPLEMENTATION.
                         )->a( n = `text`         v = `Open Popover`
                         )->a( n = `ariaHasPopup` v = `Dialog`
                         )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                               t_arg = VALUE #( ( `popover` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
+                                                                               t_arg = temp1 )
 
                 )->end(
 
@@ -189,7 +205,7 @@ CLASS z2ui5_cl_smpc_app_232 IMPLEMENTATION.
                         )->a( n = `text`         v = `Open Popover`
                         )->a( n = `ariaHasPopup` v = `Dialog`
                         )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                               t_arg = VALUE #( ( `popoverCommand` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
+                                                                               t_arg = temp2 )
 
                 )->end(
 
@@ -254,10 +270,18 @@ CLASS z2ui5_cl_smpc_app_232 IMPLEMENTATION.
     " the manifest's sap.ui5/commands shortcuts (Save = Ctrl+S, Delete = Ctrl+D)
     " - registered as declarative combo -> named-event bindings; pressing the
     " combo fires the event like a button press and suppresses the browser default
+    
+    CLEAR temp3.
+    INSERT `Ctrl+S` INTO TABLE temp3.
+    INSERT `SAVE` INTO TABLE temp3.
     client->follow_up_action( val   = client->cs_event-keyboard_shortcut
-                              t_arg = VALUE #( ( `Ctrl+S` ) ( `SAVE` ) ) ).
+                              t_arg = temp3 ).
+    
+    CLEAR temp5.
+    INSERT `Ctrl+D` INTO TABLE temp5.
+    INSERT `DELETE` INTO TABLE temp5.
     client->follow_up_action( val   = client->cs_event-keyboard_shortcut
-                              t_arg = VALUE #( ( `Ctrl+D` ) ( `DELETE` ) ) ).
+                              t_arg = temp5 ).
     " CE_SAVE_POPOVER: the sample's point is that a CommandExecution in a
     " Popover's dependents SHADOWS the page-level one for the same command
     " while the popover is open - so Ctrl+S is registered a second time,
@@ -265,10 +289,13 @@ CLASS z2ui5_cl_smpc_app_232 IMPLEMENTATION.
     " enabled/visible flags gate) instead of SAVE. The scope is the CONTROL
     " id: this Popover is declared in the view and opened with openBy, so it
     " never enters the framework's popover SLOT
+    
+    CLEAR temp7.
+    INSERT `Ctrl+S` INTO TABLE temp7.
+    INSERT `PSAVE` INTO TABLE temp7.
+    INSERT `popoverCommand` INTO TABLE temp7.
     client->follow_up_action( val   = client->cs_event-keyboard_shortcut
-                              t_arg = VALUE #( ( `Ctrl+S` )
-                                               ( `PSAVE` )
-                                               ( `popoverCommand` ) ) ).
+                              t_arg = temp7 ).
 
   ENDMETHOD.
 
@@ -311,6 +338,8 @@ CLASS z2ui5_cl_smpc_app_232 IMPLEMENTATION.
 
 
   METHOD model_init.
+    DATA temp9 LIKE t_countries.
+    DATA temp10 LIKE LINE OF temp9.
 
     value    = `HelloWorld!`.
     selected = ``.
@@ -322,8 +351,16 @@ CLASS z2ui5_cl_smpc_app_232 IMPLEMENTATION.
     psave_enabled  = abap_true.
     psave_visible  = abap_true.
 
-    t_countries = VALUE #( ( key = `DZ` text = `Algeria` )
-                           ( key = `AR` text = `Argentina` ) ).
+    
+    CLEAR temp9.
+    
+    temp10-key = `DZ`.
+    temp10-text = `Algeria`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-key = `AR`.
+    temp10-text = `Argentina`.
+    INSERT temp10 INTO TABLE temp9.
+    t_countries = temp9.
 
   ENDMETHOD.
 

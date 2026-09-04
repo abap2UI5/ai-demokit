@@ -39,9 +39,9 @@ CLASS z2ui5_cl_smpc_app_562 DEFINITION PUBLIC.
         code           TYPE string,
       END OF ty_s_message.
 
-    DATA t_forms      TYPE STANDARD TABLE OF ty_s_form WITH EMPTY KEY.
-    DATA t_employment TYPE STANDARD TABLE OF ty_s_employment WITH EMPTY KEY.
-    DATA t_messages   TYPE STANDARD TABLE OF ty_s_message WITH EMPTY KEY.
+    DATA t_forms      TYPE STANDARD TABLE OF ty_s_form WITH DEFAULT KEY.
+    DATA t_employment TYPE STANDARD TABLE OF ty_s_employment WITH DEFAULT KEY.
+    DATA t_messages   TYPE STANDARD TABLE OF ty_s_message WITH DEFAULT KEY.
 
     " the fragment's title is `Hello {/recipient/name}` - the shared demo kit
     " forms.json carries no `recipient` node at all, so the original renders a
@@ -71,12 +71,12 @@ CLASS z2ui5_cl_smpc_app_562 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -85,7 +85,8 @@ CLASS z2ui5_cl_smpc_app_562 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
@@ -111,9 +112,14 @@ CLASS z2ui5_cl_smpc_app_562 IMPLEMENTATION.
 
   METHOD popup_dialog_display.
 
-    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA popup TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA dialog TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA content TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    popup = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    DATA(dialog) = popup->ele( n = `FragmentDefinition` ns = `core`
+    
+    dialog = popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns`       v = `sap.m`
         )->a( n = `xmlns:f`     v = `sap.ui.layout.form`
         )->a( n = `xmlns:mvc`   v = `sap.ui.core.mvc`
@@ -124,7 +130,8 @@ CLASS z2ui5_cl_smpc_app_562 IMPLEMENTATION.
             )->a( n = `id`    v = `mainDialog`
             )->a( n = `title` v = |Hello { client->_bind( recipient_name ) }| ).
 
-    DATA(content) = dialog->ele( `content` ).
+    
+    content = dialog->ele( `content` ).
 
     content->ele( `VBox`
         )->a( n = `id`    v = `formContainer`
@@ -272,6 +279,11 @@ CLASS z2ui5_cl_smpc_app_562 IMPLEMENTATION.
     content->tag( n = `MessageManager` ns = `z2ui5`
         )->a( n = `items` v = client->_bind( t_messages ) ).
 
+    
+    CLEAR temp1.
+    INSERT `messagePopover` INTO TABLE temp1.
+    INSERT `toggleBy` INTO TABLE temp1.
+    INSERT `messagePopoverBtn` INTO TABLE temp1.
     dialog->ele( `footer`
         )->ele( `Toolbar`
             )->ele( `content`
@@ -286,7 +298,7 @@ CLASS z2ui5_cl_smpc_app_562 IMPLEMENTATION.
                     " handleMessagePopoverPress: this.oMP.toggle(oEvent.getSource()) - a pure
                     " client-side toggle, so wired roundtrip-free onto the button's own id
                     )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                           t_arg = VALUE #( ( `messagePopover` ) ( `toggleBy` ) ( `messagePopoverBtn` ) ) )
+                                                                           t_arg = temp1 )
 
                     )->ele( `dependents`
                         )->ele( `MessagePopover`
@@ -334,6 +346,21 @@ CLASS z2ui5_cl_smpc_app_562 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA control_id TYPE string.
+          DATA temp3 TYPE string_table.
+          DATA temp5 TYPE string_table.
+          DATA temp7 TYPE string_table.
+          FIELD-SYMBOLS <temp9> LIKE LINE OF t_forms.
+          DATA temp10 LIKE sy-tabix.
+          FIELD-SYMBOLS <temp11> LIKE LINE OF t_forms.
+          DATA temp12 LIKE sy-tabix.
+          FIELD-SYMBOLS <temp13> LIKE LINE OF t_forms.
+          DATA temp14 LIKE sy-tabix.
+          FIELD-SYMBOLS <temp15> LIKE LINE OF t_employment.
+          DATA temp16 LIKE sy-tabix.
+        DATA temp17 LIKE t_messages.
+        DATA temp18 LIKE LINE OF temp17.
+        DATA temp19 TYPE string_table.
 
     CASE client->get_event( ).
 
@@ -348,14 +375,25 @@ CLASS z2ui5_cl_smpc_app_562 IMPLEMENTATION.
         " activeTitlePress scrolls to the message's target control, closes the popover
         " and focuses the control; the full control id travels from the pressed
         " MessageItem's message object (getControlIds()[0])
-        DATA(control_id) = client->get_event_arg( ).
+        
+        control_id = client->get_event_arg( ).
         IF control_id IS NOT INITIAL.
+          
+          CLEAR temp3.
+          INSERT control_id INTO TABLE temp3.
           client->follow_up_action( val   = client->cs_event-scroll_into_view
-                                    t_arg = VALUE #( ( control_id ) ) ).
+                                    t_arg = temp3 ).
+          
+          CLEAR temp5.
+          INSERT `messagePopover` INTO TABLE temp5.
+          INSERT `close` INTO TABLE temp5.
           client->follow_up_action( val   = client->cs_event-control_by_id
-                                    t_arg = VALUE #( ( `messagePopover` ) ( `close` ) ) ).
+                                    t_arg = temp5 ).
+          
+          CLEAR temp7.
+          INSERT control_id INTO TABLE temp7.
           client->follow_up_action( val   = client->cs_event-set_focus
-                                    t_arg = VALUE #( ( control_id ) ) ).
+                                    t_arg = temp7 ).
         ENDIF.
 
       WHEN `SAVE`.
@@ -366,31 +404,87 @@ CLASS z2ui5_cl_smpc_app_562 IMPLEMENTATION.
         " reaches through formContainer.getItems()[4/5/6] - John Miller / Stefan Bosch
         " / Maria Fontes - plus the employment row, and authors the matching messages
         IF lines( t_forms ) >= 7.
-          t_forms[ 5 ]-name     = ``.
-          t_forms[ 6 ]-zip_code = `AAA`.
-          t_forms[ 7 ]-email    = `MariaFontes.com`.
+          
+          
+          temp10 = sy-tabix.
+          READ TABLE t_forms INDEX 5 ASSIGNING <temp9>.
+          sy-tabix = temp10.
+          IF sy-subrc <> 0.
+            ASSERT 1 = 0.
+          ENDIF.
+          <temp9>-name     = ``.
+          
+          
+          temp12 = sy-tabix.
+          READ TABLE t_forms INDEX 6 ASSIGNING <temp11>.
+          sy-tabix = temp12.
+          IF sy-subrc <> 0.
+            ASSERT 1 = 0.
+          ENDIF.
+          <temp11>-zip_code = `AAA`.
+          
+          
+          temp14 = sy-tabix.
+          READ TABLE t_forms INDEX 7 ASSIGNING <temp13>.
+          sy-tabix = temp14.
+          IF sy-subrc <> 0.
+            ASSERT 1 = 0.
+          ENDIF.
+          <temp13>-email    = `MariaFontes.com`.
         ENDIF.
         IF t_employment IS NOT INITIAL.
-          t_employment[ 1 ]-weeklyhours = `400`.
+          
+          
+          temp16 = sy-tabix.
+          READ TABLE t_employment INDEX 1 ASSIGNING <temp15>.
+          sy-tabix = temp16.
+          IF sy-subrc <> 0.
+            ASSERT 1 = 0.
+          ENDIF.
+          <temp15>-weeklyhours = `400`.
         ENDIF.
         " the group name is `<form title>, <group title>`: the Personal form's
         " Information and Contact groups, and the employment form's Rating group
         " (Standard Weekly Hours sits there in this sample)
-        t_messages = VALUE #(
-          ( message = `A mandatory field is required` type = `Error` additionaltext = `Name`
-            target = `/T_FORMS/4/NAME` code = `Personal, Information` )
-          ( message = `Enter a number without decimals.` type = `Error` additionaltext = `ZIP Code/City`
-            target = `/T_FORMS/5/ZIP_CODE` code = `Personal, Information` )
-          ( message = `Enter a valid email address.` type = `Error` additionaltext = `Email`
-            target = `/T_FORMS/6/EMAIL` code = `Personal, Contact` )
-          ( message = `The value should not exceed 40` type = `Warning` additionaltext = `Standard Weekly Hours`
-            description = `The value of the working hours field should not exceed 40 hours.`
-            target = `/T_EMPLOYMENT/0/WEEKLYHOURS` code = `Personal, Rating` ) ).
+        
+        CLEAR temp17.
+        
+        temp18-message = `A mandatory field is required`.
+        temp18-type = `Error`.
+        temp18-additionaltext = `Name`.
+        temp18-target = `/T_FORMS/4/NAME`.
+        temp18-code = `Personal, Information`.
+        INSERT temp18 INTO TABLE temp17.
+        temp18-message = `Enter a number without decimals.`.
+        temp18-type = `Error`.
+        temp18-additionaltext = `ZIP Code/City`.
+        temp18-target = `/T_FORMS/5/ZIP_CODE`.
+        temp18-code = `Personal, Information`.
+        INSERT temp18 INTO TABLE temp17.
+        temp18-message = `Enter a valid email address.`.
+        temp18-type = `Error`.
+        temp18-additionaltext = `Email`.
+        temp18-target = `/T_FORMS/6/EMAIL`.
+        temp18-code = `Personal, Contact`.
+        INSERT temp18 INTO TABLE temp17.
+        temp18-message = `The value should not exceed 40`.
+        temp18-type = `Warning`.
+        temp18-additionaltext = `Standard Weekly Hours`.
+        temp18-description = `The value of the working hours field should not exceed 40 hours.`.
+        temp18-target = `/T_EMPLOYMENT/0/WEEKLYHOURS`.
+        temp18-code = `Personal, Rating`.
+        INSERT temp18 INTO TABLE temp17.
+        t_messages = temp17.
         button_severity_set( ).
         " the binding-change handler navigates the popover back and refreshes the
         " button, then oMP.openBy(oButton) opens it anchored to the button
+        
+        CLEAR temp19.
+        INSERT `messagePopover` INTO TABLE temp19.
+        INSERT `openBy` INTO TABLE temp19.
+        INSERT `messagePopoverBtn` INTO TABLE temp19.
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `messagePopover` ) ( `openBy` ) ( `messagePopoverBtn` ) ) ).
+                                  t_arg = temp19 ).
 
       WHEN `CHANGE`.
         " onChange manually adds/removes the required-field and constraint messages;
@@ -403,12 +497,22 @@ CLASS z2ui5_cl_smpc_app_562 IMPLEMENTATION.
 
 
   METHOD button_severity_set.
+    DATA msg LIKE LINE OF t_messages.
+    DATA temp21 TYPE string.
+    DATA highest LIKE temp21.
+    DATA temp22 TYPE i.
+    DATA n TYPE i.
+    DATA m LIKE LINE OF t_messages.
+      DATA temp1 TYPE i.
+    DATA count LIKE temp22.
+    DATA temp23 TYPE string.
 
     " buttonTypeFormatter / buttonIconFormatter: Error > Warning > Success > Info
     CLEAR btn_icon.
     CLEAR btn_type.
 
-    LOOP AT t_messages INTO DATA(msg).
+    
+    LOOP AT t_messages INTO msg.
       CASE msg-type.
         WHEN `Error`.
           btn_type = `Negative`.
@@ -438,13 +542,42 @@ CLASS z2ui5_cl_smpc_app_562 IMPLEMENTATION.
     ENDLOOP.
 
     " highestSeverityMessages: how many messages carry the highest severity found
-    DATA(highest) = SWITCH string( btn_type
-                                   WHEN `Negative` THEN `Error`
-                                   WHEN `Critical` THEN `Warning`
-                                   WHEN `Success`  THEN `Success`
-                                   ELSE `Information` ).
-    DATA(count) = REDUCE i( INIT n = 0 FOR m IN t_messages NEXT n = COND #( WHEN m-type = highest THEN n + 1 ELSE n ) ).
-    btn_text = COND #( WHEN count = 0 THEN `` ELSE |{ count }| ).
+    
+    CASE btn_type.
+      WHEN `Negative`.
+        temp21 = `Error`.
+      WHEN `Critical`.
+        temp21 = `Warning`.
+      WHEN `Success`.
+        temp21 = `Success`.
+      WHEN OTHERS.
+        temp21 = `Information`.
+    ENDCASE.
+    
+    highest = temp21.
+    
+    
+    n = 0.
+    
+    LOOP AT t_messages INTO m.
+      
+      IF m-type = highest.
+        temp1 = n + 1.
+      ELSE.
+        temp1 = n.
+      ENDIF.
+      n = temp1.
+    ENDLOOP.
+    temp22 = n.
+    
+    count = temp22.
+    
+    IF count = 0.
+      temp23 = ``.
+    ELSE.
+      temp23 = |{ count }|.
+    ENDIF.
+    btn_text = temp23.
 
     " the formatter returns undefined while no message carries a severity; an empty
     " string would override the enum DEFAULT and reject the whole view
@@ -458,35 +591,113 @@ CLASS z2ui5_cl_smpc_app_562 IMPLEMENTATION.
   METHOD model_init.
 
     " the shared demo kit forms.json - all 8 forms and the single employment row
-    t_forms = VALUE #(
-      ( name = `Julie Armstrong` street_name = `Mainstreet` street_number = `1278`
-        zip_code = `12345` zip_city = `Maintown` country = `Germany`
-        email = `Julie.Armstrong@company.com` phone_number = `+1 (610) 661-1000` phone_time = `12:00` website = `n/a` )
-      ( name = `Denise Smith` street_name = `Mainstreet` street_number = `1567`
-        zip_code = `12345` zip_city = `Maintown` country = `Germany`
-        email = `Denise.Smith@company.com` phone_number = `+1 (610) 661-1000` phone_time = `12:00` website = `n/a` )
-      ( name = `Richard Wilson` street_name = `Mainstreet` street_number = `2984`
-        zip_code = `12345` zip_city = `Maintown` country = `Germany`
-        email = `Richard.Wilson@company.com` phone_number = `+1 (610) 661-1000` phone_time = `12:00` website = `n/a` )
-      ( name = `Gerd Becker` street_name = `Mainstreet` street_number = `3614`
-        zip_code = `12345` zip_city = `Maintown` country = `Germany`
-        email = `Gerd.Becker@company.com` phone_number = `+1 (610) 661-1000` phone_time = `12:00` website = `n/a` )
-      ( name = `John Miller` street_name = `Mainstreet` street_number = `1618`
-        zip_code = `AAA` zip_city = `Maintown` country = `Germany`
-        email = `John.Miller@company.com` phone_number = `+1 (610) 661-1000` phone_time = `12:00` website = `n/a` )
-      ( name = `Stefan Bosch` street_name = `Mainstreet` street_number = `4864`
-        zip_code = `12345` zip_city = `Maintown` country = `Germany`
-        email = `Stefan.Bosch@company.com` phone_number = `+1 (610) 661-1000` phone_time = `12:00` website = `n/a` )
-      ( name = `Maria Fontes` street_name = `Mainstreet` street_number = `4864`
-        zip_code = `12345` zip_city = `Maintown` country = `Germany`
-        email = `` phone_number = `+1 (610) 661-1000` phone_time = `12:00` website = `MariaFontescompany.com` )
-      ( name = `Antonio Ferrari` street_name = `Mainstreet` street_number = `2598`
-        zip_code = `12345` zip_city = `Maintown` country = `Germany`
-        email = `Antonio.Ferrari@company.com` phone_number = `+1 (610) 661-1000` phone_time = `12:00` website = `n/a` ) ).
+    DATA temp24 LIKE t_forms.
+    DATA temp25 LIKE LINE OF temp24.
+    DATA temp26 LIKE t_employment.
+    DATA temp27 LIKE LINE OF temp26.
+    CLEAR temp24.
+    
+    temp25-name = `Julie Armstrong`.
+    temp25-street_name = `Mainstreet`.
+    temp25-street_number = `1278`.
+    temp25-zip_code = `12345`.
+    temp25-zip_city = `Maintown`.
+    temp25-country = `Germany`.
+    temp25-email = `Julie.Armstrong@company.com`.
+    temp25-phone_number = `+1 (610) 661-1000`.
+    temp25-phone_time = `12:00`.
+    temp25-website = `n/a`.
+    INSERT temp25 INTO TABLE temp24.
+    temp25-name = `Denise Smith`.
+    temp25-street_name = `Mainstreet`.
+    temp25-street_number = `1567`.
+    temp25-zip_code = `12345`.
+    temp25-zip_city = `Maintown`.
+    temp25-country = `Germany`.
+    temp25-email = `Denise.Smith@company.com`.
+    temp25-phone_number = `+1 (610) 661-1000`.
+    temp25-phone_time = `12:00`.
+    temp25-website = `n/a`.
+    INSERT temp25 INTO TABLE temp24.
+    temp25-name = `Richard Wilson`.
+    temp25-street_name = `Mainstreet`.
+    temp25-street_number = `2984`.
+    temp25-zip_code = `12345`.
+    temp25-zip_city = `Maintown`.
+    temp25-country = `Germany`.
+    temp25-email = `Richard.Wilson@company.com`.
+    temp25-phone_number = `+1 (610) 661-1000`.
+    temp25-phone_time = `12:00`.
+    temp25-website = `n/a`.
+    INSERT temp25 INTO TABLE temp24.
+    temp25-name = `Gerd Becker`.
+    temp25-street_name = `Mainstreet`.
+    temp25-street_number = `3614`.
+    temp25-zip_code = `12345`.
+    temp25-zip_city = `Maintown`.
+    temp25-country = `Germany`.
+    temp25-email = `Gerd.Becker@company.com`.
+    temp25-phone_number = `+1 (610) 661-1000`.
+    temp25-phone_time = `12:00`.
+    temp25-website = `n/a`.
+    INSERT temp25 INTO TABLE temp24.
+    temp25-name = `John Miller`.
+    temp25-street_name = `Mainstreet`.
+    temp25-street_number = `1618`.
+    temp25-zip_code = `AAA`.
+    temp25-zip_city = `Maintown`.
+    temp25-country = `Germany`.
+    temp25-email = `John.Miller@company.com`.
+    temp25-phone_number = `+1 (610) 661-1000`.
+    temp25-phone_time = `12:00`.
+    temp25-website = `n/a`.
+    INSERT temp25 INTO TABLE temp24.
+    temp25-name = `Stefan Bosch`.
+    temp25-street_name = `Mainstreet`.
+    temp25-street_number = `4864`.
+    temp25-zip_code = `12345`.
+    temp25-zip_city = `Maintown`.
+    temp25-country = `Germany`.
+    temp25-email = `Stefan.Bosch@company.com`.
+    temp25-phone_number = `+1 (610) 661-1000`.
+    temp25-phone_time = `12:00`.
+    temp25-website = `n/a`.
+    INSERT temp25 INTO TABLE temp24.
+    temp25-name = `Maria Fontes`.
+    temp25-street_name = `Mainstreet`.
+    temp25-street_number = `4864`.
+    temp25-zip_code = `12345`.
+    temp25-zip_city = `Maintown`.
+    temp25-country = `Germany`.
+    temp25-email = ``.
+    temp25-phone_number = `+1 (610) 661-1000`.
+    temp25-phone_time = `12:00`.
+    temp25-website = `MariaFontescompany.com`.
+    INSERT temp25 INTO TABLE temp24.
+    temp25-name = `Antonio Ferrari`.
+    temp25-street_name = `Mainstreet`.
+    temp25-street_number = `2598`.
+    temp25-zip_code = `12345`.
+    temp25-zip_city = `Maintown`.
+    temp25-country = `Germany`.
+    temp25-email = `Antonio.Ferrari@company.com`.
+    temp25-phone_number = `+1 (610) 661-1000`.
+    temp25-phone_time = `12:00`.
+    temp25-website = `n/a`.
+    INSERT temp25 INTO TABLE temp24.
+    t_forms = temp24.
 
-    t_employment = VALUE #(
-      ( jobtitle = `Senior UI Developer (UIDEV-SR)` paygrade = `Salary Grade 18 (GR-14`
-        unit = `ABC` class = `Employee` fte = `1` weeklyhours = `0` ) ).
+    
+    CLEAR temp26.
+    
+    temp27-jobtitle = `Senior UI Developer (UIDEV-SR)`.
+    temp27-paygrade = `Salary Grade 18 (GR-14`.
+    temp27-unit = `ABC`.
+    temp27-class = `Employee`.
+    temp27-fte = `1`.
+    temp27-weeklyhours = `0`.
+    INSERT temp27 INTO TABLE temp26.
+    t_employment = temp26.
 
   ENDMETHOD.
 

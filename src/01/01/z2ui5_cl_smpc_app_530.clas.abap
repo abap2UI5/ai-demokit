@@ -22,10 +22,10 @@ CLASS z2ui5_cl_smpc_app_530 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -34,13 +34,22 @@ CLASS z2ui5_cl_smpc_app_530 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA width TYPE string.
+    DATA temp1 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " onSliderMoved calls setWidth( value && '%' ) on all TEN toolbars - the port
     " gives every toolbar the same expression binding over the two-way slider
     " value, so the resize needs no round-trip at all
-    DATA(width) = |\{= ${ client->_bind( viewport ) } + '%' \}|.
+    
+    width = |\{= ${ client->_bind( viewport ) } + '%' \}|.
 
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `Share action` INTO TABLE temp1.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:core` v = `sap.ui.core`
@@ -101,7 +110,7 @@ CLASS z2ui5_cl_smpc_app_530 IMPLEMENTATION.
                 )->a( n = `text`  v = `Share`
                 )->a( n = `type`  v = `Transparent`
                 )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Share action` ) ) )
+                                                                t_arg = temp1 )
 
         )->end(
 

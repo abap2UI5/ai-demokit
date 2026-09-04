@@ -21,7 +21,7 @@ CLASS z2ui5_cl_smpc_app_452 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -32,9 +32,12 @@ CLASS z2ui5_cl_smpc_app_452 IMPLEMENTATION.
 
     " _updateDesignForColorSet writes ColorSet1 / ColorSet2 onto all ten strips -
     " one expression binding over the two-way bound Select key does the same
-    DATA(color_set_expr) = |\{= ${ client->_bind( color_set ) } === '1' ? 'ColorSet1' : 'ColorSet2' \}|.
+    DATA color_set_expr TYPE string.
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    color_set_expr = |\{= ${ client->_bind( color_set ) } === '1' ? 'ColorSet1' : 'ColorSet2' \}|.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`

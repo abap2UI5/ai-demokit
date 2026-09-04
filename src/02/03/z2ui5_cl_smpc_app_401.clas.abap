@@ -13,7 +13,7 @@ CLASS z2ui5_cl_smpc_app_401 DEFINITION PUBLIC.
 
     DATA show_footer TYPE abap_bool.
 
-    DATA t_employees TYPE STANDARD TABLE OF ty_s_employee WITH EMPTY KEY.
+    DATA t_employees TYPE STANDARD TABLE OF ty_s_employee WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -31,12 +31,12 @@ CLASS z2ui5_cl_smpc_app_401 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -45,7 +45,19 @@ CLASS z2ui5_cl_smpc_app_401 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    DATA temp3 TYPE string_table.
+    DATA temp4 LIKE LINE OF t_employees.
+    DATA temp5 LIKE sy-tabix.
+    DATA temp6 LIKE LINE OF t_employees.
+    DATA temp7 LIKE sy-tabix.
+    DATA temp8 LIKE LINE OF t_employees.
+    DATA temp9 LIKE sy-tabix.
+    DATA temp10 LIKE LINE OF t_employees.
+    DATA temp11 LIKE sy-tabix.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " Block->content inlining (app 188/217/261 precedent) plus the named-model fold
     " of app 230: the blocks aggregations hold SharedBlocks BlockBase controls,
@@ -53,6 +65,53 @@ CLASS z2ui5_cl_smpc_app_401 IMPLEMENTATION.
     " EmploymentBlockJob block additionally carries uxap:ModelMapping elements
     " mapping ObjectPageModel>/Employee/N onto internal models empN>; abap2UI5
     " serves one default model, so those fold onto one table addressed per row.
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `An edit box should appear when you click on the "Edit header" button` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp2.
+    INSERT `show` INTO TABLE temp2.
+    INSERT `Page 1 a very long link clicked` INTO TABLE temp2.
+    
+    CLEAR temp3.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp3.
+    INSERT `show` INTO TABLE temp3.
+    INSERT `Page 2 long link clicked` INTO TABLE temp3.
+    
+    
+    temp5 = sy-tabix.
+    READ TABLE t_employees INDEX 1 INTO temp4.
+    sy-tabix = temp5.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp7 = sy-tabix.
+    READ TABLE t_employees INDEX 1 INTO temp6.
+    sy-tabix = temp7.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp9 = sy-tabix.
+    READ TABLE t_employees INDEX 2 INTO temp8.
+    sy-tabix = temp9.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
+    
+    
+    temp11 = sy-tabix.
+    READ TABLE t_employees INDEX 2 INTO temp10.
+    sy-tabix = temp11.
+    IF sy-subrc <> 0.
+      ASSERT 1 = 0.
+    ENDIF.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`       v = `100%`
         )->a( n = `xmlns`        v = `sap.uxap`
@@ -67,7 +126,7 @@ CLASS z2ui5_cl_smpc_app_401 IMPLEMENTATION.
             )->a( n = `showTitleInHeaderContent` v = `true`
             )->a( n = `showEditHeaderButton`     v = `true`
             )->a( n = `editHeaderButtonPress`    v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                               t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `An edit box should appear when you click on the "Edit header" button` ) ) )
+                                                                               t_arg = temp1 )
             )->a( n = `headerContentPinned`      v = `true`
             )->a( n = `upperCaseAnchorBar`       v = `false`
             " the controller's toggleFooter flips showFooter imperatively; a
@@ -84,11 +143,11 @@ CLASS z2ui5_cl_smpc_app_401 IMPLEMENTATION.
                             )->tag( n = `Link` ns = `m`
                                 )->a( n = `text`  v = `Page 1 a very long link`
                                 )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Page 1 a very long link clicked` ) ) )
+                                                                                t_arg = temp2 )
                             )->tag( n = `Link` ns = `m`
                                 )->a( n = `text`  v = `Page 2 long link`
                                 )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Page 2 long link clicked` ) ) )
+                                                                                t_arg = temp3 )
 
                         )->end(
                     )->end(
@@ -645,9 +704,9 @@ CLASS z2ui5_cl_smpc_app_401 IMPLEMENTATION.
                                                     )->ele( n = `content` ns = `layout`
                                                         )->ele( n = `VerticalLayout` ns = `layout`
                                                             )->tag( n = `Label` ns = `m`
-                                                                )->a( n = `text` v = client->_bind( val = t_employees[ 1 ]-name tab = t_employees tab_index = 1 )
+                                                                )->a( n = `text` v = client->_bind( val = temp4-name tab = t_employees tab_index = 1 )
                                                             )->tag( n = `Label` ns = `m`
-                                                                )->a( n = `text` v = client->_bind( val = t_employees[ 1 ]-job tab = t_employees tab_index = 1 )
+                                                                )->a( n = `text` v = client->_bind( val = temp6-job tab = t_employees tab_index = 1 )
 
                                                             )->ele( n = `layoutData` ns = `layout`
                                                                 )->tag( n = `GridData` ns = `layout`
@@ -673,9 +732,9 @@ CLASS z2ui5_cl_smpc_app_401 IMPLEMENTATION.
 
                                                     )->ele( n = `VerticalLayout` ns = `layout`
                                                         )->tag( n = `Label` ns = `m`
-                                                            )->a( n = `text` v = client->_bind( val = t_employees[ 2 ]-name tab = t_employees tab_index = 2 )
+                                                            )->a( n = `text` v = client->_bind( val = temp8-name tab = t_employees tab_index = 2 )
                                                         )->tag( n = `Label` ns = `m`
-                                                            )->a( n = `text` v = client->_bind( val = t_employees[ 2 ]-job tab = t_employees tab_index = 2 )
+                                                            )->a( n = `text` v = client->_bind( val = temp10-job tab = t_employees tab_index = 2 )
 
                                                         )->ele( n = `layoutData` ns = `layout`
                                                             )->tag( n = `GridData` ns = `layout`
@@ -710,16 +769,21 @@ CLASS z2ui5_cl_smpc_app_401 IMPLEMENTATION.
 
 
   METHOD on_event.
+      DATA temp1 TYPE xsdboolean.
 
     IF client->get_event( ) = `TOGGLE_FOOTER`.
       " the controller's toggleFooter: setShowFooter( !getShowFooter( ) )
-      show_footer = xsdbool( show_footer = abap_false ).
+      
+      temp1 = boolc( show_footer = abap_false ).
+      show_footer = temp1.
     ENDIF.
 
   ENDMETHOD.
 
 
   METHOD model_init.
+    DATA temp3 LIKE t_employees.
+    DATA temp4 LIKE LINE OF temp3.
 
     " ObjectPageLayout.showFooter starts out false, as in the original where
     " the footer only appears once Toggle Footer is pressed
@@ -727,11 +791,16 @@ CLASS z2ui5_cl_smpc_app_401 IMPLEMENTATION.
 
     " ObjectPageModel>/Employee rows 0 and 1, the two records the block's
     " uxap:ModelMapping elements map onto the internal models emp1> / emp2>
-    t_employees = VALUE #(
-      ( name = `Michael Adams`
-        job  = `Scrum Master` )
-      ( name = `John Miller`
-        job  = `Product Owner` ) ).
+    
+    CLEAR temp3.
+    
+    temp4-name = `Michael Adams`.
+    temp4-job = `Scrum Master`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-name = `John Miller`.
+    temp4-job = `Product Owner`.
+    INSERT temp4 INTO TABLE temp3.
+    t_employees = temp3.
 
   ENDMETHOD.
 

@@ -14,7 +14,7 @@ CLASS z2ui5_cl_smpc_app_294 DEFINITION PUBLIC.
         counter     TYPE i,
         group       TYPE string,
       END OF ty_s_message.
-    TYPES ty_t_message TYPE STANDARD TABLE OF ty_s_message WITH EMPTY KEY.
+    TYPES ty_t_message TYPE STANDARD TABLE OF ty_s_message WITH DEFAULT KEY.
 
     DATA t_messages   TYPE ty_t_message.
     " the three formatters, computed once in the backend (see model_init)
@@ -40,12 +40,12 @@ CLASS z2ui5_cl_smpc_app_294 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -54,7 +54,8 @@ CLASS z2ui5_cl_smpc_app_294 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
@@ -86,6 +87,7 @@ CLASS z2ui5_cl_smpc_app_294 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp1 TYPE string_table.
 
     CASE client->get_event( ).
 
@@ -100,9 +102,13 @@ CLASS z2ui5_cl_smpc_app_294 IMPLEMENTATION.
 
       WHEN `NAV_BACK`.
         back_visible = abap_false.
+        
+        CLEAR temp1.
+        INSERT `messageView` INTO TABLE temp1.
+        INSERT `navigateBack` INTO TABLE temp1.
         client->follow_up_action( val   = client->cs_event-control_by_id
                                   view  = client->cs_view-popup
-                                  t_arg = VALUE #( ( `messageView` ) ( `navigateBack` ) ) ).
+                                  t_arg = temp1 ).
 
       WHEN `CLOSE`.
         client->popup_destroy( ).
@@ -114,7 +120,8 @@ CLASS z2ui5_cl_smpc_app_294 IMPLEMENTATION.
 
   METHOD popup_display.
 
-    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA popup TYPE REF TO z2ui5_cl_ui5_view_builder.
+    popup = z2ui5_cl_ui5_view_builder=>factory( ).
 
     popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns:core` v = `sap.ui.core`
@@ -188,7 +195,16 @@ CLASS z2ui5_cl_smpc_app_294 IMPLEMENTATION.
 
   METHOD model_init.
 
-    DATA(lv_desc) = `First Error message description. ` && |\n| &&
+    DATA lv_desc TYPE string.
+    DATA temp3 TYPE z2ui5_cl_smpc_app_294=>ty_t_message.
+    DATA temp4 LIKE LINE OF temp3.
+    DATA lv_top TYPE string.
+    DATA ls_message LIKE LINE OF t_messages.
+    DATA temp5 TYPE i.
+    DATA x TYPE i.
+    DATA ls_row LIKE LINE OF t_messages.
+      DATA temp1 TYPE i.
+    lv_desc = `First Error message description. ` && |\n| &&
                       `Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod` &&
                       `tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,` &&
                       `quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo` &&
@@ -197,63 +213,79 @@ CLASS z2ui5_cl_smpc_app_294 IMPLEMENTATION.
                       `proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`.
 
     " the controller's aMockMessages
-    t_messages = VALUE #(
-      ( type        = `Error`
-        title       = `Account 801 requires an assignment`
-        subtitle    = `Role is invalid`
-        group       = `Purchase Order 450001`
-        description = lv_desc )
-      ( type        = `Warning`
-        title       = `Account 821 requires a check`
-        subtitle    = `Undefined task`
-        group       = `Purchase Order 450001`
-        description = lv_desc )
-      ( type        = `Warning`
-        title       = `Enter a text with maximum 6 characters length`
-        group       = `Purchase Order 450002`
-        description = lv_desc )
-      ( type        = `Warning`
-        title       = `Enter a text with maximum 8 characters length`
-        group       = `Purchase Order 450002`
-        description = lv_desc )
-      ( type        = `Error`
-        title       = `Account 802 requires an assignment`
-        subtitle    = `Role is invalid`
-        group       = `Purchase Order 450002`
-        description = lv_desc )
-      ( type        = `Information`
-        title       = `Account 804 requires an assignment`
-        subtitle    = `Information type subtitle`
-        group       = `Purchase Order 450002`
-        description = lv_desc )
-      ( type        = `Error`
-        title       = `Technical message without object relation`
-        group       = `General`
-        description = lv_desc )
-      ( type        = `Warning`
-        title       = `Global System will be down on Sunday`
-        group       = `General`
-        description = lv_desc )
-      ( type        = `Error`
-        title       = `Global System will be down on Sunday`
-        group       = `General`
-        description = lv_desc )
-      ( type        = `Error`
-        title       = `An Error`
-        subtitle    = `Ungrouped message`
-        description = lv_desc )
-      ( type        = `Warning`
-        title       = `A Warning`
-        subtitle    = `Ungrouped message`
-        description = lv_desc ) ).
+    
+    CLEAR temp3.
+    
+    temp4-type = `Error`.
+    temp4-title = `Account 801 requires an assignment`.
+    temp4-subtitle = `Role is invalid`.
+    temp4-group = `Purchase Order 450001`.
+    temp4-description = lv_desc.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-type = `Warning`.
+    temp4-title = `Account 821 requires a check`.
+    temp4-subtitle = `Undefined task`.
+    temp4-group = `Purchase Order 450001`.
+    temp4-description = lv_desc.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-type = `Warning`.
+    temp4-title = `Enter a text with maximum 6 characters length`.
+    temp4-group = `Purchase Order 450002`.
+    temp4-description = lv_desc.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-type = `Warning`.
+    temp4-title = `Enter a text with maximum 8 characters length`.
+    temp4-group = `Purchase Order 450002`.
+    temp4-description = lv_desc.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-type = `Error`.
+    temp4-title = `Account 802 requires an assignment`.
+    temp4-subtitle = `Role is invalid`.
+    temp4-group = `Purchase Order 450002`.
+    temp4-description = lv_desc.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-type = `Information`.
+    temp4-title = `Account 804 requires an assignment`.
+    temp4-subtitle = `Information type subtitle`.
+    temp4-group = `Purchase Order 450002`.
+    temp4-description = lv_desc.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-type = `Error`.
+    temp4-title = `Technical message without object relation`.
+    temp4-group = `General`.
+    temp4-description = lv_desc.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-type = `Warning`.
+    temp4-title = `Global System will be down on Sunday`.
+    temp4-group = `General`.
+    temp4-description = lv_desc.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-type = `Error`.
+    temp4-title = `Global System will be down on Sunday`.
+    temp4-group = `General`.
+    temp4-description = lv_desc.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-type = `Error`.
+    temp4-title = `An Error`.
+    temp4-subtitle = `Ungrouped message`.
+    temp4-description = lv_desc.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-type = `Warning`.
+    temp4-title = `A Warning`.
+    temp4-subtitle = `Ungrouped message`.
+    temp4-description = lv_desc.
+    INSERT temp4 INTO TABLE temp3.
+    t_messages = temp3.
 
     " buttonIconFormatter / buttonTypeFormatter / highestSeverityMessages walk
     " the whole message list and pick the highest severity (Error > Warning >
     " Success > Information) plus how many messages carry it. That is a
     " computation over the data, so it happens here and the Button binds the
     " finished values (thin-frontend rule, apps 009/010/022/092)
-    DATA(lv_top) = `Information`.
-    LOOP AT t_messages INTO DATA(ls_message).
+    
+    lv_top = `Information`.
+    
+    LOOP AT t_messages INTO ls_message.
       CASE ls_message-type.
         WHEN `Error`.
           lv_top = `Error`.
@@ -283,7 +315,21 @@ CLASS z2ui5_cl_smpc_app_294 IMPLEMENTATION.
         button_type = `Neutral`.
     ENDCASE.
 
-    button_text = |{ REDUCE i( INIT x = 0 FOR ls_row IN t_messages NEXT x = COND #( WHEN ls_row-type = lv_top THEN x + 1 ELSE x ) ) }|.
+    
+    
+    x = 0.
+    
+    LOOP AT t_messages INTO ls_row.
+      
+      IF ls_row-type = lv_top.
+        temp1 = x + 1.
+      ELSE.
+        temp1 = x.
+      ENDIF.
+      x = temp1.
+    ENDLOOP.
+    temp5 = x.
+    button_text = |{ temp5 }|.
 
   ENDMETHOD.
 

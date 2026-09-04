@@ -24,9 +24,9 @@ CLASS z2ui5_cl_smpc_app_143 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -35,7 +35,8 @@ CLASS z2ui5_cl_smpc_app_143 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the two toggles the original drives from its controller are bound instead:
     " showFooter directly, areaShrinkRatio through an expression binding over the
@@ -165,16 +166,22 @@ CLASS z2ui5_cl_smpc_app_143 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp1 TYPE xsdboolean.
+        DATA temp2 TYPE xsdboolean.
 
     CASE client->get_event( ).
 
       WHEN `TOGGLE_PRIO`.
         " the original reads the current areaShrinkRatio and alternates it with
         " the property default; the flag carries the same two-state information
-        shrink_wide = xsdbool( shrink_wide = abap_false ).
+        
+        temp1 = boolc( shrink_wide = abap_false ).
+        shrink_wide = temp1.
 
       WHEN `TOGGLE_FOOTER`.
-        show_footer = xsdbool( show_footer = abap_false ).
+        
+        temp2 = boolc( show_footer = abap_false ).
+        show_footer = temp2.
 
     ENDCASE.
 

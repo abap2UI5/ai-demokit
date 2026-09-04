@@ -23,13 +23,13 @@ CLASS z2ui5_cl_smpc_app_244 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       show_footer = abap_true.
       avatar_size = `XL`.
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -38,7 +38,12 @@ CLASS z2ui5_cl_smpc_app_244 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    DATA temp3 TYPE string_table.
+    DATA temp4 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " sap.f.DynamicPage with a responsive Avatar. showFooter is two-way bound to
     " a model flag ({/SHOW_FOOTER}, default true) and Toggle Footer flips it -
@@ -47,6 +52,25 @@ CLASS z2ui5_cl_smpc_app_244 IMPLEMENTATION.
     " breakpointChange (the sample's point) is wired as a view attribute (the
     " original attaches it in onInit) and drives both Avatars' bound displaySize.
     " test-resources image URLs point at the sdk.openui5.org host (offline rule).
+    
+    CLEAR temp1.
+    INSERT `${$parameters>/currentRange}` INTO TABLE temp1.
+    INSERT `${$parameters>/currentWidth}` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp2.
+    INSERT `show` INTO TABLE temp2.
+    INSERT `Home pressed` INTO TABLE temp2.
+    
+    CLEAR temp3.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp3.
+    INSERT `show` INTO TABLE temp3.
+    INSERT `Examples pressed` INTO TABLE temp3.
+    
+    CLEAR temp4.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp4.
+    INSERT `show` INTO TABLE temp4.
+    INSERT `Avatar pressed` INTO TABLE temp4.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:f`      v = `sap.f`
@@ -59,7 +83,7 @@ CLASS z2ui5_cl_smpc_app_244 IMPLEMENTATION.
             )->a( n = `showFooter` v = client->_bind( show_footer )
             " added wire (declared): the controller attaches this in onInit
             )->a( n = `breakpointChange` v = client->_event( val   = `BREAKPOINT_CHANGE`
-                                                             t_arg = VALUE #( ( `${$parameters>/currentRange}` ) ( `${$parameters>/currentWidth}` ) ) )
+                                                             t_arg = temp1 )
 
             )->ele( n = `title` ns = `f`
                 )->ele( n = `DynamicPageTitle` ns = `f`
@@ -69,10 +93,10 @@ CLASS z2ui5_cl_smpc_app_244 IMPLEMENTATION.
                             )->a( n = `currentLocationText` v = `Responsive Avatar Demo`
                             )->tag( `Link`
                                 )->a( n = `text`  v = `Home`
-                                )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Home pressed` ) ) )
+                                )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = temp2 )
                             )->tag( `Link`
                                 )->a( n = `text`  v = `Examples`
-                                )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Examples pressed` ) ) )
+                                )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = temp3 )
 
                         )->end(
                     )->end(
@@ -143,7 +167,7 @@ CLASS z2ui5_cl_smpc_app_244 IMPLEMENTATION.
                             )->a( n = `displaySize` v = client->_bind( avatar_size )
                             )->a( n = `class`       v = `sapUiSmallMarginEnd`
                             )->a( n = `src`         v = `https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png`
-                            )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Avatar pressed` ) ) )
+                            )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = temp4 )
 
                         )->ele( n = `VerticalLayout` ns = `layout`
                             )->a( n = `class` v = `sapUiSmallMarginBeginEnd`
@@ -278,23 +302,37 @@ CLASS z2ui5_cl_smpc_app_244 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp1 TYPE xsdboolean.
+        DATA lv_range TYPE string.
+        DATA lv_width TYPE string.
+        DATA temp3 TYPE string.
 
     CASE client->get_event( ).
       WHEN `TOGGLE_FOOTER`.
         " toggleFooter: setShowFooter(!getShowFooter()) - reproduced by flipping
         " the two-way bound flag and pushing the model back to the client
-        show_footer = xsdbool( show_footer = abap_false ).
+        
+        temp1 = boolc( show_footer = abap_false ).
+        show_footer = temp1.
 
       WHEN `BREAKPOINT_CHANGE`.
         " onBreakpointChange: map the media range to the Avatar size (Phone M,
         " Tablet L, Desktop/DesktopExtraLarge XL), update both bound Avatars
         " and toast 'Media Range: <range> (<width>px)'
-        DATA(lv_range) = client->get_event_arg( ).
-        DATA(lv_width) = client->get_event_arg( 2 ).
-        avatar_size = SWITCH #( lv_range
-                                WHEN `Phone`  THEN `M`
-                                WHEN `Tablet` THEN `L`
-                                ELSE `XL` ).
+        
+        lv_range = client->get_event_arg( ).
+        
+        lv_width = client->get_event_arg( 2 ).
+        
+        CASE lv_range.
+          WHEN `Phone`.
+            temp3 = `M`.
+          WHEN `Tablet`.
+            temp3 = `L`.
+          WHEN OTHERS.
+            temp3 = `XL`.
+        ENDCASE.
+        avatar_size = temp3.
         client->message_toast_display( |Media Range: { lv_range } ({ lv_width }px)| ).
     ENDCASE.
 

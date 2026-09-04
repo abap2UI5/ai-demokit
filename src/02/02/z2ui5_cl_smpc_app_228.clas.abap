@@ -20,9 +20,9 @@ CLASS z2ui5_cl_smpc_app_228 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -48,14 +48,32 @@ CLASS z2ui5_cl_smpc_app_228 IMPLEMENTATION.
     " empty string still pops an empty toast - MessageToast.show('') has no
     " early return. So the decision travels: the flag and the message are two
     " event args and on_event toasts only when there is no submenu
-    DATA(item) = `${$parameters>/item}`.
-    DATA(has_submenu) = |{ item }.getSubmenu() ? 'SUB' : 'ITEM'|.
-    DATA(item_message) = |{ item }.getMetadata().getName() === 'sap.ui.unified.MenuTextFieldItem'| &&
+    DATA item TYPE string.
+    DATA has_submenu TYPE string.
+    DATA item_message TYPE string.
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    item = `${$parameters>/item}`.
+    
+    has_submenu = |{ item }.getSubmenu() ? 'SUB' : 'ITEM'|.
+    
+    item_message = |{ item }.getMetadata().getName() === 'sap.ui.unified.MenuTextFieldItem'| &&
                          | ? "'" + { item }.getValue() + "' entered"| &&
                          | : "'" + { item }.getText() + "' pressed"|.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `theMenu` INTO TABLE temp1.
+    INSERT `openBy` INTO TABLE temp1.
+    INSERT `$event.oSource.sId` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT has_submenu INTO TABLE temp2.
+    INSERT item_message INTO TABLE temp2.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -75,7 +93,7 @@ CLASS z2ui5_cl_smpc_app_228 IMPLEMENTATION.
                 " for exactly this control (pr/unified-menu-open-anchored, 2026-07-27) -
                 " the "no-op today" this comment claimed until 2026-08-23 is long gone
                 )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                       t_arg = VALUE #( ( `theMenu` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
+                                                                       t_arg = temp1 )
 
                 )->ele( `dependents`
                     )->ele( n = `Menu` ns = `u`
@@ -89,7 +107,7 @@ CLASS z2ui5_cl_smpc_app_228 IMPLEMENTATION.
                         " scripts/probes/event-arg-expression-probe.mjs, a class-name ternary
                         " resolves - so the toast text is composed on the client 1:1
                         )->a( n = `itemSelect` v = client->_event( val   = `ITEM_SELECT`
-                                                                   t_arg = VALUE #( ( has_submenu ) ( item_message ) ) )
+                                                                   t_arg = temp2 )
 
                         )->tag( n = `MenuItem` ns = `u`
                             )->a( n = `text` v = `My 1st Item`

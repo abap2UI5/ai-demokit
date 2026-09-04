@@ -22,9 +22,9 @@ CLASS z2ui5_cl_smpc_app_450 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -36,7 +36,8 @@ CLASS z2ui5_cl_smpc_app_450 IMPLEMENTATION.
     " the three column views (List/Detail/DetailDetail) are inlined into one view;
     " the original's nested mvc:XMLView reference in beginColumnPages is dropped
     " (app 234 precedent)
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.m`

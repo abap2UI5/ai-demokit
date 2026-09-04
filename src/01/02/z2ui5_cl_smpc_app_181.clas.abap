@@ -21,12 +21,12 @@ CLASS z2ui5_cl_smpc_app_181 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       " original seeds the current date (UI5Date...toISOString) in yyyy-MM-dd;
       " a fixed date is used here so the port is deterministic
       date = `2026-07-24`.
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -35,7 +35,8 @@ CLASS z2ui5_cl_smpc_app_181 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " sap.ui.model.type.Date data-type binding (TypeDateAsString). The DateType
     " is pulled via core:require and every DatePicker/Text keeps the original

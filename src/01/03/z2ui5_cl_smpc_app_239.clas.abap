@@ -19,7 +19,7 @@ CLASS z2ui5_cl_smpc_app_239 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -28,7 +28,8 @@ CLASS z2ui5_cl_smpc_app_239 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " sap.uxap.ObjectPageLayout showcasing sap.uxap.ObjectPageHeaderActionButton
     " in the ObjectPageDynamicHeaderTitle actions/navigationActions. Each of the

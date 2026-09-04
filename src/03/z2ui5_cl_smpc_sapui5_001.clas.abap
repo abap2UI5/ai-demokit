@@ -17,7 +17,7 @@ CLASS z2ui5_cl_smpc_sapui5_001 DEFINITION PUBLIC.
         text    TYPE string,
         percent TYPE p LENGTH 3 DECIMALS 2,
       END OF ty_s_chart.
-    DATA counts           TYPE STANDARD TABLE OF ty_s_chart WITH EMPTY KEY.
+    DATA counts           TYPE STANDARD TABLE OF ty_s_chart WITH DEFAULT KEY.
     DATA sel4             TYPE abap_bool.
     DATA sel5             TYPE abap_bool.
     DATA sel6             TYPE abap_bool.
@@ -36,7 +36,8 @@ CLASS z2ui5_cl_smpc_sapui5_001 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `displayBlock`  v = `true`
@@ -243,33 +244,57 @@ CLASS z2ui5_cl_smpc_sapui5_001 IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD z2ui5_if_app~main.
+      DATA temp1 LIKE counts.
+      DATA temp2 LIKE LINE OF temp1.
+      DATA temp3 LIKE counts.
+      DATA temp4 LIKE LINE OF temp3.
 
     me->client = client.
 
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
 
-      counts = VALUE #(
-          ( text = `1st` percent = `10.0` )
-          ( text = `2nd` percent = `60.0` )
-          ( text = `3rd` percent = `30.0` ) ).
+      
+      CLEAR temp1.
+      
+      temp2-text = `1st`.
+      temp2-percent = `10.0`.
+      INSERT temp2 INTO TABLE temp1.
+      temp2-text = `2nd`.
+      temp2-percent = `60.0`.
+      INSERT temp2 INTO TABLE temp1.
+      temp2-text = `3rd`.
+      temp2-percent = `30.0`.
+      INSERT temp2 INTO TABLE temp1.
+      counts = temp1.
       total_count = lines( counts ).
 
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
 
-    ELSEIF client->check_on_event( `UPDATE_CHART_DATA` ).
-      counts = VALUE #(
-          ( text = `1st` percent = `60.0` )
-          ( text = `2nd` percent = `10.0` )
-          ( text = `3rd` percent = `15.0` )
-          ( text = `4th` percent = `15.0` ) ).
+    ELSEIF client->check_on_event( `UPDATE_CHART_DATA` ) IS NOT INITIAL.
+      
+      CLEAR temp3.
+      
+      temp4-text = `1st`.
+      temp4-percent = `60.0`.
+      INSERT temp4 INTO TABLE temp3.
+      temp4-text = `2nd`.
+      temp4-percent = `10.0`.
+      INSERT temp4 INTO TABLE temp3.
+      temp4-text = `3rd`.
+      temp4-percent = `15.0`.
+      INSERT temp4 INTO TABLE temp3.
+      temp4-text = `4th`.
+      temp4-percent = `15.0`.
+      INSERT temp4 INTO TABLE temp3.
+      counts = temp3.
       total_count = lines( counts ).
 
-    ELSEIF client->check_on_event( `DONUT_CHANGED` ).
+    ELSEIF client->check_on_event( `DONUT_CHANGED` ) IS NOT INITIAL.
       client->message_toast_display( `Donut selection changed` ).
 
-    ELSEIF client->check_on_event( `DONUT_PRESS` ).
+    ELSEIF client->check_on_event( `DONUT_PRESS` ) IS NOT INITIAL.
       client->message_toast_display( `Donut pressed` ).
     ENDIF.
 

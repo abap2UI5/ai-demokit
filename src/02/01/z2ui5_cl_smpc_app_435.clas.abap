@@ -25,9 +25,9 @@ CLASS z2ui5_cl_smpc_app_435 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -36,7 +36,8 @@ CLASS z2ui5_cl_smpc_app_435 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
@@ -115,20 +116,42 @@ CLASS z2ui5_cl_smpc_app_435 IMPLEMENTATION.
 
 
   METHOD on_event.
+      DATA source_id TYPE string.
+      DATA offset TYPE i.
+      DATA indicator TYPE string.
+      DATA temp1 TYPE i.
+      DATA value LIKE temp1.
+      DATA temp2 TYPE string.
+      DATA previous LIKE temp2.
+      DATA temp3 TYPE string_table.
+      DATA temp4 LIKE LINE OF temp3.
 
     IF client->get_event( ) = `SET_VALUE`.
 
       " the original reads the pressed button's id and splits it into the
       " ProgressIndicator id and the value - the same split, done in ABAP
-      DATA(source_id) = client->get_event_arg( ).
-      DATA(offset)    = find( val = source_id sub = `button` ).
+      
+      source_id = client->get_event_arg( ).
+      
+      offset    = find( val = source_id sub = `button` ).
       IF offset < 0.
         RETURN.
       ENDIF.
-      DATA(indicator) = substring( val = source_id len = offset - 1 ).
-      DATA(value)     = CONV i( substring( val = source_id off = offset + 6 ) ).
+      
+      indicator = substring( val = source_id len = offset - 1 ).
+      
+      temp1 = substring( val = source_id off = offset + 6 ).
+      
+      value = temp1.
 
-      DATA(previous) = COND string( WHEN indicator CS `pi-with-animation` THEN display_animated ELSE display_plain ).
+      
+      IF indicator CS `pi-with-animation`.
+        temp2 = display_animated.
+      ELSE.
+        temp2 = display_plain.
+      ENDIF.
+      
+      previous = temp2.
 
       IF indicator CS `pi-with-animation`.
         value_animated   = value.
@@ -140,10 +163,15 @@ CLASS z2ui5_cl_smpc_app_435 IMPLEMENTATION.
 
       " InvisibleMessage.getInstance().announce( ... ) - a singleton with no
       " control id, so the announcement goes through the global target
+      
+      CLEAR temp3.
+      INSERT `INVISIBLE_MESSAGE` INTO TABLE temp3.
+      INSERT `announce` INTO TABLE temp3.
+      
+      temp4 = |Previous value was { previous }. New value is { value }%.|.
+      INSERT temp4 INTO TABLE temp3.
       client->follow_up_action( val   = client->cs_event-control_global
-                                t_arg = VALUE #( ( `INVISIBLE_MESSAGE` )
-                                                 ( `announce` )
-                                                 ( |Previous value was { previous }. New value is { value }%.| ) ) ).
+                                t_arg = temp3 ).
 
     ENDIF.
 

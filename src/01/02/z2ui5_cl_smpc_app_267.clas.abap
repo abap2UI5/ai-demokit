@@ -22,14 +22,14 @@ CLASS z2ui5_cl_smpc_app_267 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       " the original enables the Toggle button only on breakpoint S; the
       " breakpointChanged round-trip below keeps the flag in sync
       toggle_enabled = abap_false.
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -38,7 +38,10 @@ CLASS z2ui5_cl_smpc_app_267 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " handleToggleClick calls DynamicSideContent.toggle() - reproduced
     " roundtrip-free with control_by_id (a public control method). The Slider's
@@ -51,6 +54,16 @@ CLASS z2ui5_cl_smpc_app_267 IMPLEMENTATION.
     " sidecar has described correctly ever since. The Slider keeps the
     " original's literal value=100. The img> model folds to the mock's literal
     " URLs.
+    
+    CLEAR temp1.
+    INSERT `DynamicSideContent` INTO TABLE temp1.
+    INSERT `toggle` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `sideContentContainer` INTO TABLE temp2.
+    INSERT `css` INTO TABLE temp2.
+    INSERT `width` INTO TABLE temp2.
+    INSERT `${$parameters>/value} + '%'` INTO TABLE temp2.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
         )->a( n = `xmlns`     v = `sap.m`
@@ -180,7 +193,7 @@ CLASS z2ui5_cl_smpc_app_267 IMPLEMENTATION.
                         )->a( n = `id`      v = `equalSplitToggleButton`
                         )->a( n = `enabled` v = client->_bind( toggle_enabled )
                         )->a( n = `press`   v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                          t_arg = VALUE #( ( `DynamicSideContent` ) ( `toggle` ) ) )
+                                                                          t_arg = temp1 )
                     )->tag( `Slider`
                         )->a( n = `id`      v = `DSCWidthSlider`
                         )->a( n = `value`   v = `100`
@@ -189,10 +202,7 @@ CLASS z2ui5_cl_smpc_app_267 IMPLEMENTATION.
                         " the percentage onto its DOM node like the original jQuery
                         )->a( n = `liveChange` v = client->follow_up_action(
                                   val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `sideContentContainer` )
-                                                   ( `css` )
-                                                   ( `width` )
-                                                   ( `${$parameters>/value} + '%'` ) ) )
+                                  t_arg = temp2 )
                         " onBeforeRendering: setVisible(!Device.system.phone) -
                         " the shared device> model expresses that declaratively
                         )->a( n = `visible` v = |\{= !$\{device>/system/phone\}\}|
@@ -205,11 +215,14 @@ CLASS z2ui5_cl_smpc_app_267 IMPLEMENTATION.
 
 
   METHOD on_event.
+      DATA temp1 TYPE xsdboolean.
 
     IF client->get_event( ) = `BREAKPOINT_CHANGED`.
       " _updateToggleButtonState: the Toggle button is enabled on the S
       " breakpoint only
-      toggle_enabled = xsdbool( client->get_event_arg( ) = `S` ).
+      
+      temp1 = boolc( client->get_event_arg( ) = `S` ).
+      toggle_enabled = temp1.
     ENDIF.
 
   ENDMETHOD.

@@ -16,7 +16,7 @@ CLASS z2ui5_cl_smpc_app_342 DEFINITION PUBLIC.
         manifest TYPE string,
         datamode TYPE string,
       END OF ty_s_card,
-      ty_t_card TYPE STANDARD TABLE OF ty_s_card WITH EMPTY KEY.
+      ty_t_card TYPE STANDARD TABLE OF ty_s_card WITH DEFAULT KEY.
     DATA t_cards TYPE ty_t_card.
 
     " the form fields the controller reads on submit
@@ -40,12 +40,12 @@ CLASS z2ui5_cl_smpc_app_342 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -54,7 +54,8 @@ CLASS z2ui5_cl_smpc_app_342 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the sample's SimpleForm (request time, number of cards, dataMode, Start
     " loading) and the f:GridContainer the controller fills with Cards - bound
@@ -130,36 +131,110 @@ CLASS z2ui5_cl_smpc_app_342 IMPLEMENTATION.
     " the controller's aSamples array - ten manifests with the grid width each
     " card gets. Kept local: it is never bound, so it does not belong in the
     " model that travels on every round-trip
-    DATA(lt_samples) = VALUE ty_t_card(
-        ( key = `list1`       columns = 6 manifest = `listManifest1.json` )
-        ( key = `list2`       columns = 6 manifest = `listManifest2.json` )
-        ( key = `list3`       columns = 5 manifest = `listManifestAll.json` )
-        ( key = `list4`       columns = 4 manifest = `listManifestDescriptionTitle.json` )
-        ( key = `list5`       columns = 3 manifest = `listManifestIconTitle.json` )
-        ( key = `table1`      columns = 4 manifest = `tableManifest.json` )
-        ( key = `object1`     columns = 6 manifest = `objectManifest.json` )
-        ( key = `calendar1`   columns = 5 manifest = `calendarManifest1.json` )
-        ( key = `timeline1`   columns = 5 manifest = `timelineManifest.json` )
-        ( key = `analytical1` columns = 5 manifest = `analyticalManifest.json` ) ).
+    DATA temp1 TYPE ty_t_card.
+    DATA temp2 LIKE LINE OF temp1.
+    DATA lt_samples LIKE temp1.
+    DATA lv_base TYPE string.
+    DATA temp3 TYPE z2ui5_cl_smpc_app_342=>ty_t_card.
+    DATA temp4 TYPE i.
+    DATA temp6 TYPE i.
+    DATA lv_count LIKE temp6.
+      DATA ls_sample LIKE LINE OF lt_samples.
+      DATA temp7 LIKE LINE OF lt_samples.
+      DATA temp8 LIKE sy-tabix.
+      DATA temp5 TYPE z2ui5_cl_smpc_app_342=>ty_s_card.
+      DATA temp9 TYPE z2ui5_cl_smpc_app_342=>ty_s_card-datamode.
+    CLEAR temp1.
+    
+    temp2-key = `list1`.
+    temp2-columns = 6.
+    temp2-manifest = `listManifest1.json`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = `list2`.
+    temp2-columns = 6.
+    temp2-manifest = `listManifest2.json`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = `list3`.
+    temp2-columns = 5.
+    temp2-manifest = `listManifestAll.json`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = `list4`.
+    temp2-columns = 4.
+    temp2-manifest = `listManifestDescriptionTitle.json`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = `list5`.
+    temp2-columns = 3.
+    temp2-manifest = `listManifestIconTitle.json`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = `table1`.
+    temp2-columns = 4.
+    temp2-manifest = `tableManifest.json`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = `object1`.
+    temp2-columns = 6.
+    temp2-manifest = `objectManifest.json`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = `calendar1`.
+    temp2-columns = 5.
+    temp2-manifest = `calendarManifest1.json`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = `timeline1`.
+    temp2-columns = 5.
+    temp2-manifest = `timelineManifest.json`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-key = `analytical1`.
+    temp2-columns = 5.
+    temp2-manifest = `analyticalManifest.json`.
+    INSERT temp2 INTO TABLE temp1.
+    
+    lt_samples = temp1.
 
     " the manifests are loaded BY URL: sap.ui.integration.widgets.Card reads a
     " string manifest as a manifest URL (Card.createManifest), so pointing at
     " the sample's own manifest files is the 1:1 form here
-    DATA(lv_base) = `https://sdk.openui5.org/test-resources/sap/ui/integration/demokit/sample/LazyLoading/manifests/`.
+    
+    lv_base = `https://sdk.openui5.org/test-resources/sap/ui/integration/demokit/sample/LazyLoading/manifests/`.
 
-    t_cards = VALUE #( ).
+    
+    CLEAR temp3.
+    t_cards = temp3.
     " the length term, not just the character one - `99999999999` is all
     " digits and overflows CONV i
-    DATA(lv_count) = COND i( WHEN numberofcards CO ` 0123456789` AND numberofcards IS NOT INITIAL
-                             AND strlen( condense( numberofcards ) ) <= 9
-                             THEN CONV i( numberofcards ) ).
+    
+    temp4 = numberofcards.
+    
+    IF numberofcards CO ` 0123456789` AND numberofcards IS NOT INITIAL AND strlen( condense( numberofcards ) ) <= 9.
+      temp6 = temp4.
+    ELSE.
+      CLEAR temp6.
+    ENDIF.
+    
+    lv_count = temp6.
 
     DO lv_count TIMES.
-      DATA(ls_sample) = lt_samples[ ( sy-index - 1 ) MOD lines( lt_samples ) + 1 ].
-      INSERT VALUE #( key      = ls_sample-key
-                      columns  = ls_sample-columns
-                      manifest = lv_base && ls_sample-manifest
-                      datamode = COND #( WHEN datamode_active = abap_true THEN `Active` ELSE `Auto` ) )
+      
+      
+      
+      temp8 = sy-tabix.
+      READ TABLE lt_samples INDEX ( sy-index - 1 ) MOD lines( lt_samples ) + 1 INTO temp7.
+      sy-tabix = temp8.
+      IF sy-subrc <> 0.
+        ASSERT 1 = 0.
+      ENDIF.
+      ls_sample = temp7.
+      
+      CLEAR temp5.
+      temp5-key = ls_sample-key.
+      temp5-columns = ls_sample-columns.
+      temp5-manifest = lv_base && ls_sample-manifest.
+      
+      IF datamode_active = abap_true.
+        temp9 = `Active`.
+      ELSE.
+        temp9 = `Auto`.
+      ENDIF.
+      temp5-datamode = temp9.
+      INSERT temp5
              INTO TABLE t_cards.
     ENDDO.
 

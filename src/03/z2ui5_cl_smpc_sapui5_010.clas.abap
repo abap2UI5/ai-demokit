@@ -38,12 +38,12 @@ CLASS z2ui5_cl_smpc_sapui5_010 DEFINITION PUBLIC.
              color TYPE string,
            END OF ty_s_legend.
 
-    DATA mt_spot TYPE STANDARD TABLE OF ty_s_spot WITH EMPTY KEY.
+    DATA mt_spot TYPE STANDARD TABLE OF ty_s_spot WITH DEFAULT KEY.
 
     DATA
-      mt_route TYPE STANDARD TABLE OF ty_s_route WITH EMPTY KEY.
+      mt_route TYPE STANDARD TABLE OF ty_s_route WITH DEFAULT KEY.
 
-    DATA mt_legend TYPE STANDARD TABLE OF ty_s_legend WITH EMPTY KEY.
+    DATA mt_legend TYPE STANDARD TABLE OF ty_s_legend WITH DEFAULT KEY.
 
   PROTECTED SECTION.
   PRIVATE SECTION.
@@ -52,27 +52,75 @@ ENDCLASS.
 CLASS z2ui5_cl_smpc_sapui5_010 IMPLEMENTATION.
 
   METHOD z2ui5_if_app~main.
+      DATA temp1 LIKE mt_spot.
+      DATA temp2 LIKE LINE OF temp1.
+      DATA temp3 LIKE mt_route.
+      DATA temp4 LIKE LINE OF temp3.
+      DATA temp5 LIKE mt_legend.
+      DATA temp6 LIKE LINE OF temp5.
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
 
     " No check_on_navigated( ) branch, and that is not an oversight: the view
     " below is built and displayed OUTSIDE the lifecycle IF, so every
     " roundtrip re-displays it - including the navigated one. The IF only
     " seeds the model, which has to happen once.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
 
-      mt_spot = VALUE #(
-        ( pos = `9.98336;53.55024;0`         contentoffset = `0;-6` scale = `1;1;1` key = `Hamburg`     tooltip = `Hamburg`     type = `Default` icon = `factory` )
-        ( pos = `11.5820;48.1351;0`          contentoffset = `0;-5` scale = `1;1;1` key = `Munich`      tooltip = `Munich`      type = `Default` icon = `factory` )
-        ( pos = `8.683340000;50.112000000;0` contentoffset = `0;-6` scale = `1;1;1` key = `Frankfurt`   tooltip = `Frankfurt`   type = `Default` icon = `factory` ) ).
+      
+      CLEAR temp1.
+      
+      temp2-pos = `9.98336;53.55024;0`.
+      temp2-contentoffset = `0;-6`.
+      temp2-scale = `1;1;1`.
+      temp2-key = `Hamburg`.
+      temp2-tooltip = `Hamburg`.
+      temp2-type = `Default`.
+      temp2-icon = `factory`.
+      INSERT temp2 INTO TABLE temp1.
+      temp2-pos = `11.5820;48.1351;0`.
+      temp2-contentoffset = `0;-5`.
+      temp2-scale = `1;1;1`.
+      temp2-key = `Munich`.
+      temp2-tooltip = `Munich`.
+      temp2-type = `Default`.
+      temp2-icon = `factory`.
+      INSERT temp2 INTO TABLE temp1.
+      temp2-pos = `8.683340000;50.112000000;0`.
+      temp2-contentoffset = `0;-6`.
+      temp2-scale = `1;1;1`.
+      temp2-key = `Frankfurt`.
+      temp2-tooltip = `Frankfurt`.
+      temp2-type = `Default`.
+      temp2-icon = `factory`.
+      INSERT temp2 INTO TABLE temp1.
+      mt_spot = temp1.
 
-      mt_route = VALUE #(
-        (  position = `2.3522219;48.856614;0; -74.0059731;40.7143528;0`   routetype = `Geodesic` linedash = `10;5` color = `92,186,230` colorborder = `rgb(255,255,255)` linewidth = `25` ) ).
+      
+      CLEAR temp3.
+      
+      temp4-position = `2.3522219;48.856614;0; -74.0059731;40.7143528;0`.
+      temp4-routetype = `Geodesic`.
+      temp4-linedash = `10;5`.
+      temp4-color = `92,186,230`.
+      temp4-colorborder = `rgb(255,255,255)`.
+      temp4-linewidth = `25`.
+      INSERT temp4 INTO TABLE temp3.
+      mt_route = temp3.
 
-      mt_legend = VALUE #(
-        (   text = `Dashed flight route` color = `rgb(92,186,230)` )
-        (   text = `Flight route` color = `rgb(92,186,35)` ) ).
+      
+      CLEAR temp5.
+      
+      temp6-text = `Dashed flight route`.
+      temp6-color = `rgb(92,186,230)`.
+      INSERT temp6 INTO TABLE temp5.
+      temp6-text = `Flight route`.
+      temp6-color = `rgb(92,186,35)`.
+      INSERT temp6 INTO TABLE temp5.
+      mt_legend = temp5.
     ENDIF.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `displayBlock` v = `true`

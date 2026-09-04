@@ -9,7 +9,7 @@ CLASS z2ui5_cl_smpc_app_212 DEFINITION PUBLIC.
       BEGIN OF ty_s_product,
         name TYPE string,
       END OF ty_s_product.
-    DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
+    DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -26,10 +26,10 @@ CLASS z2ui5_cl_smpc_app_212 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -38,7 +38,8 @@ CLASS z2ui5_cl_smpc_app_212 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -64,130 +65,257 @@ CLASS z2ui5_cl_smpc_app_212 IMPLEMENTATION.
   METHOD model_init.
 
     " full mock /ProductCollection (sap/ui/demo/mock/products.json)
-    t_products = VALUE #(
-      ( name = `Notebook Basic 15`                                  )
-      ( name = `Notebook Basic 17`                                  )
-      ( name = `Notebook Basic 18`                                  )
-      ( name = `Notebook Basic 19`                                  )
-      ( name = `ITelO Vault`                                        )
-      ( name = `Notebook Professional 15`                           )
-      ( name = `Notebook Professional 17`                           )
-      ( name = `ITelO Vault Net`                                    )
-      ( name = `ITelO Vault SAT`                                    )
-      ( name = `Comfort Easy`                                       )
-      ( name = `Comfort Senior`                                     )
-      ( name = `Ergo Screen E-I`                                    )
-      ( name = `Ergo Screen E-II`                                   )
-      ( name = `Ergo Screen E-III`                                  )
-      ( name = `Flat Basic`                                         )
-      ( name = `Flat Future`                                        )
-      ( name = `Flat XL`                                            )
-      ( name = `Laser Professional Eco`                             )
-      ( name = `Laser Basic`                                        )
-      ( name = `Laser Allround`                                     )
-      ( name = `Ultra Jet Super Color`                              )
-      ( name = `Ultra Jet Mobile`                                   )
-      ( name = `Ultra Jet Super Highspeed`                          )
-      ( name = `Multi Print`                                        )
-      ( name = `Multi Color`                                        )
-      ( name = `Cordless Mouse`                                     )
-      ( name = `Speed Mouse`                                        )
-      ( name = `Track Mouse`                                        )
-      ( name = `Ergonomic Keyboard`                                 )
-      ( name = `Internet Keyboard`                                  )
-      ( name = `Media Keyboard`                                     )
-      ( name = `Mousepad`                                           )
-      ( name = `Ergo Mousepad`                                      )
-      ( name = `Designer Mousepad`                                  )
-      ( name = `Universal card reader`                              )
-      ( name = `Proctra X`                                          )
-      ( name = `Gladiator MX`                                       )
-      ( name = `Hurricane GX`                                       )
-      ( name = `Hurricane GX/LN`                                    )
-      ( name = `Photo Scan`                                         )
-      ( name = `Power Scan`                                         )
-      ( name = `Jet Scan Professional`                              )
-      ( name = `Jet Scan Professional`                              )
-      ( name = `Copymaster`                                         )
-      ( name = `Surround Sound`                                     )
-      ( name = `Blaster Extreme`                                    )
-      ( name = `Sound Booster`                                      )
-      ( name = `Lovely Sound 5.1 Wireless`                          )
-      ( name = `Lovely Sound 5.1`                                   )
-      ( name = `Lovely Sound Stereo`                                )
-      ( name = `Smart Office`                                       )
-      ( name = `Smart Design`                                       )
-      ( name = `Smart Network`                                      )
-      ( name = `Smart Multimedia`                                   )
-      ( name = `Smart Games`                                        )
-      ( name = `Smart Internet Antivirus`                           )
-      ( name = `Smart Firewall`                                     )
-      ( name = `Smart Money`                                        )
-      ( name = `PC Lock`                                            )
-      ( name = `Notebook Lock`                                      )
-      ( name = `Web cam reality`                                    )
-      ( name = `Screen clean`                                       )
-      ( name = `Fabric bag professional`                            )
-      ( name = `Wireless DSL Router`                                )
-      ( name = `Wireless DSL Router / Repeater`                     )
-      ( name = `Wireless DSL Router / Repeater and Print Server`    )
-      ( name = `USB Stick`                                          )
-      ( name = `Travel Adapter`                                     )
-      ( name = `Cordless Bluetooth Keyboard, english international` )
-      ( name = `Flat XXL`                                           )
-      ( name = `Pocket Mouse`                                       )
-      ( name = `PC Power Station`                                   )
-      ( name = `Astro Laptop 1516`                                  )
-      ( name = `Astro Phone 6`                                      )
-      ( name = `Benda Laptop 1408`                                  )
-      ( name = `Bending Screen 21HD`                                )
-      ( name = `Broad Screen 22HD`                                  )
-      ( name = `Cerdik Phone 7`                                     )
-      ( name = `Cepat Tablet 10.5`                                  )
-      ( name = `Cepat Tablet 8`                                     )
-      ( name = `Server Basic`                                       )
-      ( name = `Server Professional`                                )
-      ( name = `Server Power Pro`                                   )
-      ( name = `Family PC Basic`                                    )
-      ( name = `Family PC Pro`                                      )
-      ( name = `Gaming Monster`                                     )
-      ( name = `Gaming Monster Pro`                                 )
-      ( name = `7" Widescreen Portable DVD Player w MP3`            )
-      ( name = `10" Portable DVD player`                            )
-      ( name = `Portable DVD Player with 9" LCD Monitor`            )
-      ( name = `CD/DVD case: 264 sleeves`                           )
-      ( name = `Audio/Video Cable Kit - 4m`                         )
-      ( name = `Removable CD/DVD Laser Labels`                      )
-      ( name = `Beam Breaker B-1`                                   )
-      ( name = `Beam Breaker B-2`                                   )
-      ( name = `Beam Breaker B-3`                                   )
-      ( name = `Play Movie`                                         )
-      ( name = `Record Movie`                                       )
-      ( name = `ITelo MusicStick`                                   )
-      ( name = `ITelo Jog-Mate`                                     )
-      ( name = `Power Pro Player 40`                                )
-      ( name = `Power Pro Player 80`                                )
-      ( name = `Flat Watch HD32`                                    )
-      ( name = `Flat Watch HD37`                                    )
-      ( name = `Flat Watch HD41`                                    )
-      ( name = `Copperberry`                                        )
-      ( name = `Silverberry`                                        )
-      ( name = `Goldberry`                                          )
-      ( name = `Platinberry`                                        )
-      ( name = `ITelO FlexTop I4000`                                )
-      ( name = `ITelO FlexTop I6300c`                               )
-      ( name = `ITelO FlexTop I9100`                                )
-      ( name = `ITelO FlexTop I9800`                                )
-      ( name = `Smartphone Leather Case`                            )
-      ( name = `Smartphone Alpha`                                   )
-      ( name = `Mini Tablet`                                        )
-      ( name = `Camcorder View`                                     )
-      ( name = `Tablet Pouch`                                       )
-      ( name = `Tablet Pouch`                                       )
-      ( name = `e-Book Reader ReadMe`                               )
-      ( name = `Smartphone Beta`                                    )
-      ( name = `Maxi Tablet`                                        )
-      ( name = `Flyer`                                              ) ).
+    DATA temp1 LIKE t_products.
+    DATA temp2 LIKE LINE OF temp1.
+    CLEAR temp1.
+    
+    temp2-name = `Notebook Basic 15`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Basic 17`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Basic 18`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Basic 19`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO Vault`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Professional 15`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Professional 17`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO Vault Net`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO Vault SAT`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Comfort Easy`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Comfort Senior`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Ergo Screen E-I`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Ergo Screen E-II`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Ergo Screen E-III`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Flat Basic`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Flat Future`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Flat XL`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Laser Professional Eco`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Laser Basic`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Laser Allround`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Ultra Jet Super Color`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Ultra Jet Mobile`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Ultra Jet Super Highspeed`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Multi Print`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Multi Color`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Cordless Mouse`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Speed Mouse`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Track Mouse`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Ergonomic Keyboard`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Internet Keyboard`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Media Keyboard`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Mousepad`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Ergo Mousepad`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Designer Mousepad`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Universal card reader`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Proctra X`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Gladiator MX`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Hurricane GX`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Hurricane GX/LN`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Photo Scan`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Power Scan`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Jet Scan Professional`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Jet Scan Professional`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Copymaster`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Surround Sound`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Blaster Extreme`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Sound Booster`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Lovely Sound 5.1 Wireless`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Lovely Sound 5.1`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Lovely Sound Stereo`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smart Office`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smart Design`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smart Network`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smart Multimedia`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smart Games`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smart Internet Antivirus`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smart Firewall`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smart Money`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `PC Lock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Lock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Web cam reality`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Screen clean`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Fabric bag professional`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Wireless DSL Router`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Wireless DSL Router / Repeater`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Wireless DSL Router / Repeater and Print Server`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `USB Stick`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Travel Adapter`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Cordless Bluetooth Keyboard, english international`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Flat XXL`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Pocket Mouse`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `PC Power Station`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Astro Laptop 1516`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Astro Phone 6`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Benda Laptop 1408`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Bending Screen 21HD`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Broad Screen 22HD`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Cerdik Phone 7`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Cepat Tablet 10.5`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Cepat Tablet 8`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Server Basic`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Server Professional`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Server Power Pro`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Family PC Basic`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Family PC Pro`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Gaming Monster`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Gaming Monster Pro`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `7" Widescreen Portable DVD Player w MP3`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `10" Portable DVD player`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Portable DVD Player with 9" LCD Monitor`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `CD/DVD case: 264 sleeves`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Audio/Video Cable Kit - 4m`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Removable CD/DVD Laser Labels`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Beam Breaker B-1`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Beam Breaker B-2`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Beam Breaker B-3`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Play Movie`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Record Movie`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelo MusicStick`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelo Jog-Mate`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Power Pro Player 40`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Power Pro Player 80`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Flat Watch HD32`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Flat Watch HD37`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Flat Watch HD41`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Copperberry`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Silverberry`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Goldberry`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Platinberry`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO FlexTop I4000`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO FlexTop I6300c`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO FlexTop I9100`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO FlexTop I9800`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smartphone Leather Case`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smartphone Alpha`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Mini Tablet`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Camcorder View`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Tablet Pouch`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Tablet Pouch`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `e-Book Reader ReadMe`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Smartphone Beta`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Maxi Tablet`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Flyer`.
+    INSERT temp2 INTO TABLE temp1.
+    t_products = temp1.
 
   ENDMETHOD.
 

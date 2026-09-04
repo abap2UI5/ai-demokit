@@ -10,7 +10,7 @@ CLASS z2ui5_cl_smpc_app_375 DEFINITION PUBLIC.
         label      TYPE string,
         valuestate TYPE string,
       END OF ty_s_model_data.
-    DATA t_model_data TYPE STANDARD TABLE OF ty_s_model_data WITH EMPTY KEY.
+    DATA t_model_data TYPE STANDARD TABLE OF ty_s_model_data WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -27,10 +27,10 @@ CLASS z2ui5_cl_smpc_app_375 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -39,7 +39,8 @@ CLASS z2ui5_cl_smpc_app_375 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -70,12 +71,26 @@ CLASS z2ui5_cl_smpc_app_375 IMPLEMENTATION.
 
     " Data of the inline JSON model defined in the original sample controller
     " (the label prefix is the controller's sText variable)
-    t_model_data = VALUE #(
-      ( label = `StepInput with valueState None`        valuestate = `None` )
-      ( label = `StepInput with valueState Information` valuestate = `Information` )
-      ( label = `StepInput with valueState Success`     valuestate = `Success` )
-      ( label = `StepInput with valueState Warning`     valuestate = `Warning` )
-      ( label = `StepInput with valueState Error`       valuestate = `Error` ) ).
+    DATA temp1 LIKE t_model_data.
+    DATA temp2 LIKE LINE OF temp1.
+    CLEAR temp1.
+    
+    temp2-label = `StepInput with valueState None`.
+    temp2-valuestate = `None`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-label = `StepInput with valueState Information`.
+    temp2-valuestate = `Information`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-label = `StepInput with valueState Success`.
+    temp2-valuestate = `Success`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-label = `StepInput with valueState Warning`.
+    temp2-valuestate = `Warning`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-label = `StepInput with valueState Error`.
+    temp2-valuestate = `Error`.
+    INSERT temp2 INTO TABLE temp1.
+    t_model_data = temp1.
 
   ENDMETHOD.
 

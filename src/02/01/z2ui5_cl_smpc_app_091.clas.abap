@@ -19,7 +19,7 @@ CLASS z2ui5_cl_smpc_app_091 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -28,9 +28,35 @@ CLASS z2ui5_cl_smpc_app_091 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    DATA temp3 TYPE string_table.
+    DATA temp4 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
 
+    
+    CLEAR temp1.
+    INSERT `HiddenTP` INTO TABLE temp1.
+    INSERT `openBy` INTO TABLE temp1.
+    INSERT `$event.oSource.sId` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `HiddenTP` INTO TABLE temp2.
+    INSERT `openBy` INTO TABLE temp2.
+    INSERT `$event.oSource.sId` INTO TABLE temp2.
+    
+    CLEAR temp3.
+    INSERT `HiddenTP` INTO TABLE temp3.
+    INSERT `openBy` INTO TABLE temp3.
+    INSERT `$event.oSource.sId` INTO TABLE temp3.
+    
+    CLEAR temp4.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp4.
+    INSERT `show` INTO TABLE temp4.
+    INSERT `Time selected: {0}` INTO TABLE temp4.
+    INSERT `${$parameters>/value}` INTO TABLE temp4.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
@@ -46,7 +72,7 @@ CLASS z2ui5_cl_smpc_app_091 IMPLEMENTATION.
             )->tag( `Button`
                 )->a( n = `ariaHasPopup` v = `Dialog`
                 )->a( n = `text`         v = `Open Time Picker`
-                )->a( n = `press`        v = client->follow_up_action( val = client->cs_event-control_by_id t_arg = VALUE #( ( `HiddenTP` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
+                )->a( n = `press`        v = client->follow_up_action( val = client->cs_event-control_by_id t_arg = temp1 )
 
         )->end(
         )->ele( `VBox`
@@ -57,7 +83,7 @@ CLASS z2ui5_cl_smpc_app_091 IMPLEMENTATION.
                 )->a( n = `ariaHasPopup` v = `Dialog`
                 )->a( n = `tooltip`      v = `Open Time Picker`
                 )->a( n = `icon`         v = `sap-icon://time-entry-request`
-                )->a( n = `press`        v = client->follow_up_action( val = client->cs_event-control_by_id t_arg = VALUE #( ( `HiddenTP` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
+                )->a( n = `press`        v = client->follow_up_action( val = client->cs_event-control_by_id t_arg = temp2 )
 
         )->end(
         )->ele( `VBox`
@@ -67,14 +93,14 @@ CLASS z2ui5_cl_smpc_app_091 IMPLEMENTATION.
             )->tag( `Link`
                 )->a( n = `ariaHasPopup` v = `Dialog`
                 )->a( n = `text`         v = `Open Time Picker`
-                )->a( n = `press`        v = client->follow_up_action( val = client->cs_event-control_by_id t_arg = VALUE #( ( `HiddenTP` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
+                )->a( n = `press`        v = client->follow_up_action( val = client->cs_event-control_by_id t_arg = temp3 )
 
         )->end(
 
         )->tag( `TimePicker`
             )->a( n = `id`        v = `HiddenTP`
             )->a( n = `hideInput` v = `true`
-            )->a( n = `change`    v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Time selected: {0}` ) ( `${$parameters>/value}` ) ) ) ).
+            )->a( n = `change`    v = client->follow_up_action( val = client->cs_event-control_global t_arg = temp4 ) ).
 
     client->view_display( view->stringify( ) ).
 

@@ -17,7 +17,7 @@ CLASS z2ui5_cl_smpc_app_252 DEFINITION PUBLIC.
         height        TYPE string,
         weightmeasure TYPE string,
       END OF ty_s_product.
-    DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
+    DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH DEFAULT KEY.
 
     DATA pages_count    TYPE i.
     DATA scroll_visible TYPE abap_bool.
@@ -37,10 +37,10 @@ CLASS z2ui5_cl_smpc_app_252 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -49,7 +49,9 @@ CLASS z2ui5_cl_smpc_app_252 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`       v = `sap.m`
@@ -218,8 +220,12 @@ CLASS z2ui5_cl_smpc_app_252 IMPLEMENTATION.
     client->view_display( view->stringify( ) ).
 
     " onInit: oProductsModel.setSizeLimit(10) - the model-level limit 1:1
+    
+    CLEAR temp1.
+    INSERT `10` INTO TABLE temp1.
+    INSERT client->cs_view-main INTO TABLE temp1.
     client->follow_up_action( val   = client->cs_event-set_size_limit
-                              t_arg = VALUE #( ( `10` ) ( client->cs_view-main ) ) ).
+                              t_arg = temp1 ).
 
   ENDMETHOD.
 
@@ -234,385 +240,1255 @@ CLASS z2ui5_cl_smpc_app_252 IMPLEMENTATION.
     " desktop leg. The mirror collapses that pair to the single string 'combi',
     " which is why it has to be named here - checking 'tablet' alone would give
     " such a machine 2 pages where the sample gives 4
-    pages_count    = COND #(
-        WHEN client->get( )-s_device-system = z2ui5_if_client=>cs_device-system-desktop
-          OR client->get( )-s_device-system = z2ui5_if_client=>cs_device-system-combi  THEN 4
-        WHEN client->get( )-s_device-system = z2ui5_if_client=>cs_device-system-tablet  THEN 2
-        ELSE 1 ).
+    DATA temp3 TYPE i.
+    DATA temp4 LIKE t_products.
+    DATA temp5 LIKE LINE OF temp4.
+    IF client->get( )-s_device-system = z2ui5_if_client=>cs_device-system-desktop OR client->get( )-s_device-system = z2ui5_if_client=>cs_device-system-combi.
+      temp3 = 4.
+    ELSEIF client->get( )-s_device-system = z2ui5_if_client=>cs_device-system-tablet.
+      temp3 = 2.
+    ELSE.
+      temp3 = 1.
+    ENDIF.
+    pages_count    = temp3.
     scroll_visible = abap_false.
 
     " sap/ui/demo/mock/products.json - the full 123-row ProductCollection,
     " the nine bound fields per row (setSizeLimit(10) caps the rendering)
-    t_products = VALUE #(
-          ( name = `Notebook Basic 15` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg`
-            suppliername = `Very Best Screens` maincategory = `Computer Systems` category = `Laptops`
-            width = `30` height = `3` weightmeasure = `4.2` )
-          ( name = `Notebook Basic 17` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1001.jpg`
-            suppliername = `Very Best Screens` maincategory = `Computer Systems` category = `Laptops`
-            width = `29` height = `3.1` weightmeasure = `4.5` )
-          ( name = `Notebook Basic 18` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1002.jpg`
-            suppliername = `Very Best Screens` maincategory = `Computer Systems` category = `Laptops`
-            width = `28` height = `2.5` weightmeasure = `4.2` )
-          ( name = `Notebook Basic 19` status = `Out of Stock` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1003.jpg`
-            suppliername = `Smartcards` maincategory = `Computer Systems` category = `Laptops`
-            width = `32` height = `4` weightmeasure = `4.2` )
-          ( name = `ITelO Vault` status = `Out of Stock` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1007.jpg`
-            suppliername = `Technocom` maincategory = `Computer Components` category = `Accessories`
-            width = `32` height = `3` weightmeasure = `0.2` )
-          ( name = `Notebook Professional 15` status = `Out of Stock` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1010.jpg`
-            suppliername = `Very Best Screens` maincategory = `Computer Systems` category = `Accessories`
-            width = `33` height = `3` weightmeasure = `4.3` )
-          ( name = `Notebook Professional 17` status = `Out of Stock` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1011.jpg`
-            suppliername = `Very Best Screens` maincategory = `Computer Systems` category = `Laptops`
-            width = `33` height = `2` weightmeasure = `4.1` )
-          ( name = `ITelO Vault Net` status = `Discontinued` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1020.jpg`
-            suppliername = `Technocom` maincategory = `Computer Components` category = `Accessories`
-            width = `10` height = `17` weightmeasure = `0.16` )
-          ( name = `ITelO Vault SAT` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1021.jpg`
-            suppliername = `Technocom` maincategory = `Computer Components` category = `Accessories`
-            width = `11` height = `18` weightmeasure = `0.18` )
-          ( name = `Comfort Easy` status = `Out of Stock` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1022.jpg`
-            suppliername = `Technocom` maincategory = `Computer Components` category = `Accessories`
-            width = `84` height = `14` weightmeasure = `0.2` )
-          ( name = `Comfort Senior` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1023.jpg`
-            suppliername = `Technocom` maincategory = `Computer Components` category = `Accessories`
-            width = `80` height = `13` weightmeasure = `0.8` )
-          ( name = `Ergo Screen E-I` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1030.jpg`
-            suppliername = `Very Best Screens` maincategory = `Computer Components` category = `Flat Screen Monitors`
-            width = `37` height = `36` weightmeasure = `21` )
-          ( name = `Ergo Screen E-II` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1031.jpg`
-            suppliername = `Very Best Screens` maincategory = `Computer Components` category = `Flat Screen Monitors`
-            width = `40.8` height = `43` weightmeasure = `21` )
-          ( name = `Ergo Screen E-III` status = `Out of Stock` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1032.jpg`
-            suppliername = `Very Best Screens` maincategory = `Computer Components` category = `Flat Screen Monitors`
-            width = `40.8` height = `43` weightmeasure = `21` )
-          ( name = `Flat Basic` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1035.jpg`
-            suppliername = `Very Best Screens` maincategory = `Computer Components` category = `Flat Screen Monitors`
-            width = `39` height = `41` weightmeasure = `14` )
-          ( name = `Flat Future` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1036.jpg`
-            suppliername = `Very Best Screens` maincategory = `Computer Components` category = `Flat Screen Monitors`
-            width = `45` height = `46` weightmeasure = `15` )
-          ( name = `Flat XL` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1037.jpg`
-            suppliername = `Very Best Screens` maincategory = `Computer Components` category = `Flat Screen Monitors`
-            width = `54.5` height = `39.1` weightmeasure = `17` )
-          ( name = `Laser Professional Eco` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1040.jpg`
-            suppliername = `Alpha Printers` maincategory = `Printers & Scanners` category = `Printers`
-            width = `51` height = `30` weightmeasure = `32` )
-          ( name = `Laser Basic` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1041.jpg`
-            suppliername = `Alpha Printers` maincategory = `Printers & Scanners` category = `Printers`
-            width = `48` height = `26` weightmeasure = `23` )
-          ( name = `Laser Allround` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1042.jpg`
-            suppliername = `Alpha Printers` maincategory = `Printers & Scanners` category = `Printers`
-            width = `53` height = `65` weightmeasure = `17` )
-          ( name = `Ultra Jet Super Color` status = `Discontinued` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1050.jpg`
-            suppliername = `Alpha Printers` maincategory = `Printers & Scanners` category = `Printers`
-            width = `41` height = `28` weightmeasure = `3` )
-          ( name = `Ultra Jet Mobile` status = `Discontinued` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1051.jpg`
-            suppliername = `Printer for All` maincategory = `Printers & Scanners` category = `Printers`
-            width = `46` height = `25` weightmeasure = `1.9` )
-          ( name = `Ultra Jet Super Highspeed` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1052.jpg`
-            suppliername = `Printer for All` maincategory = `Printers & Scanners` category = `Printers`
-            width = `41` height = `28` weightmeasure = `18` )
-          ( name = `Multi Print` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1055.jpg`
-            suppliername = `Printer for All` maincategory = `Printers & Scanners` category = `Multifunction Printers`
-            width = `55` height = `29` weightmeasure = `6.3` )
-          ( name = `Multi Color` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1056.jpg`
-            suppliername = `Printer for All` maincategory = `Printers & Scanners` category = `Multifunction Printers`
-            width = `51` height = `22` weightmeasure = `4.3` )
-          ( name = `Cordless Mouse` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1060.jpg`
-            suppliername = `Oxynum` maincategory = `Computer Components` category = `Mice`
-            width = `6` height = `3.5` weightmeasure = `0.09` )
-          ( name = `Speed Mouse` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1061.jpg`
-            suppliername = `Oxynum` maincategory = `Computer Components` category = `Mice`
-            width = `7` height = `3.1` weightmeasure = `0.09` )
-          ( name = `Track Mouse` status = `Discontinued` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1062.jpg`
-            suppliername = `Oxynum` maincategory = `Computer Components` category = `Mice`
-            width = `3` height = `4` weightmeasure = `0.03` )
-          ( name = `Ergonomic Keyboard` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1063.jpg`
-            suppliername = `Oxynum` maincategory = `Computer Components` category = `Keyboards`
-            width = `50` height = `3.5` weightmeasure = `2.1` )
-          ( name = `Internet Keyboard` status = `Out of Stock` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1064.jpg`
-            suppliername = `Oxynum` maincategory = `Computer Components` category = `Keyboards`
-            width = `52` height = `3` weightmeasure = `1.8` )
-          ( name = `Media Keyboard` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1065.jpg`
-            suppliername = `Oxynum` maincategory = `Computer Components` category = `Keyboards`
-            width = `51.4` height = `4` weightmeasure = `2.3` )
-          ( name = `Mousepad` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1066.jpg`
-            suppliername = `Oxynum` maincategory = `Computer Components` category = `Mousepads`
-            width = `15` height = `0.2` weightmeasure = `80` )
-          ( name = `Ergo Mousepad` status = `Out of Stock` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1067.jpg`
-            suppliername = `Oxynum` maincategory = `Computer Components` category = `Mousepads`
-            width = `15` height = `0.2` weightmeasure = `80` )
-          ( name = `Designer Mousepad` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1068.jpg`
-            suppliername = `Fasttech` maincategory = `Computer Components` category = `Mousepads`
-            width = `24` height = `0.6` weightmeasure = `90` )
-          ( name = `Universal card reader` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1069.jpg`
-            suppliername = `Fasttech` maincategory = `Computer Systems` category = `Computer System Accessories`
-            width = `6` height = `3` weightmeasure = `45` )
-          ( name = `Proctra X` status = `Out of Stock` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1070.jpg`
-            suppliername = `Ultrasonic United` maincategory = `Computer Components` category = `Graphic Cards`
-            width = `22` height = `17` weightmeasure = `0.255` )
-          ( name = `Gladiator MX` status = `Discontinued` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1071.jpg`
-            suppliername = `Ultrasonic United` maincategory = `Computer Components` category = `Graphic Cards`
-            width = `22` height = `17` weightmeasure = `0.3` )
-          ( name = `Hurricane GX` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1072.jpg`
-            suppliername = `Ultrasonic United` maincategory = `Computer Components` category = `Graphic Cards`
-            width = `22` height = `17` weightmeasure = `0.4` )
-          ( name = `Hurricane GX/LN` status = `Out of Stock` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1073.jpg`
-            suppliername = `Smartcards` maincategory = `Computer Components` category = `Graphic Cards`
-            width = `22` height = `17` weightmeasure = `0.4` )
-          ( name = `Photo Scan` status = `Out of Stock` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1080.jpg`
-            suppliername = `Printer for All` maincategory = `Printers & Scanners` category = `Scanners`
-            width = `34` height = `5` weightmeasure = `2.3` )
-          ( name = `Power Scan` status = `Out of Stock` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1081.jpg`
-            suppliername = `Printer for All` maincategory = `Printers & Scanners` category = `Scanners`
-            width = `31` height = `7` weightmeasure = `2.4` )
-          ( name = `Jet Scan Professional` status = `Out of Stock` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1082.jpg`
-            suppliername = `Printer for All` maincategory = `Printers & Scanners` category = `Scanners`
-            width = `33` height = `12` weightmeasure = `3.2` )
-          ( name = `Jet Scan Professional` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1083.jpg`
-            suppliername = `Printer for All` maincategory = `Printers & Scanners` category = `Scanners`
-            width = `35` height = `10` weightmeasure = `3.2` )
-          ( name = `Copymaster` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1085.jpg`
-            suppliername = `Alpha Printers` maincategory = `Printers & Scanners` category = `Multifunction Printers`
-            width = `45` height = `22` weightmeasure = `23.2` )
-          ( name = `Surround Sound` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1090.jpg`
-            suppliername = `Speaker Experts` maincategory = `Computer Components` category = `Speakers`
-            width = `12` height = `16` weightmeasure = `3` )
-          ( name = `Blaster Extreme` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1091.jpg`
-            suppliername = `Speaker Experts` maincategory = `Computer Components` category = `Speakers`
-            width = `13` height = `17.5` weightmeasure = `1.4` )
-          ( name = `Sound Booster` status = `Discontinued` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1092.jpg`
-            suppliername = `Speaker Experts` maincategory = `Computer Components` category = `Speakers`
-            width = `12.4` height = `18.1` weightmeasure = `2.1` )
-          ( name = `Lovely Sound 5.1 Wireless` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1095.jpg`
-            suppliername = `Fasttech` maincategory = `Computer Components` category = `Accessories`
-            width = `24` height = `23` weightmeasure = `80` )
-          ( name = `Lovely Sound 5.1` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1096.jpg`
-            suppliername = `Fasttech` maincategory = `Computer Components` category = `Accessories`
-            width = `25` height = `19` weightmeasure = `130` )
-          ( name = `Lovely Sound Stereo` status = `Out of Stock` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1097.jpg`
-            suppliername = `Fasttech` maincategory = `Computer Components` category = `Accessories`
-            width = `21.3` height = `19.7` weightmeasure = `60` )
-          ( name = `Smart Office` status = `Out of Stock` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1100.jpg`
-            suppliername = `Technocom` maincategory = `Software` category = `Software`
-            width = `15` height = `2.1` weightmeasure = `1.2` )
-          ( name = `Smart Design` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1101.jpg`
-            suppliername = `Technocom` maincategory = `Software` category = `Software`
-            width = `14` height = `24` weightmeasure = `0.8` )
-          ( name = `Smart Network` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1102.jpg`
-            suppliername = `Technocom` maincategory = `Software` category = `Software`
-            width = `16` height = `27` weightmeasure = `0.8` )
-          ( name = `Smart Multimedia` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1103.jpg`
-            suppliername = `Technocom` maincategory = `Software` category = `Software`
-            width = `11` height = `22` weightmeasure = `0.8` )
-          ( name = `Smart Games` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1104.jpg`
-            suppliername = `Technocom` maincategory = `Software` category = `Software`
-            width = `10` height = `30` weightmeasure = `1.1` )
-          ( name = `Smart Internet Antivirus` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1105.jpg`
-            suppliername = `Brainsoft` maincategory = `Software` category = `Software`
-            width = `16` height = `21` weightmeasure = `0.7` )
-          ( name = `Smart Firewall` status = `Discontinued` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1106.jpg`
-            suppliername = `Brainsoft` maincategory = `Software` category = `Software`
-            width = `17.9` height = `23.1` weightmeasure = `0.9` )
-          ( name = `Smart Money` status = `Out of Stock` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1107.jpg`
-            suppliername = `Brainsoft` maincategory = `Software` category = `Software`
-            width = `12` height = `19` weightmeasure = `0.5` )
-          ( name = `PC Lock` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1110.jpg`
-            suppliername = `Red Point Stores` maincategory = `Computer Systems` category = `Computer System Accessories`
-            width = `20` height = `4.3` weightmeasure = `0.03` )
-          ( name = `Notebook Lock` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1111.jpg`
-            suppliername = `Red Point Stores` maincategory = `Computer Systems` category = `Computer System Accessories`
-            width = `31` height = `7` weightmeasure = `0.02` )
-          ( name = `Web cam reality` status = `Out of Stock` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1112.jpg`
-            suppliername = `Red Point Stores` maincategory = `Computer Systems` category = `Computer System Accessories`
-            width = `9` height = `1.3` weightmeasure = `0.075` )
-          ( name = `Screen clean` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1113.jpg`
-            suppliername = `Red Point Stores` maincategory = `Computer Systems` category = `Computer System Accessories`
-            width = `2` height = `0.1` weightmeasure = `0.05` )
-          ( name = `Fabric bag professional` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1114.jpg`
-            suppliername = `Red Point Stores` maincategory = `Computer Systems` category = `Computer System Accessories`
-            width = `42` height = `7` weightmeasure = `1.8` )
-          ( name = `Wireless DSL Router` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1115.jpg`
-            suppliername = `Red Point Stores` maincategory = `Computer Components` category = `Telecommunications`
-            width = `19.3` height = `5` weightmeasure = `0.45` )
-          ( name = `Wireless DSL Router / Repeater` status = `Out of Stock` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1116.jpg`
-            suppliername = `Red Point Stores` maincategory = `Computer Components` category = `Telecommunications`
-            width = `19.3` height = `5` weightmeasure = `0.45` )
-          ( name = `Wireless DSL Router / Repeater and Print Server` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1117.jpg`
-            suppliername = `Technocom` maincategory = `Computer Components` category = `Telecommunications`
-            width = `19.3` height = `5` weightmeasure = `0.45` )
-          ( name = `USB Stick` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1118.jpg`
-            suppliername = `Technocom` maincategory = `Computer Systems` category = `Computer System Accessories`
-            width = `1.5` height = `1.2` weightmeasure = `0.015` )
-          ( name = `Travel Adapter` status = `Discontinued` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1119.jpg`
-            suppliername = `Titanium` maincategory = `Computer Systems` category = `Accessories`
-            width = `2` height = `3.9` weightmeasure = `88` )
-          ( name = `Cordless Bluetooth Keyboard, english international` status = `Out of Stock` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1120.jpg`
-            suppliername = `Technocom` maincategory = `Computer Components` category = `Keyboards`
-            width = `51.4` height = `4` weightmeasure = `1` )
-          ( name = `Flat XXL` status = `Discontinued` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1137.jpg`
-            suppliername = `Technocom` maincategory = `Computer Components` category = `Flat Screen Monitors`
-            width = `54` height = `38` weightmeasure = `18` )
-          ( name = `Pocket Mouse` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1138.jpg`
-            suppliername = `Technocom` maincategory = `Computer Components` category = `Mice`
-            width = `0.3` height = `1` weightmeasure = `0.02` )
-          ( name = `PC Power Station` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1210.jpg`
-            suppliername = `Technocom` maincategory = `Computer Systems` category = `PCs`
-            width = `28` height = `43` weightmeasure = `2.3` )
-          ( name = `Astro Laptop 1516` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1251.jpg`
-            suppliername = `Ultrasonic United` maincategory = `Computer Systems` category = `Laptops`
-            width = `30` height = `3` weightmeasure = `4.2` )
-          ( name = `Astro Phone 6` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1252.jpg`
-            suppliername = `Ultrasonic United` maincategory = `Smartphones & Tablets` category = `Smartphones and Tablets`
-            width = `8` height = `1.5` weightmeasure = `0.75` )
-          ( name = `Benda Laptop 1408` status = `Discontinued` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1253.jpg`
-            suppliername = `Ultrasonic United` maincategory = `Computer Systems` category = `Laptops`
-            width = `30` height = `3` weightmeasure = `4.2` )
-          ( name = `Bending Screen 21HD` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1254.jpg`
-            suppliername = `Ultrasonic United` maincategory = `Computer Components` category = `Flat Screens`
-            width = `37` height = `36` weightmeasure = `15` )
-          ( name = `Broad Screen 22HD` status = `Discontinued` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1255.jpg`
-            suppliername = `Ultrasonic United` maincategory = `Computer Components` category = `Flat Screens`
-            width = `39` height = `38` weightmeasure = `16` )
-          ( name = `Cerdik Phone 7` status = `Discontinued` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1256.jpg`
-            suppliername = `Ultrasonic United` maincategory = `Smartphones & Tablets` category = `Smartphones and Tablets`
-            width = `9` height = `1.5` weightmeasure = `0.75` )
-          ( name = `Cepat Tablet 10.5` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1257.jpg`
-            suppliername = `Ultrasonic United` maincategory = `Smartphones & Tablets` category = `Smartphones and Tablets`
-            width = `48` height = `4.5` weightmeasure = `2.8` )
-          ( name = `Cepat Tablet 8` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1258.jpg`
-            suppliername = `Ultrasonic United` maincategory = `Smartphones & Tablets` category = `Smartphones and Tablets`
-            width = `38` height = `3.5` weightmeasure = `2.5` )
-          ( name = `Server Basic` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1500.jpg`
-            suppliername = `Technocom` maincategory = `Computer Systems` category = `Servers`
-            width = `34` height = `23` weightmeasure = `18` )
-          ( name = `Server Professional` status = `Out of Stock` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1501.jpg`
-            suppliername = `Technocom` maincategory = `Computer Systems` category = `Servers`
-            width = `29` height = `27` weightmeasure = `25` )
-          ( name = `Server Power Pro` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1502.jpg`
-            suppliername = `Technocom` maincategory = `Computer Systems` category = `Servers`
-            width = `22` height = `37` weightmeasure = `35` )
-          ( name = `Family PC Basic` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1600.jpg`
-            suppliername = `Titanium` maincategory = `Computer Systems` category = `Desktop Computers`
-            width = `21.4` height = `38` weightmeasure = `4.8` )
-          ( name = `Family PC Pro` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1601.jpg`
-            suppliername = `Titanium` maincategory = `Computer Systems` category = `Desktop Computers`
-            width = `25` height = `40.2` weightmeasure = `5.3` )
-          ( name = `Gaming Monster` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1602.jpg`
-            suppliername = `Titanium` maincategory = `Computer Systems` category = `Desktop Computers`
-            width = `26.5` height = `47` weightmeasure = `5.9` )
-          ( name = `Gaming Monster Pro` status = `Discontinued` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1603.jpg`
-            suppliername = `Titanium` maincategory = `Computer Systems` category = `Desktop Computers`
-            width = `27` height = `42` weightmeasure = `6.8` )
-          ( name = `7" Widescreen Portable DVD Player w MP3` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2000.jpg`
-            suppliername = `Titanium` maincategory = `TV, Video & HiFi` category = `Accessories`
-            width = `21.4` height = `27.6` weightmeasure = `0.79` )
-          ( name = `10" Portable DVD player` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2001.jpg`
-            suppliername = `Titanium` maincategory = `TV, Video & HiFi` category = `Accessories`
-            width = `24` height = `29` weightmeasure = `0.84` )
-          ( name = `Portable DVD Player with 9" LCD Monitor` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2002.jpg`
-            suppliername = `Technocom` maincategory = `TV, Video & HiFi` category = `Accessories`
-            width = `21` height = `14` weightmeasure = `0.72` )
-          ( name = `CD/DVD case: 264 sleeves` status = `Discontinued` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2025.jpg`
-            suppliername = `Titanium` maincategory = `Computer Systems` category = `Accessories`
-            width = `13` height = `20` weightmeasure = `0.65` )
-          ( name = `Audio/Video Cable Kit - 4m` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2026.jpg`
-            suppliername = `Titanium` maincategory = `Computer Systems` category = `Accessories`
-            width = `21` height = `13` weightmeasure = `0.2` )
-          ( name = `Removable CD/DVD Laser Labels` status = `Discontinued` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2027.jpg`
-            suppliername = `Titanium` maincategory = `Computer Systems` category = `Accessories`
-            width = `5.5` height = `2` weightmeasure = `0.15` )
-          ( name = `Beam Breaker B-1` status = `Out of Stock` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6100.jpg`
-            suppliername = `Titanium` maincategory = `TV, Video & HiFi` category = `Accessories`
-            width = `30.4` height = `23` weightmeasure = `1.7` )
-          ( name = `Beam Breaker B-2` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6101.jpg`
-            suppliername = `Technocom` maincategory = `TV, Video & HiFi` category = `Accessories`
-            width = `30.4` height = `23` weightmeasure = `2` )
-          ( name = `Beam Breaker B-3` status = `Out of Stock` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6102.jpg`
-            suppliername = `Technocom` maincategory = `TV, Video & HiFi` category = `Accessories`
-            width = `30.4` height = `23` weightmeasure = `2.5` )
-          ( name = `Play Movie` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6110.jpg`
-            suppliername = `Fasttech` maincategory = `TV, Video & HiFi` category = `Accessories`
-            width = `37` height = `6` weightmeasure = `2.4` )
-          ( name = `Record Movie` status = `Discontinued` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6111.jpg`
-            suppliername = `Fasttech` maincategory = `TV, Video & HiFi` category = `Accessories`
-            width = `38` height = `6.2` weightmeasure = `3.1` )
-          ( name = `ITelo MusicStick` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6120.jpg`
-            suppliername = `Fasttech` maincategory = `TV, Video & HiFi` category = `Accessories`
-            width = `1.5` height = `1` weightmeasure = `134` )
-          ( name = `ITelo Jog-Mate` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6121.jpg`
-            suppliername = `Fasttech` maincategory = `TV, Video & HiFi` category = `Accessories`
-            width = `5.1` height = `9.2` weightmeasure = `134` )
-          ( name = `Power Pro Player 40` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6122.jpg`
-            suppliername = `Fasttech` maincategory = `TV, Video & HiFi` category = `Accessories`
-            width = `5.1` height = `9.2` weightmeasure = `266` )
-          ( name = `Power Pro Player 80` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6123.jpg`
-            suppliername = `Fasttech` maincategory = `TV, Video & HiFi` category = `Accessories`
-            width = `4` height = `0.8` weightmeasure = `267` )
-          ( name = `Flat Watch HD32` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6130.jpg`
-            suppliername = `Very Best Screens` maincategory = `TV, Video & HiFi` category = `Flat Screen TVs`
-            width = `78` height = `55` weightmeasure = `2.6` )
-          ( name = `Flat Watch HD37` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6131.jpg`
-            suppliername = `Very Best Screens` maincategory = `TV, Video & HiFi` category = `Flat Screen TVs`
-            width = `99.1` height = `61` weightmeasure = `2.2` )
-          ( name = `Flat Watch HD41` status = `Discontinued` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6132.jpg`
-            suppliername = `Very Best Screens` maincategory = `TV, Video & HiFi` category = `Flat Screen TVs`
-            width = `128` height = `79.1` weightmeasure = `1.8` )
-          ( name = `Copperberry` status = `Discontinued` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7000.jpg`
-            suppliername = `Fasttech` maincategory = `Computer Components` category = `Accessories`
-            width = `8.1` height = `12.1` weightmeasure = `0.5` )
-          ( name = `Silverberry` status = `Discontinued` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7010.jpg`
-            suppliername = `Fasttech` maincategory = `Computer Components` category = `Accessories`
-            width = `8.1` height = `12.1` weightmeasure = `0.5` )
-          ( name = `Goldberry` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7020.jpg`
-            suppliername = `Fasttech` maincategory = `Computer Components` category = `Accessories`
-            width = `8.1` height = `12.1` weightmeasure = `0.5` )
-          ( name = `Platinberry` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7030.jpg`
-            suppliername = `Fasttech` maincategory = `Computer Components` category = `Accessories`
-            width = `8.1` height = `12.1` weightmeasure = `0.5` )
-          ( name = `ITelO FlexTop I4000` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-8000.jpg`
-            suppliername = `Titanium` maincategory = `Computer Systems` category = `Laptops`
-            width = `31` height = `3.1` weightmeasure = `4` )
-          ( name = `ITelO FlexTop I6300c` status = `Discontinued` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-8001.jpg`
-            suppliername = `Titanium` maincategory = `Computer Systems` category = `Laptops`
-            width = `32` height = `3.4` weightmeasure = `4.2` )
-          ( name = `ITelO FlexTop I9100` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-8002.jpg`
-            suppliername = `Titanium` maincategory = `Computer Systems` category = `Laptops`
-            width = `38` height = `4.1` weightmeasure = `3.5` )
-          ( name = `ITelO FlexTop I9800` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-8003.jpg`
-            suppliername = `Titanium` maincategory = `Computer Systems` category = `Laptops`
-            width = `48` height = `4.5` weightmeasure = `3.8` )
-          ( name = `Smartphone Leather Case` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9991.jpg`
-            suppliername = `Ultrasonic United` maincategory = `Smartphones & Tablets` category = `Accessories`
-            width = `48` height = `4.5` weightmeasure = `0.02` )
-          ( name = `Smartphone Alpha` status = `Out of Stock` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9992.jpg`
-            suppliername = `Ultrasonic United` maincategory = `Smartphones & Tablets` category = `Smartphones and Tablets`
-            width = `48` height = `4.5` weightmeasure = `0.75` )
-          ( name = `Mini Tablet` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9993.jpg`
-            suppliername = `Ultrasonic United` maincategory = `Smartphones & Tablets` category = `Smartphones and Tablets`
-            width = `48` height = `4.5` weightmeasure = `3.8` )
-          ( name = `Camcorder View` status = `Out of Stock` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9994.jpg`
-            suppliername = `Ultrasonic United` maincategory = `TV, Video & HiFi` category = `Accessories`
-            width = `48` height = `27` weightmeasure = `3.8` )
-          ( name = `Tablet Pouch` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9995.jpg`
-            suppliername = `Titanium` maincategory = `Smartphones & Tablets` category = `Accessories`
-            width = `25` height = `4.5` weightmeasure = `0.03` )
-          ( name = `Tablet Pouch` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9996.jpg`
-            suppliername = `Titanium` maincategory = `Smartphones & Tablets` category = `Accessories`
-            width = `25` height = `4.5` weightmeasure = `0.03` )
-          ( name = `e-Book Reader ReadMe` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9997.jpg`
-            suppliername = `Titanium` maincategory = `Smartphones & Tablets` category = `Smartphones and Tablets`
-            width = `48` height = `4.5` weightmeasure = `3.8` )
-          ( name = `Smartphone Beta` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9998.jpg`
-            suppliername = `Titanium` maincategory = `Smartphones & Tablets` category = `Smartphones and Tablets`
-            width = `48` height = `4.5` weightmeasure = `0.75` )
-          ( name = `Maxi Tablet` status = `Available` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9999.jpg`
-            suppliername = `Titanium` maincategory = `Smartphones & Tablets` category = `Tablets`
-            width = `48` height = `4.5` weightmeasure = `3.8` )
-          ( name = `Flyer` status = `Out of Stock` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/PF-1000.jpg`
-            suppliername = `Titanium` maincategory = `Computer Systems` category = `Accessories`
-            width = `46` height = `3` weightmeasure = `0.01` ) ).
+    
+    CLEAR temp4.
+    
+    temp5-name = `Notebook Basic 15`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg`.
+    temp5-suppliername = `Very Best Screens`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Laptops`.
+    temp5-width = `30`.
+    temp5-height = `3`.
+    temp5-weightmeasure = `4.2`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Notebook Basic 17`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1001.jpg`.
+    temp5-suppliername = `Very Best Screens`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Laptops`.
+    temp5-width = `29`.
+    temp5-height = `3.1`.
+    temp5-weightmeasure = `4.5`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Notebook Basic 18`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1002.jpg`.
+    temp5-suppliername = `Very Best Screens`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Laptops`.
+    temp5-width = `28`.
+    temp5-height = `2.5`.
+    temp5-weightmeasure = `4.2`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Notebook Basic 19`.
+    temp5-status = `Out of Stock`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1003.jpg`.
+    temp5-suppliername = `Smartcards`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Laptops`.
+    temp5-width = `32`.
+    temp5-height = `4`.
+    temp5-weightmeasure = `4.2`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `ITelO Vault`.
+    temp5-status = `Out of Stock`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1007.jpg`.
+    temp5-suppliername = `Technocom`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Accessories`.
+    temp5-width = `32`.
+    temp5-height = `3`.
+    temp5-weightmeasure = `0.2`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Notebook Professional 15`.
+    temp5-status = `Out of Stock`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1010.jpg`.
+    temp5-suppliername = `Very Best Screens`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Accessories`.
+    temp5-width = `33`.
+    temp5-height = `3`.
+    temp5-weightmeasure = `4.3`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Notebook Professional 17`.
+    temp5-status = `Out of Stock`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1011.jpg`.
+    temp5-suppliername = `Very Best Screens`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Laptops`.
+    temp5-width = `33`.
+    temp5-height = `2`.
+    temp5-weightmeasure = `4.1`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `ITelO Vault Net`.
+    temp5-status = `Discontinued`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1020.jpg`.
+    temp5-suppliername = `Technocom`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Accessories`.
+    temp5-width = `10`.
+    temp5-height = `17`.
+    temp5-weightmeasure = `0.16`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `ITelO Vault SAT`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1021.jpg`.
+    temp5-suppliername = `Technocom`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Accessories`.
+    temp5-width = `11`.
+    temp5-height = `18`.
+    temp5-weightmeasure = `0.18`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Comfort Easy`.
+    temp5-status = `Out of Stock`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1022.jpg`.
+    temp5-suppliername = `Technocom`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Accessories`.
+    temp5-width = `84`.
+    temp5-height = `14`.
+    temp5-weightmeasure = `0.2`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Comfort Senior`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1023.jpg`.
+    temp5-suppliername = `Technocom`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Accessories`.
+    temp5-width = `80`.
+    temp5-height = `13`.
+    temp5-weightmeasure = `0.8`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Ergo Screen E-I`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1030.jpg`.
+    temp5-suppliername = `Very Best Screens`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Flat Screen Monitors`.
+    temp5-width = `37`.
+    temp5-height = `36`.
+    temp5-weightmeasure = `21`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Ergo Screen E-II`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1031.jpg`.
+    temp5-suppliername = `Very Best Screens`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Flat Screen Monitors`.
+    temp5-width = `40.8`.
+    temp5-height = `43`.
+    temp5-weightmeasure = `21`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Ergo Screen E-III`.
+    temp5-status = `Out of Stock`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1032.jpg`.
+    temp5-suppliername = `Very Best Screens`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Flat Screen Monitors`.
+    temp5-width = `40.8`.
+    temp5-height = `43`.
+    temp5-weightmeasure = `21`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Flat Basic`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1035.jpg`.
+    temp5-suppliername = `Very Best Screens`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Flat Screen Monitors`.
+    temp5-width = `39`.
+    temp5-height = `41`.
+    temp5-weightmeasure = `14`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Flat Future`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1036.jpg`.
+    temp5-suppliername = `Very Best Screens`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Flat Screen Monitors`.
+    temp5-width = `45`.
+    temp5-height = `46`.
+    temp5-weightmeasure = `15`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Flat XL`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1037.jpg`.
+    temp5-suppliername = `Very Best Screens`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Flat Screen Monitors`.
+    temp5-width = `54.5`.
+    temp5-height = `39.1`.
+    temp5-weightmeasure = `17`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Laser Professional Eco`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1040.jpg`.
+    temp5-suppliername = `Alpha Printers`.
+    temp5-maincategory = `Printers & Scanners`.
+    temp5-category = `Printers`.
+    temp5-width = `51`.
+    temp5-height = `30`.
+    temp5-weightmeasure = `32`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Laser Basic`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1041.jpg`.
+    temp5-suppliername = `Alpha Printers`.
+    temp5-maincategory = `Printers & Scanners`.
+    temp5-category = `Printers`.
+    temp5-width = `48`.
+    temp5-height = `26`.
+    temp5-weightmeasure = `23`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Laser Allround`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1042.jpg`.
+    temp5-suppliername = `Alpha Printers`.
+    temp5-maincategory = `Printers & Scanners`.
+    temp5-category = `Printers`.
+    temp5-width = `53`.
+    temp5-height = `65`.
+    temp5-weightmeasure = `17`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Ultra Jet Super Color`.
+    temp5-status = `Discontinued`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1050.jpg`.
+    temp5-suppliername = `Alpha Printers`.
+    temp5-maincategory = `Printers & Scanners`.
+    temp5-category = `Printers`.
+    temp5-width = `41`.
+    temp5-height = `28`.
+    temp5-weightmeasure = `3`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Ultra Jet Mobile`.
+    temp5-status = `Discontinued`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1051.jpg`.
+    temp5-suppliername = `Printer for All`.
+    temp5-maincategory = `Printers & Scanners`.
+    temp5-category = `Printers`.
+    temp5-width = `46`.
+    temp5-height = `25`.
+    temp5-weightmeasure = `1.9`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Ultra Jet Super Highspeed`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1052.jpg`.
+    temp5-suppliername = `Printer for All`.
+    temp5-maincategory = `Printers & Scanners`.
+    temp5-category = `Printers`.
+    temp5-width = `41`.
+    temp5-height = `28`.
+    temp5-weightmeasure = `18`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Multi Print`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1055.jpg`.
+    temp5-suppliername = `Printer for All`.
+    temp5-maincategory = `Printers & Scanners`.
+    temp5-category = `Multifunction Printers`.
+    temp5-width = `55`.
+    temp5-height = `29`.
+    temp5-weightmeasure = `6.3`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Multi Color`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1056.jpg`.
+    temp5-suppliername = `Printer for All`.
+    temp5-maincategory = `Printers & Scanners`.
+    temp5-category = `Multifunction Printers`.
+    temp5-width = `51`.
+    temp5-height = `22`.
+    temp5-weightmeasure = `4.3`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Cordless Mouse`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1060.jpg`.
+    temp5-suppliername = `Oxynum`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Mice`.
+    temp5-width = `6`.
+    temp5-height = `3.5`.
+    temp5-weightmeasure = `0.09`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Speed Mouse`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1061.jpg`.
+    temp5-suppliername = `Oxynum`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Mice`.
+    temp5-width = `7`.
+    temp5-height = `3.1`.
+    temp5-weightmeasure = `0.09`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Track Mouse`.
+    temp5-status = `Discontinued`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1062.jpg`.
+    temp5-suppliername = `Oxynum`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Mice`.
+    temp5-width = `3`.
+    temp5-height = `4`.
+    temp5-weightmeasure = `0.03`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Ergonomic Keyboard`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1063.jpg`.
+    temp5-suppliername = `Oxynum`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Keyboards`.
+    temp5-width = `50`.
+    temp5-height = `3.5`.
+    temp5-weightmeasure = `2.1`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Internet Keyboard`.
+    temp5-status = `Out of Stock`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1064.jpg`.
+    temp5-suppliername = `Oxynum`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Keyboards`.
+    temp5-width = `52`.
+    temp5-height = `3`.
+    temp5-weightmeasure = `1.8`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Media Keyboard`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1065.jpg`.
+    temp5-suppliername = `Oxynum`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Keyboards`.
+    temp5-width = `51.4`.
+    temp5-height = `4`.
+    temp5-weightmeasure = `2.3`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Mousepad`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1066.jpg`.
+    temp5-suppliername = `Oxynum`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Mousepads`.
+    temp5-width = `15`.
+    temp5-height = `0.2`.
+    temp5-weightmeasure = `80`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Ergo Mousepad`.
+    temp5-status = `Out of Stock`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1067.jpg`.
+    temp5-suppliername = `Oxynum`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Mousepads`.
+    temp5-width = `15`.
+    temp5-height = `0.2`.
+    temp5-weightmeasure = `80`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Designer Mousepad`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1068.jpg`.
+    temp5-suppliername = `Fasttech`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Mousepads`.
+    temp5-width = `24`.
+    temp5-height = `0.6`.
+    temp5-weightmeasure = `90`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Universal card reader`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1069.jpg`.
+    temp5-suppliername = `Fasttech`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Computer System Accessories`.
+    temp5-width = `6`.
+    temp5-height = `3`.
+    temp5-weightmeasure = `45`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Proctra X`.
+    temp5-status = `Out of Stock`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1070.jpg`.
+    temp5-suppliername = `Ultrasonic United`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Graphic Cards`.
+    temp5-width = `22`.
+    temp5-height = `17`.
+    temp5-weightmeasure = `0.255`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Gladiator MX`.
+    temp5-status = `Discontinued`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1071.jpg`.
+    temp5-suppliername = `Ultrasonic United`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Graphic Cards`.
+    temp5-width = `22`.
+    temp5-height = `17`.
+    temp5-weightmeasure = `0.3`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Hurricane GX`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1072.jpg`.
+    temp5-suppliername = `Ultrasonic United`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Graphic Cards`.
+    temp5-width = `22`.
+    temp5-height = `17`.
+    temp5-weightmeasure = `0.4`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Hurricane GX/LN`.
+    temp5-status = `Out of Stock`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1073.jpg`.
+    temp5-suppliername = `Smartcards`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Graphic Cards`.
+    temp5-width = `22`.
+    temp5-height = `17`.
+    temp5-weightmeasure = `0.4`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Photo Scan`.
+    temp5-status = `Out of Stock`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1080.jpg`.
+    temp5-suppliername = `Printer for All`.
+    temp5-maincategory = `Printers & Scanners`.
+    temp5-category = `Scanners`.
+    temp5-width = `34`.
+    temp5-height = `5`.
+    temp5-weightmeasure = `2.3`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Power Scan`.
+    temp5-status = `Out of Stock`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1081.jpg`.
+    temp5-suppliername = `Printer for All`.
+    temp5-maincategory = `Printers & Scanners`.
+    temp5-category = `Scanners`.
+    temp5-width = `31`.
+    temp5-height = `7`.
+    temp5-weightmeasure = `2.4`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Jet Scan Professional`.
+    temp5-status = `Out of Stock`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1082.jpg`.
+    temp5-suppliername = `Printer for All`.
+    temp5-maincategory = `Printers & Scanners`.
+    temp5-category = `Scanners`.
+    temp5-width = `33`.
+    temp5-height = `12`.
+    temp5-weightmeasure = `3.2`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Jet Scan Professional`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1083.jpg`.
+    temp5-suppliername = `Printer for All`.
+    temp5-maincategory = `Printers & Scanners`.
+    temp5-category = `Scanners`.
+    temp5-width = `35`.
+    temp5-height = `10`.
+    temp5-weightmeasure = `3.2`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Copymaster`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1085.jpg`.
+    temp5-suppliername = `Alpha Printers`.
+    temp5-maincategory = `Printers & Scanners`.
+    temp5-category = `Multifunction Printers`.
+    temp5-width = `45`.
+    temp5-height = `22`.
+    temp5-weightmeasure = `23.2`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Surround Sound`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1090.jpg`.
+    temp5-suppliername = `Speaker Experts`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Speakers`.
+    temp5-width = `12`.
+    temp5-height = `16`.
+    temp5-weightmeasure = `3`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Blaster Extreme`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1091.jpg`.
+    temp5-suppliername = `Speaker Experts`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Speakers`.
+    temp5-width = `13`.
+    temp5-height = `17.5`.
+    temp5-weightmeasure = `1.4`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Sound Booster`.
+    temp5-status = `Discontinued`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1092.jpg`.
+    temp5-suppliername = `Speaker Experts`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Speakers`.
+    temp5-width = `12.4`.
+    temp5-height = `18.1`.
+    temp5-weightmeasure = `2.1`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Lovely Sound 5.1 Wireless`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1095.jpg`.
+    temp5-suppliername = `Fasttech`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Accessories`.
+    temp5-width = `24`.
+    temp5-height = `23`.
+    temp5-weightmeasure = `80`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Lovely Sound 5.1`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1096.jpg`.
+    temp5-suppliername = `Fasttech`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Accessories`.
+    temp5-width = `25`.
+    temp5-height = `19`.
+    temp5-weightmeasure = `130`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Lovely Sound Stereo`.
+    temp5-status = `Out of Stock`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1097.jpg`.
+    temp5-suppliername = `Fasttech`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Accessories`.
+    temp5-width = `21.3`.
+    temp5-height = `19.7`.
+    temp5-weightmeasure = `60`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Smart Office`.
+    temp5-status = `Out of Stock`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1100.jpg`.
+    temp5-suppliername = `Technocom`.
+    temp5-maincategory = `Software`.
+    temp5-category = `Software`.
+    temp5-width = `15`.
+    temp5-height = `2.1`.
+    temp5-weightmeasure = `1.2`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Smart Design`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1101.jpg`.
+    temp5-suppliername = `Technocom`.
+    temp5-maincategory = `Software`.
+    temp5-category = `Software`.
+    temp5-width = `14`.
+    temp5-height = `24`.
+    temp5-weightmeasure = `0.8`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Smart Network`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1102.jpg`.
+    temp5-suppliername = `Technocom`.
+    temp5-maincategory = `Software`.
+    temp5-category = `Software`.
+    temp5-width = `16`.
+    temp5-height = `27`.
+    temp5-weightmeasure = `0.8`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Smart Multimedia`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1103.jpg`.
+    temp5-suppliername = `Technocom`.
+    temp5-maincategory = `Software`.
+    temp5-category = `Software`.
+    temp5-width = `11`.
+    temp5-height = `22`.
+    temp5-weightmeasure = `0.8`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Smart Games`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1104.jpg`.
+    temp5-suppliername = `Technocom`.
+    temp5-maincategory = `Software`.
+    temp5-category = `Software`.
+    temp5-width = `10`.
+    temp5-height = `30`.
+    temp5-weightmeasure = `1.1`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Smart Internet Antivirus`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1105.jpg`.
+    temp5-suppliername = `Brainsoft`.
+    temp5-maincategory = `Software`.
+    temp5-category = `Software`.
+    temp5-width = `16`.
+    temp5-height = `21`.
+    temp5-weightmeasure = `0.7`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Smart Firewall`.
+    temp5-status = `Discontinued`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1106.jpg`.
+    temp5-suppliername = `Brainsoft`.
+    temp5-maincategory = `Software`.
+    temp5-category = `Software`.
+    temp5-width = `17.9`.
+    temp5-height = `23.1`.
+    temp5-weightmeasure = `0.9`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Smart Money`.
+    temp5-status = `Out of Stock`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1107.jpg`.
+    temp5-suppliername = `Brainsoft`.
+    temp5-maincategory = `Software`.
+    temp5-category = `Software`.
+    temp5-width = `12`.
+    temp5-height = `19`.
+    temp5-weightmeasure = `0.5`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `PC Lock`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1110.jpg`.
+    temp5-suppliername = `Red Point Stores`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Computer System Accessories`.
+    temp5-width = `20`.
+    temp5-height = `4.3`.
+    temp5-weightmeasure = `0.03`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Notebook Lock`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1111.jpg`.
+    temp5-suppliername = `Red Point Stores`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Computer System Accessories`.
+    temp5-width = `31`.
+    temp5-height = `7`.
+    temp5-weightmeasure = `0.02`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Web cam reality`.
+    temp5-status = `Out of Stock`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1112.jpg`.
+    temp5-suppliername = `Red Point Stores`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Computer System Accessories`.
+    temp5-width = `9`.
+    temp5-height = `1.3`.
+    temp5-weightmeasure = `0.075`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Screen clean`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1113.jpg`.
+    temp5-suppliername = `Red Point Stores`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Computer System Accessories`.
+    temp5-width = `2`.
+    temp5-height = `0.1`.
+    temp5-weightmeasure = `0.05`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Fabric bag professional`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1114.jpg`.
+    temp5-suppliername = `Red Point Stores`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Computer System Accessories`.
+    temp5-width = `42`.
+    temp5-height = `7`.
+    temp5-weightmeasure = `1.8`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Wireless DSL Router`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1115.jpg`.
+    temp5-suppliername = `Red Point Stores`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Telecommunications`.
+    temp5-width = `19.3`.
+    temp5-height = `5`.
+    temp5-weightmeasure = `0.45`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Wireless DSL Router / Repeater`.
+    temp5-status = `Out of Stock`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1116.jpg`.
+    temp5-suppliername = `Red Point Stores`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Telecommunications`.
+    temp5-width = `19.3`.
+    temp5-height = `5`.
+    temp5-weightmeasure = `0.45`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Wireless DSL Router / Repeater and Print Server`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1117.jpg`.
+    temp5-suppliername = `Technocom`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Telecommunications`.
+    temp5-width = `19.3`.
+    temp5-height = `5`.
+    temp5-weightmeasure = `0.45`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `USB Stick`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1118.jpg`.
+    temp5-suppliername = `Technocom`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Computer System Accessories`.
+    temp5-width = `1.5`.
+    temp5-height = `1.2`.
+    temp5-weightmeasure = `0.015`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Travel Adapter`.
+    temp5-status = `Discontinued`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1119.jpg`.
+    temp5-suppliername = `Titanium`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Accessories`.
+    temp5-width = `2`.
+    temp5-height = `3.9`.
+    temp5-weightmeasure = `88`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Cordless Bluetooth Keyboard, english international`.
+    temp5-status = `Out of Stock`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1120.jpg`.
+    temp5-suppliername = `Technocom`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Keyboards`.
+    temp5-width = `51.4`.
+    temp5-height = `4`.
+    temp5-weightmeasure = `1`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Flat XXL`.
+    temp5-status = `Discontinued`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1137.jpg`.
+    temp5-suppliername = `Technocom`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Flat Screen Monitors`.
+    temp5-width = `54`.
+    temp5-height = `38`.
+    temp5-weightmeasure = `18`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Pocket Mouse`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1138.jpg`.
+    temp5-suppliername = `Technocom`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Mice`.
+    temp5-width = `0.3`.
+    temp5-height = `1`.
+    temp5-weightmeasure = `0.02`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `PC Power Station`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1210.jpg`.
+    temp5-suppliername = `Technocom`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `PCs`.
+    temp5-width = `28`.
+    temp5-height = `43`.
+    temp5-weightmeasure = `2.3`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Astro Laptop 1516`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1251.jpg`.
+    temp5-suppliername = `Ultrasonic United`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Laptops`.
+    temp5-width = `30`.
+    temp5-height = `3`.
+    temp5-weightmeasure = `4.2`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Astro Phone 6`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1252.jpg`.
+    temp5-suppliername = `Ultrasonic United`.
+    temp5-maincategory = `Smartphones & Tablets`.
+    temp5-category = `Smartphones and Tablets`.
+    temp5-width = `8`.
+    temp5-height = `1.5`.
+    temp5-weightmeasure = `0.75`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Benda Laptop 1408`.
+    temp5-status = `Discontinued`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1253.jpg`.
+    temp5-suppliername = `Ultrasonic United`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Laptops`.
+    temp5-width = `30`.
+    temp5-height = `3`.
+    temp5-weightmeasure = `4.2`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Bending Screen 21HD`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1254.jpg`.
+    temp5-suppliername = `Ultrasonic United`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Flat Screens`.
+    temp5-width = `37`.
+    temp5-height = `36`.
+    temp5-weightmeasure = `15`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Broad Screen 22HD`.
+    temp5-status = `Discontinued`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1255.jpg`.
+    temp5-suppliername = `Ultrasonic United`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Flat Screens`.
+    temp5-width = `39`.
+    temp5-height = `38`.
+    temp5-weightmeasure = `16`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Cerdik Phone 7`.
+    temp5-status = `Discontinued`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1256.jpg`.
+    temp5-suppliername = `Ultrasonic United`.
+    temp5-maincategory = `Smartphones & Tablets`.
+    temp5-category = `Smartphones and Tablets`.
+    temp5-width = `9`.
+    temp5-height = `1.5`.
+    temp5-weightmeasure = `0.75`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Cepat Tablet 10.5`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1257.jpg`.
+    temp5-suppliername = `Ultrasonic United`.
+    temp5-maincategory = `Smartphones & Tablets`.
+    temp5-category = `Smartphones and Tablets`.
+    temp5-width = `48`.
+    temp5-height = `4.5`.
+    temp5-weightmeasure = `2.8`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Cepat Tablet 8`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1258.jpg`.
+    temp5-suppliername = `Ultrasonic United`.
+    temp5-maincategory = `Smartphones & Tablets`.
+    temp5-category = `Smartphones and Tablets`.
+    temp5-width = `38`.
+    temp5-height = `3.5`.
+    temp5-weightmeasure = `2.5`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Server Basic`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1500.jpg`.
+    temp5-suppliername = `Technocom`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Servers`.
+    temp5-width = `34`.
+    temp5-height = `23`.
+    temp5-weightmeasure = `18`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Server Professional`.
+    temp5-status = `Out of Stock`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1501.jpg`.
+    temp5-suppliername = `Technocom`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Servers`.
+    temp5-width = `29`.
+    temp5-height = `27`.
+    temp5-weightmeasure = `25`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Server Power Pro`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1502.jpg`.
+    temp5-suppliername = `Technocom`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Servers`.
+    temp5-width = `22`.
+    temp5-height = `37`.
+    temp5-weightmeasure = `35`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Family PC Basic`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1600.jpg`.
+    temp5-suppliername = `Titanium`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Desktop Computers`.
+    temp5-width = `21.4`.
+    temp5-height = `38`.
+    temp5-weightmeasure = `4.8`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Family PC Pro`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1601.jpg`.
+    temp5-suppliername = `Titanium`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Desktop Computers`.
+    temp5-width = `25`.
+    temp5-height = `40.2`.
+    temp5-weightmeasure = `5.3`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Gaming Monster`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1602.jpg`.
+    temp5-suppliername = `Titanium`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Desktop Computers`.
+    temp5-width = `26.5`.
+    temp5-height = `47`.
+    temp5-weightmeasure = `5.9`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Gaming Monster Pro`.
+    temp5-status = `Discontinued`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1603.jpg`.
+    temp5-suppliername = `Titanium`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Desktop Computers`.
+    temp5-width = `27`.
+    temp5-height = `42`.
+    temp5-weightmeasure = `6.8`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `7" Widescreen Portable DVD Player w MP3`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2000.jpg`.
+    temp5-suppliername = `Titanium`.
+    temp5-maincategory = `TV, Video & HiFi`.
+    temp5-category = `Accessories`.
+    temp5-width = `21.4`.
+    temp5-height = `27.6`.
+    temp5-weightmeasure = `0.79`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `10" Portable DVD player`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2001.jpg`.
+    temp5-suppliername = `Titanium`.
+    temp5-maincategory = `TV, Video & HiFi`.
+    temp5-category = `Accessories`.
+    temp5-width = `24`.
+    temp5-height = `29`.
+    temp5-weightmeasure = `0.84`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Portable DVD Player with 9" LCD Monitor`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2002.jpg`.
+    temp5-suppliername = `Technocom`.
+    temp5-maincategory = `TV, Video & HiFi`.
+    temp5-category = `Accessories`.
+    temp5-width = `21`.
+    temp5-height = `14`.
+    temp5-weightmeasure = `0.72`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `CD/DVD case: 264 sleeves`.
+    temp5-status = `Discontinued`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2025.jpg`.
+    temp5-suppliername = `Titanium`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Accessories`.
+    temp5-width = `13`.
+    temp5-height = `20`.
+    temp5-weightmeasure = `0.65`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Audio/Video Cable Kit - 4m`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2026.jpg`.
+    temp5-suppliername = `Titanium`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Accessories`.
+    temp5-width = `21`.
+    temp5-height = `13`.
+    temp5-weightmeasure = `0.2`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Removable CD/DVD Laser Labels`.
+    temp5-status = `Discontinued`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2027.jpg`.
+    temp5-suppliername = `Titanium`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Accessories`.
+    temp5-width = `5.5`.
+    temp5-height = `2`.
+    temp5-weightmeasure = `0.15`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Beam Breaker B-1`.
+    temp5-status = `Out of Stock`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6100.jpg`.
+    temp5-suppliername = `Titanium`.
+    temp5-maincategory = `TV, Video & HiFi`.
+    temp5-category = `Accessories`.
+    temp5-width = `30.4`.
+    temp5-height = `23`.
+    temp5-weightmeasure = `1.7`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Beam Breaker B-2`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6101.jpg`.
+    temp5-suppliername = `Technocom`.
+    temp5-maincategory = `TV, Video & HiFi`.
+    temp5-category = `Accessories`.
+    temp5-width = `30.4`.
+    temp5-height = `23`.
+    temp5-weightmeasure = `2`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Beam Breaker B-3`.
+    temp5-status = `Out of Stock`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6102.jpg`.
+    temp5-suppliername = `Technocom`.
+    temp5-maincategory = `TV, Video & HiFi`.
+    temp5-category = `Accessories`.
+    temp5-width = `30.4`.
+    temp5-height = `23`.
+    temp5-weightmeasure = `2.5`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Play Movie`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6110.jpg`.
+    temp5-suppliername = `Fasttech`.
+    temp5-maincategory = `TV, Video & HiFi`.
+    temp5-category = `Accessories`.
+    temp5-width = `37`.
+    temp5-height = `6`.
+    temp5-weightmeasure = `2.4`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Record Movie`.
+    temp5-status = `Discontinued`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6111.jpg`.
+    temp5-suppliername = `Fasttech`.
+    temp5-maincategory = `TV, Video & HiFi`.
+    temp5-category = `Accessories`.
+    temp5-width = `38`.
+    temp5-height = `6.2`.
+    temp5-weightmeasure = `3.1`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `ITelo MusicStick`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6120.jpg`.
+    temp5-suppliername = `Fasttech`.
+    temp5-maincategory = `TV, Video & HiFi`.
+    temp5-category = `Accessories`.
+    temp5-width = `1.5`.
+    temp5-height = `1`.
+    temp5-weightmeasure = `134`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `ITelo Jog-Mate`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6121.jpg`.
+    temp5-suppliername = `Fasttech`.
+    temp5-maincategory = `TV, Video & HiFi`.
+    temp5-category = `Accessories`.
+    temp5-width = `5.1`.
+    temp5-height = `9.2`.
+    temp5-weightmeasure = `134`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Power Pro Player 40`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6122.jpg`.
+    temp5-suppliername = `Fasttech`.
+    temp5-maincategory = `TV, Video & HiFi`.
+    temp5-category = `Accessories`.
+    temp5-width = `5.1`.
+    temp5-height = `9.2`.
+    temp5-weightmeasure = `266`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Power Pro Player 80`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6123.jpg`.
+    temp5-suppliername = `Fasttech`.
+    temp5-maincategory = `TV, Video & HiFi`.
+    temp5-category = `Accessories`.
+    temp5-width = `4`.
+    temp5-height = `0.8`.
+    temp5-weightmeasure = `267`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Flat Watch HD32`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6130.jpg`.
+    temp5-suppliername = `Very Best Screens`.
+    temp5-maincategory = `TV, Video & HiFi`.
+    temp5-category = `Flat Screen TVs`.
+    temp5-width = `78`.
+    temp5-height = `55`.
+    temp5-weightmeasure = `2.6`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Flat Watch HD37`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6131.jpg`.
+    temp5-suppliername = `Very Best Screens`.
+    temp5-maincategory = `TV, Video & HiFi`.
+    temp5-category = `Flat Screen TVs`.
+    temp5-width = `99.1`.
+    temp5-height = `61`.
+    temp5-weightmeasure = `2.2`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Flat Watch HD41`.
+    temp5-status = `Discontinued`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6132.jpg`.
+    temp5-suppliername = `Very Best Screens`.
+    temp5-maincategory = `TV, Video & HiFi`.
+    temp5-category = `Flat Screen TVs`.
+    temp5-width = `128`.
+    temp5-height = `79.1`.
+    temp5-weightmeasure = `1.8`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Copperberry`.
+    temp5-status = `Discontinued`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7000.jpg`.
+    temp5-suppliername = `Fasttech`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Accessories`.
+    temp5-width = `8.1`.
+    temp5-height = `12.1`.
+    temp5-weightmeasure = `0.5`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Silverberry`.
+    temp5-status = `Discontinued`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7010.jpg`.
+    temp5-suppliername = `Fasttech`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Accessories`.
+    temp5-width = `8.1`.
+    temp5-height = `12.1`.
+    temp5-weightmeasure = `0.5`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Goldberry`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7020.jpg`.
+    temp5-suppliername = `Fasttech`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Accessories`.
+    temp5-width = `8.1`.
+    temp5-height = `12.1`.
+    temp5-weightmeasure = `0.5`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Platinberry`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7030.jpg`.
+    temp5-suppliername = `Fasttech`.
+    temp5-maincategory = `Computer Components`.
+    temp5-category = `Accessories`.
+    temp5-width = `8.1`.
+    temp5-height = `12.1`.
+    temp5-weightmeasure = `0.5`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `ITelO FlexTop I4000`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-8000.jpg`.
+    temp5-suppliername = `Titanium`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Laptops`.
+    temp5-width = `31`.
+    temp5-height = `3.1`.
+    temp5-weightmeasure = `4`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `ITelO FlexTop I6300c`.
+    temp5-status = `Discontinued`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-8001.jpg`.
+    temp5-suppliername = `Titanium`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Laptops`.
+    temp5-width = `32`.
+    temp5-height = `3.4`.
+    temp5-weightmeasure = `4.2`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `ITelO FlexTop I9100`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-8002.jpg`.
+    temp5-suppliername = `Titanium`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Laptops`.
+    temp5-width = `38`.
+    temp5-height = `4.1`.
+    temp5-weightmeasure = `3.5`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `ITelO FlexTop I9800`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-8003.jpg`.
+    temp5-suppliername = `Titanium`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Laptops`.
+    temp5-width = `48`.
+    temp5-height = `4.5`.
+    temp5-weightmeasure = `3.8`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Smartphone Leather Case`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9991.jpg`.
+    temp5-suppliername = `Ultrasonic United`.
+    temp5-maincategory = `Smartphones & Tablets`.
+    temp5-category = `Accessories`.
+    temp5-width = `48`.
+    temp5-height = `4.5`.
+    temp5-weightmeasure = `0.02`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Smartphone Alpha`.
+    temp5-status = `Out of Stock`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9992.jpg`.
+    temp5-suppliername = `Ultrasonic United`.
+    temp5-maincategory = `Smartphones & Tablets`.
+    temp5-category = `Smartphones and Tablets`.
+    temp5-width = `48`.
+    temp5-height = `4.5`.
+    temp5-weightmeasure = `0.75`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Mini Tablet`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9993.jpg`.
+    temp5-suppliername = `Ultrasonic United`.
+    temp5-maincategory = `Smartphones & Tablets`.
+    temp5-category = `Smartphones and Tablets`.
+    temp5-width = `48`.
+    temp5-height = `4.5`.
+    temp5-weightmeasure = `3.8`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Camcorder View`.
+    temp5-status = `Out of Stock`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9994.jpg`.
+    temp5-suppliername = `Ultrasonic United`.
+    temp5-maincategory = `TV, Video & HiFi`.
+    temp5-category = `Accessories`.
+    temp5-width = `48`.
+    temp5-height = `27`.
+    temp5-weightmeasure = `3.8`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Tablet Pouch`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9995.jpg`.
+    temp5-suppliername = `Titanium`.
+    temp5-maincategory = `Smartphones & Tablets`.
+    temp5-category = `Accessories`.
+    temp5-width = `25`.
+    temp5-height = `4.5`.
+    temp5-weightmeasure = `0.03`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Tablet Pouch`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9996.jpg`.
+    temp5-suppliername = `Titanium`.
+    temp5-maincategory = `Smartphones & Tablets`.
+    temp5-category = `Accessories`.
+    temp5-width = `25`.
+    temp5-height = `4.5`.
+    temp5-weightmeasure = `0.03`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `e-Book Reader ReadMe`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9997.jpg`.
+    temp5-suppliername = `Titanium`.
+    temp5-maincategory = `Smartphones & Tablets`.
+    temp5-category = `Smartphones and Tablets`.
+    temp5-width = `48`.
+    temp5-height = `4.5`.
+    temp5-weightmeasure = `3.8`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Smartphone Beta`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9998.jpg`.
+    temp5-suppliername = `Titanium`.
+    temp5-maincategory = `Smartphones & Tablets`.
+    temp5-category = `Smartphones and Tablets`.
+    temp5-width = `48`.
+    temp5-height = `4.5`.
+    temp5-weightmeasure = `0.75`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Maxi Tablet`.
+    temp5-status = `Available`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-9999.jpg`.
+    temp5-suppliername = `Titanium`.
+    temp5-maincategory = `Smartphones & Tablets`.
+    temp5-category = `Tablets`.
+    temp5-width = `48`.
+    temp5-height = `4.5`.
+    temp5-weightmeasure = `3.8`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-name = `Flyer`.
+    temp5-status = `Out of Stock`.
+    temp5-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/PF-1000.jpg`.
+    temp5-suppliername = `Titanium`.
+    temp5-maincategory = `Computer Systems`.
+    temp5-category = `Accessories`.
+    temp5-width = `46`.
+    temp5-height = `3`.
+    temp5-weightmeasure = `0.01`.
+    INSERT temp5 INTO TABLE temp4.
+    t_products = temp4.
 
   ENDMETHOD.
 

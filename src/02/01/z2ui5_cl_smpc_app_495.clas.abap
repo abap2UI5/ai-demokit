@@ -9,7 +9,7 @@ CLASS z2ui5_cl_smpc_app_495 DEFINITION PUBLIC.
              key  TYPE string,
              text TYPE string,
            END OF ty_s_item.
-    TYPES ty_t_item TYPE STANDARD TABLE OF ty_s_item WITH EMPTY KEY.
+    TYPES ty_t_item TYPE STANDARD TABLE OF ty_s_item WITH DEFAULT KEY.
 
     DATA t_items TYPE ty_t_item.
 
@@ -28,10 +28,10 @@ CLASS z2ui5_cl_smpc_app_495 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -40,7 +40,8 @@ CLASS z2ui5_cl_smpc_app_495 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
@@ -121,11 +122,18 @@ CLASS z2ui5_cl_smpc_app_495 IMPLEMENTATION.
 
 
   METHOD model_init.
+      DATA index LIKE sy-index.
+      DATA temp1 TYPE z2ui5_cl_smpc_app_495=>ty_s_item.
 
     " onInit builds 100 items (key item<n>, text Item <n>) to make the picker scroll
     DO 100 TIMES.
-      DATA(index) = sy-index.
-      INSERT VALUE #( key = |item{ index }| text = |Item { index }| ) INTO TABLE t_items.
+      
+      index = sy-index.
+      
+      CLEAR temp1.
+      temp1-key = |item{ index }|.
+      temp1-text = |Item { index }|.
+      INSERT temp1 INTO TABLE t_items.
     ENDDO.
 
   ENDMETHOD.

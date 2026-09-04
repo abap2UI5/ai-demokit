@@ -45,21 +45,28 @@ ENDCLASS.
 CLASS z2ui5_cl_smpc_app_350 IMPLEMENTATION.
 
   METHOD z2ui5_if_app~main.
+      DATA temp1 TYPE string_table.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       " Component.js init: IconPool.registerFont for the SAP-icons-TNT
       " collection, which is what makes the sap-icon://SAP-icons-TNT/... URI of
       " the Group2 tile resolvable. An abap2UI5 app has no Component of its own
       " and IconPool is a module singleton, so the ICON_POOL global target is
       " the only wire that reaches it - once per session, from the init branch
+      
+      CLEAR temp1.
+      INSERT `ICON_POOL` INTO TABLE temp1.
+      INSERT `registerFont` INTO TABLE temp1.
+      INSERT `SAP-icons-TNT` INTO TABLE temp1.
+      INSERT `sap/tnt/themes/base/fonts/` INTO TABLE temp1.
       client->follow_up_action( val   = client->cs_event-control_global
-                                t_arg = VALUE #( ( `ICON_POOL` ) ( `registerFont` ) ( `SAP-icons-TNT` ) ( `sap/tnt/themes/base/fonts/` ) ) ).
+                                t_arg = temp1 ).
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -68,7 +75,8 @@ CLASS z2ui5_cl_smpc_app_350 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the tnt:ToolPage home layout: the four Group fragments are inlined into
     " the one view (abap2UI5 serves one view per round-trip, so a fragmentName
@@ -591,6 +599,8 @@ CLASS z2ui5_cl_smpc_app_350 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp3 TYPE i.
+        DATA temp1 TYPE i.
 
     CASE client->get_event( ).
 
@@ -603,7 +613,15 @@ CLASS z2ui5_cl_smpc_app_350 IMPLEMENTATION.
       WHEN `COLUMNS_CHANGE`.
         " onColumnsChange: below 14 grid columns the users / user-provisioning
         " cards stay 4 columns wide, from 14 on they take 5
-        card_columns = COND #( WHEN CONV i( client->get_event_arg( ) ) < 14 THEN 4 ELSE 5 ).
+        
+        temp3 = client->get_event_arg( ).
+        
+        IF temp3 < 14.
+          temp1 = 4.
+        ELSE.
+          temp1 = 5.
+        ENDIF.
+        card_columns = temp1.
 
     ENDCASE.
 
@@ -615,19 +633,36 @@ CLASS z2ui5_cl_smpc_app_350 IMPLEMENTATION.
     " model/home.json's /layout/<group>/columns table: the value for the
     " current breakpoint, falling back to `default` - what the original's
     " onLayoutChangeMain looks up per group
-    group1_columns = SWITCH #( layout
-                                 WHEN `S`    THEN 4
-                                 WHEN `ML`   THEN 12
-                                 WHEN `L`    THEN 12
-                                 WHEN `XL`   THEN 12
-                                 WHEN `XXL`  THEN 14
-                                 WHEN `XXXL` THEN 11
-                                 ELSE 10 ).
+    DATA temp4 TYPE i.
+    DATA temp5 TYPE i.
+    CASE layout.
+      WHEN `S`.
+        temp4 = 4.
+      WHEN `ML`.
+        temp4 = 12.
+      WHEN `L`.
+        temp4 = 12.
+      WHEN `XL`.
+        temp4 = 12.
+      WHEN `XXL`.
+        temp4 = 14.
+      WHEN `XXXL`.
+        temp4 = 11.
+      WHEN OTHERS.
+        temp4 = 10.
+    ENDCASE.
+    group1_columns = temp4.
     group2_columns = 4.
-    group3_columns = SWITCH #( layout
-                                 WHEN `S`    THEN 4
-                                 WHEN `XXXL` THEN 4
-                                 ELSE 7 ).
+    
+    CASE layout.
+      WHEN `S`.
+        temp5 = 4.
+      WHEN `XXXL`.
+        temp5 = 4.
+      WHEN OTHERS.
+        temp5 = 7.
+    ENDCASE.
+    group3_columns = temp5.
     group4_columns = 4.
 
   ENDMETHOD.

@@ -23,13 +23,13 @@ CLASS z2ui5_cl_smpc_app_306 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       selected_from = `No Date Selected`.
       selected_to   = `No Date Selected`.
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -38,8 +38,32 @@ CLASS z2ui5_cl_smpc_app_306 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    DATA temp3 TYPE z2ui5_if_client=>ty_s_event_control.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `$event.oSource.getSelectedDates().length > 0 && $event.oSource.getSelectedDates()[0].getStartDate() ? $event.oSource.getSelectedDates()[0].getStartDate().getFullYear() : 0` INTO TABLE temp1.
+    INSERT `$event.oSource.getSelectedDates().length > 0 && $event.oSource.getSelectedDates()[0].getStartDate() ? $event.oSource.getSelectedDates()[0].getStartDate().getMonth() + 1 : 0` INTO TABLE temp1.
+    INSERT `$event.oSource.getSelectedDates().length > 0 && $event.oSource.getSelectedDates()[0].getStartDate() ? $event.oSource.getSelectedDates()[0].getStartDate().getDate() : 0` INTO TABLE temp1.
+    INSERT `$event.oSource.getSelectedDates().length > 0 && $event.oSource.getSelectedDates()[0].getEndDate() ? $event.oSource.getSelectedDates()[0].getEndDate().getFullYear() : 0` INTO TABLE temp1.
+    INSERT `$event.oSource.getSelectedDates().length > 0 && $event.oSource.getSelectedDates()[0].getEndDate() ? $event.oSource.getSelectedDates()[0].getEndDate().getMonth() + 1 : 0` INTO TABLE temp1.
+    INSERT `$event.oSource.getSelectedDates().length > 0 && $event.oSource.getSelectedDates()[0].getEndDate() ? $event.oSource.getSelectedDates()[0].getEndDate().getDate() : 0` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `${$parameters>/weekNumber}` INTO TABLE temp2.
+    INSERT `${$parameters>/weekDays} && ${$parameters>/weekDays}.getStartDate() ? ${$parameters>/weekDays}.getStartDate().getFullYear() : 0` INTO TABLE temp2.
+    INSERT `${$parameters>/weekDays} && ${$parameters>/weekDays}.getStartDate() ? ${$parameters>/weekDays}.getStartDate().getMonth() + 1 : 0` INTO TABLE temp2.
+    INSERT `${$parameters>/weekDays} && ${$parameters>/weekDays}.getStartDate() ? ${$parameters>/weekDays}.getStartDate().getDate() : 0` INTO TABLE temp2.
+    INSERT `${$parameters>/weekDays} && ${$parameters>/weekDays}.getEndDate() ? ${$parameters>/weekDays}.getEndDate().getFullYear() : 0` INTO TABLE temp2.
+    INSERT `${$parameters>/weekDays} && ${$parameters>/weekDays}.getEndDate() ? ${$parameters>/weekDays}.getEndDate().getMonth() + 1 : 0` INTO TABLE temp2.
+    INSERT `${$parameters>/weekDays} && ${$parameters>/weekDays}.getEndDate() ? ${$parameters>/weekDays}.getEndDate().getDate() : 0` INTO TABLE temp2.
+    
+    CLEAR temp3.
+    temp3-prevent_default_expr = `${$parameters>/weekNumber} % 5 === 0`.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:u`   v = `sap.ui.unified`
@@ -67,13 +91,7 @@ CLASS z2ui5_cl_smpc_app_306 IMPLEMENTATION.
                 " idiom). The LOCAL date parts travel, not toISOString( ), which would
                 " shift the day east of Greenwich
                 )->a( n = `select`            v = client->_event( val   = `CAL_SELECT`
-                                                                  t_arg = VALUE #(
-                                                                    ( `$event.oSource.getSelectedDates().length > 0 && $event.oSource.getSelectedDates()[0].getStartDate() ? $event.oSource.getSelectedDates()[0].getStartDate().getFullYear() : 0` )
-                                                                    ( `$event.oSource.getSelectedDates().length > 0 && $event.oSource.getSelectedDates()[0].getStartDate() ? $event.oSource.getSelectedDates()[0].getStartDate().getMonth() + 1 : 0` )
-                                                                    ( `$event.oSource.getSelectedDates().length > 0 && $event.oSource.getSelectedDates()[0].getStartDate() ? $event.oSource.getSelectedDates()[0].getStartDate().getDate() : 0` )
-                                                                    ( `$event.oSource.getSelectedDates().length > 0 && $event.oSource.getSelectedDates()[0].getEndDate() ? $event.oSource.getSelectedDates()[0].getEndDate().getFullYear() : 0` )
-                                                                    ( `$event.oSource.getSelectedDates().length > 0 && $event.oSource.getSelectedDates()[0].getEndDate() ? $event.oSource.getSelectedDates()[0].getEndDate().getMonth() + 1 : 0` )
-                                                                    ( `$event.oSource.getSelectedDates().length > 0 && $event.oSource.getSelectedDates()[0].getEndDate() ? $event.oSource.getSelectedDates()[0].getEndDate().getDate() : 0` ) ) )
+                                                                  t_arg = temp1 )
                 )->a( n = `intervalSelection` v = `true`
                 " weekNumberSelect is @since 1.56 on Calendar (1.60 is the Month
                 " event of the same name) - the weekDays DateRange and the week
@@ -86,14 +104,7 @@ CLASS z2ui5_cl_smpc_app_306 IMPLEMENTATION.
                 " EventHandlerResolver rethrows: no round trip, no label update,
                 " and the control's own deselect never runs either
                 )->a( n = `weekNumberSelect`  v = client->_event( val   = `WEEK_SELECT`
-                                                                  t_arg = VALUE #(
-                                                                    ( `${$parameters>/weekNumber}` )
-                                                                    ( `${$parameters>/weekDays} && ${$parameters>/weekDays}.getStartDate() ? ${$parameters>/weekDays}.getStartDate().getFullYear() : 0` )
-                                                                    ( `${$parameters>/weekDays} && ${$parameters>/weekDays}.getStartDate() ? ${$parameters>/weekDays}.getStartDate().getMonth() + 1 : 0` )
-                                                                    ( `${$parameters>/weekDays} && ${$parameters>/weekDays}.getStartDate() ? ${$parameters>/weekDays}.getStartDate().getDate() : 0` )
-                                                                    ( `${$parameters>/weekDays} && ${$parameters>/weekDays}.getEndDate() ? ${$parameters>/weekDays}.getEndDate().getFullYear() : 0` )
-                                                                    ( `${$parameters>/weekDays} && ${$parameters>/weekDays}.getEndDate() ? ${$parameters>/weekDays}.getEndDate().getMonth() + 1 : 0` )
-                                                                    ( `${$parameters>/weekDays} && ${$parameters>/weekDays}.getEndDate() ? ${$parameters>/weekDays}.getEndDate().getDate() : 0` ) )
+                                                                  t_arg = temp2
                                                                   " handleWeekNumberSelect calls oEvent.preventDefault( )
                                                                   " for a week divisible by five, so the forbidden week
                                                                   " is not selected at all. The veto is CONDITIONAL, and
@@ -104,8 +115,7 @@ CLASS z2ui5_cl_smpc_app_306 IMPLEMENTATION.
                                                                   " 247's columnResize, app 354's column filter), and the
                                                                   " condition here is a plain expression over an event
                                                                   " parameter.
-                                                                  s_ctrl = VALUE #(
-                                                                    prevent_default_expr = `${$parameters>/weekNumber} % 5 === 0` ) )
+                                                                  s_ctrl = temp3 )
 
             )->ele( n = `HorizontalLayout` ns = `l`
                 )->tag( `Label`
@@ -132,38 +142,83 @@ CLASS z2ui5_cl_smpc_app_306 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp3 TYPE i.
+        DATA temp8 TYPE i.
+        DATA temp12 TYPE string.
+        DATA temp4 TYPE i.
+        DATA temp9 TYPE i.
+        DATA temp13 TYPE string.
+        DATA temp5 TYPE i.
+        DATA week LIKE temp5.
+          DATA temp6 TYPE i.
+          DATA temp10 TYPE i.
+          DATA temp14 TYPE string.
+          DATA temp7 TYPE i.
+          DATA temp11 TYPE i.
+          DATA temp15 TYPE string.
 
     CASE client->get_event( ).
 
       WHEN `CAL_SELECT`.
         " _updateText: the interval's start and end formatted yyyy-MM-dd, or
         " 'No Date Selected' where the DateRange has no such end
-        selected_from = COND #( WHEN client->get_event_arg( ) = `0` OR client->get_event_arg( ) IS INITIAL
-                                THEN `No Date Selected`
-                                ELSE |{ client->get_event_arg( ) }-{ CONV i( client->get_event_arg( 2 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
-                                     |-{ CONV i( client->get_event_arg( 3 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| ).
-        selected_to   = COND #( WHEN client->get_event_arg( 4 ) = `0` OR client->get_event_arg( 4 ) IS INITIAL
-                                THEN `No Date Selected`
-                                ELSE |{ client->get_event_arg( 4 ) }-{ CONV i( client->get_event_arg( 5 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
-                                     |-{ CONV i( client->get_event_arg( 6 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| ).
+        
+        temp3 = client->get_event_arg( 2 ).
+        
+        temp8 = client->get_event_arg( 3 ).
+        
+        IF client->get_event_arg( ) = `0` OR client->get_event_arg( ) IS INITIAL.
+          temp12 = `No Date Selected`.
+        ELSE.
+          temp12 = |{ client->get_event_arg( ) }-{ temp3 WIDTH = 2 ALIGN = RIGHT PAD = '0' }| && |-{ temp8 WIDTH = 2 ALIGN = RIGHT PAD = '0' }|.
+        ENDIF.
+        selected_from = temp12.
+        
+        temp4 = client->get_event_arg( 5 ).
+        
+        temp9 = client->get_event_arg( 6 ).
+        
+        IF client->get_event_arg( 4 ) = `0` OR client->get_event_arg( 4 ) IS INITIAL.
+          temp13 = `No Date Selected`.
+        ELSE.
+          temp13 = |{ client->get_event_arg( 4 ) }-{ temp4 WIDTH = 2 ALIGN = RIGHT PAD = '0' }| && |-{ temp9 WIDTH = 2 ALIGN = RIGHT PAD = '0' }|.
+        ENDIF.
+        selected_to   = temp13.
 
       WHEN `WEEK_SELECT`.
         " handleWeekNumberSelect: every fifth calendar week is refused with a
         " toast AND with the prevented default on the wire above, so the week is
         " not selected either; any other week fills the two labels from its
         " weekDays DateRange
-        DATA(week) = CONV i( client->get_event_arg( ) ).
+        
+        temp5 = client->get_event_arg( ).
+        
+        week = temp5.
         IF week MOD 5 = 0.
           client->message_toast_display( `You are not allowed to select this calendar week!` ).
         ELSE.
-          selected_from = COND #( WHEN client->get_event_arg( 2 ) = `0` OR client->get_event_arg( 2 ) IS INITIAL
-                                  THEN `No Date Selected`
-                                  ELSE |{ client->get_event_arg( 2 ) }-{ CONV i( client->get_event_arg( 3 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
-                                       |-{ CONV i( client->get_event_arg( 4 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| ).
-          selected_to   = COND #( WHEN client->get_event_arg( 5 ) = `0` OR client->get_event_arg( 5 ) IS INITIAL
-                                  THEN `No Date Selected`
-                                  ELSE |{ client->get_event_arg( 5 ) }-{ CONV i( client->get_event_arg( 6 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
-                                       |-{ CONV i( client->get_event_arg( 7 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| ).
+          
+          temp6 = client->get_event_arg( 3 ).
+          
+          temp10 = client->get_event_arg( 4 ).
+          
+          IF client->get_event_arg( 2 ) = `0` OR client->get_event_arg( 2 ) IS INITIAL.
+            temp14 = `No Date Selected`.
+          ELSE.
+            temp14 = |{ client->get_event_arg( 2 ) }-{ temp6 WIDTH = 2 ALIGN = RIGHT PAD = '0' }| && |-{ temp10 WIDTH = 2 ALIGN = RIGHT PAD = '0' }|.
+          ENDIF.
+          selected_from = temp14.
+          
+          temp7 = client->get_event_arg( 6 ).
+          
+          temp11 = client->get_event_arg( 7 ).
+          
+          IF client->get_event_arg( 5 ) = `0` OR client->get_event_arg( 5 ) IS INITIAL.
+            temp15 = `No Date Selected`.
+          ELSE.
+            temp15 = |{ client->get_event_arg( 5 ) }-{ temp7 WIDTH = 2 ALIGN = RIGHT PAD = '0' }| && |-{ temp11 WIDTH = 2 ALIGN = RIGHT PAD = '0' }|.
+          ENDIF.
+          selected_to   = temp15.
         ENDIF.
 
     ENDCASE.

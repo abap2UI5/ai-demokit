@@ -24,9 +24,9 @@ CLASS z2ui5_cl_smpc_app_136 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -38,11 +38,18 @@ CLASS z2ui5_cl_smpc_app_136 IMPLEMENTATION.
     " (!expanded && preventCollapse) || (expanded && preventExpand) - the two
     " Switch states are two-way bound, so the expression reads what the user
     " last flipped, not what the last render happened to bake in
-    DATA(veto_expr) = `(!${$parameters>/expanded} && $` && client->_bind( prevent_collapse ) &&
+    DATA veto_expr TYPE string.
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE z2ui5_if_client=>ty_s_event_control.
+    veto_expr = `(!${$parameters>/expanded} && $` && client->_bind( prevent_collapse ) &&
                       `) || (${$parameters>/expanded} && $` && client->_bind( prevent_expand ) && `)`.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    temp1-prevent_default_expr = veto_expr.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:f`    v = `sap.f`
@@ -62,7 +69,7 @@ CLASS z2ui5_cl_smpc_app_136 IMPLEMENTATION.
                     " RENDER time, the Switches carry no event, and a flipped switch
                     " therefore only reached the wire on the NEXT render - one toggle
                     " too late (corrected 2026-08-23)
-                    )->a( n = `toggle` v = client->_event( val = `TOGGLE` arg = `${$parameters>/expanded}`s_ctrl = VALUE #( prevent_default_expr = veto_expr ) )
+                    )->a( n = `toggle` v = client->_event( val = `TOGGLE` arg = `${$parameters>/expanded}`s_ctrl = temp1 )
 
                     )->ele( n = `mainContent` ns = `f`
                         )->tag( `Button`
@@ -150,6 +157,8 @@ CLASS z2ui5_cl_smpc_app_136 IMPLEMENTATION.
 
 
   METHOD on_event.
+      DATA expanded TYPE abap_bool.
+      DATA temp1 TYPE xsdboolean.
 
     IF client->get_event( ) = `TOGGLE`.
       " the event still reaches the backend when the veto fired (the framework
@@ -157,7 +166,10 @@ CLASS z2ui5_cl_smpc_app_136 IMPLEMENTATION.
       " branch is the original's: on a vetoed direction, toast and reset that
       " switch; otherwise the control has already toggled itself and there is
       " nothing for the backend to do
-      DATA(expanded) = xsdbool( client->get_event_arg( ) = abap_true ).
+      
+      
+      temp1 = boolc( client->get_event_arg( ) = abap_true ).
+      expanded = temp1.
       IF expanded = abap_false AND prevent_collapse = abap_true.
         prevent_collapse = abap_false.
         client->message_toast_display( `I am prevented COLLAPSE event` ).

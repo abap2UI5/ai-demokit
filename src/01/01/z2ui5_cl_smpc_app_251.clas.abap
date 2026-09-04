@@ -20,9 +20,9 @@ CLASS z2ui5_cl_smpc_app_251 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -31,7 +31,8 @@ CLASS z2ui5_cl_smpc_app_251 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
@@ -61,20 +62,35 @@ CLASS z2ui5_cl_smpc_app_251 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp1 TYPE string_table.
+        DATA temp3 TYPE string_table.
+        DATA temp5 TYPE string_table.
 
     " handlePress: oDialog.open() + setTimeout(close, 3000) - the 147 idiom
     " (control_by_id open + START_TIMER, the timer round-trip closes)
     CASE client->get_event( ).
 
       WHEN `SHOW_BUSY`.
+        
+        CLEAR temp1.
+        INSERT `BusyDialog` INTO TABLE temp1.
+        INSERT `open` INTO TABLE temp1.
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `BusyDialog` ) ( `open` ) ) ).
+                                  t_arg = temp1 ).
+        
+        CLEAR temp3.
+        INSERT `CLOSE_BUSY` INTO TABLE temp3.
+        INSERT `3000` INTO TABLE temp3.
         client->follow_up_action( val   = client->cs_event-start_timer
-                                  t_arg = VALUE #( ( `CLOSE_BUSY` ) ( `3000` ) ) ).
+                                  t_arg = temp3 ).
 
       WHEN `CLOSE_BUSY`.
+        
+        CLEAR temp5.
+        INSERT `BusyDialog` INTO TABLE temp5.
+        INSERT `close` INTO TABLE temp5.
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `BusyDialog` ) ( `close` ) ) ).
+                                  t_arg = temp5 ).
 
     ENDCASE.
 

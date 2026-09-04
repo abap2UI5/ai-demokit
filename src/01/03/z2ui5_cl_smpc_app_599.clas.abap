@@ -25,12 +25,12 @@ CLASS z2ui5_cl_smpc_app_599 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -39,7 +39,8 @@ CLASS z2ui5_cl_smpc_app_599 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " Block->content inlining (app 401/416 precedent): all 359 blocks are one
     " BlockBase, sample:InfoButton, around a single full-width Button. What the
@@ -2823,16 +2824,26 @@ CLASS z2ui5_cl_smpc_app_599 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp1 TYPE string.
+        DATA temp2 TYPE xsdboolean.
 
     CASE client->get_event( ).
 
       WHEN `TOGGLE_TITLE`.
         " toggleTitle: ConfigModel>/subSectionLayout flips TitleOnTop <-> TitleOnLeft
-        subsection_layout = COND #( WHEN subsection_layout = `TitleOnTop` THEN `TitleOnLeft` ELSE `TitleOnTop` ).
+        
+        IF subsection_layout = `TitleOnTop`.
+          temp1 = `TitleOnLeft`.
+        ELSE.
+          temp1 = `TitleOnTop`.
+        ENDIF.
+        subsection_layout = temp1.
 
       WHEN `TOGGLE_TWO_COLUMNS`.
         " toggleUseTwoColumns: ConfigModel>/useTwoColumnsForLargeScreen flips
-        two_columns = xsdbool( two_columns = abap_false ).
+        
+        temp2 = boolc( two_columns = abap_false ).
+        two_columns = temp2.
 
     ENDCASE.
 

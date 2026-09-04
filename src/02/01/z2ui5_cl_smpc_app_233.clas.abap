@@ -16,7 +16,7 @@ CLASS z2ui5_cl_smpc_app_233 DEFINITION PUBLIC.
              price        TYPE p LENGTH 12 DECIMALS 2,
              currencycode TYPE string,
            END OF ty_s_product.
-    TYPES ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
+    TYPES ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH DEFAULT KEY.
     TYPES: BEGIN OF ty_s_purchase,
              purchaseid           TYPE string,
              suppliername         TYPE string,
@@ -27,7 +27,7 @@ CLASS z2ui5_cl_smpc_app_233 DEFINITION PUBLIC.
              deliverystatus_state TYPE string,
              productcollection    TYPE ty_t_product,
            END OF ty_s_purchase.
-    DATA t_purchases TYPE STANDARD TABLE OF ty_s_purchase WITH EMPTY KEY.
+    DATA t_purchases TYPE STANDARD TABLE OF ty_s_purchase WITH DEFAULT KEY.
 
     " the sample's dynamic /selectedPurchase object is flattened to the default-model
     " root: the header fields, the delivery-status state and the products table
@@ -59,12 +59,12 @@ CLASS z2ui5_cl_smpc_app_233 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -73,8 +73,22 @@ CLASS z2ui5_cl_smpc_app_233 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `selectDialog` INTO TABLE temp1.
+    INSERT `items` INTO TABLE temp1.
+    INSERT `filter` INTO TABLE temp1.
+    INSERT `$event.oSource.getValue() ? '[[["PURCHASEID","Contains","' + $event.oSource.getValue() + '"],["SUPPLIERNAME","Contains","' + $event.oSource.getValue() + '"]]]' : '[]'` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `selectDialog` INTO TABLE temp2.
+    INSERT `open` INTO TABLE temp2.
+    INSERT `$event.oSource.getValue()` INTO TABLE temp2.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`       v = `sap.m`
         )->a( n = `xmlns:mvc`   v = `sap.ui.core.mvc`
@@ -132,21 +146,10 @@ CLASS z2ui5_cl_smpc_app_233 IMPLEMENTATION.
                             " search field - it does not filter - so both are chained here
                             )->a( n = `valueHelpRequest` v = client->follow_up_action(
                                       val   = client->cs_event-binding_call
-                                      t_arg = VALUE #( ( `selectDialog` )
-                                                       ( `items` )
-                                                       ( `filter` )
-                                                       " the expression MUST begin with $ : get_t_arg only leaves an
-                                                       " argument raw when it starts with $ or { (or is an .eB/.eF
-                                                       " call) - anything else, a leading quote included, is wrapped
-                                                       " in a JS string literal and never evaluated. The leading
-                                                       " getValue( ) test is also the original's `if (sValue)` guard:
-                                                       " an empty input clears the filter instead of filtering on ''
-                                                       ( `$event.oSource.getValue() ? '[[["PURCHASEID","Contains","' + $event.oSource.getValue() + '"],["SUPPLIERNAME","Contains","' + $event.oSource.getValue() + '"]]]' : '[]'` ) ) ) && `; ` &&
+                                      t_arg = temp1 ) && `; ` &&
                                                   client->follow_up_action(
                                       val   = client->cs_event-control_by_id
-                                      t_arg = VALUE #( ( `selectDialog` )
-                                                       ( `open` )
-                                                       ( `$event.oSource.getValue()` ) ) )
+                                      t_arg = temp2 )
                             )->a( n = `suggestionItems` v = client->_bind( t_purchases )
                             )->a( n = `suggestionItemSelected` v = client->_event( val = `SUGGEST` arg = `${$parameters>/selectedItem}.getKey()` )
 
@@ -431,6 +434,9 @@ CLASS z2ui5_cl_smpc_app_233 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA search_value TYPE string.
+        DATA temp3 TYPE string_table.
+        DATA temp4 LIKE LINE OF temp3.
 
     CASE client->get_event( ).
 
@@ -460,16 +466,22 @@ CLASS z2ui5_cl_smpc_app_233 IMPLEMENTATION.
         " _getCombinedFilter: PurchaseID Contains value OR SupplierName Contains
         " value - one group, so the two entries OR (the compound form shipped with
         " pr/binding-call-compound-filters)
-        DATA(search_value) = client->get_event_arg( ).
+        
+        search_value = client->get_event_arg( ).
         " free text spliced into a JSON string literal - backslash first, then the quote (app 218/420)
         REPLACE ALL OCCURRENCES OF `\` IN search_value WITH `\\`.
         REPLACE ALL OCCURRENCES OF `"` IN search_value WITH `\"`.
+        
+        CLEAR temp3.
+        INSERT `selectDialog` INTO TABLE temp3.
+        INSERT `items` INTO TABLE temp3.
+        INSERT `filter` INTO TABLE temp3.
+        
+        temp4 = |[[["PURCHASEID","Contains","{ search_value }"],["SUPPLIERNAME","Contains","{ search_value }"]]]|.
+        INSERT temp4 INTO TABLE temp3.
         client->follow_up_action(
             val   = client->cs_event-binding_call
-            t_arg = VALUE #( ( `selectDialog` )
-                             ( `items` )
-                             ( `filter` )
-                             ( |[[["PURCHASEID","Contains","{ search_value }"],["SUPPLIERNAME","Contains","{ search_value }"]]]| ) ) ).
+            t_arg = temp3 ).
 
       WHEN `VH_CONFIRM`.
         " handleValueHelpConfirm: the picked item's description = PurchaseID
@@ -482,13 +494,15 @@ CLASS z2ui5_cl_smpc_app_233 IMPLEMENTATION.
 
 
   METHOD set_selection.
+    DATA purchase TYPE z2ui5_cl_smpc_app_233=>ty_s_purchase.
 
     " _setSelectedPurchaseAndUpdateInput: resolve the purchase by PurchaseID and
     " seed the flattened /selectedPurchase fields; if none is found, force "no
     " selection" so the IllustratedMessage "not found" state shows
     inputpopulated = abap_true.
 
-    READ TABLE t_purchases INTO DATA(purchase) WITH KEY purchaseid = key.
+    
+    READ TABLE t_purchases INTO purchase WITH KEY purchaseid = key.
     IF sy-subrc = 0.
       " the original resolves the purchase with Input.setSelectedKey, and under
       " textFormatMode="KeyValue" the input then shows "(<key>) <text>" - the
@@ -512,117 +526,979 @@ CLASS z2ui5_cl_smpc_app_233 IMPLEMENTATION.
 
 
   METHOD model_init.
+    DATA temp5 LIKE t_purchases.
+    DATA temp6 LIKE LINE OF temp5.
+    DATA temp7 TYPE z2ui5_cl_smpc_app_233=>ty_t_product.
+    DATA temp8 LIKE LINE OF temp7.
+    DATA temp9 TYPE z2ui5_cl_smpc_app_233=>ty_t_product.
+    DATA temp10 LIKE LINE OF temp9.
+    DATA temp11 TYPE z2ui5_cl_smpc_app_233=>ty_t_product.
+    DATA temp12 LIKE LINE OF temp11.
 
     " no purchase selected yet - seed the ObjectStatus state with the formatter's
     " default ValueState (None) so the enum property is valid before a selection
     sel_delivery_state = `None`.
 
-    t_purchases = VALUE #(
-      ( purchaseid = `123` suppliername = `BestEastern` category = `Computers` subcategory = `Laptops`
-        paymenttype = `Invoice` deliverystatus = `Not Completed` deliverystatus_state = `None`
-        productcollection = VALUE #(
-          ( productid = `HT-1000` name = `Notebook Basic 15`                       width = `30`   depth = `18`   height = `3`    dimunit = `cm` quantity = 10 price = '956'    currencycode = `EUR` )
-          ( productid = `HT-1001` name = `Notebook Basic 17`                       width = `29`   depth = `17`   height = `3.1`  dimunit = `cm` quantity = 20 price = '1249'   currencycode = `EUR` )
-          ( productid = `HT-1002` name = `Notebook Basic 18`                       width = `28`   depth = `19`   height = `2.5`  dimunit = `cm` quantity = 10 price = '1570'   currencycode = `EUR` )
-          ( productid = `HT-6132` name = `Flat Watch HD41`                         width = `128`  depth = `23`   height = `79.1` dimunit = `cm` quantity = 13 price = '899'    currencycode = `EUR` )
-          ( productid = `HT-7030` name = `Platinberry`                             width = `8.1`  depth = `13`   height = `12.1` dimunit = `cm` quantity = 12 price = '549'    currencycode = `EUR` )
-          ( productid = `HT-7020` name = `Goldberry`                               width = `8.1`  depth = `13`   height = `12.1` dimunit = `cm` quantity = 11 price = '549'    currencycode = `EUR` )
-          ( productid = `HT-7010` name = `Silverberry`                             width = `8.1`  depth = `13`   height = `12.1` dimunit = `cm` quantity = 9  price = '549'    currencycode = `EUR` )
-          ( productid = `HT-7000` name = `Copperberry`                             width = `8.1`  depth = `13`   height = `12.1` dimunit = `cm` quantity = 5  price = '549'    currencycode = `EUR` )
-          ( productid = `HT-1095` name = `Lovely Sound 5.1 Wireless`               width = `24`   depth = `19`   height = `23`   dimunit = `cm` quantity = 12 price = '49'     currencycode = `EUR` )
-          ( productid = `HT-1096` name = `Lovely Sound 5.1`                        width = `25`   depth = `17`   height = `19`   dimunit = `cm` quantity = 18 price = '39'     currencycode = `EUR` )
-          ( productid = `HT-1097` name = `Lovely Sound Stereo`                     width = `21.3` depth = `2.4`  height = `19.7` dimunit = `cm` quantity = 21 price = '29'     currencycode = `EUR` )
-          ( productid = `HT-6123` name = `Power Pro Player 80`                     width = `4`    depth = `6`    height = `0.8`  dimunit = `cm` quantity = 13 price = '299'    currencycode = `EUR` )
-          ( productid = `HT-6122` name = `Power Pro Player 40`                     width = `5.1`  depth = `8`    height = `9.2`  dimunit = `cm` quantity = 23 price = '167'    currencycode = `EUR` )
-          ( productid = `HT-6121` name = `ITelo Jog-Mate`                          width = `5.1`  depth = `8`    height = `9.2`  dimunit = `cm` quantity = 24 price = '63'     currencycode = `EUR` )
-          ( productid = `HT-6120` name = `ITelo MusicStick`                        width = `1.5`  depth = `6`    height = `1`    dimunit = `cm` quantity = 15 price = '45'     currencycode = `EUR` )
-          ( productid = `HT-6111` name = `Record Movie`                            width = `38`   depth = `26`   height = `6.2`  dimunit = `cm` quantity = 24 price = '288'    currencycode = `EUR` )
-          ( productid = `HT-6110` name = `Play Movie`                              width = `37`   depth = `24`   height = `6`    dimunit = `cm` quantity = 15 price = '130'    currencycode = `EUR` )
-          ( productid = `HT-6102` name = `Beam Breaker B-3`                        width = `30.4` depth = `23.1` height = `23`   dimunit = `cm` quantity = 16 price = '889'    currencycode = `EUR` )
-          ( productid = `HT-6101` name = `Beam Breaker B-2`                        width = `30.4` depth = `23.1` height = `23`   dimunit = `cm` quantity = 18 price = '679'    currencycode = `EUR` )
-          ( productid = `HT-2002` name = `Portable DVD Player with 9" LCD Monitor` width = `21`   depth = `16.5` height = `14`   dimunit = `cm` quantity = 50 price = '853.99' currencycode = `EUR` )
-          ( productid = `HT-6100` name = `Beam Breaker B-1`                        width = `30.4` depth = `23.1` height = `23`   dimunit = `cm` quantity = 32 price = '469'    currencycode = `EUR` )
-          ( productid = `HT-2027` name = `Removable CD/DVD Laser Labels`           width = `5.5`  depth = `2`    height = `2`    dimunit = `cm` quantity = 25 price = '8.99'   currencycode = `EUR` )
-        ) )
-      ( purchaseid = `420` suppliername = `Ultrasonic` category = `Computer Peripherals` subcategory = `Monitors`
-        paymenttype = `Debit Card` deliverystatus = `Shipped` deliverystatus_state = `Success`
-        productcollection = VALUE #(
-          ( productid = `HT-1072` name = `Hurricane GX`                                       width = `22`   depth = `35`   height = `17`   dimunit = `cm` quantity = 13 price = '101.2'  currencycode = `EUR` )
-          ( productid = `HT-1073` name = `Hurricane GX/LN`                                    width = `22`   depth = `35`   height = `17`   dimunit = `cm` quantity = 5  price = '139.99' currencycode = `EUR` )
-          ( productid = `HT-1080` name = `Photo Scan`                                         width = `34`   depth = `48`   height = `5`    dimunit = `cm` quantity = 8  price = '129'    currencycode = `EUR` )
-          ( productid = `HT-1081` name = `Power Scan`                                         width = `31`   depth = `43`   height = `7`    dimunit = `cm` quantity = 11 price = '89'     currencycode = `EUR` )
-          ( productid = `HT-1082` name = `Jet Scan Professional`                              width = `33`   depth = `41`   height = `12`   dimunit = `cm` quantity = 13 price = '169'    currencycode = `EUR` )
-          ( productid = `HT-1083` name = `Jet Scan Professional`                              width = `35`   depth = `40`   height = `10`   dimunit = `cm` quantity = 10 price = '189'    currencycode = `EUR` )
-          ( productid = `HT-1085` name = `Copymaster`                                         width = `45`   depth = `42`   height = `22`   dimunit = `cm` quantity = 10 price = '1499'   currencycode = `EUR` )
-          ( productid = `HT-1090` name = `Surround Sound`                                     width = `12`   depth = `10`   height = `16`   dimunit = `cm` quantity = 20 price = '39'     currencycode = `EUR` )
-          ( productid = `HT-1091` name = `Blaster Extreme`                                    width = `13`   depth = `11`   height = `17.5` dimunit = `cm` quantity = 15 price = '26'     currencycode = `EUR` )
-          ( productid = `HT-1092` name = `Sound Booster`                                      width = `12.4` depth = `10.4` height = `18.1` dimunit = `cm` quantity = 50 price = '45'     currencycode = `EUR` )
-          ( productid = `HT-1100` name = `Smart Office`                                       width = `15`   depth = `6.5`  height = `2.1`  dimunit = `cm` quantity = 25 price = '89.9'   currencycode = `EUR` )
-          ( productid = `HT-1101` name = `Smart Design`                                       width = `14`   depth = `6.7`  height = `24`   dimunit = `cm` quantity = 26 price = '79.9'   currencycode = `EUR` )
-          ( productid = `HT-1102` name = `Smart Network`                                      width = `16`   depth = `6`    height = `27`   dimunit = `cm` quantity = 28 price = '69'     currencycode = `EUR` )
-          ( productid = `HT-1103` name = `Smart Multimedia`                                   width = `11`   depth = `3.4`  height = `22`   dimunit = `cm` quantity = 9  price = '77'     currencycode = `EUR` )
-          ( productid = `HT-1104` name = `Smart Games`                                        width = `10`   depth = `3`    height = `30`   dimunit = `cm` quantity = 13 price = '55'     currencycode = `EUR` )
-          ( productid = `HT-1105` name = `Smart Internet Antivirus`                           width = `16`   depth = `4`    height = `21`   dimunit = `cm` quantity = 17 price = '29'     currencycode = `EUR` )
-          ( productid = `HT-1106` name = `Smart Firewall`                                     width = `17.9` depth = `4.2`  height = `23.1` dimunit = `cm` quantity = 19 price = '34'     currencycode = `EUR` )
-          ( productid = `HT-1107` name = `Smart Money`                                        width = `12`   depth = `1.5`  height = `19`   dimunit = `cm` quantity = 18 price = '29.9'   currencycode = `EUR` )
-          ( productid = `HT-1110` name = `PC Lock`                                            width = `20`   depth = `8`    height = `4.3`  dimunit = `cm` quantity = 14 price = '8.9'    currencycode = `EUR` )
-          ( productid = `HT-1111` name = `Notebook Lock`                                      width = `31`   depth = `9`    height = `7`    dimunit = `cm` quantity = 20 price = '6.9'    currencycode = `EUR` )
-          ( productid = `HT-1112` name = `Web cam reality`                                    width = `9`    depth = `8.2`  height = `1.3`  dimunit = `cm` quantity = 27 price = '39'     currencycode = `EUR` )
-          ( productid = `HT-1113` name = `Screen clean`                                       width = `2`    depth = `2`    height = `0.1`  dimunit = `cm` quantity = 17 price = '2.3'    currencycode = `EUR` )
-          ( productid = `HT-1114` name = `Fabric bag professional`                            width = `42`   depth = `32`   height = `7`    dimunit = `cm` quantity = 14 price = '31'     currencycode = `EUR` )
-          ( productid = `HT-1115` name = `Wireless DSL Router`                                width = `19.3` depth = `18`   height = `5`    dimunit = `cm` quantity = 16 price = '49'     currencycode = `EUR` )
-          ( productid = `HT-1116` name = `Wireless DSL Router / Repeater`                     width = `19.3` depth = `18`   height = `5`    dimunit = `cm` quantity = 12 price = '59'     currencycode = `EUR` )
-          ( productid = `HT-1117` name = `Wireless DSL Router / Repeater and Print Server`    width = `19.3` depth = `18`   height = `5`    dimunit = `cm` quantity = 12 price = '69'     currencycode = `EUR` )
-          ( productid = `HT-1118` name = `USB Stick`                                          width = `1.5`  depth = `8.7`  height = `1.2`  dimunit = `cm` quantity = 14 price = '35'     currencycode = `EUR` )
-          ( productid = `HT-1120` name = `Cordless Bluetooth Keyboard, english international` width = `51.4` depth = `23`   height = `4`    dimunit = `cm` quantity = 13 price = '29'     currencycode = `EUR` )
-          ( productid = `HT-1137` name = `Flat XXL`                                           width = `54`   depth = `22`   height = `38`   dimunit = `cm` quantity = 10 price = '1430'   currencycode = `EUR` )
-          ( productid = `HT-1138` name = `Pocket Mouse`                                       width = `0.3`  depth = `0.5`  height = `1`    dimunit = `cm` quantity = 20 price = '23'     currencycode = `EUR` )
-          ( productid = `HT-1210` name = `PC Power Station`                                   width = `28`   depth = `31`   height = `43`   dimunit = `cm` quantity = 22 price = '2399'   currencycode = `EUR` )
-          ( productid = `HT-1500` name = `Server Basic`                                       width = `34`   depth = `35`   height = `23`   dimunit = `cm` quantity = 24 price = '5000'   currencycode = `EUR` )
-          ( productid = `HT-1501` name = `Server Professional`                                width = `29`   depth = `30`   height = `27`   dimunit = `cm` quantity = 26 price = '15000'  currencycode = `EUR` )
-          ( productid = `HT-1502` name = `Server Power Pro`                                   width = `22`   depth = `27.3` height = `37`   dimunit = `cm` quantity = 34 price = '25000'  currencycode = `EUR` )
-          ( productid = `HT-6130` name = `Flat Watch HD32`                                    width = `78`   depth = `22.1` height = `55`   dimunit = `cm` quantity = 16 price = '1459'   currencycode = `EUR` )
-          ( productid = `HT-6131` name = `Flat Watch HD37`                                    width = `99.1` depth = `26`   height = `61`   dimunit = `cm` quantity = 14 price = '1199'   currencycode = `EUR` )
-        ) )
-      ( purchaseid = `321` suppliername = `Technocom` category = `Computer Hardware` subcategory = `Video Cards`
-        paymenttype = `Credit Card` deliverystatus = `Failed Shipping` deliverystatus_state = `Error`
-        productcollection = VALUE #(
-          ( productid = `HT-1003` name = `Notebook Basic 19`                       width = `32`   depth = `21`   height = `4`    dimunit = `cm` quantity = 15 price = '1650'   currencycode = `EUR` )
-          ( productid = `HT-1007` name = `ITelO Vault`                             width = `32`   depth = `22`   height = `3`    dimunit = `cm` quantity = 15 price = '299'    currencycode = `EUR` )
-          ( productid = `HT-1010` name = `Notebook Professional 15`                width = `33`   depth = `20`   height = `3`    dimunit = `cm` quantity = 16 price = '1999'   currencycode = `EUR` )
-          ( productid = `HT-2026` name = `Audio/Video Cable Kit - 4m`              width = `21`   depth = `10.2` height = `13`   dimunit = `cm` quantity = 16 price = '29.99'  currencycode = `EUR` )
-          ( productid = `HT-2025` name = `CD/DVD case: 264 sleeves`                width = `13`   depth = `13`   height = `20`   dimunit = `cm` quantity = 26 price = '44.99'  currencycode = `EUR` )
-          ( productid = `HT-2001` name = `10" Portable DVD player`                 width = `24`   depth = `19.5` height = `29`   dimunit = `cm` quantity = 21 price = '449.99' currencycode = `EUR` )
-          ( productid = `HT-2000` name = `7" Widescreen Portable DVD Player w MP3` width = `21.4` depth = `19`   height = `27.6` dimunit = `cm` quantity = 20 price = '249.99' currencycode = `EUR` )
-          ( productid = `HT-1603` name = `Gaming Monster Pro`                      width = `27`   depth = `28`   height = `42`   dimunit = `cm` quantity = 25 price = '1700'   currencycode = `EUR` )
-          ( productid = `HT-1602` name = `Gaming Monster`                          width = `26.5` depth = `34`   height = `47`   dimunit = `cm` quantity = 24 price = '1200'   currencycode = `EUR` )
-          ( productid = `HT-1601` name = `Family PC Pro`                           width = `25`   depth = `31.7` height = `40.2` dimunit = `cm` quantity = 20 price = '900'    currencycode = `EUR` )
-          ( productid = `HT-1600` name = `Family PC Basic`                         width = `21.4` depth = `29`   height = `38`   dimunit = `cm` quantity = 10 price = '600'    currencycode = `EUR` )
-          ( productid = `HT-1119` name = `Travel Adapter`                          width = `2`    depth = `3.1`  height = `3.9`  dimunit = `cm` quantity = 10 price = '79'     currencycode = `EUR` )
-          ( productid = `HT-8000` name = `ITelO FlexTop I4000`                     width = `31`   depth = `19`   height = `3.1`  dimunit = `cm` quantity = 11 price = '799'    currencycode = `EUR` )
-          ( productid = `HT-8001` name = `ITelO FlexTop I6300c`                    width = `32`   depth = `20`   height = `3.4`  dimunit = `cm` quantity = 20 price = '799'    currencycode = `EUR` )
-          ( productid = `HT-8002` name = `ITelO FlexTop I9100`                     width = `38`   depth = `21`   height = `4.1`  dimunit = `cm` quantity = 20 price = '1199'   currencycode = `EUR` )
-          ( productid = `HT-8003` name = `ITelO FlexTop I9800`                     width = `48`   depth = `31`   height = `4.5`  dimunit = `cm` quantity = 22 price = '1388'   currencycode = `EUR` )
-          ( productid = `PF-1000` name = `Flyer`                                   width = `46`   depth = `30`   height = `3`    dimunit = `cm` quantity = 33 price = '0'      currencycode = `EUR` )
-          ( productid = `HT-9999` name = `Maxi Tablet`                             width = `48`   depth = `31`   height = `4.5`  dimunit = `cm` quantity = 20 price = '749'    currencycode = `EUR` )
-          ( productid = `HT-9998` name = `Smartphone Beta`                         width = `48`   depth = `31`   height = `4.5`  dimunit = `cm` quantity = 21 price = '30'     currencycode = `EUR` )
-          ( productid = `HT-9997` name = `e-Book Reader ReadMe`                    width = `48`   depth = `31`   height = `4.5`  dimunit = `cm` quantity = 23 price = '33'     currencycode = `EUR` )
-          ( productid = `HT-9996` name = `Tablet Pouch`                            width = `25`   depth = `40`   height = `4.5`  dimunit = `cm` quantity = 34 price = '20'     currencycode = `EUR` )
-          ( productid = `HT-9995` name = `Smartphone Cover`                        width = `48`   depth = `31`   height = `4.5`  dimunit = `cm` quantity = 23 price = '15'     currencycode = `EUR` )
-          ( productid = `HT-9994` name = `Camcorder View`                          width = `48`   depth = `31`   height = `27`   dimunit = `cm` quantity = 50 price = '1388'   currencycode = `EUR` )
-          ( productid = `HT-9993` name = `Mini Tablet`                             width = `48`   depth = `31`   height = `4.5`  dimunit = `cm` quantity = 10 price = '833'    currencycode = `EUR` )
-          ( productid = `HT-9992` name = `Smartphone Alpha`                        width = `48`   depth = `31`   height = `4.5`  dimunit = `cm` quantity = 13 price = '599'    currencycode = `EUR` )
-          ( productid = `HT-9991` name = `Smartphone Leather Case`                 width = `48`   depth = `31`   height = `4.5`  dimunit = `cm` quantity = 12 price = '25'     currencycode = `EUR` )
-          ( productid = `HT-1251` name = `Astro Laptop 1516`                       width = `30`   depth = `18`   height = `3`    dimunit = `cm` quantity = 23 price = '989'    currencycode = `EUR` )
-          ( productid = `HT-1252` name = `Astro Phone 6`                           width = `8`    depth = `6`    height = `1.5`  dimunit = `cm` quantity = 28 price = '649'    currencycode = `EUR` )
-          ( productid = `HT-1253` name = `Benda Laptop 1408`                       width = `30`   depth = `18`   height = `3`    dimunit = `cm` quantity = 27 price = '976'    currencycode = `EUR` )
-          ( productid = `HT-1254` name = `Bending Screen 21HD`                     width = `37`   depth = `12`   height = `36`   dimunit = `cm` quantity = 23 price = '250'    currencycode = `EUR` )
-          ( productid = `HT-1255` name = `Broad Screen 22HD`                       width = `39`   depth = `12`   height = `38`   dimunit = `cm` quantity = 5  price = '270'    currencycode = `EUR` )
-          ( productid = `HT-1256` name = `Cerdik Phone 7`                          width = `9`    depth = `15`   height = `1.5`  dimunit = `cm` quantity = 19 price = '549'    currencycode = `EUR` )
-          ( productid = `HT-1257` name = `Cepat Tablet 10.5`                       width = `48`   depth = `31`   height = `4.5`  dimunit = `cm` quantity = 17 price = '549'    currencycode = `EUR` )
-          ( productid = `HT-1258` name = `Cepat Tablet 8`                          width = `38`   depth = `21`   height = `3.5`  dimunit = `cm` quantity = 24 price = '529'    currencycode = `EUR` )
-        ) )
-    ).
+    
+    CLEAR temp5.
+    
+    temp6-purchaseid = `123`.
+    temp6-suppliername = `BestEastern`.
+    temp6-category = `Computers`.
+    temp6-subcategory = `Laptops`.
+    temp6-paymenttype = `Invoice`.
+    temp6-deliverystatus = `Not Completed`.
+    temp6-deliverystatus_state = `None`.
+    
+    CLEAR temp7.
+    
+    temp8-productid = `HT-1000`.
+    temp8-name = `Notebook Basic 15`.
+    temp8-width = `30`.
+    temp8-depth = `18`.
+    temp8-height = `3`.
+    temp8-dimunit = `cm`.
+    temp8-quantity = 10.
+    temp8-price = '956'.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1001`.
+    temp8-name = `Notebook Basic 17`.
+    temp8-width = `29`.
+    temp8-depth = `17`.
+    temp8-height = `3.1`.
+    temp8-dimunit = `cm`.
+    temp8-quantity = 20.
+    temp8-price = '1249'.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1002`.
+    temp8-name = `Notebook Basic 18`.
+    temp8-width = `28`.
+    temp8-depth = `19`.
+    temp8-height = `2.5`.
+    temp8-dimunit = `cm`.
+    temp8-quantity = 10.
+    temp8-price = '1570'.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-6132`.
+    temp8-name = `Flat Watch HD41`.
+    temp8-width = `128`.
+    temp8-depth = `23`.
+    temp8-height = `79.1`.
+    temp8-dimunit = `cm`.
+    temp8-quantity = 13.
+    temp8-price = '899'.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-7030`.
+    temp8-name = `Platinberry`.
+    temp8-width = `8.1`.
+    temp8-depth = `13`.
+    temp8-height = `12.1`.
+    temp8-dimunit = `cm`.
+    temp8-quantity = 12.
+    temp8-price = '549'.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-7020`.
+    temp8-name = `Goldberry`.
+    temp8-width = `8.1`.
+    temp8-depth = `13`.
+    temp8-height = `12.1`.
+    temp8-dimunit = `cm`.
+    temp8-quantity = 11.
+    temp8-price = '549'.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-7010`.
+    temp8-name = `Silverberry`.
+    temp8-width = `8.1`.
+    temp8-depth = `13`.
+    temp8-height = `12.1`.
+    temp8-dimunit = `cm`.
+    temp8-quantity = 9.
+    temp8-price = '549'.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-7000`.
+    temp8-name = `Copperberry`.
+    temp8-width = `8.1`.
+    temp8-depth = `13`.
+    temp8-height = `12.1`.
+    temp8-dimunit = `cm`.
+    temp8-quantity = 5.
+    temp8-price = '549'.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1095`.
+    temp8-name = `Lovely Sound 5.1 Wireless`.
+    temp8-width = `24`.
+    temp8-depth = `19`.
+    temp8-height = `23`.
+    temp8-dimunit = `cm`.
+    temp8-quantity = 12.
+    temp8-price = '49'.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1096`.
+    temp8-name = `Lovely Sound 5.1`.
+    temp8-width = `25`.
+    temp8-depth = `17`.
+    temp8-height = `19`.
+    temp8-dimunit = `cm`.
+    temp8-quantity = 18.
+    temp8-price = '39'.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-1097`.
+    temp8-name = `Lovely Sound Stereo`.
+    temp8-width = `21.3`.
+    temp8-depth = `2.4`.
+    temp8-height = `19.7`.
+    temp8-dimunit = `cm`.
+    temp8-quantity = 21.
+    temp8-price = '29'.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-6123`.
+    temp8-name = `Power Pro Player 80`.
+    temp8-width = `4`.
+    temp8-depth = `6`.
+    temp8-height = `0.8`.
+    temp8-dimunit = `cm`.
+    temp8-quantity = 13.
+    temp8-price = '299'.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-6122`.
+    temp8-name = `Power Pro Player 40`.
+    temp8-width = `5.1`.
+    temp8-depth = `8`.
+    temp8-height = `9.2`.
+    temp8-dimunit = `cm`.
+    temp8-quantity = 23.
+    temp8-price = '167'.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-6121`.
+    temp8-name = `ITelo Jog-Mate`.
+    temp8-width = `5.1`.
+    temp8-depth = `8`.
+    temp8-height = `9.2`.
+    temp8-dimunit = `cm`.
+    temp8-quantity = 24.
+    temp8-price = '63'.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-6120`.
+    temp8-name = `ITelo MusicStick`.
+    temp8-width = `1.5`.
+    temp8-depth = `6`.
+    temp8-height = `1`.
+    temp8-dimunit = `cm`.
+    temp8-quantity = 15.
+    temp8-price = '45'.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-6111`.
+    temp8-name = `Record Movie`.
+    temp8-width = `38`.
+    temp8-depth = `26`.
+    temp8-height = `6.2`.
+    temp8-dimunit = `cm`.
+    temp8-quantity = 24.
+    temp8-price = '288'.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-6110`.
+    temp8-name = `Play Movie`.
+    temp8-width = `37`.
+    temp8-depth = `24`.
+    temp8-height = `6`.
+    temp8-dimunit = `cm`.
+    temp8-quantity = 15.
+    temp8-price = '130'.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-6102`.
+    temp8-name = `Beam Breaker B-3`.
+    temp8-width = `30.4`.
+    temp8-depth = `23.1`.
+    temp8-height = `23`.
+    temp8-dimunit = `cm`.
+    temp8-quantity = 16.
+    temp8-price = '889'.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-6101`.
+    temp8-name = `Beam Breaker B-2`.
+    temp8-width = `30.4`.
+    temp8-depth = `23.1`.
+    temp8-height = `23`.
+    temp8-dimunit = `cm`.
+    temp8-quantity = 18.
+    temp8-price = '679'.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-2002`.
+    temp8-name = `Portable DVD Player with 9" LCD Monitor`.
+    temp8-width = `21`.
+    temp8-depth = `16.5`.
+    temp8-height = `14`.
+    temp8-dimunit = `cm`.
+    temp8-quantity = 50.
+    temp8-price = '853.99'.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-6100`.
+    temp8-name = `Beam Breaker B-1`.
+    temp8-width = `30.4`.
+    temp8-depth = `23.1`.
+    temp8-height = `23`.
+    temp8-dimunit = `cm`.
+    temp8-quantity = 32.
+    temp8-price = '469'.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-productid = `HT-2027`.
+    temp8-name = `Removable CD/DVD Laser Labels`.
+    temp8-width = `5.5`.
+    temp8-depth = `2`.
+    temp8-height = `2`.
+    temp8-dimunit = `cm`.
+    temp8-quantity = 25.
+    temp8-price = '8.99'.
+    temp8-currencycode = `EUR`.
+    INSERT temp8 INTO TABLE temp7.
+    temp6-productcollection = temp7.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-purchaseid = `420`.
+    temp6-suppliername = `Ultrasonic`.
+    temp6-category = `Computer Peripherals`.
+    temp6-subcategory = `Monitors`.
+    temp6-paymenttype = `Debit Card`.
+    temp6-deliverystatus = `Shipped`.
+    temp6-deliverystatus_state = `Success`.
+    
+    CLEAR temp9.
+    
+    temp10-productid = `HT-1072`.
+    temp10-name = `Hurricane GX`.
+    temp10-width = `22`.
+    temp10-depth = `35`.
+    temp10-height = `17`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 13.
+    temp10-price = '101.2'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1073`.
+    temp10-name = `Hurricane GX/LN`.
+    temp10-width = `22`.
+    temp10-depth = `35`.
+    temp10-height = `17`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 5.
+    temp10-price = '139.99'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1080`.
+    temp10-name = `Photo Scan`.
+    temp10-width = `34`.
+    temp10-depth = `48`.
+    temp10-height = `5`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 8.
+    temp10-price = '129'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1081`.
+    temp10-name = `Power Scan`.
+    temp10-width = `31`.
+    temp10-depth = `43`.
+    temp10-height = `7`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 11.
+    temp10-price = '89'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1082`.
+    temp10-name = `Jet Scan Professional`.
+    temp10-width = `33`.
+    temp10-depth = `41`.
+    temp10-height = `12`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 13.
+    temp10-price = '169'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1083`.
+    temp10-name = `Jet Scan Professional`.
+    temp10-width = `35`.
+    temp10-depth = `40`.
+    temp10-height = `10`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 10.
+    temp10-price = '189'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1085`.
+    temp10-name = `Copymaster`.
+    temp10-width = `45`.
+    temp10-depth = `42`.
+    temp10-height = `22`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 10.
+    temp10-price = '1499'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1090`.
+    temp10-name = `Surround Sound`.
+    temp10-width = `12`.
+    temp10-depth = `10`.
+    temp10-height = `16`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 20.
+    temp10-price = '39'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1091`.
+    temp10-name = `Blaster Extreme`.
+    temp10-width = `13`.
+    temp10-depth = `11`.
+    temp10-height = `17.5`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 15.
+    temp10-price = '26'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1092`.
+    temp10-name = `Sound Booster`.
+    temp10-width = `12.4`.
+    temp10-depth = `10.4`.
+    temp10-height = `18.1`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 50.
+    temp10-price = '45'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1100`.
+    temp10-name = `Smart Office`.
+    temp10-width = `15`.
+    temp10-depth = `6.5`.
+    temp10-height = `2.1`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 25.
+    temp10-price = '89.9'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1101`.
+    temp10-name = `Smart Design`.
+    temp10-width = `14`.
+    temp10-depth = `6.7`.
+    temp10-height = `24`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 26.
+    temp10-price = '79.9'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1102`.
+    temp10-name = `Smart Network`.
+    temp10-width = `16`.
+    temp10-depth = `6`.
+    temp10-height = `27`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 28.
+    temp10-price = '69'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1103`.
+    temp10-name = `Smart Multimedia`.
+    temp10-width = `11`.
+    temp10-depth = `3.4`.
+    temp10-height = `22`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 9.
+    temp10-price = '77'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1104`.
+    temp10-name = `Smart Games`.
+    temp10-width = `10`.
+    temp10-depth = `3`.
+    temp10-height = `30`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 13.
+    temp10-price = '55'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1105`.
+    temp10-name = `Smart Internet Antivirus`.
+    temp10-width = `16`.
+    temp10-depth = `4`.
+    temp10-height = `21`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 17.
+    temp10-price = '29'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1106`.
+    temp10-name = `Smart Firewall`.
+    temp10-width = `17.9`.
+    temp10-depth = `4.2`.
+    temp10-height = `23.1`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 19.
+    temp10-price = '34'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1107`.
+    temp10-name = `Smart Money`.
+    temp10-width = `12`.
+    temp10-depth = `1.5`.
+    temp10-height = `19`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 18.
+    temp10-price = '29.9'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1110`.
+    temp10-name = `PC Lock`.
+    temp10-width = `20`.
+    temp10-depth = `8`.
+    temp10-height = `4.3`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 14.
+    temp10-price = '8.9'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1111`.
+    temp10-name = `Notebook Lock`.
+    temp10-width = `31`.
+    temp10-depth = `9`.
+    temp10-height = `7`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 20.
+    temp10-price = '6.9'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1112`.
+    temp10-name = `Web cam reality`.
+    temp10-width = `9`.
+    temp10-depth = `8.2`.
+    temp10-height = `1.3`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 27.
+    temp10-price = '39'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1113`.
+    temp10-name = `Screen clean`.
+    temp10-width = `2`.
+    temp10-depth = `2`.
+    temp10-height = `0.1`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 17.
+    temp10-price = '2.3'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1114`.
+    temp10-name = `Fabric bag professional`.
+    temp10-width = `42`.
+    temp10-depth = `32`.
+    temp10-height = `7`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 14.
+    temp10-price = '31'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1115`.
+    temp10-name = `Wireless DSL Router`.
+    temp10-width = `19.3`.
+    temp10-depth = `18`.
+    temp10-height = `5`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 16.
+    temp10-price = '49'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1116`.
+    temp10-name = `Wireless DSL Router / Repeater`.
+    temp10-width = `19.3`.
+    temp10-depth = `18`.
+    temp10-height = `5`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 12.
+    temp10-price = '59'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1117`.
+    temp10-name = `Wireless DSL Router / Repeater and Print Server`.
+    temp10-width = `19.3`.
+    temp10-depth = `18`.
+    temp10-height = `5`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 12.
+    temp10-price = '69'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1118`.
+    temp10-name = `USB Stick`.
+    temp10-width = `1.5`.
+    temp10-depth = `8.7`.
+    temp10-height = `1.2`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 14.
+    temp10-price = '35'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1120`.
+    temp10-name = `Cordless Bluetooth Keyboard, english international`.
+    temp10-width = `51.4`.
+    temp10-depth = `23`.
+    temp10-height = `4`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 13.
+    temp10-price = '29'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1137`.
+    temp10-name = `Flat XXL`.
+    temp10-width = `54`.
+    temp10-depth = `22`.
+    temp10-height = `38`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 10.
+    temp10-price = '1430'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1138`.
+    temp10-name = `Pocket Mouse`.
+    temp10-width = `0.3`.
+    temp10-depth = `0.5`.
+    temp10-height = `1`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 20.
+    temp10-price = '23'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1210`.
+    temp10-name = `PC Power Station`.
+    temp10-width = `28`.
+    temp10-depth = `31`.
+    temp10-height = `43`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 22.
+    temp10-price = '2399'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1500`.
+    temp10-name = `Server Basic`.
+    temp10-width = `34`.
+    temp10-depth = `35`.
+    temp10-height = `23`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 24.
+    temp10-price = '5000'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1501`.
+    temp10-name = `Server Professional`.
+    temp10-width = `29`.
+    temp10-depth = `30`.
+    temp10-height = `27`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 26.
+    temp10-price = '15000'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-1502`.
+    temp10-name = `Server Power Pro`.
+    temp10-width = `22`.
+    temp10-depth = `27.3`.
+    temp10-height = `37`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 34.
+    temp10-price = '25000'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-6130`.
+    temp10-name = `Flat Watch HD32`.
+    temp10-width = `78`.
+    temp10-depth = `22.1`.
+    temp10-height = `55`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 16.
+    temp10-price = '1459'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-productid = `HT-6131`.
+    temp10-name = `Flat Watch HD37`.
+    temp10-width = `99.1`.
+    temp10-depth = `26`.
+    temp10-height = `61`.
+    temp10-dimunit = `cm`.
+    temp10-quantity = 14.
+    temp10-price = '1199'.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp6-productcollection = temp9.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-purchaseid = `321`.
+    temp6-suppliername = `Technocom`.
+    temp6-category = `Computer Hardware`.
+    temp6-subcategory = `Video Cards`.
+    temp6-paymenttype = `Credit Card`.
+    temp6-deliverystatus = `Failed Shipping`.
+    temp6-deliverystatus_state = `Error`.
+    
+    CLEAR temp11.
+    
+    temp12-productid = `HT-1003`.
+    temp12-name = `Notebook Basic 19`.
+    temp12-width = `32`.
+    temp12-depth = `21`.
+    temp12-height = `4`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 15.
+    temp12-price = '1650'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-1007`.
+    temp12-name = `ITelO Vault`.
+    temp12-width = `32`.
+    temp12-depth = `22`.
+    temp12-height = `3`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 15.
+    temp12-price = '299'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-1010`.
+    temp12-name = `Notebook Professional 15`.
+    temp12-width = `33`.
+    temp12-depth = `20`.
+    temp12-height = `3`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 16.
+    temp12-price = '1999'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-2026`.
+    temp12-name = `Audio/Video Cable Kit - 4m`.
+    temp12-width = `21`.
+    temp12-depth = `10.2`.
+    temp12-height = `13`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 16.
+    temp12-price = '29.99'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-2025`.
+    temp12-name = `CD/DVD case: 264 sleeves`.
+    temp12-width = `13`.
+    temp12-depth = `13`.
+    temp12-height = `20`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 26.
+    temp12-price = '44.99'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-2001`.
+    temp12-name = `10" Portable DVD player`.
+    temp12-width = `24`.
+    temp12-depth = `19.5`.
+    temp12-height = `29`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 21.
+    temp12-price = '449.99'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-2000`.
+    temp12-name = `7" Widescreen Portable DVD Player w MP3`.
+    temp12-width = `21.4`.
+    temp12-depth = `19`.
+    temp12-height = `27.6`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 20.
+    temp12-price = '249.99'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-1603`.
+    temp12-name = `Gaming Monster Pro`.
+    temp12-width = `27`.
+    temp12-depth = `28`.
+    temp12-height = `42`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 25.
+    temp12-price = '1700'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-1602`.
+    temp12-name = `Gaming Monster`.
+    temp12-width = `26.5`.
+    temp12-depth = `34`.
+    temp12-height = `47`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 24.
+    temp12-price = '1200'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-1601`.
+    temp12-name = `Family PC Pro`.
+    temp12-width = `25`.
+    temp12-depth = `31.7`.
+    temp12-height = `40.2`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 20.
+    temp12-price = '900'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-1600`.
+    temp12-name = `Family PC Basic`.
+    temp12-width = `21.4`.
+    temp12-depth = `29`.
+    temp12-height = `38`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 10.
+    temp12-price = '600'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-1119`.
+    temp12-name = `Travel Adapter`.
+    temp12-width = `2`.
+    temp12-depth = `3.1`.
+    temp12-height = `3.9`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 10.
+    temp12-price = '79'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-8000`.
+    temp12-name = `ITelO FlexTop I4000`.
+    temp12-width = `31`.
+    temp12-depth = `19`.
+    temp12-height = `3.1`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 11.
+    temp12-price = '799'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-8001`.
+    temp12-name = `ITelO FlexTop I6300c`.
+    temp12-width = `32`.
+    temp12-depth = `20`.
+    temp12-height = `3.4`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 20.
+    temp12-price = '799'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-8002`.
+    temp12-name = `ITelO FlexTop I9100`.
+    temp12-width = `38`.
+    temp12-depth = `21`.
+    temp12-height = `4.1`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 20.
+    temp12-price = '1199'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-8003`.
+    temp12-name = `ITelO FlexTop I9800`.
+    temp12-width = `48`.
+    temp12-depth = `31`.
+    temp12-height = `4.5`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 22.
+    temp12-price = '1388'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `PF-1000`.
+    temp12-name = `Flyer`.
+    temp12-width = `46`.
+    temp12-depth = `30`.
+    temp12-height = `3`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 33.
+    temp12-price = '0'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-9999`.
+    temp12-name = `Maxi Tablet`.
+    temp12-width = `48`.
+    temp12-depth = `31`.
+    temp12-height = `4.5`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 20.
+    temp12-price = '749'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-9998`.
+    temp12-name = `Smartphone Beta`.
+    temp12-width = `48`.
+    temp12-depth = `31`.
+    temp12-height = `4.5`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 21.
+    temp12-price = '30'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-9997`.
+    temp12-name = `e-Book Reader ReadMe`.
+    temp12-width = `48`.
+    temp12-depth = `31`.
+    temp12-height = `4.5`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 23.
+    temp12-price = '33'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-9996`.
+    temp12-name = `Tablet Pouch`.
+    temp12-width = `25`.
+    temp12-depth = `40`.
+    temp12-height = `4.5`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 34.
+    temp12-price = '20'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-9995`.
+    temp12-name = `Smartphone Cover`.
+    temp12-width = `48`.
+    temp12-depth = `31`.
+    temp12-height = `4.5`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 23.
+    temp12-price = '15'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-9994`.
+    temp12-name = `Camcorder View`.
+    temp12-width = `48`.
+    temp12-depth = `31`.
+    temp12-height = `27`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 50.
+    temp12-price = '1388'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-9993`.
+    temp12-name = `Mini Tablet`.
+    temp12-width = `48`.
+    temp12-depth = `31`.
+    temp12-height = `4.5`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 10.
+    temp12-price = '833'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-9992`.
+    temp12-name = `Smartphone Alpha`.
+    temp12-width = `48`.
+    temp12-depth = `31`.
+    temp12-height = `4.5`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 13.
+    temp12-price = '599'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-9991`.
+    temp12-name = `Smartphone Leather Case`.
+    temp12-width = `48`.
+    temp12-depth = `31`.
+    temp12-height = `4.5`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 12.
+    temp12-price = '25'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-1251`.
+    temp12-name = `Astro Laptop 1516`.
+    temp12-width = `30`.
+    temp12-depth = `18`.
+    temp12-height = `3`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 23.
+    temp12-price = '989'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-1252`.
+    temp12-name = `Astro Phone 6`.
+    temp12-width = `8`.
+    temp12-depth = `6`.
+    temp12-height = `1.5`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 28.
+    temp12-price = '649'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-1253`.
+    temp12-name = `Benda Laptop 1408`.
+    temp12-width = `30`.
+    temp12-depth = `18`.
+    temp12-height = `3`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 27.
+    temp12-price = '976'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-1254`.
+    temp12-name = `Bending Screen 21HD`.
+    temp12-width = `37`.
+    temp12-depth = `12`.
+    temp12-height = `36`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 23.
+    temp12-price = '250'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-1255`.
+    temp12-name = `Broad Screen 22HD`.
+    temp12-width = `39`.
+    temp12-depth = `12`.
+    temp12-height = `38`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 5.
+    temp12-price = '270'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-1256`.
+    temp12-name = `Cerdik Phone 7`.
+    temp12-width = `9`.
+    temp12-depth = `15`.
+    temp12-height = `1.5`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 19.
+    temp12-price = '549'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-1257`.
+    temp12-name = `Cepat Tablet 10.5`.
+    temp12-width = `48`.
+    temp12-depth = `31`.
+    temp12-height = `4.5`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 17.
+    temp12-price = '549'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-productid = `HT-1258`.
+    temp12-name = `Cepat Tablet 8`.
+    temp12-width = `38`.
+    temp12-depth = `21`.
+    temp12-height = `3.5`.
+    temp12-dimunit = `cm`.
+    temp12-quantity = 24.
+    temp12-price = '529'.
+    temp12-currencycode = `EUR`.
+    INSERT temp12 INTO TABLE temp11.
+    temp6-productcollection = temp11.
+    INSERT temp6 INTO TABLE temp5.
+    t_purchases = temp5.
 
   ENDMETHOD.
 

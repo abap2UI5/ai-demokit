@@ -12,7 +12,7 @@ CLASS z2ui5_cl_smpc_app_165 DEFINITION PUBLIC.
              targetsrc TYPE string,
              target    TYPE string,
            END OF ty_s_item.
-    DATA t_items TYPE STANDARD TABLE OF ty_s_item WITH EMPTY KEY.
+    DATA t_items TYPE STANDARD TABLE OF ty_s_item WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -31,12 +31,12 @@ CLASS z2ui5_cl_smpc_app_165 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -45,7 +45,8 @@ CLASS z2ui5_cl_smpc_app_165 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " The ProductSwitch itself is built in the sample's controller (fnOpen) and
     " shown in a popover; the shipped view is just the trigger button plus two
@@ -83,10 +84,27 @@ CLASS z2ui5_cl_smpc_app_165 IMPLEMENTATION.
 
 
   METHOD on_event.
+      DATA popover TYPE REF TO z2ui5_cl_ui5_view_builder.
+      DATA temp1 TYPE string_table.
+      DATA temp2 TYPE string_table.
+      DATA temp3 LIKE LINE OF temp2.
 
     IF client->get_event( ) = `OPEN_SWITCH`.
-      DATA(popover) = z2ui5_cl_ui5_view_builder=>factory( ).
+      
+      popover = z2ui5_cl_ui5_view_builder=>factory( ).
 
+      
+      CLEAR temp1.
+      INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+      INSERT `show` INTO TABLE temp1.
+      INSERT `Redirecting to {0}` INTO TABLE temp1.
+      INSERT `${$parameters>/itemPressed}.getTargetSrc()` INTO TABLE temp1.
+      
+      CLEAR temp2.
+      INSERT `REDIRECT` INTO TABLE temp2.
+      
+      temp3 = |\{ URL: $\{$parameters>/itemPressed\}.getTargetSrc(), NEW_WINDOW: true \}|.
+      INSERT temp3 INTO TABLE temp2.
       popover->ele( n = `FragmentDefinition` ns = `core`
           )->a( n = `xmlns`      v = `sap.m`
           )->a( n = `xmlns:f`    v = `sap.f`
@@ -117,19 +135,10 @@ CLASS z2ui5_cl_smpc_app_165 IMPLEMENTATION.
                   " actions, chained on one event
                   )->a( n = `change` v = client->follow_up_action(
                             val   = client->cs_event-control_global
-                            t_arg = VALUE #( ( `MESSAGE_TOAST` )
-                                             ( `show` )
-                                             ( `Redirecting to {0}` )
-                                             ( `${$parameters>/itemPressed}.getTargetSrc()` ) ) ) && `; ` &&
+                            t_arg = temp1 ) && `; ` &&
                                         client->follow_up_action(
                             val   = client->cs_event-urlhelper
-                            t_arg = VALUE #( ( `REDIRECT` )
-                                             " a STRING TEMPLATE, not a backtick literal: only |...| treats
-                                             " \{ as an escape. In a backtick literal the backslash is a real
-                                             " character, the arg no longer starts with { , and get_t_arg
-                                             " QUOTES the whole thing - the expression would never evaluate
-                                             " and URLHelper would be handed a string with URL undefined
-                                             ( |\{ URL: $\{$parameters>/itemPressed\}.getTargetSrc(), NEW_WINDOW: true \}| ) ) )
+                            t_arg = temp2 )
 
                   )->ele( n = `items` ns = `f`
                       )->tag( n = `ProductSwitchItem` ns = `f`
@@ -148,14 +157,27 @@ CLASS z2ui5_cl_smpc_app_165 IMPLEMENTATION.
   METHOD model_init.
 
     " model/data.json, the three products the sample offers
-    t_items = VALUE #(
-      target = `_blank`
-      ( src = `sap-icon://sap-logo-shape` title = `SAP Homepage` subtitle = `Learn more about SAP`
-        targetsrc = `https://www.sap.com/index.html` )
-      ( src = `sap-icon://newspaper` title = `Newsletter` subtitle = `Subscribe to receive the latest UI5 updates`
-        targetsrc = `https://listserv.sap.com/mailman/listinfo/ui5.announce` )
-      ( src = `sap-icon://group` title = `Community` subtitle = `Get involved`
-        targetsrc = `https://community.sap.com/topics/ui5` ) ).
+    DATA temp3 LIKE t_items.
+    DATA temp4 LIKE LINE OF temp3.
+    CLEAR temp3.
+    
+    temp4-target = `_blank`.
+    temp4-src = `sap-icon://sap-logo-shape`.
+    temp4-title = `SAP Homepage`.
+    temp4-subtitle = `Learn more about SAP`.
+    temp4-targetsrc = `https://www.sap.com/index.html`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-src = `sap-icon://newspaper`.
+    temp4-title = `Newsletter`.
+    temp4-subtitle = `Subscribe to receive the latest UI5 updates`.
+    temp4-targetsrc = `https://listserv.sap.com/mailman/listinfo/ui5.announce`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-src = `sap-icon://group`.
+    temp4-title = `Community`.
+    temp4-subtitle = `Get involved`.
+    temp4-targetsrc = `https://community.sap.com/topics/ui5`.
+    INSERT temp4 INTO TABLE temp3.
+    t_items = temp3.
 
   ENDMETHOD.
 

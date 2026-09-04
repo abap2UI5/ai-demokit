@@ -34,10 +34,10 @@ CLASS z2ui5_cl_smpc_app_089 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -46,7 +46,8 @@ CLASS z2ui5_cl_smpc_app_089 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
@@ -166,12 +167,16 @@ CLASS z2ui5_cl_smpc_app_089 IMPLEMENTATION.
   METHOD model_init.
 
     " the bound record /ProductCollection/0 (Notebook Basic 15) of ui5/mock/products.json, verbatim
-    s_product = VALUE #( name           = `Notebook Basic 15`
-                         price          = '956.00'
-                         currency_code  = `EUR`
-                         weight_measure = `4.2` weight_unit = `KG`
-                         width          = `30`  depth       = `18`
-                         height         = `3`   dim_unit    = `cm` ).
+    CLEAR s_product.
+    s_product-name = `Notebook Basic 15`.
+    s_product-price = '956.00'.
+    s_product-currency_code = `EUR`.
+    s_product-weight_measure = `4.2`.
+    s_product-weight_unit = `KG`.
+    s_product-width = `30`.
+    s_product-depth = `18`.
+    s_product-height = `3`.
+    s_product-dim_unit = `cm`.
 
   ENDMETHOD.
 

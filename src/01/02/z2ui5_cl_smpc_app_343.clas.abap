@@ -35,10 +35,10 @@ CLASS z2ui5_cl_smpc_app_343 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -47,7 +47,8 @@ CLASS z2ui5_cl_smpc_app_343 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the sample's six BlockLayoutRows. Each cell carries its OWN context
     " (binding="{/cellN}") and the ColorSelect fragment is inlined into every
@@ -601,12 +602,24 @@ CLASS z2ui5_cl_smpc_app_343 IMPLEMENTATION.
 
     " the controller's _modelData verbatim - every cell starts on ColorSet6,
     " with shades A..F one per cell
-    cell1 = VALUE #( colorset = `ColorSet6` colorshade = `ShadeA` ).
-    cell2 = VALUE #( colorset = `ColorSet6` colorshade = `ShadeB` ).
-    cell3 = VALUE #( colorset = `ColorSet6` colorshade = `ShadeC` ).
-    cell4 = VALUE #( colorset = `ColorSet6` colorshade = `ShadeD` ).
-    cell5 = VALUE #( colorset = `ColorSet6` colorshade = `ShadeE` ).
-    cell6 = VALUE #( colorset = `ColorSet6` colorshade = `ShadeF` ).
+    CLEAR cell1.
+    cell1-colorset = `ColorSet6`.
+    cell1-colorshade = `ShadeA`.
+    CLEAR cell2.
+    cell2-colorset = `ColorSet6`.
+    cell2-colorshade = `ShadeB`.
+    CLEAR cell3.
+    cell3-colorset = `ColorSet6`.
+    cell3-colorshade = `ShadeC`.
+    CLEAR cell4.
+    cell4-colorset = `ColorSet6`.
+    cell4-colorshade = `ShadeD`.
+    CLEAR cell5.
+    cell5-colorset = `ColorSet6`.
+    cell5-colorshade = `ShadeE`.
+    CLEAR cell6.
+    cell6-colorset = `ColorSet6`.
+    cell6-colorshade = `ShadeF`.
 
   ENDMETHOD.
 

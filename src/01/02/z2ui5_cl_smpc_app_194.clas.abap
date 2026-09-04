@@ -13,7 +13,7 @@ CLASS z2ui5_cl_smpc_app_194 DEFINITION PUBLIC.
         contactpicurl TYPE string,
         description   TYPE string,
       END OF ty_s_person.
-    DATA t_persons TYPE STANDARD TABLE OF ty_s_person WITH EMPTY KEY.
+    DATA t_persons TYPE STANDARD TABLE OF ty_s_person WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -30,10 +30,10 @@ CLASS z2ui5_cl_smpc_app_194 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -42,7 +42,8 @@ CLASS z2ui5_cl_smpc_app_194 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
@@ -131,44 +132,55 @@ CLASS z2ui5_cl_smpc_app_194 IMPLEMENTATION.
   METHOD model_init.
 
     " Data of the mock model sap/ui/layout/sample/GridInfo/persons.json used by the original sample
-    t_persons = VALUE #(
-      ( firstname = `George`
-        lastname = `Washington`
-        title = `1st U.S. President`
-        contactpicurl = `http://upload.wikimedia.org/wikipedia/commons/2/25/George_Washington_as_CIC_of_the_Continental_Army_bust.jpg`
-        description = `George Washington was the first President of the United States, the commander-in-chief of the Continental Army during the American Revolutionary War, and one of the Founding Fathers of the United States.` )
-      ( firstname = `Alexandrina`
-        lastname = `Victoria`
-        title = `Former Queen regnant`
-        contactpicurl = `http://upload.wikimedia.org/wikipedia/commons/a/aa/Dronning_victoria.jpg`
-        description = `Queen Victoria was the monarch of the United Kingdom of Great Britain and Ireland from 20 June 1837 until her death. From 1 May 1876, she used the additional title of Empress of India.` )
-      ( firstname = `Friedrich`
-        lastname = `Der Große`
-        title = `King of Prussia 1740-1786`
-        contactpicurl = `http://upload.wikimedia.org/wikipedia/commons/f/fc/Frederic_II_de_prusse.jpg`
-        description = `Frederick II was King in Prussia of the Hohenzollern dynasty. He is best known for his brilliance in military campaigning and ` &&
-                      `organization of Prussian armies. He became known as Frederick the Great and was nicknamed Der Alte Fritz.` )
-      ( firstname = `Agnes`
-        lastname = `Teresa`
-        title = `Mother Teresa`
-        contactpicurl = `http://upload.wikimedia.org/wikipedia/commons/6/6e/The_Saint_Mother_Teresa.jpg`
-        description = `Mother Teresa (26 August 1910 – 5 September 1997), was an Albanian born, Indian Roman Catholic Religious Sister. She founded the ` &&
-                      `Missionaries of Charity, a Roman Catholic religious congregation, which in 2012 consisted of over 4,500 sisters and is active in 133 countries.` )
-      ( firstname = `Sigmund`
-        lastname = `Freud`
-        title = `Neurologist`
-        contactpicurl = `http://upload.wikimedia.org/wikipedia/commons/6/69/Sigmund_Freud_Anciano.jpg`
-        description = `Sigmund Freud was an Austrian neurologist who became known as the founding father of psychoanalysis.` )
-      ( firstname = `Christopher`
-        lastname = `Columbus`
-        title = `Explorer`
-        contactpicurl = `http://upload.wikimedia.org/wikipedia/commons/0/06/CristobalColon.jpg`
-        description = `Christopher Columbus was an Italian explorer, navigator, and colonizer, born in the Republic of Genoa, in what is today northwestern Italy.` )
-      ( firstname = `Winston`
-        lastname = `Churchill`
-        title = `Former Prime Minister of the United Kingdom`
-        contactpicurl = `http://upload.wikimedia.org/wikipedia/commons/3/35/Churchill_portrait_NYP_45063.jpg`
-        description = `Sir Winston Leonard Spencer-Churchill, KG, OM, CH, TD, DL, FRS, Hon. RA was a British politician who was Prime Minister of the United Kingdom from 1940 to 1945 and again from 1951 to 1955.` ) ).
+    DATA temp1 LIKE t_persons.
+    DATA temp2 LIKE LINE OF temp1.
+    CLEAR temp1.
+    
+    temp2-firstname = `George`.
+    temp2-lastname = `Washington`.
+    temp2-title = `1st U.S. President`.
+    temp2-contactpicurl = `http://upload.wikimedia.org/wikipedia/commons/2/25/George_Washington_as_CIC_of_the_Continental_Army_bust.jpg`.
+    temp2-description = `George Washington was the first President of the United States, the commander-in-chief of the Continental Army during the American Revolutionary War, and one of the Founding Fathers of the United States.`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-firstname = `Alexandrina`.
+    temp2-lastname = `Victoria`.
+    temp2-title = `Former Queen regnant`.
+    temp2-contactpicurl = `http://upload.wikimedia.org/wikipedia/commons/a/aa/Dronning_victoria.jpg`.
+    temp2-description = `Queen Victoria was the monarch of the United Kingdom of Great Britain and Ireland from 20 June 1837 until her death. From 1 May 1876, she used the additional title of Empress of India.`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-firstname = `Friedrich`.
+    temp2-lastname = `Der Große`.
+    temp2-title = `King of Prussia 1740-1786`.
+    temp2-contactpicurl = `http://upload.wikimedia.org/wikipedia/commons/f/fc/Frederic_II_de_prusse.jpg`.
+    temp2-description = `Frederick II was King in Prussia of the Hohenzollern dynasty. He is best known for his brilliance in military campaigning and ` &&
+`organization of Prussian armies. He became known as Frederick the Great and was nicknamed Der Alte Fritz.`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-firstname = `Agnes`.
+    temp2-lastname = `Teresa`.
+    temp2-title = `Mother Teresa`.
+    temp2-contactpicurl = `http://upload.wikimedia.org/wikipedia/commons/6/6e/The_Saint_Mother_Teresa.jpg`.
+    temp2-description = `Mother Teresa (26 August 1910 – 5 September 1997), was an Albanian born, Indian Roman Catholic Religious Sister. She founded the ` &&
+`Missionaries of Charity, a Roman Catholic religious congregation, which in 2012 consisted of over 4,500 sisters and is active in 133 countries.`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-firstname = `Sigmund`.
+    temp2-lastname = `Freud`.
+    temp2-title = `Neurologist`.
+    temp2-contactpicurl = `http://upload.wikimedia.org/wikipedia/commons/6/69/Sigmund_Freud_Anciano.jpg`.
+    temp2-description = `Sigmund Freud was an Austrian neurologist who became known as the founding father of psychoanalysis.`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-firstname = `Christopher`.
+    temp2-lastname = `Columbus`.
+    temp2-title = `Explorer`.
+    temp2-contactpicurl = `http://upload.wikimedia.org/wikipedia/commons/0/06/CristobalColon.jpg`.
+    temp2-description = `Christopher Columbus was an Italian explorer, navigator, and colonizer, born in the Republic of Genoa, in what is today northwestern Italy.`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-firstname = `Winston`.
+    temp2-lastname = `Churchill`.
+    temp2-title = `Former Prime Minister of the United Kingdom`.
+    temp2-contactpicurl = `http://upload.wikimedia.org/wikipedia/commons/3/35/Churchill_portrait_NYP_45063.jpg`.
+    temp2-description = `Sir Winston Leonard Spencer-Churchill, KG, OM, CH, TD, DL, FRS, Hon. RA was a British politician who was Prime Minister of the United Kingdom from 1940 to 1945 and again from 1951 to 1955.`.
+    INSERT temp2 INTO TABLE temp1.
+    t_persons = temp1.
 
   ENDMETHOD.
 

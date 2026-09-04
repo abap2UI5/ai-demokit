@@ -19,10 +19,12 @@ CLASS z2ui5_cl_smpc_app_359 DEFINITION PUBLIC.
         key  TYPE string,
         text TYPE string,
       END OF ty_s_key.
-    DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
+    TYPES temp1_72dcc0e1f1 TYPE STANDARD TABLE OF ty_s_product WITH DEFAULT KEY.
+DATA t_products TYPE temp1_72dcc0e1f1.
 
     " the original's `modes>` model, folded onto the one default model
-    DATA t_modes  TYPE STANDARD TABLE OF ty_s_key WITH EMPTY KEY.
+    TYPES temp2_72dcc0e1f1 TYPE STANDARD TABLE OF ty_s_key WITH DEFAULT KEY.
+DATA t_modes  TYPE temp2_72dcc0e1f1.
     DATA mode_key TYPE string.
 
     " what the picked mode means for the row actions - the original builds a
@@ -54,12 +56,12 @@ CLASS z2ui5_cl_smpc_app_359 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -68,12 +70,61 @@ CLASS z2ui5_cl_smpc_app_359 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    DATA temp3 TYPE string_table.
+    DATA temp4 TYPE string_table.
+    DATA temp5 TYPE string_table.
+    DATA temp6 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the row-action demo. The original builds a different RowAction template
     " per mode in the controller; the port declares the union of its six items
     " once and drives their visible flags plus rowActionCount from the backend,
     " so the Select switches the row actions without any control construction.
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `Item {0} pressed for product with id {1}` INTO TABLE temp1.
+    INSERT `${$parameters>/item}.getText() || ${$parameters>/item}.getType()` INTO TABLE temp1.
+    INSERT `${$parameters>/row}.getBindingContext().getProperty('PRODUCTID')` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp2.
+    INSERT `show` INTO TABLE temp2.
+    INSERT `Item {0} pressed for product with id {1}` INTO TABLE temp2.
+    INSERT `${$parameters>/item}.getText() || ${$parameters>/item}.getType()` INTO TABLE temp2.
+    INSERT `${$parameters>/row}.getBindingContext().getProperty('PRODUCTID')` INTO TABLE temp2.
+    
+    CLEAR temp3.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp3.
+    INSERT `show` INTO TABLE temp3.
+    INSERT `Item {0} pressed for product with id {1}` INTO TABLE temp3.
+    INSERT `${$parameters>/item}.getText() || ${$parameters>/item}.getType()` INTO TABLE temp3.
+    INSERT `${$parameters>/row}.getBindingContext().getProperty('PRODUCTID')` INTO TABLE temp3.
+    
+    CLEAR temp4.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp4.
+    INSERT `show` INTO TABLE temp4.
+    INSERT `Item {0} pressed for product with id {1}` INTO TABLE temp4.
+    INSERT `${$parameters>/item}.getText() || ${$parameters>/item}.getType()` INTO TABLE temp4.
+    INSERT `${$parameters>/row}.getBindingContext().getProperty('PRODUCTID')` INTO TABLE temp4.
+    
+    CLEAR temp5.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp5.
+    INSERT `show` INTO TABLE temp5.
+    INSERT `Item {0} pressed for product with id {1}` INTO TABLE temp5.
+    INSERT `${$parameters>/item}.getText() || ${$parameters>/item}.getType()` INTO TABLE temp5.
+    INSERT `${$parameters>/row}.getBindingContext().getProperty('PRODUCTID')` INTO TABLE temp5.
+    
+    CLEAR temp6.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp6.
+    INSERT `show` INTO TABLE temp6.
+    INSERT `Item {0} pressed for product with id {1}` INTO TABLE temp6.
+    INSERT `${$parameters>/item}.getText() || ${$parameters>/item}.getType()` INTO TABLE temp6.
+    INSERT `${$parameters>/row}.getBindingContext().getProperty('PRODUCTID')` INTO TABLE temp6.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.ui.table`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -177,22 +228,14 @@ CLASS z2ui5_cl_smpc_app_359 IMPLEMENTATION.
                                 )->a( n = `visible` v = |\{= ${ client->_bind( show_navigation ) } && $\{AVAILABLE\} \}|
                                 )->a( n = `press`   v = client->follow_up_action(
                                           val   = client->cs_event-control_global
-                                          t_arg = VALUE #( ( `MESSAGE_TOAST` )
-                                                           ( `show` )
-                                                           ( `Item {0} pressed for product with id {1}` )
-                                                           ( `${$parameters>/item}.getText() || ${$parameters>/item}.getType()` )
-                                                           ( `${$parameters>/row}.getBindingContext().getProperty('PRODUCTID')` ) ) )
+                                          t_arg = temp1 )
 
                             )->tag( `RowActionItem`
                                 )->a( n = `type`    v = `Delete`
                                 )->a( n = `visible` v = client->_bind( show_delete )
                                 )->a( n = `press`   v = client->follow_up_action(
                                           val   = client->cs_event-control_global
-                                          t_arg = VALUE #( ( `MESSAGE_TOAST` )
-                                                           ( `show` )
-                                                           ( `Item {0} pressed for product with id {1}` )
-                                                           ( `${$parameters>/item}.getText() || ${$parameters>/item}.getType()` )
-                                                           ( `${$parameters>/row}.getBindingContext().getProperty('PRODUCTID')` ) ) )
+                                          t_arg = temp2 )
 
                             )->tag( `RowActionItem`
                                 )->a( n = `icon`    v = `sap-icon://attachment`
@@ -200,11 +243,7 @@ CLASS z2ui5_cl_smpc_app_359 IMPLEMENTATION.
                                 )->a( n = `visible` v = client->_bind( show_multi )
                                 )->a( n = `press`   v = client->follow_up_action(
                                           val   = client->cs_event-control_global
-                                          t_arg = VALUE #( ( `MESSAGE_TOAST` )
-                                                           ( `show` )
-                                                           ( `Item {0} pressed for product with id {1}` )
-                                                           ( `${$parameters>/item}.getText() || ${$parameters>/item}.getType()` )
-                                                           ( `${$parameters>/row}.getBindingContext().getProperty('PRODUCTID')` ) ) )
+                                          t_arg = temp3 )
 
                             )->tag( `RowActionItem`
                                 )->a( n = `icon`    v = `sap-icon://search`
@@ -212,11 +251,7 @@ CLASS z2ui5_cl_smpc_app_359 IMPLEMENTATION.
                                 )->a( n = `visible` v = client->_bind( show_multi )
                                 )->a( n = `press`   v = client->follow_up_action(
                                           val   = client->cs_event-control_global
-                                          t_arg = VALUE #( ( `MESSAGE_TOAST` )
-                                                           ( `show` )
-                                                           ( `Item {0} pressed for product with id {1}` )
-                                                           ( `${$parameters>/item}.getText() || ${$parameters>/item}.getType()` )
-                                                           ( `${$parameters>/row}.getBindingContext().getProperty('PRODUCTID')` ) ) )
+                                          t_arg = temp4 )
 
                             )->tag( `RowActionItem`
                                 )->a( n = `icon`    v = `sap-icon://edit`
@@ -224,11 +259,7 @@ CLASS z2ui5_cl_smpc_app_359 IMPLEMENTATION.
                                 )->a( n = `visible` v = client->_bind( show_edit )
                                 )->a( n = `press`   v = client->follow_up_action(
                                           val   = client->cs_event-control_global
-                                          t_arg = VALUE #( ( `MESSAGE_TOAST` )
-                                                           ( `show` )
-                                                           ( `Item {0} pressed for product with id {1}` )
-                                                           ( `${$parameters>/item}.getText() || ${$parameters>/item}.getType()` )
-                                                           ( `${$parameters>/row}.getBindingContext().getProperty('PRODUCTID')` ) ) )
+                                          t_arg = temp5 )
 
                             )->tag( `RowActionItem`
                                 )->a( n = `icon`    v = `sap-icon://line-chart`
@@ -236,11 +267,7 @@ CLASS z2ui5_cl_smpc_app_359 IMPLEMENTATION.
                                 )->a( n = `visible` v = client->_bind( show_multi )
                                 )->a( n = `press`   v = client->follow_up_action(
                                           val   = client->cs_event-control_global
-                                          t_arg = VALUE #( ( `MESSAGE_TOAST` )
-                                                           ( `show` )
-                                                           ( `Item {0} pressed for product with id {1}` )
-                                                           ( `${$parameters>/item}.getText() || ${$parameters>/item}.getType()` )
-                                                           ( `${$parameters>/row}.getBindingContext().getProperty('PRODUCTID')` ) ) )
+                                          t_arg = temp6 )
 
                         )->end(
                     )->end(
@@ -260,11 +287,16 @@ CLASS z2ui5_cl_smpc_app_359 IMPLEMENTATION.
 
 
   METHOD on_event.
+      DATA lv_was_none TYPE abap_bool.
+      DATA temp1 TYPE xsdboolean.
 
     IF client->get_event( ) = `MODE_CHANGE`.
       " onBehaviourModeChange -> switchState: the picked mode decides the
       " row action count and which items are shown
-      DATA(lv_was_none) = xsdbool( row_action_count = 0 ).
+      
+      
+      temp1 = boolc( row_action_count = 0 ).
+      lv_was_none = temp1.
       mode_apply( ).
       " switchState always calls setRowActionTemplate BEFORE setRowActionCount,
       " and that ordering is load-bearing: the template setter ends in an
@@ -293,16 +325,32 @@ CLASS z2ui5_cl_smpc_app_359 IMPLEMENTATION.
   METHOD mode_apply.
 
     " the five handlers of the controller's `modes` array, as data
-    show_navigation = xsdbool( mode_key = `Navigation`
-                            OR mode_key = `NavigationDelete`
-                            OR mode_key = `NavigationCustom` ).
-    show_delete     = xsdbool( mode_key = `NavigationDelete` ).
-    show_edit       = xsdbool( mode_key = `NavigationCustom` OR mode_key = `Multi` ).
-    show_multi      = xsdbool( mode_key = `Multi` ).
-    row_action_count = SWITCH #( mode_key
-                                   WHEN `None`       THEN 0
-                                   WHEN `Navigation` THEN 1
-                                   ELSE 2 ).
+    DATA temp2 TYPE xsdboolean.
+    DATA temp4 TYPE xsdboolean.
+    DATA temp5 TYPE xsdboolean.
+    DATA temp6 TYPE xsdboolean.
+    DATA temp3 TYPE i.
+    temp2 = boolc( mode_key = `Navigation` OR mode_key = `NavigationDelete` OR mode_key = `NavigationCustom` ).
+    show_navigation = temp2.
+    
+    temp4 = boolc( mode_key = `NavigationDelete` ).
+    show_delete     = temp4.
+    
+    temp5 = boolc( mode_key = `NavigationCustom` OR mode_key = `Multi` ).
+    show_edit       = temp5.
+    
+    temp6 = boolc( mode_key = `Multi` ).
+    show_multi      = temp6.
+    
+    CASE mode_key.
+      WHEN `None`.
+        temp3 = 0.
+      WHEN `Navigation`.
+        temp3 = 1.
+      WHEN OTHERS.
+        temp3 = 2.
+    ENDCASE.
+    row_action_count = temp3.
 
   ENDMETHOD.
 
@@ -310,12 +358,28 @@ CLASS z2ui5_cl_smpc_app_359 IMPLEMENTATION.
   METHOD model_init.
 
     " the controller's `modes` array - key and label per row-action mode
-    t_modes = VALUE #(
-      ( key = `Navigation`       text = `Navigation` )
-      ( key = `NavigationDelete` text = `Navigation & Delete` )
-      ( key = `NavigationCustom` text = `Navigation & Custom` )
-      ( key = `Multi`            text = `Multiple Actions` )
-      ( key = `None`             text = `No Actions` ) ).
+    DATA temp4 LIKE t_modes.
+    DATA temp5 LIKE LINE OF temp4.
+    DATA temp6 LIKE t_products.
+    DATA temp7 LIKE LINE OF temp6.
+    CLEAR temp4.
+    
+    temp5-key = `Navigation`.
+    temp5-text = `Navigation`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-key = `NavigationDelete`.
+    temp5-text = `Navigation & Delete`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-key = `NavigationCustom`.
+    temp5-text = `Navigation & Custom`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-key = `Multi`.
+    temp5-text = `Multiple Actions`.
+    INSERT temp5 INTO TABLE temp4.
+    temp5-key = `None`.
+    temp5-text = `No Actions`.
+    INSERT temp5 INTO TABLE temp4.
+    t_modes = temp4.
 
     " switchState("Navigation") in onInit
     mode_key = `Navigation`.
@@ -325,131 +389,872 @@ CLASS z2ui5_cl_smpc_app_359 IMPLEMENTATION.
     " with the four columns the sample binds, plus the derived Available flag
     " the Navigation item's visible binding needs. The original marks the
     " SECOND row as navigated (i === 1), which is reproduced here
-    t_products = VALUE #(
-      ( name = `Notebook Basic 15` productid = `HT-1000` quantity = 10 price = 956 currencycode = `EUR` available = abap_true )
-      ( name = `Notebook Basic 17` productid = `HT-1001` quantity = 20 price = 1249 currencycode = `EUR` available = abap_true navigatedstate = abap_true )
-      ( name = `Notebook Basic 18` productid = `HT-1002` quantity = 10 price = 1570 currencycode = `EUR` available = abap_true )
-      ( name = `Notebook Basic 19` productid = `HT-1003` quantity = 15 price = 1650 currencycode = `EUR` available = abap_false )
-      ( name = `ITelO Vault` productid = `HT-1007` quantity = 15 price = 299 currencycode = `EUR` available = abap_false )
-      ( name = `Notebook Professional 15` productid = `HT-1010` quantity = 16 price = 1999 currencycode = `EUR` available = abap_false )
-      ( name = `Notebook Professional 17` productid = `HT-1011` quantity = 17 price = 2299 currencycode = `EUR` available = abap_false )
-      ( name = `ITelO Vault Net` productid = `HT-1020` quantity = 14 price = 459 currencycode = `EUR` available = abap_false )
-      ( name = `ITelO Vault SAT` productid = `HT-1021` quantity = 50 price = 149 currencycode = `EUR` available = abap_true )
-      ( name = `Comfort Easy` productid = `HT-1022` quantity = 30 price = 1679 currencycode = `EUR` available = abap_false )
-      ( name = `Comfort Senior` productid = `HT-1023` quantity = 24 price = 512 currencycode = `EUR` available = abap_true )
-      ( name = `Ergo Screen E-I` productid = `HT-1030` quantity = 14 price = 230 currencycode = `EUR` available = abap_true )
-      ( name = `Ergo Screen E-II` productid = `HT-1031` quantity = 24 price = 285 currencycode = `EUR` available = abap_true )
-      ( name = `Ergo Screen E-III` productid = `HT-1032` quantity = 50 price = 345 currencycode = `EUR` available = abap_false )
-      ( name = `Flat Basic` productid = `HT-1035` quantity = 23 price = 399 currencycode = `EUR` available = abap_true )
-      ( name = `Flat Future` productid = `HT-1036` quantity = 22 price = 430 currencycode = `EUR` available = abap_true )
-      ( name = `Flat XL` productid = `HT-1037` quantity = 23 price = 1230 currencycode = `EUR` available = abap_true )
-      ( name = `Laser Professional Eco` productid = `HT-1040` quantity = 21 price = 830 currencycode = `EUR` available = abap_true )
-      ( name = `Laser Basic` productid = `HT-1041` quantity = 8 price = 490 currencycode = `EUR` available = abap_true )
-      ( name = `Laser Allround` productid = `HT-1042` quantity = 9 price = 349 currencycode = `EUR` available = abap_true )
-      ( name = `Ultra Jet Super Color` productid = `HT-1050` quantity = 17 price = 139 currencycode = `EUR` available = abap_false )
-      ( name = `Ultra Jet Mobile` productid = `HT-1051` quantity = 18 price = 99 currencycode = `EUR` available = abap_false )
-      ( name = `Ultra Jet Super Highspeed` productid = `HT-1052` quantity = 25 price = 170 currencycode = `EUR` available = abap_true )
-      ( name = `Multi Print` productid = `HT-1055` quantity = 16 price = 99 currencycode = `EUR` available = abap_true )
-      ( name = `Multi Color` productid = `HT-1056` quantity = 5 price = 119 currencycode = `EUR` available = abap_true )
-      ( name = `Cordless Mouse` productid = `HT-1060` quantity = 25 price = 9 currencycode = `EUR` available = abap_true )
-      ( name = `Speed Mouse` productid = `HT-1061` quantity = 12 price = 7 currencycode = `EUR` available = abap_true )
-      ( name = `Track Mouse` productid = `HT-1062` quantity = 12 price = 11 currencycode = `EUR` available = abap_false )
-      ( name = `Ergonomic Keyboard` productid = `HT-1063` quantity = 50 price = 14 currencycode = `EUR` available = abap_true )
-      ( name = `Internet Keyboard` productid = `HT-1064` quantity = 35 price = 16 currencycode = `EUR` available = abap_false )
-      ( name = `Media Keyboard` productid = `HT-1065` quantity = 26 price = 26 currencycode = `EUR` available = abap_true )
-      ( name = `Mousepad` productid = `HT-1066` quantity = 12 price = `6.99` currencycode = `EUR` available = abap_true )
-      ( name = `Ergo Mousepad` productid = `HT-1067` quantity = 16 price = `8.99` currencycode = `EUR` available = abap_false )
-      ( name = `Designer Mousepad` productid = `HT-1068` quantity = 26 price = `12.99` currencycode = `EUR` available = abap_true )
-      ( name = `Universal card reader` productid = `HT-1069` quantity = 22 price = 14 currencycode = `EUR` available = abap_true )
-      ( name = `Proctra X` productid = `HT-1070` quantity = 15 price = `70.9` currencycode = `EUR` available = abap_false )
-      ( name = `Gladiator MX` productid = `HT-1071` quantity = 16 price = `81.7` currencycode = `EUR` available = abap_false )
-      ( name = `Hurricane GX` productid = `HT-1072` quantity = 13 price = `101.2` currencycode = `EUR` available = abap_true )
-      ( name = `Hurricane GX/LN` productid = `HT-1073` quantity = 5 price = `139.99` currencycode = `EUR` available = abap_false )
-      ( name = `Photo Scan` productid = `HT-1080` quantity = 8 price = 129 currencycode = `EUR` available = abap_false )
-      ( name = `Power Scan` productid = `HT-1081` quantity = 11 price = 89 currencycode = `EUR` available = abap_false )
-      ( name = `Jet Scan Professional` productid = `HT-1082` quantity = 13 price = 169 currencycode = `EUR` available = abap_false )
-      ( name = `Jet Scan Professional` productid = `HT-1083` quantity = 10 price = 189 currencycode = `EUR` available = abap_true )
-      ( name = `Copymaster` productid = `HT-1085` quantity = 10 price = 1499 currencycode = `EUR` available = abap_true )
-      ( name = `Surround Sound` productid = `HT-1090` quantity = 20 price = 39 currencycode = `EUR` available = abap_true )
-      ( name = `Blaster Extreme` productid = `HT-1091` quantity = 15 price = 26 currencycode = `EUR` available = abap_true )
-      ( name = `Sound Booster` productid = `HT-1092` quantity = 50 price = 45 currencycode = `EUR` available = abap_false )
-      ( name = `Lovely Sound 5.1 Wireless` productid = `HT-1095` quantity = 12 price = 49 currencycode = `EUR` available = abap_true )
-      ( name = `Lovely Sound 5.1` productid = `HT-1096` quantity = 18 price = 39 currencycode = `EUR` available = abap_true )
-      ( name = `Lovely Sound Stereo` productid = `HT-1097` quantity = 21 price = 29 currencycode = `EUR` available = abap_false )
-      ( name = `Smart Office` productid = `HT-1100` quantity = 25 price = `89.9` currencycode = `EUR` available = abap_false )
-      ( name = `Smart Design` productid = `HT-1101` quantity = 26 price = `79.9` currencycode = `EUR` available = abap_true )
-      ( name = `Smart Network` productid = `HT-1102` quantity = 28 price = 69 currencycode = `EUR` available = abap_true )
-      ( name = `Smart Multimedia` productid = `HT-1103` quantity = 9 price = 77 currencycode = `EUR` available = abap_true )
-      ( name = `Smart Games` productid = `HT-1104` quantity = 13 price = 55 currencycode = `EUR` available = abap_true )
-      ( name = `Smart Internet Antivirus` productid = `HT-1105` quantity = 17 price = 29 currencycode = `EUR` available = abap_true )
-      ( name = `Smart Firewall` productid = `HT-1106` quantity = 19 price = 34 currencycode = `EUR` available = abap_false )
-      ( name = `Smart Money` productid = `HT-1107` quantity = 18 price = `29.9` currencycode = `EUR` available = abap_false )
-      ( name = `PC Lock` productid = `HT-1110` quantity = 14 price = `8.9` currencycode = `EUR` available = abap_true )
-      ( name = `Notebook Lock` productid = `HT-1111` quantity = 20 price = `6.9` currencycode = `EUR` available = abap_true )
-      ( name = `Web cam reality` productid = `HT-1112` quantity = 27 price = 39 currencycode = `EUR` available = abap_false )
-      ( name = `Screen clean` productid = `HT-1113` quantity = 17 price = `2.3` currencycode = `EUR` available = abap_true )
-      ( name = `Fabric bag professional` productid = `HT-1114` quantity = 14 price = 31 currencycode = `EUR` available = abap_true )
-      ( name = `Wireless DSL Router` productid = `HT-1115` quantity = 16 price = 49 currencycode = `EUR` available = abap_true )
-      ( name = `Wireless DSL Router / Repeater` productid = `HT-1116` quantity = 12 price = 59 currencycode = `EUR` available = abap_false )
-      ( name = `Wireless DSL Router / Repeater and Print Server` productid = `HT-1117` quantity = 12 price = 69 currencycode = `EUR` available = abap_true )
-      ( name = `USB Stick` productid = `HT-1118` quantity = 14 price = 35 currencycode = `EUR` available = abap_true )
-      ( name = `Travel Adapter` productid = `HT-1119` quantity = 10 price = 79 currencycode = `EUR` available = abap_false )
-      ( name = `Cordless Bluetooth Keyboard, english international` productid = `HT-1120` quantity = 13 price = 29 currencycode = `EUR` available = abap_false )
-      ( name = `Flat XXL` productid = `HT-1137` quantity = 10 price = 1430 currencycode = `EUR` available = abap_false )
-      ( name = `Pocket Mouse` productid = `HT-1138` quantity = 20 price = 23 currencycode = `EUR` available = abap_true )
-      ( name = `PC Power Station` productid = `HT-1210` quantity = 22 price = 2399 currencycode = `EUR` available = abap_true )
-      ( name = `Astro Laptop 1516` productid = `HT-1251` quantity = 23 price = 989 currencycode = `EUR` available = abap_true )
-      ( name = `Astro Phone 6` productid = `HT-1252` quantity = 28 price = 649 currencycode = `EUR` available = abap_true )
-      ( name = `Benda Laptop 1408` productid = `HT-1253` quantity = 27 price = 976 currencycode = `EUR` available = abap_false )
-      ( name = `Bending Screen 21HD` productid = `HT-1254` quantity = 23 price = 250 currencycode = `EUR` available = abap_true )
-      ( name = `Broad Screen 22HD` productid = `HT-1255` quantity = 5 price = 270 currencycode = `EUR` available = abap_false )
-      ( name = `Cerdik Phone 7` productid = `HT-1256` quantity = 19 price = 549 currencycode = `EUR` available = abap_false )
-      ( name = `Cepat Tablet 10.5` productid = `HT-1257` quantity = 17 price = 549 currencycode = `EUR` available = abap_true )
-      ( name = `Cepat Tablet 8` productid = `HT-1258` quantity = 24 price = 529 currencycode = `EUR` available = abap_true )
-      ( name = `Server Basic` productid = `HT-1500` quantity = 24 price = 5000 currencycode = `EUR` available = abap_true )
-      ( name = `Server Professional` productid = `HT-1501` quantity = 26 price = 15000 currencycode = `EUR` available = abap_false )
-      ( name = `Server Power Pro` productid = `HT-1502` quantity = 34 price = 25000 currencycode = `EUR` available = abap_true )
-      ( name = `Family PC Basic` productid = `HT-1600` quantity = 10 price = 600 currencycode = `EUR` available = abap_true )
-      ( name = `Family PC Pro` productid = `HT-1601` quantity = 20 price = 900 currencycode = `EUR` available = abap_true )
-      ( name = `Gaming Monster` productid = `HT-1602` quantity = 24 price = 1200 currencycode = `EUR` available = abap_true )
-      ( name = `Gaming Monster Pro` productid = `HT-1603` quantity = 25 price = 1700 currencycode = `EUR` available = abap_false )
-      ( name = `7" Widescreen Portable DVD Player w MP3` productid = `HT-2000` quantity = 20 price = `249.99` currencycode = `EUR` available = abap_true )
-      ( name = `10" Portable DVD player` productid = `HT-2001` quantity = 21 price = `449.99` currencycode = `EUR` available = abap_true )
-      ( name = `Portable DVD Player with 9" LCD Monitor` productid = `HT-2002` quantity = 50 price = `853.99` currencycode = `EUR` available = abap_true )
-      ( name = `CD/DVD case: 264 sleeves` productid = `HT-2025` quantity = 26 price = `44.99` currencycode = `EUR` available = abap_false )
-      ( name = `Audio/Video Cable Kit - 4m` productid = `HT-2026` quantity = 16 price = `29.99` currencycode = `EUR` available = abap_true )
-      ( name = `Removable CD/DVD Laser Labels` productid = `HT-2027` quantity = 25 price = `8.99` currencycode = `EUR` available = abap_false )
-      ( name = `Beam Breaker B-1` productid = `HT-6100` quantity = 32 price = 469 currencycode = `EUR` available = abap_false )
-      ( name = `Beam Breaker B-2` productid = `HT-6101` quantity = 18 price = 679 currencycode = `EUR` available = abap_true )
-      ( name = `Beam Breaker B-3` productid = `HT-6102` quantity = 16 price = 889 currencycode = `EUR` available = abap_false )
-      ( name = `Play Movie` productid = `HT-6110` quantity = 15 price = 130 currencycode = `EUR` available = abap_true )
-      ( name = `Record Movie` productid = `HT-6111` quantity = 24 price = 288 currencycode = `EUR` available = abap_false )
-      ( name = `ITelo MusicStick` productid = `HT-6120` quantity = 15 price = 45 currencycode = `EUR` available = abap_true )
-      ( name = `ITelo Jog-Mate` productid = `HT-6121` quantity = 24 price = 63 currencycode = `EUR` available = abap_true )
-      ( name = `Power Pro Player 40` productid = `HT-6122` quantity = 23 price = 167 currencycode = `EUR` available = abap_true )
-      ( name = `Power Pro Player 80` productid = `HT-6123` quantity = 13 price = 299 currencycode = `EUR` available = abap_true )
-      ( name = `Flat Watch HD32` productid = `HT-6130` quantity = 16 price = 1459 currencycode = `EUR` available = abap_true )
-      ( name = `Flat Watch HD37` productid = `HT-6131` quantity = 14 price = 1199 currencycode = `EUR` available = abap_true )
-      ( name = `Flat Watch HD41` productid = `HT-6132` quantity = 13 price = 899 currencycode = `EUR` available = abap_false )
-      ( name = `Copperberry` productid = `HT-7000` quantity = 5 price = 549 currencycode = `EUR` available = abap_false )
-      ( name = `Silverberry` productid = `HT-7010` quantity = 9 price = 549 currencycode = `EUR` available = abap_false )
-      ( name = `Goldberry` productid = `HT-7020` quantity = 11 price = 549 currencycode = `EUR` available = abap_true )
-      ( name = `Platinberry` productid = `HT-7030` quantity = 12 price = 549 currencycode = `EUR` available = abap_true )
-      ( name = `ITelO FlexTop I4000` productid = `HT-8000` quantity = 11 price = 799 currencycode = `EUR` available = abap_true )
-      ( name = `ITelO FlexTop I6300c` productid = `HT-8001` quantity = 20 price = 799 currencycode = `EUR` available = abap_false )
-      ( name = `ITelO FlexTop I9100` productid = `HT-8002` quantity = 20 price = 1199 currencycode = `EUR` available = abap_true )
-      ( name = `ITelO FlexTop I9800` productid = `HT-8003` quantity = 22 price = 1388 currencycode = `EUR` available = abap_true )
-      ( name = `Smartphone Leather Case` productid = `HT-9991` quantity = 12 price = 25 currencycode = `EUR` available = abap_true )
-      ( name = `Smartphone Alpha` productid = `HT-9992` quantity = 13 price = 599 currencycode = `EUR` available = abap_false )
-      ( name = `Mini Tablet` productid = `HT-9993` quantity = 10 price = 833 currencycode = `EUR` available = abap_true )
-      ( name = `Camcorder View` productid = `HT-9994` quantity = 50 price = 1388 currencycode = `EUR` available = abap_false )
-      ( name = `Tablet Pouch` productid = `HT-9995` quantity = 34 price = 20 currencycode = `EUR` available = abap_true )
-      ( name = `Tablet Pouch` productid = `HT-9996` quantity = 34 price = 20 currencycode = `EUR` available = abap_true )
-      ( name = `e-Book Reader ReadMe` productid = `HT-9997` quantity = 23 price = 33 currencycode = `EUR` available = abap_true )
-      ( name = `Smartphone Beta` productid = `HT-9998` quantity = 21 price = 30 currencycode = `EUR` available = abap_true )
-      ( name = `Maxi Tablet` productid = `HT-9999` quantity = 20 price = 749 currencycode = `EUR` available = abap_true )
-      ( name = `Flyer` productid = `PF-1000` quantity = 33 price = 0 currencycode = `EUR` available = abap_false )
-      ).
+    
+    CLEAR temp6.
+    
+    temp7-name = `Notebook Basic 15`.
+    temp7-productid = `HT-1000`.
+    temp7-quantity = 10.
+    temp7-price = 956.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Notebook Basic 17`.
+    temp7-productid = `HT-1001`.
+    temp7-quantity = 20.
+    temp7-price = 1249.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    temp7-navigatedstate = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Notebook Basic 18`.
+    temp7-productid = `HT-1002`.
+    temp7-quantity = 10.
+    temp7-price = 1570.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Notebook Basic 19`.
+    temp7-productid = `HT-1003`.
+    temp7-quantity = 15.
+    temp7-price = 1650.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `ITelO Vault`.
+    temp7-productid = `HT-1007`.
+    temp7-quantity = 15.
+    temp7-price = 299.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Notebook Professional 15`.
+    temp7-productid = `HT-1010`.
+    temp7-quantity = 16.
+    temp7-price = 1999.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Notebook Professional 17`.
+    temp7-productid = `HT-1011`.
+    temp7-quantity = 17.
+    temp7-price = 2299.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `ITelO Vault Net`.
+    temp7-productid = `HT-1020`.
+    temp7-quantity = 14.
+    temp7-price = 459.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `ITelO Vault SAT`.
+    temp7-productid = `HT-1021`.
+    temp7-quantity = 50.
+    temp7-price = 149.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Comfort Easy`.
+    temp7-productid = `HT-1022`.
+    temp7-quantity = 30.
+    temp7-price = 1679.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Comfort Senior`.
+    temp7-productid = `HT-1023`.
+    temp7-quantity = 24.
+    temp7-price = 512.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Ergo Screen E-I`.
+    temp7-productid = `HT-1030`.
+    temp7-quantity = 14.
+    temp7-price = 230.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Ergo Screen E-II`.
+    temp7-productid = `HT-1031`.
+    temp7-quantity = 24.
+    temp7-price = 285.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Ergo Screen E-III`.
+    temp7-productid = `HT-1032`.
+    temp7-quantity = 50.
+    temp7-price = 345.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Flat Basic`.
+    temp7-productid = `HT-1035`.
+    temp7-quantity = 23.
+    temp7-price = 399.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Flat Future`.
+    temp7-productid = `HT-1036`.
+    temp7-quantity = 22.
+    temp7-price = 430.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Flat XL`.
+    temp7-productid = `HT-1037`.
+    temp7-quantity = 23.
+    temp7-price = 1230.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Laser Professional Eco`.
+    temp7-productid = `HT-1040`.
+    temp7-quantity = 21.
+    temp7-price = 830.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Laser Basic`.
+    temp7-productid = `HT-1041`.
+    temp7-quantity = 8.
+    temp7-price = 490.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Laser Allround`.
+    temp7-productid = `HT-1042`.
+    temp7-quantity = 9.
+    temp7-price = 349.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Ultra Jet Super Color`.
+    temp7-productid = `HT-1050`.
+    temp7-quantity = 17.
+    temp7-price = 139.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Ultra Jet Mobile`.
+    temp7-productid = `HT-1051`.
+    temp7-quantity = 18.
+    temp7-price = 99.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Ultra Jet Super Highspeed`.
+    temp7-productid = `HT-1052`.
+    temp7-quantity = 25.
+    temp7-price = 170.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Multi Print`.
+    temp7-productid = `HT-1055`.
+    temp7-quantity = 16.
+    temp7-price = 99.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Multi Color`.
+    temp7-productid = `HT-1056`.
+    temp7-quantity = 5.
+    temp7-price = 119.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Cordless Mouse`.
+    temp7-productid = `HT-1060`.
+    temp7-quantity = 25.
+    temp7-price = 9.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Speed Mouse`.
+    temp7-productid = `HT-1061`.
+    temp7-quantity = 12.
+    temp7-price = 7.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Track Mouse`.
+    temp7-productid = `HT-1062`.
+    temp7-quantity = 12.
+    temp7-price = 11.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Ergonomic Keyboard`.
+    temp7-productid = `HT-1063`.
+    temp7-quantity = 50.
+    temp7-price = 14.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Internet Keyboard`.
+    temp7-productid = `HT-1064`.
+    temp7-quantity = 35.
+    temp7-price = 16.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Media Keyboard`.
+    temp7-productid = `HT-1065`.
+    temp7-quantity = 26.
+    temp7-price = 26.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Mousepad`.
+    temp7-productid = `HT-1066`.
+    temp7-quantity = 12.
+    temp7-price = `6.99`.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Ergo Mousepad`.
+    temp7-productid = `HT-1067`.
+    temp7-quantity = 16.
+    temp7-price = `8.99`.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Designer Mousepad`.
+    temp7-productid = `HT-1068`.
+    temp7-quantity = 26.
+    temp7-price = `12.99`.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Universal card reader`.
+    temp7-productid = `HT-1069`.
+    temp7-quantity = 22.
+    temp7-price = 14.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Proctra X`.
+    temp7-productid = `HT-1070`.
+    temp7-quantity = 15.
+    temp7-price = `70.9`.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Gladiator MX`.
+    temp7-productid = `HT-1071`.
+    temp7-quantity = 16.
+    temp7-price = `81.7`.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Hurricane GX`.
+    temp7-productid = `HT-1072`.
+    temp7-quantity = 13.
+    temp7-price = `101.2`.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Hurricane GX/LN`.
+    temp7-productid = `HT-1073`.
+    temp7-quantity = 5.
+    temp7-price = `139.99`.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Photo Scan`.
+    temp7-productid = `HT-1080`.
+    temp7-quantity = 8.
+    temp7-price = 129.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Power Scan`.
+    temp7-productid = `HT-1081`.
+    temp7-quantity = 11.
+    temp7-price = 89.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Jet Scan Professional`.
+    temp7-productid = `HT-1082`.
+    temp7-quantity = 13.
+    temp7-price = 169.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Jet Scan Professional`.
+    temp7-productid = `HT-1083`.
+    temp7-quantity = 10.
+    temp7-price = 189.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Copymaster`.
+    temp7-productid = `HT-1085`.
+    temp7-quantity = 10.
+    temp7-price = 1499.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Surround Sound`.
+    temp7-productid = `HT-1090`.
+    temp7-quantity = 20.
+    temp7-price = 39.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Blaster Extreme`.
+    temp7-productid = `HT-1091`.
+    temp7-quantity = 15.
+    temp7-price = 26.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Sound Booster`.
+    temp7-productid = `HT-1092`.
+    temp7-quantity = 50.
+    temp7-price = 45.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Lovely Sound 5.1 Wireless`.
+    temp7-productid = `HT-1095`.
+    temp7-quantity = 12.
+    temp7-price = 49.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Lovely Sound 5.1`.
+    temp7-productid = `HT-1096`.
+    temp7-quantity = 18.
+    temp7-price = 39.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Lovely Sound Stereo`.
+    temp7-productid = `HT-1097`.
+    temp7-quantity = 21.
+    temp7-price = 29.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Smart Office`.
+    temp7-productid = `HT-1100`.
+    temp7-quantity = 25.
+    temp7-price = `89.9`.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Smart Design`.
+    temp7-productid = `HT-1101`.
+    temp7-quantity = 26.
+    temp7-price = `79.9`.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Smart Network`.
+    temp7-productid = `HT-1102`.
+    temp7-quantity = 28.
+    temp7-price = 69.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Smart Multimedia`.
+    temp7-productid = `HT-1103`.
+    temp7-quantity = 9.
+    temp7-price = 77.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Smart Games`.
+    temp7-productid = `HT-1104`.
+    temp7-quantity = 13.
+    temp7-price = 55.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Smart Internet Antivirus`.
+    temp7-productid = `HT-1105`.
+    temp7-quantity = 17.
+    temp7-price = 29.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Smart Firewall`.
+    temp7-productid = `HT-1106`.
+    temp7-quantity = 19.
+    temp7-price = 34.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Smart Money`.
+    temp7-productid = `HT-1107`.
+    temp7-quantity = 18.
+    temp7-price = `29.9`.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `PC Lock`.
+    temp7-productid = `HT-1110`.
+    temp7-quantity = 14.
+    temp7-price = `8.9`.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Notebook Lock`.
+    temp7-productid = `HT-1111`.
+    temp7-quantity = 20.
+    temp7-price = `6.9`.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Web cam reality`.
+    temp7-productid = `HT-1112`.
+    temp7-quantity = 27.
+    temp7-price = 39.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Screen clean`.
+    temp7-productid = `HT-1113`.
+    temp7-quantity = 17.
+    temp7-price = `2.3`.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Fabric bag professional`.
+    temp7-productid = `HT-1114`.
+    temp7-quantity = 14.
+    temp7-price = 31.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Wireless DSL Router`.
+    temp7-productid = `HT-1115`.
+    temp7-quantity = 16.
+    temp7-price = 49.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Wireless DSL Router / Repeater`.
+    temp7-productid = `HT-1116`.
+    temp7-quantity = 12.
+    temp7-price = 59.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Wireless DSL Router / Repeater and Print Server`.
+    temp7-productid = `HT-1117`.
+    temp7-quantity = 12.
+    temp7-price = 69.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `USB Stick`.
+    temp7-productid = `HT-1118`.
+    temp7-quantity = 14.
+    temp7-price = 35.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Travel Adapter`.
+    temp7-productid = `HT-1119`.
+    temp7-quantity = 10.
+    temp7-price = 79.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Cordless Bluetooth Keyboard, english international`.
+    temp7-productid = `HT-1120`.
+    temp7-quantity = 13.
+    temp7-price = 29.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Flat XXL`.
+    temp7-productid = `HT-1137`.
+    temp7-quantity = 10.
+    temp7-price = 1430.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Pocket Mouse`.
+    temp7-productid = `HT-1138`.
+    temp7-quantity = 20.
+    temp7-price = 23.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `PC Power Station`.
+    temp7-productid = `HT-1210`.
+    temp7-quantity = 22.
+    temp7-price = 2399.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Astro Laptop 1516`.
+    temp7-productid = `HT-1251`.
+    temp7-quantity = 23.
+    temp7-price = 989.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Astro Phone 6`.
+    temp7-productid = `HT-1252`.
+    temp7-quantity = 28.
+    temp7-price = 649.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Benda Laptop 1408`.
+    temp7-productid = `HT-1253`.
+    temp7-quantity = 27.
+    temp7-price = 976.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Bending Screen 21HD`.
+    temp7-productid = `HT-1254`.
+    temp7-quantity = 23.
+    temp7-price = 250.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Broad Screen 22HD`.
+    temp7-productid = `HT-1255`.
+    temp7-quantity = 5.
+    temp7-price = 270.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Cerdik Phone 7`.
+    temp7-productid = `HT-1256`.
+    temp7-quantity = 19.
+    temp7-price = 549.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Cepat Tablet 10.5`.
+    temp7-productid = `HT-1257`.
+    temp7-quantity = 17.
+    temp7-price = 549.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Cepat Tablet 8`.
+    temp7-productid = `HT-1258`.
+    temp7-quantity = 24.
+    temp7-price = 529.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Server Basic`.
+    temp7-productid = `HT-1500`.
+    temp7-quantity = 24.
+    temp7-price = 5000.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Server Professional`.
+    temp7-productid = `HT-1501`.
+    temp7-quantity = 26.
+    temp7-price = 15000.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Server Power Pro`.
+    temp7-productid = `HT-1502`.
+    temp7-quantity = 34.
+    temp7-price = 25000.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Family PC Basic`.
+    temp7-productid = `HT-1600`.
+    temp7-quantity = 10.
+    temp7-price = 600.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Family PC Pro`.
+    temp7-productid = `HT-1601`.
+    temp7-quantity = 20.
+    temp7-price = 900.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Gaming Monster`.
+    temp7-productid = `HT-1602`.
+    temp7-quantity = 24.
+    temp7-price = 1200.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Gaming Monster Pro`.
+    temp7-productid = `HT-1603`.
+    temp7-quantity = 25.
+    temp7-price = 1700.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `7" Widescreen Portable DVD Player w MP3`.
+    temp7-productid = `HT-2000`.
+    temp7-quantity = 20.
+    temp7-price = `249.99`.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `10" Portable DVD player`.
+    temp7-productid = `HT-2001`.
+    temp7-quantity = 21.
+    temp7-price = `449.99`.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Portable DVD Player with 9" LCD Monitor`.
+    temp7-productid = `HT-2002`.
+    temp7-quantity = 50.
+    temp7-price = `853.99`.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `CD/DVD case: 264 sleeves`.
+    temp7-productid = `HT-2025`.
+    temp7-quantity = 26.
+    temp7-price = `44.99`.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Audio/Video Cable Kit - 4m`.
+    temp7-productid = `HT-2026`.
+    temp7-quantity = 16.
+    temp7-price = `29.99`.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Removable CD/DVD Laser Labels`.
+    temp7-productid = `HT-2027`.
+    temp7-quantity = 25.
+    temp7-price = `8.99`.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Beam Breaker B-1`.
+    temp7-productid = `HT-6100`.
+    temp7-quantity = 32.
+    temp7-price = 469.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Beam Breaker B-2`.
+    temp7-productid = `HT-6101`.
+    temp7-quantity = 18.
+    temp7-price = 679.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Beam Breaker B-3`.
+    temp7-productid = `HT-6102`.
+    temp7-quantity = 16.
+    temp7-price = 889.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Play Movie`.
+    temp7-productid = `HT-6110`.
+    temp7-quantity = 15.
+    temp7-price = 130.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Record Movie`.
+    temp7-productid = `HT-6111`.
+    temp7-quantity = 24.
+    temp7-price = 288.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `ITelo MusicStick`.
+    temp7-productid = `HT-6120`.
+    temp7-quantity = 15.
+    temp7-price = 45.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `ITelo Jog-Mate`.
+    temp7-productid = `HT-6121`.
+    temp7-quantity = 24.
+    temp7-price = 63.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Power Pro Player 40`.
+    temp7-productid = `HT-6122`.
+    temp7-quantity = 23.
+    temp7-price = 167.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Power Pro Player 80`.
+    temp7-productid = `HT-6123`.
+    temp7-quantity = 13.
+    temp7-price = 299.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Flat Watch HD32`.
+    temp7-productid = `HT-6130`.
+    temp7-quantity = 16.
+    temp7-price = 1459.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Flat Watch HD37`.
+    temp7-productid = `HT-6131`.
+    temp7-quantity = 14.
+    temp7-price = 1199.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Flat Watch HD41`.
+    temp7-productid = `HT-6132`.
+    temp7-quantity = 13.
+    temp7-price = 899.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Copperberry`.
+    temp7-productid = `HT-7000`.
+    temp7-quantity = 5.
+    temp7-price = 549.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Silverberry`.
+    temp7-productid = `HT-7010`.
+    temp7-quantity = 9.
+    temp7-price = 549.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Goldberry`.
+    temp7-productid = `HT-7020`.
+    temp7-quantity = 11.
+    temp7-price = 549.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Platinberry`.
+    temp7-productid = `HT-7030`.
+    temp7-quantity = 12.
+    temp7-price = 549.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `ITelO FlexTop I4000`.
+    temp7-productid = `HT-8000`.
+    temp7-quantity = 11.
+    temp7-price = 799.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `ITelO FlexTop I6300c`.
+    temp7-productid = `HT-8001`.
+    temp7-quantity = 20.
+    temp7-price = 799.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `ITelO FlexTop I9100`.
+    temp7-productid = `HT-8002`.
+    temp7-quantity = 20.
+    temp7-price = 1199.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `ITelO FlexTop I9800`.
+    temp7-productid = `HT-8003`.
+    temp7-quantity = 22.
+    temp7-price = 1388.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Smartphone Leather Case`.
+    temp7-productid = `HT-9991`.
+    temp7-quantity = 12.
+    temp7-price = 25.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Smartphone Alpha`.
+    temp7-productid = `HT-9992`.
+    temp7-quantity = 13.
+    temp7-price = 599.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Mini Tablet`.
+    temp7-productid = `HT-9993`.
+    temp7-quantity = 10.
+    temp7-price = 833.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Camcorder View`.
+    temp7-productid = `HT-9994`.
+    temp7-quantity = 50.
+    temp7-price = 1388.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Tablet Pouch`.
+    temp7-productid = `HT-9995`.
+    temp7-quantity = 34.
+    temp7-price = 20.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Tablet Pouch`.
+    temp7-productid = `HT-9996`.
+    temp7-quantity = 34.
+    temp7-price = 20.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `e-Book Reader ReadMe`.
+    temp7-productid = `HT-9997`.
+    temp7-quantity = 23.
+    temp7-price = 33.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Smartphone Beta`.
+    temp7-productid = `HT-9998`.
+    temp7-quantity = 21.
+    temp7-price = 30.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Maxi Tablet`.
+    temp7-productid = `HT-9999`.
+    temp7-quantity = 20.
+    temp7-price = 749.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_true.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-name = `Flyer`.
+    temp7-productid = `PF-1000`.
+    temp7-quantity = 33.
+    temp7-price = 0.
+    temp7-currencycode = `EUR`.
+    temp7-available = abap_false.
+    INSERT temp7 INTO TABLE temp6.
+    t_products = temp6.
 
   ENDMETHOD.
 

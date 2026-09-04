@@ -23,9 +23,9 @@ CLASS z2ui5_cl_smpc_app_102 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -34,7 +34,8 @@ CLASS z2ui5_cl_smpc_app_102 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
@@ -64,13 +65,18 @@ CLASS z2ui5_cl_smpc_app_102 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp1 TYPE string_table.
 
     CASE client->get_event( ).
 
       WHEN `REBIND`.
         " original fnRebind: after ~3s (the OData dataReceived) late-bind the input
+        
+        CLEAR temp1.
+        INSERT `REBIND_DONE` INTO TABLE temp1.
+        INSERT `3000` INTO TABLE temp1.
         client->follow_up_action( val   = client->cs_event-start_timer
-                                  t_arg = VALUE #( ( `REBIND_DONE` ) ( `3000` ) ) ).
+                                  t_arg = temp1 ).
 
       WHEN `REBIND_DONE`.
         " original dataReceived: if the input is still untouched, bind it to Employees(1)/FirstName

@@ -8,7 +8,7 @@ CLASS z2ui5_cl_smpc_app_582 DEFINITION PUBLIC.
     TYPES: BEGIN OF ty_s_item,
              title TYPE string,
            END OF ty_s_item.
-    TYPES ty_t_item TYPE STANDARD TABLE OF ty_s_item WITH EMPTY KEY.
+    TYPES ty_t_item TYPE STANDARD TABLE OF ty_s_item WITH DEFAULT KEY.
 
     DATA t_items1 TYPE ty_t_item.
     DATA t_items2 TYPE ty_t_item.
@@ -33,10 +33,10 @@ CLASS z2ui5_cl_smpc_app_582 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -45,9 +45,17 @@ CLASS z2ui5_cl_smpc_app_582 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA page TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA container TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp3 TYPE string_table.
+    DATA temp5 TYPE string_table.
+    DATA temp7 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    DATA(page) = view->ele( n = `View` ns = `mvc`
+    
+    page = view->ele( n = `View` ns = `mvc`
         )->a( n = `height`        v = `100%`
         )->a( n = `xmlns`         v = `sap.m`
         )->a( n = `xmlns:f`       v = `sap.f`
@@ -68,7 +76,8 @@ CLASS z2ui5_cl_smpc_app_582 IMPLEMENTATION.
         )->tag( `Slider`
             )->a( n = `value` v = client->_bind( slider_value ) ).
 
-    DATA(container) = page->ele( n = `CSSGrid` ns = `cssgrid`
+    
+    container = page->ele( n = `CSSGrid` ns = `cssgrid`
         )->a( n = `id`    v = `container`
         )->a( n = `width` v = |\{= ${ client->_bind( slider_value ) } + '%' \}|
 
@@ -91,6 +100,11 @@ CLASS z2ui5_cl_smpc_app_582 IMPLEMENTATION.
             )->end(
         )->end( ).
 
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `Reached border of GridList 1` INTO TABLE temp1.
     container->ele( n = `GridList` ns = `f`
         )->a( n = `id`             v = `gridList1`
         )->a( n = `headerText`     v = `GridList 1`
@@ -99,9 +113,7 @@ CLASS z2ui5_cl_smpc_app_582 IMPLEMENTATION.
         " the neighbouring one; only the toast can travel (see sidecar)
         )->a( n = `borderReached`  v = client->follow_up_action(
                   val   = client->cs_event-control_global
-                  t_arg = VALUE #( ( `MESSAGE_TOAST` )
-                                   ( `show` )
-                                   ( `Reached border of GridList 1` ) ) )
+                  t_arg = temp1 )
 
         )->ele( n = `customLayout` ns = `f`
             )->tag( n = `GridBasicLayout` ns = `cssgrid`
@@ -132,6 +144,11 @@ CLASS z2ui5_cl_smpc_app_582 IMPLEMENTATION.
         )->end(
     )->end( ).
 
+    
+    CLEAR temp3.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp3.
+    INSERT `show` INTO TABLE temp3.
+    INSERT `Reached border of GridList 2` INTO TABLE temp3.
     container->ele( n = `GridList` ns = `f`
         )->a( n = `id`             v = `gridList2`
         )->a( n = `headerText`     v = `GridList 2`
@@ -140,9 +157,7 @@ CLASS z2ui5_cl_smpc_app_582 IMPLEMENTATION.
         " the neighbouring one; only the toast can travel (see sidecar)
         )->a( n = `borderReached`  v = client->follow_up_action(
                   val   = client->cs_event-control_global
-                  t_arg = VALUE #( ( `MESSAGE_TOAST` )
-                                   ( `show` )
-                                   ( `Reached border of GridList 2` ) ) )
+                  t_arg = temp3 )
 
         )->ele( n = `customLayout` ns = `f`
             )->tag( n = `GridBasicLayout` ns = `cssgrid`
@@ -173,6 +188,11 @@ CLASS z2ui5_cl_smpc_app_582 IMPLEMENTATION.
         )->end(
     )->end( ).
 
+    
+    CLEAR temp5.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp5.
+    INSERT `show` INTO TABLE temp5.
+    INSERT `Reached border of GridList 3` INTO TABLE temp5.
     container->ele( n = `GridList` ns = `f`
         )->a( n = `id`             v = `gridList3`
         )->a( n = `headerText`     v = `GridList 3`
@@ -181,9 +201,7 @@ CLASS z2ui5_cl_smpc_app_582 IMPLEMENTATION.
         " the neighbouring one; only the toast can travel (see sidecar)
         )->a( n = `borderReached`  v = client->follow_up_action(
                   val   = client->cs_event-control_global
-                  t_arg = VALUE #( ( `MESSAGE_TOAST` )
-                                   ( `show` )
-                                   ( `Reached border of GridList 3` ) ) )
+                  t_arg = temp5 )
 
         )->ele( n = `customLayout` ns = `f`
             )->tag( n = `GridBasicLayout` ns = `cssgrid`
@@ -214,6 +232,11 @@ CLASS z2ui5_cl_smpc_app_582 IMPLEMENTATION.
         )->end(
     )->end( ).
 
+    
+    CLEAR temp7.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp7.
+    INSERT `show` INTO TABLE temp7.
+    INSERT `Reached border of GridList 4` INTO TABLE temp7.
     container->ele( n = `GridList` ns = `f`
         )->a( n = `id`             v = `gridList4`
         )->a( n = `headerText`     v = `GridList 4`
@@ -222,9 +245,7 @@ CLASS z2ui5_cl_smpc_app_582 IMPLEMENTATION.
         " the neighbouring one; only the toast can travel (see sidecar)
         )->a( n = `borderReached`  v = client->follow_up_action(
                   val   = client->cs_event-control_global
-                  t_arg = VALUE #( ( `MESSAGE_TOAST` )
-                                   ( `show` )
-                                   ( `Reached border of GridList 4` ) ) )
+                  t_arg = temp7 )
 
         )->ele( n = `customLayout` ns = `f`
             )->tag( n = `GridBasicLayout` ns = `cssgrid`
@@ -263,10 +284,65 @@ CLASS z2ui5_cl_smpc_app_582 IMPLEMENTATION.
 
     " model/data.json - the four item lists. Only the title is bound by the item
     " template; the mock's subtitle, counter and type are not
-    t_items1 = VALUE #( ( title = `Item 1` ) ( title = `Item 2` ) ( title = `Item 3` ) ( title = `Item 4` ) ).
-    t_items2 = VALUE #( ( title = `Item 1` ) ( title = `Item 2` ) ( title = `Item 3` ) ( title = `Item 4` ) ).
-    t_items3 = VALUE #( ( title = `Item 1` ) ( title = `Item 2` ) ( title = `Item 3` ) ( title = `Item 4` ) ( title = `Item 5` ) ).
-    t_items4 = VALUE #( ( title = `Item 1` ) ( title = `Item 2` ) ( title = `Item 3` ) ( title = `Item 4` ) ( title = `Item 5` ) ).
+    DATA temp9 TYPE z2ui5_cl_smpc_app_582=>ty_t_item.
+    DATA temp10 LIKE LINE OF temp9.
+    DATA temp11 TYPE z2ui5_cl_smpc_app_582=>ty_t_item.
+    DATA temp12 LIKE LINE OF temp11.
+    DATA temp13 TYPE z2ui5_cl_smpc_app_582=>ty_t_item.
+    DATA temp14 LIKE LINE OF temp13.
+    DATA temp15 TYPE z2ui5_cl_smpc_app_582=>ty_t_item.
+    DATA temp16 LIKE LINE OF temp15.
+    CLEAR temp9.
+    
+    temp10-title = `Item 1`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-title = `Item 2`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-title = `Item 3`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-title = `Item 4`.
+    INSERT temp10 INTO TABLE temp9.
+    t_items1 = temp9.
+    
+    CLEAR temp11.
+    
+    temp12-title = `Item 1`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-title = `Item 2`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-title = `Item 3`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-title = `Item 4`.
+    INSERT temp12 INTO TABLE temp11.
+    t_items2 = temp11.
+    
+    CLEAR temp13.
+    
+    temp14-title = `Item 1`.
+    INSERT temp14 INTO TABLE temp13.
+    temp14-title = `Item 2`.
+    INSERT temp14 INTO TABLE temp13.
+    temp14-title = `Item 3`.
+    INSERT temp14 INTO TABLE temp13.
+    temp14-title = `Item 4`.
+    INSERT temp14 INTO TABLE temp13.
+    temp14-title = `Item 5`.
+    INSERT temp14 INTO TABLE temp13.
+    t_items3 = temp13.
+    
+    CLEAR temp15.
+    
+    temp16-title = `Item 1`.
+    INSERT temp16 INTO TABLE temp15.
+    temp16-title = `Item 2`.
+    INSERT temp16 INTO TABLE temp15.
+    temp16-title = `Item 3`.
+    INSERT temp16 INTO TABLE temp15.
+    temp16-title = `Item 4`.
+    INSERT temp16 INTO TABLE temp15.
+    temp16-title = `Item 5`.
+    INSERT temp16 INTO TABLE temp15.
+    t_items4 = temp15.
 
   ENDMETHOD.
 

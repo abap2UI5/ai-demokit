@@ -33,7 +33,8 @@ CLASS z2ui5_cl_smpc_sapui5_002 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `displayBlock`  v = `true`
@@ -243,9 +244,9 @@ CLASS z2ui5_cl_smpc_sapui5_002 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -253,6 +254,7 @@ CLASS z2ui5_cl_smpc_sapui5_002 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA selected TYPE i.
 
     CASE client->get_event( ).
 
@@ -261,7 +263,8 @@ CLASS z2ui5_cl_smpc_sapui5_002 IMPLEMENTATION.
         " in the model when this fires - nothing has to be read off the event
         " counted per flag - a VALUE string_table over abap_bool fields does not
         " survive the transpiler's downported INSERT (types not compatible)
-        DATA(selected) = 0.
+        
+        selected = 0.
         IF sel7 = abap_true.
           selected = selected + 1.
         ENDIF.

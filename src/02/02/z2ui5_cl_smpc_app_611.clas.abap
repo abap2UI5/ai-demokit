@@ -12,7 +12,7 @@ CLASS z2ui5_cl_smpc_app_611 DEFINITION PUBLIC.
              ariahaspopup TYPE string,
              label        TYPE string,
            END OF ty_s_special.
-    TYPES ty_t_special TYPE STANDARD TABLE OF ty_s_special WITH EMPTY KEY.
+    TYPES ty_t_special TYPE STANDARD TABLE OF ty_s_special WITH DEFAULT KEY.
 
     DATA t_special TYPE ty_t_special.
 
@@ -36,12 +36,12 @@ CLASS z2ui5_cl_smpc_app_611 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -50,7 +50,8 @@ CLASS z2ui5_cl_smpc_app_611 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " DateTypeRange.startDate is typed "object" and demands a real JS Date; the
     " model keeps ABAP DATS strings and Formatter.DateAbapDateToDateObject
@@ -123,7 +124,17 @@ CLASS z2ui5_cl_smpc_app_611 IMPLEMENTATION.
 
     " onDateSelect looks the selected day up among the special dates that carry
     " an ariaHasPopup and, if it lands inside one, fills the popover and opens it
-    DATA(millis) = client->get_event_arg( ).
+    DATA millis TYPE string.
+    DATA temp1 TYPE decfloat34.
+    DATA temp2 TYPE d.
+    DATA range LIKE LINE OF t_special.
+      DATA temp3 TYPE d.
+      DATA temp5 TYPE d.
+      DATA temp6 TYPE d.
+      DATA range_end LIKE temp6.
+      DATA temp4 TYPE d.
+        DATA popover TYPE REF TO z2ui5_cl_ui5_view_builder.
+    millis = client->get_event_arg( ).
 
     IF millis IS INITIAL.
       RETURN.
@@ -134,21 +145,38 @@ CLASS z2ui5_cl_smpc_app_611 IMPLEMENTATION.
     " 2,147,483,647, so CONV i( millis ) raises CX_SY_CONVERSION_OVERFLOW on a
     " real stack (the transpiled backend represents i as a JS number, which is
     " why CI never saw it). The quotient is ~20700 days and fits i
-    days     = CONV decfloat34( millis ) / 86400000.
-    selected = CONV d( '19700101' ) + days.
+    
+    temp1 = millis.
+    days     = temp1 / 86400000.
+    
+    temp2 = '19700101'.
+    selected = temp2 + days.
 
-    LOOP AT t_special INTO DATA(range).
+    
+    LOOP AT t_special INTO range.
       IF range-ariahaspopup IS INITIAL.
         CONTINUE.
       ENDIF.
-      DATA(range_end) = COND d( WHEN range-end_date IS INITIAL
-                                THEN CONV d( range-start_date )
-                                ELSE CONV d( range-end_date ) ).
-      IF selected >= CONV d( range-start_date ) AND selected <= range_end.
+      
+      temp3 = range-start_date.
+      
+      temp5 = range-end_date.
+      
+      IF range-end_date IS INITIAL.
+        temp6 = temp3.
+      ELSE.
+        temp6 = temp5.
+      ENDIF.
+      
+      range_end = temp6.
+      
+      temp4 = range-start_date.
+      IF selected >= temp4 AND selected <= range_end.
         popover_date = range-label.
         popover_type = |Day type: { range-type }|.
 
-        DATA(popover) = z2ui5_cl_ui5_view_builder=>factory( ).
+        
+        popover = z2ui5_cl_ui5_view_builder=>factory( ).
         popover->ele( n = `FragmentDefinition` ns = `core`
             )->a( n = `xmlns:core` v = `sap.ui.core`
             )->a( n = `xmlns`      v = `sap.m`
@@ -180,22 +208,31 @@ CLASS z2ui5_cl_smpc_app_611 IMPLEMENTATION.
 
     " onInit builds three DateTypeRanges on the CURRENT month: day 5 (Type01),
     " days 10-12 (Type02) and day 20 (None) - all three with ariaHasPopup Dialog
-    DATA(prefix) = |{ sy-datum+0(4) }{ sy-datum+4(2) }|.
+    DATA prefix TYPE string.
+    DATA temp5 TYPE z2ui5_cl_smpc_app_611=>ty_t_special.
+    DATA temp6 LIKE LINE OF temp5.
+    prefix = |{ sy-datum+0(4) }{ sy-datum+4(2) }|.
 
-    t_special = VALUE #(
-      ( start_date   = |{ prefix }05|
-        type         = `Type01`
-        ariahaspopup = `Dialog`
-        label        = |{ prefix }05| )
-      ( start_date   = |{ prefix }10|
-        end_date     = |{ prefix }12|
-        type         = `Type02`
-        ariahaspopup = `Dialog`
-        label        = |{ prefix }10 – { prefix }12| )
-      ( start_date   = |{ prefix }20|
-        type         = `None`
-        ariahaspopup = `Dialog`
-        label        = |{ prefix }20| ) ).
+    
+    CLEAR temp5.
+    
+    temp6-start_date = |{ prefix }05|.
+    temp6-type = `Type01`.
+    temp6-ariahaspopup = `Dialog`.
+    temp6-label = |{ prefix }05|.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-start_date = |{ prefix }10|.
+    temp6-end_date = |{ prefix }12|.
+    temp6-type = `Type02`.
+    temp6-ariahaspopup = `Dialog`.
+    temp6-label = |{ prefix }10 – { prefix }12|.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-start_date = |{ prefix }20|.
+    temp6-type = `None`.
+    temp6-ariahaspopup = `Dialog`.
+    temp6-label = |{ prefix }20|.
+    INSERT temp6 INTO TABLE temp5.
+    t_special = temp5.
 
   ENDMETHOD.
 

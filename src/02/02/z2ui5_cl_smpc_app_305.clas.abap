@@ -27,12 +27,12 @@ CLASS z2ui5_cl_smpc_app_305 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       selected_date = `No Date Selected`.
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -41,8 +41,15 @@ CLASS z2ui5_cl_smpc_app_305 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getFullYear() : 0` INTO TABLE temp1.
+    INSERT `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getMonth() + 1 : 0` INTO TABLE temp1.
+    INSERT `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getDate() : 0` INTO TABLE temp1.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:u`   v = `sap.ui.unified`
@@ -72,10 +79,7 @@ CLASS z2ui5_cl_smpc_app_305 IMPLEMENTATION.
                 " parts travel, not toISOString( ), which would shift the day east of
                 " Greenwich
                 )->a( n = `select`                v = client->_event( val   = `CAL_SELECT`
-                                                                      t_arg = VALUE #(
-                                                                        ( `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getFullYear() : 0` )
-                                                                        ( `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getMonth() + 1 : 0` )
-                                                                        ( `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getDate() : 0` ) ) )
+                                                                      t_arg = temp1 )
 
             )->ele( n = `HorizontalLayout` ns = `l`
                 )->tag( `Label`
@@ -92,18 +96,29 @@ CLASS z2ui5_cl_smpc_app_305 IMPLEMENTATION.
 
 
   METHOD on_event.
+      DATA year TYPE string.
+        DATA temp3 TYPE i.
+        DATA temp1 TYPE i.
+        DATA picked TYPE string.
+          DATA temp4 TYPE string_table.
 
     IF client->get_event( ) = `CAL_SELECT`.
       " handleCalendarSelect: a second click on the SAME day clears the
       " selection (removeSelectedDate), any other day becomes the new one;
       " _updateText then formats it yyyy-MM-dd
-      DATA(year) = client->get_event_arg( ).
+      
+      year = client->get_event_arg( ).
       IF year IS INITIAL OR year = `0`.
         selected_date = `No Date Selected`.
         CLEAR last_selected.
       ELSE.
-        DATA(picked) = |{ year }-{ CONV i( client->get_event_arg( 2 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
-                       |-{ CONV i( client->get_event_arg( 3 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }|.
+        
+        temp3 = client->get_event_arg( 2 ).
+        
+        temp1 = client->get_event_arg( 3 ).
+        
+        picked = |{ year }-{ temp3 WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
+                       |-{ temp1 WIDTH = 2 ALIGN = RIGHT PAD = '0' }|.
         IF picked = last_selected.
           selected_date = `No Date Selected`.
           CLEAR last_selected.
@@ -114,8 +129,12 @@ CLASS z2ui5_cl_smpc_app_305 IMPLEMENTATION.
           " singleSelection nor intervalSelection), so at most one DateRange
           " exists and removeAllSelectedDates is exactly the same removal.
           " Same wire as the sibling port 307's handleRemoveSelection.
+          
+          CLEAR temp4.
+          INSERT `calendar` INTO TABLE temp4.
+          INSERT `removeAllSelectedDates` INTO TABLE temp4.
           client->follow_up_action( val   = client->cs_event-control_by_id
-                                    t_arg = VALUE #( ( `calendar` ) ( `removeAllSelectedDates` ) ) ).
+                                    t_arg = temp4 ).
         ELSE.
           selected_date = picked.
           last_selected = picked.

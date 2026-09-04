@@ -27,15 +27,15 @@ CLASS z2ui5_cl_smpc_app_417 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       " the original view starts with showSideContent="false"; the open button
       " is visible until the side content is shown (updateToggleButtonState)
       show_side        = abap_false.
       open_btn_visible = abap_true.
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -44,7 +44,8 @@ CLASS z2ui5_cl_smpc_app_417 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the controller's ObjectPageModel (SharedJSONData employee.json) is never
     " bound by any control in this view, so no model is seeded; the side
@@ -233,6 +234,8 @@ CLASS z2ui5_cl_smpc_app_417 IMPLEMENTATION.
 
 
   METHOD at_breakpoint_s.
+      DATA temp1 TYPE xsdboolean.
+    DATA temp2 TYPE xsdboolean.
 
     " The original keeps sCurrentBreakpoint fresh in onAfterRendering AND in
     " handleBreakpointChange, and reads it at press time. The port only had the
@@ -250,16 +253,25 @@ CLASS z2ui5_cl_smpc_app_417 IMPLEMENTATION.
     " window whose container is narrow) is what the breakpointChanged event
     " still reports, which is why that wire stays and is consulted first.
     IF breakpoint IS NOT INITIAL.
-      result = xsdbool( breakpoint = `S` ).
+      
+      temp1 = boolc( breakpoint = `S` ).
+      result = temp1.
       RETURN.
     ENDIF.
 
-    result = xsdbool( client->get( )-s_device-resize-width <= 720 ).
+    
+    temp2 = boolc( client->get( )-s_device-resize-width <= 720 ).
+    result = temp2.
 
   ENDMETHOD.
 
 
   METHOD on_event.
+        DATA temp4 TYPE xsdboolean.
+          DATA temp1 TYPE string_table.
+        DATA temp3 TYPE string_table.
+          DATA temp5 TYPE string_table.
+        DATA temp7 TYPE string_table.
 
     CASE client->get_event( ).
 
@@ -267,7 +279,9 @@ CLASS z2ui5_cl_smpc_app_417 IMPLEMENTATION.
         " updateToggleButtonState: the open button shows on breakpoint S
         " or while the side content is hidden
         breakpoint = client->get_event_arg( ).
-        open_btn_visible = xsdbool( breakpoint = `S` OR show_side = abap_false ).
+        
+        temp4 = boolc( breakpoint = `S` OR show_side = abap_false ).
+        open_btn_visible = temp4.
 
       WHEN `OPEN_SIDE_CONTENT`.
         " handleSCBtnPress branches on the breakpoint: toggle( ) on S, the
@@ -282,14 +296,21 @@ CLASS z2ui5_cl_smpc_app_417 IMPLEMENTATION.
         " itself in the same round-trip and SET_FOCUS targets a button inside
         " the side content that never came up.
         IF at_breakpoint_s( ) = abap_true.
+          
+          CLEAR temp1.
+          INSERT `DynamicSideContent` INTO TABLE temp1.
+          INSERT `toggle` INTO TABLE temp1.
           client->follow_up_action( val   = client->cs_event-control_by_id
-                                    t_arg = VALUE #( ( `DynamicSideContent` ) ( `toggle` ) ) ).
+                                    t_arg = temp1 ).
         ELSE.
           show_side = abap_true.
         ENDIF.
         open_btn_visible = abap_false.
+        
+        CLEAR temp3.
+        INSERT `closeSideContentBtn` INTO TABLE temp3.
         client->follow_up_action( val   = client->cs_event-set_focus
-                                  t_arg = VALUE #( ( `closeSideContentBtn` ) ) ).
+                                  t_arg = temp3 ).
 
       WHEN `CLOSE_SIDE_CONTENT`.
         " handleSideContentHide hides the side content, shows the open button
@@ -303,14 +324,21 @@ CLASS z2ui5_cl_smpc_app_417 IMPLEMENTATION.
         " content comes back; with the unconditional false it stayed hidden
         " next to a re-shown open button.
         IF at_breakpoint_s( ) = abap_true.
+          
+          CLEAR temp5.
+          INSERT `DynamicSideContent` INTO TABLE temp5.
+          INSERT `toggle` INTO TABLE temp5.
           client->follow_up_action( val   = client->cs_event-control_by_id
-                                    t_arg = VALUE #( ( `DynamicSideContent` ) ( `toggle` ) ) ).
+                                    t_arg = temp5 ).
         ELSE.
           show_side = abap_false.
         ENDIF.
         open_btn_visible = abap_true.
+        
+        CLEAR temp7.
+        INSERT `openSideContentBtn` INTO TABLE temp7.
         client->follow_up_action( val   = client->cs_event-set_focus
-                                  t_arg = VALUE #( ( `openSideContentBtn` ) ) ).
+                                  t_arg = temp7 ).
 
     ENDCASE.
 

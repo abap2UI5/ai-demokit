@@ -32,12 +32,12 @@ CLASS z2ui5_cl_smpc_app_295 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -46,7 +46,8 @@ CLASS z2ui5_cl_smpc_app_295 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
@@ -97,22 +98,33 @@ CLASS z2ui5_cl_smpc_app_295 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp1 TYPE string_table.
+        DATA temp2 TYPE xsdboolean.
+        DATA filter_string TYPE string.
+        DATA temp3 TYPE xsdboolean.
 
     CASE client->get_event( ).
 
       WHEN `OPEN_DIALOG`.
+        
+        CLEAR temp1.
+        INSERT `settingsDialog` INTO TABLE temp1.
+        INSERT `open` INTO TABLE temp1.
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `settingsDialog` ) ( `open` ) ) ).
+                                  t_arg = temp1 ).
 
       WHEN `SLIDER_CHANGE`.
         " the original compares the new value against the last confirmed one
         " and marks the custom filter active when they differ
         slider_value = client->get_event_arg( ).
-        filter_state_set( xsdbool( slider_value <> previous_value ) ).
+        
+        temp2 = boolc( slider_value <> previous_value ).
+        filter_state_set( temp2 ).
 
       WHEN `CONFIRM`.
         previous_value = slider_value.
-        DATA(filter_string) = client->get_event_arg( ).
+        
+        filter_string = client->get_event_arg( ).
         IF filter_string IS NOT INITIAL.
           client->message_toast_display( |{ filter_string } Value is { slider_value }| ).
         ENDIF.
@@ -120,7 +132,9 @@ CLASS z2ui5_cl_smpc_app_295 IMPLEMENTATION.
       WHEN `CANCEL`.
         " discard the unconfirmed value and re-derive the filter state from it
         slider_value = previous_value.
-        filter_state_set( xsdbool( previous_value <> c_reset_value ) ).
+        
+        temp3 = boolc( previous_value <> c_reset_value ).
+        filter_state_set( temp3 ).
 
       WHEN `RESET_FILTERS`.
         slider_value = c_reset_value.
@@ -133,7 +147,13 @@ CLASS z2ui5_cl_smpc_app_295 IMPLEMENTATION.
 
   METHOD filter_state_set.
 
-    filter_count    = COND #( WHEN active = abap_true THEN 1 ELSE 0 ).
+    DATA temp3 TYPE i.
+    IF active = abap_true.
+      temp3 = 1.
+    ELSE.
+      temp3 = 0.
+    ENDIF.
+    filter_count    = temp3.
     filter_selected = active.
 
 

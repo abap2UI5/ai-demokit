@@ -10,7 +10,7 @@ CLASS z2ui5_cl_smpc_app_105 DEFINITION PUBLIC.
              description TYPE string,
              type        TYPE string,
            END OF ty_s_message.
-    DATA t_messages TYPE STANDARD TABLE OF ty_s_message WITH EMPTY KEY.
+    DATA t_messages TYPE STANDARD TABLE OF ty_s_message WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -28,12 +28,12 @@ CLASS z2ui5_cl_smpc_app_105 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -42,8 +42,15 @@ CLASS z2ui5_cl_smpc_app_105 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `semMessagePopover` INTO TABLE temp1.
+    INSERT `toggleBy` INTO TABLE temp1.
+    INSERT `$event.oSource.sId` INTO TABLE temp1.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`         v = `100%`
         )->a( n = `xmlns:core`     v = `sap.ui.core`
@@ -112,7 +119,7 @@ CLASS z2ui5_cl_smpc_app_105 IMPLEMENTATION.
             )->ele( n = `messagesIndicator` ns = `semantic`
                 )->ele( n = `MessagesIndicator` ns = `semantic`
                     )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                    t_arg = VALUE #( ( `semMessagePopover` ) ( `toggleBy` ) ( `$event.oSource.sId` ) ) )
+                                                                    t_arg = temp1 )
 
                     " the original's controller-built MessagePopover over the
                     " message model, declared as a dependent of its anchor
@@ -173,7 +180,14 @@ CLASS z2ui5_cl_smpc_app_105 IMPLEMENTATION.
     " onInit: MessageManager.addMessages( new Message( { message: 'Something
     " wrong happened', type: Error } ) ) - reconciled by the
     " z2ui5.cc.MessageManager bridge control in the view
-    t_messages = VALUE #( ( message = `Something wrong happened` type = `Error` ) ).
+    DATA temp3 LIKE t_messages.
+    DATA temp4 LIKE LINE OF temp3.
+    CLEAR temp3.
+    
+    temp4-message = `Something wrong happened`.
+    temp4-type = `Error`.
+    INSERT temp4 INTO TABLE temp3.
+    t_messages = temp3.
 
   ENDMETHOD.
 

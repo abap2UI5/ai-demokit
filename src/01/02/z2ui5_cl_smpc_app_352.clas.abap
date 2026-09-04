@@ -15,13 +15,13 @@ CLASS z2ui5_cl_smpc_app_352 DEFINITION PUBLIC.
         price          TYPE p LENGTH 13 DECIMALS 2,
         currencycode   TYPE string,
       END OF ty_s_product,
-      ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY,
+      ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH DEFAULT KEY,
       BEGIN OF ty_s_value,
         text     TYPE string,
         data     TYPE i,
         selected TYPE abap_bool,
       END OF ty_s_value,
-      ty_t_value TYPE STANDARD TABLE OF ty_s_value WITH EMPTY KEY,
+      ty_t_value TYPE STANDARD TABLE OF ty_s_value WITH DEFAULT KEY,
       BEGIN OF ty_s_filter,
         type   TYPE string,
         values TYPE ty_t_value,
@@ -34,7 +34,7 @@ CLASS z2ui5_cl_smpc_app_352 DEFINITION PUBLIC.
 
     " /ProductCollectionStats/Filters - the two facet lists with their values;
     " each value carries the selected flag the FacetFilterItem binds two-way
-    DATA t_filters TYPE STANDARD TABLE OF ty_s_filter WITH EMPTY KEY.
+    DATA t_filters TYPE STANDARD TABLE OF ty_s_filter WITH DEFAULT KEY.
 
     " the original's `ui>` model
     DATA filter_value TYPE string.
@@ -59,12 +59,12 @@ CLASS z2ui5_cl_smpc_app_352 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -73,7 +73,8 @@ CLASS z2ui5_cl_smpc_app_352 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the aggregation demo: a SearchField and a two-list FacetFilter over the
     " same table. Both filters are applied in ABAP and the table binds the
@@ -249,6 +250,10 @@ CLASS z2ui5_cl_smpc_app_352 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp1 LIKE LINE OF t_filters.
+        DATA lr_filter LIKE REF TO temp1.
+          DATA temp2 LIKE LINE OF lr_filter->values.
+          DATA lr_value LIKE REF TO temp2.
 
     CASE client->get_event( ).
 
@@ -262,8 +267,12 @@ CLASS z2ui5_cl_smpc_app_352 IMPLEMENTATION.
 
       WHEN `FACET_RESET`.
         " handleFacetFilterReset: clear every facet selection
-        LOOP AT t_filters REFERENCE INTO DATA(lr_filter).
-          LOOP AT lr_filter->values REFERENCE INTO DATA(lr_value).
+        
+        
+        LOOP AT t_filters REFERENCE INTO lr_filter.
+          
+          
+          LOOP AT lr_filter->values REFERENCE INTO lr_value.
             lr_value->selected = abap_false.
           ENDLOOP.
         ENDLOOP.
@@ -286,6 +295,20 @@ CLASS z2ui5_cl_smpc_app_352 IMPLEMENTATION.
 
 
   METHOD filter_apply.
+      DATA lv_query TYPE string.
+      DATA temp3 TYPE ty_t_product.
+      DATA lt_keep LIKE temp3.
+      DATA ls_row LIKE LINE OF t_products.
+    DATA ls_filter LIKE LINE OF t_filters.
+      DATA temp4 TYPE string_table.
+      DATA value LIKE LINE OF ls_filter-values.
+      DATA lt_selected LIKE temp4.
+      DATA temp6 TYPE ty_t_product.
+      DATA lt_facet_keep LIKE temp6.
+      DATA ls_product LIKE LINE OF t_products.
+        DATA temp7 TYPE string.
+        DATA lv_value LIKE temp7.
+        DATA temp8 LIKE sy-subrc.
 
     " the controller's _filter( ): the text filter and the facet filter are
     " ANDed; inside a facet list the selected values are ORed, and only a list
@@ -298,9 +321,14 @@ CLASS z2ui5_cl_smpc_app_352 IMPLEMENTATION.
     " transpiled backend it raises TABLE_INVALID_INDEX (found by the e2e
     " interaction, 2026-08-17). Building the keep list has neither problem.
     IF filter_value IS NOT INITIAL.
-      DATA(lv_query) = to_upper( filter_value ).
-      DATA(lt_keep) = VALUE ty_t_product( ).
-      LOOP AT t_products INTO DATA(ls_row).
+      
+      lv_query = to_upper( filter_value ).
+      
+      CLEAR temp3.
+      
+      lt_keep = temp3.
+      
+      LOOP AT t_products INTO ls_row.
         IF to_upper( ls_row-name ) CS lv_query OR to_upper( ls_row-status ) CS lv_query.
           APPEND ls_row TO lt_keep.
         ENDIF.
@@ -308,19 +336,37 @@ CLASS z2ui5_cl_smpc_app_352 IMPLEMENTATION.
       t_products = lt_keep.
     ENDIF.
 
-    LOOP AT t_filters INTO DATA(ls_filter).
-      DATA(lt_selected) = VALUE string_table( FOR value IN ls_filter-values
-                                              WHERE ( selected = abap_true )
-                                              ( value-text ) ).
+    
+    LOOP AT t_filters INTO ls_filter.
+      
+      CLEAR temp4.
+      
+      LOOP AT ls_filter-values INTO value WHERE selected = abap_true.
+        INSERT value-text INTO TABLE temp4.
+      ENDLOOP.
+      
+      lt_selected = temp4.
       IF lt_selected IS INITIAL.
         CONTINUE.
       ENDIF.
-      DATA(lt_facet_keep) = VALUE ty_t_product( ).
-      LOOP AT t_products INTO DATA(ls_product).
-        DATA(lv_value) = COND string( WHEN ls_filter-type = `Category`
-                                      THEN ls_product-category
-                                      ELSE ls_product-suppliername ).
-        IF line_exists( lt_selected[ table_line = lv_value ] ).
+      
+      CLEAR temp6.
+      
+      lt_facet_keep = temp6.
+      
+      LOOP AT t_products INTO ls_product.
+        
+        IF ls_filter-type = `Category`.
+          temp7 = ls_product-category.
+        ELSE.
+          temp7 = ls_product-suppliername.
+        ENDIF.
+        
+        lv_value = temp7.
+        
+        READ TABLE lt_selected WITH KEY table_line = lv_value TRANSPORTING NO FIELDS.
+        temp8 = sy-subrc.
+        IF temp8 = 0.
           APPEND ls_product TO lt_facet_keep.
         ENDIF.
       ENDLOOP.
@@ -336,131 +382,995 @@ CLASS z2ui5_cl_smpc_app_352 IMPLEMENTATION.
     " with the five columns the sample binds. The controller's
     " formatAvailableToObjectState is precomputed into AVAILABLESTATE, since
     " business logic belongs in the backend
-    result = VALUE #(
-      ( name = `Notebook Basic 15`                                  category = `Laptops`                     suppliername = `Very Best Screens` status = `Available`    availablestate = `Success` price = 956      currencycode = `EUR` )
-      ( name = `Notebook Basic 17`                                  category = `Laptops`                     suppliername = `Very Best Screens` status = `Available`    availablestate = `Success` price = 1249     currencycode = `EUR` )
-      ( name = `Notebook Basic 18`                                  category = `Laptops`                     suppliername = `Very Best Screens` status = `Available`    availablestate = `Success` price = 1570     currencycode = `EUR` )
-      ( name = `Notebook Basic 19`                                  category = `Laptops`                     suppliername = `Smartcards`        status = `Out of Stock` availablestate = `Error`   price = 1650     currencycode = `EUR` )
-      ( name = `ITelO Vault`                                        category = `Accessories`                 suppliername = `Technocom`         status = `Out of Stock` availablestate = `Error`   price = 299      currencycode = `EUR` )
-      ( name = `Notebook Professional 15`                           category = `Accessories`                 suppliername = `Very Best Screens` status = `Out of Stock` availablestate = `Error`   price = 1999     currencycode = `EUR` )
-      ( name = `Notebook Professional 17`                           category = `Laptops`                     suppliername = `Very Best Screens` status = `Out of Stock` availablestate = `Error`   price = 2299     currencycode = `EUR` )
-      ( name = `ITelO Vault Net`                                    category = `Accessories`                 suppliername = `Technocom`         status = `Discontinued` availablestate = `Error`   price = 459      currencycode = `EUR` )
-      ( name = `ITelO Vault SAT`                                    category = `Accessories`                 suppliername = `Technocom`         status = `Available`    availablestate = `Success` price = 149      currencycode = `EUR` )
-      ( name = `Comfort Easy`                                       category = `Accessories`                 suppliername = `Technocom`         status = `Out of Stock` availablestate = `Error`   price = 1679     currencycode = `EUR` )
-      ( name = `Comfort Senior`                                     category = `Accessories`                 suppliername = `Technocom`         status = `Available`    availablestate = `Success` price = 512      currencycode = `EUR` )
-      ( name = `Ergo Screen E-I`                                    category = `Flat Screen Monitors`        suppliername = `Very Best Screens` status = `Available`    availablestate = `Success` price = 230      currencycode = `EUR` )
-      ( name = `Ergo Screen E-II`                                   category = `Flat Screen Monitors`        suppliername = `Very Best Screens` status = `Available`    availablestate = `Success` price = 285      currencycode = `EUR` )
-      ( name = `Ergo Screen E-III`                                  category = `Flat Screen Monitors`        suppliername = `Very Best Screens` status = `Out of Stock` availablestate = `Error`   price = 345      currencycode = `EUR` )
-      ( name = `Flat Basic`                                         category = `Flat Screen Monitors`        suppliername = `Very Best Screens` status = `Available`    availablestate = `Success` price = 399      currencycode = `EUR` )
-      ( name = `Flat Future`                                        category = `Flat Screen Monitors`        suppliername = `Very Best Screens` status = `Available`    availablestate = `Success` price = 430      currencycode = `EUR` )
-      ( name = `Flat XL`                                            category = `Flat Screen Monitors`        suppliername = `Very Best Screens` status = `Available`    availablestate = `Success` price = 1230     currencycode = `EUR` )
-      ( name = `Laser Professional Eco`                             category = `Printers`                    suppliername = `Alpha Printers`    status = `Available`    availablestate = `Success` price = 830      currencycode = `EUR` )
-      ( name = `Laser Basic`                                        category = `Printers`                    suppliername = `Alpha Printers`    status = `Available`    availablestate = `Success` price = 490      currencycode = `EUR` )
-      ( name = `Laser Allround`                                     category = `Printers`                    suppliername = `Alpha Printers`    status = `Available`    availablestate = `Success` price = 349      currencycode = `EUR` )
-      ( name = `Ultra Jet Super Color`                              category = `Printers`                    suppliername = `Alpha Printers`    status = `Discontinued` availablestate = `Error`   price = 139      currencycode = `EUR` )
-      ( name = `Ultra Jet Mobile`                                   category = `Printers`                    suppliername = `Printer for All`   status = `Discontinued` availablestate = `Error`   price = 99       currencycode = `EUR` )
-      ( name = `Ultra Jet Super Highspeed`                          category = `Printers`                    suppliername = `Printer for All`   status = `Available`    availablestate = `Success` price = 170      currencycode = `EUR` )
-      ( name = `Multi Print`                                        category = `Multifunction Printers`      suppliername = `Printer for All`   status = `Available`    availablestate = `Success` price = 99       currencycode = `EUR` )
-      ( name = `Multi Color`                                        category = `Multifunction Printers`      suppliername = `Printer for All`   status = `Available`    availablestate = `Success` price = 119      currencycode = `EUR` )
-      ( name = `Cordless Mouse`                                     category = `Mice`                        suppliername = `Oxynum`            status = `Available`    availablestate = `Success` price = 9        currencycode = `EUR` )
-      ( name = `Speed Mouse`                                        category = `Mice`                        suppliername = `Oxynum`            status = `Available`    availablestate = `Success` price = 7        currencycode = `EUR` )
-      ( name = `Track Mouse`                                        category = `Mice`                        suppliername = `Oxynum`            status = `Discontinued` availablestate = `Error`   price = 11       currencycode = `EUR` )
-      ( name = `Ergonomic Keyboard`                                 category = `Keyboards`                   suppliername = `Oxynum`            status = `Available`    availablestate = `Success` price = 14       currencycode = `EUR` )
-      ( name = `Internet Keyboard`                                  category = `Keyboards`                   suppliername = `Oxynum`            status = `Out of Stock` availablestate = `Error`   price = 16       currencycode = `EUR` )
-      ( name = `Media Keyboard`                                     category = `Keyboards`                   suppliername = `Oxynum`            status = `Available`    availablestate = `Success` price = 26       currencycode = `EUR` )
-      ( name = `Mousepad`                                           category = `Mousepads`                   suppliername = `Oxynum`            status = `Available`    availablestate = `Success` price = `6.99`   currencycode = `EUR` )
-      ( name = `Ergo Mousepad`                                      category = `Mousepads`                   suppliername = `Oxynum`            status = `Out of Stock` availablestate = `Error`   price = `8.99`   currencycode = `EUR` )
-      ( name = `Designer Mousepad`                                  category = `Mousepads`                   suppliername = `Fasttech`          status = `Available`    availablestate = `Success` price = `12.99`  currencycode = `EUR` )
-      ( name = `Universal card reader`                              category = `Computer System Accessories` suppliername = `Fasttech`          status = `Available`    availablestate = `Success` price = 14       currencycode = `EUR` )
-      ( name = `Proctra X`                                          category = `Graphic Cards`               suppliername = `Ultrasonic United` status = `Out of Stock` availablestate = `Error`   price = `70.9`   currencycode = `EUR` )
-      ( name = `Gladiator MX`                                       category = `Graphic Cards`               suppliername = `Ultrasonic United` status = `Discontinued` availablestate = `Error`   price = `81.7`   currencycode = `EUR` )
-      ( name = `Hurricane GX`                                       category = `Graphic Cards`               suppliername = `Ultrasonic United` status = `Available`    availablestate = `Success` price = `101.2`  currencycode = `EUR` )
-      ( name = `Hurricane GX/LN`                                    category = `Graphic Cards`               suppliername = `Smartcards`        status = `Out of Stock` availablestate = `Error`   price = `139.99` currencycode = `EUR` )
-      ( name = `Photo Scan`                                         category = `Scanners`                    suppliername = `Printer for All`   status = `Out of Stock` availablestate = `Error`   price = 129      currencycode = `EUR` )
-      ( name = `Power Scan`                                         category = `Scanners`                    suppliername = `Printer for All`   status = `Out of Stock` availablestate = `Error`   price = 89       currencycode = `EUR` )
-      ( name = `Jet Scan Professional`                              category = `Scanners`                    suppliername = `Printer for All`   status = `Out of Stock` availablestate = `Error`   price = 169      currencycode = `EUR` )
-      ( name = `Jet Scan Professional`                              category = `Scanners`                    suppliername = `Printer for All`   status = `Available`    availablestate = `Success` price = 189      currencycode = `EUR` )
-      ( name = `Copymaster`                                         category = `Multifunction Printers`      suppliername = `Alpha Printers`    status = `Available`    availablestate = `Success` price = 1499     currencycode = `EUR` )
-      ( name = `Surround Sound`                                     category = `Speakers`                    suppliername = `Speaker Experts`   status = `Available`    availablestate = `Success` price = 39       currencycode = `EUR` )
-      ( name = `Blaster Extreme`                                    category = `Speakers`                    suppliername = `Speaker Experts`   status = `Available`    availablestate = `Success` price = 26       currencycode = `EUR` )
-      ( name = `Sound Booster`                                      category = `Speakers`                    suppliername = `Speaker Experts`   status = `Discontinued` availablestate = `Error`   price = 45       currencycode = `EUR` )
-      ( name = `Lovely Sound 5.1 Wireless`                          category = `Accessories`                 suppliername = `Fasttech`          status = `Available`    availablestate = `Success` price = 49       currencycode = `EUR` )
-      ( name = `Lovely Sound 5.1`                                   category = `Accessories`                 suppliername = `Fasttech`          status = `Available`    availablestate = `Success` price = 39       currencycode = `EUR` )
-      ( name = `Lovely Sound Stereo`                                category = `Accessories`                 suppliername = `Fasttech`          status = `Out of Stock` availablestate = `Error`   price = 29       currencycode = `EUR` )
-      ( name = `Smart Office`                                       category = `Software`                    suppliername = `Technocom`         status = `Out of Stock` availablestate = `Error`   price = `89.9`   currencycode = `EUR` )
-      ( name = `Smart Design`                                       category = `Software`                    suppliername = `Technocom`         status = `Available`    availablestate = `Success` price = `79.9`   currencycode = `EUR` )
-      ( name = `Smart Network`                                      category = `Software`                    suppliername = `Technocom`         status = `Available`    availablestate = `Success` price = 69       currencycode = `EUR` )
-      ( name = `Smart Multimedia`                                   category = `Software`                    suppliername = `Technocom`         status = `Available`    availablestate = `Success` price = 77       currencycode = `EUR` )
-      ( name = `Smart Games`                                        category = `Software`                    suppliername = `Technocom`         status = `Available`    availablestate = `Success` price = 55       currencycode = `EUR` )
-      ( name = `Smart Internet Antivirus`                           category = `Software`                    suppliername = `Brainsoft`         status = `Available`    availablestate = `Success` price = 29       currencycode = `EUR` )
-      ( name = `Smart Firewall`                                     category = `Software`                    suppliername = `Brainsoft`         status = `Discontinued` availablestate = `Error`   price = 34       currencycode = `EUR` )
-      ( name = `Smart Money`                                        category = `Software`                    suppliername = `Brainsoft`         status = `Out of Stock` availablestate = `Error`   price = `29.9`   currencycode = `EUR` )
-      ( name = `PC Lock`                                            category = `Computer System Accessories` suppliername = `Red Point Stores`  status = `Available`    availablestate = `Success` price = `8.9`    currencycode = `EUR` )
-      ( name = `Notebook Lock`                                      category = `Computer System Accessories` suppliername = `Red Point Stores`  status = `Available`    availablestate = `Success` price = `6.9`    currencycode = `EUR` )
-      ( name = `Web cam reality`                                    category = `Computer System Accessories` suppliername = `Red Point Stores`  status = `Out of Stock` availablestate = `Error`   price = 39       currencycode = `EUR` )
-      ( name = `Screen clean`                                       category = `Computer System Accessories` suppliername = `Red Point Stores`  status = `Available`    availablestate = `Success` price = `2.3`    currencycode = `EUR` )
-      ( name = `Fabric bag professional`                            category = `Computer System Accessories` suppliername = `Red Point Stores`  status = `Available`    availablestate = `Success` price = 31       currencycode = `EUR` )
-      ( name = `Wireless DSL Router`                                category = `Telecommunications`          suppliername = `Red Point Stores`  status = `Available`    availablestate = `Success` price = 49       currencycode = `EUR` )
-      ( name = `Wireless DSL Router / Repeater`                     category = `Telecommunications`          suppliername = `Red Point Stores`  status = `Out of Stock` availablestate = `Error`   price = 59       currencycode = `EUR` )
-      ( name = `Wireless DSL Router / Repeater and Print Server`    category = `Telecommunications`          suppliername = `Technocom`         status = `Available`    availablestate = `Success` price = 69       currencycode = `EUR` )
-      ( name = `USB Stick`                                          category = `Computer System Accessories` suppliername = `Technocom`         status = `Available`    availablestate = `Success` price = 35       currencycode = `EUR` )
-      ( name = `Travel Adapter`                                     category = `Accessories`                 suppliername = `Titanium`          status = `Discontinued` availablestate = `Error`   price = 79       currencycode = `EUR` )
-      ( name = `Cordless Bluetooth Keyboard, english international` category = `Keyboards`                   suppliername = `Technocom`         status = `Out of Stock` availablestate = `Error`   price = 29       currencycode = `EUR` )
-      ( name = `Flat XXL`                                           category = `Flat Screen Monitors`        suppliername = `Technocom`         status = `Discontinued` availablestate = `Error`   price = 1430     currencycode = `EUR` )
-      ( name = `Pocket Mouse`                                       category = `Mice`                        suppliername = `Technocom`         status = `Available`    availablestate = `Success` price = 23       currencycode = `EUR` )
-      ( name = `PC Power Station`                                   category = `PCs`                         suppliername = `Technocom`         status = `Available`    availablestate = `Success` price = 2399     currencycode = `EUR` )
-      ( name = `Astro Laptop 1516`                                  category = `Laptops`                     suppliername = `Ultrasonic United` status = `Available`    availablestate = `Success` price = 989      currencycode = `EUR` )
-      ( name = `Astro Phone 6`                                      category = `Smartphones and Tablets`     suppliername = `Ultrasonic United` status = `Available`    availablestate = `Success` price = 649      currencycode = `EUR` )
-      ( name = `Benda Laptop 1408`                                  category = `Laptops`                     suppliername = `Ultrasonic United` status = `Discontinued` availablestate = `Error`   price = 976      currencycode = `EUR` )
-      ( name = `Bending Screen 21HD`                                category = `Flat Screens`                suppliername = `Ultrasonic United` status = `Available`    availablestate = `Success` price = 250      currencycode = `EUR` )
-      ( name = `Broad Screen 22HD`                                  category = `Flat Screens`                suppliername = `Ultrasonic United` status = `Discontinued` availablestate = `Error`   price = 270      currencycode = `EUR` )
-      ( name = `Cerdik Phone 7`                                     category = `Smartphones and Tablets`     suppliername = `Ultrasonic United` status = `Discontinued` availablestate = `Error`   price = 549      currencycode = `EUR` )
-      ( name = `Cepat Tablet 10.5`                                  category = `Smartphones and Tablets`     suppliername = `Ultrasonic United` status = `Available`    availablestate = `Success` price = 549      currencycode = `EUR` )
-      ( name = `Cepat Tablet 8`                                     category = `Smartphones and Tablets`     suppliername = `Ultrasonic United` status = `Available`    availablestate = `Success` price = 529      currencycode = `EUR` )
-      ( name = `Server Basic`                                       category = `Servers`                     suppliername = `Technocom`         status = `Available`    availablestate = `Success` price = 5000     currencycode = `EUR` )
-      ( name = `Server Professional`                                category = `Servers`                     suppliername = `Technocom`         status = `Out of Stock` availablestate = `Error`   price = 15000    currencycode = `EUR` )
-      ( name = `Server Power Pro`                                   category = `Servers`                     suppliername = `Technocom`         status = `Available`    availablestate = `Success` price = 25000    currencycode = `EUR` )
-      ( name = `Family PC Basic`                                    category = `Desktop Computers`           suppliername = `Titanium`          status = `Available`    availablestate = `Success` price = 600      currencycode = `EUR` )
-      ( name = `Family PC Pro`                                      category = `Desktop Computers`           suppliername = `Titanium`          status = `Available`    availablestate = `Success` price = 900      currencycode = `EUR` )
-      ( name = `Gaming Monster`                                     category = `Desktop Computers`           suppliername = `Titanium`          status = `Available`    availablestate = `Success` price = 1200     currencycode = `EUR` )
-      ( name = `Gaming Monster Pro`                                 category = `Desktop Computers`           suppliername = `Titanium`          status = `Discontinued` availablestate = `Error`   price = 1700     currencycode = `EUR` )
-      ( name = `7" Widescreen Portable DVD Player w MP3`            category = `Accessories`                 suppliername = `Titanium`          status = `Available`    availablestate = `Success` price = `249.99` currencycode = `EUR` )
-      ( name = `10" Portable DVD player`                            category = `Accessories`                 suppliername = `Titanium`          status = `Available`    availablestate = `Success` price = `449.99` currencycode = `EUR` )
-      ( name = `Portable DVD Player with 9" LCD Monitor`            category = `Accessories`                 suppliername = `Technocom`         status = `Available`    availablestate = `Success` price = `853.99` currencycode = `EUR` )
-      ( name = `CD/DVD case: 264 sleeves`                           category = `Accessories`                 suppliername = `Titanium`          status = `Discontinued` availablestate = `Error`   price = `44.99`  currencycode = `EUR` )
-      ( name = `Audio/Video Cable Kit - 4m`                         category = `Accessories`                 suppliername = `Titanium`          status = `Available`    availablestate = `Success` price = `29.99`  currencycode = `EUR` )
-      ( name = `Removable CD/DVD Laser Labels`                      category = `Accessories`                 suppliername = `Titanium`          status = `Discontinued` availablestate = `Error`   price = `8.99`   currencycode = `EUR` )
-      ( name = `Beam Breaker B-1`                                   category = `Accessories`                 suppliername = `Titanium`          status = `Out of Stock` availablestate = `Error`   price = 469      currencycode = `EUR` )
-      ( name = `Beam Breaker B-2`                                   category = `Accessories`                 suppliername = `Technocom`         status = `Available`    availablestate = `Success` price = 679      currencycode = `EUR` )
-      ( name = `Beam Breaker B-3`                                   category = `Accessories`                 suppliername = `Technocom`         status = `Out of Stock` availablestate = `Error`   price = 889      currencycode = `EUR` )
-      ( name = `Play Movie`                                         category = `Accessories`                 suppliername = `Fasttech`          status = `Available`    availablestate = `Success` price = 130      currencycode = `EUR` )
-      ( name = `Record Movie`                                       category = `Accessories`                 suppliername = `Fasttech`          status = `Discontinued` availablestate = `Error`   price = 288      currencycode = `EUR` )
-      ( name = `ITelo MusicStick`                                   category = `Accessories`                 suppliername = `Fasttech`          status = `Available`    availablestate = `Success` price = 45       currencycode = `EUR` )
-      ( name = `ITelo Jog-Mate`                                     category = `Accessories`                 suppliername = `Fasttech`          status = `Available`    availablestate = `Success` price = 63       currencycode = `EUR` )
-      ( name = `Power Pro Player 40`                                category = `Accessories`                 suppliername = `Fasttech`          status = `Available`    availablestate = `Success` price = 167      currencycode = `EUR` )
-      ( name = `Power Pro Player 80`                                category = `Accessories`                 suppliername = `Fasttech`          status = `Available`    availablestate = `Success` price = 299      currencycode = `EUR` )
-      ( name = `Flat Watch HD32`                                    category = `Flat Screen TVs`             suppliername = `Very Best Screens` status = `Available`    availablestate = `Success` price = 1459     currencycode = `EUR` )
-      ( name = `Flat Watch HD37`                                    category = `Flat Screen TVs`             suppliername = `Very Best Screens` status = `Available`    availablestate = `Success` price = 1199     currencycode = `EUR` )
-      ( name = `Flat Watch HD41`                                    category = `Flat Screen TVs`             suppliername = `Very Best Screens` status = `Discontinued` availablestate = `Error`   price = 899      currencycode = `EUR` )
-      ( name = `Copperberry`                                        category = `Accessories`                 suppliername = `Fasttech`          status = `Discontinued` availablestate = `Error`   price = 549      currencycode = `EUR` )
-      ( name = `Silverberry`                                        category = `Accessories`                 suppliername = `Fasttech`          status = `Discontinued` availablestate = `Error`   price = 549      currencycode = `EUR` )
-      ( name = `Goldberry`                                          category = `Accessories`                 suppliername = `Fasttech`          status = `Available`    availablestate = `Success` price = 549      currencycode = `EUR` )
-      ( name = `Platinberry`                                        category = `Accessories`                 suppliername = `Fasttech`          status = `Available`    availablestate = `Success` price = 549      currencycode = `EUR` )
-      ( name = `ITelO FlexTop I4000`                                category = `Laptops`                     suppliername = `Titanium`          status = `Available`    availablestate = `Success` price = 799      currencycode = `EUR` )
-      ( name = `ITelO FlexTop I6300c`                               category = `Laptops`                     suppliername = `Titanium`          status = `Discontinued` availablestate = `Error`   price = 799      currencycode = `EUR` )
-      ( name = `ITelO FlexTop I9100`                                category = `Laptops`                     suppliername = `Titanium`          status = `Available`    availablestate = `Success` price = 1199     currencycode = `EUR` )
-      ( name = `ITelO FlexTop I9800`                                category = `Laptops`                     suppliername = `Titanium`          status = `Available`    availablestate = `Success` price = 1388     currencycode = `EUR` )
-      ( name = `Smartphone Leather Case`                            category = `Accessories`                 suppliername = `Ultrasonic United` status = `Available`    availablestate = `Success` price = 25       currencycode = `EUR` )
-      ( name = `Smartphone Alpha`                                   category = `Smartphones and Tablets`     suppliername = `Ultrasonic United` status = `Out of Stock` availablestate = `Error`   price = 599      currencycode = `EUR` )
-      ( name = `Mini Tablet`                                        category = `Smartphones and Tablets`     suppliername = `Ultrasonic United` status = `Available`    availablestate = `Success` price = 833      currencycode = `EUR` )
-      ( name = `Camcorder View`                                     category = `Accessories`                 suppliername = `Ultrasonic United` status = `Out of Stock` availablestate = `Error`   price = 1388     currencycode = `EUR` )
-      ( name = `Tablet Pouch`                                       category = `Accessories`                 suppliername = `Titanium`          status = `Available`    availablestate = `Success` price = 20       currencycode = `EUR` )
-      ( name = `Tablet Pouch`                                       category = `Accessories`                 suppliername = `Titanium`          status = `Available`    availablestate = `Success` price = 20       currencycode = `EUR` )
-      ( name = `e-Book Reader ReadMe`                               category = `Smartphones and Tablets`     suppliername = `Titanium`          status = `Available`    availablestate = `Success` price = 33       currencycode = `EUR` )
-      ( name = `Smartphone Beta`                                    category = `Smartphones and Tablets`     suppliername = `Titanium`          status = `Available`    availablestate = `Success` price = 30       currencycode = `EUR` )
-      ( name = `Maxi Tablet`                                        category = `Tablets`                     suppliername = `Titanium`          status = `Available`    availablestate = `Success` price = 749      currencycode = `EUR` )
-      ( name = `Flyer`                                              category = `Accessories`                 suppliername = `Titanium`          status = `Out of Stock` availablestate = `Error`   price = 0        currencycode = `EUR` )
-      ).
+    DATA temp9 TYPE z2ui5_cl_smpc_app_352=>ty_t_product.
+    DATA temp10 LIKE LINE OF temp9.
+    CLEAR temp9.
+    
+    temp10-name = `Notebook Basic 15`.
+    temp10-category = `Laptops`.
+    temp10-suppliername = `Very Best Screens`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 956.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Notebook Basic 17`.
+    temp10-category = `Laptops`.
+    temp10-suppliername = `Very Best Screens`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 1249.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Notebook Basic 18`.
+    temp10-category = `Laptops`.
+    temp10-suppliername = `Very Best Screens`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 1570.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Notebook Basic 19`.
+    temp10-category = `Laptops`.
+    temp10-suppliername = `Smartcards`.
+    temp10-status = `Out of Stock`.
+    temp10-availablestate = `Error`.
+    temp10-price = 1650.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `ITelO Vault`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Technocom`.
+    temp10-status = `Out of Stock`.
+    temp10-availablestate = `Error`.
+    temp10-price = 299.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Notebook Professional 15`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Very Best Screens`.
+    temp10-status = `Out of Stock`.
+    temp10-availablestate = `Error`.
+    temp10-price = 1999.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Notebook Professional 17`.
+    temp10-category = `Laptops`.
+    temp10-suppliername = `Very Best Screens`.
+    temp10-status = `Out of Stock`.
+    temp10-availablestate = `Error`.
+    temp10-price = 2299.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `ITelO Vault Net`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Technocom`.
+    temp10-status = `Discontinued`.
+    temp10-availablestate = `Error`.
+    temp10-price = 459.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `ITelO Vault SAT`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Technocom`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 149.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Comfort Easy`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Technocom`.
+    temp10-status = `Out of Stock`.
+    temp10-availablestate = `Error`.
+    temp10-price = 1679.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Comfort Senior`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Technocom`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 512.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Ergo Screen E-I`.
+    temp10-category = `Flat Screen Monitors`.
+    temp10-suppliername = `Very Best Screens`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 230.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Ergo Screen E-II`.
+    temp10-category = `Flat Screen Monitors`.
+    temp10-suppliername = `Very Best Screens`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 285.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Ergo Screen E-III`.
+    temp10-category = `Flat Screen Monitors`.
+    temp10-suppliername = `Very Best Screens`.
+    temp10-status = `Out of Stock`.
+    temp10-availablestate = `Error`.
+    temp10-price = 345.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Flat Basic`.
+    temp10-category = `Flat Screen Monitors`.
+    temp10-suppliername = `Very Best Screens`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 399.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Flat Future`.
+    temp10-category = `Flat Screen Monitors`.
+    temp10-suppliername = `Very Best Screens`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 430.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Flat XL`.
+    temp10-category = `Flat Screen Monitors`.
+    temp10-suppliername = `Very Best Screens`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 1230.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Laser Professional Eco`.
+    temp10-category = `Printers`.
+    temp10-suppliername = `Alpha Printers`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 830.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Laser Basic`.
+    temp10-category = `Printers`.
+    temp10-suppliername = `Alpha Printers`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 490.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Laser Allround`.
+    temp10-category = `Printers`.
+    temp10-suppliername = `Alpha Printers`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 349.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Ultra Jet Super Color`.
+    temp10-category = `Printers`.
+    temp10-suppliername = `Alpha Printers`.
+    temp10-status = `Discontinued`.
+    temp10-availablestate = `Error`.
+    temp10-price = 139.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Ultra Jet Mobile`.
+    temp10-category = `Printers`.
+    temp10-suppliername = `Printer for All`.
+    temp10-status = `Discontinued`.
+    temp10-availablestate = `Error`.
+    temp10-price = 99.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Ultra Jet Super Highspeed`.
+    temp10-category = `Printers`.
+    temp10-suppliername = `Printer for All`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 170.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Multi Print`.
+    temp10-category = `Multifunction Printers`.
+    temp10-suppliername = `Printer for All`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 99.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Multi Color`.
+    temp10-category = `Multifunction Printers`.
+    temp10-suppliername = `Printer for All`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 119.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Cordless Mouse`.
+    temp10-category = `Mice`.
+    temp10-suppliername = `Oxynum`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 9.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Speed Mouse`.
+    temp10-category = `Mice`.
+    temp10-suppliername = `Oxynum`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 7.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Track Mouse`.
+    temp10-category = `Mice`.
+    temp10-suppliername = `Oxynum`.
+    temp10-status = `Discontinued`.
+    temp10-availablestate = `Error`.
+    temp10-price = 11.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Ergonomic Keyboard`.
+    temp10-category = `Keyboards`.
+    temp10-suppliername = `Oxynum`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 14.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Internet Keyboard`.
+    temp10-category = `Keyboards`.
+    temp10-suppliername = `Oxynum`.
+    temp10-status = `Out of Stock`.
+    temp10-availablestate = `Error`.
+    temp10-price = 16.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Media Keyboard`.
+    temp10-category = `Keyboards`.
+    temp10-suppliername = `Oxynum`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 26.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Mousepad`.
+    temp10-category = `Mousepads`.
+    temp10-suppliername = `Oxynum`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = `6.99`.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Ergo Mousepad`.
+    temp10-category = `Mousepads`.
+    temp10-suppliername = `Oxynum`.
+    temp10-status = `Out of Stock`.
+    temp10-availablestate = `Error`.
+    temp10-price = `8.99`.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Designer Mousepad`.
+    temp10-category = `Mousepads`.
+    temp10-suppliername = `Fasttech`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = `12.99`.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Universal card reader`.
+    temp10-category = `Computer System Accessories`.
+    temp10-suppliername = `Fasttech`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 14.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Proctra X`.
+    temp10-category = `Graphic Cards`.
+    temp10-suppliername = `Ultrasonic United`.
+    temp10-status = `Out of Stock`.
+    temp10-availablestate = `Error`.
+    temp10-price = `70.9`.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Gladiator MX`.
+    temp10-category = `Graphic Cards`.
+    temp10-suppliername = `Ultrasonic United`.
+    temp10-status = `Discontinued`.
+    temp10-availablestate = `Error`.
+    temp10-price = `81.7`.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Hurricane GX`.
+    temp10-category = `Graphic Cards`.
+    temp10-suppliername = `Ultrasonic United`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = `101.2`.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Hurricane GX/LN`.
+    temp10-category = `Graphic Cards`.
+    temp10-suppliername = `Smartcards`.
+    temp10-status = `Out of Stock`.
+    temp10-availablestate = `Error`.
+    temp10-price = `139.99`.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Photo Scan`.
+    temp10-category = `Scanners`.
+    temp10-suppliername = `Printer for All`.
+    temp10-status = `Out of Stock`.
+    temp10-availablestate = `Error`.
+    temp10-price = 129.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Power Scan`.
+    temp10-category = `Scanners`.
+    temp10-suppliername = `Printer for All`.
+    temp10-status = `Out of Stock`.
+    temp10-availablestate = `Error`.
+    temp10-price = 89.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Jet Scan Professional`.
+    temp10-category = `Scanners`.
+    temp10-suppliername = `Printer for All`.
+    temp10-status = `Out of Stock`.
+    temp10-availablestate = `Error`.
+    temp10-price = 169.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Jet Scan Professional`.
+    temp10-category = `Scanners`.
+    temp10-suppliername = `Printer for All`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 189.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Copymaster`.
+    temp10-category = `Multifunction Printers`.
+    temp10-suppliername = `Alpha Printers`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 1499.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Surround Sound`.
+    temp10-category = `Speakers`.
+    temp10-suppliername = `Speaker Experts`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 39.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Blaster Extreme`.
+    temp10-category = `Speakers`.
+    temp10-suppliername = `Speaker Experts`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 26.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Sound Booster`.
+    temp10-category = `Speakers`.
+    temp10-suppliername = `Speaker Experts`.
+    temp10-status = `Discontinued`.
+    temp10-availablestate = `Error`.
+    temp10-price = 45.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Lovely Sound 5.1 Wireless`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Fasttech`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 49.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Lovely Sound 5.1`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Fasttech`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 39.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Lovely Sound Stereo`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Fasttech`.
+    temp10-status = `Out of Stock`.
+    temp10-availablestate = `Error`.
+    temp10-price = 29.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Smart Office`.
+    temp10-category = `Software`.
+    temp10-suppliername = `Technocom`.
+    temp10-status = `Out of Stock`.
+    temp10-availablestate = `Error`.
+    temp10-price = `89.9`.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Smart Design`.
+    temp10-category = `Software`.
+    temp10-suppliername = `Technocom`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = `79.9`.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Smart Network`.
+    temp10-category = `Software`.
+    temp10-suppliername = `Technocom`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 69.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Smart Multimedia`.
+    temp10-category = `Software`.
+    temp10-suppliername = `Technocom`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 77.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Smart Games`.
+    temp10-category = `Software`.
+    temp10-suppliername = `Technocom`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 55.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Smart Internet Antivirus`.
+    temp10-category = `Software`.
+    temp10-suppliername = `Brainsoft`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 29.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Smart Firewall`.
+    temp10-category = `Software`.
+    temp10-suppliername = `Brainsoft`.
+    temp10-status = `Discontinued`.
+    temp10-availablestate = `Error`.
+    temp10-price = 34.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Smart Money`.
+    temp10-category = `Software`.
+    temp10-suppliername = `Brainsoft`.
+    temp10-status = `Out of Stock`.
+    temp10-availablestate = `Error`.
+    temp10-price = `29.9`.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `PC Lock`.
+    temp10-category = `Computer System Accessories`.
+    temp10-suppliername = `Red Point Stores`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = `8.9`.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Notebook Lock`.
+    temp10-category = `Computer System Accessories`.
+    temp10-suppliername = `Red Point Stores`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = `6.9`.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Web cam reality`.
+    temp10-category = `Computer System Accessories`.
+    temp10-suppliername = `Red Point Stores`.
+    temp10-status = `Out of Stock`.
+    temp10-availablestate = `Error`.
+    temp10-price = 39.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Screen clean`.
+    temp10-category = `Computer System Accessories`.
+    temp10-suppliername = `Red Point Stores`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = `2.3`.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Fabric bag professional`.
+    temp10-category = `Computer System Accessories`.
+    temp10-suppliername = `Red Point Stores`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 31.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Wireless DSL Router`.
+    temp10-category = `Telecommunications`.
+    temp10-suppliername = `Red Point Stores`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 49.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Wireless DSL Router / Repeater`.
+    temp10-category = `Telecommunications`.
+    temp10-suppliername = `Red Point Stores`.
+    temp10-status = `Out of Stock`.
+    temp10-availablestate = `Error`.
+    temp10-price = 59.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Wireless DSL Router / Repeater and Print Server`.
+    temp10-category = `Telecommunications`.
+    temp10-suppliername = `Technocom`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 69.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `USB Stick`.
+    temp10-category = `Computer System Accessories`.
+    temp10-suppliername = `Technocom`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 35.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Travel Adapter`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Titanium`.
+    temp10-status = `Discontinued`.
+    temp10-availablestate = `Error`.
+    temp10-price = 79.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Cordless Bluetooth Keyboard, english international`.
+    temp10-category = `Keyboards`.
+    temp10-suppliername = `Technocom`.
+    temp10-status = `Out of Stock`.
+    temp10-availablestate = `Error`.
+    temp10-price = 29.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Flat XXL`.
+    temp10-category = `Flat Screen Monitors`.
+    temp10-suppliername = `Technocom`.
+    temp10-status = `Discontinued`.
+    temp10-availablestate = `Error`.
+    temp10-price = 1430.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Pocket Mouse`.
+    temp10-category = `Mice`.
+    temp10-suppliername = `Technocom`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 23.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `PC Power Station`.
+    temp10-category = `PCs`.
+    temp10-suppliername = `Technocom`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 2399.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Astro Laptop 1516`.
+    temp10-category = `Laptops`.
+    temp10-suppliername = `Ultrasonic United`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 989.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Astro Phone 6`.
+    temp10-category = `Smartphones and Tablets`.
+    temp10-suppliername = `Ultrasonic United`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 649.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Benda Laptop 1408`.
+    temp10-category = `Laptops`.
+    temp10-suppliername = `Ultrasonic United`.
+    temp10-status = `Discontinued`.
+    temp10-availablestate = `Error`.
+    temp10-price = 976.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Bending Screen 21HD`.
+    temp10-category = `Flat Screens`.
+    temp10-suppliername = `Ultrasonic United`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 250.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Broad Screen 22HD`.
+    temp10-category = `Flat Screens`.
+    temp10-suppliername = `Ultrasonic United`.
+    temp10-status = `Discontinued`.
+    temp10-availablestate = `Error`.
+    temp10-price = 270.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Cerdik Phone 7`.
+    temp10-category = `Smartphones and Tablets`.
+    temp10-suppliername = `Ultrasonic United`.
+    temp10-status = `Discontinued`.
+    temp10-availablestate = `Error`.
+    temp10-price = 549.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Cepat Tablet 10.5`.
+    temp10-category = `Smartphones and Tablets`.
+    temp10-suppliername = `Ultrasonic United`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 549.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Cepat Tablet 8`.
+    temp10-category = `Smartphones and Tablets`.
+    temp10-suppliername = `Ultrasonic United`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 529.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Server Basic`.
+    temp10-category = `Servers`.
+    temp10-suppliername = `Technocom`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 5000.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Server Professional`.
+    temp10-category = `Servers`.
+    temp10-suppliername = `Technocom`.
+    temp10-status = `Out of Stock`.
+    temp10-availablestate = `Error`.
+    temp10-price = 15000.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Server Power Pro`.
+    temp10-category = `Servers`.
+    temp10-suppliername = `Technocom`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 25000.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Family PC Basic`.
+    temp10-category = `Desktop Computers`.
+    temp10-suppliername = `Titanium`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 600.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Family PC Pro`.
+    temp10-category = `Desktop Computers`.
+    temp10-suppliername = `Titanium`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 900.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Gaming Monster`.
+    temp10-category = `Desktop Computers`.
+    temp10-suppliername = `Titanium`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 1200.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Gaming Monster Pro`.
+    temp10-category = `Desktop Computers`.
+    temp10-suppliername = `Titanium`.
+    temp10-status = `Discontinued`.
+    temp10-availablestate = `Error`.
+    temp10-price = 1700.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `7" Widescreen Portable DVD Player w MP3`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Titanium`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = `249.99`.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `10" Portable DVD player`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Titanium`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = `449.99`.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Portable DVD Player with 9" LCD Monitor`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Technocom`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = `853.99`.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `CD/DVD case: 264 sleeves`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Titanium`.
+    temp10-status = `Discontinued`.
+    temp10-availablestate = `Error`.
+    temp10-price = `44.99`.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Audio/Video Cable Kit - 4m`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Titanium`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = `29.99`.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Removable CD/DVD Laser Labels`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Titanium`.
+    temp10-status = `Discontinued`.
+    temp10-availablestate = `Error`.
+    temp10-price = `8.99`.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Beam Breaker B-1`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Titanium`.
+    temp10-status = `Out of Stock`.
+    temp10-availablestate = `Error`.
+    temp10-price = 469.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Beam Breaker B-2`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Technocom`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 679.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Beam Breaker B-3`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Technocom`.
+    temp10-status = `Out of Stock`.
+    temp10-availablestate = `Error`.
+    temp10-price = 889.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Play Movie`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Fasttech`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 130.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Record Movie`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Fasttech`.
+    temp10-status = `Discontinued`.
+    temp10-availablestate = `Error`.
+    temp10-price = 288.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `ITelo MusicStick`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Fasttech`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 45.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `ITelo Jog-Mate`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Fasttech`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 63.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Power Pro Player 40`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Fasttech`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 167.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Power Pro Player 80`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Fasttech`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 299.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Flat Watch HD32`.
+    temp10-category = `Flat Screen TVs`.
+    temp10-suppliername = `Very Best Screens`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 1459.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Flat Watch HD37`.
+    temp10-category = `Flat Screen TVs`.
+    temp10-suppliername = `Very Best Screens`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 1199.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Flat Watch HD41`.
+    temp10-category = `Flat Screen TVs`.
+    temp10-suppliername = `Very Best Screens`.
+    temp10-status = `Discontinued`.
+    temp10-availablestate = `Error`.
+    temp10-price = 899.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Copperberry`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Fasttech`.
+    temp10-status = `Discontinued`.
+    temp10-availablestate = `Error`.
+    temp10-price = 549.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Silverberry`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Fasttech`.
+    temp10-status = `Discontinued`.
+    temp10-availablestate = `Error`.
+    temp10-price = 549.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Goldberry`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Fasttech`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 549.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Platinberry`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Fasttech`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 549.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `ITelO FlexTop I4000`.
+    temp10-category = `Laptops`.
+    temp10-suppliername = `Titanium`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 799.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `ITelO FlexTop I6300c`.
+    temp10-category = `Laptops`.
+    temp10-suppliername = `Titanium`.
+    temp10-status = `Discontinued`.
+    temp10-availablestate = `Error`.
+    temp10-price = 799.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `ITelO FlexTop I9100`.
+    temp10-category = `Laptops`.
+    temp10-suppliername = `Titanium`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 1199.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `ITelO FlexTop I9800`.
+    temp10-category = `Laptops`.
+    temp10-suppliername = `Titanium`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 1388.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Smartphone Leather Case`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Ultrasonic United`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 25.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Smartphone Alpha`.
+    temp10-category = `Smartphones and Tablets`.
+    temp10-suppliername = `Ultrasonic United`.
+    temp10-status = `Out of Stock`.
+    temp10-availablestate = `Error`.
+    temp10-price = 599.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Mini Tablet`.
+    temp10-category = `Smartphones and Tablets`.
+    temp10-suppliername = `Ultrasonic United`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 833.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Camcorder View`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Ultrasonic United`.
+    temp10-status = `Out of Stock`.
+    temp10-availablestate = `Error`.
+    temp10-price = 1388.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Tablet Pouch`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Titanium`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 20.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Tablet Pouch`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Titanium`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 20.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `e-Book Reader ReadMe`.
+    temp10-category = `Smartphones and Tablets`.
+    temp10-suppliername = `Titanium`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 33.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Smartphone Beta`.
+    temp10-category = `Smartphones and Tablets`.
+    temp10-suppliername = `Titanium`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 30.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Maxi Tablet`.
+    temp10-category = `Tablets`.
+    temp10-suppliername = `Titanium`.
+    temp10-status = `Available`.
+    temp10-availablestate = `Success`.
+    temp10-price = 749.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-name = `Flyer`.
+    temp10-category = `Accessories`.
+    temp10-suppliername = `Titanium`.
+    temp10-status = `Out of Stock`.
+    temp10-availablestate = `Error`.
+    temp10-price = 0.
+    temp10-currencycode = `EUR`.
+    INSERT temp10 INTO TABLE temp9.
+    result = temp9.
 
   ENDMETHOD.
 
@@ -469,40 +1379,111 @@ CLASS z2ui5_cl_smpc_app_352 IMPLEMENTATION.
 
     " /ProductCollectionStats/Filters of the same mock - the two facet lists
     " (Category, SupplierName) with their values and counts, verbatim
-    t_filters = VALUE #(
-      ( type = `Category` values = VALUE #(
-          ( text = `Accessories`                 data = 34 )
-          ( text = `Desktop Computers`           data = 7 )
-          ( text = `Flat Screens`                data = 2 )
-          ( text = `Keyboards`                   data = 4 )
-          ( text = `Laptops`                     data = 11 )
-          ( text = `Printers`                    data = 9 )
-          ( text = `Smartphones and Tablets`     data = 9 )
-          ( text = `Mice`                        data = 7 )
-          ( text = `Computer System Accessories` data = 8 )
-          ( text = `Graphics Card`               data = 4 )
-          ( text = `Scanners`                    data = 4 )
-          ( text = `Speakers`                    data = 3 )
-          ( text = `Software`                    data = 8 )
-          ( text = `Telekommunikation`           data = 3 )
-          ( text = `Servers`                     data = 3 )
-          ( text = `Flat Screen TVs`             data = 3 )
-        ) )
-      ( type = `SupplierName` values = VALUE #(
-          ( text = `Titanium`          data = 21 )
-          ( text = `Technocom`         data = 22 )
-          ( text = `Red Point Stores`  data = 7 )
-          ( text = `Very Best Screens` data = 14 )
-          ( text = `Smartcards`        data = 2 )
-          ( text = `Alpha Printers`    data = 5 )
-          ( text = `Printer for All`   data = 8 )
-          ( text = `Oxynum`            data = 8 )
-          ( text = `Fasttech`          data = 15 )
-          ( text = `Ultrasonic United` data = 15 )
-          ( text = `Speaker Experts`   data = 3 )
-          ( text = `Brainsoft`         data = 3 )
-        ) )
-      ).
+    DATA temp11 LIKE t_filters.
+    DATA temp12 LIKE LINE OF temp11.
+    DATA temp1 TYPE z2ui5_cl_smpc_app_352=>ty_t_value.
+    DATA temp2 LIKE LINE OF temp1.
+    DATA temp3 TYPE z2ui5_cl_smpc_app_352=>ty_t_value.
+    DATA temp4 LIKE LINE OF temp3.
+    CLEAR temp11.
+    
+    temp12-type = `Category`.
+    
+    CLEAR temp1.
+    
+    temp2-text = `Accessories`.
+    temp2-data = 34.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-text = `Desktop Computers`.
+    temp2-data = 7.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-text = `Flat Screens`.
+    temp2-data = 2.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-text = `Keyboards`.
+    temp2-data = 4.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-text = `Laptops`.
+    temp2-data = 11.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-text = `Printers`.
+    temp2-data = 9.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-text = `Smartphones and Tablets`.
+    temp2-data = 9.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-text = `Mice`.
+    temp2-data = 7.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-text = `Computer System Accessories`.
+    temp2-data = 8.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-text = `Graphics Card`.
+    temp2-data = 4.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-text = `Scanners`.
+    temp2-data = 4.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-text = `Speakers`.
+    temp2-data = 3.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-text = `Software`.
+    temp2-data = 8.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-text = `Telekommunikation`.
+    temp2-data = 3.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-text = `Servers`.
+    temp2-data = 3.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-text = `Flat Screen TVs`.
+    temp2-data = 3.
+    INSERT temp2 INTO TABLE temp1.
+    temp12-values = temp1.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-type = `SupplierName`.
+    
+    CLEAR temp3.
+    
+    temp4-text = `Titanium`.
+    temp4-data = 21.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-text = `Technocom`.
+    temp4-data = 22.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-text = `Red Point Stores`.
+    temp4-data = 7.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-text = `Very Best Screens`.
+    temp4-data = 14.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-text = `Smartcards`.
+    temp4-data = 2.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-text = `Alpha Printers`.
+    temp4-data = 5.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-text = `Printer for All`.
+    temp4-data = 8.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-text = `Oxynum`.
+    temp4-data = 8.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-text = `Fasttech`.
+    temp4-data = 15.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-text = `Ultrasonic United`.
+    temp4-data = 15.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-text = `Speaker Experts`.
+    temp4-data = 3.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-text = `Brainsoft`.
+    temp4-data = 3.
+    INSERT temp4 INTO TABLE temp3.
+    temp12-values = temp3.
+    INSERT temp12 INTO TABLE temp11.
+    t_filters = temp11.
 
     t_products = catalog( ).
 

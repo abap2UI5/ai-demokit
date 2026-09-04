@@ -19,7 +19,7 @@ CLASS z2ui5_cl_smpc_app_591 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -28,11 +28,24 @@ CLASS z2ui5_cl_smpc_app_591 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " Block->content inlining (app 401/416 precedent): the two sections hold one
     " form block each plus four blockcolor:BlockBlue fillers, every one of them a
     " BlockBase around a static view - inlined 1:1 below (see sidecar)
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `Page 1 a very long link clicked` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp2.
+    INSERT `show` INTO TABLE temp2.
+    INSERT `Page 2 long link clicked` INTO TABLE temp2.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`       v = `100%`
         )->a( n = `xmlns`        v = `sap.uxap`
@@ -55,11 +68,11 @@ CLASS z2ui5_cl_smpc_app_591 IMPLEMENTATION.
                             )->tag( n = `Link` ns = `m`
                                 )->a( n = `text`  v = `Page 1 a very long link`
                                 )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Page 1 a very long link clicked` ) ) )
+                                                                                t_arg = temp1 )
                             )->tag( n = `Link` ns = `m`
                                 )->a( n = `text`  v = `Page 2 long link`
                                 )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Page 2 long link clicked` ) ) )
+                                                                                t_arg = temp2 )
                         )->end(
                     )->end(
 

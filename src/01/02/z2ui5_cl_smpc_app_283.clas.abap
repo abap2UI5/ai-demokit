@@ -11,7 +11,7 @@ CLASS z2ui5_cl_smpc_app_283 DEFINITION PUBLIC.
         stylingstring TYPE string,
         borderstyle   TYPE string,
       END OF ty_s_style.
-    TYPES ty_t_style TYPE STANDARD TABLE OF ty_s_style WITH EMPTY KEY.
+    TYPES ty_t_style TYPE STANDARD TABLE OF ty_s_style WITH DEFAULT KEY.
 
     DATA t_styles TYPE ty_t_style.
 
@@ -30,10 +30,10 @@ CLASS z2ui5_cl_smpc_app_283 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -42,7 +42,8 @@ CLASS z2ui5_cl_smpc_app_283 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
@@ -118,33 +119,115 @@ CLASS z2ui5_cl_smpc_app_283 IMPLEMENTATION.
     " the original scrapes document.styleSheets for every selector containing
     " sapTheme - a browser-only operation. The same set is seeded here from the
     " OpenUI5 base theme source (themes/base/parameterClasses.less).
-    t_styles = VALUE #(
-      ( styleclass = `sapThemeFont`                               stylingstring = `font-family: var(--sapFontFamily) !important; font-size: var(--sapFontSize) !important;` borderstyle = `` )
-      ( styleclass = `sapThemeFontFamily`                         stylingstring = `font-family: var(--sapFontFamily) !important;`                                          borderstyle = `` )
-      ( styleclass = `sapThemeFontSize`                           stylingstring = `font-size: var(--sapFontSize) !important;`                                              borderstyle = `` )
-      ( styleclass = `sapThemeText`                               stylingstring = `color: var(--sapTextColor) !important;`                                                 borderstyle = `` )
-      ( styleclass = `sapThemeText-asColor`                       stylingstring = `color: var(--sapTextColor) !important;`                                                 borderstyle = `` )
-      ( styleclass = `sapThemeText-asBackgroundColor`             stylingstring = `background-color: var(--sapTextColor) !important;`                                      borderstyle = `` )
-      ( styleclass = `sapThemeText-asBorderColor`                 stylingstring = `border-color: var(--sapTextColor) !important;`                                          borderstyle = `border-style: solid;` )
-      ( styleclass = `sapThemeText-asOutlineColor`                stylingstring = `outline-color: var(--sapTextColor) !important;`                                         borderstyle = `` )
-      ( styleclass = `sapThemeTextInverted`                       stylingstring = `color: var(--sapContent_ContrastTextColor) !important;`                                 borderstyle = `` )
-      ( styleclass = `sapThemeTextInverted-asColor`               stylingstring = `color: var(--sapContent_ContrastTextColor) !important;`                                 borderstyle = `` )
-      ( styleclass = `sapThemeBaseBG`                             stylingstring = `background-color: var(--sapBackgroundColor) !important;`                                borderstyle = `` )
-      ( styleclass = `sapThemeBaseBG-asBackgroundColor`           stylingstring = `background-color: var(--sapBackgroundColor) !important;`                                borderstyle = `` )
-      ( styleclass = `sapThemeBaseBG-asBorderColor`               stylingstring = `border-color: var(--sapBackgroundColor) !important;`                                    borderstyle = `border-style: solid;` )
-      ( styleclass = `sapThemeBaseBG-asColor`                     stylingstring = `color: var(--sapBackgroundColor) !important;`                                           borderstyle = `` )
-      ( styleclass = `sapThemeBrand`                              stylingstring = `color: var(--sapBrandColor) !important;`                                                borderstyle = `` )
-      ( styleclass = `sapThemeBrand-asColor`                      stylingstring = `color: var(--sapBrandColor) !important;`                                                borderstyle = `` )
-      ( styleclass = `sapThemeBrand-asBorderColor`                stylingstring = `border-color: var(--sapBrandColor) !important;`                                         borderstyle = `border-style: solid;` )
-      ( styleclass = `sapThemeBrand-asBackgroundColor`            stylingstring = `background-color: var(--sapBrandColor) !important;`                                     borderstyle = `` )
-      ( styleclass = `sapThemeBrand-asOutlineColor`               stylingstring = `outline-color: var(--sapBrandColor) !important;`                                        borderstyle = `` )
-      ( styleclass = `sapThemeHighlight`                          stylingstring = `color: var(--sapHighlightColor) !important;`                                            borderstyle = `` )
-      ( styleclass = `sapThemeHighlight-asColor`                  stylingstring = `color: var(--sapHighlightColor) !important;`                                            borderstyle = `` )
-      ( styleclass = `sapThemeHighlight-asBorderColor`            stylingstring = `border-color: var(--sapHighlightColor) !important;`                                     borderstyle = `border-style: solid;` )
-      ( styleclass = `sapThemeHighlight-asBackgroundColor`        stylingstring = `background-color: var(--sapHighlightColor) !important;`                                 borderstyle = `` )
-      ( styleclass = `sapThemeHighlight-asOutlineColor`           stylingstring = `outline-color: var(--sapHighlightColor) !important;`                                    borderstyle = `` )
-      ( styleclass = `sapThemeForegroundBorderColor`              stylingstring = `border-color: var(--sapContent_ForegroundBorderColor) !important;`                      borderstyle = `border-style: solid;` )
-      ( styleclass = `sapThemeForegroundBorderColor-asBorderColor` stylingstring = `border-color: var(--sapContent_ForegroundBorderColor) !important;`                     borderstyle = `border-style: solid;` ) ).
+    DATA temp1 TYPE z2ui5_cl_smpc_app_283=>ty_t_style.
+    DATA temp2 LIKE LINE OF temp1.
+    CLEAR temp1.
+    
+    temp2-styleclass = `sapThemeFont`.
+    temp2-stylingstring = `font-family: var(--sapFontFamily) !important; font-size: var(--sapFontSize) !important;`.
+    temp2-borderstyle = ``.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-styleclass = `sapThemeFontFamily`.
+    temp2-stylingstring = `font-family: var(--sapFontFamily) !important;`.
+    temp2-borderstyle = ``.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-styleclass = `sapThemeFontSize`.
+    temp2-stylingstring = `font-size: var(--sapFontSize) !important;`.
+    temp2-borderstyle = ``.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-styleclass = `sapThemeText`.
+    temp2-stylingstring = `color: var(--sapTextColor) !important;`.
+    temp2-borderstyle = ``.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-styleclass = `sapThemeText-asColor`.
+    temp2-stylingstring = `color: var(--sapTextColor) !important;`.
+    temp2-borderstyle = ``.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-styleclass = `sapThemeText-asBackgroundColor`.
+    temp2-stylingstring = `background-color: var(--sapTextColor) !important;`.
+    temp2-borderstyle = ``.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-styleclass = `sapThemeText-asBorderColor`.
+    temp2-stylingstring = `border-color: var(--sapTextColor) !important;`.
+    temp2-borderstyle = `border-style: solid;`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-styleclass = `sapThemeText-asOutlineColor`.
+    temp2-stylingstring = `outline-color: var(--sapTextColor) !important;`.
+    temp2-borderstyle = ``.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-styleclass = `sapThemeTextInverted`.
+    temp2-stylingstring = `color: var(--sapContent_ContrastTextColor) !important;`.
+    temp2-borderstyle = ``.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-styleclass = `sapThemeTextInverted-asColor`.
+    temp2-stylingstring = `color: var(--sapContent_ContrastTextColor) !important;`.
+    temp2-borderstyle = ``.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-styleclass = `sapThemeBaseBG`.
+    temp2-stylingstring = `background-color: var(--sapBackgroundColor) !important;`.
+    temp2-borderstyle = ``.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-styleclass = `sapThemeBaseBG-asBackgroundColor`.
+    temp2-stylingstring = `background-color: var(--sapBackgroundColor) !important;`.
+    temp2-borderstyle = ``.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-styleclass = `sapThemeBaseBG-asBorderColor`.
+    temp2-stylingstring = `border-color: var(--sapBackgroundColor) !important;`.
+    temp2-borderstyle = `border-style: solid;`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-styleclass = `sapThemeBaseBG-asColor`.
+    temp2-stylingstring = `color: var(--sapBackgroundColor) !important;`.
+    temp2-borderstyle = ``.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-styleclass = `sapThemeBrand`.
+    temp2-stylingstring = `color: var(--sapBrandColor) !important;`.
+    temp2-borderstyle = ``.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-styleclass = `sapThemeBrand-asColor`.
+    temp2-stylingstring = `color: var(--sapBrandColor) !important;`.
+    temp2-borderstyle = ``.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-styleclass = `sapThemeBrand-asBorderColor`.
+    temp2-stylingstring = `border-color: var(--sapBrandColor) !important;`.
+    temp2-borderstyle = `border-style: solid;`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-styleclass = `sapThemeBrand-asBackgroundColor`.
+    temp2-stylingstring = `background-color: var(--sapBrandColor) !important;`.
+    temp2-borderstyle = ``.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-styleclass = `sapThemeBrand-asOutlineColor`.
+    temp2-stylingstring = `outline-color: var(--sapBrandColor) !important;`.
+    temp2-borderstyle = ``.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-styleclass = `sapThemeHighlight`.
+    temp2-stylingstring = `color: var(--sapHighlightColor) !important;`.
+    temp2-borderstyle = ``.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-styleclass = `sapThemeHighlight-asColor`.
+    temp2-stylingstring = `color: var(--sapHighlightColor) !important;`.
+    temp2-borderstyle = ``.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-styleclass = `sapThemeHighlight-asBorderColor`.
+    temp2-stylingstring = `border-color: var(--sapHighlightColor) !important;`.
+    temp2-borderstyle = `border-style: solid;`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-styleclass = `sapThemeHighlight-asBackgroundColor`.
+    temp2-stylingstring = `background-color: var(--sapHighlightColor) !important;`.
+    temp2-borderstyle = ``.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-styleclass = `sapThemeHighlight-asOutlineColor`.
+    temp2-stylingstring = `outline-color: var(--sapHighlightColor) !important;`.
+    temp2-borderstyle = ``.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-styleclass = `sapThemeForegroundBorderColor`.
+    temp2-stylingstring = `border-color: var(--sapContent_ForegroundBorderColor) !important;`.
+    temp2-borderstyle = `border-style: solid;`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-styleclass = `sapThemeForegroundBorderColor-asBorderColor`.
+    temp2-stylingstring = `border-color: var(--sapContent_ForegroundBorderColor) !important;`.
+    temp2-borderstyle = `border-style: solid;`.
+    INSERT temp2 INTO TABLE temp1.
+    t_styles = temp1.
 
   ENDMETHOD.
 

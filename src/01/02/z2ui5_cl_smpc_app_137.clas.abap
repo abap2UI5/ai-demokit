@@ -13,7 +13,7 @@ CLASS z2ui5_cl_smpc_app_137 DEFINITION PUBLIC.
         phone      TYPE string,
         openorders TYPE i,
       END OF ty_row.
-    DATA modeldata TYPE STANDARD TABLE OF ty_row WITH EMPTY KEY.
+    DATA modeldata TYPE STANDARD TABLE OF ty_row WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -30,10 +30,10 @@ CLASS z2ui5_cl_smpc_app_137 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -42,7 +42,8 @@ CLASS z2ui5_cl_smpc_app_137 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.ui.table`
@@ -181,12 +182,41 @@ CLASS z2ui5_cl_smpc_app_137 IMPLEMENTATION.
 
   METHOD model_init.
 
-    modeldata = VALUE #(
-      ( supplier = `Titanium`          street = `401 23rd St` city = `Port Angeles` phone = `5682-121-828` openorders = 10 )
-      ( supplier = `Technocom`         street = `51 39th St`  city = `Smallfield`   phone = `2212-853-789` openorders = 0 )
-      ( supplier = `Red Point Stores`  street = `451 55th St` city = `Meridian`     phone = `2234-245-898` openorders = 5 )
-      ( supplier = `Technocom`         street = `40 21st St`  city = `Bethesda`     phone = `5512-125-643` openorders = 0 )
-      ( supplier = `Very Best Screens` street = `123 72nd St` city = `McLean`       phone = `5412-543-765` openorders = 6 ) ).
+    DATA temp1 LIKE modeldata.
+    DATA temp2 LIKE LINE OF temp1.
+    CLEAR temp1.
+    
+    temp2-supplier = `Titanium`.
+    temp2-street = `401 23rd St`.
+    temp2-city = `Port Angeles`.
+    temp2-phone = `5682-121-828`.
+    temp2-openorders = 10.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-supplier = `Technocom`.
+    temp2-street = `51 39th St`.
+    temp2-city = `Smallfield`.
+    temp2-phone = `2212-853-789`.
+    temp2-openorders = 0.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-supplier = `Red Point Stores`.
+    temp2-street = `451 55th St`.
+    temp2-city = `Meridian`.
+    temp2-phone = `2234-245-898`.
+    temp2-openorders = 5.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-supplier = `Technocom`.
+    temp2-street = `40 21st St`.
+    temp2-city = `Bethesda`.
+    temp2-phone = `5512-125-643`.
+    temp2-openorders = 0.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-supplier = `Very Best Screens`.
+    temp2-street = `123 72nd St`.
+    temp2-city = `McLean`.
+    temp2-phone = `5412-543-765`.
+    temp2-openorders = 6.
+    INSERT temp2 INTO TABLE temp1.
+    modeldata = temp1.
 
   ENDMETHOD.
 

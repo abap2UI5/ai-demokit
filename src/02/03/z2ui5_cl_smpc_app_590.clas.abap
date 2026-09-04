@@ -19,7 +19,7 @@ CLASS z2ui5_cl_smpc_app_590 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -28,11 +28,17 @@ CLASS z2ui5_cl_smpc_app_590 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " Block->content inlining (app 401/416 precedent): the six Personal sections
     " each hold one blockcolor:BlockBlue, a BlockBase around a view whose whole
     " body is a coloured html:div - inlined as the text it shows (see sidecar)
+    
+    CLEAR temp1.
+    INSERT `nameInput` INTO TABLE temp1.
+    INSERT `focus` INTO TABLE temp1.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`       v = `100%`
         )->a( n = `xmlns`        v = `sap.uxap`
@@ -100,7 +106,7 @@ CLASS z2ui5_cl_smpc_app_590 IMPLEMENTATION.
                             )->a( n = `type`  v = `Emphasized`
                             )->a( n = `text`  v = `Focus`
                             )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                            t_arg = VALUE #( ( `nameInput` ) ( `focus` ) ) )
+                                                                            t_arg = temp1 )
                     )->end(
                 )->end(
             )->end(

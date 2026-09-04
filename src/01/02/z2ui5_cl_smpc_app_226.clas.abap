@@ -15,7 +15,7 @@ CLASS z2ui5_cl_smpc_app_226 DEFINITION PUBLIC.
         productpicurl  TYPE string,
         productpicurl2 TYPE string,
       END OF ty_s_information.
-    DATA informationcollection TYPE STANDARD TABLE OF ty_s_information WITH EMPTY KEY.
+    DATA informationcollection TYPE STANDARD TABLE OF ty_s_information WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -32,10 +32,10 @@ CLASS z2ui5_cl_smpc_app_226 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -44,7 +44,8 @@ CLASS z2ui5_cl_smpc_app_226 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
@@ -188,21 +189,34 @@ CLASS z2ui5_cl_smpc_app_226 IMPLEMENTATION.
     " InformationCollection from ui5/sap.ui.layout/GridXL/information.json, verbatim (all 5 rows).
     " Only row 0 carries the intro/description texts; every row carries the two product image URLs,
     " host-prefixed to sdk.openui5.org per the project asset-URL rule.
-    informationcollection = VALUE #(
-      ( introtext1   = `This Grid Layout sample application demonstrates the major features and capabilites of the Grid Layout. There are 3 Grid Layouts used in this application.`
-        introtext2   = `In the first Grid Layout, when the screen size is reduced to 'Small' or 'Mobile', the image on the right is made invisible by using the property 'visibleOnSmall=false' of the GridData control.`
-        introtext3   = `In the second Grid Layout, that is in the Products section, when the screen size is reduced to 'Medium' or 'Tablet', the images are swapped by using properties 'moveForward' and 'moveBackwards' of the` &&
-                       ` GridData control. There is also indentation applied the images when the screen sizes are 'Extra-large, Large and Medium'.`
-        description1 = `In this Grid Layout, when the screen size is 'Extra-large' or 'Large Desktop' then there are 2 Images and 1 Text control rendered in 1 row. But when the screen is reduced to 'Large' or 'Smaller` &&
-                       ` Desktop', there is a line break for the image on the right and it is rendered in a new row. This is achieved by using the properties 'linebreakXL=false' and 'linebreakL=true' of the GridData control.`
-        description2 = `When the screen is further reduced to 'Medium' or 'Tablet', the image rendered in the new row is made invisible by using the property 'visibleOnMedium=false' of the GridData control and this image is` &&
-                       ` visible again when the screen size if further reduced to 'Small' or 'Mobile'.`
-        productpicurl  = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1111.jpg`
-        productpicurl2 = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1030.jpg` )
-      ( productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6100.jpg` productpicurl2 = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1032.jpg` )
-      ( productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1071.jpg` productpicurl2 = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1138.jpg` )
-      ( productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1072.jpg` productpicurl2 = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1010.jpg` )
-      ( productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1112.jpg` productpicurl2 = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1063.jpg` ) ).
+    DATA temp1 LIKE informationcollection.
+    DATA temp2 LIKE LINE OF temp1.
+    CLEAR temp1.
+    
+    temp2-introtext1 = `This Grid Layout sample application demonstrates the major features and capabilites of the Grid Layout. There are 3 Grid Layouts used in this application.`.
+    temp2-introtext2 = `In the first Grid Layout, when the screen size is reduced to 'Small' or 'Mobile', the image on the right is made invisible by using the property 'visibleOnSmall=false' of the GridData control.`.
+    temp2-introtext3 = `In the second Grid Layout, that is in the Products section, when the screen size is reduced to 'Medium' or 'Tablet', the images are swapped by using properties 'moveForward' and 'moveBackwards' of the` &&
+` GridData control. There is also indentation applied the images when the screen sizes are 'Extra-large, Large and Medium'.`.
+    temp2-description1 = `In this Grid Layout, when the screen size is 'Extra-large' or 'Large Desktop' then there are 2 Images and 1 Text control rendered in 1 row. But when the screen is reduced to 'Large' or 'Smaller` &&
+` Desktop', there is a line break for the image on the right and it is rendered in a new row. This is achieved by using the properties 'linebreakXL=false' and 'linebreakL=true' of the GridData control.`.
+    temp2-description2 = `When the screen is further reduced to 'Medium' or 'Tablet', the image rendered in the new row is made invisible by using the property 'visibleOnMedium=false' of the GridData control and this image is` &&
+` visible again when the screen size if further reduced to 'Small' or 'Mobile'.`.
+    temp2-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1111.jpg`.
+    temp2-productpicurl2 = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1030.jpg`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6100.jpg`.
+    temp2-productpicurl2 = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1032.jpg`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1071.jpg`.
+    temp2-productpicurl2 = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1138.jpg`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1072.jpg`.
+    temp2-productpicurl2 = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1010.jpg`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1112.jpg`.
+    temp2-productpicurl2 = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1063.jpg`.
+    INSERT temp2 INTO TABLE temp1.
+    informationcollection = temp1.
 
   ENDMETHOD.
 

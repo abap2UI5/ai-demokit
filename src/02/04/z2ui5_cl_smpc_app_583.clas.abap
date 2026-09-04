@@ -12,7 +12,7 @@ CLASS z2ui5_cl_smpc_app_583 DEFINITION PUBLIC.
              targetsrc TYPE string,
              target    TYPE string,
            END OF ty_s_item.
-    TYPES ty_t_item TYPE STANDARD TABLE OF ty_s_item WITH EMPTY KEY.
+    TYPES ty_t_item TYPE STANDARD TABLE OF ty_s_item WITH DEFAULT KEY.
 
     DATA t_items TYPE ty_t_item.
 
@@ -33,12 +33,12 @@ CLASS z2ui5_cl_smpc_app_583 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -47,7 +47,8 @@ CLASS z2ui5_cl_smpc_app_583 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`       v = `100%`
@@ -74,8 +75,18 @@ CLASS z2ui5_cl_smpc_app_583 IMPLEMENTATION.
 
   METHOD popover_display.
 
-    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA popup TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    popup = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `Change event was fired from {0}. It has targetSrc: {1} and target: {2}.` INTO TABLE temp1.
+    INSERT `${$parameters>/itemPressed}.getId()` INTO TABLE temp1.
+    INSERT `${$parameters>/itemPressed}.getTargetSrc()` INTO TABLE temp1.
+    INSERT `${$parameters>/itemPressed}.getTarget()` INTO TABLE temp1.
     popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:f`    v = `sap.f`
@@ -91,12 +102,7 @@ CLASS z2ui5_cl_smpc_app_583 IMPLEMENTATION.
                 " all three resolve on the client, so nothing has to travel
                 )->a( n = `change` v = client->follow_up_action(
                           val   = client->cs_event-control_global
-                          t_arg = VALUE #( ( `MESSAGE_TOAST` )
-                                           ( `show` )
-                                           ( `Change event was fired from {0}. It has targetSrc: {1} and target: {2}.` )
-                                           ( `${$parameters>/itemPressed}.getId()` )
-                                           ( `${$parameters>/itemPressed}.getTargetSrc()` )
-                                           ( `${$parameters>/itemPressed}.getTarget()` ) ) )
+                          t_arg = temp1 )
 
                 )->ele( n = `items` ns = `f`
                     )->tag( n = `ProductSwitchItem` ns = `f`
@@ -126,21 +132,67 @@ CLASS z2ui5_cl_smpc_app_583 IMPLEMENTATION.
     " model/data.json - the fourteen product-switch entries. The fragment binds
     " subTitle, targetSrc and target too; the mock sets only src, title and a
     " subtitle on some rows, so the rest stay empty here as they are undefined there
-    t_items = VALUE #(
-      ( src = `sap-icon://home`                        title = `Home`                     subtitle = `Central Home` )
-      ( src = `sap-icon://business-objects-experience` title = `Analytics Cloud`          subtitle = `Analytics Cloud` )
-      ( src = `sap-icon://contacts`                    title = `Catalog`                  subtitle = `Ariba` )
-      ( src = `sap-icon://credit-card`                 title = `Guided Buying`            subtitle = `` )
-      ( src = `sap-icon://cart-3`                      title = `Strategic Procurement`    subtitle = `` )
-      ( src = `sap-icon://flight`                      title = `Travel & Expense`         subtitle = `Concur` )
-      ( src = `sap-icon://shipping-status`             title = `Vendor Management`        subtitle = `Fieldglass` )
-      ( src = `sap-icon://customer`                    title = `Human Capital Management` subtitle = `` )
-      ( src = `sap-icon://sales-notification`          title = `Sales Cloud`              subtitle = `Sales Cloud` )
-      ( src = `sap-icon://retail-store`                title = `Commerce Cloud`           subtitle = `Commerce cloud` )
-      ( src = `sap-icon://marketing-campaign`          title = `Marketing Cloud`          subtitle = `Marketing Cloud` )
-      ( src = `sap-icon://family-care`                 title = `Service Cloud`            subtitle = `` )
-      ( src = `sap-icon://customer-briefing`           title = `Customer Data Cloud`      subtitle = `` )
-      ( src = `sap-icon://batch-payments`              title = `S/4HANA`                  subtitle = `` ) ).
+    DATA temp3 TYPE z2ui5_cl_smpc_app_583=>ty_t_item.
+    DATA temp4 LIKE LINE OF temp3.
+    CLEAR temp3.
+    
+    temp4-src = `sap-icon://home`.
+    temp4-title = `Home`.
+    temp4-subtitle = `Central Home`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-src = `sap-icon://business-objects-experience`.
+    temp4-title = `Analytics Cloud`.
+    temp4-subtitle = `Analytics Cloud`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-src = `sap-icon://contacts`.
+    temp4-title = `Catalog`.
+    temp4-subtitle = `Ariba`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-src = `sap-icon://credit-card`.
+    temp4-title = `Guided Buying`.
+    temp4-subtitle = ``.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-src = `sap-icon://cart-3`.
+    temp4-title = `Strategic Procurement`.
+    temp4-subtitle = ``.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-src = `sap-icon://flight`.
+    temp4-title = `Travel & Expense`.
+    temp4-subtitle = `Concur`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-src = `sap-icon://shipping-status`.
+    temp4-title = `Vendor Management`.
+    temp4-subtitle = `Fieldglass`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-src = `sap-icon://customer`.
+    temp4-title = `Human Capital Management`.
+    temp4-subtitle = ``.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-src = `sap-icon://sales-notification`.
+    temp4-title = `Sales Cloud`.
+    temp4-subtitle = `Sales Cloud`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-src = `sap-icon://retail-store`.
+    temp4-title = `Commerce Cloud`.
+    temp4-subtitle = `Commerce cloud`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-src = `sap-icon://marketing-campaign`.
+    temp4-title = `Marketing Cloud`.
+    temp4-subtitle = `Marketing Cloud`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-src = `sap-icon://family-care`.
+    temp4-title = `Service Cloud`.
+    temp4-subtitle = ``.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-src = `sap-icon://customer-briefing`.
+    temp4-title = `Customer Data Cloud`.
+    temp4-subtitle = ``.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-src = `sap-icon://batch-payments`.
+    temp4-title = `S/4HANA`.
+    temp4-subtitle = ``.
+    INSERT temp4 INTO TABLE temp3.
+    t_items = temp3.
 
   ENDMETHOD.
 

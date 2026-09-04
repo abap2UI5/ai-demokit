@@ -12,7 +12,7 @@ CLASS z2ui5_cl_smpc_app_585 DEFINITION PUBLIC.
              key     TYPE string,
              enabled TYPE abap_bool,
            END OF ty_s_child.
-    TYPES ty_t_child TYPE STANDARD TABLE OF ty_s_child WITH EMPTY KEY.
+    TYPES ty_t_child TYPE STANDARD TABLE OF ty_s_child WITH DEFAULT KEY.
     TYPES: BEGIN OF ty_s_nav,
              title    TYPE string,
              icon     TYPE string,
@@ -21,7 +21,7 @@ CLASS z2ui5_cl_smpc_app_585 DEFINITION PUBLIC.
              expanded TYPE abap_bool,
              t_items  TYPE ty_t_child,
            END OF ty_s_nav.
-    TYPES ty_t_nav TYPE STANDARD TABLE OF ty_s_nav WITH EMPTY KEY.
+    TYPES ty_t_nav TYPE STANDARD TABLE OF ty_s_nav WITH DEFAULT KEY.
 
     DATA t_navigation       TYPE ty_t_nav.
     DATA t_fixed_navigation TYPE ty_t_nav.
@@ -47,12 +47,12 @@ CLASS z2ui5_cl_smpc_app_585 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -61,9 +61,16 @@ CLASS z2ui5_cl_smpc_app_585 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA tool_page TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA side TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA fixed TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA pages TYPE REF TO z2ui5_cl_ui5_view_builder.
+      DATA temp1 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    DATA(tool_page) = view->ele( n = `View` ns = `mvc`
+    
+    tool_page = view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:f`    v = `sap.f`
@@ -111,7 +118,8 @@ CLASS z2ui5_cl_smpc_app_585 IMPLEMENTATION.
     )->end( ).
 
     " SideNavigation.fragment.xml
-    DATA(side) = tool_page->ele( n = `sideContent` ns = `tnt`
+    
+    side = tool_page->ele( n = `sideContent` ns = `tnt`
         )->ele( n = `SideNavigation` ns = `tnt`
             )->a( n = `expanded`    v = `true`
             )->a( n = `selectedKey` v = client->_bind( selected_key )
@@ -119,11 +127,13 @@ CLASS z2ui5_cl_smpc_app_585 IMPLEMENTATION.
 
     nav_list( node = side items = client->_bind( t_navigation ) ).
 
-    DATA(fixed) = side->ele( n = `fixedItem` ns = `tnt` ).
+    
+    fixed = side->ele( n = `fixedItem` ns = `tnt` ).
 
     nav_list( node = fixed items = client->_bind( t_fixed_navigation ) ).
 
-    DATA(pages) = tool_page->ele( n = `mainContents` ns = `tnt`
+    
+    pages = tool_page->ele( n = `mainContents` ns = `tnt`
         )->ele( `NavContainer`
             )->a( n = `id`          v = `pageContainer`
             )->a( n = `initialPage` v = `page2`
@@ -182,8 +192,13 @@ CLASS z2ui5_cl_smpc_app_585 IMPLEMENTATION.
     " idiom. Guarded twice: an untouched key (nothing selected yet) and the key
     " the initialPage already shows both need no action at all
     IF selected_key IS NOT INITIAL AND selected_key <> `page2`.
+      
+      CLEAR temp1.
+      INSERT `pageContainer` INTO TABLE temp1.
+      INSERT `to` INTO TABLE temp1.
+      INSERT selected_key INTO TABLE temp1.
       client->follow_up_action( val   = client->cs_event-control_by_id
-                                t_arg = VALUE #( ( `pageContainer` ) ( `to` ) ( selected_key ) ) ).
+                                t_arg = temp1 ).
     ENDIF.
 
   ENDMETHOD.
@@ -215,20 +230,31 @@ CLASS z2ui5_cl_smpc_app_585 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp1 TYPE xsdboolean.
+        DATA key TYPE string.
+          DATA temp3 TYPE string_table.
 
     CASE client->get_event( ).
 
       WHEN `MENU_BUTTON`.
         " onMenuButtonPress: toolPage.setSideExpanded( !sideExpanded )
-        side_expanded = xsdbool( side_expanded = abap_false ).
+        
+        temp1 = boolc( side_expanded = abap_false ).
+        side_expanded = temp1.
 
       WHEN `ITEM_SELECT`.
         " onItemSelect: pageContainer.to( the item's key )
-        DATA(key) = client->get_event_arg( ).
+        
+        key = client->get_event_arg( ).
         IF key IS NOT INITIAL.
           selected_key = key.
+          
+          CLEAR temp3.
+          INSERT `pageContainer` INTO TABLE temp3.
+          INSERT `to` INTO TABLE temp3.
+          INSERT key INTO TABLE temp3.
           client->follow_up_action( val   = client->cs_event-control_by_id
-                                    t_arg = VALUE #( ( `pageContainer` ) ( `to` ) ( key ) ) ).
+                                    t_arg = temp3 ).
         ENDIF.
 
     ENDCASE.
@@ -241,28 +267,111 @@ CLASS z2ui5_cl_smpc_app_585 IMPLEMENTATION.
     " model.json - the four navigation roots with their children, and the three
     " fixed items. The fragment binds enabled on every item; the mock never sets
     " it, so it is seeded true - the NavigationListItem default
-    t_navigation = VALUE #(
-      ( title = `Root Item` icon = `sap-icon://employee` key = `root1` enabled = abap_true expanded = abap_true
-        t_items = VALUE #( ( title = `Child Item 1` key = `page1` enabled = abap_true )
-                           ( title = `Child Item 2` key = `page2` enabled = abap_true ) ) )
-      ( title = `Root Item` icon = `sap-icon://building` key = `root2` enabled = abap_true expanded = abap_true )
-      ( title = `Root Item` icon = `sap-icon://card` enabled = abap_true expanded = abap_false
-        t_items = VALUE #( ( title = `Child Item` enabled = abap_true )
-                           ( title = `Child Item` enabled = abap_true )
-                           ( title = `Child Item` enabled = abap_true )
-                           ( title = `Child Item` enabled = abap_true )
-                           ( title = `Child Item` enabled = abap_true )
-                           ( title = `Child Item` enabled = abap_true )
-                           ( title = `Child Item` enabled = abap_true ) ) )
-      ( title = `Root Item` icon = `sap-icon://action` enabled = abap_true expanded = abap_false
-        t_items = VALUE #( ( title = `Child Item 1` enabled = abap_true )
-                           ( title = `Child Item 2` enabled = abap_true )
-                           ( title = `Child Item 3` enabled = abap_true ) ) ) ).
+    DATA temp5 TYPE z2ui5_cl_smpc_app_585=>ty_t_nav.
+    DATA temp6 LIKE LINE OF temp5.
+    DATA temp1 TYPE z2ui5_cl_smpc_app_585=>ty_t_child.
+    DATA temp2 LIKE LINE OF temp1.
+    DATA temp3 TYPE z2ui5_cl_smpc_app_585=>ty_t_child.
+    DATA temp4 LIKE LINE OF temp3.
+    DATA temp9 TYPE z2ui5_cl_smpc_app_585=>ty_t_child.
+    DATA temp10 LIKE LINE OF temp9.
+    DATA temp7 TYPE z2ui5_cl_smpc_app_585=>ty_t_nav.
+    DATA temp8 LIKE LINE OF temp7.
+    CLEAR temp5.
+    
+    temp6-title = `Root Item`.
+    temp6-icon = `sap-icon://employee`.
+    temp6-key = `root1`.
+    temp6-enabled = abap_true.
+    temp6-expanded = abap_true.
+    
+    CLEAR temp1.
+    
+    temp2-title = `Child Item 1`.
+    temp2-key = `page1`.
+    temp2-enabled = abap_true.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Child Item 2`.
+    temp2-key = `page2`.
+    temp2-enabled = abap_true.
+    INSERT temp2 INTO TABLE temp1.
+    temp6-t_items = temp1.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-title = `Root Item`.
+    temp6-icon = `sap-icon://building`.
+    temp6-key = `root2`.
+    temp6-enabled = abap_true.
+    temp6-expanded = abap_true.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-title = `Root Item`.
+    temp6-icon = `sap-icon://card`.
+    temp6-enabled = abap_true.
+    temp6-expanded = abap_false.
+    
+    CLEAR temp3.
+    
+    temp4-title = `Child Item`.
+    temp4-enabled = abap_true.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Child Item`.
+    temp4-enabled = abap_true.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Child Item`.
+    temp4-enabled = abap_true.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Child Item`.
+    temp4-enabled = abap_true.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Child Item`.
+    temp4-enabled = abap_true.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Child Item`.
+    temp4-enabled = abap_true.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Child Item`.
+    temp4-enabled = abap_true.
+    INSERT temp4 INTO TABLE temp3.
+    temp6-t_items = temp3.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-title = `Root Item`.
+    temp6-icon = `sap-icon://action`.
+    temp6-enabled = abap_true.
+    temp6-expanded = abap_false.
+    
+    CLEAR temp9.
+    
+    temp10-title = `Child Item 1`.
+    temp10-enabled = abap_true.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-title = `Child Item 2`.
+    temp10-enabled = abap_true.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-title = `Child Item 3`.
+    temp10-enabled = abap_true.
+    INSERT temp10 INTO TABLE temp9.
+    temp6-t_items = temp9.
+    INSERT temp6 INTO TABLE temp5.
+    t_navigation = temp5.
 
-    t_fixed_navigation = VALUE #(
-      ( title = `Fixed Item 1` icon = `sap-icon://employee` enabled = abap_true expanded = abap_true )
-      ( title = `Fixed Item 2` icon = `sap-icon://building` enabled = abap_true expanded = abap_true )
-      ( title = `Fixed Item 3` icon = `sap-icon://card`     enabled = abap_true expanded = abap_true ) ).
+    
+    CLEAR temp7.
+    
+    temp8-title = `Fixed Item 1`.
+    temp8-icon = `sap-icon://employee`.
+    temp8-enabled = abap_true.
+    temp8-expanded = abap_true.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-title = `Fixed Item 2`.
+    temp8-icon = `sap-icon://building`.
+    temp8-enabled = abap_true.
+    temp8-expanded = abap_true.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-title = `Fixed Item 3`.
+    temp8-icon = `sap-icon://card`.
+    temp8-enabled = abap_true.
+    temp8-expanded = abap_true.
+    INSERT temp8 INTO TABLE temp7.
+    t_fixed_navigation = temp7.
 
     " the second page's text, the sample's own lorem ipsum. An XML attribute
     " normalizes its line breaks and indentation to single spaces, which is what

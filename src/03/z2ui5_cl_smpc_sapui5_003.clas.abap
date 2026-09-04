@@ -30,8 +30,12 @@ CLASS z2ui5_cl_smpc_sapui5_003 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE xsdboolean.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    temp1 = boolc( client->get( )-check_launchpad_active = abap_false ).
     view->ele( n = `View` ns = `mvc`
         )->a( n = `displayBlock`  v = `true`
         )->a( n = `height`        v = `100%`
@@ -46,7 +50,7 @@ CLASS z2ui5_cl_smpc_sapui5_003 IMPLEMENTATION.
                 )->a( n = `title`          v = `abap2UI5 - Visualization`
                 )->a( n = `navButtonPress` v = client->_event_nav_app_leave( )
                 )->a( n = `showNavButton`  b = client->check_app_prev_stack( )
-                )->a( n = `showHeader`     b = xsdbool( client->get( )-check_launchpad_active = abap_false )
+                )->a( n = `showHeader`     b = temp1
 
                 )->ele( n = `TabContainer` ns = `webc`
                     )->ele( n = `Tab` ns = `webc`
@@ -185,9 +189,9 @@ CLASS z2ui5_cl_smpc_sapui5_003 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -195,6 +199,7 @@ CLASS z2ui5_cl_smpc_sapui5_003 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA selected TYPE i.
 
     CASE client->get_event( ).
 
@@ -203,7 +208,8 @@ CLASS z2ui5_cl_smpc_sapui5_003 IMPLEMENTATION.
         " in the model when this fires - nothing has to be read off the event
         " counted per flag - a VALUE string_table over abap_bool fields does not
         " survive the transpiler's downported INSERT (types not compatible)
-        DATA(selected) = 0.
+        
+        selected = 0.
         IF sel1 = abap_true.
           selected = selected + 1.
         ENDIF.

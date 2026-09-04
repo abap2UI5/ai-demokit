@@ -19,7 +19,7 @@ CLASS z2ui5_cl_smpc_app_134 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -28,8 +28,33 @@ CLASS z2ui5_cl_smpc_app_134 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    DATA temp3 TYPE string_table.
+    DATA temp4 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `Logo pressed!` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp2.
+    INSERT `show` INTO TABLE temp2.
+    INSERT `Avatar pressed!` INTO TABLE temp2.
+    
+    CLEAR temp3.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp3.
+    INSERT `show` INTO TABLE temp3.
+    INSERT `Logo pressed!` INTO TABLE temp3.
+    
+    CLEAR temp4.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp4.
+    INSERT `show` INTO TABLE temp4.
+    INSERT `Avatar pressed!` INTO TABLE temp4.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -58,7 +83,7 @@ CLASS z2ui5_cl_smpc_app_134 IMPLEMENTATION.
                 )->ele( `Image`
                     )->a( n = `src`        v = `https://sdk.openui5.org/test-resources/sap/tnt/images/SAP_Logo.png`
                     )->a( n = `decorative` v = `false`
-                    )->a( n = `press`      v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Logo pressed!` ) ) )
+                    )->a( n = `press`      v = client->follow_up_action( val = client->cs_event-control_global t_arg = temp1 )
                     )->a( n = `tooltip`    v = `SAP Logo`
                     )->a( n = `width`      v = `60px`
                     )->a( n = `height`     v = `30px`
@@ -162,7 +187,7 @@ CLASS z2ui5_cl_smpc_app_134 IMPLEMENTATION.
                 )->ele( `Avatar`
                     )->a( n = `src`         v = `https://sdk.openui5.org/test-resources/sap/tnt/images/Woman_avatar_01.png`
                     )->a( n = `displaySize` v = `XS`
-                    )->a( n = `press`       v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Avatar pressed!` ) ) )
+                    )->a( n = `press`       v = client->follow_up_action( val = client->cs_event-control_global t_arg = temp2 )
                     )->a( n = `tooltip`     v = `Profile`
                     )->ele( `layoutData`
                         )->tag( `OverflowToolbarLayoutData`
@@ -179,7 +204,7 @@ CLASS z2ui5_cl_smpc_app_134 IMPLEMENTATION.
                 )->ele( `Image`
                     )->a( n = `src`        v = `https://sdk.openui5.org/test-resources/sap/tnt/images/SAP_Logo.png`
                     )->a( n = `decorative` v = `false`
-                    )->a( n = `press`      v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Logo pressed!` ) ) )
+                    )->a( n = `press`      v = client->follow_up_action( val = client->cs_event-control_global t_arg = temp3 )
                     )->a( n = `tooltip`    v = `SAP Logo`
                     )->a( n = `width`      v = `60px`
                     )->a( n = `height`     v = `30px`
@@ -202,7 +227,7 @@ CLASS z2ui5_cl_smpc_app_134 IMPLEMENTATION.
                 )->ele( `Avatar`
                     )->a( n = `src`         v = `https://sdk.openui5.org/test-resources/sap/tnt/images/Woman_avatar_01.png`
                     )->a( n = `displaySize` v = `XS`
-                    )->a( n = `press`       v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Avatar pressed!` ) ) )
+                    )->a( n = `press`       v = client->follow_up_action( val = client->cs_event-control_global t_arg = temp4 )
                     )->a( n = `tooltip`     v = `Profile`
                     )->ele( `layoutData`
                         )->tag( `OverflowToolbarLayoutData`

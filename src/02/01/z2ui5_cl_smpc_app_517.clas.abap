@@ -23,9 +23,9 @@ CLASS z2ui5_cl_smpc_app_517 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -34,8 +34,75 @@ CLASS z2ui5_cl_smpc_app_517 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    DATA temp3 TYPE string_table.
+    DATA temp4 TYPE string_table.
+    DATA temp5 TYPE string_table.
+    DATA temp6 TYPE string_table.
+    DATA temp7 TYPE string_table.
+    DATA temp8 TYPE string_table.
+    DATA temp9 TYPE string_table.
+    DATA temp10 TYPE string_table.
+    DATA temp11 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `The GenericTile is pressed.` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp2.
+    INSERT `show` INTO TABLE temp2.
+    INSERT `The GenericTile is pressed.` INTO TABLE temp2.
+    
+    CLEAR temp3.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp3.
+    INSERT `show` INTO TABLE temp3.
+    INSERT `The GenericTile is pressed.` INTO TABLE temp3.
+    
+    CLEAR temp4.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp4.
+    INSERT `show` INTO TABLE temp4.
+    INSERT `The GenericTile is pressed.` INTO TABLE temp4.
+    
+    CLEAR temp5.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp5.
+    INSERT `show` INTO TABLE temp5.
+    INSERT `The GenericTile is pressed.` INTO TABLE temp5.
+    
+    CLEAR temp6.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp6.
+    INSERT `show` INTO TABLE temp6.
+    INSERT `The GenericTile is pressed.` INTO TABLE temp6.
+    
+    CLEAR temp7.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp7.
+    INSERT `show` INTO TABLE temp7.
+    INSERT `The GenericTile is pressed.` INTO TABLE temp7.
+    
+    CLEAR temp8.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp8.
+    INSERT `show` INTO TABLE temp8.
+    INSERT `The GenericTile is pressed.` INTO TABLE temp8.
+    
+    CLEAR temp9.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp9.
+    INSERT `show` INTO TABLE temp9.
+    INSERT `The GenericTile is pressed.` INTO TABLE temp9.
+    
+    CLEAR temp10.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp10.
+    INSERT `show` INTO TABLE temp10.
+    INSERT `The GenericTile is pressed.` INTO TABLE temp10.
+    
+    CLEAR temp11.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp11.
+    INSERT `show` INTO TABLE temp11.
+    INSERT `The GenericTile is pressed.` INTO TABLE temp11.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
@@ -75,7 +142,7 @@ CLASS z2ui5_cl_smpc_app_517 IMPLEMENTATION.
             )->a( n = `class` v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
             )->a( n = `header` v = `Country-Specific Profit Margin`
             )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The GenericTile is pressed.` ) ) )
+                                                            t_arg = temp1 )
             )->a( n = `frameType` v = `OneByHalf`
             )->a( n = `subheader` v = `Subtitle`
             )->a( n = `state` v = client->_bind( tile_state )
@@ -92,7 +159,7 @@ CLASS z2ui5_cl_smpc_app_517 IMPLEMENTATION.
             )->a( n = `class` v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
             )->a( n = `header` v = `Sales Fulfillment Application Title`
             )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The GenericTile is pressed.` ) ) )
+                                                            t_arg = temp2 )
             )->a( n = `frameType` v = `TwoByHalf`
             )->a( n = `subheader` v = `Subtitle`
             )->a( n = `state` v = client->_bind( tile_state )
@@ -105,7 +172,7 @@ CLASS z2ui5_cl_smpc_app_517 IMPLEMENTATION.
             )->a( n = `class` v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
             )->a( n = `header` v = `Manage Activity Master Data Type`
             )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The GenericTile is pressed.` ) ) )
+                                                            t_arg = temp3 )
             )->a( n = `frameType` v = `TwoByHalf`
             )->a( n = `subheader` v = `Subtitle`
             )->a( n = `state` v = client->_bind( tile_state )
@@ -124,7 +191,7 @@ CLASS z2ui5_cl_smpc_app_517 IMPLEMENTATION.
             )->a( n = `class` v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
             )->a( n = `header` v = `Right click to open in new tab`
             )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The GenericTile is pressed.` ) ) )
+                                                            t_arg = temp4 )
             )->a( n = `subheader` v = `Link tile`
             )->a( n = `url` v = `https://www.sap.com/`
             )->a( n = `state` v = client->_bind( tile_state )
@@ -141,7 +208,7 @@ CLASS z2ui5_cl_smpc_app_517 IMPLEMENTATION.
             )->a( n = `class` v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
             )->a( n = `header` v = `Sales Fulfillment Application Title`
             )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The GenericTile is pressed.` ) ) )
+                                                            t_arg = temp5 )
             )->a( n = `subheader` v = `Subtitle`
             )->a( n = `state` v = client->_bind( tile_state )
 
@@ -159,7 +226,7 @@ CLASS z2ui5_cl_smpc_app_517 IMPLEMENTATION.
             )->a( n = `class` v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
             )->a( n = `header` v = `Manage Activity Master Data Type`
             )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The GenericTile is pressed.` ) ) )
+                                                            t_arg = temp6 )
             )->a( n = `subheader` v = `Subtitle`
             )->a( n = `state` v = client->_bind( tile_state )
 
@@ -175,7 +242,7 @@ CLASS z2ui5_cl_smpc_app_517 IMPLEMENTATION.
             )->a( n = `class` v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
             )->a( n = `header` v = `Manage Activity Master Data Type With a Long Title Without an Icon`
             )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The GenericTile is pressed.` ) ) )
+                                                            t_arg = temp7 )
             )->a( n = `subheader` v = `Subtitle Launch Tile`
             )->a( n = `mode` v = `HeaderMode`
             )->a( n = `state` v = client->_bind( tile_state )
@@ -191,7 +258,7 @@ CLASS z2ui5_cl_smpc_app_517 IMPLEMENTATION.
             )->a( n = `class` v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
             )->a( n = `header` v = `Jessica D. Prince Senior Consultant`
             )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The GenericTile is pressed.` ) ) )
+                                                            t_arg = temp8 )
             )->a( n = `subheader` v = `Department`
             )->a( n = `appShortcut` v = `shortcut`
             )->a( n = `systemInfo` v = `systeminfo`
@@ -209,7 +276,7 @@ CLASS z2ui5_cl_smpc_app_517 IMPLEMENTATION.
             )->a( n = `class` v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
             )->a( n = `header` v = `Sales Fulfillment Application Title`
             )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The GenericTile is pressed.` ) ) )
+                                                            t_arg = temp9 )
             )->a( n = `frameType` v = `OneByHalf`
             )->a( n = `state` v = client->_bind( tile_state )
 
@@ -224,7 +291,7 @@ CLASS z2ui5_cl_smpc_app_517 IMPLEMENTATION.
             )->a( n = `class` v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
             )->a( n = `header` v = `Sales Fulfillment Application Title`
             )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The GenericTile is pressed.` ) ) )
+                                                            t_arg = temp10 )
             )->a( n = `frameType` v = `TwoByHalf`
             )->a( n = `state` v = client->_bind( tile_state )
 
@@ -239,7 +306,7 @@ CLASS z2ui5_cl_smpc_app_517 IMPLEMENTATION.
             )->a( n = `class` v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
             )->a( n = `header` v = `Jessica D. Prince Senior Consultant`
             )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The GenericTile is pressed.` ) ) )
+                                                            t_arg = temp11 )
             )->a( n = `frameType` v = `TwoByHalf`
             )->a( n = `subheader` v = `Department`
             )->a( n = `state` v = client->_bind( tile_state )
@@ -257,6 +324,11 @@ CLASS z2ui5_cl_smpc_app_517 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp3 TYPE i.
+        DATA temp5 TYPE string.
+        DATA seconds LIKE temp3.
+        DATA temp4 TYPE string_table.
+        DATA temp6 LIKE LINE OF temp4.
 
     CASE client->get_event( ).
 
@@ -265,12 +337,24 @@ CLASS z2ui5_cl_smpc_app_517 IMPLEMENTATION.
         " the length term matters as much as the character one: without it
         " `99999999999` passes CO and overflows CONV i, and 2147484 already
         " overflows the `seconds * 1000` below, which calculates in i
-        DATA(seconds) = CONV i( COND string( WHEN loading_seconds CO `0123456789` AND loading_seconds IS NOT INITIAL
-                                             AND strlen( loading_seconds ) <= 6
-                                             THEN loading_seconds
-                                             ELSE `0` ) ).
+        
+        
+        IF loading_seconds CO `0123456789` AND loading_seconds IS NOT INITIAL AND strlen( loading_seconds ) <= 6.
+          temp5 = loading_seconds.
+        ELSE.
+          temp5 = `0`.
+        ENDIF.
+        temp3 = temp5.
+        
+        seconds = temp3.
+        
+        CLEAR temp4.
+        INSERT `LOADED` INTO TABLE temp4.
+        
+        temp6 = |{ seconds * 1000 }|.
+        INSERT temp6 INTO TABLE temp4.
         client->follow_up_action( val   = client->cs_event-start_timer
-                                  t_arg = VALUE #( ( `LOADED` ) ( |{ seconds * 1000 }| ) ) ).
+                                  t_arg = temp4 ).
 
       WHEN `LOADED`.
         tile_state = `Loaded`.

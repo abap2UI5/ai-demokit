@@ -20,9 +20,9 @@ CLASS z2ui5_cl_smpc_app_302 DEFINITION PUBLIC.
              key      TYPE string,
              enabled  TYPE abap_bool,
              expanded TYPE abap_bool,
-             items    TYPE STANDARD TABLE OF ty_s_sub_item WITH EMPTY KEY,
+             items    TYPE STANDARD TABLE OF ty_s_sub_item WITH DEFAULT KEY,
            END OF ty_s_nav_item.
-    DATA navigation TYPE STANDARD TABLE OF ty_s_nav_item WITH EMPTY KEY.
+    DATA navigation TYPE STANDARD TABLE OF ty_s_nav_item WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -40,12 +40,12 @@ CLASS z2ui5_cl_smpc_app_302 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -54,7 +54,9 @@ CLASS z2ui5_cl_smpc_app_302 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+      DATA temp1 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
@@ -364,31 +366,48 @@ CLASS z2ui5_cl_smpc_app_302 IMPLEMENTATION.
     " untouched key and the key the initialPage already shows both need no
     " action at all
     IF selectedkey IS NOT INITIAL AND selectedkey <> `page1`.
+      
+      CLEAR temp1.
+      INSERT `pageContainer` INTO TABLE temp1.
+      INSERT `to` INTO TABLE temp1.
+      INSERT selectedkey INTO TABLE temp1.
       client->follow_up_action( val   = client->cs_event-control_by_id
-                                t_arg = VALUE #( ( `pageContainer` ) ( `to` ) ( selectedkey ) ) ).
+                                t_arg = temp1 ).
     ENDIF.
 
   ENDMETHOD.
 
 
   METHOD on_event.
+        DATA temp3 TYPE string_table.
+        DATA temp5 TYPE string.
+        DATA temp1 TYPE xsdboolean.
 
     CASE client->get_event( ).
 
       WHEN `ITEM_SELECT`.
         " original onItemSelect: pageContainer.to( the selected item's key )
+        
+        CLEAR temp3.
+        INSERT `pageContainer` INTO TABLE temp3.
+        INSERT `to` INTO TABLE temp3.
+        INSERT client->get_event_arg( ) INTO TABLE temp3.
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `pageContainer` )
-                                                   ( `to` )
-                                                   ( client->get_event_arg( ) ) ) ).
+                                  t_arg = temp3 ).
 
       WHEN `SIDE_NAV_TOGGLE`.
         " original onSideNavButtonPress: sets the toggle button's tooltip from the
         " CURRENT sideExpanded state, then flips ToolPage.sideExpanded
-        toggle_tooltip = COND #( WHEN side_expanded = abap_true
-                                 THEN `Large Size Navigation`
-                                 ELSE `Small Size Navigation` ).
-        side_expanded  = xsdbool( side_expanded = abap_false ).
+        
+        IF side_expanded = abap_true.
+          temp5 = `Large Size Navigation`.
+        ELSE.
+          temp5 = `Small Size Navigation`.
+        ENDIF.
+        toggle_tooltip = temp5.
+        
+        temp1 = boolc( side_expanded = abap_false ).
+        side_expanded  = temp1.
 
     ENDCASE.
 
@@ -396,6 +415,17 @@ CLASS z2ui5_cl_smpc_app_302 IMPLEMENTATION.
 
 
   METHOD model_init.
+    DATA temp6 TYPE string.
+    DATA temp7 LIKE navigation.
+    DATA temp8 LIKE LINE OF temp7.
+    DATA temp1 TYPE z2ui5_cl_smpc_app_302=>ty_s_nav_item-items.
+    DATA temp2 LIKE LINE OF temp1.
+    DATA temp3 TYPE z2ui5_cl_smpc_app_302=>ty_s_nav_item-items.
+    DATA temp4 LIKE LINE OF temp3.
+    DATA temp5 TYPE z2ui5_cl_smpc_app_302=>ty_s_nav_item-items.
+    DATA temp9 LIKE LINE OF temp5.
+    DATA temp10 TYPE z2ui5_cl_smpc_app_302=>ty_s_nav_item-items.
+    DATA temp11 LIKE LINE OF temp10.
 
     " model/data.json of the sample, inlined 1:1. ENABLED/EXPANDED are not in the
     " mock - the rows carry the UI5 property default (true) explicitly so the
@@ -404,34 +434,101 @@ CLASS z2ui5_cl_smpc_app_302 IMPLEMENTATION.
     side_expanded  = abap_true.
     " _setToggleButtonTooltip( !Device.system.desktop ) at init, read from the
     " device data the framework mirrors server-side
-    toggle_tooltip = COND #( WHEN client->get( )-s_device-system = z2ui5_if_client=>cs_device-system-desktop
-                             THEN `Small Size Navigation`
-                             ELSE `Large Size Navigation` ).
+    
+    IF client->get( )-s_device-system = z2ui5_if_client=>cs_device-system-desktop.
+      temp6 = `Small Size Navigation`.
+    ELSE.
+      temp6 = `Large Size Navigation`.
+    ENDIF.
+    toggle_tooltip = temp6.
 
-    navigation = VALUE #(
-      enabled = abap_true expanded = abap_true
-      ( title = `Home`         icon = `sap-icon://home`             key = `page1` )
-      ( title = `Applications` icon = `sap-icon://internet-browser` key = `page2` )
-      ( title = `Users and Groups` icon = `sap-icon://family-care` key = `page3`
-        items = VALUE #( enabled = abap_true
-                         ( title = `User 1` key = `page3` )
-                         ( title = `User 2` key = `page3` )
-                         ( title = `User 3` key = `page3` ) ) )
-      ( title = `Identity` icon = `sap-icon://business-card` key = `page4`
-        items = VALUE #( enabled = abap_true
-                         ( title = `Identity 1` key = `page4` )
-                         ( title = `Identity 2` key = `page4` )
-                         ( title = `Identity 3` key = `page4` ) ) )
-      ( title = `Provisioning` icon = `sap-icon://generate-shortcut` key = `page5` )
-      ( title = `Monitoring` icon = `sap-icon://unwired` key = `page6`
-        items = VALUE #( enabled = abap_true
-                         ( title = `Monitoring 1` key = `page6` )
-                         ( title = `Monitoring 2` key = `page6` ) ) )
-      ( title = `Resources` icon = `sap-icon://document-text` key = `page7`
-        items = VALUE #( enabled = abap_true
-                         ( title = `Resource 1` key = `page7` )
-                         ( title = `Resource 2` key = `page7` )
-                         ( title = `Resource 3` key = `page7` ) ) ) ).
+    
+    CLEAR temp7.
+    
+    temp8-enabled = abap_true.
+    temp8-expanded = abap_true.
+    temp8-title = `Home`.
+    temp8-icon = `sap-icon://home`.
+    temp8-key = `page1`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-title = `Applications`.
+    temp8-icon = `sap-icon://internet-browser`.
+    temp8-key = `page2`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-title = `Users and Groups`.
+    temp8-icon = `sap-icon://family-care`.
+    temp8-key = `page3`.
+    
+    CLEAR temp1.
+    
+    temp2-enabled = abap_true.
+    temp2-title = `User 1`.
+    temp2-key = `page3`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `User 2`.
+    temp2-key = `page3`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `User 3`.
+    temp2-key = `page3`.
+    INSERT temp2 INTO TABLE temp1.
+    temp8-items = temp1.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-title = `Identity`.
+    temp8-icon = `sap-icon://business-card`.
+    temp8-key = `page4`.
+    
+    CLEAR temp3.
+    
+    temp4-enabled = abap_true.
+    temp4-title = `Identity 1`.
+    temp4-key = `page4`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Identity 2`.
+    temp4-key = `page4`.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-title = `Identity 3`.
+    temp4-key = `page4`.
+    INSERT temp4 INTO TABLE temp3.
+    temp8-items = temp3.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-title = `Provisioning`.
+    temp8-icon = `sap-icon://generate-shortcut`.
+    temp8-key = `page5`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-title = `Monitoring`.
+    temp8-icon = `sap-icon://unwired`.
+    temp8-key = `page6`.
+    
+    CLEAR temp5.
+    
+    temp9-enabled = abap_true.
+    temp9-title = `Monitoring 1`.
+    temp9-key = `page6`.
+    INSERT temp9 INTO TABLE temp5.
+    temp9-title = `Monitoring 2`.
+    temp9-key = `page6`.
+    INSERT temp9 INTO TABLE temp5.
+    temp8-items = temp5.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-title = `Resources`.
+    temp8-icon = `sap-icon://document-text`.
+    temp8-key = `page7`.
+    
+    CLEAR temp10.
+    
+    temp11-enabled = abap_true.
+    temp11-title = `Resource 1`.
+    temp11-key = `page7`.
+    INSERT temp11 INTO TABLE temp10.
+    temp11-title = `Resource 2`.
+    temp11-key = `page7`.
+    INSERT temp11 INTO TABLE temp10.
+    temp11-title = `Resource 3`.
+    temp11-key = `page7`.
+    INSERT temp11 INTO TABLE temp10.
+    temp8-items = temp10.
+    INSERT temp8 INTO TABLE temp7.
+    navigation = temp7.
 
   ENDMETHOD.
 

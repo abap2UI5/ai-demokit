@@ -22,7 +22,7 @@ CLASS z2ui5_cl_smpc_app_462 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -31,8 +31,15 @@ CLASS z2ui5_cl_smpc_app_462 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `getValue` INTO TABLE temp1.
+    INSERT `setText` INTO TABLE temp1.
+    INSERT `${$parameters>/value}` INTO TABLE temp1.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns`      v = `sap.m`
@@ -57,7 +64,7 @@ CLASS z2ui5_cl_smpc_app_462 IMPLEMENTATION.
                 )->a( n = `value`            v = client->_bind( input_value )
                 )->a( n = `valueLiveUpdate`  v = client->_bind( value_live_update )
                 )->a( n = `liveChange`       v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                           t_arg = VALUE #( ( `getValue` ) ( `setText` ) ( `${$parameters>/value}` ) ) )
+                                                                           t_arg = temp1 )
             )->tag( `Label`
                 )->a( n = `text` v = `oInput.getValue()`
             " no text of its own, exactly as the original: the Text is written

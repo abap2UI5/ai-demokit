@@ -10,7 +10,7 @@ CLASS z2ui5_cl_smpc_app_527 DEFINITION PUBLIC.
              rows    TYPE i,
              columns TYPE i,
            END OF ty_s_item.
-    TYPES ty_t_item TYPE STANDARD TABLE OF ty_s_item WITH EMPTY KEY.
+    TYPES ty_t_item TYPE STANDARD TABLE OF ty_s_item WITH DEFAULT KEY.
 
     DATA t_list TYPE ty_t_item.
     DATA t_grid TYPE ty_t_item.
@@ -31,12 +31,12 @@ CLASS z2ui5_cl_smpc_app_527 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -45,8 +45,25 @@ CLASS z2ui5_cl_smpc_app_527 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `${$parameters>/draggedControl/oParent}.getId()` INTO TABLE temp1.
+    INSERT `${$parameters>/draggedControl/oParent}.indexOfItem(${$parameters>/draggedControl})` INTO TABLE temp1.
+    INSERT `${$parameters>/droppedControl} ? ${$parameters>/droppedControl/oParent}.getId() : ''` INTO TABLE temp1.
+    INSERT `${$parameters>/droppedControl} ? ${$parameters>/droppedControl/oParent}.indexOfItem(${$parameters>/droppedControl}) : -1` INTO TABLE temp1.
+    INSERT `${$parameters>/dropPosition}` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `${$parameters>/draggedControl/oParent}.getId()` INTO TABLE temp2.
+    INSERT `${$parameters>/draggedControl/oParent}.indexOfItem(${$parameters>/draggedControl})` INTO TABLE temp2.
+    INSERT `${$parameters>/droppedControl} ? ${$parameters>/droppedControl/oParent}.getId() : ''` INTO TABLE temp2.
+    INSERT `${$parameters>/droppedControl} ? ${$parameters>/droppedControl/oParent}.indexOfItem(${$parameters>/droppedControl}) : -1` INTO TABLE temp2.
+    INSERT `${$parameters>/dropPosition}` INTO TABLE temp2.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`         v = `sap.m`
         )->a( n = `xmlns:mvc`     v = `sap.ui.core.mvc`
@@ -89,12 +106,7 @@ CLASS z2ui5_cl_smpc_app_527 IMPLEMENTATION.
                             " source container, the source index, the target container, the target
                             " index and the drop position, which is everything onDrop reads
                             )->a( n = `drop`              v = client->_event( val   = `DROP`
-                                                                              t_arg = VALUE #(
-                                                                                ( `${$parameters>/draggedControl/oParent}.getId()` )
-                                                                                ( `${$parameters>/draggedControl/oParent}.indexOfItem(${$parameters>/draggedControl})` )
-                                                                                ( `${$parameters>/droppedControl} ? ${$parameters>/droppedControl/oParent}.getId() : ''` )
-                                                                                ( `${$parameters>/droppedControl} ? ${$parameters>/droppedControl/oParent}.indexOfItem(${$parameters>/droppedControl}) : -1` )
-                                                                                ( `${$parameters>/dropPosition}` ) ) )
+                                                                              t_arg = temp1 )
 
                     )->end(
 
@@ -121,12 +133,7 @@ CLASS z2ui5_cl_smpc_app_527 IMPLEMENTATION.
                             " source container, the source index, the target container, the target
                             " index and the drop position, which is everything onDrop reads
                             )->a( n = `drop`              v = client->_event( val   = `DROP`
-                                                                              t_arg = VALUE #(
-                                                                                ( `${$parameters>/draggedControl/oParent}.getId()` )
-                                                                                ( `${$parameters>/draggedControl/oParent}.indexOfItem(${$parameters>/draggedControl})` )
-                                                                                ( `${$parameters>/droppedControl} ? ${$parameters>/droppedControl/oParent}.getId() : ''` )
-                                                                                ( `${$parameters>/droppedControl} ? ${$parameters>/droppedControl/oParent}.indexOfItem(${$parameters>/droppedControl}) : -1` )
-                                                                                ( `${$parameters>/dropPosition}` ) ) )
+                                                                              t_arg = temp2 )
 
                     )->end(
 
@@ -164,24 +171,73 @@ CLASS z2ui5_cl_smpc_app_527 IMPLEMENTATION.
 
 
   METHOD on_event.
+      DATA drag_container TYPE string.
+      DATA temp3 TYPE i.
+      DATA drag_index LIKE temp3.
+      DATA drop_container TYPE string.
+      DATA temp4 TYPE i.
+      DATA drop_index LIKE temp4.
+      DATA drop_position TYPE string.
+      DATA from_list TYPE abap_bool.
+      DATA temp1 TYPE xsdboolean.
+      DATA to_list TYPE abap_bool.
+      DATA temp2 TYPE xsdboolean.
+      DATA temp5 TYPE ty_t_item.
+      DATA source LIKE temp5.
+        DATA item LIKE LINE OF source.
+        DATA temp7 LIKE LINE OF source.
+        DATA temp8 LIKE sy-tabix.
+        DATA temp6 TYPE ty_t_item.
+        DATA target LIKE temp6.
 
     IF client->get_event( ) = `DROP`.
 
-      DATA(drag_container) = client->get_event_arg( ).
-      DATA(drag_index)     = CONV i( client->get_event_arg( 2 ) ).
-      DATA(drop_container) = client->get_event_arg( 3 ).
-      DATA(drop_index)     = CONV i( client->get_event_arg( 4 ) ).
-      DATA(drop_position)  = client->get_event_arg( 5 ).
+      
+      drag_container = client->get_event_arg( ).
+      
+      temp3 = client->get_event_arg( 2 ).
+      
+      drag_index = temp3.
+      
+      drop_container = client->get_event_arg( 3 ).
+      
+      temp4 = client->get_event_arg( 4 ).
+      
+      drop_index = temp4.
+      
+      drop_position  = client->get_event_arg( 5 ).
 
-      DATA(from_list) = xsdbool( drag_container CS `list1` ).
-      DATA(to_list)   = xsdbool( drop_container CS `list1` ).
+      
+      
+      temp1 = boolc( drag_container CS `list1` ).
+      from_list = temp1.
+      
+      
+      temp2 = boolc( drop_container CS `list1` ).
+      to_list   = temp2.
 
       " onDrop: take the row out of the SOURCE model, correct the target index
       " the same two ways the original does, then splice it into the TARGET model
-      DATA(source) = COND ty_t_item( WHEN from_list = abap_true THEN t_list ELSE t_grid ).
+      
+      IF from_list = abap_true.
+        temp5 = t_list.
+      ELSE.
+        temp5 = t_grid.
+      ENDIF.
+      
+      source = temp5.
       IF drag_index >= 0 AND drag_index < lines( source ).
 
-        DATA(item) = source[ drag_index + 1 ].
+        
+        
+        
+        temp8 = sy-tabix.
+        READ TABLE source INDEX drag_index + 1 INTO temp7.
+        sy-tabix = temp8.
+        IF sy-subrc <> 0.
+          ASSERT 1 = 0.
+        ENDIF.
+        item = temp7.
         DELETE source INDEX drag_index + 1.
 
         IF from_list = abap_true.
@@ -190,7 +246,14 @@ CLASS z2ui5_cl_smpc_app_527 IMPLEMENTATION.
           t_grid = source.
         ENDIF.
 
-        DATA(target) = COND ty_t_item( WHEN to_list = abap_true THEN t_list ELSE t_grid ).
+        
+        IF to_list = abap_true.
+          temp6 = t_list.
+        ELSE.
+          temp6 = t_grid.
+        ENDIF.
+        
+        target = temp6.
 
         IF from_list = to_list AND drag_index < drop_index.
           drop_index = drop_index - 1.
@@ -220,15 +283,42 @@ CLASS z2ui5_cl_smpc_app_527 IMPLEMENTATION.
   METHOD model_init.
 
     " initData: the List's three rows and the GridContainer's three rows
-    t_list = VALUE #(
-      ( title = `Open SAP Homepage 2x2`          rows = 2 columns = 2 )
-      ( title = `Your personal information 3x3`  rows = 3 columns = 3 )
-      ( title = `Appointments management 2x4`    rows = 2 columns = 4 ) ).
+    DATA temp7 TYPE z2ui5_cl_smpc_app_527=>ty_t_item.
+    DATA temp8 LIKE LINE OF temp7.
+    DATA temp9 TYPE z2ui5_cl_smpc_app_527=>ty_t_item.
+    DATA temp10 LIKE LINE OF temp9.
+    CLEAR temp7.
+    
+    temp8-title = `Open SAP Homepage 2x2`.
+    temp8-rows = 2.
+    temp8-columns = 2.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-title = `Your personal information 3x3`.
+    temp8-rows = 3.
+    temp8-columns = 3.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-title = `Appointments management 2x4`.
+    temp8-rows = 2.
+    temp8-columns = 4.
+    INSERT temp8 INTO TABLE temp7.
+    t_list = temp7.
 
-    t_grid = VALUE #(
-      ( title = `Sales Fulfillment Application Title 4x2` rows = 4 columns = 2 )
-      ( title = `Manage Activity Master Data Type 2x3`    rows = 2 columns = 3 )
-      ( title = `Success Map 2x2`                         rows = 2 columns = 2 ) ).
+    
+    CLEAR temp9.
+    
+    temp10-title = `Sales Fulfillment Application Title 4x2`.
+    temp10-rows = 4.
+    temp10-columns = 2.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-title = `Manage Activity Master Data Type 2x3`.
+    temp10-rows = 2.
+    temp10-columns = 3.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-title = `Success Map 2x2`.
+    temp10-rows = 2.
+    temp10-columns = 2.
+    INSERT temp10 INTO TABLE temp9.
+    t_grid = temp9.
 
   ENDMETHOD.
 

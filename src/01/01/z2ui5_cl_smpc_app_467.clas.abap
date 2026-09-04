@@ -11,7 +11,7 @@ CLASS z2ui5_cl_smpc_app_467 DEFINITION PUBLIC.
              content TYPE string,
              icon    TYPE string,
            END OF ty_s_tab.
-    TYPES ty_t_tab TYPE STANDARD TABLE OF ty_s_tab WITH EMPTY KEY.
+    TYPES ty_t_tab TYPE STANDARD TABLE OF ty_s_tab WITH DEFAULT KEY.
 
     DATA t_tabs TYPE ty_t_tab.
 
@@ -31,10 +31,10 @@ CLASS z2ui5_cl_smpc_app_467 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -43,7 +43,8 @@ CLASS z2ui5_cl_smpc_app_467 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -73,19 +74,32 @@ CLASS z2ui5_cl_smpc_app_467 IMPLEMENTATION.
 
 
   METHOD model_init.
+      DATA index LIKE sy-index.
+      DATA temp1 TYPE z2ui5_cl_smpc_app_467=>ty_s_tab.
+      DATA temp2 TYPE z2ui5_cl_smpc_app_467=>ty_s_tab-icon.
 
     " the controller builds Tab 1..12 with Content 1..12 and then gives every tab a
     " RANDOM icon out of three; a backend cannot repeat a client-side random draw,
     " so the port walks the same three icons in order
     DO 12 TIMES.
-      DATA(index) = sy-index.
-      INSERT VALUE #( key     = index
-                      text    = |Tab { index }|
-                      content = |Content { index }|
-                      icon    = SWITCH #( index MOD 3
-                                          WHEN 1 THEN `sap-icon://history`
-                                          WHEN 2 THEN `sap-icon://home`
-                                          WHEN 0 THEN `sap-icon://employee` ) )
+      
+      index = sy-index.
+      
+      CLEAR temp1.
+      temp1-key = index.
+      temp1-text = |Tab { index }|.
+      temp1-content = |Content { index }|.
+      
+      CASE index MOD 3.
+        WHEN 1.
+          temp2 = `sap-icon://history`.
+        WHEN 2.
+          temp2 = `sap-icon://home`.
+        WHEN 0.
+          temp2 = `sap-icon://employee`.
+      ENDCASE.
+      temp1-icon = temp2.
+      INSERT temp1
              INTO TABLE t_tabs.
     ENDDO.
 

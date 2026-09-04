@@ -38,12 +38,12 @@ CLASS z2ui5_cl_smpc_app_101 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -52,7 +52,8 @@ CLASS z2ui5_cl_smpc_app_101 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
@@ -484,37 +485,88 @@ CLASS z2ui5_cl_smpc_app_101 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA name_ok TYPE abap_bool.
+        DATA temp5 TYPE xsdboolean.
+        DATA weight TYPE string.
+        DATA temp1 TYPE abap_bool.
+          DATA temp7 TYPE xsdboolean.
+        DATA weight_ok LIKE temp1.
+        DATA temp2 TYPE string.
+        DATA temp3 TYPE string.
+        DATA temp9 TYPE xsdboolean.
+          DATA temp4 TYPE string_table.
+        DATA temp6 TYPE string_table.
+        DATA temp8 TYPE string_table.
+        DATA temp10 TYPE string_table.
+          DATA temp12 TYPE string_table.
+          DATA temp14 TYPE string_table.
 
     CASE client->get_event( ).
 
       WHEN `ADDITIONAL_INFO`.
         " reproduces additionalInfoValidation: name >= 6 chars, weight numeric
-        DATA(name_ok) = xsdbool( strlen( product_name ) >= 6 ).
+        
+        
+        temp5 = boolc( strlen( product_name ) >= 6 ).
+        name_ok = temp5.
         " the original tests parseInt( ) IS NaN, which is far laxer than "all
         " digits": leading blanks and a sign are skipped and parsing stops at
         " the first non-digit, so '12.5', '-5' and '12abc' are all VALID there
-        DATA(weight) = condense( product_weight ).
+        
+        weight = condense( product_weight ).
         IF weight IS NOT INITIAL AND ( weight(1) = `-` OR weight(1) = `+` ).
           weight = weight+1.
         ENDIF.
-        DATA(weight_ok) = COND abap_bool( WHEN weight IS INITIAL THEN abap_false
-                                          ELSE xsdbool( weight(1) CO `0123456789` ) ).
-        product_name_state   = COND #( WHEN name_ok = abap_true THEN `None` ELSE `Error` ).
-        product_weight_state = COND #( WHEN weight_ok = abap_true THEN `None` ELSE `Error` ).
-        step2_validated      = xsdbool( name_ok = abap_true AND weight_ok = abap_true ).
+        
+        IF weight IS INITIAL.
+          temp1 = abap_false.
+        ELSE.
+          
+          temp7 = boolc( weight(1) CO `0123456789` ).
+          temp1 = temp7.
+        ENDIF.
+        
+        weight_ok = temp1.
+        
+        IF name_ok = abap_true.
+          temp2 = `None`.
+        ELSE.
+          temp2 = `Error`.
+        ENDIF.
+        product_name_state   = temp2.
+        
+        IF weight_ok = abap_true.
+          temp3 = `None`.
+        ELSE.
+          temp3 = `Error`.
+        ENDIF.
+        product_weight_state = temp3.
+        
+        temp9 = boolc( name_ok = abap_true AND weight_ok = abap_true ).
+        step2_validated      = temp9.
         IF step2_validated = abap_false.
           " both failing branches of the original also call
           " setCurrentStep( ProductInfoStep ), forcing the wizard back to it
+          
+          CLEAR temp4.
+          INSERT `CreateProductWizard` INTO TABLE temp4.
+          INSERT `setCurrentStep` INTO TABLE temp4.
+          INSERT `ProductInfoStep` INTO TABLE temp4.
           client->follow_up_action( val   = client->cs_event-control_by_id
-                                    t_arg = VALUE #( ( `CreateProductWizard` ) ( `setCurrentStep` ) ( `ProductInfoStep` ) ) ).
+                                    t_arg = temp4 ).
         ENDIF.
 
       WHEN `OPTIONAL_ACTIVATE`.
         client->message_toast_display( `This event is fired on activate of Step3.` ).
 
       WHEN `WIZARD_COMPLETE`.
+        
+        CLEAR temp6.
+        INSERT `wizardNavContainer` INTO TABLE temp6.
+        INSERT `to` INTO TABLE temp6.
+        INSERT `wizardReviewPage` INTO TABLE temp6.
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `wizardNavContainer` ) ( `to` ) ( `wizardReviewPage` ) ) ).
+                                  t_arg = temp6 ).
 
       WHEN `EDIT_STEP_1`.
         edit_step( `ProductTypeStep` ).
@@ -529,23 +581,41 @@ CLASS z2ui5_cl_smpc_app_101 IMPLEMENTATION.
         edit_step( `PricingStep` ).
 
       WHEN `WIZARD_CANCEL`.
+        
+        CLEAR temp8.
+        INSERT `YES` INTO TABLE temp8.
+        INSERT `NO` INTO TABLE temp8.
         client->message_box_display( text    = `Are you sure you want to cancel your report?`
                                      type    = `warning`
-                                     actions = VALUE #( ( `YES` ) ( `NO` ) )
+                                     actions = temp8
                                      onclose = `CANCEL_CLOSED` ).
 
       WHEN `WIZARD_SUBMIT`.
+        
+        CLEAR temp10.
+        INSERT `YES` INTO TABLE temp10.
+        INSERT `NO` INTO TABLE temp10.
         client->message_box_display( text    = `Are you sure you want to submit your report?`
                                      type    = `confirm`
-                                     actions = VALUE #( ( `YES` ) ( `NO` ) )
+                                     actions = temp10
                                      onclose = `CANCEL_CLOSED` ).
 
       WHEN `CANCEL_CLOSED`.
         IF client->get_event_arg( ) = `YES`.
+          
+          CLEAR temp12.
+          INSERT `wizardNavContainer` INTO TABLE temp12.
+          INSERT `backToPage` INTO TABLE temp12.
+          INSERT `wizardContentPage` INTO TABLE temp12.
           client->follow_up_action( val   = client->cs_event-control_by_id
-                                    t_arg = VALUE #( ( `wizardNavContainer` ) ( `backToPage` ) ( `wizardContentPage` ) ) ).
+                                    t_arg = temp12 ).
+          
+          CLEAR temp14.
+          INSERT `CreateProductWizard` INTO TABLE temp14.
+          INSERT `discardProgress` INTO TABLE temp14.
+          INSERT `ProductTypeStep` INTO TABLE temp14.
           client->follow_up_action( val   = client->cs_event-control_by_id
-                                    t_arg = VALUE #( ( `CreateProductWizard` ) ( `discardProgress` ) ( `ProductTypeStep` ) ) ).
+                                    t_arg = temp14 ).
         ENDIF.
 
     ENDCASE.
@@ -556,10 +626,21 @@ CLASS z2ui5_cl_smpc_app_101 IMPLEMENTATION.
   METHOD edit_step.
 
     " original _handleNavigationToStep: back to the wizard content page, then goToStep
+    DATA temp16 TYPE string_table.
+    DATA temp18 TYPE string_table.
+    CLEAR temp16.
+    INSERT `wizardNavContainer` INTO TABLE temp16.
+    INSERT `backToPage` INTO TABLE temp16.
+    INSERT `wizardContentPage` INTO TABLE temp16.
     client->follow_up_action( val   = client->cs_event-control_by_id
-                              t_arg = VALUE #( ( `wizardNavContainer` ) ( `backToPage` ) ( `wizardContentPage` ) ) ).
+                              t_arg = temp16 ).
+    
+    CLEAR temp18.
+    INSERT `CreateProductWizard` INTO TABLE temp18.
+    INSERT `goToStep` INTO TABLE temp18.
+    INSERT step_id INTO TABLE temp18.
     client->follow_up_action( val   = client->cs_event-control_by_id
-                              t_arg = VALUE #( ( `CreateProductWizard` ) ( `goToStep` ) ( step_id ) ) ).
+                              t_arg = temp18 ).
 
   ENDMETHOD.
 

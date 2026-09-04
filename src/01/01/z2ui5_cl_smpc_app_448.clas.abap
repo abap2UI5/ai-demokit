@@ -10,7 +10,7 @@ CLASS z2ui5_cl_smpc_app_448 DEFINITION PUBLIC.
              message     TYPE string,
              description TYPE string,
            END OF ty_s_message.
-    TYPES ty_t_message TYPE STANDARD TABLE OF ty_s_message WITH EMPTY KEY.
+    TYPES ty_t_message TYPE STANDARD TABLE OF ty_s_message WITH DEFAULT KEY.
 
     DATA t_messages TYPE ty_t_message.
     DATA type_here  TYPE string.
@@ -31,12 +31,12 @@ CLASS z2ui5_cl_smpc_app_448 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -45,8 +45,26 @@ CLASS z2ui5_cl_smpc_app_448 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    DATA temp3 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `Pressed navigation button` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `draftMessagePopover` INTO TABLE temp2.
+    INSERT `toggleBy` INTO TABLE temp2.
+    INSERT `$event.oSource.sId` INTO TABLE temp2.
+    
+    CLEAR temp3.
+    INSERT `draftIndi` INTO TABLE temp3.
+    INSERT `showDraftSaving` INTO TABLE temp3.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`         v = `100%`
         )->a( n = `xmlns:core`     v = `sap.ui.core`
@@ -61,7 +79,7 @@ CLASS z2ui5_cl_smpc_app_448 IMPLEMENTATION.
             )->a( n = `title`          v = `FullScreen Page Title`
             )->a( n = `showNavButton`  v = `true`
             )->a( n = `navButtonPress` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                     t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Pressed navigation button` ) ) )
+                                                                     t_arg = temp1 )
 
             " onSemanticButtonPress toasts the source's class name with the library
             " prefix stripped - the class name travels, the strip happens in ABAP
@@ -83,7 +101,7 @@ CLASS z2ui5_cl_smpc_app_448 IMPLEMENTATION.
             )->ele( n = `messagesIndicator` ns = `semantic`
                 )->ele( n = `MessagesIndicator` ns = `semantic`
                     )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                    t_arg = VALUE #( ( `draftMessagePopover` ) ( `toggleBy` ) ( `$event.oSource.sId` ) ) )
+                                                                    t_arg = temp2 )
 
                     " the controller-built MessagePopover over the message model,
                     " declared as a dependent of its anchor (app 107 precedent)
@@ -153,7 +171,7 @@ CLASS z2ui5_cl_smpc_app_448 IMPLEMENTATION.
                         )->a( n = `id`         v = `TypeHere`
                         )->a( n = `value`      v = client->_bind( type_here )
                         )->a( n = `liveChange` v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                             t_arg = VALUE #( ( `draftIndi` ) ( `showDraftSaving` ) ) ) ).
+                                                                             t_arg = temp3 ) ).
 
     client->view_display( view->stringify( ) ).
 
@@ -161,11 +179,13 @@ CLASS z2ui5_cl_smpc_app_448 IMPLEMENTATION.
 
 
   METHOD on_event.
+      DATA action TYPE string.
 
     IF client->get_event( ) = `SEMANTIC_PRESS`.
       " the original strips the LIBRARY name, so sap.m.semantic.AddAction
       " reaches the toast as semantic.AddAction
-      DATA(action) = replace( val = client->get_event_arg( ) sub = `sap.m.` with = `` ).
+      
+      action = replace( val = client->get_event_arg( ) sub = `sap.m.` with = `` ).
       client->message_toast_display( |Pressed: { action }| ).
     ENDIF.
 
@@ -175,7 +195,14 @@ CLASS z2ui5_cl_smpc_app_448 IMPLEMENTATION.
   METHOD model_init.
 
     " onInit registers a ControlMessageProcessor and adds one error message
-    t_messages = VALUE #( ( type = `Error` message = `Something wrong happened` ) ).
+    DATA temp3 TYPE z2ui5_cl_smpc_app_448=>ty_t_message.
+    DATA temp4 LIKE LINE OF temp3.
+    CLEAR temp3.
+    
+    temp4-type = `Error`.
+    temp4-message = `Something wrong happened`.
+    INSERT temp4 INTO TABLE temp3.
+    t_messages = temp3.
 
   ENDMETHOD.
 

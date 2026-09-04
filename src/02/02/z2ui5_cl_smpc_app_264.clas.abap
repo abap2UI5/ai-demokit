@@ -13,7 +13,7 @@ CLASS z2ui5_cl_smpc_app_264 DEFINITION PUBLIC.
              location   TYPE string,
            END OF ty_s_teammember.
 
-    DATA t_teammembers      TYPE STANDARD TABLE OF ty_s_teammember WITH EMPTY KEY.
+    DATA t_teammembers      TYPE STANDARD TABLE OF ty_s_teammember WITH DEFAULT KEY.
     DATA departmentprefix   TYPE string.
     DATA locationprefix     TYPE string.
     DATA firstname          TYPE string.
@@ -36,12 +36,12 @@ CLASS z2ui5_cl_smpc_app_264 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -50,19 +50,24 @@ CLASS z2ui5_cl_smpc_app_264 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string.
+    DATA lv_boundfilters LIKE temp1.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " onToggleFilters replaces the binding's filter set with the other pair
     " (organizational <-> personal). abap2UI5 bakes the binding info at render
     " time, so the toggle event redraws the view with the other boundFilters
     " list instead of calling ListBinding.filter (app 241 precedent). Only the
     " fragment is composed here - every client->_bind( ) call stays inline.
-    DATA(lv_boundfilters) = COND string(
-      WHEN showorganizational = abap_true
-      THEN |\{ path: 'LOCATION', operator: 'StartsWith', value1: '{ client->_bind( locationprefix ) }' \}, | &&
-           |\{ path: 'DEPARTMENT', operator: 'StartsWith', value1: '{ client->_bind( departmentprefix ) }' \}|
-      ELSE |\{ path: 'FIRSTNAME', operator: 'StartsWith', value1: '{ client->_bind( firstname ) }' \}, | &&
-           |\{ path: 'LASTNAME', operator: 'StartsWith', value1: '{ client->_bind( lastname ) }' \}| ).
+    
+    IF showorganizational = abap_true.
+      temp1 = |\{ path: 'LOCATION', operator: 'StartsWith', value1: '{ client->_bind( locationprefix ) }' \}, | && |\{ path: 'DEPARTMENT', operator: 'StartsWith', value1: '{ client->_bind( departmentprefix ) }' \}|.
+    ELSE.
+      temp1 = |\{ path: 'FIRSTNAME', operator: 'StartsWith', value1: '{ client->_bind( firstname ) }' \}, | && |\{ path: 'LASTNAME', operator: 'StartsWith', value1: '{ client->_bind( lastname ) }' \}|.
+    ENDIF.
+    
+    lv_boundfilters = temp1.
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `class`       v = `sapUiSizeCompact`
@@ -191,12 +196,15 @@ CLASS z2ui5_cl_smpc_app_264 IMPLEMENTATION.
 
 
   METHOD on_event.
+      DATA temp1 TYPE xsdboolean.
 
     IF client->get_event( ) = `TOGGLE_FILTERS`.
       " onToggleFilters: flip ui>/showOrganizational and apply the other
       " filter pair to the rows binding - here the flag flips and the view is
       " redrawn, which re-bakes the boundFilters list into the binding info
-      showorganizational = xsdbool( showorganizational = abap_false ).
+      
+      temp1 = boolc( showorganizational = abap_false ).
+      showorganizational = temp1.
       view_display( ).
     ENDIF.
 
@@ -204,26 +212,106 @@ CLASS z2ui5_cl_smpc_app_264 IMPLEMENTATION.
 
 
   METHOD model_init.
+    DATA temp2 LIKE t_teammembers.
+    DATA temp3 LIKE LINE OF temp2.
 
     " the four filter> fields start undefined in the original JSONModel
     showorganizational = abap_true.
 
-    t_teammembers = VALUE #(
-      ( firstname = `John`    lastname = `Doe`       age = 28 department = `Development` location = `Walldorf` )
-      ( firstname = `Jane`    lastname = `Smith`     age = 34 department = `Consulting`  location = `New York` )
-      ( firstname = `Michael` lastname = `Johnson`   age = 45 department = `Management`  location = `Bangalore` )
-      ( firstname = `Emily`   lastname = `Davis`     age = 29 department = `Development` location = `Sydney` )
-      ( firstname = `Chris`   lastname = `Brown`     age = 38 department = `Consulting`  location = `Berlin` )
-      ( firstname = `Jessica` lastname = `Williams`  age = 41 department = `Development` location = `Walldorf` )
-      ( firstname = `David`   lastname = `Jones`     age = 52 department = `Management`  location = `New York` )
-      ( firstname = `Sarah`   lastname = `Miller`    age = 27 department = `Development` location = `Bangalore` )
-      ( firstname = `Daniel`  lastname = `Wilson`    age = 33 department = `Consulting`  location = `Sydney` )
-      ( firstname = `Laura`   lastname = `Moore`     age = 24 department = `Development` location = `Berlin` )
-      ( firstname = `James`   lastname = `Taylor`    age = 36 department = `Consulting`  location = `Walldorf` )
-      ( firstname = `Emma`    lastname = `Anderson`  age = 30 department = `Development` location = `New York` )
-      ( firstname = `Robert`  lastname = `Thomas`    age = 50 department = `Consulting`  location = `Bangalore` )
-      ( firstname = `Olivia`  lastname = `Jackson`   age = 22 department = `Development` location = `Sydney` )
-      ( firstname = `William` lastname = `White`     age = 47 department = `Consulting`  location = `Berlin` ) ).
+    
+    CLEAR temp2.
+    
+    temp3-firstname = `John`.
+    temp3-lastname = `Doe`.
+    temp3-age = 28.
+    temp3-department = `Development`.
+    temp3-location = `Walldorf`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-firstname = `Jane`.
+    temp3-lastname = `Smith`.
+    temp3-age = 34.
+    temp3-department = `Consulting`.
+    temp3-location = `New York`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-firstname = `Michael`.
+    temp3-lastname = `Johnson`.
+    temp3-age = 45.
+    temp3-department = `Management`.
+    temp3-location = `Bangalore`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-firstname = `Emily`.
+    temp3-lastname = `Davis`.
+    temp3-age = 29.
+    temp3-department = `Development`.
+    temp3-location = `Sydney`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-firstname = `Chris`.
+    temp3-lastname = `Brown`.
+    temp3-age = 38.
+    temp3-department = `Consulting`.
+    temp3-location = `Berlin`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-firstname = `Jessica`.
+    temp3-lastname = `Williams`.
+    temp3-age = 41.
+    temp3-department = `Development`.
+    temp3-location = `Walldorf`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-firstname = `David`.
+    temp3-lastname = `Jones`.
+    temp3-age = 52.
+    temp3-department = `Management`.
+    temp3-location = `New York`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-firstname = `Sarah`.
+    temp3-lastname = `Miller`.
+    temp3-age = 27.
+    temp3-department = `Development`.
+    temp3-location = `Bangalore`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-firstname = `Daniel`.
+    temp3-lastname = `Wilson`.
+    temp3-age = 33.
+    temp3-department = `Consulting`.
+    temp3-location = `Sydney`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-firstname = `Laura`.
+    temp3-lastname = `Moore`.
+    temp3-age = 24.
+    temp3-department = `Development`.
+    temp3-location = `Berlin`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-firstname = `James`.
+    temp3-lastname = `Taylor`.
+    temp3-age = 36.
+    temp3-department = `Consulting`.
+    temp3-location = `Walldorf`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-firstname = `Emma`.
+    temp3-lastname = `Anderson`.
+    temp3-age = 30.
+    temp3-department = `Development`.
+    temp3-location = `New York`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-firstname = `Robert`.
+    temp3-lastname = `Thomas`.
+    temp3-age = 50.
+    temp3-department = `Consulting`.
+    temp3-location = `Bangalore`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-firstname = `Olivia`.
+    temp3-lastname = `Jackson`.
+    temp3-age = 22.
+    temp3-department = `Development`.
+    temp3-location = `Sydney`.
+    INSERT temp3 INTO TABLE temp2.
+    temp3-firstname = `William`.
+    temp3-lastname = `White`.
+    temp3-age = 47.
+    temp3-department = `Consulting`.
+    temp3-location = `Berlin`.
+    INSERT temp3 INTO TABLE temp2.
+    t_teammembers = temp2.
 
   ENDMETHOD.
 

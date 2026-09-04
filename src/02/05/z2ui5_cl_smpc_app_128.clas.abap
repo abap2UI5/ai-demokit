@@ -23,13 +23,13 @@ CLASS z2ui5_cl_smpc_app_128 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       expanded       = abap_false.
       walked_visible = abap_true.
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -38,7 +38,8 @@ CLASS z2ui5_cl_smpc_app_128 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
@@ -161,16 +162,22 @@ CLASS z2ui5_cl_smpc_app_128 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp1 TYPE xsdboolean.
+        DATA temp2 TYPE xsdboolean.
 
     CASE client->get_event( ).
 
       WHEN `TOGGLE_EXPAND`.
         " original onCollapseExpandPress: toggles SideNavigation.expanded
-        expanded = xsdbool( expanded = abap_false ).
+        
+        temp1 = boolc( expanded = abap_false ).
+        expanded = temp1.
 
       WHEN `TOGGLE_WALKED`.
         " original onHideShowWalkedPress: toggles the 'walked' item visibility
-        walked_visible = xsdbool( walked_visible = abap_false ).
+        
+        temp2 = boolc( walked_visible = abap_false ).
+        walked_visible = temp2.
 
     ENDCASE.
 

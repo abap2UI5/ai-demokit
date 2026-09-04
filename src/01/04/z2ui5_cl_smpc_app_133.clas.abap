@@ -15,7 +15,7 @@ CLASS z2ui5_cl_smpc_app_133 DEFINITION PUBLIC.
         quantity      TYPE i,
         onlyimage     TYPE abap_bool,
       END OF ty_product.
-    DATA t_products  TYPE STANDARD TABLE OF ty_product WITH EMPTY KEY.
+    DATA t_products  TYPE STANDARD TABLE OF ty_product WITH DEFAULT KEY.
     DATA mode        TYPE string.
     DATA header_text TYPE string.
 
@@ -35,12 +35,12 @@ CLASS z2ui5_cl_smpc_app_133 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -49,8 +49,38 @@ CLASS z2ui5_cl_smpc_app_133 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    DATA temp3 TYPE string_table.
+    DATA temp4 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `{0?Selected:Unselected} item with ID {1}` INTO TABLE temp1.
+    INSERT `${$parameters>/selected}` INTO TABLE temp1.
+    INSERT `${$parameters>/listItem}.getId()` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp2.
+    INSERT `show` INTO TABLE temp2.
+    INSERT `Delete item with ID {0}` INTO TABLE temp2.
+    INSERT `${$parameters>/listItem}.getId()` INTO TABLE temp2.
+    
+    CLEAR temp3.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp3.
+    INSERT `show` INTO TABLE temp3.
+    INSERT `Request details for item with ID {0}` INTO TABLE temp3.
+    INSERT `$event.oSource.sId` INTO TABLE temp3.
+    
+    CLEAR temp4.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp4.
+    INSERT `show` INTO TABLE temp4.
+    INSERT `Pressed item with ID {0}` INTO TABLE temp4.
+    INSERT `$event.oSource.sId` INTO TABLE temp4.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
@@ -109,11 +139,9 @@ CLASS z2ui5_cl_smpc_app_133 IMPLEMENTATION.
             )->a( n = `mode`            v = client->_bind( mode )
             )->a( n = `items`           v = client->_bind( t_products )
             )->a( n = `selectionChange` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                      t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0?Selected:Unselected} item with ID {1}` )
-                                                                                       ( `${$parameters>/selected}` ) ( `${$parameters>/listItem}.getId()` ) ) )
+                                                                      t_arg = temp1 )
             )->a( n = `delete`          v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                      t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Delete item with ID {0}` )
-                                                                                       ( `${$parameters>/listItem}.getId()` ) ) )
+                                                                      t_arg = temp2 )
             )->a( n = `class`           v = `sapUiResponsiveContentPadding`
 
             )->ele( n = `customLayout` ns = `f`
@@ -125,11 +153,9 @@ CLASS z2ui5_cl_smpc_app_133 IMPLEMENTATION.
 
             )->ele( n = `GridListItem` ns = `f`
                 )->a( n = `detailPress` v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                      t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Request details for item with ID {0}` )
-                                                                                       ( `$event.oSource.sId` ) ) )
+                                                                      t_arg = temp3 )
                 )->a( n = `press`       v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                      t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Pressed item with ID {0}` )
-                                                                                       ( `$event.oSource.sId` ) ) )
+                                                                      t_arg = temp4 )
                 )->a( n = `counter`     v = `{QUANTITY}`
                 )->a( n = `highlight`   v = `{STATUS}`
                 )->a( n = `type`        v = `{TYPE}`
@@ -176,6 +202,8 @@ CLASS z2ui5_cl_smpc_app_133 IMPLEMENTATION.
 
 
   METHOD model_init.
+    DATA temp3 LIKE t_products.
+    DATA temp4 LIKE LINE OF temp3.
 
     mode        = `MultiSelect`.
     header_text = `GridList with mode MultiSelect`.
@@ -184,29 +212,88 @@ CLASS z2ui5_cl_smpc_app_133 IMPLEMENTATION.
     " values are substituted with their UI5 defaults so the bound enum
     " properties stay valid: type -> 'Inactive', Status/highlight -> 'None'
     " (both render identically to the original's undefined fields).
-    t_products = VALUE #(
-      ( name = `Notebook Basic 15` description = `Notebook Basic 15 with 2,80 GHz quad core, 15" LCD, 4 GB DDR3 RAM, 500 GB Hard Disc, Windows 8 Pro`
-        productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg` status = `Information` type = `DetailAndActive` quantity = 24 )
-      ( name = `Notebook Basic 17` description = `Notebook Basic 17 with 2,80 GHz quad core, 17" LCD, 4 GB DDR3 RAM, 500 GB Hard Disc, Windows 8 Pro`
-        productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1001.jpg` status = `Success` type = `DetailAndActive` quantity = 14 )
-      ( name = `Notebook Basic 18` description = `Notebook Basic 18 with 2,80 GHz quad core, 18" LCD, 8 GB DDR3 RAM, 1000 GB Hard Disc, Windows 8 Pro`
-        productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1002.jpg` status = `Success` type = `Inactive` quantity = 37 )
-      ( name = `Notebook Basic 19` description = `Notebook Basic 19 with 2,80 GHz quad core, 19" LCD, 8 GB DDR3 RAM, 1000 GB Hard Disc, Windows 8 Pro`
-        productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1003.jpg` status = `Warning` type = `Inactive` quantity = 2 )
-      ( name = `ITelO Vault` description = `Digital Organizer with State-of-the-Art Storage Encryption`
-        productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1007.jpg` status = `Error` type = `Inactive` quantity = 0 )
-      ( name = `Notebook Professional 15` description = `Notebook Professional 15 with 2,80 GHz quad core, 15" Multitouch LCD, 8 GB DDR3 RAM, 500 GB SSD - DVD-Writer (DVD-R/+R/-RW/-RAM),Windows 8 Pro`
-        productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1010.jpg` status = `None` type = `Inactive` quantity = 22 )
-      ( name = `Notebook Professional 17` description = `Notebook Professional 17 with 2,80 GHz quad core, 17" Multitouch LCD, 8 GB DDR3 RAM, 500 GB SSD - DVD-Writer (DVD-R/+R/-RW/-RAM),Windows 8 Pro`
-        productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1011.jpg` status = `None` type = `Inactive` quantity = 31 )
-      ( name = `ITelO Vault Net` description = `Digital Organizer with State-of-the-Art Encryption for Storage and Network Communications`
-        productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1020.jpg` status = `None` type = `Inactive` quantity = 14 )
-      ( name = `ITelO Vault SAT` description = `Digital Organizer with State-of-the-Art Encryption for Storage and Secure Stellite Link`
-        productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1021.jpg` status = `None` type = `Inactive` quantity = 50 )
-      ( name = `Comfort Easy` description = `32 GB Digital Assistant with high-resolution color screen`
-        productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1022.jpg` status = `None` type = `Inactive` quantity = 30 )
-      ( name = `Ultra Jet Super Highspeed` description = `4800 dpi x 1200 dpi - up to 35 ppm (mono) / up to 34 ppm (color) - capacity: 250 sheets - Hi-Speed USB2.0, Ethernet`
-        productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1065.jpg` status = `None` type = `Navigation` quantity = 25 onlyimage = abap_true ) ).
+    
+    CLEAR temp3.
+    
+    temp4-name = `Notebook Basic 15`.
+    temp4-description = `Notebook Basic 15 with 2,80 GHz quad core, 15" LCD, 4 GB DDR3 RAM, 500 GB Hard Disc, Windows 8 Pro`.
+    temp4-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg`.
+    temp4-status = `Information`.
+    temp4-type = `DetailAndActive`.
+    temp4-quantity = 24.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-name = `Notebook Basic 17`.
+    temp4-description = `Notebook Basic 17 with 2,80 GHz quad core, 17" LCD, 4 GB DDR3 RAM, 500 GB Hard Disc, Windows 8 Pro`.
+    temp4-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1001.jpg`.
+    temp4-status = `Success`.
+    temp4-type = `DetailAndActive`.
+    temp4-quantity = 14.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-name = `Notebook Basic 18`.
+    temp4-description = `Notebook Basic 18 with 2,80 GHz quad core, 18" LCD, 8 GB DDR3 RAM, 1000 GB Hard Disc, Windows 8 Pro`.
+    temp4-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1002.jpg`.
+    temp4-status = `Success`.
+    temp4-type = `Inactive`.
+    temp4-quantity = 37.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-name = `Notebook Basic 19`.
+    temp4-description = `Notebook Basic 19 with 2,80 GHz quad core, 19" LCD, 8 GB DDR3 RAM, 1000 GB Hard Disc, Windows 8 Pro`.
+    temp4-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1003.jpg`.
+    temp4-status = `Warning`.
+    temp4-type = `Inactive`.
+    temp4-quantity = 2.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-name = `ITelO Vault`.
+    temp4-description = `Digital Organizer with State-of-the-Art Storage Encryption`.
+    temp4-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1007.jpg`.
+    temp4-status = `Error`.
+    temp4-type = `Inactive`.
+    temp4-quantity = 0.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-name = `Notebook Professional 15`.
+    temp4-description = `Notebook Professional 15 with 2,80 GHz quad core, 15" Multitouch LCD, 8 GB DDR3 RAM, 500 GB SSD - DVD-Writer (DVD-R/+R/-RW/-RAM),Windows 8 Pro`.
+    temp4-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1010.jpg`.
+    temp4-status = `None`.
+    temp4-type = `Inactive`.
+    temp4-quantity = 22.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-name = `Notebook Professional 17`.
+    temp4-description = `Notebook Professional 17 with 2,80 GHz quad core, 17" Multitouch LCD, 8 GB DDR3 RAM, 500 GB SSD - DVD-Writer (DVD-R/+R/-RW/-RAM),Windows 8 Pro`.
+    temp4-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1011.jpg`.
+    temp4-status = `None`.
+    temp4-type = `Inactive`.
+    temp4-quantity = 31.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-name = `ITelO Vault Net`.
+    temp4-description = `Digital Organizer with State-of-the-Art Encryption for Storage and Network Communications`.
+    temp4-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1020.jpg`.
+    temp4-status = `None`.
+    temp4-type = `Inactive`.
+    temp4-quantity = 14.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-name = `ITelO Vault SAT`.
+    temp4-description = `Digital Organizer with State-of-the-Art Encryption for Storage and Secure Stellite Link`.
+    temp4-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1021.jpg`.
+    temp4-status = `None`.
+    temp4-type = `Inactive`.
+    temp4-quantity = 50.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-name = `Comfort Easy`.
+    temp4-description = `32 GB Digital Assistant with high-resolution color screen`.
+    temp4-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1022.jpg`.
+    temp4-status = `None`.
+    temp4-type = `Inactive`.
+    temp4-quantity = 30.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-name = `Ultra Jet Super Highspeed`.
+    temp4-description = `4800 dpi x 1200 dpi - up to 35 ppm (mono) / up to 34 ppm (color) - capacity: 250 sheets - Hi-Speed USB2.0, Ethernet`.
+    temp4-productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1065.jpg`.
+    temp4-status = `None`.
+    temp4-type = `Navigation`.
+    temp4-quantity = 25.
+    temp4-onlyimage = abap_true.
+    INSERT temp4 INTO TABLE temp3.
+    t_products = temp3.
 
   ENDMETHOD.
 

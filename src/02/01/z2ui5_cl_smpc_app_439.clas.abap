@@ -19,7 +19,7 @@ CLASS z2ui5_cl_smpc_app_439 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -28,8 +28,15 @@ CLASS z2ui5_cl_smpc_app_439 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `containerAuto` INTO TABLE temp1.
+    INSERT `toggleStyleClass` INTO TABLE temp1.
+    INSERT `sapMShowEmpty-CTX` INTO TABLE temp1.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
@@ -83,7 +90,7 @@ CLASS z2ui5_cl_smpc_app_439 IMPLEMENTATION.
                     )->a( n = `id`     v = `CssClassSwitch`
                     )->a( n = `state`  v = `false`
                     )->a( n = `change` v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                     t_arg = VALUE #( ( `containerAuto` ) ( `toggleStyleClass` ) ( `sapMShowEmpty-CTX` ) ) )
+                                                                     t_arg = temp1 )
                 )->tag( `Label`
                     )->a( n = `text` v = `Products`
                 " Auto renders the dash only inside a sapMShowEmpty-CTX container

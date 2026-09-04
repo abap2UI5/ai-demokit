@@ -11,7 +11,7 @@ CLASS z2ui5_cl_smpc_app_620 DEFINITION PUBLIC.
              icon    TYPE string,
              content TYPE string,
            END OF ty_s_tab.
-    TYPES ty_t_tab TYPE STANDARD TABLE OF ty_s_tab WITH EMPTY KEY.
+    TYPES ty_t_tab TYPE STANDARD TABLE OF ty_s_tab WITH DEFAULT KEY.
 
     " the two bars the controller fills in JavaScript
     DATA t_tabs        TYPE ty_t_tab.
@@ -37,12 +37,12 @@ CLASS z2ui5_cl_smpc_app_620 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -51,9 +51,12 @@ CLASS z2ui5_cl_smpc_app_620 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA bars TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    DATA(bars) = view->ele( n = `View` ns = `mvc`
+    
+    bars = view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:f`   v = `sap.ui.layout.form`
@@ -402,19 +405,32 @@ CLASS z2ui5_cl_smpc_app_620 IMPLEMENTATION.
 
 
   METHOD on_event.
+      DATA temp1 TYPE string.
 
     IF client->get_event( ) = `DENSITY`.
       " the three texts ARE the sap.m.IconTabDensityMode members
-      density_mode = SWITCH #( density_idx
-                               WHEN 0 THEN `Cozy`
-                               WHEN 1 THEN `Compact`
-                               ELSE        `Inherit` ).
+      
+      CASE density_idx.
+        WHEN 0.
+          temp1 = `Cozy`.
+        WHEN 1.
+          temp1 = `Compact`.
+        WHEN OTHERS.
+          temp1 = `Inherit`.
+      ENDCASE.
+      density_mode = temp1.
     ENDIF.
 
   ENDMETHOD.
 
 
   METHOD model_init.
+      DATA temp2 TYPE z2ui5_cl_smpc_app_620=>ty_s_tab.
+    DATA temp3 TYPE string_table.
+    DATA icons LIKE temp3.
+      DATA temp5 TYPE z2ui5_cl_smpc_app_620=>ty_s_tab.
+      DATA temp1 LIKE LINE OF icons.
+      DATA temp4 LIKE sy-tabix.
 
     " the group comes up on its first button, which is what getSelectedButton( )
     " returns before any select
@@ -423,18 +439,40 @@ CLASS z2ui5_cl_smpc_app_620 IMPLEMENTATION.
 
     " onInit adds thirty tabs to idIconTabBar0 ('Tab n' / 'Content n')
     DO 30 TIMES.
-      APPEND VALUE #( key = |{ sy-index }| text = |Tab { sy-index }| content = |Content { sy-index }| ) TO t_tabs.
+      
+      CLEAR temp2.
+      temp2-key = |{ sy-index }|.
+      temp2-text = |Tab { sy-index }|.
+      temp2-content = |Content { sy-index }|.
+      APPEND temp2 TO t_tabs.
     ENDDO.
 
     " and twelve to iconTabBarInlineIcons, each with an icon picked at RANDOM
     " from three; a backend cannot draw the browser's numbers, so the three
     " cycle instead (see sidecar)
-    DATA(icons) = VALUE string_table( ( `sap-icon://history` ) ( `sap-icon://home` ) ( `sap-icon://employee` ) ).
+    
+    CLEAR temp3.
+    INSERT `sap-icon://history` INTO TABLE temp3.
+    INSERT `sap-icon://home` INTO TABLE temp3.
+    INSERT `sap-icon://employee` INTO TABLE temp3.
+    
+    icons = temp3.
     DO 12 TIMES.
-      APPEND VALUE #( key     = |{ sy-index }|
-                      text    = |Tab { sy-index }|
-                      icon    = icons[ ( sy-index - 1 ) MOD 3 + 1 ]
-                      content = |IconTabBar inline header mode with icons Content { sy-index }| ) TO t_inline_tabs.
+      
+      CLEAR temp5.
+      temp5-key = |{ sy-index }|.
+      temp5-text = |Tab { sy-index }|.
+      
+      
+      temp4 = sy-tabix.
+      READ TABLE icons INDEX ( sy-index - 1 ) MOD 3 + 1 INTO temp1.
+      sy-tabix = temp4.
+      IF sy-subrc <> 0.
+        ASSERT 1 = 0.
+      ENDIF.
+      temp5-icon = temp1.
+      temp5-content = |IconTabBar inline header mode with icons Content { sy-index }|.
+      APPEND temp5 TO t_inline_tabs.
     ENDDO.
 
   ENDMETHOD.

@@ -23,7 +23,7 @@ CLASS z2ui5_cl_smpc_app_443 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -35,7 +35,9 @@ CLASS z2ui5_cl_smpc_app_443 IMPLEMENTATION.
     " the sample's text carries the whitespace it demonstrates: line breaks
     " (&#xA;), tab runs (&#x9;) and space runs, written here as \n / \t in an
     " ABAP string template so the characters reach the attribute unchanged
-    DATA(whitespace_text) = |Lorem ipsum dolor sit amet,(1 line break follows)\nconsetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt (2 line | &&
+    DATA whitespace_text TYPE string.
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    whitespace_text = |Lorem ipsum dolor sit amet,(1 line break follows)\nconsetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt (2 line | &&
                                      |breaks follow)\n\nut labore et dolore magna aliquyam erat, (4 tabs follow)\t\t\t\tsed diam voluptua. At vero eos et accusam et | &&
                                      |justo duo dolores et ea rebum. (1 line break follows)\nStet clita kasd gubergren, no sea takimata sanctus est (7 spaces follow)   | &&
                                      |    Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut | &&
@@ -45,7 +47,8 @@ CLASS z2ui5_cl_smpc_app_443 IMPLEMENTATION.
                                      |magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no | &&
                                      |sea takimata sanctus est Lorem ipsum dolor sit amet:|.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.m`

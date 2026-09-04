@@ -21,7 +21,7 @@ CLASS z2ui5_cl_smpc_app_424 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -30,8 +30,15 @@ CLASS z2ui5_cl_smpc_app_424 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `OverflowToolbar is clicked` INTO TABLE temp1.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
@@ -52,7 +59,7 @@ CLASS z2ui5_cl_smpc_app_424 IMPLEMENTATION.
             " onToolbarPress shows a MessageToast with a constant text - composed on the
             " client (control_global MESSAGE_TOAST), so the press needs no round-trip
             )->a( n = `press`          v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                     t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `OverflowToolbar is clicked` ) ) )
+                                                                     t_arg = temp1 )
             )->a( n = `ariaLabelledBy` v = `myText`
 
             )->tag( `Text`

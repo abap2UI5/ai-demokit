@@ -18,7 +18,7 @@ CLASS z2ui5_cl_smpc_app_351 DEFINITION PUBLIC.
         minsize_text TYPE string,
         resizable    TYPE abap_bool,
       END OF ty_s_area,
-      ty_t_area TYPE STANDARD TABLE OF ty_s_area WITH EMPTY KEY.
+      ty_t_area TYPE STANDARD TABLE OF ty_s_area WITH DEFAULT KEY.
     DATA t_areas TYPE ty_t_area.
 
     " sap.ui.layout.Splitter.orientation - the property btnChangeOrientation
@@ -47,12 +47,12 @@ CLASS z2ui5_cl_smpc_app_351 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -61,7 +61,8 @@ CLASS z2ui5_cl_smpc_app_351 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the Splitter with its content areas and the options layout below it are
     " both bound to t_areas - the original declares three areas in the view and
@@ -169,6 +170,15 @@ CLASS z2ui5_cl_smpc_app_351 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp1 TYPE z2ui5_cl_smpc_app_351=>ty_s_area.
+        DATA temp6 TYPE z2ui5_cl_smpc_app_351=>ty_s_area-size.
+        DATA temp2 TYPE string.
+        DATA temp3 LIKE LINE OF t_areas.
+        DATA lr_area LIKE REF TO temp3.
+          DATA temp4 TYPE i.
+          DATA temp7 TYPE i.
+    DATA temp5 LIKE LINE OF t_areas.
+    DATA lr_row LIKE REF TO temp5.
 
     CASE client->get_event( ).
 
@@ -176,11 +186,20 @@ CLASS z2ui5_cl_smpc_app_351 IMPLEMENTATION.
         " createExampleContent + addContentArea: the original randomizes size
         " and maxSize; a deterministic rotation is used here (the corpus rule
         " for random/now values), so the port renders the same every run
-        INSERT VALUE #( text         = `Content!`
-                        size         = COND #( WHEN lines( t_areas ) MOD 2 = 0 THEN `auto` ELSE `150px` )
-                        minsize      = 0
-                        minsize_text = `0`
-                        resizable    = abap_true )
+        
+        CLEAR temp1.
+        temp1-text = `Content!`.
+        
+        IF lines( t_areas ) MOD 2 = 0.
+          temp6 = `auto`.
+        ELSE.
+          temp6 = `150px`.
+        ENDIF.
+        temp1-size = temp6.
+        temp1-minsize = 0.
+        temp1-minsize_text = `0`.
+        temp1-resizable = abap_true.
+        INSERT temp1
                INTO TABLE t_areas.
 
       WHEN `REMOVE_AREA`.
@@ -205,7 +224,13 @@ CLASS z2ui5_cl_smpc_app_351 IMPLEMENTATION.
       WHEN `CHANGE_ORIENTATION`.
         " btnChangeOrientation flips Splitter.orientation, which IS a bindable
         " property - so the flip happens on the model, not through a setter
-        orientation = COND #( WHEN orientation = `Horizontal` THEN `Vertical` ELSE `Horizontal` ).
+        
+        IF orientation = `Horizontal`.
+          temp2 = `Vertical`.
+        ELSE.
+          temp2 = `Horizontal`.
+        ENDIF.
+        orientation = temp2.
 
       WHEN `RESIZE`.
         " the controller's resize handler: a running counter plus the current
@@ -218,18 +243,28 @@ CLASS z2ui5_cl_smpc_app_351 IMPLEMENTATION.
         " is an integer; the original parses it with parseInt in the handler,
         " here the parse happens in ABAP over the whole (already two-way
         " returned) table - no per-row index has to travel
-        LOOP AT t_areas REFERENCE INTO DATA(lr_area).
+        
+        
+        LOOP AT t_areas REFERENCE INTO lr_area.
           " the length term, not just the character one - `99999999999` is all
           " digits and overflows CONV i
-          lr_area->minsize = COND i( WHEN lr_area->minsize_text CO ` 0123456789`
-                                     AND strlen( condense( lr_area->minsize_text ) ) <= 9
-                                     THEN CONV i( lr_area->minsize_text ) ).
+          
+          temp4 = lr_area->minsize_text.
+          
+          IF lr_area->minsize_text CO ` 0123456789` AND strlen( condense( lr_area->minsize_text ) ) <= 9.
+            temp7 = temp4.
+          ELSE.
+            CLEAR temp7.
+          ENDIF.
+          lr_area->minsize = temp7.
         ENDLOOP.
 
     ENDCASE.
 
     " every area row carries its own option row, so the titles follow the table
-    LOOP AT t_areas REFERENCE INTO DATA(lr_row).
+    
+    
+    LOOP AT t_areas REFERENCE INTO lr_row.
       lr_row->title = |ContentArea #{ sy-tabix }|.
     ENDLOOP.
 
@@ -241,10 +276,30 @@ CLASS z2ui5_cl_smpc_app_351 IMPLEMENTATION.
 
     " the three content areas the original declares in the view, with their
     " SplitterLayoutData; resizable defaults to true on all of them
-    t_areas = VALUE #( resizable = abap_true
-                       ( title = `ContentArea #1` text = `Content 1` size = `300px` minsize = 0   minsize_text = `0` )
-                       ( title = `ContentArea #2` text = `Content 2` size = `auto`  minsize = 0   minsize_text = `0` )
-                       ( title = `ContentArea #3` text = `Content 3` size = `30%`   minsize = 200 minsize_text = `200` ) ).
+    DATA temp6 TYPE z2ui5_cl_smpc_app_351=>ty_t_area.
+    DATA temp7 LIKE LINE OF temp6.
+    CLEAR temp6.
+    
+    temp7-resizable = abap_true.
+    temp7-title = `ContentArea #1`.
+    temp7-text = `Content 1`.
+    temp7-size = `300px`.
+    temp7-minsize = 0.
+    temp7-minsize_text = `0`.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `ContentArea #2`.
+    temp7-text = `Content 2`.
+    temp7-size = `auto`.
+    temp7-minsize = 0.
+    temp7-minsize_text = `0`.
+    INSERT temp7 INTO TABLE temp6.
+    temp7-title = `ContentArea #3`.
+    temp7-text = `Content 3`.
+    temp7-size = `30%`.
+    temp7-minsize = 200.
+    temp7-minsize_text = `200`.
+    INSERT temp7 INTO TABLE temp6.
+    t_areas = temp6.
 
     " Splitter.orientation default, and the Text's initial label
     orientation = `Horizontal`.

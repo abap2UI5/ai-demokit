@@ -22,12 +22,12 @@ CLASS z2ui5_cl_smpc_app_172 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       expanded = abap_false.
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -36,8 +36,16 @@ CLASS z2ui5_cl_smpc_app_172 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `Item selected: {0}` INTO TABLE temp1.
+    INSERT `${$parameters>/item}.getText()` INTO TABLE temp1.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -59,7 +67,7 @@ CLASS z2ui5_cl_smpc_app_172 IMPLEMENTATION.
                 )->a( n = `selectedKey` v = `walked`
                 )->a( n = `expanded`    v = client->_bind( expanded )
                 )->a( n = `itemSelect`  v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                      t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item selected: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
+                                                                      t_arg = temp1 )
 
                 )->ele( n = `NavigationList` ns = `tnt`
                     )->ele( n = `NavigationListItem` ns = `tnt`
@@ -118,10 +126,13 @@ CLASS z2ui5_cl_smpc_app_172 IMPLEMENTATION.
 
 
   METHOD on_event.
+      DATA temp1 TYPE xsdboolean.
 
     IF client->get_event( ) = `TOGGLE_EXPAND`.
       " original onCollapseExpandPress: toggles SideNavigation.expanded
-      expanded = xsdbool( expanded = abap_false ).
+      
+      temp1 = boolc( expanded = abap_false ).
+      expanded = temp1.
     ENDIF.
 
   ENDMETHOD.

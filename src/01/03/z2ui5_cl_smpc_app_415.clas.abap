@@ -9,7 +9,7 @@ CLASS z2ui5_cl_smpc_app_415 DEFINITION PUBLIC.
       BEGIN OF ty_s_product,
         text TYPE string,
       END OF ty_s_product.
-    TYPES ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
+    TYPES ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH DEFAULT KEY.
 
     DATA productcollection TYPE ty_t_product.
     DATA text TYPE string.
@@ -34,12 +34,12 @@ CLASS z2ui5_cl_smpc_app_415 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -48,7 +48,8 @@ CLASS z2ui5_cl_smpc_app_415 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " Block->content inlining (app 217/188/161 precedent, CAPABILITIES 'Custom
     " BlockBase blocks in a sap.uxap.ObjectPageLayout'): the original blocks
@@ -448,7 +449,8 @@ CLASS z2ui5_cl_smpc_app_415 IMPLEMENTATION.
 
   METHOD popover_select_display.
 
-    DATA(popover) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA popover TYPE REF TO z2ui5_cl_ui5_view_builder.
+    popover = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " Popover.fragment.xml 1:1; anchored at the ObjectPageHeader control id
     " transported as $event.oSource.sId (the original uses the titleSelectorPress
@@ -479,7 +481,8 @@ CLASS z2ui5_cl_smpc_app_415 IMPLEMENTATION.
 
   METHOD popover_lock_display.
 
-    DATA(popover) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA popover TYPE REF TO z2ui5_cl_ui5_view_builder.
+    popover = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " PopoverLock.fragment.xml 1:1; anchored at the ObjectPageHeader control id
     " transported as $event.oSource.sId (the original uses the markLockedPress
@@ -504,6 +507,8 @@ CLASS z2ui5_cl_smpc_app_415 IMPLEMENTATION.
 
 
   METHOD model_init.
+    DATA temp1 TYPE z2ui5_cl_smpc_app_415=>ty_t_product.
+    DATA temp2 LIKE LINE OF temp1.
 
     " the 'buttons' JSONModel of the controller, flattened into the default model
     text = `working binding`.
@@ -514,13 +519,22 @@ CLASS z2ui5_cl_smpc_app_415 IMPLEMENTATION.
 
     " SharedJSONData/products.json /ProductCollection, verbatim (the Popover
     " fragment's List binds it; only the bound 'text' field per row)
-    productcollection = VALUE #(
-      ( text = `Product` )
-      ( text = `Name` )
-      ( text = `Category` )
-      ( text = `Supplier` )
-      ( text = `Description` )
-      ( text = `Price` ) ).
+    
+    CLEAR temp1.
+    
+    temp2-text = `Product`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-text = `Name`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-text = `Category`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-text = `Supplier`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-text = `Description`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-text = `Price`.
+    INSERT temp2 INTO TABLE temp1.
+    productcollection = temp1.
 
   ENDMETHOD.
 

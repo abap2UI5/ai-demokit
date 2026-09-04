@@ -26,9 +26,9 @@ CLASS z2ui5_cl_smpc_app_043 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -38,12 +38,15 @@ CLASS z2ui5_cl_smpc_app_043 IMPLEMENTATION.
   METHOD view_display.
 
     " placeholder text reused by all three panels of the original sample
-    DATA(lorem) = `Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ` &&
+    DATA lorem TYPE string.
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    lorem = `Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ` &&
       `At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ` &&
       `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ` &&
       `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat`.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
@@ -118,12 +121,15 @@ CLASS z2ui5_cl_smpc_app_043 IMPLEMENTATION.
 
 
   METHOD on_event.
+      DATA temp1 TYPE xsdboolean.
 
     IF client->get_event( ) = `TOOLBAR_PRESSED`.
       " original: oPanel.setExpanded(!oPanel.getExpanded()). Panel.expanded is
       " a bindable property, so the flag is bound two-way and only flipped
       " here - no frontend action, and the state survives a view rebuild
-      expanded = xsdbool( expanded = abap_false ).
+      
+      temp1 = boolc( expanded = abap_false ).
+      expanded = temp1.
     ENDIF.
 
   ENDMETHOD.

@@ -18,7 +18,8 @@ CLASS z2ui5_cl_smpc_sapui5_009 DEFINITION PUBLIC.
 
     DATA mv_slider_value TYPE i.
 
-    DATA mt_shapes TYPE STANDARD TABLE OF ty_s_shape WITH EMPTY KEY.
+    TYPES temp1_585620f2fa TYPE STANDARD TABLE OF ty_s_shape WITH DEFAULT KEY.
+DATA mt_shapes TYPE temp1_585620f2fa.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -32,84 +33,159 @@ ENDCLASS.
 CLASS z2ui5_cl_smpc_sapui5_009 IMPLEMENTATION.
 
   METHOD initialize.
+    DATA temp1 LIKE mt_shapes.
+    DATA temp2 LIKE LINE OF temp1.
 
     mv_slider_value = 0.
 
-    mt_shapes = VALUE #(
-                        ( id = `arrow_down` )
-                        ( id = `arrow_left` )
-                        ( id = `arrow_right` )
-                        ( id = `arrow_up` )
-                        ( id = `attention_1` )
-                        ( id = `attention_2` )
-                        ( id = `building` )
-                        ( id = `bulb` )
-                        ( id = `bull` )
-                        ( id = `calendar` )
-                        ( id = `car` )
-                        ( id = `cart` )
-                        ( id = `cereals` )
-                        ( id = `circle` )
-                        ( id = `clock` )
-                        ( id = `cloud` )
-                        ( id = `conveyor` )
-                        ( id = `desk` )
-                        ( id = `document` )
-                        ( id = `documents` )
-                        ( id = `dollar` )
-                        ( id = `donut` )
-                        ( id = `drop` )
-                        ( id = `envelope` )
-                        ( id = `euro` )
-                        ( id = `factory` )
-                        ( id = `female` )
-                        ( id = `fish` )
-                        ( id = `flag` )
-                        ( id = `folder_1` )
-                        ( id = `folder_2` )
-                        ( id = `gear` )
-                        ( id = `heart` )
-                        ( id = `honey` )
-                        ( id = `house` )
-                        ( id = `information` )
-                        ( id = `letter` )
-                        ( id = `lung` )
-                        ( id = `machine` )
-                        ( id = `male` )
-                        ( id = `pen` )
-                        ( id = `person` )
-                        ( id = `pin` )
-                        ( id = `plane` )
-                        ( id = `printer` )
-                        ( id = `progress` )
-                        ( id = `question` )
-                        ( id = `robot` )
-                        ( id = `sandclock` )
-                        ( id = `speed` )
-                        ( id = `stomach` )
-                        ( id = `success` )
-                        ( id = `tank_diesel` )
-                        ( id = `tank_lpg` )
-                        ( id = `thermo` )
-                        ( id = `tool` )
-                        ( id = `transfusion` )
-                        ( id = `travel` )
-                        ( id = `turnip` )
-                        ( id = `vehicle_construction` )
-                        ( id = `vehicle_tank` )
-                        ( id = `vehicle_tractor` )
-                        ( id = `vehicle_truck_1` )
-                        ( id = `vehicle_truck_2` )
-                        ( id = `vehicle_truck_3` )
-                        ( id = `warehouse` ) ).
+    
+    CLEAR temp1.
+    
+    temp2-id = `arrow_down`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `arrow_left`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `arrow_right`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `arrow_up`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `attention_1`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `attention_2`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `building`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `bulb`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `bull`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `calendar`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `car`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `cart`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `cereals`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `circle`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `clock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `cloud`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `conveyor`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `desk`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `document`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `documents`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `dollar`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `donut`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `drop`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `envelope`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `euro`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `factory`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `female`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `fish`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `flag`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `folder_1`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `folder_2`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `gear`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `heart`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `honey`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `house`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `information`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `letter`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `lung`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `machine`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `male`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `pen`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `person`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `pin`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `plane`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `printer`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `progress`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `question`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `robot`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `sandclock`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `speed`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `stomach`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `success`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `tank_diesel`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `tank_lpg`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `thermo`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `tool`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `transfusion`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `travel`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `turnip`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `vehicle_construction`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `vehicle_tank`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `vehicle_tractor`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `vehicle_truck_1`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `vehicle_truck_2`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `vehicle_truck_3`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-id = `warehouse`.
+    INSERT temp2 INTO TABLE temp1.
+    mt_shapes = temp1.
 
   ENDMETHOD.
 
   METHOD view_display.
 
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE xsdboolean.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    temp1 = boolc( client->get( )-check_launchpad_active = abap_false ).
     view->ele( n = `View` ns = `mvc`
         )->a( n = `displayBlock` v = `true`
         )->a( n = `height`       v = `100%`
@@ -139,7 +215,7 @@ CLASS z2ui5_cl_smpc_sapui5_009 IMPLEMENTATION.
                 )->a( n = `title`          v = `abap2UI5 - Status Indicators Library`
                 )->a( n = `navButtonPress` v = client->_event_nav_app_leave( )
                 )->a( n = `showNavButton`  b = client->check_app_prev_stack( )
-                )->a( n = `showHeader`     b = xsdbool( client->get( )-check_launchpad_active = abap_false )
+                )->a( n = `showHeader`     b = temp1
 
                 )->ele( `Panel`
                     )->a( n = `class` v = `sapUiResponsiveMargin SIPanelStyle`
@@ -198,11 +274,11 @@ CLASS z2ui5_cl_smpc_sapui5_009 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
 
       initialize( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
 
     ENDIF.

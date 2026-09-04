@@ -38,12 +38,12 @@ CLASS z2ui5_cl_smpc_app_328 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -52,7 +52,9 @@ CLASS z2ui5_cl_smpc_app_328 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " _showFormFragment swaps the Page content between the Display and the Change
     " fragment; both are inlined here and switched by one bound flag instead
@@ -265,8 +267,13 @@ CLASS z2ui5_cl_smpc_app_328 IMPLEMENTATION.
     " initialized container - and a phone would then re-render on the master list,
     " the exact state this call exists to avoid. The invariant is "view built,
     " toDetail follows", so the wire belongs to the builder, not to one branch.
+    
+    CLEAR temp1.
+    INSERT `SimpleFormSplitscreen` INTO TABLE temp1.
+    INSERT `toDetail` INTO TABLE temp1.
+    INSERT `page` INTO TABLE temp1.
     client->follow_up_action( val   = client->cs_event-control_by_id
-                              t_arg = VALUE #( ( `SimpleFormSplitscreen` ) ( `toDetail` ) ( `page` ) ) ).
+                              t_arg = temp1 ).
 
   ENDMETHOD.
 

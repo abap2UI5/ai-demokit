@@ -20,9 +20,9 @@ CLASS z2ui5_cl_smpc_app_032 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -31,11 +31,14 @@ CLASS z2ui5_cl_smpc_app_032 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(warning_text) = `Warning message. Extra long text used as a warning message. Extra long text used as a warning message - 2. ` &&
+    DATA warning_text TYPE string.
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    warning_text = `Warning message. Extra long text used as a warning message. Extra long text used as a warning message - 2. ` &&
                          `Extra long text used as a warning message - 3. Extra long text used as a warning message - 4. ` &&
                          `Extra long text used as a warning message - 5.`.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`

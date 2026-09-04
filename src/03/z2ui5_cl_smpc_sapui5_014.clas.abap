@@ -28,7 +28,7 @@ CLASS z2ui5_cl_smpc_sapui5_014 DEFINITION PUBLIC.
         predecessor TYPE string,
         successor   TYPE string,
       END OF ty_s_relation.
-    TYPES ty_t_relation TYPE STANDARD TABLE OF ty_s_relation WITH EMPTY KEY.
+    TYPES ty_t_relation TYPE STANDARD TABLE OF ty_s_relation WITH DEFAULT KEY.
     TYPES:
       BEGIN OF ty_s_task,
         objectid      TYPE string,
@@ -44,11 +44,11 @@ CLASS z2ui5_cl_smpc_sapui5_014 DEFINITION PUBLIC.
         starttime     TYPE string,
         endtime       TYPE string,
         relationships TYPE ty_t_relation,
-        children      TYPE STANDARD TABLE OF ty_s_task WITH EMPTY KEY,
+        children      TYPE STANDARD TABLE OF ty_s_task WITH DEFAULT KEY,
       END OF ty_s_phase.
     TYPES:
       BEGIN OF ty_s_root,
-        children TYPE STANDARD TABLE OF ty_s_phase WITH EMPTY KEY,
+        children TYPE STANDARD TABLE OF ty_s_phase WITH DEFAULT KEY,
       END OF ty_s_root.
     DATA s_root TYPE ty_s_root.
 
@@ -66,7 +66,7 @@ CLASS z2ui5_cl_smpc_sapui5_014 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
 
       mv_export_config = `{"columnKey": "OBJECTNAME", `      &&
                          `"leadingProperty": "OBJECTNAME", ` &&
@@ -75,7 +75,7 @@ CLASS z2ui5_cl_smpc_sapui5_014 IMPLEMENTATION.
       data_read( ).
       view_display( ).
 
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -83,7 +83,8 @@ CLASS z2ui5_cl_smpc_sapui5_014 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `displayBlock`   v = `true`
@@ -208,86 +209,158 @@ CLASS z2ui5_cl_smpc_sapui5_014 IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD data_read.
+    DATA temp1 TYPE z2ui5_cl_smpc_sapui5_014=>ty_s_root-children.
+    DATA temp2 LIKE LINE OF temp1.
+    DATA temp3 TYPE z2ui5_cl_smpc_sapui5_014=>ty_t_relation.
+    DATA temp4 LIKE LINE OF temp3.
+    DATA temp5 TYPE z2ui5_cl_smpc_sapui5_014=>ty_s_phase-children.
+    DATA temp6 LIKE LINE OF temp5.
+    DATA temp13 TYPE z2ui5_cl_smpc_sapui5_014=>ty_t_relation.
+    DATA temp14 LIKE LINE OF temp13.
+    DATA temp7 TYPE z2ui5_cl_smpc_sapui5_014=>ty_s_phase-children.
+    DATA temp8 LIKE LINE OF temp7.
+    DATA temp15 TYPE z2ui5_cl_smpc_sapui5_014=>ty_t_relation.
+    DATA temp16 LIKE LINE OF temp15.
+    DATA temp17 TYPE z2ui5_cl_smpc_sapui5_014=>ty_t_relation.
+    DATA temp18 LIKE LINE OF temp17.
+    DATA temp19 TYPE z2ui5_cl_smpc_sapui5_014=>ty_t_relation.
+    DATA temp20 LIKE LINE OF temp19.
+    DATA temp9 TYPE z2ui5_cl_smpc_sapui5_014=>ty_t_relation.
+    DATA temp10 LIKE LINE OF temp9.
+    DATA temp11 TYPE z2ui5_cl_smpc_sapui5_014=>ty_s_phase-children.
+    DATA temp12 LIKE LINE OF temp11.
 
-    s_root = VALUE #(
-        children = VALUE #(
-            ( objectid      = `object-0-1`
-              objectname    = `Phase 1 - Design`
-              starttime     = `2018-11-01T09:00:00`
-              endtime       = `2018-11-10T17:00:00`
-              relationships = VALUE #( ( relationid  = `rls-4`
-                                         type        = `StartToFinish`
-                                         predecessor = `object-0-1`
-                                         successor   = `object-0-2` ) )
-              children      = VALUE #(
-                  ( objectid      = `object-0-1-1`
-                    objectname    = `Draft`
-                    starttime     = `2018-11-01T09:00:00`
-                    endtime       = `2018-11-05T17:00:00`
-                    relationships = VALUE #( ( relationid  = `rls-0`
-                                               type        = `StartToFinish`
-                                               predecessor = `object-0-1-1`
-                                               successor   = `object-0-1-2` ) ) )
-                  ( objectid   = `object-0-1-2`
-                    objectname = `Review`
-                    starttime  = `2018-11-06T09:00:00`
-                    endtime    = `2018-11-10T17:00:00` ) ) )
-
-            ( objectid   = `object-0-2`
-              objectname = `Phase 2 - Build`
-              starttime  = `2018-11-11T09:00:00`
-              endtime    = `2018-11-24T17:00:00`
-              children   = VALUE #(
-                  ( objectid      = `object-0-2-1`
-                    objectname    = `Prepare`
-                    starttime     = `2018-11-11T09:00:00`
-                    endtime       = `2018-11-13T17:00:00`
-                    relationships = VALUE #( ( relationid  = `rls-2`
-                                               type        = `StartToStart`
-                                               predecessor = `object-0-2-1`
-                                               successor   = `object-0-2-4` )
-                                             ( relationid  = `rls-3`
-                                               type        = `FinishToFinish`
-                                               predecessor = `object-0-2-1`
-                                               successor   = `object-0-2-3` ) ) )
-                  ( objectid      = `object-0-2-2`
-                    objectname    = `Implement`
-                    starttime     = `2018-11-14T09:00:00`
-                    endtime       = `2018-11-17T17:00:00`
-                    relationships = VALUE #( ( relationid  = `rls-1`
-                                               type        = `FinishToFinish`
-                                               predecessor = `object-0-2-2`
-                                               successor   = `object-0-2-3` ) ) )
-                  ( objectid   = `object-0-2-3`
-                    objectname = `Test`
-                    starttime  = `2018-11-18T09:00:00`
-                    endtime    = `2018-11-20T17:00:00` )
-                  ( objectid      = `object-0-2-4`
-                    objectname    = `Ship`
-                    starttime     = `2018-11-21T09:00:00`
-                    endtime       = `2018-11-22T17:00:00`
-                    relationships = VALUE #( ( relationid  = `rls-5`
-                                               type        = `FinishToStart`
-                                               predecessor = `object-0-2-4`
-                                               successor   = `object-0-2-5` ) ) )
-                  ( objectid   = `object-0-2-5`
-                    objectname = `Handover`
-                    starttime  = `2018-11-23T09:00:00`
-                    endtime    = `2018-11-24T17:00:00` ) ) )
-
-            ( objectid      = `object-0-3`
-              objectname    = `Phase 3 - Close`
-              starttime     = `2018-11-25T09:00:00`
-              endtime       = `2018-11-29T17:00:00`
-              relationships = VALUE #( ( relationid  = `rls-6`
-                                         type        = `FinishToStart`
-                                         predecessor = `object-0-3`
-                                         successor   = `object-0-3-1` ) )
-              children      = VALUE #(
-                  ( objectid   = `object-0-3-1`
-                    objectname = `Sign off`
-                    starttime  = `2018-11-25T09:00:00`
-                    endtime    = `2018-11-29T17:00:00` ) ) ) ) ).
+    CLEAR s_root.
+    
+    CLEAR temp1.
+    
+    temp2-objectid = `object-0-1`.
+    temp2-objectname = `Phase 1 - Design`.
+    temp2-starttime = `2018-11-01T09:00:00`.
+    temp2-endtime = `2018-11-10T17:00:00`.
+    
+    CLEAR temp3.
+    
+    temp4-relationid = `rls-4`.
+    temp4-type = `StartToFinish`.
+    temp4-predecessor = `object-0-1`.
+    temp4-successor = `object-0-2`.
+    INSERT temp4 INTO TABLE temp3.
+    temp2-relationships = temp3.
+    
+    CLEAR temp5.
+    
+    temp6-objectid = `object-0-1-1`.
+    temp6-objectname = `Draft`.
+    temp6-starttime = `2018-11-01T09:00:00`.
+    temp6-endtime = `2018-11-05T17:00:00`.
+    
+    CLEAR temp13.
+    
+    temp14-relationid = `rls-0`.
+    temp14-type = `StartToFinish`.
+    temp14-predecessor = `object-0-1-1`.
+    temp14-successor = `object-0-1-2`.
+    INSERT temp14 INTO TABLE temp13.
+    temp6-relationships = temp13.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-objectid = `object-0-1-2`.
+    temp6-objectname = `Review`.
+    temp6-starttime = `2018-11-06T09:00:00`.
+    temp6-endtime = `2018-11-10T17:00:00`.
+    INSERT temp6 INTO TABLE temp5.
+    temp2-children = temp5.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-objectid = `object-0-2`.
+    temp2-objectname = `Phase 2 - Build`.
+    temp2-starttime = `2018-11-11T09:00:00`.
+    temp2-endtime = `2018-11-24T17:00:00`.
+    
+    CLEAR temp7.
+    
+    temp8-objectid = `object-0-2-1`.
+    temp8-objectname = `Prepare`.
+    temp8-starttime = `2018-11-11T09:00:00`.
+    temp8-endtime = `2018-11-13T17:00:00`.
+    
+    CLEAR temp15.
+    
+    temp16-relationid = `rls-2`.
+    temp16-type = `StartToStart`.
+    temp16-predecessor = `object-0-2-1`.
+    temp16-successor = `object-0-2-4`.
+    INSERT temp16 INTO TABLE temp15.
+    temp16-relationid = `rls-3`.
+    temp16-type = `FinishToFinish`.
+    temp16-predecessor = `object-0-2-1`.
+    temp16-successor = `object-0-2-3`.
+    INSERT temp16 INTO TABLE temp15.
+    temp8-relationships = temp15.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-objectid = `object-0-2-2`.
+    temp8-objectname = `Implement`.
+    temp8-starttime = `2018-11-14T09:00:00`.
+    temp8-endtime = `2018-11-17T17:00:00`.
+    
+    CLEAR temp17.
+    
+    temp18-relationid = `rls-1`.
+    temp18-type = `FinishToFinish`.
+    temp18-predecessor = `object-0-2-2`.
+    temp18-successor = `object-0-2-3`.
+    INSERT temp18 INTO TABLE temp17.
+    temp8-relationships = temp17.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-objectid = `object-0-2-3`.
+    temp8-objectname = `Test`.
+    temp8-starttime = `2018-11-18T09:00:00`.
+    temp8-endtime = `2018-11-20T17:00:00`.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-objectid = `object-0-2-4`.
+    temp8-objectname = `Ship`.
+    temp8-starttime = `2018-11-21T09:00:00`.
+    temp8-endtime = `2018-11-22T17:00:00`.
+    
+    CLEAR temp19.
+    
+    temp20-relationid = `rls-5`.
+    temp20-type = `FinishToStart`.
+    temp20-predecessor = `object-0-2-4`.
+    temp20-successor = `object-0-2-5`.
+    INSERT temp20 INTO TABLE temp19.
+    temp8-relationships = temp19.
+    INSERT temp8 INTO TABLE temp7.
+    temp8-objectid = `object-0-2-5`.
+    temp8-objectname = `Handover`.
+    temp8-starttime = `2018-11-23T09:00:00`.
+    temp8-endtime = `2018-11-24T17:00:00`.
+    INSERT temp8 INTO TABLE temp7.
+    temp2-children = temp7.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-objectid = `object-0-3`.
+    temp2-objectname = `Phase 3 - Close`.
+    temp2-starttime = `2018-11-25T09:00:00`.
+    temp2-endtime = `2018-11-29T17:00:00`.
+    
+    CLEAR temp9.
+    
+    temp10-relationid = `rls-6`.
+    temp10-type = `FinishToStart`.
+    temp10-predecessor = `object-0-3`.
+    temp10-successor = `object-0-3-1`.
+    INSERT temp10 INTO TABLE temp9.
+    temp2-relationships = temp9.
+    
+    CLEAR temp11.
+    
+    temp12-objectid = `object-0-3-1`.
+    temp12-objectname = `Sign off`.
+    temp12-starttime = `2018-11-25T09:00:00`.
+    temp12-endtime = `2018-11-29T17:00:00`.
+    INSERT temp12 INTO TABLE temp11.
+    temp2-children = temp11.
+    INSERT temp2 INTO TABLE temp1.
+    s_root-children = temp1.
 
   ENDMETHOD.
 ENDCLASS.

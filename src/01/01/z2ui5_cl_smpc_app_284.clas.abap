@@ -15,7 +15,7 @@ CLASS z2ui5_cl_smpc_app_284 DEFINITION PUBLIC.
         counter           TYPE i,
         markupdescription TYPE abap_bool,
       END OF ty_s_message.
-    TYPES ty_t_message TYPE STANDARD TABLE OF ty_s_message WITH EMPTY KEY.
+    TYPES ty_t_message TYPE STANDARD TABLE OF ty_s_message WITH DEFAULT KEY.
 
     DATA t_messages   TYPE ty_t_message.
     DATA dialog_title TYPE string.
@@ -38,12 +38,12 @@ CLASS z2ui5_cl_smpc_app_284 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -52,7 +52,8 @@ CLASS z2ui5_cl_smpc_app_284 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
@@ -75,6 +76,7 @@ CLASS z2ui5_cl_smpc_app_284 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp1 TYPE string_table.
 
     CASE client->get_event( ).
 
@@ -93,9 +95,13 @@ CLASS z2ui5_cl_smpc_app_284 IMPLEMENTATION.
       WHEN `NAV_BACK`.
         back_visible = abap_false.
         dialog_title = `Messages`.
+        
+        CLEAR temp1.
+        INSERT `messageView` INTO TABLE temp1.
+        INSERT `navigateBack` INTO TABLE temp1.
         client->follow_up_action( val   = client->cs_event-control_by_id
                                   view  = client->cs_view-popup
-                                  t_arg = VALUE #( ( `messageView` ) ( `navigateBack` ) ) ).
+                                  t_arg = temp1 ).
 
       WHEN `CLOSE`.
         client->popup_destroy( ).
@@ -107,8 +113,15 @@ CLASS z2ui5_cl_smpc_app_284 IMPLEMENTATION.
 
   METHOD popup_display.
 
-    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA popup TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp3 TYPE string_table.
+    popup = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp3.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp3.
+    INSERT `show` INTO TABLE temp3.
+    INSERT `Active title pressed` INTO TABLE temp3.
     popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns`      v = `sap.m`
@@ -150,7 +163,7 @@ CLASS z2ui5_cl_smpc_app_284 IMPLEMENTATION.
                     )->a( n = `itemSelect`            v = client->_event( `ITEM_SELECT` )
                     " the original composes this toast on the client, so it stays there
                     )->a( n = `activeTitlePress`      v = client->follow_up_action( val = client->cs_event-control_global
-                                                                                    t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Active title pressed` ) ) )
+                                                                                    t_arg = temp3 )
 
                     )->ele( `items`
 
@@ -186,42 +199,53 @@ CLASS z2ui5_cl_smpc_app_284 IMPLEMENTATION.
 
 
   METHOD model_init.
+    DATA temp5 TYPE z2ui5_cl_smpc_app_284=>ty_t_message.
+    DATA temp6 LIKE LINE OF temp5.
 
     dialog_title = `Messages`.
 
     " the controller's aMockMessages
-    t_messages = VALUE #(
-      ( type        = `Error`
-        title       = `Error message`
-        description = `First Error message description. ` && |\n| && `Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod`
-        subtitle    = `Example of subtitle`
-        counter     = 1 )
-      ( type        = `Warning`
-        title       = `Warning without description`
-        description = `` )
-      ( type        = `Success`
-        title       = `Success message`
-        description = `First Success message description`
-        subtitle    = `Example of subtitle`
-        counter     = 1 )
-      ( type        = `Error`
-        title       = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. `
-                   && `Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris `
-        description = `Second Error message description`
-        subtitle    = `Example of subtitle`
-        counter     = 2 )
-      ( type        = `Information`
-        title       = `Information message`
-        description = `First Information message description`
-        subtitle    = `Example of long subtitle lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et `
-                   && `dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris `
-        counter     = 1 )
-      ( type        = `Success`
-        title       = `Success message with active title`
-        description = `Second Success message description`
-        subtitle    = `Example of subtitle`
-        activetitle = abap_true
-        counter     = 1 ) ).
+    
+    CLEAR temp5.
+    
+    temp6-type = `Error`.
+    temp6-title = `Error message`.
+    temp6-description = `First Error message description. ` && |\n| && `Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod`.
+    temp6-subtitle = `Example of subtitle`.
+    temp6-counter = 1.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-type = `Warning`.
+    temp6-title = `Warning without description`.
+    temp6-description = ``.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-type = `Success`.
+    temp6-title = `Success message`.
+    temp6-description = `First Success message description`.
+    temp6-subtitle = `Example of subtitle`.
+    temp6-counter = 1.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-type = `Error`.
+    temp6-title = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. `
+&& `Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris `.
+    temp6-description = `Second Error message description`.
+    temp6-subtitle = `Example of subtitle`.
+    temp6-counter = 2.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-type = `Information`.
+    temp6-title = `Information message`.
+    temp6-description = `First Information message description`.
+    temp6-subtitle = `Example of long subtitle lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et `
+&& `dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris `.
+    temp6-counter = 1.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-type = `Success`.
+    temp6-title = `Success message with active title`.
+    temp6-description = `Second Success message description`.
+    temp6-subtitle = `Example of subtitle`.
+    temp6-activetitle = abap_true.
+    temp6-counter = 1.
+    INSERT temp6 INTO TABLE temp5.
+    t_messages = temp5.
 
   ENDMETHOD.
 

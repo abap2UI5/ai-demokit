@@ -22,12 +22,12 @@ CLASS z2ui5_cl_smpc_app_130 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       busy = abap_false.
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -36,7 +36,8 @@ CLASS z2ui5_cl_smpc_app_130 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
@@ -91,6 +92,7 @@ CLASS z2ui5_cl_smpc_app_130 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp1 TYPE string_table.
 
     CASE client->get_event( ).
 
@@ -98,8 +100,12 @@ CLASS z2ui5_cl_smpc_app_130 IMPLEMENTATION.
         " original onAction: sets both controls busy, then clears them again
         " after a 5s setTimeout - START_TIMER fires the clearing round trip
         busy = abap_true.
+        
+        CLEAR temp1.
+        INSERT `CLEAR_BUSY` INTO TABLE temp1.
+        INSERT `5000` INTO TABLE temp1.
         client->follow_up_action( val   = client->cs_event-start_timer
-                                  t_arg = VALUE #( ( `CLEAR_BUSY` ) ( `5000` ) ) ).
+                                  t_arg = temp1 ).
 
       WHEN `CLEAR_BUSY`.
         " the timer callback - the setTimeout body

@@ -13,7 +13,7 @@ CLASS z2ui5_cl_smpc_app_204 DEFINITION PUBLIC.
         highlight TYPE string,
         info      TYPE string,
       END OF ty_s_name.
-    DATA t_names TYPE STANDARD TABLE OF ty_s_name WITH EMPTY KEY.
+    DATA t_names TYPE STANDARD TABLE OF ty_s_name WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -30,10 +30,10 @@ CLASS z2ui5_cl_smpc_app_204 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -42,7 +42,8 @@ CLASS z2ui5_cl_smpc_app_204 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -74,13 +75,41 @@ CLASS z2ui5_cl_smpc_app_204 IMPLEMENTATION.
   METHOD model_init.
 
     " inline JSON mock (/names) of the original sample's controller (onInit)
-    t_names = VALUE #(
-      ( title = `Title text` desc = `Description text` icon = `sap-icon://favorite`   highlight = `Success`     info = `Completed` )
-      ( title = `Title text` desc = `Description text` icon = `sap-icon://employee`   highlight = `Error`       info = `Incomplete` )
-      ( title = `Title text` desc = ``                 icon = `sap-icon://accept`     highlight = `Information` info = `Information` )
-      ( title = `Title text` desc = ``                 icon = `sap-icon://activities` highlight = `None`        info = `None` )
-      ( title = `Title text` desc = `Description text` icon = `sap-icon://badge`      highlight = `Warning`     info = `Warning` )
-    ).
+    DATA temp1 LIKE t_names.
+    DATA temp2 LIKE LINE OF temp1.
+    CLEAR temp1.
+    
+    temp2-title = `Title text`.
+    temp2-desc = `Description text`.
+    temp2-icon = `sap-icon://favorite`.
+    temp2-highlight = `Success`.
+    temp2-info = `Completed`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Title text`.
+    temp2-desc = `Description text`.
+    temp2-icon = `sap-icon://employee`.
+    temp2-highlight = `Error`.
+    temp2-info = `Incomplete`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Title text`.
+    temp2-desc = ``.
+    temp2-icon = `sap-icon://accept`.
+    temp2-highlight = `Information`.
+    temp2-info = `Information`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Title text`.
+    temp2-desc = ``.
+    temp2-icon = `sap-icon://activities`.
+    temp2-highlight = `None`.
+    temp2-info = `None`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-title = `Title text`.
+    temp2-desc = `Description text`.
+    temp2-icon = `sap-icon://badge`.
+    temp2-highlight = `Warning`.
+    temp2-info = `Warning`.
+    INSERT temp2 INTO TABLE temp1.
+    t_names = temp1.
 
   ENDMETHOD.
 

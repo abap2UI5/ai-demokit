@@ -40,12 +40,12 @@ CLASS z2ui5_cl_smpc_app_017 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -54,8 +54,44 @@ CLASS z2ui5_cl_smpc_app_017 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    DATA temp3 TYPE string_table.
+    DATA temp4 TYPE string_table.
+    DATA temp5 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `$event.oSource.sId` INTO TABLE temp1.
+    INSERT `${$parameters>/from}` INTO TABLE temp1.
+    INSERT `${$parameters>/to}` INTO TABLE temp1.
+    INSERT `${$parameters>/valid}` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `$event.oSource.sId` INTO TABLE temp2.
+    INSERT `${$parameters>/from}` INTO TABLE temp2.
+    INSERT `${$parameters>/to}` INTO TABLE temp2.
+    INSERT `${$parameters>/valid}` INTO TABLE temp2.
+    
+    CLEAR temp3.
+    INSERT `$event.oSource.sId` INTO TABLE temp3.
+    INSERT `${$parameters>/from}` INTO TABLE temp3.
+    INSERT `${$parameters>/to}` INTO TABLE temp3.
+    INSERT `${$parameters>/valid}` INTO TABLE temp3.
+    
+    CLEAR temp4.
+    INSERT `$event.oSource.sId` INTO TABLE temp4.
+    INSERT `${$parameters>/from}` INTO TABLE temp4.
+    INSERT `${$parameters>/to}` INTO TABLE temp4.
+    INSERT `${$parameters>/valid}` INTO TABLE temp4.
+    
+    CLEAR temp5.
+    INSERT `$event.oSource.sId` INTO TABLE temp5.
+    INSERT `${$parameters>/from}` INTO TABLE temp5.
+    INSERT `${$parameters>/to}` INTO TABLE temp5.
+    INSERT `${$parameters>/valid}` INTO TABLE temp5.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
         )->a( n = `xmlns`        v = `sap.m`
@@ -76,10 +112,7 @@ CLASS z2ui5_cl_smpc_app_017 IMPLEMENTATION.
                                            | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind_path( drs1_start ) }' \},| &&
                                            | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind_path( drs1_end ) }' \} ] \}|
                 )->a( n = `change`     v = client->_event( val   = `CHANGE`
-                                                           t_arg = VALUE #( ( `$event.oSource.sId` )
-                                                                            ( `${$parameters>/from}` )
-                                                                            ( `${$parameters>/to}` )
-                                                                            ( `${$parameters>/valid}` ) ) )
+                                                           t_arg = temp1 )
                 )->a( n = `valueState` v = client->_bind( drs1_value_state )
             )->tag( `Label`
                 )->a( n = `text`     v = `DateRangeSelection with minDate=2016-01-01 and maxDate=2016-12-31:`
@@ -98,10 +131,7 @@ CLASS z2ui5_cl_smpc_app_017 IMPLEMENTATION.
             )->tag( `DateRangeSelection`
                 )->a( n = `id`         v = `DRS2`
                 )->a( n = `change`     v = client->_event( val   = `CHANGE`
-                                                           t_arg = VALUE #( ( `$event.oSource.sId` )
-                                                                            ( `${$parameters>/from}` )
-                                                                            ( `${$parameters>/to}` )
-                                                                            ( `${$parameters>/valid}` ) ) )
+                                                           t_arg = temp2 )
                 )->a( n = `value`      v = |\{ 'type': 'sap.ui.model.type.DateInterval', 'parts': [| &&
                                            | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind_path( drs2_start ) }' \},| &&
                                            | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind_path( drs2_end ) }' \} ] \}|
@@ -117,10 +147,7 @@ CLASS z2ui5_cl_smpc_app_017 IMPLEMENTATION.
                 )->a( n = `showCurrentDateButton` v = `true`
                 )->a( n = `showFooter`            v = `true`
                 )->a( n = `change`                v = client->_event( val   = `CHANGE`
-                                                                      t_arg = VALUE #( ( `$event.oSource.sId` )
-                                                                                       ( `${$parameters>/from}` )
-                                                                                       ( `${$parameters>/to}` )
-                                                                                       ( `${$parameters>/valid}` ) ) )
+                                                                      t_arg = temp3 )
                 )->a( n = `value`                 v = |\{ 'type': 'sap.ui.model.type.DateInterval', 'parts': [| &&
                                                       | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind_path( drs3_start ) }' \},| &&
                                                       | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind_path( drs3_end ) }' \} ] \}|
@@ -131,10 +158,7 @@ CLASS z2ui5_cl_smpc_app_017 IMPLEMENTATION.
             )->tag( `DateRangeSelection`
                 )->a( n = `id`         v = `DRS4`
                 )->a( n = `change`     v = client->_event( val   = `CHANGE`
-                                                           t_arg = VALUE #( ( `$event.oSource.sId` )
-                                                                            ( `${$parameters>/from}` )
-                                                                            ( `${$parameters>/to}` )
-                                                                            ( `${$parameters>/valid}` ) ) )
+                                                           t_arg = temp4 )
                 )->a( n = `value`      v = |\{ 'type': 'sap.ui.model.type.DateInterval', 'formatOptions': \{ 'pattern': 'MM/yyyy' \}, 'parts': [| &&
                                            | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind_path( drs4_start ) }' \},| &&
                                            | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind_path( drs4_end ) }' \} ] \}|
@@ -146,10 +170,7 @@ CLASS z2ui5_cl_smpc_app_017 IMPLEMENTATION.
                 )->a( n = `id`            v = `DRS5`
                 )->a( n = `displayFormat` v = `yyyy`
                 )->a( n = `change`        v = client->_event( val   = `CHANGE`
-                                                              t_arg = VALUE #( ( `$event.oSource.sId` )
-                                                                               ( `${$parameters>/from}` )
-                                                                               ( `${$parameters>/to}` )
-                                                                               ( `${$parameters>/valid}` ) ) )
+                                                              t_arg = temp5 )
                 )->a( n = `value`         v = |\{ 'type': 'sap.ui.model.type.DateInterval', 'formatOptions': \{ 'pattern': 'yyyy' \}, 'parts': [| &&
                                               | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind_path( drs5_start ) }' \},| &&
                                               | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind_path( drs5_end ) }' \} ] \}|
@@ -170,14 +191,29 @@ CLASS z2ui5_cl_smpc_app_017 IMPLEMENTATION.
   METHOD on_event.
 
     DATA valid TYPE abap_bool.
+      DATA source_id TYPE string.
+      DATA date_from TYPE string.
+      DATA date_to TYPE string.
+      DATA temp3 TYPE string.
+      DATA value_state LIKE temp3.
 
     IF client->get_event( ) = `CHANGE`.
-      DATA(source_id) = client->get_event_arg( ).
-      DATA(date_from) = client->get_event_arg( 2 ).
-      DATA(date_to)   = client->get_event_arg( 3 ).
+      
+      source_id = client->get_event_arg( ).
+      
+      date_from = client->get_event_arg( 2 ).
+      
+      date_to   = client->get_event_arg( 3 ).
       valid = client->get_event_arg( 4 ).
       event_text = |Id: { source_id }\nFrom: { date_from }\nTo: { date_to }|.
-      DATA(value_state) = COND string( WHEN valid = abap_true THEN `None` ELSE `Error` ).
+      
+      IF valid = abap_true.
+        temp3 = `None`.
+      ELSE.
+        temp3 = `Error`.
+      ENDIF.
+      
+      value_state = temp3.
       IF source_id CS `DRS1`.
         drs1_value_state = value_state.
       ELSEIF source_id CS `DRS2`.

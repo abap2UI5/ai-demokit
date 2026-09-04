@@ -7,7 +7,7 @@ CLASS z2ui5_cl_smpc_app_555 DEFINITION PUBLIC.
 
     " RecurrenceRule.days is an int[]: a table of STRINGS serializes to ['1','2']
     " and UI5 rejects it, so the day tables are integer tables
-    TYPES ty_t_int TYPE STANDARD TABLE OF i WITH EMPTY KEY.
+    TYPES ty_t_int TYPE STANDARD TABLE OF i WITH DEFAULT KEY.
     TYPES: BEGIN OF ty_s_appointment,
              start_at          TYPE string,
              end_at            TYPE string,
@@ -24,7 +24,7 @@ CLASS z2ui5_cl_smpc_app_555 DEFINITION PUBLIC.
              ruledayofweek     TYPE i,
              rulemonth         TYPE i,
            END OF ty_s_appointment.
-    TYPES ty_t_appointment TYPE STANDARD TABLE OF ty_s_appointment WITH EMPTY KEY.
+    TYPES ty_t_appointment TYPE STANDARD TABLE OF ty_s_appointment WITH DEFAULT KEY.
 
     TYPES: BEGIN OF ty_s_non_working,
              date_at           TYPE string,
@@ -37,7 +37,7 @@ CLASS z2ui5_cl_smpc_app_555 DEFINITION PUBLIC.
              recurrenceenddate TYPE string,
              t_recurrence_day  TYPE ty_t_int,
            END OF ty_s_non_working.
-    TYPES ty_t_non_working TYPE STANDARD TABLE OF ty_s_non_working WITH EMPTY KEY.
+    TYPES ty_t_non_working TYPE STANDARD TABLE OF ty_s_non_working WITH DEFAULT KEY.
 
     DATA t_appointments TYPE ty_t_appointment.
     DATA t_non_working  TYPE ty_t_non_working.
@@ -77,12 +77,12 @@ CLASS z2ui5_cl_smpc_app_555 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -91,10 +91,17 @@ CLASS z2ui5_cl_smpc_app_555 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the calendar date properties are typed "object" and demand a real JS Date;
     " the model keeps ISO strings and Formatter.DateCreateObject converts them
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `'viewChange' event fired.` INTO TABLE temp1.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc`     v = `sap.ui.core.mvc`
         )->a( n = `xmlns:core`    v = `sap.ui.core`
@@ -125,7 +132,7 @@ CLASS z2ui5_cl_smpc_app_555 IMPLEMENTATION.
                 " handleViewChange only toasts a constant text - composed on the client
                 )->a( n = `viewChange`        v = client->follow_up_action(
                           val   = client->cs_event-control_global
-                          t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'viewChange' event fired.` ) ) )
+                          t_arg = temp1 )
                 )->a( n = `startDate`         v = |\{ path: '{ client->_bind_path( start_date ) }', formatter: 'Formatter.DateCreateObject' \}|
                 " ROOT-level aggregations: the path has to be the model path
                 " client->_bind_path( ) resolves to. A bare 'T_' is
@@ -206,7 +213,8 @@ CLASS z2ui5_cl_smpc_app_555 IMPLEMENTATION.
 
   METHOD popup_create_display.
 
-    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA popup TYPE REF TO z2ui5_cl_ui5_view_builder.
+    popup = z2ui5_cl_ui5_view_builder=>factory( ).
 
     popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns`      v = `sap.m`
@@ -564,6 +572,14 @@ CLASS z2ui5_cl_smpc_app_555 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp3 TYPE ty_s_appointment.
+        DATA new_appointment LIKE temp3.
+          DATA temp4 TYPE i.
+          DATA temp1 TYPE i.
+              DATA temp5 TYPE i.
+              DATA temp2 TYPE i.
+              DATA temp6 TYPE i.
+            DATA temp7 TYPE i.
 
     CASE client->get_event( ).
 
@@ -593,21 +609,30 @@ CLASS z2ui5_cl_smpc_app_555 IMPLEMENTATION.
         " original keeps the default by leaving the property off a non-recurring
         " appointment - a serialized ABAP structure cannot leave a field out, so
         " the initial 0 would reach the setter and terminate the app
-        DATA(new_appointment) = VALUE ty_s_appointment( start_at          = c_start
-                                                        end_at            = c_end
-                                                        title             = c_title
-                                                        text              = c_text
-                                                        type              = c_type
-                                                        recurrencepattern = 1 ).
+        
+        CLEAR temp3.
+        temp3-start_at = c_start.
+        temp3-end_at = c_end.
+        temp3-title = c_title.
+        temp3-text = c_text.
+        temp3-type = c_type.
+        temp3-recurrencepattern = 1.
+        
+        new_appointment = temp3.
         IF c_rec_type IS NOT INITIAL.
           new_appointment-recurrencetype    = c_rec_type.
           " guarded on characters AND length: c_rec_pattern comes straight from a
           " free-entry Input, so an unguarded CONV i can raise NO_NUMBER or
           " OVERFLOW; an unusable entry falls back to the sample's default
-          new_appointment-recurrencepattern = COND i( WHEN c_rec_pattern CO `0123456789` AND c_rec_pattern IS NOT INITIAL
-                                                      AND strlen( c_rec_pattern ) <= 9
-                                                      THEN CONV i( c_rec_pattern )
-                                                      ELSE 1 ).
+          
+          temp4 = c_rec_pattern.
+          
+          IF c_rec_pattern CO `0123456789` AND c_rec_pattern IS NOT INITIAL AND strlen( c_rec_pattern ) <= 9.
+            temp1 = temp4.
+          ELSE.
+            temp1 = 1.
+          ENDIF.
+          new_appointment-recurrencepattern = temp1.
           new_appointment-recurrenceenddate = c_rec_end.
           IF c_rec_type = `Weekly` AND c_rec_days IS NOT INITIAL.
             new_appointment-t_recurrence_day = c_rec_days.
@@ -616,17 +641,26 @@ CLASS z2ui5_cl_smpc_app_555 IMPLEMENTATION.
             new_appointment-ruletype = c_rule_type.
             IF c_rule_type = `DayOfMonth`.
               " same guard as recurrencepattern above - c_rule_dom is free entry too
-              new_appointment-ruledayofmonth = COND i( WHEN c_rule_dom CO `0123456789` AND c_rule_dom IS NOT INITIAL
-                                                       AND strlen( c_rule_dom ) <= 9
-                                                       THEN CONV i( c_rule_dom )
-                                                       ELSE 0 ).
+              
+              temp5 = c_rule_dom.
+              
+              IF c_rule_dom CO `0123456789` AND c_rule_dom IS NOT INITIAL AND strlen( c_rule_dom ) <= 9.
+                temp2 = temp5.
+              ELSE.
+                temp2 = 0.
+              ENDIF.
+              new_appointment-ruledayofmonth = temp2.
             ELSE.
               new_appointment-ruleweekofmonth = c_rule_wom.
-              new_appointment-ruledayofweek   = CONV i( c_rule_dow ).
+              
+              temp6 = c_rule_dow.
+              new_appointment-ruledayofweek   = temp6.
             ENDIF.
           ENDIF.
           IF c_rec_type = `Yearly`.
-            new_appointment-rulemonth = CONV i( c_rule_month ).
+            
+            temp7 = c_rule_month.
+            new_appointment-rulemonth = temp7.
           ENDIF.
         ENDIF.
 
@@ -647,12 +681,16 @@ CLASS z2ui5_cl_smpc_app_555 IMPLEMENTATION.
     " onCreateAppointment reseeds the dialog model: the next full hour and the
     " hour after it. A backend has no client clock, so the seed is the sample's
     " own calendar day at the next full hour of the SERVER time (see sidecar)
-    DATA(now) = sy-timlo.
+    DATA now LIKE sy-timlo.
+    DATA temp8 TYPE i.
+    now = sy-timlo.
     c_title       = ``.
     c_text        = ``.
     c_type        = `Type01`.
     c_start       = |{ sy-datlo DATE = ISO }T{ now(2) }:00:00|.
-    c_end         = |{ sy-datlo DATE = ISO }T{ CONV i( now(2) ) + 1 WIDTH = 2 ALIGN = RIGHT PAD = '0' }:00:00|.
+    
+    temp8 = now(2).
+    c_end         = |{ sy-datlo DATE = ISO }T{ temp8 + 1 WIDTH = 2 ALIGN = RIGHT PAD = '0' }:00:00|.
     c_rec_type    = ``.
     c_rec_pattern = `1`.
     CLEAR c_rec_days.
@@ -667,49 +705,256 @@ CLASS z2ui5_cl_smpc_app_555 IMPLEMENTATION.
 
 
   METHOD model_init.
+    DATA temp9 TYPE z2ui5_cl_smpc_app_555=>ty_t_appointment.
+    DATA temp10 LIKE LINE OF temp9.
+    DATA temp3 TYPE z2ui5_cl_smpc_app_555=>ty_t_int.
+    DATA temp5 TYPE z2ui5_cl_smpc_app_555=>ty_t_int.
+    DATA temp7 TYPE z2ui5_cl_smpc_app_555=>ty_t_int.
+    DATA temp11 TYPE z2ui5_cl_smpc_app_555=>ty_t_non_working.
+    DATA temp12 LIKE LINE OF temp11.
+    DATA temp13 TYPE z2ui5_cl_smpc_app_555=>ty_t_int.
+    DATA temp15 TYPE z2ui5_cl_smpc_app_555=>ty_t_int.
+    DATA temp17 TYPE z2ui5_cl_smpc_app_555=>ty_t_int.
+    DATA temp19 TYPE z2ui5_cl_smpc_app_555=>ty_t_int.
+    DATA temp21 TYPE z2ui5_cl_smpc_app_555=>ty_t_int.
 
     start_date = `2024-01-01T00:00:00`.
     create_reset( ).
 
-    t_appointments = VALUE #(
-      ( start_at = `2024-01-01T09:00:00` end_at = `2024-01-01T09:15:00` title = `Daily Standup (every day)` text = `Should appear every single day` type = `Type05` recurrencetype = `Daily` recurrencepattern = 1
-        recurrenceenddate = `2024-12-31T00:00:00` )
-      ( start_at = `2024-01-01T16:00:00` end_at = `2024-01-01T16:30:00` title = `Log Review (every 2 days)` text = `Should appear every other day: Jan 1, 3, 5, 7...` type = `Type08` recurrencetype = `Daily` recurrencepattern = 2
-        recurrenceenddate = `2024-12-31T00:00:00` )
-      ( start_at = `2024-01-01T10:00:00` end_at = `2024-01-01T11:00:00` title = `Team Meeting (every Mon)` text = `Should appear once per week on Monday` type = `Type01` recurrencetype = `Weekly` recurrencepattern = 1
-        recurrenceenddate = `2024-12-31T00:00:00` t_recurrence_day = VALUE #( ( 1 ) ) )
-      ( start_at = `2024-01-03T14:00:00` end_at = `2024-01-03T15:30:00` title = `Code Review (every Wed+Fri)` text = `Should appear twice per week: Wednesday and Friday` type = `Type02` recurrencetype = `Weekly` recurrencepattern = 1
-        recurrenceenddate = `2024-12-31T00:00:00` t_recurrence_day = VALUE #( ( 3 ) ( 5 ) ) )
-      ( start_at = `2024-01-02T11:00:00` end_at = `2024-01-02T11:30:00` title = `1-on-1 (every 2nd Tue)` text = `Should appear every other Tuesday: Jan 2, 16, 30...` type = `Type06` recurrencetype = `Weekly` recurrencepattern = 2
-        recurrenceenddate = `2024-12-31T00:00:00` t_recurrence_day = VALUE #( ( 2 ) ) )
-      ( start_at = `2024-01-01T13:00:00` end_at = `2024-01-01T14:30:00` title = `Retro (1st of each month)` text = `Should appear on the 1st of every month: Jan 1, Feb 1...` type = `Type03` recurrencetype = `Monthly` recurrencepattern = 1
-        recurrenceenddate = `2026-12-31T00:00:00` )
-      ( start_at = `2024-01-15T09:00:00` end_at = `2024-01-15T12:00:00` title = `Board Review (every 3 months)` text = `Should appear quarterly on 15th: Jan 15, Apr 15, Jul 15, Oct 15` type = `Type07` recurrencetype = `Monthly`
-        recurrencepattern = 3 recurrenceenddate = `2026-12-31T00:00:00` )
-      ( start_at = `2024-01-15T00:00:00` end_at = `2024-01-15T23:59:00` title = `Company Kickoff (yearly Jan 15)` text = `Should appear once per year on January 15` type = `Type04` recurrencetype = `Yearly` recurrencepattern = 1
-        recurrenceenddate = `2026-12-31T00:00:00` )
-      ( start_at = `2024-03-10T10:00:00` end_at = `2024-03-10T11:30:00` title = `Perf Review (yearly Mar 10)` text = `Should appear once per year on March 10` type = `Type09` recurrencetype = `Yearly` recurrencepattern = 1
-        recurrenceenddate = `2026-12-31T00:00:00` )
-    ).
+    
+    CLEAR temp9.
+    
+    temp10-start_at = `2024-01-01T09:00:00`.
+    temp10-end_at = `2024-01-01T09:15:00`.
+    temp10-title = `Daily Standup (every day)`.
+    temp10-text = `Should appear every single day`.
+    temp10-type = `Type05`.
+    temp10-recurrencetype = `Daily`.
+    temp10-recurrencepattern = 1.
+    temp10-recurrenceenddate = `2024-12-31T00:00:00`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-start_at = `2024-01-01T16:00:00`.
+    temp10-end_at = `2024-01-01T16:30:00`.
+    temp10-title = `Log Review (every 2 days)`.
+    temp10-text = `Should appear every other day: Jan 1, 3, 5, 7...`.
+    temp10-type = `Type08`.
+    temp10-recurrencetype = `Daily`.
+    temp10-recurrencepattern = 2.
+    temp10-recurrenceenddate = `2024-12-31T00:00:00`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-start_at = `2024-01-01T10:00:00`.
+    temp10-end_at = `2024-01-01T11:00:00`.
+    temp10-title = `Team Meeting (every Mon)`.
+    temp10-text = `Should appear once per week on Monday`.
+    temp10-type = `Type01`.
+    temp10-recurrencetype = `Weekly`.
+    temp10-recurrencepattern = 1.
+    temp10-recurrenceenddate = `2024-12-31T00:00:00`.
+    
+    CLEAR temp3.
+    INSERT 1 INTO TABLE temp3.
+    temp10-t_recurrence_day = temp3.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-start_at = `2024-01-03T14:00:00`.
+    temp10-end_at = `2024-01-03T15:30:00`.
+    temp10-title = `Code Review (every Wed+Fri)`.
+    temp10-text = `Should appear twice per week: Wednesday and Friday`.
+    temp10-type = `Type02`.
+    temp10-recurrencetype = `Weekly`.
+    temp10-recurrencepattern = 1.
+    temp10-recurrenceenddate = `2024-12-31T00:00:00`.
+    
+    CLEAR temp5.
+    INSERT 3 INTO TABLE temp5.
+    INSERT 5 INTO TABLE temp5.
+    temp10-t_recurrence_day = temp5.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-start_at = `2024-01-02T11:00:00`.
+    temp10-end_at = `2024-01-02T11:30:00`.
+    temp10-title = `1-on-1 (every 2nd Tue)`.
+    temp10-text = `Should appear every other Tuesday: Jan 2, 16, 30...`.
+    temp10-type = `Type06`.
+    temp10-recurrencetype = `Weekly`.
+    temp10-recurrencepattern = 2.
+    temp10-recurrenceenddate = `2024-12-31T00:00:00`.
+    
+    CLEAR temp7.
+    INSERT 2 INTO TABLE temp7.
+    temp10-t_recurrence_day = temp7.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-start_at = `2024-01-01T13:00:00`.
+    temp10-end_at = `2024-01-01T14:30:00`.
+    temp10-title = `Retro (1st of each month)`.
+    temp10-text = `Should appear on the 1st of every month: Jan 1, Feb 1...`.
+    temp10-type = `Type03`.
+    temp10-recurrencetype = `Monthly`.
+    temp10-recurrencepattern = 1.
+    temp10-recurrenceenddate = `2026-12-31T00:00:00`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-start_at = `2024-01-15T09:00:00`.
+    temp10-end_at = `2024-01-15T12:00:00`.
+    temp10-title = `Board Review (every 3 months)`.
+    temp10-text = `Should appear quarterly on 15th: Jan 15, Apr 15, Jul 15, Oct 15`.
+    temp10-type = `Type07`.
+    temp10-recurrencetype = `Monthly`.
+    temp10-recurrencepattern = 3.
+    temp10-recurrenceenddate = `2026-12-31T00:00:00`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-start_at = `2024-01-15T00:00:00`.
+    temp10-end_at = `2024-01-15T23:59:00`.
+    temp10-title = `Company Kickoff (yearly Jan 15)`.
+    temp10-text = `Should appear once per year on January 15`.
+    temp10-type = `Type04`.
+    temp10-recurrencetype = `Yearly`.
+    temp10-recurrencepattern = 1.
+    temp10-recurrenceenddate = `2026-12-31T00:00:00`.
+    INSERT temp10 INTO TABLE temp9.
+    temp10-start_at = `2024-03-10T10:00:00`.
+    temp10-end_at = `2024-03-10T11:30:00`.
+    temp10-title = `Perf Review (yearly Mar 10)`.
+    temp10-text = `Should appear once per year on March 10`.
+    temp10-type = `Type09`.
+    temp10-recurrencetype = `Yearly`.
+    temp10-recurrencepattern = 1.
+    temp10-recurrenceenddate = `2026-12-31T00:00:00`.
+    INSERT temp10 INTO TABLE temp9.
+    t_appointments = temp9.
 
-    t_non_working = VALUE #(
-      ( date_at = `2024-01-01T00:00:00` start_at = `00:00` end_at = `08:00` valueformat = `HH:mm` title = `Before Work Hours` recurrencetype = `Weekly` recurrencepattern = 1 recurrenceenddate = `2024-12-31T00:00:00`
-        t_recurrence_day = VALUE #( ( 1 ) ( 2 ) ( 3 ) ( 4 ) ( 5 ) ) )
-      ( date_at = `2024-01-01T00:00:00` start_at = `12:00` end_at = `13:00` valueformat = `HH:mm` title = `Lunch Break` recurrencetype = `Weekly` recurrencepattern = 1 recurrenceenddate = `2024-12-31T00:00:00`
-        t_recurrence_day = VALUE #( ( 1 ) ( 2 ) ( 3 ) ( 4 ) ( 5 ) ) )
-      ( date_at = `2024-01-01T00:00:00` start_at = `18:00` end_at = `23:59` valueformat = `HH:mm` title = `After Work Hours` recurrencetype = `Weekly` recurrencepattern = 1 recurrenceenddate = `2024-12-31T00:00:00`
-        t_recurrence_day = VALUE #( ( 1 ) ( 2 ) ( 3 ) ( 4 ) ( 5 ) ) )
-      ( date_at = `2024-01-06T00:00:00` start_at = `00:00` end_at = `23:59` valueformat = `HH:mm` title = `Weekend - Saturday` recurrencetype = `Weekly` recurrencepattern = 1 recurrenceenddate = `2024-12-31T00:00:00`
-        t_recurrence_day = VALUE #( ( 6 ) ) )
-      ( date_at = `2024-01-07T00:00:00` start_at = `00:00` end_at = `23:59` valueformat = `HH:mm` title = `Weekend - Sunday` recurrencetype = `Weekly` recurrencepattern = 1 recurrenceenddate = `2024-12-31T00:00:00`
-        t_recurrence_day = VALUE #( ( 0 ) ) )
-      ( date_at = `2024-01-01T00:00:00` start_at = `02:00` end_at = `02:30` valueformat = `HH:mm` title = `Server Backup`       recurrencetype = `Daily`   recurrencepattern = 1 recurrenceenddate = `2024-12-31T00:00:00` )
-      ( date_at = `2024-01-01T00:00:00` start_at = `06:00` end_at = `08:00` valueformat = `HH:mm` title = `Monthly Maintenance` recurrencetype = `Monthly` recurrencepattern = 1 recurrenceenddate = `2026-12-31T00:00:00` )
-      ( date_at = `2024-01-15T00:00:00` start_at = `08:00` end_at = `12:00` valueformat = `HH:mm` title = `Monthly Inventory`   recurrencetype = `Monthly` recurrencepattern = 1 recurrenceenddate = `2026-12-31T00:00:00` )
-      ( date_at = `2024-01-01T00:00:00` start_at = `00:00` end_at = `23:59` valueformat = `HH:mm` title = `New Year's Day`      recurrencetype = `Yearly`  recurrencepattern = 1 recurrenceenddate = `2026-12-31T00:00:00` )
-      ( date_at = `2024-07-04T00:00:00` start_at = `00:00` end_at = `23:59` valueformat = `HH:mm` title = `Independence Day`    recurrencetype = `Yearly`  recurrencepattern = 1 recurrenceenddate = `2026-12-31T00:00:00` )
-      ( date_at = `2024-12-25T00:00:00` start_at = `00:00` end_at = `23:59` valueformat = `HH:mm` title = `Christmas Day`       recurrencetype = `Yearly`  recurrencepattern = 1 recurrenceenddate = `2026-12-31T00:00:00` )
-    ).
+    
+    CLEAR temp11.
+    
+    temp12-date_at = `2024-01-01T00:00:00`.
+    temp12-start_at = `00:00`.
+    temp12-end_at = `08:00`.
+    temp12-valueformat = `HH:mm`.
+    temp12-title = `Before Work Hours`.
+    temp12-recurrencetype = `Weekly`.
+    temp12-recurrencepattern = 1.
+    temp12-recurrenceenddate = `2024-12-31T00:00:00`.
+    
+    CLEAR temp13.
+    INSERT 1 INTO TABLE temp13.
+    INSERT 2 INTO TABLE temp13.
+    INSERT 3 INTO TABLE temp13.
+    INSERT 4 INTO TABLE temp13.
+    INSERT 5 INTO TABLE temp13.
+    temp12-t_recurrence_day = temp13.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-date_at = `2024-01-01T00:00:00`.
+    temp12-start_at = `12:00`.
+    temp12-end_at = `13:00`.
+    temp12-valueformat = `HH:mm`.
+    temp12-title = `Lunch Break`.
+    temp12-recurrencetype = `Weekly`.
+    temp12-recurrencepattern = 1.
+    temp12-recurrenceenddate = `2024-12-31T00:00:00`.
+    
+    CLEAR temp15.
+    INSERT 1 INTO TABLE temp15.
+    INSERT 2 INTO TABLE temp15.
+    INSERT 3 INTO TABLE temp15.
+    INSERT 4 INTO TABLE temp15.
+    INSERT 5 INTO TABLE temp15.
+    temp12-t_recurrence_day = temp15.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-date_at = `2024-01-01T00:00:00`.
+    temp12-start_at = `18:00`.
+    temp12-end_at = `23:59`.
+    temp12-valueformat = `HH:mm`.
+    temp12-title = `After Work Hours`.
+    temp12-recurrencetype = `Weekly`.
+    temp12-recurrencepattern = 1.
+    temp12-recurrenceenddate = `2024-12-31T00:00:00`.
+    
+    CLEAR temp17.
+    INSERT 1 INTO TABLE temp17.
+    INSERT 2 INTO TABLE temp17.
+    INSERT 3 INTO TABLE temp17.
+    INSERT 4 INTO TABLE temp17.
+    INSERT 5 INTO TABLE temp17.
+    temp12-t_recurrence_day = temp17.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-date_at = `2024-01-06T00:00:00`.
+    temp12-start_at = `00:00`.
+    temp12-end_at = `23:59`.
+    temp12-valueformat = `HH:mm`.
+    temp12-title = `Weekend - Saturday`.
+    temp12-recurrencetype = `Weekly`.
+    temp12-recurrencepattern = 1.
+    temp12-recurrenceenddate = `2024-12-31T00:00:00`.
+    
+    CLEAR temp19.
+    INSERT 6 INTO TABLE temp19.
+    temp12-t_recurrence_day = temp19.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-date_at = `2024-01-07T00:00:00`.
+    temp12-start_at = `00:00`.
+    temp12-end_at = `23:59`.
+    temp12-valueformat = `HH:mm`.
+    temp12-title = `Weekend - Sunday`.
+    temp12-recurrencetype = `Weekly`.
+    temp12-recurrencepattern = 1.
+    temp12-recurrenceenddate = `2024-12-31T00:00:00`.
+    
+    CLEAR temp21.
+    INSERT 0 INTO TABLE temp21.
+    temp12-t_recurrence_day = temp21.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-date_at = `2024-01-01T00:00:00`.
+    temp12-start_at = `02:00`.
+    temp12-end_at = `02:30`.
+    temp12-valueformat = `HH:mm`.
+    temp12-title = `Server Backup`.
+    temp12-recurrencetype = `Daily`.
+    temp12-recurrencepattern = 1.
+    temp12-recurrenceenddate = `2024-12-31T00:00:00`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-date_at = `2024-01-01T00:00:00`.
+    temp12-start_at = `06:00`.
+    temp12-end_at = `08:00`.
+    temp12-valueformat = `HH:mm`.
+    temp12-title = `Monthly Maintenance`.
+    temp12-recurrencetype = `Monthly`.
+    temp12-recurrencepattern = 1.
+    temp12-recurrenceenddate = `2026-12-31T00:00:00`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-date_at = `2024-01-15T00:00:00`.
+    temp12-start_at = `08:00`.
+    temp12-end_at = `12:00`.
+    temp12-valueformat = `HH:mm`.
+    temp12-title = `Monthly Inventory`.
+    temp12-recurrencetype = `Monthly`.
+    temp12-recurrencepattern = 1.
+    temp12-recurrenceenddate = `2026-12-31T00:00:00`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-date_at = `2024-01-01T00:00:00`.
+    temp12-start_at = `00:00`.
+    temp12-end_at = `23:59`.
+    temp12-valueformat = `HH:mm`.
+    temp12-title = `New Year's Day`.
+    temp12-recurrencetype = `Yearly`.
+    temp12-recurrencepattern = 1.
+    temp12-recurrenceenddate = `2026-12-31T00:00:00`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-date_at = `2024-07-04T00:00:00`.
+    temp12-start_at = `00:00`.
+    temp12-end_at = `23:59`.
+    temp12-valueformat = `HH:mm`.
+    temp12-title = `Independence Day`.
+    temp12-recurrencetype = `Yearly`.
+    temp12-recurrencepattern = 1.
+    temp12-recurrenceenddate = `2026-12-31T00:00:00`.
+    INSERT temp12 INTO TABLE temp11.
+    temp12-date_at = `2024-12-25T00:00:00`.
+    temp12-start_at = `00:00`.
+    temp12-end_at = `23:59`.
+    temp12-valueformat = `HH:mm`.
+    temp12-title = `Christmas Day`.
+    temp12-recurrencetype = `Yearly`.
+    temp12-recurrencepattern = 1.
+    temp12-recurrenceenddate = `2026-12-31T00:00:00`.
+    INSERT temp12 INTO TABLE temp11.
+    t_non_working = temp11.
 
   ENDMETHOD.
 

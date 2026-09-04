@@ -14,7 +14,7 @@ CLASS z2ui5_cl_smpc_app_020 DEFINITION PUBLIC.
         city          TYPE string,
         country       TYPE string,
       END OF ty_s_supplier.
-    DATA t_suppliers TYPE STANDARD TABLE OF ty_s_supplier WITH EMPTY KEY.
+    DATA t_suppliers TYPE STANDARD TABLE OF ty_s_supplier WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -31,10 +31,10 @@ CLASS z2ui5_cl_smpc_app_020 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_navigated( ).
+    ELSEIF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -43,7 +43,8 @@ CLASS z2ui5_cl_smpc_app_020 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
@@ -83,13 +84,18 @@ CLASS z2ui5_cl_smpc_app_020 IMPLEMENTATION.
   METHOD model_init.
 
     " the single record of the shared mock supplier.json /SupplierCollection, bound columns only
-    t_suppliers = VALUE #(
-      ( supplier_name = `Red Point Stores`
-        street        = `Main St`
-        house_number  = `1618`
-        zip_code      = `31415`
-        city          = `Maintown`
-        country       = `Germany` ) ).
+    DATA temp1 LIKE t_suppliers.
+    DATA temp2 LIKE LINE OF temp1.
+    CLEAR temp1.
+    
+    temp2-supplier_name = `Red Point Stores`.
+    temp2-street = `Main St`.
+    temp2-house_number = `1618`.
+    temp2-zip_code = `31415`.
+    temp2-city = `Maintown`.
+    temp2-country = `Germany`.
+    INSERT temp2 INTO TABLE temp1.
+    t_suppliers = temp1.
 
   ENDMETHOD.
 

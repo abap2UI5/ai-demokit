@@ -19,7 +19,7 @@ CLASS z2ui5_cl_smpc_app_399 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -28,23 +28,38 @@ CLASS z2ui5_cl_smpc_app_399 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA image_width TYPE string.
+    DATA pic1 TYPE string.
+    DATA pic3 TYPE string.
+    DATA svg_logo TYPE string.
+    DATA temp1 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the controller's imageWidth is Device.system.phone ? 5em : 10em - kept a
     " branch over the framework's device> model instead of resolving it at init
-    DATA(image_width) = `{= ${device>/system/phone} ? '5em' : '10em' }`.
+    
+    image_width = `{= ${device>/system/phone} ? '5em' : '10em' }`.
     " fixed values of the original models: img>/products/pic1, pic3 and the
     " sample's own images/sap-logo.svg
-    DATA(pic1)     = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg`.
-    DATA(pic3)     = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6100-large.jpg`.
+    
+    pic1     = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg`.
+    
+    pic3     = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6100-large.jpg`.
     " sap.ui.require.toUrl( 'sap/m/sample/Image/images/sap-logo.svg' ) resolves
     " against the demo kit's own layout, which inserts a demokit/ segment - the
     " file is at src/sap.m/test/sap/m/demokit/sample/Image/images/. Without it
     " both SVG Images 404, and nothing catches that: the e2e smoke resolves only
     " /resources/ paths locally and ignores every other miss. Same shape as app
     " 288's sample.pdf.
-    DATA(svg_logo) = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/Image/images/sap-logo.svg`.
+    
+    svg_logo = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/Image/images/sap-logo.svg`.
 
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `The image has been pressed` INTO TABLE temp1.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
@@ -76,7 +91,7 @@ CLASS z2ui5_cl_smpc_app_399 IMPLEMENTATION.
                         )->a( n = `width`       v = image_width
                         )->a( n = `decorative`  v = `false`
                         )->a( n = `press`       v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                              t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The image has been pressed` ) ) )
+                                                                              t_arg = temp1 )
 
                 )->end(
                 )->ele( `VBox`

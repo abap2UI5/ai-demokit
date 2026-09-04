@@ -19,7 +19,7 @@ CLASS z2ui5_cl_smpc_app_126 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_navigated( ).
+    IF client->check_on_navigated( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -28,8 +28,20 @@ CLASS z2ui5_cl_smpc_app_126 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_ui5_view_builder.
+    DATA temp1 TYPE string_table.
+    DATA temp2 TYPE string_table.
+    view = z2ui5_cl_ui5_view_builder=>factory( ).
 
+    
+    CLEAR temp1.
+    INSERT `MESSAGE_TOAST` INTO TABLE temp1.
+    INSERT `show` INTO TABLE temp1.
+    INSERT `File upload complete. Status: 200 (Upload Success)` INTO TABLE temp1.
+    
+    CLEAR temp2.
+    INSERT `fileUploader` INTO TABLE temp2.
+    INSERT `upload` INTO TABLE temp2.
     view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:u`   v = `sap.ui.unified`
@@ -53,7 +65,7 @@ CLASS z2ui5_cl_smpc_app_126 IMPLEMENTATION.
                 )->a( n = `name`           v = `myFileUpload`
                 )->a( n = `uploadUrl`      v = `upload/`
                 )->a( n = `tooltip`        v = `Upload your file to the local server`
-                )->a( n = `uploadComplete` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `File upload complete. Status: 200 (Upload Success)` ) ) )
+                )->a( n = `uploadComplete` v = client->follow_up_action( val = client->cs_event-control_global t_arg = temp1 )
             )->tag( `Button`
                 )->a( n = `text`  v = `Upload File`
                 " handleUploadPress calls oFileUploader.upload( ), which is what makes
@@ -61,7 +73,7 @@ CLASS z2ui5_cl_smpc_app_126 IMPLEMENTATION.
                 " ordinary public control method and is not on the frontend denylist.
                 " Only the checkFileReadable( ) guard and its error toast stay dropped
                 )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_by_id
-                                                                t_arg = VALUE #( ( `fileUploader` ) ( `upload` ) ) ) ).
+                                                                t_arg = temp2 ) ).
 
     client->view_display( view->stringify( ) ).
 
